@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { LayoutGrid, List, Plus, Search, Star, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -24,6 +25,7 @@ import {
   updateClientStage,
 } from "@/lib/actions/clients";
 import {
+  formatCurrency,
   STAGE_LABELS,
   stagesForSide,
   type ClientSide,
@@ -39,11 +41,13 @@ export function ClientsView({
   side,
   view: initialView,
   includeInactive,
+  commission,
 }: {
   clients: Client[];
   side: ClientSide;
   view: ViewMode;
   includeInactive: boolean;
+  commission?: { pipeline: number; closed: number } | null;
 }) {
   const router = useRouter();
   const [, startTransition] = useTransition();
@@ -115,6 +119,20 @@ export function ClientsView({
             {optimisticClients.length === 1 ? "client" : "clients"}
             {includeInactive ? " (incl. inactive)" : ""}
           </p>
+          {commission && (commission.pipeline > 0 || commission.closed > 0) && (
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
+              {commission.pipeline > 0 && (
+                <Badge variant="warning">
+                  {formatCurrency(commission.pipeline)} in pipeline
+                </Badge>
+              )}
+              {commission.closed > 0 && (
+                <Badge variant="success">
+                  {formatCurrency(commission.closed)} closed
+                </Badge>
+              )}
+            </div>
+          )}
         </div>
         <Button asChild>
           <Link href={`/clients/new?side=${side}`}>

@@ -1,4 +1,5 @@
 import { getClients } from "@/lib/data/clients";
+import { getCommissionSummary } from "@/lib/data/buyer";
 import { ClientsView } from "@/components/clients/clients-view";
 
 export default async function ClientsPage({
@@ -10,7 +11,11 @@ export default async function ClientsPage({
   const side = sp.side === "seller" ? "seller" : "buyer";
   const includeInactive = sp.inactive === "1";
   const view = sp.view === "kanban" ? "kanban" : "table";
-  const clients = await getClients(side, { includeInactive });
+
+  const [clients, commission] = await Promise.all([
+    getClients(side, { includeInactive }),
+    side === "buyer" ? getCommissionSummary() : Promise.resolve(null),
+  ]);
 
   return (
     <ClientsView
@@ -18,6 +23,7 @@ export default async function ClientsPage({
       side={side}
       view={view}
       includeInactive={includeInactive}
+      commission={commission}
     />
   );
 }

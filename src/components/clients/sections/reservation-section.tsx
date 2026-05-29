@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -66,13 +67,18 @@ export function ReservationSection({
         { label: "PPC", value: formatCurrency(r.ppc) },
         { label: "PPC date", value: fmtDate(r.ppc_date) },
         { label: "Notary", value: fmtDate(r.notary_date) },
+        { label: "Commission", value: formatCurrency(r.commission) },
+        { label: "Closed", value: fmtDate(r.closed_at) },
       ]
     : [];
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-base">Reservation</CardTitle>
+        <div className="flex items-center gap-2">
+          <CardTitle className="text-base">Reservation</CardTitle>
+          {r?.closed_at && <Badge variant="success">Closed</Badge>}
+        </div>
         <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
           {r ? <Pencil /> : <Plus />}
           {r ? "Edit" : "Add"}
@@ -139,6 +145,9 @@ function ReservationDialog({
       ppc_date: reservation?.ppc_date ?? "",
       notary_date: reservation?.notary_date ?? "",
       notary_notes: reservation?.notary_notes ?? "",
+      commission:
+        reservation?.commission != null ? String(reservation.commission) : "",
+      closed_at: reservation?.closed_at ?? "",
     },
   });
 
@@ -222,6 +231,32 @@ function ReservationDialog({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Notary date</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="commission"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Commission (€)</FormLabel>
+                    <FormControl>
+                      <Input inputMode="numeric" placeholder="18000" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="closed_at"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Closed date</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>

@@ -173,6 +173,8 @@ export async function upsertReservation(
       ppc_date: emptyToNull(v.ppc_date),
       notary_date: emptyToNull(v.notary_date),
       notary_notes: emptyToNull(v.notary_notes),
+      commission: toNumberOrNull(v.commission),
+      closed_at: emptyToNull(v.closed_at),
     },
     { onConflict: "client_id" }
   );

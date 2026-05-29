@@ -200,6 +200,8 @@ export type Database = {
           ppc_date: string | null;
           notary_date: string | null;
           notary_notes: string | null;
+          commission: number | null;
+          closed_at: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -212,6 +214,8 @@ export type Database = {
           ppc_date?: string | null;
           notary_date?: string | null;
           notary_notes?: string | null;
+          commission?: number | null;
+          closed_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -224,6 +228,8 @@ export type Database = {
           ppc_date?: string | null;
           notary_date?: string | null;
           notary_notes?: string | null;
+          commission?: number | null;
+          closed_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };

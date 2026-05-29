@@ -17,13 +17,15 @@ import {
   getViewings,
 } from "@/lib/data/buyer";
 import { getDocuments } from "@/lib/data/documents";
-import { getProperties } from "@/lib/data/seller";
+import { getMatchingListings, getProperties } from "@/lib/data/seller";
 import { ClientControls } from "@/components/clients/client-controls";
 import { StageBadge } from "@/components/clients/stage-badge";
+import { WhatsAppButton } from "@/components/clients/whatsapp-button";
 import { PreferencesSection } from "@/components/clients/sections/preferences-section";
 import { ViewingsSection } from "@/components/clients/sections/viewings-section";
 import { ReservationSection } from "@/components/clients/sections/reservation-section";
 import { PropertiesSection } from "@/components/clients/sections/properties-section";
+import { MatchingListingsSection } from "@/components/clients/sections/matching-listings-section";
 import { DocumentsSection } from "@/components/clients/sections/documents-section";
 import {
   Card,
@@ -87,6 +89,16 @@ export default async function ClientDetailPage({
       getDocuments(client.id),
     ]);
 
+  const matches =
+    showPrefs && prefs
+      ? await getMatchingListings({
+          property_types: prefs.property_types,
+          budget_min: prefs.budget_min,
+          budget_max: prefs.budget_max,
+          bedrooms: prefs.bedrooms,
+        })
+      : [];
+
   const typeLabel =
     side === "buyer"
       ? client.deal_type
@@ -129,6 +141,7 @@ export default async function ClientDetailPage({
           {showPrefs && (
             <PreferencesSection clientId={client.id} prefs={prefs} />
           )}
+          {showPrefs && prefs && <MatchingListingsSection matches={matches} />}
           {showViewings && (
             <ViewingsSection
               clientId={client.id}
@@ -173,6 +186,12 @@ export default async function ClientDetailPage({
               <CardTitle className="text-base">Contact</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
+              <WhatsAppButton
+                phone={client.phone}
+                firstName={client.first_name}
+                language={client.language}
+                className="w-full"
+              />
               <InfoRow
                 icon={<Mail className="size-4" />}
                 label="Email"

@@ -55,6 +55,26 @@ export async function getViewings(
   }));
 }
 
+export async function getCommissionSummary(): Promise<{
+  pipeline: number;
+  closed: number;
+}> {
+  const supabase = await createSupabase();
+  const { data, error } = await supabase
+    .from("reservations")
+    .select("commission, closed_at");
+  if (error) throw new Error(error.message);
+
+  let pipeline = 0;
+  let closed = 0;
+  for (const r of data ?? []) {
+    const amount = r.commission ?? 0;
+    if (r.closed_at) closed += amount;
+    else pipeline += amount;
+  }
+  return { pipeline, closed };
+}
+
 export async function getReservation(
   clientId: string
 ): Promise<Reservation | null> {

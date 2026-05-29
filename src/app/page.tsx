@@ -16,6 +16,7 @@ import {
   Star,
   Tag,
   Users,
+  X,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -176,6 +177,86 @@ export default function Home() {
             listing attached.
           </p>
         </div>
+      </section>
+
+      {/* Anti-bloat / refreshingly simple */}
+      <section className="mx-auto w-full max-w-6xl px-4 py-16">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <Badge variant="secondary" className="mb-4">
+            Built to stay simple
+          </Badge>
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            Everything you need. Nothing you don&apos;t.
+          </h2>
+          <p className="text-muted-foreground mt-3">
+            Most CRMs are built for big brokerages and bury solo agents in tools
+            they&apos;ll never touch. Lena is the opposite — the essentials,
+            done well, and we leave the rest out on purpose.
+          </p>
+        </Reveal>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-2">
+          <Reveal>
+            <div className="bg-card h-full rounded-2xl border p-6">
+              <h3 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                Left out — on purpose
+              </h3>
+              <ul className="mt-4 space-y-2.5">
+                {[
+                  "IDX website builders",
+                  "Power dialers & call centres",
+                  "Team leaderboards & lead-routing rules",
+                  "200-app integration marketplaces",
+                  "Analytics dashboards no one opens",
+                  "Per-seat enterprise pricing",
+                ].map((t) => (
+                  <li
+                    key={t}
+                    className="text-muted-foreground flex items-center gap-2.5 text-sm"
+                  >
+                    <X className="text-muted-foreground/50 size-4 shrink-0" />
+                    <span className="decoration-muted-foreground/40 line-through">
+                      {t}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
+
+          <Reveal delay={80}>
+            <div className="bg-card border-primary/30 h-full rounded-2xl border p-6 shadow-sm">
+              <h3 className="text-primary text-xs font-semibold tracking-wide uppercase">
+                What you actually get
+              </h3>
+              <ul className="mt-4 space-y-2.5">
+                {[
+                  "Every client in a clear pipeline",
+                  "Follow-ups that write themselves",
+                  "Properties, viewings & offers together",
+                  "Documents filed against each client",
+                  "Installable on your phone",
+                  "One place for every agency you work with",
+                ].map((t) => (
+                  <li
+                    key={t}
+                    className="flex items-center gap-2.5 text-sm font-medium"
+                  >
+                    <Check className="text-primary size-4 shrink-0" />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
+        </div>
+
+        <Reveal>
+          <p className="text-muted-foreground mt-8 text-center text-sm">
+            Not yet another CRM — the only simple one you&apos;ll actually keep
+            using.
+          </p>
+        </Reveal>
       </section>
 
       {/* AI — coming soon */}

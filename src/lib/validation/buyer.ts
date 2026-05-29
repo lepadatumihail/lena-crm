@@ -56,5 +56,7 @@ export const reservationFormSchema = z.object({
   ppc_date: optionalDate,
   notary_date: optionalDate,
   notary_notes: optionalText(2000),
+  commission: numericString(),
+  closed_at: optionalDate,
 });
 export type ReservationFormValues = z.infer<typeof reservationFormSchema>;
