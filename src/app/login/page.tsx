@@ -7,6 +7,7 @@ import { ArrowLeft, Loader2, Mail } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/client";
 import { AuthErrorListener } from "@/components/auth-error-listener";
+import { MarketingNav } from "@/components/marketing-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -132,8 +133,10 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex flex-1 items-center justify-center px-4 py-12">
-      <AuthErrorListener />
+    <>
+      <MarketingNav variant="minimal" />
+      <main className="flex flex-1 items-center justify-center px-4 py-12">
+        <AuthErrorListener />
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <p className="text-primary text-sm font-semibold tracking-wide uppercase">
@@ -263,6 +266,7 @@ export default function LoginPage() {
           )}
         </CardContent>
       </Card>
-    </main>
+      </main>
+    </>
   );
 }
