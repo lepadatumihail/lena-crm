@@ -75,3 +75,4 @@ This writes `DESIGN.md` to the repo root; the Tailwind theme in
 Email follow-up automation (send-as-agent via Gmail API / Microsoft Graph with a
 Resend fallback) is designed into the schema (`email_accounts`,
 `email_templates`, `scheduled_emails`) but not built in v1.
+
