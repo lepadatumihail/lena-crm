@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Mail, Loader2 } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/client";
+import { AuthErrorListener } from "@/components/auth-error-listener";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -84,6 +85,7 @@ export default function LoginPage() {
 
   return (
     <main className="flex flex-1 items-center justify-center px-4 py-12">
+      <AuthErrorListener />
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <p className="text-primary text-sm font-semibold tracking-wide uppercase">
