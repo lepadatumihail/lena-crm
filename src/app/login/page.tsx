@@ -1,14 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Mail, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, Mail } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/client";
 import { AuthErrorListener } from "@/components/auth-error-listener";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import {
   Card,
   CardContent,
@@ -48,10 +54,13 @@ function safeNext(): string {
 }
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [step, setStep] = useState<"email" | "code">("email");
   const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [emailLoading, setEmailLoading] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [verifying, setVerifying] = useState(false);
 
   async function handleGoogle() {
     setGoogleLoading(true);
@@ -59,7 +68,9 @@ export default function LoginPage() {
     const next = encodeURIComponent(safeNext());
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback?next=${next}` },
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=${next}`,
+      },
     });
     if (error) {
       toast.error(error.message);
@@ -67,20 +78,57 @@ export default function LoginPage() {
     }
   }
 
-  async function handleMagicLink(e: React.FormEvent) {
-    e.preventDefault();
-    setEmailLoading(true);
+  async function sendCode(): Promise<boolean> {
+    setSending(true);
     const supabase = createClient();
-    const next = encodeURIComponent(safeNext());
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=${next}`,
-      },
+      options: { shouldCreateUser: true },
     });
-    setEmailLoading(false);
-    if (error) toast.error(error.message);
-    else setSent(true);
+    setSending(false);
+    if (error) {
+      toast.error("Couldn't send code", { description: error.message });
+      return false;
+    }
+    return true;
+  }
+
+  async function handleSendCode(e: React.FormEvent) {
+    e.preventDefault();
+    if (await sendCode()) {
+      setCode("");
+      setStep("code");
+      toast.success("Code sent", {
+        description: `Check ${email} for your 6-digit code.`,
+      });
+    }
+  }
+
+  async function handleResend() {
+    if (await sendCode()) {
+      setCode("");
+      toast.success("New code sent");
+    }
+  }
+
+  async function handleVerify(value?: string) {
+    const token = (value ?? code).trim();
+    if (token.length !== 6) return;
+    setVerifying(true);
+    const supabase = createClient();
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: "email",
+    });
+    if (error) {
+      setVerifying(false);
+      setCode("");
+      toast.error("Invalid or expired code", { description: error.message });
+      return;
+    }
+    router.push(safeNext());
+    router.refresh();
   }
 
   return (
@@ -91,30 +139,22 @@ export default function LoginPage() {
           <p className="text-primary text-sm font-semibold tracking-wide uppercase">
             Lena
           </p>
-          <CardTitle className="text-2xl">Welcome back</CardTitle>
+          <CardTitle className="text-2xl">
+            {step === "email" ? "Welcome back" : "Enter your code"}
+          </CardTitle>
           <CardDescription>
-            Sign in to your CRM. No password needed.
+            {step === "email" ? (
+              "Sign in to your CRM. No password needed."
+            ) : (
+              <>
+                We emailed a 6-digit code to{" "}
+                <span className="text-foreground font-medium">{email}</span>.
+              </>
+            )}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {sent ? (
-            <div className="bg-muted/50 rounded-lg border p-4 text-center text-sm">
-              <Mail className="text-primary mx-auto mb-2 size-6" />
-              <p className="font-medium">Check your inbox</p>
-              <p className="text-muted-foreground mt-1">
-                We sent a magic link to{" "}
-                <span className="text-foreground font-medium">{email}</span>.
-                Open it on this device to sign in.
-              </p>
-              <Button
-                variant="link"
-                className="mt-2"
-                onClick={() => setSent(false)}
-              >
-                Use a different email
-              </Button>
-            </div>
-          ) : (
+          {step === "email" ? (
             <>
               <Button
                 variant="outline"
@@ -136,7 +176,7 @@ export default function LoginPage() {
                 <span className="bg-border h-px flex-1" />
               </div>
 
-              <form onSubmit={handleMagicLink} className="space-y-3">
+              <form onSubmit={handleSendCode} className="space-y-3">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -152,17 +192,74 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   className="w-full"
-                  disabled={emailLoading || !email}
+                  disabled={sending || !email}
                 >
-                  {emailLoading ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    <Mail />
-                  )}
-                  Email me a magic link
+                  {sending ? <Loader2 className="animate-spin" /> : <Mail />}
+                  Email me a code
                 </Button>
               </form>
             </>
+          ) : (
+            <div className="space-y-4">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void handleVerify();
+                }}
+                className="flex flex-col items-center gap-4"
+              >
+                <InputOTP
+                  maxLength={6}
+                  value={code}
+                  onChange={setCode}
+                  onComplete={(v) => void handleVerify(v)}
+                  disabled={verifying}
+                  autoFocus
+                  containerClassName="justify-center"
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={verifying || code.length !== 6}
+                >
+                  {verifying && <Loader2 className="animate-spin" />}
+                  Verify &amp; sign in
+                </Button>
+              </form>
+
+              <div className="flex items-center justify-between">
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="px-0"
+                  onClick={() => {
+                    setStep("email");
+                    setCode("");
+                  }}
+                  disabled={verifying}
+                >
+                  <ArrowLeft className="size-3.5" /> Different email
+                </Button>
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="px-0"
+                  onClick={handleResend}
+                  disabled={sending || verifying}
+                >
+                  Resend code
+                </Button>
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>
