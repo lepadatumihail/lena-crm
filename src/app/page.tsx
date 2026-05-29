@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { AuthErrorListener } from "@/components/auth-error-listener";
 import { MarketingNav } from "@/components/marketing-nav";
 import { Reveal } from "@/components/reveal";
+import { FeatureDeepDives } from "@/components/landing/feature-deep-dives";
 
 const FEATURES = [
   {
@@ -145,6 +146,9 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Feature deep-dives */}
+      <FeatureDeepDives />
 
       {/* Pipeline strip */}
       <section className="bg-muted/40 border-y">
