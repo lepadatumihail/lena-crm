@@ -8,12 +8,10 @@ import {
   FileText,
   Layers,
   Mail,
-  Search,
   Send,
   ShieldCheck,
   Smartphone,
   Sparkles,
-  Star,
   Tag,
   Users,
   X,
@@ -25,6 +23,7 @@ import { AuthErrorListener } from "@/components/auth-error-listener";
 import { MarketingNav } from "@/components/marketing-nav";
 import { Reveal } from "@/components/reveal";
 import { FeatureDeepDives } from "@/components/landing/feature-deep-dives";
+import { AppPreview } from "@/components/landing/app-preview";
 
 const FEATURES = [
   {
@@ -473,169 +472,6 @@ function TrustItem({
       <div>
         <h3 className="font-semibold">{title}</h3>
         <p className="text-muted-foreground mt-1 text-sm">{body}</p>
-      </div>
-    </div>
-  );
-}
-
-type PreviewCard = {
-  name: string;
-  meta: string;
-  initials: string;
-  avatar: string;
-  priority?: boolean;
-  offer?: string;
-  done?: boolean;
-};
-
-type PreviewColumn = {
-  label: string;
-  dot: string;
-  count: number;
-  cards: PreviewCard[];
-};
-
-/** Decorative, app-like pipeline board shown under the hero. */
-function AppPreview() {
-  const columns: PreviewColumn[] = [
-    {
-      label: "Qualified",
-      dot: "bg-primary",
-      count: 8,
-      cards: [
-        {
-          name: "Sofia Müller",
-          meta: "Apartment · €600–800k",
-          initials: "SM",
-          avatar: "bg-primary/15 text-primary",
-          priority: true,
-        },
-        {
-          name: "James Carter",
-          meta: "Villa · Nueva Andalucía",
-          initials: "JC",
-          avatar: "bg-accent text-accent-foreground",
-        },
-        {
-          name: "Anya Petrova",
-          meta: "Penthouse · Marbella",
-          initials: "AP",
-          avatar: "bg-secondary text-secondary-foreground",
-        },
-      ],
-    },
-    {
-      label: "Viewing",
-      dot: "bg-warning",
-      count: 5,
-      cards: [
-        {
-          name: "Olivia Brown",
-          meta: "5 properties viewed",
-          initials: "OB",
-          avatar: "bg-warning/20 text-warning",
-          offer: "€710k",
-        },
-        {
-          name: "Lars Nielsen",
-          meta: "Apartment · Estepona",
-          initials: "LN",
-          avatar: "bg-primary/15 text-primary",
-        },
-      ],
-    },
-    {
-      label: "Reserved",
-      dot: "bg-success",
-      count: 3,
-      cards: [
-        {
-          name: "Marie Dubois",
-          meta: "Notary · 14 Jun",
-          initials: "MD",
-          avatar: "bg-success/20 text-success",
-          done: true,
-        },
-      ],
-    },
-  ];
-
-  return (
-    <div aria-hidden className="relative mt-16 w-full max-w-4xl">
-      <div className="from-primary/12 absolute -inset-x-8 -top-8 -bottom-8 -z-10 rounded-[2.5rem] bg-gradient-to-tr to-transparent blur-2xl" />
-
-      <div className="bg-card overflow-hidden rounded-2xl border shadow-lg ring-1 ring-black/5">
-        {/* App toolbar */}
-        <div className="flex items-center justify-between gap-3 border-b px-3 py-2.5 sm:px-4">
-          <div className="bg-muted inline-flex rounded-lg p-0.5 text-xs">
-            <span className="bg-background rounded-md px-2.5 py-1 font-medium shadow-sm">
-              Buyers
-            </span>
-            <span className="text-muted-foreground px-2.5 py-1">Sellers</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="bg-muted/60 text-muted-foreground hidden items-center gap-1.5 rounded-md px-2 py-1 text-xs sm:flex">
-              <Search className="size-3.5" /> Search…
-            </div>
-            <span className="bg-primary text-primary-foreground rounded-md px-2 py-1 text-xs font-medium">
-              + New
-            </span>
-          </div>
-        </div>
-
-        {/* Board */}
-        <div className="relative">
-          <div className="grid grid-cols-3 gap-2 p-3 text-left sm:gap-3 sm:p-4">
-            {columns.map((col) => (
-              <div key={col.label} className="flex flex-col gap-2">
-                <div className="flex items-center justify-between px-0.5">
-                  <span className="flex items-center gap-1.5 text-xs font-semibold">
-                    <span className={`size-2 rounded-full ${col.dot}`} />
-                    {col.label}
-                  </span>
-                  <span className="text-muted-foreground bg-muted rounded-full px-1.5 text-[10px]">
-                    {col.count}
-                  </span>
-                </div>
-
-                {col.cards.map((card) => (
-                  <div
-                    key={card.name}
-                    className="bg-background flex items-center gap-2 rounded-lg border p-2 shadow-sm"
-                  >
-                    <span
-                      className={`hidden size-7 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold sm:flex ${card.avatar}`}
-                    >
-                      {card.initials}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1">
-                        <p className="truncate text-[11px] font-medium sm:text-xs">
-                          {card.name}
-                        </p>
-                        {card.priority && (
-                          <Star className="fill-warning text-warning size-3 shrink-0" />
-                        )}
-                      </div>
-                      <p className="text-muted-foreground mt-0.5 truncate text-[10px] sm:text-[11px]">
-                        {card.meta}
-                      </p>
-                    </div>
-                    {card.offer && (
-                      <span className="bg-success/15 text-success shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-semibold sm:text-[10px]">
-                        {card.offer}
-                      </span>
-                    )}
-                    {card.done && (
-                      <Check className="text-success size-3.5 shrink-0" />
-                    )}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-          <div className="from-card pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t to-transparent" />
-        </div>
       </div>
     </div>
   );
