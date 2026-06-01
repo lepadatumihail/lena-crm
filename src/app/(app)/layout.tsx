@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 
 import { createClient } from "@/lib/supabase/server";
 import { AppSidebar } from "@/components/app-sidebar";
+import { NotificationsBell } from "@/components/notifications/notifications-bell";
 import {
   SidebarInset,
   SidebarProvider,
@@ -30,6 +31,9 @@ export default async function AppLayout({
       <SidebarInset>
         <header className="bg-background/80 sticky top-0 z-10 flex h-14 items-center gap-2 border-b px-4 backdrop-blur">
           <SidebarTrigger className="-ml-1" />
+          <div className="ml-auto">
+            <NotificationsBell />
+          </div>
         </header>
         <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
           {children}

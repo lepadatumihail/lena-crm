@@ -418,6 +418,99 @@ export type Database = {
         };
         Relationships: [];
       };
+      appointments: {
+        Row: {
+          id: string;
+          agent_id: string;
+          type: Database["public"]["Enums"]["appointment_type"];
+          title: string | null;
+          client_id: string | null;
+          property_id: string | null;
+          property_label: string | null;
+          starts_at: string;
+          ends_at: string | null;
+          location: string | null;
+          notes: string | null;
+          reminder_minutes: number | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          agent_id?: string;
+          type: Database["public"]["Enums"]["appointment_type"];
+          title?: string | null;
+          client_id?: string | null;
+          property_id?: string | null;
+          property_label?: string | null;
+          starts_at: string;
+          ends_at?: string | null;
+          location?: string | null;
+          notes?: string | null;
+          reminder_minutes?: number | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          agent_id?: string;
+          type?: Database["public"]["Enums"]["appointment_type"];
+          title?: string | null;
+          client_id?: string | null;
+          property_id?: string | null;
+          property_label?: string | null;
+          starts_at?: string;
+          ends_at?: string | null;
+          location?: string | null;
+          notes?: string | null;
+          reminder_minutes?: number | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      notifications: {
+        Row: {
+          id: string;
+          agent_id: string;
+          type: Database["public"]["Enums"]["notification_type"];
+          title: string;
+          body: string | null;
+          client_id: string | null;
+          appointment_id: string | null;
+          dedupe_key: string;
+          due_at: string;
+          read_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          agent_id?: string;
+          type: Database["public"]["Enums"]["notification_type"];
+          title: string;
+          body?: string | null;
+          client_id?: string | null;
+          appointment_id?: string | null;
+          dedupe_key: string;
+          due_at?: string;
+          read_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          agent_id?: string;
+          type?: Database["public"]["Enums"]["notification_type"];
+          title?: string;
+          body?: string | null;
+          client_id?: string | null;
+          appointment_id?: string | null;
+          dedupe_key?: string;
+          due_at?: string;
+          read_at?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;
@@ -429,6 +522,13 @@ export type Database = {
       email_provider: "google" | "microsoft" | "resend";
       email_account_status: "connected" | "disconnected" | "error";
       scheduled_email_status: "pending" | "sent" | "failed" | "cancelled";
+      appointment_type: "meeting" | "viewing";
+      notification_type:
+        | "appointment_reminder"
+        | "appointment_today"
+        | "follow_up"
+        | "reservation_date"
+        | "stalled_offer";
     };
     CompositeTypes: Record<never, never>;
   };
@@ -456,3 +556,5 @@ export type DocumentRow = Tables<"documents">;
 export type EmailAccount = Tables<"email_accounts">;
 export type EmailTemplate = Tables<"email_templates">;
 export type ScheduledEmail = Tables<"scheduled_emails">;
+export type Appointment = Tables<"appointments">;
+export type Notification = Tables<"notifications">;

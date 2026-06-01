@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { Building2, LogOut, Users } from "lucide-react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Building2, CalendarDays, LogOut, Users } from "lucide-react";
 
 import { signOut } from "@/lib/actions/auth";
 import {
@@ -19,14 +19,19 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-const NAV = [
+const PIPELINE = [
   { side: "buyer", label: "Buyers", icon: Users },
   { side: "seller", label: "Sellers", icon: Building2 },
 ] as const;
 
+const ACTIVE_CLASSES =
+  "data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:hover:bg-primary/15 data-[active=true]:[&>svg]:text-primary";
+
 export function AppSidebar({ email }: { email: string }) {
+  const pathname = usePathname();
   const params = useSearchParams();
-  const active = params.get("side") === "seller" ? "seller" : "buyer";
+  const onCalendar = pathname.startsWith("/calendar");
+  const side = params.get("side") === "seller" ? "seller" : "buyer";
 
   return (
     <Sidebar collapsible="icon">
@@ -46,16 +51,36 @@ export function AppSidebar({ email }: { email: string }) {
 
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={onCalendar}
+                  tooltip="Calendar"
+                  className={ACTIVE_CLASSES}
+                >
+                  <Link href="/calendar">
+                    <CalendarDays />
+                    <span>Calendar</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
           <SidebarGroupLabel>Pipeline</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {NAV.map((item) => (
+              {PIPELINE.map((item) => (
                 <SidebarMenuItem key={item.side}>
                   <SidebarMenuButton
                     asChild
-                    isActive={active === item.side}
+                    isActive={!onCalendar && side === item.side}
                     tooltip={item.label}
-                    className="data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:hover:bg-primary/15 data-[active=true]:[&>svg]:text-primary"
+                    className={ACTIVE_CLASSES}
                   >
                     <Link href={`/clients?side=${item.side}`}>
                       <item.icon />
