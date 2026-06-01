@@ -11,6 +11,9 @@ import {
 
 type ActionResult = { error: string | null };
 
+const STORAGE_BUCKET = "attachments";
+const REMOVE_CHUNK_SIZE = 100;
+
 export async function createClient(
   values: ClientFormValues
 ): Promise<{ error: string | null; id?: string }> {
@@ -78,6 +81,37 @@ export async function updateClient(
 
 export async function deleteClient(id: string): Promise<ActionResult> {
   const supabase = await createSupabase();
+
+  // Gather every storage object owned by this client before deleting the row.
+  // The DB rows cascade away, but the bucket files do not, so collect their
+  // paths first or they leak.
+  const paths: string[] = [];
+
+  const { data: docs } = await supabase
+    .from("documents")
+    .select("storage_path")
+    .eq("client_id", id);
+  for (const d of docs ?? []) paths.push(d.storage_path);
+
+  const { data: viewings } = await supabase
+    .from("viewings")
+    .select("id")
+    .eq("client_id", id);
+  const viewingIds = (viewings ?? []).map((v) => v.id);
+  if (viewingIds.length) {
+    const { data: atts } = await supabase
+      .from("viewing_attachments")
+      .select("storage_path")
+      .in("viewing_id", viewingIds);
+    for (const a of atts ?? []) paths.push(a.storage_path);
+  }
+
+  for (let i = 0; i < paths.length; i += REMOVE_CHUNK_SIZE) {
+    await supabase.storage
+      .from(STORAGE_BUCKET)
+      .remove(paths.slice(i, i + REMOVE_CHUNK_SIZE));
+  }
+
   const { error } = await supabase.from("clients").delete().eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/clients");
