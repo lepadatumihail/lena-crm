@@ -55,6 +55,7 @@ export function AppSidebar({ email }: { email: string }) {
                     asChild
                     isActive={active === item.side}
                     tooltip={item.label}
+                    className="data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:hover:bg-primary/15 data-[active=true]:[&>svg]:text-primary"
                   >
                     <Link href={`/clients?side=${item.side}`}>
                       <item.icon />

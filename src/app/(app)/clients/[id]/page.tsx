@@ -36,7 +36,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  buyerStageAtLeast,
   clientFullName,
   DEAL_TYPE_LABELS,
   SELLER_ROLE_LABELS,
@@ -75,10 +74,10 @@ export default async function ClientDetailPage({
 
   const side = client.side as ClientSide;
   const isBuyer = side === "buyer";
-  const showPrefs = isBuyer && buyerStageAtLeast(client.stage, "qualified");
-  const showViewings = isBuyer && buyerStageAtLeast(client.stage, "viewing");
-  const showReservation = isBuyer && client.stage === "reserved";
-  const showProperties = !isBuyer && client.stage === "qualified";
+  const showPrefs = isBuyer;
+  const showViewings = isBuyer;
+  const showReservation = isBuyer;
+  const showProperties = !isBuyer;
 
   const [prefs, viewings, reservation, properties, documents] =
     await Promise.all([
@@ -161,18 +160,20 @@ export default async function ClientDetailPage({
               properties={properties}
             />
           )}
-          {client.notes && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Notes</CardTitle>
-              </CardHeader>
-              <CardContent>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Notes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {client.notes ? (
                 <p className="text-muted-foreground text-sm whitespace-pre-wrap">
                   {client.notes}
                 </p>
-              </CardContent>
-            </Card>
-          )}
+              ) : (
+                <p className="text-muted-foreground text-sm">No notes yet.</p>
+              )}
+            </CardContent>
+          </Card>
           <DocumentsSection
             clientId={client.id}
             agentId={client.agent_id}
