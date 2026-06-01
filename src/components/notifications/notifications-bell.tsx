@@ -98,10 +98,16 @@ export function NotificationsBell() {
       void markNotificationRead(n.id);
     }
     setOpen(false);
+    const compose =
+      n.type === "follow_up"
+        ? "?compose=check_in"
+        : n.type === "stalled_offer"
+          ? "?compose=offer_followup"
+          : "";
     const href = n.type.startsWith("appointment")
       ? "/calendar"
       : n.client_id
-        ? `/clients/${n.client_id}`
+        ? `/clients/${n.client_id}${compose}`
         : "/calendar";
     router.push(href);
   }

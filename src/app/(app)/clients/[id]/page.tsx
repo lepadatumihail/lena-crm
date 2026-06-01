@@ -21,6 +21,7 @@ import { getMatchingListings, getProperties } from "@/lib/data/seller";
 import { ClientControls } from "@/components/clients/client-controls";
 import { StageBadge } from "@/components/clients/stage-badge";
 import { WhatsAppButton } from "@/components/clients/whatsapp-button";
+import { MessageComposer } from "@/components/clients/message-composer";
 import { PreferencesSection } from "@/components/clients/sections/preferences-section";
 import { ViewingsSection } from "@/components/clients/sections/viewings-section";
 import { ReservationSection } from "@/components/clients/sections/reservation-section";
@@ -42,6 +43,7 @@ import {
   SELLER_ROLE_LABELS,
   type ClientSide,
 } from "@/lib/crm";
+import { buildVars } from "@/lib/message-templates";
 
 function InfoRow({
   icon,
@@ -66,10 +68,13 @@ function InfoRow({
 
 export default async function ClientDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ compose?: string }>;
 }) {
   const { id } = await params;
+  const { compose } = await searchParams;
   const client = await getClientById(id);
   if (!client) notFound();
 
@@ -98,6 +103,15 @@ export default async function ClientDetailPage({
           bedrooms: prefs.bedrooms,
         })
       : [];
+
+  const messageVars = buildVars({
+    first_name: client.first_name,
+    last_name: client.last_name,
+    agency: client.agency,
+    budgetMin: prefs?.budget_min ?? null,
+    budgetMax: prefs?.budget_max ?? null,
+    property: viewings[0]?.title ?? null,
+  });
 
   const typeLabel =
     side === "buyer"
@@ -193,6 +207,16 @@ export default async function ClientDetailPage({
                 firstName={client.first_name}
                 language={client.language}
                 className="w-full"
+              />
+              <MessageComposer
+                client={{
+                  id: client.id,
+                  first_name: client.first_name,
+                  phone: client.phone,
+                  email: client.email,
+                }}
+                vars={messageVars}
+                autoOpenTemplate={compose ?? null}
               />
               <InfoRow
                 icon={<Mail className="size-4" />}
