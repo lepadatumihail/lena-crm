@@ -59,12 +59,14 @@ export function NotificationsBell() {
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState<Notification[]>([]);
   const [unread, setUnread] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
 
   const refresh = useCallback(async () => {
     try {
       const feed = await loadNotifications(buildContext());
       setItems(feed.items);
       setUnread(feed.unread);
+      setHasMore(feed.hasMore);
     } catch {
       // keep whatever we already have
     }
@@ -200,6 +202,11 @@ export function NotificationsBell() {
             })
           )}
         </div>
+        {hasMore && (
+          <p className="text-muted-foreground border-t px-3 py-2 text-center text-xs">
+            Showing your most recent notifications
+          </p>
+        )}
       </PopoverContent>
     </Popover>
   );

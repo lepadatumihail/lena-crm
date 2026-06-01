@@ -1,7 +1,11 @@
 import { createClient as createSupabase } from "@/lib/supabase/server";
 import type { Notification } from "@/lib/supabase/types";
 
-export type NotificationFeed = { items: Notification[]; unread: number };
+export type NotificationFeed = {
+  items: Notification[];
+  unread: number;
+  hasMore: boolean;
+};
 
 export async function getNotificationFeed(
   limit = 30
@@ -20,5 +24,10 @@ export async function getNotificationFeed(
       .is("read_at", null),
   ]);
   if (listRes.error) throw new Error(listRes.error.message);
-  return { items: listRes.data ?? [], unread: countRes.count ?? 0 };
+  const items = listRes.data ?? [];
+  return {
+    items,
+    unread: countRes.count ?? 0,
+    hasMore: items.length >= limit,
+  };
 }

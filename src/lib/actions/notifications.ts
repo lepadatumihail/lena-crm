@@ -313,6 +313,13 @@ export async function syncNotifications(
       .upsert(rows, { onConflict: "agent_id,dedupe_key" });
     if (error) return { error: error.message };
   }
+
+  // Keep the table lean: drop notifications that were read over 30 days ago.
+  const pruneBefore = new Date(
+    now.getTime() - 30 * 24 * 60 * 60 * 1000
+  ).toISOString();
+  await supabase.from("notifications").delete().lt("read_at", pruneBefore);
+
   return { error: null };
 }
 
