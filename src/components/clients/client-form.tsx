@@ -35,6 +35,8 @@ import {
   clientFormSchema,
   type ClientFormValues,
 } from "@/lib/validation/client";
+import { LeadPaste } from "@/components/clients/lead-paste";
+import type { ExtractedLead } from "@/lib/actions/leads";
 import {
   clientsPath,
   DEAL_TYPE_LABELS,
@@ -104,9 +106,21 @@ export function ClientForm({
   const cancelHref =
     mode === "edit" && clientId ? `/clients/${clientId}` : clientsPath(side);
 
+  function applyLead(data: ExtractedLead) {
+    if (data.first_name) form.setValue("first_name", data.first_name, { shouldDirty: true });
+    if (data.last_name) form.setValue("last_name", data.last_name, { shouldDirty: true });
+    if (data.email) form.setValue("email", data.email, { shouldDirty: true });
+    if (data.phone) form.setValue("phone", data.phone, { shouldDirty: true });
+    if (data.language) form.setValue("language", data.language, { shouldDirty: true });
+    if (data.nationality)
+      form.setValue("nationality", data.nationality, { shouldDirty: true });
+    if (data.notes) form.setValue("notes", data.notes, { shouldDirty: true });
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {mode === "create" && <LeadPaste onApply={applyLead} />}
         <div className="grid gap-4 sm:grid-cols-2">
           <FormField
             control={form.control}
