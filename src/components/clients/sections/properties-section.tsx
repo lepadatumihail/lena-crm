@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { PriceInput } from "@/components/price-input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
@@ -282,7 +283,12 @@ function PropertyDialog({
                   <FormItem>
                     <FormLabel>Price (€)</FormLabel>
                     <FormControl>
-                      <Input inputMode="numeric" placeholder="950000" {...field} />
+                      <PriceInput
+                        placeholder="950.000"
+                        value={field.value ?? ""}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

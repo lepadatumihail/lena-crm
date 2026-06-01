@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { PriceInput } from "@/components/price-input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
@@ -225,7 +226,12 @@ function PreferencesDialog({
                   <FormItem>
                     <FormLabel>Budget min (€)</FormLabel>
                     <FormControl>
-                      <Input inputMode="numeric" placeholder="500000" {...field} />
+                      <PriceInput
+                        placeholder="500.000"
+                        value={field.value ?? ""}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -238,7 +244,12 @@ function PreferencesDialog({
                   <FormItem>
                     <FormLabel>Budget max (€)</FormLabel>
                     <FormControl>
-                      <Input inputMode="numeric" placeholder="800000" {...field} />
+                      <PriceInput
+                        placeholder="800.000"
+                        value={field.value ?? ""}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

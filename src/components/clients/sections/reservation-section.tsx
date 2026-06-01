@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { PriceInput } from "@/components/price-input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
@@ -180,7 +181,12 @@ function ReservationDialog({
                   <FormItem>
                     <FormLabel>Down payment (€)</FormLabel>
                     <FormControl>
-                      <Input inputMode="numeric" placeholder="50000" {...field} />
+                      <PriceInput
+                        placeholder="50.000"
+                        value={field.value ?? ""}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -206,7 +212,12 @@ function ReservationDialog({
                   <FormItem>
                     <FormLabel>PPC (€)</FormLabel>
                     <FormControl>
-                      <Input inputMode="numeric" placeholder="75000" {...field} />
+                      <PriceInput
+                        placeholder="75.000"
+                        value={field.value ?? ""}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -245,7 +256,12 @@ function ReservationDialog({
                   <FormItem>
                     <FormLabel>Commission (€)</FormLabel>
                     <FormControl>
-                      <Input inputMode="numeric" placeholder="18000" {...field} />
+                      <PriceInput
+                        placeholder="18.000"
+                        value={field.value ?? ""}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/select";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { DatePicker, TimePicker } from "@/components/date-time-picker";
+import { PriceInput } from "@/components/price-input";
 import { deleteViewing, saveViewing } from "@/lib/actions/buyer";
 import {
   viewingFormSchema,
@@ -236,7 +237,12 @@ export function ViewingDialog({
                 <FormItem>
                   <FormLabel>Asking price (€)</FormLabel>
                   <FormControl>
-                    <Input inputMode="numeric" placeholder="750000" {...field} />
+                    <PriceInput
+                      placeholder="750.000"
+                      value={field.value ?? ""}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -321,7 +327,12 @@ export function ViewingDialog({
                   <FormItem>
                     <FormLabel>Offer price (€)</FormLabel>
                     <FormControl>
-                      <Input inputMode="numeric" placeholder="710000" {...field} />
+                      <PriceInput
+                        placeholder="710.000"
+                        value={field.value ?? ""}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
