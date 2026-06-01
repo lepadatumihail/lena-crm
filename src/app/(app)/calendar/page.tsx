@@ -8,10 +8,7 @@ import {
   startOfWeek,
 } from "date-fns";
 
-import {
-  getAppointmentsInRange,
-  getCalendarFormData,
-} from "@/lib/data/calendar";
+import { getCalendarEvents, getCalendarFormData } from "@/lib/data/calendar";
 import { CalendarView } from "@/components/calendar/calendar-view";
 
 export default async function CalendarPage({
@@ -27,9 +24,9 @@ export default async function CalendarPage({
   const gridStart = startOfWeek(startOfMonth(base), { weekStartsOn: 1 });
   const gridEnd = endOfWeek(endOfMonth(base), { weekStartsOn: 1 });
 
-  const [appointments, formData] = await Promise.all([
+  const [events, formData] = await Promise.all([
     // pad ±1 day so events near midnight at the grid edges aren't missed
-    getAppointmentsInRange(
+    getCalendarEvents(
       addDays(gridStart, -1).toISOString(),
       addDays(gridEnd, 1).toISOString()
     ),
@@ -39,9 +36,8 @@ export default async function CalendarPage({
   return (
     <CalendarView
       monthISO={format(base, "yyyy-MM")}
-      appointments={appointments}
+      events={events}
       clients={formData.clients}
-      properties={formData.properties}
     />
   );
 }

@@ -125,6 +125,8 @@ export type Database = {
           had_offer: boolean;
           offer_price: number | null;
           property_price: number | null;
+          scheduled_at: string | null;
+          reminder_minutes: number | null;
           created_at: string;
           updated_at: string;
         };
@@ -137,6 +139,8 @@ export type Database = {
           had_offer?: boolean;
           offer_price?: number | null;
           property_price?: number | null;
+          scheduled_at?: string | null;
+          reminder_minutes?: number | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -149,6 +153,8 @@ export type Database = {
           had_offer?: boolean;
           offer_price?: number | null;
           property_price?: number | null;
+          scheduled_at?: string | null;
+          reminder_minutes?: number | null;
           created_at?: string;
           updated_at?: string;
         };

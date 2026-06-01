@@ -39,19 +39,11 @@ import {
   appointmentFormSchema,
   type AppointmentFormValues,
 } from "@/lib/validation/calendar";
-import {
-  APPOINTMENT_TYPES,
-  APPOINTMENT_TYPE_LABELS,
-  REMINDER_PRESETS,
-} from "@/lib/calendar";
-import { cn } from "@/lib/utils";
+import { REMINDER_PRESETS } from "@/lib/calendar";
 import type {
   AppointmentWithRefs,
   CalendarClientOption,
-  CalendarPropertyOption,
 } from "@/lib/data/calendar";
-
-const NO_PROPERTY = "none";
 
 const DURATIONS = [
   { value: "30", label: "30 minutes" },
@@ -80,11 +72,11 @@ function toFormValues(
         )
       : 60;
     return {
-      type: appointment.type,
+      type: "meeting",
       title: appointment.title ?? "",
       client_id: appointment.client_id ?? "",
-      property_id: appointment.property_id ?? "",
-      property_label: appointment.property_label ?? "",
+      property_id: "",
+      property_label: "",
       date: format(start, "yyyy-MM-dd"),
       time: format(start, "HH:mm"),
       duration_minutes: String(duration),
@@ -114,14 +106,12 @@ export function AppointmentDialog({
   appointment,
   defaultDateKey,
   clients,
-  properties,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   appointment?: AppointmentWithRefs;
   defaultDateKey?: string;
   clients: CalendarClientOption[];
-  properties: CalendarPropertyOption[];
 }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
@@ -131,17 +121,10 @@ export function AppointmentDialog({
     defaultValues: toFormValues(appointment, defaultDateKey),
   });
 
-  // Re-seed the form whenever the dialog opens for a different target.
   useEffect(() => {
     if (open) form.reset(toFormValues(appointment, defaultDateKey));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, appointment?.id, defaultDateKey]);
-
-  const type = form.watch("type");
-  const isViewing = type === "viewing";
-  const clientOptions = isViewing
-    ? clients.filter((c) => c.side === "buyer")
-    : clients;
 
   async function onSubmit(values: AppointmentFormValues) {
     const start = new Date(`${values.date}T${values.time}`);
@@ -154,11 +137,11 @@ export function AppointmentDialog({
 
     setSubmitting(true);
     const { error } = await saveAppointment(appointment?.id ?? null, {
-      type: values.type,
+      type: "meeting",
       title: values.title?.trim() || null,
       client_id: values.client_id || null,
-      property_id: isViewing && values.property_id ? values.property_id : null,
-      property_label: isViewing ? values.property_label?.trim() || null : null,
+      property_id: null,
+      property_label: null,
       starts_at: start.toISOString(),
       ends_at: ends.toISOString(),
       location: values.location?.trim() || null,
@@ -167,10 +150,10 @@ export function AppointmentDialog({
     });
     setSubmitting(false);
     if (error) {
-      toast.error("Couldn't save appointment", { description: error });
+      toast.error("Couldn't save meeting", { description: error });
       return;
     }
-    toast.success(appointment ? "Appointment updated" : "Appointment created");
+    toast.success(appointment ? "Meeting updated" : "Meeting created");
     onOpenChange(false);
     router.refresh();
   }
@@ -182,7 +165,7 @@ export function AppointmentDialog({
       toast.error("Couldn't delete", { description: error });
       return false;
     }
-    toast.success("Appointment deleted");
+    toast.success("Meeting deleted");
     onOpenChange(false);
     router.refresh();
     return true;
@@ -193,44 +176,17 @@ export function AppointmentDialog({
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {appointment ? "Edit appointment" : "New appointment"}
+            {appointment ? "Edit meeting" : "New meeting"}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Type</FormLabel>
-                  <div className="grid grid-cols-2 gap-2">
-                    {APPOINTMENT_TYPES.map((t) => (
-                      <button
-                        key={t}
-                        type="button"
-                        onClick={() => field.onChange(t)}
-                        className={cn(
-                          "rounded-md border px-3 py-2 text-sm font-medium transition-colors",
-                          field.value === t
-                            ? "border-primary bg-primary/10 text-primary"
-                            : "hover:bg-accent"
-                        )}
-                      >
-                        {APPOINTMENT_TYPE_LABELS[t]}
-                      </button>
-                    ))}
-                  </div>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="client_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{isViewing ? "Buyer" : "Client"}</FormLabel>
+                  <FormLabel>Client</FormLabel>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger className="w-full">
@@ -238,12 +194,12 @@ export function AppointmentDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {clientOptions.length === 0 ? (
+                      {clients.length === 0 ? (
                         <div className="text-muted-foreground px-2 py-1.5 text-sm">
-                          No {isViewing ? "buyers" : "clients"} yet
+                          No clients yet
                         </div>
                       ) : (
-                        clientOptions.map((c) => (
+                        clients.map((c) => (
                           <SelectItem key={c.id} value={c.id}>
                             {c.name}
                           </SelectItem>
@@ -256,59 +212,6 @@ export function AppointmentDialog({
               )}
             />
 
-            {isViewing && (
-              <>
-                <FormField
-                  control={form.control}
-                  name="property_id"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Property</FormLabel>
-                      <Select
-                        value={field.value || NO_PROPERTY}
-                        onValueChange={(v) =>
-                          field.onChange(v === NO_PROPERTY ? "" : v)
-                        }
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Pick one of your listings…" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value={NO_PROPERTY}>
-                            Not one of my listings
-                          </SelectItem>
-                          {properties.map((p) => (
-                            <SelectItem key={p.id} value={p.id}>
-                              {p.label}
-                              {p.sellerName ? ` — ${p.sellerName}` : ""}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="property_label"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Or enter an address</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="e.g. C/ Ramón Gómez 4, Marbella"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </>
-            )}
-
             <FormField
               control={form.control}
               name="title"
@@ -316,7 +219,7 @@ export function AppointmentDialog({
                 <FormItem>
                   <FormLabel>Title (optional)</FormLabel>
                   <FormControl>
-                    <Input placeholder="Defaults to type + client" {...field} />
+                    <Input placeholder="Defaults to client name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -407,10 +310,7 @@ export function AppointmentDialog({
                     </FormControl>
                     <SelectContent>
                       {REMINDER_PRESETS.map((p) => (
-                        <SelectItem
-                          key={p.label}
-                          value={reminderValue(p.value)}
-                        >
+                        <SelectItem key={p.label} value={reminderValue(p.value)}>
                           {p.label}
                         </SelectItem>
                       ))}
@@ -437,8 +337,8 @@ export function AppointmentDialog({
             <DialogFooter className="gap-2 sm:justify-between">
               {appointment ? (
                 <ConfirmDialog
-                  title="Delete appointment?"
-                  description="This appointment will be permanently deleted."
+                  title="Delete meeting?"
+                  description="This meeting will be permanently deleted."
                   onConfirm={onDelete}
                   trigger={
                     <Button

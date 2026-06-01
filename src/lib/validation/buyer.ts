@@ -46,6 +46,11 @@ export const viewingFormSchema = z.object({
   property_price: numericString(),
   had_offer: z.boolean(),
   offer_price: numericString(),
+  // optional scheduling — when a date is set the viewing shows on the calendar
+  client_id: z.string().optional().or(z.literal("")),
+  date: optionalDate,
+  time: z.string(),
+  reminder: z.string(),
 });
 export type ViewingFormValues = z.infer<typeof viewingFormSchema>;
 

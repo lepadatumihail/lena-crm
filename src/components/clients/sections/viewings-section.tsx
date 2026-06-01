@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { format } from "date-fns";
 import {
+  CalendarClock,
   FileText,
   ImageIcon,
-  Loader2,
   Pencil,
   Plus,
   Trash2,
@@ -22,37 +21,14 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { UploadButton } from "@/components/file-upload";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { ViewingDialog } from "@/components/clients/viewing-dialog";
 import {
+  addViewingAttachment,
   deleteViewing,
   deleteViewingAttachment,
-  addViewingAttachment,
-  saveViewing,
 } from "@/lib/actions/buyer";
-import {
-  viewingFormSchema,
-  type ViewingFormValues,
-} from "@/lib/validation/buyer";
 import { formatCurrency } from "@/lib/crm";
 import { createClient } from "@/lib/supabase/client";
 import type { ViewingWithAttachments } from "@/lib/data/buyer";
@@ -189,6 +165,12 @@ function ViewingCard({
       </div>
 
       <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+        {viewing.scheduled_at && (
+          <span className="text-muted-foreground flex items-center gap-1">
+            <CalendarClock className="size-3.5" />
+            {format(new Date(viewing.scheduled_at), "EEE d MMM, HH:mm")}
+          </span>
+        )}
         {viewing.property_price != null && (
           <span className="text-muted-foreground">
             Asking{" "}
@@ -314,152 +296,5 @@ function AttachmentRow({
         }
       />
     </div>
-  );
-}
-
-function ViewingDialog({
-  clientId,
-  viewing,
-  open,
-  onOpenChange,
-}: {
-  clientId: string;
-  viewing?: ViewingWithAttachments;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}) {
-  const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
-
-  const form = useForm<ViewingFormValues>({
-    resolver: zodResolver(viewingFormSchema),
-    defaultValues: {
-      title: viewing?.title ?? "",
-      description: viewing?.description ?? "",
-      property_price:
-        viewing?.property_price != null ? String(viewing.property_price) : "",
-      had_offer: viewing?.had_offer ?? false,
-      offer_price:
-        viewing?.offer_price != null ? String(viewing.offer_price) : "",
-    },
-  });
-
-  const hadOffer = form.watch("had_offer");
-
-  async function onSubmit(values: ViewingFormValues) {
-    setSubmitting(true);
-    const { error } = await saveViewing(clientId, viewing?.id ?? null, values);
-    setSubmitting(false);
-    if (error) {
-      toast.error("Couldn't save viewing", { description: error });
-      return;
-    }
-    toast.success(viewing ? "Viewing updated" : "Viewing added");
-    onOpenChange(false);
-    if (!viewing) form.reset();
-    router.refresh();
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{viewing ? "Edit viewing" : "Add viewing"}</DialogTitle>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Property title</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="3-bed apartment, Nueva Andalucía"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea rows={2} placeholder="Notes about the property…" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="property_price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Asking price (€)</FormLabel>
-                  <FormControl>
-                    <Input inputMode="numeric" placeholder="750000" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="had_offer"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
-                  <Label htmlFor="had_offer">Made an offer</Label>
-                  <FormControl>
-                    <Switch
-                      id="had_offer"
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
-            {hadOffer && (
-              <FormField
-                control={form.control}
-                name="offer_price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Offer price (€)</FormLabel>
-                    <FormControl>
-                      <Input inputMode="numeric" placeholder="710000" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => onOpenChange(false)}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={submitting}>
-                {submitting && <Loader2 className="animate-spin" />}
-                {viewing ? "Save" : "Add viewing"}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
   );
 }

@@ -1,5 +1,6 @@
 import { createClient as createSupabase } from "@/lib/supabase/server";
-import type { Appointment } from "@/lib/supabase/types";
+import { appointmentTitle } from "@/lib/calendar";
+import type { Appointment, Viewing } from "@/lib/supabase/types";
 
 type Embedded<T> = T | T[] | null;
 
@@ -32,7 +33,7 @@ type RawAppointment = Appointment & {
   property: Embedded<AppointmentPropertyRef>;
 };
 
-export async function getAppointmentsInRange(
+async function getAppointmentsInRange(
   startISO: string,
   endISO: string
 ): Promise<AppointmentWithRefs[]> {
@@ -55,64 +56,112 @@ export async function getAppointmentsInRange(
   }));
 }
 
+/** A single thing on the calendar — a meeting (appointment) or a dated viewing. */
+export type CalendarEvent =
+  | {
+      kind: "meeting";
+      id: string;
+      starts_at: string;
+      ends_at: string | null;
+      title: string;
+      location: string | null;
+      appointment: AppointmentWithRefs;
+    }
+  | {
+      kind: "viewing";
+      id: string;
+      starts_at: string;
+      ends_at: string | null;
+      title: string;
+      location: string | null;
+      viewing: Viewing;
+      buyerId: string;
+      buyerName: string | null;
+    };
+
+export async function getCalendarEvents(
+  startISO: string,
+  endISO: string
+): Promise<CalendarEvent[]> {
+  const supabase = await createSupabase();
+  const [appointments, viewingsRes] = await Promise.all([
+    getAppointmentsInRange(startISO, endISO),
+    supabase
+      .from("viewings")
+      .select("*, client:clients(id, first_name, last_name)")
+      .not("scheduled_at", "is", null)
+      .gte("scheduled_at", startISO)
+      .lte("scheduled_at", endISO)
+      .order("scheduled_at", { ascending: true }),
+  ]);
+  if (viewingsRes.error) throw new Error(viewingsRes.error.message);
+
+  const meetings: CalendarEvent[] = appointments.map((a) => ({
+    kind: "meeting",
+    id: a.id,
+    starts_at: a.starts_at,
+    ends_at: a.ends_at,
+    title: appointmentTitle(a, {
+      clientName: a.client
+        ? `${a.client.first_name} ${a.client.last_name}`.trim()
+        : null,
+      property:
+        a.property_label ??
+        a.property?.address ??
+        a.property?.property_type ??
+        null,
+    }),
+    location: a.location,
+    appointment: a,
+  }));
+
+  type RawViewing = Viewing & {
+    client: Embedded<{ id: string; first_name: string; last_name: string }>;
+  };
+  const viewings: CalendarEvent[] = (
+    (viewingsRes.data ?? []) as unknown as RawViewing[]
+  ).map((v) => {
+    const buyer = one(v.client);
+    const buyerName = buyer
+      ? `${buyer.first_name} ${buyer.last_name}`.trim()
+      : null;
+    return {
+      kind: "viewing",
+      id: v.id,
+      starts_at: v.scheduled_at as string,
+      ends_at: null,
+      title: v.title?.trim() || (buyerName ? `Viewing with ${buyerName}` : "Viewing"),
+      location: null,
+      viewing: v,
+      buyerId: v.client_id,
+      buyerName,
+    };
+  });
+
+  return [...meetings, ...viewings];
+}
+
 export type CalendarClientOption = {
   id: string;
   name: string;
   side: string;
 };
 
-export type CalendarPropertyOption = {
-  id: string;
-  label: string;
-  sellerName: string;
-};
-
 export async function getCalendarFormData(): Promise<{
   clients: CalendarClientOption[];
-  properties: CalendarPropertyOption[];
 }> {
   const supabase = await createSupabase();
-  const [clientsRes, propsRes] = await Promise.all([
-    supabase
-      .from("clients")
-      .select("id, first_name, last_name, side")
-      .eq("is_active", true)
-      .order("first_name", { ascending: true }),
-    supabase
-      .from("properties")
-      .select(
-        "id, address, city, property_type, client:clients(first_name, last_name)"
-      )
-      .order("created_at", { ascending: false }),
-  ]);
-  if (clientsRes.error) throw new Error(clientsRes.error.message);
-  if (propsRes.error) throw new Error(propsRes.error.message);
+  const { data, error } = await supabase
+    .from("clients")
+    .select("id, first_name, last_name, side")
+    .eq("is_active", true)
+    .order("first_name", { ascending: true });
+  if (error) throw new Error(error.message);
 
-  const clients: CalendarClientOption[] = (clientsRes.data ?? []).map((c) => ({
+  const clients: CalendarClientOption[] = (data ?? []).map((c) => ({
     id: c.id,
     name: `${c.first_name} ${c.last_name}`.trim(),
     side: c.side,
   }));
-
-  type RawProp = {
-    id: string;
-    address: string | null;
-    city: string | null;
-    property_type: string | null;
-    client: Embedded<{ first_name: string; last_name: string }>;
-  };
-  const propRows = (propsRes.data ?? []) as unknown as RawProp[];
-  const properties: CalendarPropertyOption[] = propRows.map((p) => {
-    const seller = one(p.client);
-    const label = [p.address || p.property_type || "Property", p.city]
-      .filter(Boolean)
-      .join(", ");
-    return {
-      id: p.id,
-      label,
-      sellerName: seller ? `${seller.first_name} ${seller.last_name}`.trim() : "",
-    };
-  });
-
-  return { clients, properties };
+  return { clients };
 }

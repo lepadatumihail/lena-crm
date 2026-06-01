@@ -15,7 +15,7 @@ import {
   startOfWeek,
   subMonths,
 } from "date-fns";
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { CalendarClock, ChevronLeft, ChevronRight, Plus, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -25,65 +25,63 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { AppointmentDialog } from "@/components/calendar/appointment-dialog";
-import { appointmentTitle, formatTimeRange } from "@/lib/calendar";
+import { ViewingDialog } from "@/components/clients/viewing-dialog";
+import { formatTimeRange } from "@/lib/calendar";
 import { cn } from "@/lib/utils";
 import type {
   AppointmentWithRefs,
   CalendarClientOption,
-  CalendarPropertyOption,
+  CalendarEvent,
 } from "@/lib/data/calendar";
+import type { Viewing } from "@/lib/supabase/types";
 
 const DAY_KEY = "yyyy-MM-dd";
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-function clientName(a: AppointmentWithRefs): string | null {
-  return a.client ? `${a.client.first_name} ${a.client.last_name}`.trim() : null;
-}
-function propertyLabel(a: AppointmentWithRefs): string | null {
-  if (a.property_label) return a.property_label;
-  if (a.property) return a.property.address || a.property.property_type || null;
-  return null;
-}
-function titleOf(a: AppointmentWithRefs): string {
-  return appointmentTitle(a, {
-    clientName: clientName(a),
-    property: propertyLabel(a),
-  });
-}
-
 export function CalendarView({
   monthISO,
-  appointments,
+  events,
   clients,
-  properties,
 }: {
   monthISO: string;
-  appointments: AppointmentWithRefs[];
+  events: CalendarEvent[];
   clients: CalendarClientOption[];
-  properties: CalendarPropertyOption[];
 }) {
   const base = parseISO(`${monthISO}-01`);
   const gridStart = startOfWeek(startOfMonth(base), { weekStartsOn: 1 });
   const gridEnd = endOfWeek(endOfMonth(base), { weekStartsOn: 1 });
   const days = eachDayOfInterval({ start: gridStart, end: gridEnd });
+  const buyers = useMemo(
+    () =>
+      clients
+        .filter((c) => c.side === "buyer")
+        .map((c) => ({ id: c.id, name: c.name })),
+    [clients]
+  );
 
   const byDay = useMemo(() => {
-    const map = new Map<string, AppointmentWithRefs[]>();
-    for (const a of appointments) {
-      const key = format(new Date(a.starts_at), DAY_KEY);
+    const map = new Map<string, CalendarEvent[]>();
+    for (const e of events) {
+      const key = format(new Date(e.starts_at), DAY_KEY);
       const arr = map.get(key);
-      if (arr) arr.push(a);
-      else map.set(key, [a]);
+      if (arr) arr.push(e);
+      else map.set(key, [e]);
     }
     for (const arr of map.values()) {
       arr.sort((x, y) => x.starts_at.localeCompare(y.starts_at));
     }
     return map;
-  }, [appointments]);
+  }, [events]);
 
   const [dayOpen, setDayOpen] = useState<string | null>(null);
-  const [editing, setEditing] = useState<{
+  const [choosing, setChoosing] = useState<string | null>(null);
+  const [editingMeeting, setEditingMeeting] = useState<{
     appointment?: AppointmentWithRefs;
+    dateKey?: string;
+  } | null>(null);
+  const [editingViewing, setEditingViewing] = useState<{
+    viewing?: Viewing;
+    clientId?: string;
     dateKey?: string;
   } | null>(null);
 
@@ -92,13 +90,24 @@ export function CalendarView({
   const todayKey = format(new Date(), DAY_KEY);
   const dayList = dayOpen ? byDay.get(dayOpen) ?? [] : [];
 
-  function openNew(dateKey: string) {
+  function startChoosing(dateKey: string) {
     setDayOpen(null);
-    setEditing({ dateKey });
+    setChoosing(dateKey);
   }
-  function openEdit(a: AppointmentWithRefs) {
+  function chooseMeeting() {
+    const dateKey = choosing ?? undefined;
+    setChoosing(null);
+    setEditingMeeting({ dateKey });
+  }
+  function chooseViewing() {
+    const dateKey = choosing ?? undefined;
+    setChoosing(null);
+    setEditingViewing({ dateKey });
+  }
+  function openEvent(e: CalendarEvent) {
     setDayOpen(null);
-    setEditing({ appointment: a });
+    if (e.kind === "meeting") setEditingMeeting({ appointment: e.appointment });
+    else setEditingViewing({ viewing: e.viewing, clientId: e.buyerId });
   }
 
   return (
@@ -121,8 +130,8 @@ export function CalendarView({
               <ChevronRight />
             </Link>
           </Button>
-          <Button size="sm" onClick={() => openNew(todayKey)}>
-            <Plus /> New appointment
+          <Button size="sm" onClick={() => startChoosing(todayKey)}>
+            <Plus /> New
           </Button>
         </div>
       </div>
@@ -161,17 +170,17 @@ export function CalendarView({
                 {format(day, "d")}
               </span>
               <div className="flex flex-col gap-0.5">
-                {items.slice(0, 3).map((a) => (
+                {items.slice(0, 3).map((e) => (
                   <span
-                    key={a.id}
+                    key={e.id}
                     className={cn(
                       "truncate rounded px-1 py-0.5 text-[11px] leading-tight",
-                      a.type === "viewing"
+                      e.kind === "viewing"
                         ? "bg-primary/10 text-primary"
                         : "bg-secondary text-secondary-foreground"
                     )}
                   >
-                    {format(new Date(a.starts_at), "HH:mm")} {titleOf(a)}
+                    {format(new Date(e.starts_at), "HH:mm")} {e.title}
                   </span>
                 ))}
                 {items.length > 3 && (
@@ -185,6 +194,7 @@ export function CalendarView({
         })}
       </div>
 
+      {/* Day list */}
       <Dialog open={dayOpen != null} onOpenChange={(o) => !o && setDayOpen(null)}>
         <DialogContent>
           <DialogHeader>
@@ -194,28 +204,27 @@ export function CalendarView({
           </DialogHeader>
           <div className="space-y-2">
             {dayList.length === 0 ? (
-              <p className="text-muted-foreground text-sm">
-                Nothing scheduled.
-              </p>
+              <p className="text-muted-foreground text-sm">Nothing scheduled.</p>
             ) : (
-              dayList.map((a) => (
+              dayList.map((e) => (
                 <button
-                  key={a.id}
+                  key={e.id}
                   type="button"
-                  onClick={() => openEdit(a)}
+                  onClick={() => openEvent(e)}
                   className="hover:bg-accent flex w-full items-start gap-3 rounded-lg border p-3 text-left transition-colors"
                 >
                   <span
                     className={cn(
                       "mt-1.5 size-2 shrink-0 rounded-full",
-                      a.type === "viewing" ? "bg-primary" : "bg-muted-foreground"
+                      e.kind === "viewing" ? "bg-primary" : "bg-muted-foreground"
                     )}
                   />
                   <div className="min-w-0">
-                    <p className="font-medium">{titleOf(a)}</p>
+                    <p className="font-medium">{e.title}</p>
                     <p className="text-muted-foreground text-sm">
-                      {formatTimeRange(a.starts_at, a.ends_at)}
-                      {a.location ? ` · ${a.location}` : ""}
+                      {e.kind === "viewing" ? "Viewing · " : "Meeting · "}
+                      {formatTimeRange(e.starts_at, e.ends_at)}
+                      {e.location ? ` · ${e.location}` : ""}
                     </p>
                   </div>
                 </button>
@@ -223,22 +232,57 @@ export function CalendarView({
             )}
           </div>
           <Button
-            onClick={() => dayOpen && openNew(dayOpen)}
+            onClick={() => dayOpen && startChoosing(dayOpen)}
             variant="outline"
             className="w-full"
           >
-            <Plus /> Add appointment
+            <Plus /> Add
           </Button>
         </DialogContent>
       </Dialog>
 
+      {/* Meeting vs viewing chooser */}
+      <Dialog open={choosing != null} onOpenChange={(o) => !o && setChoosing(null)}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>
+              Add to {choosing ? format(parseISO(choosing), "EEE d MMM") : ""}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={chooseMeeting}
+              className="hover:border-primary hover:bg-accent flex flex-col items-center gap-2 rounded-lg border p-4 text-sm font-medium transition-colors"
+            >
+              <Users className="size-5" /> Meeting
+            </button>
+            <button
+              type="button"
+              onClick={chooseViewing}
+              className="hover:border-primary hover:bg-accent flex flex-col items-center gap-2 rounded-lg border p-4 text-sm font-medium transition-colors"
+            >
+              <CalendarClock className="size-5" /> Viewing
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <AppointmentDialog
-        open={editing != null}
-        onOpenChange={(o) => !o && setEditing(null)}
-        appointment={editing?.appointment}
-        defaultDateKey={editing?.dateKey}
+        open={editingMeeting != null}
+        onOpenChange={(o) => !o && setEditingMeeting(null)}
+        appointment={editingMeeting?.appointment}
+        defaultDateKey={editingMeeting?.dateKey}
         clients={clients}
-        properties={properties}
+      />
+
+      <ViewingDialog
+        open={editingViewing != null}
+        onOpenChange={(o) => !o && setEditingViewing(null)}
+        viewing={editingViewing?.viewing}
+        clientId={editingViewing?.clientId}
+        buyers={buyers}
+        defaultDateKey={editingViewing?.dateKey}
       />
     </div>
   );

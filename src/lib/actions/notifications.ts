@@ -69,7 +69,7 @@ export async function syncNotifications(
   )}`;
   const rows: NotificationInsert[] = [];
 
-  // ---- 1 & 2: appointment reminders + today's digest ----
+  // ---- 1 & 2: reminders + today's digest (meetings AND dated viewings) ----
   type ApptRow = {
     id: string;
     type: AppointmentType;
@@ -82,52 +82,103 @@ export async function syncNotifications(
     client: Embedded<{ first_name: string; last_name: string }>;
     property: Embedded<{ address: string | null; property_type: string | null }>;
   };
-  const apptRes = await supabase
-    .from("appointments")
-    .select(
-      "id, type, title, client_id, starts_at, location, reminder_minutes, property_label, client:clients(first_name, last_name), property:properties(address, property_type)"
-    )
-    .gte("starts_at", ctx.dayStartISO)
-    .order("starts_at", { ascending: true });
-  const appts = (apptRes.data ?? []) as unknown as ApptRow[];
+  type ViewRow = {
+    id: string;
+    title: string | null;
+    client_id: string;
+    scheduled_at: string;
+    reminder_minutes: number | null;
+    client: Embedded<{ first_name: string; last_name: string }>;
+  };
+  const [apptRes, viewRes] = await Promise.all([
+    supabase
+      .from("appointments")
+      .select(
+        "id, type, title, client_id, starts_at, location, reminder_minutes, property_label, client:clients(first_name, last_name), property:properties(address, property_type)"
+      )
+      .gte("starts_at", ctx.dayStartISO)
+      .order("starts_at", { ascending: true }),
+    supabase
+      .from("viewings")
+      .select(
+        "id, title, client_id, scheduled_at, reminder_minutes, client:clients(first_name, last_name)"
+      )
+      .not("scheduled_at", "is", null)
+      .gte("scheduled_at", ctx.dayStartISO),
+  ]);
 
-  const todays: ApptRow[] = [];
-  const labelFor = (a: ApptRow) => {
+  type SchedEvent = {
+    key: string; // dedupe namespace, e.g. "appt:<id>" / "viewing:<id>"
+    title: string;
+    starts_at: string;
+    reminder_minutes: number | null;
+    client_id: string | null;
+    location: string | null;
+    appointment_id: string | null;
+  };
+  const events: SchedEvent[] = [];
+
+  for (const a of (apptRes.data ?? []) as unknown as ApptRow[]) {
     const prop = one(a.property);
     const propLabel =
       a.property_label || prop?.address || prop?.property_type || null;
-    return appointmentTitle(
-      { type: a.type, title: a.title },
-      { clientName: fullName(one(a.client)), property: propLabel }
-    );
-  };
+    events.push({
+      key: `appt:${a.id}`,
+      title: appointmentTitle(
+        { type: a.type, title: a.title },
+        { clientName: fullName(one(a.client)), property: propLabel }
+      ),
+      starts_at: a.starts_at,
+      reminder_minutes: a.reminder_minutes,
+      client_id: a.client_id,
+      location: a.location,
+      appointment_id: a.id,
+    });
+  }
+  for (const v of (viewRes.data ?? []) as unknown as ViewRow[]) {
+    const buyer = one(v.client);
+    const buyerName = buyer
+      ? `${buyer.first_name} ${buyer.last_name}`.trim()
+      : null;
+    events.push({
+      key: `viewing:${v.id}`,
+      title: v.title?.trim() || (buyerName ? `Viewing with ${buyerName}` : "Viewing"),
+      starts_at: v.scheduled_at,
+      reminder_minutes: v.reminder_minutes,
+      client_id: v.client_id,
+      location: null,
+      appointment_id: null,
+    });
+  }
 
-  for (const a of appts) {
-    const start = new Date(a.starts_at);
-    if (a.reminder_minutes != null) {
-      const remindAt = new Date(start.getTime() - a.reminder_minutes * 60000);
+  const todays: SchedEvent[] = [];
+  for (const e of events) {
+    const start = new Date(e.starts_at);
+    if (e.reminder_minutes != null) {
+      const remindAt = new Date(start.getTime() - e.reminder_minutes * 60000);
       if (remindAt.getTime() <= now.getTime()) {
         rows.push({
           agent_id: agentId,
           type: "appointment_reminder",
-          title: labelFor(a),
+          title: e.title,
           body: `${format(start, "EEE d MMM, HH:mm")}${
-            a.location ? ` · ${a.location}` : ""
+            e.location ? ` · ${e.location}` : ""
           }`,
-          client_id: a.client_id,
-          appointment_id: a.id,
-          dedupe_key: `reminder:${a.id}`,
+          client_id: e.client_id,
+          appointment_id: e.appointment_id,
+          dedupe_key: `reminder:${e.key}`,
           due_at: remindAt.toISOString(),
         });
       }
     }
-    if (start >= dayStart && start <= dayEnd) todays.push(a);
+    if (start >= dayStart && start <= dayEnd) todays.push(e);
   }
 
   if (todays.length > 0) {
+    todays.sort((a, b) => a.starts_at.localeCompare(b.starts_at));
     const lines = todays
       .slice(0, 3)
-      .map((a) => `${format(new Date(a.starts_at), "HH:mm")} · ${labelFor(a)}`);
+      .map((e) => `${format(new Date(e.starts_at), "HH:mm")} · ${e.title}`);
     if (todays.length > 3) lines.push(`+${todays.length - 3} more`);
     rows.push({
       agent_id: agentId,

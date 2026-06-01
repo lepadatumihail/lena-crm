@@ -47,7 +47,8 @@ export async function upsertPreferences(
 export async function saveViewing(
   clientId: string,
   viewingId: string | null,
-  values: ViewingFormValues
+  values: ViewingFormValues,
+  schedule: { scheduled_at: string | null; reminder_minutes: number | null }
 ): Promise<{ error: string | null; id?: string }> {
   const parsed = viewingFormSchema.safeParse(values);
   if (!parsed.success) return { error: "Please check the form." };
@@ -60,6 +61,8 @@ export async function saveViewing(
     property_price: toNumberOrNull(v.property_price),
     had_offer: v.had_offer,
     offer_price: v.had_offer ? toNumberOrNull(v.offer_price) : null,
+    scheduled_at: schedule.scheduled_at,
+    reminder_minutes: schedule.reminder_minutes,
   };
 
   if (viewingId) {
@@ -69,6 +72,7 @@ export async function saveViewing(
       .eq("id", viewingId);
     if (error) return { error: error.message };
     revalidatePath(`/clients/${clientId}`);
+    revalidatePath("/calendar");
     return { error: null, id: viewingId };
   }
 
@@ -79,6 +83,7 @@ export async function saveViewing(
     .single();
   if (error) return { error: error.message };
   revalidatePath(`/clients/${clientId}`);
+  revalidatePath("/calendar");
   return { error: null, id: data.id };
 }
 
@@ -103,6 +108,7 @@ export async function deleteViewing(
     .eq("id", viewingId);
   if (error) return { error: error.message };
   revalidatePath(`/clients/${clientId}`);
+  revalidatePath("/calendar");
   return { error: null };
 }
 
