@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Building2, CalendarDays, LogOut, Users } from "lucide-react";
 
 import { signOut } from "@/lib/actions/auth";
+import { clientsPath, type ClientSide } from "@/lib/crm";
 import {
   Sidebar,
   SidebarContent,
@@ -29,9 +30,12 @@ const ACTIVE_CLASSES =
 
 export function AppSidebar({ email }: { email: string }) {
   const pathname = usePathname();
-  const params = useSearchParams();
   const onCalendar = pathname.startsWith("/calendar");
-  const side = params.get("side") === "seller" ? "seller" : "buyer";
+  const activeSide: ClientSide | null = pathname.startsWith("/clients/sellers")
+    ? "seller"
+    : pathname.startsWith("/clients")
+      ? "buyer"
+      : null;
 
   return (
     <Sidebar collapsible="icon">
@@ -78,11 +82,11 @@ export function AppSidebar({ email }: { email: string }) {
                 <SidebarMenuItem key={item.side}>
                   <SidebarMenuButton
                     asChild
-                    isActive={!onCalendar && side === item.side}
+                    isActive={activeSide === item.side}
                     tooltip={item.label}
                     className={ACTIVE_CLASSES}
                   >
-                    <Link href={`/clients?side=${item.side}`}>
+                    <Link href={clientsPath(item.side)}>
                       <item.icon />
                       <span>{item.label}</span>
                     </Link>

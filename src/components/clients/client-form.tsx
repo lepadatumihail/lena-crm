@@ -36,6 +36,7 @@ import {
   type ClientFormValues,
 } from "@/lib/validation/client";
 import {
+  clientsPath,
   DEAL_TYPE_LABELS,
   SELLER_ROLE_LABELS,
   type ClientSide,
@@ -101,7 +102,7 @@ export function ClientForm({
   }
 
   const cancelHref =
-    mode === "edit" && clientId ? `/clients/${clientId}` : `/clients?side=${side}`;
+    mode === "edit" && clientId ? `/clients/${clientId}` : clientsPath(side);
 
   return (
     <Form {...form}>

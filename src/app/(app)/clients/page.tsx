@@ -1,29 +1,5 @@
-import { getClients } from "@/lib/data/clients";
-import { getCommissionSummary } from "@/lib/data/buyer";
-import { ClientsView } from "@/components/clients/clients-view";
+import { redirect } from "next/navigation";
 
-export default async function ClientsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ side?: string; view?: string; inactive?: string }>;
-}) {
-  const sp = await searchParams;
-  const side = sp.side === "seller" ? "seller" : "buyer";
-  const includeInactive = sp.inactive === "1";
-  const view = sp.view === "kanban" ? "kanban" : "table";
-
-  const [clients, commission] = await Promise.all([
-    getClients(side, { includeInactive }),
-    side === "buyer" ? getCommissionSummary() : Promise.resolve(null),
-  ]);
-
-  return (
-    <ClientsView
-      clients={clients}
-      side={side}
-      view={view}
-      includeInactive={includeInactive}
-      commission={commission}
-    />
-  );
+export default function ClientsPage() {
+  redirect("/clients/buyers");
 }

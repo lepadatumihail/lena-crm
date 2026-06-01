@@ -44,6 +44,11 @@ export function stagesForSide(side: ClientSide): readonly Stage[] {
   return side === "buyer" ? BUYER_STAGES : SELLER_STAGES;
 }
 
+/** Path for a side's client list, e.g. "buyer" → "/clients/buyers". */
+export function clientsPath(side: ClientSide): string {
+  return `/clients/${side}s`;
+}
+
 export function defaultStageForSide(side: ClientSide): Stage {
   return side === "buyer" ? "new" : "pending";
 }

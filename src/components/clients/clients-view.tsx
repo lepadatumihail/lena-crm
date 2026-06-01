@@ -25,6 +25,7 @@ import {
   updateClientStage,
 } from "@/lib/actions/clients";
 import {
+  clientsPath,
   formatCurrency,
   STAGE_LABELS,
   stagesForSide,
@@ -100,9 +101,7 @@ export function ClientsView({
   }
 
   function toggleInactive(checked: boolean) {
-    const params = new URLSearchParams({ side });
-    if (checked) params.set("inactive", "1");
-    router.push(`/clients?${params.toString()}`);
+    router.push(`${clientsPath(side)}${checked ? "?inactive=1" : ""}`);
   }
 
   const stages = stagesForSide(side);

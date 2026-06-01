@@ -48,10 +48,10 @@ function GoogleIcon() {
 }
 
 function safeNext(): string {
-  if (typeof window === "undefined") return "/clients";
+  if (typeof window === "undefined") return "/clients/buyers";
   const next = new URLSearchParams(window.location.search).get("next");
   if (next && next.startsWith("/") && !next.startsWith("//")) return next;
-  return "/clients";
+  return "/clients/buyers";
 }
 
 export default function LoginPage() {

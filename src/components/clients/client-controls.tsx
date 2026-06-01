@@ -34,6 +34,7 @@ import {
 } from "@/lib/actions/clients";
 import {
   clientFullName,
+  clientsPath,
   STAGE_LABELS,
   stagesForSide,
   type ClientSide,
@@ -87,7 +88,7 @@ export function ClientControls({ client }: { client: Client }) {
       return;
     }
     toast.success("Client deleted");
-    router.push(`/clients?side=${side}`);
+    router.push(clientsPath(side));
   }
 
   return (

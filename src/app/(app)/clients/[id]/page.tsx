@@ -37,6 +37,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   clientFullName,
+  clientsPath,
   DEAL_TYPE_LABELS,
   SELLER_ROLE_LABELS,
   type ClientSide,
@@ -119,7 +120,7 @@ export default async function ClientDetailPage({
     <div className="space-y-6">
       <div>
         <Button asChild variant="ghost" size="sm" className="-ml-2 mb-1">
-          <Link href={`/clients?side=${side}`}>
+          <Link href={clientsPath(side)}>
             <ArrowLeft /> Back to {side}s
           </Link>
         </Button>

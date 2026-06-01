@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { ClientForm } from "@/components/clients/client-form";
 import { Button } from "@/components/ui/button";
-import type { ClientSide } from "@/lib/crm";
+import { clientsPath, type ClientSide } from "@/lib/crm";
 
 export default async function NewClientPage({
   searchParams,
@@ -17,7 +17,7 @@ export default async function NewClientPage({
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
         <Button asChild variant="ghost" size="sm" className="-ml-2 mb-1">
-          <Link href={`/clients?side=${side}`}>
+          <Link href={clientsPath(side)}>
             <ArrowLeft /> Back to {side}s
           </Link>
         </Button>
