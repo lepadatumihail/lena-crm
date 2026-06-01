@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -201,6 +202,9 @@ export function CalendarView({
             <DialogTitle>
               {dayOpen ? format(parseISO(dayOpen), "EEEE d MMMM") : ""}
             </DialogTitle>
+            <DialogDescription>
+              Meetings and viewings scheduled for this day.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
             {dayList.length === 0 ? (
@@ -248,6 +252,9 @@ export function CalendarView({
             <DialogTitle>
               Add to {choosing ? format(parseISO(choosing), "EEE d MMM") : ""}
             </DialogTitle>
+            <DialogDescription className="sr-only">
+              Choose whether to add a meeting or a viewing.
+            </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-3">
             <button

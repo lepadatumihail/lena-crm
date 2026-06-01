@@ -22,6 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -170,6 +171,9 @@ function ReservationDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Reservation details</DialogTitle>
+          <DialogDescription>
+            Reservation, payment and completion details.
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

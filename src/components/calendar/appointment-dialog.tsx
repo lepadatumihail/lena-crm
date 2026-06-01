@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -179,6 +180,9 @@ export function AppointmentDialog({
           <DialogTitle>
             {appointment ? "Edit meeting" : "New meeting"}
           </DialogTitle>
+          <DialogDescription>
+            Schedule a meeting with a client and set an optional reminder.
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

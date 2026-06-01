@@ -21,6 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -184,6 +185,9 @@ function PreferencesDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Buyer preferences</DialogTitle>
+          <DialogDescription>
+            Capture what this buyer is looking for.
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

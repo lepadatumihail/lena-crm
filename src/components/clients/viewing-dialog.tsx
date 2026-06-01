@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -162,6 +163,10 @@ export function ViewingDialog({
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{viewing ? "Edit viewing" : "Add viewing"}</DialogTitle>
+          <DialogDescription>
+            Log a property this buyer viewed — add a date to show it on your
+            calendar.
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
