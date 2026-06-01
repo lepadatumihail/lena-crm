@@ -19,7 +19,9 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -35,12 +37,22 @@ import { LANGUAGES } from "@/lib/crm";
 import { cn } from "@/lib/utils";
 
 const BLANK = "blank";
+const NO_PROPERTY = "none";
 
 type Channel = "whatsapp" | "email";
+
+export type ComposerTemplate = {
+  id: string;
+  name: string;
+  subject: string;
+  body: string;
+};
 
 export function MessageComposer({
   client,
   vars,
+  customTemplates = [],
+  propertyOptions = [],
   autoOpenTemplate,
 }: {
   client: {
@@ -51,6 +63,8 @@ export function MessageComposer({
     language: string | null;
   };
   vars: MessageVars;
+  customTemplates?: ComposerTemplate[];
+  propertyOptions?: string[];
   autoOpenTemplate?: string | null;
 }) {
   const hasWhatsApp = whatsappLink(client.phone) != null;
@@ -61,6 +75,9 @@ export function MessageComposer({
     client.language && (LANGUAGES as readonly string[]).includes(client.language)
       ? client.language
       : "English";
+  const propertyChoices = Array.from(
+    new Set([vars.property, ...propertyOptions].filter(Boolean))
+  );
 
   const [open, setOpen] = useState(Boolean(initial));
   const [channel, setChannel] = useState<Channel>(
@@ -68,6 +85,7 @@ export function MessageComposer({
   );
   const [templateId, setTemplateId] = useState(initial?.id ?? "");
   const [language, setLanguage] = useState(defaultLanguage);
+  const [propertyLabel, setPropertyLabel] = useState(vars.property ?? "");
   const [instruction, setInstruction] = useState("");
   const [subject, setSubject] = useState(
     initial ? fillTemplate(initial.subject, vars) : ""
@@ -77,12 +95,21 @@ export function MessageComposer({
   );
   const [aiLoading, setAiLoading] = useState(false);
 
+  function findTemplate(
+    id: string
+  ): { subject: string; body: string } | null {
+    const builtin = getTemplate(id);
+    if (builtin) return { subject: builtin.subject, body: builtin.body };
+    return customTemplates.find((t) => t.id === id) ?? null;
+  }
+
   function selectTemplate(id: string) {
     setTemplateId(id);
-    const t = getTemplate(id);
+    const t = findTemplate(id);
     if (t) {
-      setSubject(fillTemplate(t.subject, vars));
-      setBody(fillTemplate(t.body, vars));
+      const filled = { ...vars, property: propertyLabel || vars.property };
+      setSubject(fillTemplate(t.subject, filled));
+      setBody(fillTemplate(t.body, filled));
     }
   }
 
@@ -90,10 +117,11 @@ export function MessageComposer({
     setAiLoading(true);
     const res = await draftMessage({
       clientId: client.id,
-      templateId: templateId || null,
       channel,
       language,
+      draft: body.trim() || undefined,
       instruction: instruction.trim() || undefined,
+      property: propertyLabel.trim() || undefined,
     });
     setAiLoading(false);
     if (res.error) {
@@ -176,6 +204,32 @@ export function MessageComposer({
             </button>
           </div>
 
+          {propertyChoices.length > 0 && (
+            <div className="space-y-1.5">
+              <Label>Property</Label>
+              <Select
+                value={propertyLabel || NO_PROPERTY}
+                onValueChange={(v) =>
+                  setPropertyLabel(v === NO_PROPERTY ? "" : v)
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={NO_PROPERTY}>
+                    No specific property
+                  </SelectItem>
+                  {propertyChoices.map((p) => (
+                    <SelectItem key={p} value={p}>
+                      {p}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
           <div className="space-y-1.5">
             <Label>Template</Label>
             <Select
@@ -187,11 +241,24 @@ export function MessageComposer({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value={BLANK}>Blank / write your own</SelectItem>
-                {MESSAGE_TEMPLATES.map((t) => (
-                  <SelectItem key={t.id} value={t.id}>
-                    {t.label} — {t.description}
-                  </SelectItem>
-                ))}
+                <SelectGroup>
+                  <SelectLabel>Starters</SelectLabel>
+                  {MESSAGE_TEMPLATES.map((t) => (
+                    <SelectItem key={t.id} value={t.id}>
+                      {t.label} — {t.description}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+                {customTemplates.length > 0 && (
+                  <SelectGroup>
+                    <SelectLabel>My templates</SelectLabel>
+                    {customTemplates.map((t) => (
+                      <SelectItem key={t.id} value={t.id}>
+                        {t.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                )}
               </SelectContent>
             </Select>
           </div>

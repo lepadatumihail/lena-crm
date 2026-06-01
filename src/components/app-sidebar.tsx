@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Building2, CalendarDays, LogOut, Users } from "lucide-react";
+import { Building2, CalendarDays, FileText, LogOut, Users } from "lucide-react";
 
 import { signOut } from "@/lib/actions/auth";
 import { clientsPath, type ClientSide } from "@/lib/crm";
@@ -31,6 +31,7 @@ const ACTIVE_CLASSES =
 export function AppSidebar({ email }: { email: string }) {
   const pathname = usePathname();
   const onCalendar = pathname.startsWith("/calendar");
+  const onTemplates = pathname.startsWith("/templates");
   const activeSide: ClientSide | null = pathname.startsWith("/clients/sellers")
     ? "seller"
     : pathname.startsWith("/clients")
@@ -67,6 +68,19 @@ export function AppSidebar({ email }: { email: string }) {
                   <Link href="/calendar">
                     <CalendarDays />
                     <span>Calendar</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={onTemplates}
+                  tooltip="Templates"
+                  className={ACTIVE_CLASSES}
+                >
+                  <Link href="/templates">
+                    <FileText />
+                    <span>Templates</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

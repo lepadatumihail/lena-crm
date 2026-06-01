@@ -2,17 +2,19 @@
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
 import { openrouterChat } from "@/lib/openrouter";
-import { getTemplate } from "@/lib/message-templates";
 import { formatCurrency } from "@/lib/crm";
 
 type DraftResult = { subject: string; body: string; error: string | null };
 
 export async function draftMessage(input: {
   clientId: string;
-  templateId?: string | null;
   channel: "whatsapp" | "email";
+  /** Current message text to polish/rewrite; empty = write from scratch. */
+  draft?: string;
   language?: string;
   instruction?: string;
+  /** The property this message is about (overrides the auto-detected one). */
+  property?: string;
 }): Promise<DraftResult> {
   const supabase = await createSupabase();
 
@@ -42,7 +44,6 @@ export async function draftMessage(input: {
       .maybeSingle(),
   ]);
 
-  const template = getTemplate(input.templateId);
   const language =
     input.language?.trim() || client.language?.trim() || "English";
 
@@ -65,8 +66,11 @@ export async function draftMessage(input: {
       parts.push(`types: ${prefs.property_types.join(", ")}`);
     if (parts.length) ctx.push(`Preferences: ${parts.join("; ")}.`);
   }
+  const property = input.property?.trim();
   const lastViewing = (viewingsRes.data ?? [])[0];
-  if (lastViewing) {
+  if (property) {
+    ctx.push(`Property this message is about: ${property}.`);
+  } else if (lastViewing) {
     ctx.push(
       `Most recent property of interest: ${lastViewing.title ?? "a property"}${
         lastViewing.had_offer
@@ -99,18 +103,14 @@ export async function draftMessage(input: {
     `Respond ONLY with a JSON object: {"subject": string, "body": string}. For WhatsApp set subject to "".`,
   ].join(" ");
 
+  const draft = input.draft?.trim();
   const instruction = input.instruction?.trim();
   const user = [
-    `Goal: ${
-      template
-        ? template.purpose
-        : "Write a helpful, friendly message to this client."
-    }`,
-    template
-      ? `Loose starting point (rewrite and personalise, do not copy verbatim):\n"${template.body}"`
-      : "",
+    draft
+      ? `Polish and personalise this draft into a natural, warm ${channelLabel} — keep its meaning and intent, don't invent facts:\n"""${draft}"""`
+      : "Write a short, friendly message to this client.",
     instruction
-      ? `Extra instruction from the agent — follow this closely: ${instruction}`
+      ? `Instruction from the agent — follow it closely: ${instruction}`
       : "",
     `Client context:\n${ctx.join("\n")}`,
   ]

@@ -17,6 +17,7 @@ import {
   getViewings,
 } from "@/lib/data/buyer";
 import { getDocuments } from "@/lib/data/documents";
+import { getTemplates } from "@/lib/data/templates";
 import { getMatchingListings, getProperties } from "@/lib/data/seller";
 import { ClientControls } from "@/components/clients/client-controls";
 import { StageBadge } from "@/components/clients/stage-badge";
@@ -85,13 +86,14 @@ export default async function ClientDetailPage({
   const showReservation = isBuyer;
   const showProperties = !isBuyer;
 
-  const [prefs, viewings, reservation, properties, documents] =
+  const [prefs, viewings, reservation, properties, documents, customTemplates] =
     await Promise.all([
       showPrefs ? getBuyerPreferences(client.id) : Promise.resolve(null),
       showViewings ? getViewings(client.id) : Promise.resolve([]),
       showReservation ? getReservation(client.id) : Promise.resolve(null),
       showProperties ? getProperties(client.id) : Promise.resolve([]),
       getDocuments(client.id),
+      getTemplates(),
     ]);
 
   const matches =
@@ -112,6 +114,12 @@ export default async function ClientDetailPage({
     budgetMax: prefs?.budget_max ?? null,
     property: viewings[0]?.title ?? null,
   });
+
+  const propertyOptions = isBuyer
+    ? viewings.map((v) => v.title).filter((t): t is string => Boolean(t))
+    : properties
+        .map((p) => p.address || p.property_type || "")
+        .filter(Boolean);
 
   const typeLabel =
     side === "buyer"
@@ -217,6 +225,8 @@ export default async function ClientDetailPage({
                   language: client.language,
                 }}
                 vars={messageVars}
+                customTemplates={customTemplates}
+                propertyOptions={propertyOptions}
                 autoOpenTemplate={compose ?? null}
               />
               <InfoRow
