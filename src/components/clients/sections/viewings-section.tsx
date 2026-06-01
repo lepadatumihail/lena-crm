@@ -42,6 +42,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { UploadButton } from "@/components/file-upload";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import {
   deleteViewing,
   deleteViewingAttachment,
@@ -124,18 +125,24 @@ function ViewingCard({
 
   async function onDelete() {
     const { error } = await deleteViewing(clientId, viewing.id);
-    if (error) toast.error("Couldn't delete viewing", { description: error });
-    else {
-      toast.success("Viewing deleted");
-      router.refresh();
+    if (error) {
+      toast.error("Couldn't delete viewing", { description: error });
+      return false;
     }
+    toast.success("Viewing deleted");
+    router.refresh();
+    return true;
   }
 
   async function recordAttachment(
     meta: Parameters<typeof addViewingAttachment>[2]
   ) {
     const { error } = await addViewingAttachment(clientId, viewing.id, meta);
-    if (error) toast.error("Couldn't save attachment", { description: error });
+    if (error) {
+      toast.error("Couldn't save attachment", { description: error });
+      return false;
+    }
+    return true;
   }
 
   return (
@@ -161,15 +168,23 @@ function ViewingCard({
           >
             <Pencil className="size-4" />
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-muted-foreground hover:text-destructive size-8"
-            onClick={onDelete}
-            aria-label="Delete viewing"
-          >
-            <Trash2 className="size-4" />
-          </Button>
+          <ConfirmDialog
+            title="Delete viewing?"
+            description={`This removes “${
+              viewing.title || "Untitled property"
+            }” and its attachments. This can’t be undone.`}
+            onConfirm={onDelete}
+            trigger={
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-muted-foreground hover:text-destructive size-8"
+                aria-label="Delete viewing"
+              >
+                <Trash2 className="size-4" />
+              </Button>
+            }
+          />
         </div>
       </div>
 
@@ -204,6 +219,7 @@ function ViewingCard({
           folder="viewings"
           accept="application/pdf"
           multiple={false}
+          successLabel="Window card"
           onUploaded={(meta) =>
             recordAttachment({ ...meta, kind: "window_card" })
           }
@@ -215,6 +231,7 @@ function ViewingCard({
           clientId={clientId}
           folder="viewings"
           accept="image/*"
+          successLabel="Image"
           onUploaded={(meta) => recordAttachment({ ...meta, kind: "image" })}
         >
           Images
@@ -257,8 +274,13 @@ function AttachmentRow({
 
   async function remove() {
     const { error } = await deleteViewingAttachment(clientId, attachment.id);
-    if (error) toast.error("Couldn't remove", { description: error });
-    else router.refresh();
+    if (error) {
+      toast.error("Couldn't remove", { description: error });
+      return false;
+    }
+    toast.success("Attachment removed");
+    router.refresh();
+    return true;
   }
 
   return (
@@ -276,14 +298,21 @@ function AttachmentRow({
       >
         {attachment.file_name}
       </button>
-      <button
-        type="button"
-        onClick={remove}
-        className="text-muted-foreground hover:text-destructive shrink-0"
-        aria-label="Remove attachment"
-      >
-        <Trash2 className="size-3.5" />
-      </button>
+      <ConfirmDialog
+        title="Remove attachment?"
+        description={`“${attachment.file_name}” will be removed from this viewing.`}
+        confirmLabel="Remove"
+        onConfirm={remove}
+        trigger={
+          <button
+            type="button"
+            className="text-muted-foreground hover:text-destructive shrink-0"
+            aria-label="Remove attachment"
+          >
+            <Trash2 className="size-3.5" />
+          </button>
+        }
+      />
     </div>
   );
 }

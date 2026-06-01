@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { UploadButton } from "@/components/file-upload";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { addDocument, deleteDocument } from "@/lib/actions/documents";
 import { createClient } from "@/lib/supabase/client";
 import type { DocumentRow } from "@/lib/supabase/types";
@@ -45,10 +46,14 @@ export function DocumentsSection({
           agentId={agentId}
           clientId={clientId}
           folder="documents"
+          successLabel="Document"
           onUploaded={async (meta) => {
             const { error } = await addDocument(clientId, meta);
-            if (error)
+            if (error) {
               toast.error("Couldn't save document", { description: error });
+              return false;
+            }
+            return true;
           }}
         >
           Upload
@@ -95,11 +100,13 @@ function DocumentRowItem({
 
   async function remove() {
     const { error } = await deleteDocument(clientId, doc.id);
-    if (error) toast.error("Couldn't delete", { description: error });
-    else {
-      toast.success("Document deleted");
-      router.refresh();
+    if (error) {
+      toast.error("Couldn't delete", { description: error });
+      return false;
     }
+    toast.success("Document deleted");
+    router.refresh();
+    return true;
   }
 
   return (
@@ -118,14 +125,20 @@ function DocumentRowItem({
           {formatBytes(doc.size)}
         </span>
       )}
-      <button
-        type="button"
-        onClick={remove}
-        className="text-muted-foreground hover:text-destructive shrink-0"
-        aria-label="Delete document"
-      >
-        <Trash2 className="size-3.5" />
-      </button>
+      <ConfirmDialog
+        title="Delete document?"
+        description={`“${doc.file_name}” will be permanently deleted.`}
+        onConfirm={remove}
+        trigger={
+          <button
+            type="button"
+            className="text-muted-foreground hover:text-destructive shrink-0"
+            aria-label="Delete document"
+          >
+            <Trash2 className="size-3.5" />
+          </button>
+        }
+      />
     </div>
   );
 }

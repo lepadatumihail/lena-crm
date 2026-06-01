@@ -32,6 +32,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import {
   Select,
   SelectContent,
@@ -109,11 +110,13 @@ function PropertyCard({
 
   async function onDelete() {
     const { error } = await deleteProperty(clientId, property.id);
-    if (error) toast.error("Couldn't delete property", { description: error });
-    else {
-      toast.success("Property deleted");
-      router.refresh();
+    if (error) {
+      toast.error("Couldn't delete property", { description: error });
+      return false;
     }
+    toast.success("Property deleted");
+    router.refresh();
+    return true;
   }
 
   const title =
@@ -144,15 +147,21 @@ function PropertyCard({
           >
             <Pencil className="size-4" />
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-muted-foreground hover:text-destructive size-8"
-            onClick={onDelete}
-            aria-label="Delete property"
-          >
-            <Trash2 className="size-4" />
-          </Button>
+          <ConfirmDialog
+            title="Delete property?"
+            description={`“${title}” will be permanently deleted. This can’t be undone.`}
+            onConfirm={onDelete}
+            trigger={
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-muted-foreground hover:text-destructive size-8"
+                aria-label="Delete property"
+              >
+                <Trash2 className="size-4" />
+              </Button>
+            }
+          />
         </div>
       </div>
 
