@@ -11,6 +11,7 @@ export async function draftMessage(input: {
   clientId: string;
   templateId?: string | null;
   channel: "whatsapp" | "email";
+  language?: string;
   instruction?: string;
 }): Promise<DraftResult> {
   const supabase = await createSupabase();
@@ -42,7 +43,8 @@ export async function draftMessage(input: {
   ]);
 
   const template = getTemplate(input.templateId);
-  const language = client.language?.trim() || "English";
+  const language =
+    input.language?.trim() || client.language?.trim() || "English";
 
   // Compact, factual context for the model (no invented details).
   const ctx: string[] = [
@@ -97,14 +99,18 @@ export async function draftMessage(input: {
     `Respond ONLY with a JSON object: {"subject": string, "body": string}. For WhatsApp set subject to "".`,
   ].join(" ");
 
+  const instruction = input.instruction?.trim();
   const user = [
-    template
-      ? `Goal: ${template.purpose}`
-      : input.instruction
-        ? `Goal: ${input.instruction}`
-        : "Goal: write a helpful, friendly check-in.",
+    `Goal: ${
+      template
+        ? template.purpose
+        : "Write a helpful, friendly message to this client."
+    }`,
     template
       ? `Loose starting point (rewrite and personalise, do not copy verbatim):\n"${template.body}"`
+      : "",
+    instruction
+      ? `Extra instruction from the agent — follow this closely: ${instruction}`
       : "",
     `Client context:\n${ctx.join("\n")}`,
   ]

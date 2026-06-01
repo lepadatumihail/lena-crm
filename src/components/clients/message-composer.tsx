@@ -31,6 +31,7 @@ import {
   type MessageVars,
 } from "@/lib/message-templates";
 import { whatsappLink } from "@/lib/whatsapp";
+import { LANGUAGES } from "@/lib/crm";
 import { cn } from "@/lib/utils";
 
 const BLANK = "blank";
@@ -47,6 +48,7 @@ export function MessageComposer({
     first_name: string;
     phone: string | null;
     email: string | null;
+    language: string | null;
   };
   vars: MessageVars;
   autoOpenTemplate?: string | null;
@@ -55,12 +57,18 @@ export function MessageComposer({
   const hasEmail = Boolean(client.email);
 
   const initial = autoOpenTemplate ? getTemplate(autoOpenTemplate) : null;
+  const defaultLanguage =
+    client.language && (LANGUAGES as readonly string[]).includes(client.language)
+      ? client.language
+      : "English";
 
   const [open, setOpen] = useState(Boolean(initial));
   const [channel, setChannel] = useState<Channel>(
     hasWhatsApp ? "whatsapp" : "email"
   );
   const [templateId, setTemplateId] = useState(initial?.id ?? "");
+  const [language, setLanguage] = useState(defaultLanguage);
+  const [instruction, setInstruction] = useState("");
   const [subject, setSubject] = useState(
     initial ? fillTemplate(initial.subject, vars) : ""
   );
@@ -84,6 +92,8 @@ export function MessageComposer({
       clientId: client.id,
       templateId: templateId || null,
       channel,
+      language,
+      instruction: instruction.trim() || undefined,
     });
     setAiLoading(false);
     if (res.error) {
@@ -186,6 +196,22 @@ export function MessageComposer({
             </Select>
           </div>
 
+          <div className="space-y-1.5">
+            <Label>Language</Label>
+            <Select value={language} onValueChange={setLanguage}>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {LANGUAGES.map((l) => (
+                  <SelectItem key={l} value={l}>
+                    {l}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           {channel === "email" && (
             <div className="space-y-1.5">
               <Label htmlFor="msg-subject">Subject</Label>
@@ -199,24 +225,39 @@ export function MessageComposer({
           )}
 
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="msg-body">Message</Label>
+            <Label htmlFor="msg-ai">
+              Personalise with AI{" "}
+              <span className="text-muted-foreground font-normal">
+                (optional)
+              </span>
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                id="msg-ai"
+                value={instruction}
+                onChange={(e) => setInstruction(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    writeWithAI();
+                  }
+                }}
+                placeholder="e.g. shorter and more formal, mention the sea view"
+              />
               <Button
                 type="button"
-                variant="ghost"
-                size="sm"
                 onClick={writeWithAI}
                 disabled={aiLoading}
-                className="text-primary hover:text-primary h-7"
+                className="shrink-0"
               >
-                {aiLoading ? (
-                  <Loader2 className="animate-spin" />
-                ) : (
-                  <Sparkles />
-                )}
-                {body.trim() ? "Rewrite with AI" : "Write with AI"}
+                {aiLoading ? <Loader2 className="animate-spin" /> : <Sparkles />}
+                {body.trim() ? "Rewrite" : "Write"}
               </Button>
             </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="msg-body">Message</Label>
             <Textarea
               id="msg-body"
               rows={6}

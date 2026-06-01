@@ -214,6 +214,7 @@ export default async function ClientDetailPage({
                   first_name: client.first_name,
                   phone: client.phone,
                   email: client.email,
+                  language: client.language,
                 }}
                 vars={messageVars}
                 autoOpenTemplate={compose ?? null}
