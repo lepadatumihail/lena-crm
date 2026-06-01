@@ -1,7 +1,13 @@
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 import { createClient } from "@/lib/supabase/server";
-import { AppHeader } from "@/components/app-header";
+import { AppSidebar } from "@/components/app-sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 
 export default async function AppLayout({
   children,
@@ -15,12 +21,20 @@ export default async function AppLayout({
 
   if (!user) redirect("/login");
 
+  const cookieStore = await cookies();
+  const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
+
   return (
-    <div className="flex min-h-full flex-1 flex-col">
-      <AppHeader email={user.email ?? ""} />
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
-        {children}
-      </main>
-    </div>
+    <SidebarProvider defaultOpen={defaultOpen}>
+      <AppSidebar email={user.email ?? ""} />
+      <SidebarInset>
+        <header className="bg-background/80 sticky top-0 z-10 flex h-14 items-center gap-2 border-b px-4 backdrop-blur">
+          <SidebarTrigger className="-ml-1" />
+        </header>
+        <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
+          {children}
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
