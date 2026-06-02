@@ -70,7 +70,11 @@ export function MessageComposer({
   const hasWhatsApp = whatsappLink(client.phone) != null;
   const hasEmail = Boolean(client.email);
 
-  const initial = autoOpenTemplate ? getTemplate(autoOpenTemplate) : null;
+  const initial = autoOpenTemplate
+    ? getTemplate(autoOpenTemplate) ??
+      customTemplates.find((t) => t.id === autoOpenTemplate) ??
+      null
+    : null;
   const defaultLanguage =
     client.language && (LANGUAGES as readonly string[]).includes(client.language)
       ? client.language

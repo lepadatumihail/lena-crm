@@ -23,6 +23,23 @@ export async function getClients(
   return data ?? [];
 }
 
+/** Lightweight {id, name} list of active clients, for pickers. */
+export async function getActiveClientOptions(): Promise<
+  { id: string; name: string }[]
+> {
+  const supabase = await createSupabase();
+  const { data, error } = await supabase
+    .from("clients")
+    .select("id, first_name, last_name")
+    .eq("is_active", true)
+    .order("first_name", { ascending: true });
+  if (error) throw new Error(error.message);
+  return (data ?? []).map((c) => ({
+    id: c.id,
+    name: `${c.first_name} ${c.last_name}`.trim(),
+  }));
+}
+
 export async function getClientById(id: string): Promise<Client | null> {
   const supabase = await createSupabase();
   const { data, error } = await supabase
