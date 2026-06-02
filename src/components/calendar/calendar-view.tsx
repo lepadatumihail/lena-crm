@@ -36,7 +36,7 @@ import { AppointmentDialog } from "@/components/calendar/appointment-dialog";
 import { ViewingDialog } from "@/components/clients/viewing-dialog";
 import { formatTimeRange } from "@/lib/calendar";
 import { formatCurrency } from "@/lib/crm";
-import { reminderMessage, whatsappLink } from "@/lib/whatsapp";
+import { eventReminderHref } from "@/lib/event-reminder";
 import { cn } from "@/lib/utils";
 import type {
   AppointmentWithRefs,
@@ -61,19 +61,6 @@ function eventMeta(e: CalendarEvent): string {
 function eventDescription(e: CalendarEvent): string | null {
   if (e.kind === "viewing") return e.viewing.description?.trim() || null;
   return e.appointment.notes?.trim() || null;
-}
-
-/** One-tap WhatsApp reminder link for an event, or null if no usable phone. */
-function reminderHref(e: CalendarEvent): string | null {
-  if (!e.contact?.phone) return null;
-  const when = format(new Date(e.starts_at), "EEE d MMM 'at' HH:mm");
-  const text = reminderMessage(
-    e.contact.firstName,
-    e.contact.language,
-    e.reminderWhat,
-    when
-  );
-  return whatsappLink(e.contact.phone, text);
 }
 
 export function CalendarView({
@@ -248,7 +235,7 @@ export function CalendarView({
               <p className="text-muted-foreground text-sm">Nothing scheduled.</p>
             ) : (
               dayList.map((e) => {
-                const remind = reminderHref(e);
+                const remind = eventReminderHref(e);
                 const desc = eventDescription(e);
                 return (
                   <div

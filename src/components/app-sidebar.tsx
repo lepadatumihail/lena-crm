@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Building2, CalendarDays, FileText, LogOut, Users } from "lucide-react";
+import {
+  Building2,
+  CalendarDays,
+  FileText,
+  Home,
+  LogOut,
+  Users,
+} from "lucide-react";
 
 import { signOut } from "@/lib/actions/auth";
 import { clientsPath, type ClientSide } from "@/lib/crm";
@@ -29,6 +36,7 @@ const ACTIVE_CLASSES =
 
 export function AppSidebar({ email }: { email: string }) {
   const pathname = usePathname();
+  const onHome = pathname === "/home";
   const onCalendar = pathname.startsWith("/calendar");
   const onTemplates = pathname.startsWith("/templates");
   const activeSide: ClientSide | null = pathname.startsWith("/clients/sellers")
@@ -41,7 +49,7 @@ export function AppSidebar({ email }: { email: string }) {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <Link
-          href="/clients"
+          href="/home"
           className="flex items-center gap-2 px-1 py-1.5"
         >
           <span className="bg-primary text-primary-foreground flex size-7 shrink-0 items-center justify-center rounded-md text-sm font-bold">
@@ -57,6 +65,19 @@ export function AppSidebar({ email }: { email: string }) {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={onHome}
+                  tooltip="Home"
+                  className={ACTIVE_CLASSES}
+                >
+                  <Link href="/home">
+                    <Home />
+                    <span>Home</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
               {PIPELINE.map((item) => (
                 <SidebarMenuItem key={item.side}>
                   <SidebarMenuButton

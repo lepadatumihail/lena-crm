@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 
 function safeNext(next: string | null): string {
   if (next && next.startsWith("/") && !next.startsWith("//")) return next;
-  return "/clients/buyers";
+  return "/home";
 }
 
 export async function GET(request: Request) {
