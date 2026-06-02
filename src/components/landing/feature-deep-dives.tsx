@@ -8,7 +8,6 @@ import {
   Zap,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/reveal";
 import { cn } from "@/lib/utils";
 
@@ -86,7 +85,7 @@ function VisualPortal() {
         <div className="flex items-center justify-between gap-2">
           <p className="text-sm font-medium">New lead · Anya Petrova</p>
           <span className="bg-success/15 text-success rounded-full px-1.5 py-0.5 text-[9px] font-semibold">
-            Auto-added
+            AI-filled
           </span>
         </div>
         <p className="text-muted-foreground mt-1 text-xs">
@@ -103,14 +102,14 @@ function VisualSpeed() {
       <div className="flex items-center justify-between border-b pb-2 text-xs">
         <span className="font-medium">New lead · Lars Nielsen</span>
         <span className="text-success inline-flex items-center gap-1 font-medium">
-          <Zap className="size-3" /> replied in 28s
+          <Zap className="size-3" /> first reply ready
         </span>
       </div>
       <div className="bg-primary/5 mt-3 rounded-2xl rounded-tl-sm p-3 text-xs leading-relaxed">
         Hej Lars! Tak for din henvendelse — jeg har et par lejligheder i
         Estepona, der passer perfekt. Hvornår passer det at ringe?
         <span className="text-primary mt-1.5 flex items-center gap-1 text-[10px] font-medium">
-          <Sparkles className="size-3" /> Auto-reply · Danish
+          <Sparkles className="size-3" /> AI draft · Danish
         </span>
       </div>
     </div>
@@ -133,7 +132,8 @@ function VisualScheduler() {
       <div className="rounded-2xl rounded-bl-sm bg-[#25D366]/10 p-3 text-xs leading-relaxed">
         Reminder: your viewing is tomorrow at 12:00.
         <span className="text-muted-foreground mt-1 flex items-center gap-1 text-[10px]">
-          <MessageCircle className="size-3 text-[#25D366]" /> Sent on WhatsApp
+          <MessageCircle className="size-3 text-[#25D366]" /> One tap to send on
+          WhatsApp
         </span>
       </div>
     </div>
@@ -175,7 +175,6 @@ const ACCENTS: Record<string, Accent> = {
 };
 
 type Feature = {
-  tag?: string;
   accent: keyof typeof ACCENTS;
   icon: React.ComponentType<{ className?: string }>;
   title: string;
@@ -186,7 +185,6 @@ type Feature = {
 
 const FEATURES: Feature[] = [
   {
-    tag: "Soon",
     accent: "success",
     icon: MessageCircle,
     title: "AI-written WhatsApp messages",
@@ -211,41 +209,38 @@ const FEATURES: Feature[] = [
     visual: <VisualMatch />,
   },
   {
-    tag: "Soon",
     accent: "warning",
     icon: Inbox,
     title: "Portal lead capture",
-    body: "Enquiries from Idealista, Fotocasa and Kyero land in Lena automatically — parsed and dropped into your pipeline, no copy-paste.",
+    body: "Paste an enquiry from Idealista, Fotocasa, Kyero, an email or a WhatsApp — Lena reads it and fills a ready-to-save lead. No retyping.",
     points: [
-      "Works with the portals you already use",
-      "Auto-creates the lead, pre-filled",
-      "Never lose an enquiry in your inbox",
+      "Works with any portal, email or WhatsApp",
+      "Pulls out name, phone, language & budget",
+      "Pre-fills the new-client form for you",
     ],
     visual: <VisualPortal />,
   },
   {
-    tag: "Soon",
     accent: "destructive",
     icon: Zap,
     title: "Multilingual speed-to-lead",
-    body: "The moment a lead arrives, Lena drafts an instant first reply in their language — so you're first to respond, every single time.",
+    body: "When a new lead comes in, draft a first reply in their language in one tap — so you're first to respond, not staring at a blank message.",
     points: [
-      "Replies within seconds",
+      "One-tap first reply",
       "In the lead's own language",
-      "First to reply wins the deal",
+      "Send via WhatsApp or email",
     ],
     visual: <VisualSpeed />,
   },
   {
-    tag: "Soon",
     accent: "primary",
     icon: CalendarClock,
-    title: "Viewing scheduler + WhatsApp reminders",
-    body: "Book viewings, sync them to your calendar, and Lena sends the client a WhatsApp reminder in their language — so no-shows drop.",
+    title: "Viewing scheduler + reminders",
+    body: "Book viewings and meetings on a clean calendar, get a reminder before each one, and send the client a WhatsApp confirmation in a tap.",
     points: [
-      "Syncs to your Google Calendar",
-      "Automatic WhatsApp reminders",
-      "Fewer missed viewings",
+      "A simple month calendar for viewings & meetings",
+      "Reminders surface in your notifications",
+      "One-tap WhatsApp confirmation to the client",
     ],
     visual: <VisualScheduler />,
   },
@@ -297,12 +292,9 @@ export function FeatureDeepDives() {
                         {String(i + 1).padStart(2, "0")}
                       </span>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-2xl font-semibold tracking-tight">
-                        {f.title}
-                      </h3>
-                      {f.tag && <Badge variant="secondary">{f.tag}</Badge>}
-                    </div>
+                    <h3 className="text-2xl font-semibold tracking-tight">
+                      {f.title}
+                    </h3>
                     <p className="text-muted-foreground">{f.body}</p>
                     <ul className="space-y-2">
                       {f.points.map((p) => (

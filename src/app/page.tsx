@@ -262,11 +262,11 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* AI — coming soon */}
+      {/* AI — built in */}
       <section className="mx-auto w-full max-w-6xl px-4 py-16">
         <Reveal className="mx-auto max-w-4xl text-center">
           <Badge variant="secondary" className="mb-4 gap-1.5">
-            <Sparkles className="size-3.5" /> Coming soon · AI
+            <Sparkles className="size-3.5" /> Built in · AI
           </Badge>
           <h2 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
             Stop chasing. Let Lena do the{" "}
