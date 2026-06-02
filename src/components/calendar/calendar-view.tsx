@@ -15,9 +15,16 @@ import {
   startOfWeek,
   subMonths,
 } from "date-fns";
-import { CalendarClock, ChevronLeft, ChevronRight, Plus, Users } from "lucide-react";
+import {
+  CalendarClock,
+  ChevronLeft,
+  ChevronRight,
+  MessageCircle,
+  Plus,
+  Users,
+} from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -28,6 +35,7 @@ import {
 import { AppointmentDialog } from "@/components/calendar/appointment-dialog";
 import { ViewingDialog } from "@/components/clients/viewing-dialog";
 import { formatTimeRange } from "@/lib/calendar";
+import { reminderMessage, whatsappLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import type {
   AppointmentWithRefs,
@@ -38,6 +46,19 @@ import type { Viewing } from "@/lib/supabase/types";
 
 const DAY_KEY = "yyyy-MM-dd";
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+/** One-tap WhatsApp reminder link for an event, or null if no usable phone. */
+function reminderHref(e: CalendarEvent): string | null {
+  if (!e.contact?.phone) return null;
+  const when = format(new Date(e.starts_at), "EEE d MMM 'at' HH:mm");
+  const text = reminderMessage(
+    e.contact.firstName,
+    e.contact.language,
+    e.reminderWhat,
+    when
+  );
+  return whatsappLink(e.contact.phone, text);
+}
 
 export function CalendarView({
   monthISO,
@@ -210,29 +231,53 @@ export function CalendarView({
             {dayList.length === 0 ? (
               <p className="text-muted-foreground text-sm">Nothing scheduled.</p>
             ) : (
-              dayList.map((e) => (
-                <button
-                  key={e.id}
-                  type="button"
-                  onClick={() => openEvent(e)}
-                  className="hover:bg-accent flex w-full items-start gap-3 rounded-lg border p-3 text-left transition-colors"
-                >
-                  <span
-                    className={cn(
-                      "mt-1.5 size-2 shrink-0 rounded-full",
-                      e.kind === "viewing" ? "bg-primary" : "bg-muted-foreground"
+              dayList.map((e) => {
+                const remind = reminderHref(e);
+                return (
+                  <div
+                    key={e.id}
+                    className="hover:bg-accent flex items-center gap-2 rounded-lg border p-3 transition-colors"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => openEvent(e)}
+                      className="flex min-w-0 flex-1 items-start gap-3 text-left"
+                    >
+                      <span
+                        className={cn(
+                          "mt-1.5 size-2 shrink-0 rounded-full",
+                          e.kind === "viewing"
+                            ? "bg-primary"
+                            : "bg-muted-foreground"
+                        )}
+                      />
+                      <div className="min-w-0">
+                        <p className="font-medium">{e.title}</p>
+                        <p className="text-muted-foreground text-sm">
+                          {e.kind === "viewing" ? "Viewing · " : "Meeting · "}
+                          {formatTimeRange(e.starts_at, e.ends_at)}
+                          {e.location ? ` · ${e.location}` : ""}
+                        </p>
+                      </div>
+                    </button>
+                    {remind && (
+                      <a
+                        href={remind}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={cn(
+                          buttonVariants({ variant: "outline", size: "icon" }),
+                          "shrink-0"
+                        )}
+                        title="Remind on WhatsApp"
+                        aria-label="Send a WhatsApp reminder"
+                      >
+                        <MessageCircle className="size-4 text-[#25D366]" />
+                      </a>
                     )}
-                  />
-                  <div className="min-w-0">
-                    <p className="font-medium">{e.title}</p>
-                    <p className="text-muted-foreground text-sm">
-                      {e.kind === "viewing" ? "Viewing · " : "Meeting · "}
-                      {formatTimeRange(e.starts_at, e.ends_at)}
-                      {e.location ? ` · ${e.location}` : ""}
-                    </p>
                   </div>
-                </button>
-              ))
+                );
+              })
             )}
           </div>
           <Button

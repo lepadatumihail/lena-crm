@@ -14,6 +14,15 @@ export type AppointmentClientRef = {
   first_name: string;
   last_name: string;
   side: string;
+  phone: string | null;
+  language: string | null;
+};
+
+/** Minimal client contact carried on calendar events for one-tap reminders. */
+export type EventContact = {
+  firstName: string;
+  phone: string | null;
+  language: string | null;
 };
 
 export type AppointmentPropertyRef = {
@@ -41,7 +50,7 @@ async function getAppointmentsInRange(
   const { data, error } = await supabase
     .from("appointments")
     .select(
-      "*, client:clients(id, first_name, last_name, side), property:properties(id, address, city, property_type)"
+      "*, client:clients(id, first_name, last_name, side, phone, language), property:properties(id, address, city, property_type)"
     )
     .gte("starts_at", startISO)
     .lte("starts_at", endISO)
@@ -65,6 +74,8 @@ export type CalendarEvent =
       ends_at: string | null;
       title: string;
       location: string | null;
+      contact: EventContact | null;
+      reminderWhat: string;
       appointment: AppointmentWithRefs;
     }
   | {
@@ -74,6 +85,8 @@ export type CalendarEvent =
       ends_at: string | null;
       title: string;
       location: string | null;
+      contact: EventContact | null;
+      reminderWhat: string;
       viewing: Viewing;
       buyerId: string;
       buyerName: string | null;
@@ -88,7 +101,7 @@ export async function getCalendarEvents(
     getAppointmentsInRange(startISO, endISO),
     supabase
       .from("viewings")
-      .select("*, client:clients(id, first_name, last_name)")
+      .select("*, client:clients(id, first_name, last_name, phone, language)")
       .not("scheduled_at", "is", null)
       .gte("scheduled_at", startISO)
       .lte("scheduled_at", endISO)
@@ -112,11 +125,25 @@ export async function getCalendarEvents(
         null,
     }),
     location: a.location,
+    contact: a.client
+      ? {
+          firstName: a.client.first_name,
+          phone: a.client.phone,
+          language: a.client.language,
+        }
+      : null,
+    reminderWhat: a.title ?? "",
     appointment: a,
   }));
 
   type RawViewing = Viewing & {
-    client: Embedded<{ id: string; first_name: string; last_name: string }>;
+    client: Embedded<{
+      id: string;
+      first_name: string;
+      last_name: string;
+      phone: string | null;
+      language: string | null;
+    }>;
   };
   const viewings: CalendarEvent[] = (
     (viewingsRes.data ?? []) as unknown as RawViewing[]
@@ -132,6 +159,14 @@ export async function getCalendarEvents(
       ends_at: null,
       title: v.title?.trim() || (buyerName ? `Viewing with ${buyerName}` : "Viewing"),
       location: null,
+      contact: buyer
+        ? {
+            firstName: buyer.first_name,
+            phone: buyer.phone,
+            language: buyer.language,
+          }
+        : null,
+      reminderWhat: v.title ?? "",
       viewing: v,
       buyerId: v.client_id,
       buyerName,
