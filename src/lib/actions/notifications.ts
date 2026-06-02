@@ -194,7 +194,7 @@ export async function syncNotifications(
     });
   }
 
-  // ---- 3: follow-up nudges (buyers stuck in new/contacted, 7+ days idle) ----
+  // ---- 3: follow-up nudges (any active, non-reserved buyer, 7+ days idle) ----
   const staleBefore = new Date(
     now.getTime() - 7 * 24 * 60 * 60 * 1000
   ).toISOString();
@@ -210,7 +210,7 @@ export async function syncNotifications(
     .select("id, first_name, last_name, stage, updated_at")
     .eq("side", "buyer")
     .eq("is_active", true)
-    .in("stage", ["new", "contacted"])
+    .neq("stage", "reserved")
     .lte("updated_at", staleBefore);
   for (const c of (staleRes.data ?? []) as StaleRow[]) {
     const days = Math.max(
@@ -305,12 +305,21 @@ export async function syncNotifications(
     });
   }
 
-  if (rows.length > 0) {
+  // A client with a pending-offer nudge doesn't also need a generic follow-up.
+  const stalledClients = new Set(
+    rows.filter((r) => r.type === "stalled_offer").map((r) => r.client_id)
+  );
+  const toUpsert = rows.filter(
+    (r) =>
+      !(r.type === "follow_up" && r.client_id && stalledClients.has(r.client_id))
+  );
+
+  if (toUpsert.length > 0) {
     // Upsert refreshes title/body/due_at but leaves read_at untouched
     // (it isn't in the payload), so dismissed notifications stay dismissed.
     const { error } = await supabase
       .from("notifications")
-      .upsert(rows, { onConflict: "agent_id,dedupe_key" });
+      .upsert(toUpsert, { onConflict: "agent_id,dedupe_key" });
     if (error) return { error: error.message };
   }
 
