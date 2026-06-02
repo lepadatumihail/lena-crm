@@ -35,6 +35,7 @@ import {
 import { AppointmentDialog } from "@/components/calendar/appointment-dialog";
 import { ViewingDialog } from "@/components/clients/viewing-dialog";
 import { formatTimeRange } from "@/lib/calendar";
+import { formatCurrency } from "@/lib/crm";
 import { reminderMessage, whatsappLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import type {
@@ -46,6 +47,21 @@ import type { Viewing } from "@/lib/supabase/types";
 
 const DAY_KEY = "yyyy-MM-dd";
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+function eventMeta(e: CalendarEvent): string {
+  const parts = [
+    e.kind === "viewing" ? "Viewing" : "Meeting",
+    formatTimeRange(e.starts_at, e.ends_at),
+  ];
+  if (e.kind === "viewing" && e.buyerName) parts.push(e.buyerName);
+  if (e.location) parts.push(e.location);
+  return parts.join(" · ");
+}
+
+function eventDescription(e: CalendarEvent): string | null {
+  if (e.kind === "viewing") return e.viewing.description?.trim() || null;
+  return e.appointment.notes?.trim() || null;
+}
 
 /** One-tap WhatsApp reminder link for an event, or null if no usable phone. */
 function reminderHref(e: CalendarEvent): string | null {
@@ -233,6 +249,7 @@ export function CalendarView({
             ) : (
               dayList.map((e) => {
                 const remind = reminderHref(e);
+                const desc = eventDescription(e);
                 return (
                   <div
                     key={e.id}
@@ -254,10 +271,27 @@ export function CalendarView({
                       <div className="min-w-0">
                         <p className="font-medium">{e.title}</p>
                         <p className="text-muted-foreground text-sm">
-                          {e.kind === "viewing" ? "Viewing · " : "Meeting · "}
-                          {formatTimeRange(e.starts_at, e.ends_at)}
-                          {e.location ? ` · ${e.location}` : ""}
+                          {eventMeta(e)}
                         </p>
+                        {desc && (
+                          <p className="text-muted-foreground mt-1 line-clamp-2 text-sm whitespace-pre-wrap">
+                            {desc}
+                          </p>
+                        )}
+                        {e.kind === "viewing" &&
+                          (e.viewing.property_price != null ||
+                            e.viewing.had_offer) && (
+                            <p className="text-muted-foreground mt-1 text-xs">
+                              {e.viewing.property_price != null &&
+                                `Asking ${formatCurrency(
+                                  e.viewing.property_price
+                                )}`}
+                              {e.viewing.had_offer &&
+                                `${
+                                  e.viewing.property_price != null ? " · " : ""
+                                }Offer ${formatCurrency(e.viewing.offer_price)}`}
+                            </p>
+                          )}
                       </div>
                     </button>
                     {remind && (
