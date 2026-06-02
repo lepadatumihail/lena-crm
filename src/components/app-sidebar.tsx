@@ -12,7 +12,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -58,6 +57,21 @@ export function AppSidebar({ email }: { email: string }) {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
+              {PIPELINE.map((item) => (
+                <SidebarMenuItem key={item.side}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={activeSide === item.side}
+                    tooltip={item.label}
+                    className={ACTIVE_CLASSES}
+                  >
+                    <Link href={clientsPath(item.side)}>
+                      <item.icon />
+                      <span>{item.label}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
@@ -84,29 +98,6 @@ export function AppSidebar({ email }: { email: string }) {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel>Pipeline</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {PIPELINE.map((item) => (
-                <SidebarMenuItem key={item.side}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={activeSide === item.side}
-                    tooltip={item.label}
-                    className={ACTIVE_CLASSES}
-                  >
-                    <Link href={clientsPath(item.side)}>
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
