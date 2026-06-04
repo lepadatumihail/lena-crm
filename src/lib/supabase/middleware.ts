@@ -35,7 +35,9 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isAuthRoute =
     pathname.startsWith("/login") || pathname.startsWith("/auth");
-  const isPublicRoute = pathname === "/" || isAuthRoute;
+  // The calendar ICS feed is fetched by Google with no session — keep it public.
+  const isPublicRoute =
+    pathname === "/" || isAuthRoute || pathname.startsWith("/api/calendar");
 
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();

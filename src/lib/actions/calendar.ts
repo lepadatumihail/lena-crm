@@ -7,8 +7,22 @@ import {
   appointmentInputSchema,
   type AppointmentInput,
 } from "@/lib/validation/calendar";
+import { feedToken } from "@/lib/calendar-feed-token";
 
 type ActionResult = { error: string | null };
+
+/** The current agent's signed calendar-feed token (for the .ics subscribe URL). */
+export async function getCalendarFeedToken(): Promise<{
+  token: string | null;
+  error: string | null;
+}> {
+  const supabase = await createSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { token: null, error: "Not signed in" };
+  return { token: feedToken(user.id), error: null };
+}
 
 export async function saveAppointment(
   appointmentId: string | null,
