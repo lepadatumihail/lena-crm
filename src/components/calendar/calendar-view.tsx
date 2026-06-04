@@ -17,7 +17,6 @@ import {
 } from "date-fns";
 import {
   CalendarClock,
-  CalendarPlus,
   ChevronLeft,
   ChevronRight,
   MessageCircle,
@@ -39,7 +38,6 @@ import { CalendarSyncDialog } from "@/components/calendar/calendar-sync-dialog";
 import { formatTimeRange } from "@/lib/calendar";
 import { formatCurrency } from "@/lib/crm";
 import { eventReminderHref } from "@/lib/event-reminder";
-import { googleCalendarHref } from "@/lib/google-calendar";
 import { cn } from "@/lib/utils";
 import type {
   AppointmentWithRefs,
@@ -300,19 +298,6 @@ export function CalendarView({
                         <MessageCircle className="size-4 text-[#25D366]" />
                       </a>
                     )}
-                    <a
-                      href={googleCalendarHref(e)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={cn(
-                        buttonVariants({ variant: "outline", size: "icon" }),
-                        "shrink-0"
-                      )}
-                      title="Add to Google Calendar"
-                      aria-label="Add to Google Calendar"
-                    >
-                      <CalendarPlus className="size-4" />
-                    </a>
                   </div>
                 );
               })

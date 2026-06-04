@@ -149,9 +149,8 @@ export function CalendarSyncDialog() {
           <div className="text-muted-foreground flex gap-2 text-xs">
             <Info className="mt-0.5 size-3.5 shrink-0" />
             <p>
-              Subscribed calendars refresh every few hours, so new events can
-              take a little while to appear. Adding events one by one instead?
-              Skip this — using both shows the same event twice.
+              Subscribed calendars refresh every few hours, so a newly added
+              event can take a little while to appear in Google.
             </p>
           </div>
         </div>
