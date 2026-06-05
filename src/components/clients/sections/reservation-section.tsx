@@ -52,6 +52,16 @@ function fmtDate(d: string | null) {
   }
 }
 
+function money(value: number | null) {
+  return value != null ? formatCurrency(value) : null;
+}
+
+/** Pair an amount with the date it happened, e.g. "€50,000 · 4 Jun 2026". */
+function amountOn(amount: number | null, date: string | null) {
+  const parts = [money(amount), fmtDate(date)].filter(Boolean);
+  return parts.length ? parts.join(" · ") : null;
+}
+
 export function ReservationSection({
   clientId,
   reservation,
@@ -64,12 +74,13 @@ export function ReservationSection({
 
   const rows: { label: string; value: string | null }[] = r
     ? [
-        { label: "Down payment", value: formatCurrency(r.down_payment) },
-        { label: "Down payment date", value: fmtDate(r.down_payment_date) },
-        { label: "PPC", value: formatCurrency(r.ppc) },
-        { label: "PPC date", value: fmtDate(r.ppc_date) },
+        {
+          label: "Down payment",
+          value: amountOn(r.down_payment, r.down_payment_date),
+        },
+        { label: "PPC", value: amountOn(r.ppc, r.ppc_date) },
+        { label: "Commission", value: money(r.commission) },
         { label: "Notary", value: fmtDate(r.notary_date) },
-        { label: "Commission", value: formatCurrency(r.commission) },
         { label: "Closed", value: fmtDate(r.closed_at) },
       ]
     : [];
@@ -86,21 +97,23 @@ export function ReservationSection({
           {r ? "Edit" : "Add"}
         </Button>
       </CardHeader>
-      <CardContent>
+      <CardContent className="@container">
         {r ? (
-          <dl className="grid gap-4 sm:grid-cols-2">
+          <dl className="grid gap-x-6 gap-y-4 @sm:grid-cols-2">
             {rows.map((row) => (
               <div key={row.label}>
                 <dt className="text-muted-foreground text-xs">{row.label}</dt>
-                <dd className="mt-1 text-sm font-medium">
+                <dd className="mt-1 text-sm font-medium tabular-nums">
                   {row.value ?? "—"}
                 </dd>
               </div>
             ))}
             {r.notary_notes && (
-              <div className="sm:col-span-2">
+              <div className="@sm:col-span-2">
                 <dt className="text-muted-foreground text-xs">Notary notes</dt>
-                <dd className="mt-1 text-sm">{r.notary_notes}</dd>
+                <dd className="mt-1 text-sm whitespace-pre-wrap">
+                  {r.notary_notes}
+                </dd>
               </div>
             )}
           </dl>

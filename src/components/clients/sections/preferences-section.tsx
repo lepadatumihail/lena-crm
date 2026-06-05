@@ -49,8 +49,12 @@ import { cn } from "@/lib/utils";
 import type { BuyerPreferences } from "@/lib/supabase/types";
 
 function budgetText(min: number | null, max: number | null) {
-  if (min != null && max != null)
-    return `${formatCurrency(min)} – ${formatCurrency(max)}`;
+  if (min != null && max != null) {
+    // Guard against a swapped range so it never reads "€50,000 – €30,000".
+    const lo = Math.min(min, max);
+    const hi = Math.max(min, max);
+    return `${formatCurrency(lo)} – ${formatCurrency(hi)}`;
+  }
   if (min != null) return `From ${formatCurrency(min)}`;
   if (max != null) return `Up to ${formatCurrency(max)}`;
   return null;
@@ -75,12 +79,12 @@ export function PreferencesSection({
           {prefs ? "Edit" : "Add"}
         </Button>
       </CardHeader>
-      <CardContent>
+      <CardContent className="@container">
         {prefs ? (
-          <dl className="grid gap-4 sm:grid-cols-2">
-            <div className="sm:col-span-2">
+          <dl className="grid gap-x-6 gap-y-4 @sm:grid-cols-2">
+            <div className="@sm:col-span-2">
               <dt className="text-muted-foreground text-xs">Property types</dt>
-              <dd className="mt-1 flex flex-wrap gap-1.5">
+              <dd className="mt-1.5 flex flex-wrap gap-1.5">
                 {prefs.property_types.length ? (
                   prefs.property_types.map((t) => (
                     <Badge key={t} variant="secondary">
@@ -94,7 +98,9 @@ export function PreferencesSection({
             </div>
             <div>
               <dt className="text-muted-foreground text-xs">Budget</dt>
-              <dd className="mt-1 text-sm font-medium">{budget ?? "—"}</dd>
+              <dd className="mt-1 text-sm font-medium tabular-nums">
+                {budget ?? "—"}
+              </dd>
             </div>
             <div>
               <dt className="text-muted-foreground text-xs">Bedrooms</dt>
@@ -109,9 +115,11 @@ export function PreferencesSection({
               </dd>
             </div>
             {prefs.area_notes && (
-              <div className="sm:col-span-2">
+              <div className="@sm:col-span-2">
                 <dt className="text-muted-foreground text-xs">Area notes</dt>
-                <dd className="mt-1 text-sm">{prefs.area_notes}</dd>
+                <dd className="mt-1 text-sm whitespace-pre-wrap">
+                  {prefs.area_notes}
+                </dd>
               </div>
             )}
           </dl>
