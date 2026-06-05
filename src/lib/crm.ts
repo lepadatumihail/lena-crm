@@ -68,6 +68,7 @@ export const PROPERTY_TYPES = [
   "house",
   "villa",
   "townhouse",
+  "new_development",
   "plot",
   "commercial",
 ] as const;
@@ -79,6 +80,7 @@ export const PROPERTY_TYPE_LABELS: Record<PropertyType, string> = {
   house: "House",
   villa: "Villa",
   townhouse: "Townhouse",
+  new_development: "New development",
   plot: "Plot",
   commercial: "Commercial",
 };
