@@ -51,11 +51,7 @@ import {
   type ReservationFormValues,
 } from "@/lib/validation/buyer";
 import { formatCurrency } from "@/lib/crm";
-import {
-  DETAIL_LIST,
-  DetailBlock,
-  DetailRow,
-} from "@/components/clients/detail-row";
+import { DETAIL_LIST, DetailRow } from "@/components/clients/detail-row";
 import type { Reservation } from "@/lib/supabase/types";
 
 function fmtDate(d: string | null) {
@@ -88,7 +84,7 @@ export function ReservationSection({
   const r = reservation;
 
   return (
-    <Card>
+    <Card className="overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
           <CardTitle className="text-base">Reservation</CardTitle>
@@ -106,11 +102,13 @@ export function ReservationSection({
               icon={Wallet}
               label="Down payment"
               value={amountOn(r.down_payment, r.down_payment_date) ?? "—"}
+              className="@sm:col-span-2"
             />
             <DetailRow
               icon={Receipt}
               label="PPC"
               value={amountOn(r.ppc, r.ppc_date) ?? "—"}
+              className="@sm:col-span-2"
             />
             <DetailRow
               icon={HandCoins}
@@ -127,11 +125,6 @@ export function ReservationSection({
               label="Closed"
               value={fmtDate(r.closed_at) ?? "—"}
             />
-            {r.notary_notes && (
-              <DetailBlock icon={ScrollText} label="Notary notes">
-                <p className="whitespace-pre-wrap">{r.notary_notes}</p>
-              </DetailBlock>
-            )}
           </dl>
         ) : (
           <p className="text-muted-foreground text-sm">
@@ -139,6 +132,16 @@ export function ReservationSection({
           </p>
         )}
       </CardContent>
+
+      {r?.notary_notes && (
+        <div className="bg-muted/30 -mb-6 border-t px-6 py-4">
+          <p className="text-muted-foreground flex items-center gap-2 text-xs">
+            <ScrollText className="size-3.5 shrink-0 opacity-70" />
+            Notary notes
+          </p>
+          <p className="mt-1.5 text-sm whitespace-pre-wrap">{r.notary_notes}</p>
+        </div>
+      )}
 
       <ReservationDialog
         clientId={clientId}

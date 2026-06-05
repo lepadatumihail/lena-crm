@@ -85,7 +85,7 @@ export function PreferencesSection({
   const budget = prefs ? budgetText(prefs.budget_min, prefs.budget_max) : null;
 
   return (
-    <Card>
+    <Card className="overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-base">Preferences</CardTitle>
         <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
@@ -109,7 +109,12 @@ export function PreferencesSection({
                 "—"
               )}
             </DetailBlock>
-            <DetailRow icon={Wallet} label="Budget" value={budget ?? "—"} />
+            <DetailRow
+              icon={Wallet}
+              label="Budget"
+              value={budget ?? "—"}
+              className="@sm:col-span-2"
+            />
             <DetailRow
               icon={BedDouble}
               label="Bedrooms"
@@ -120,11 +125,6 @@ export function PreferencesSection({
               label="Bathrooms"
               value={prefs.bathrooms ?? "—"}
             />
-            {prefs.area_notes && (
-              <DetailBlock icon={MapPin} label="Area notes">
-                <p className="whitespace-pre-wrap">{prefs.area_notes}</p>
-              </DetailBlock>
-            )}
           </dl>
         ) : (
           <p className="text-muted-foreground text-sm">
@@ -132,6 +132,18 @@ export function PreferencesSection({
           </p>
         )}
       </CardContent>
+
+      {prefs?.area_notes && (
+        <div className="bg-muted/30 -mb-6 border-t px-6 py-4">
+          <p className="text-muted-foreground flex items-center gap-2 text-xs">
+            <MapPin className="size-3.5 shrink-0 opacity-70" />
+            Area notes
+          </p>
+          <p className="mt-1.5 text-sm whitespace-pre-wrap">
+            {prefs.area_notes}
+          </p>
+        </div>
+      )}
 
       <PreferencesDialog
         clientId={clientId}
