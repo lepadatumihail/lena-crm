@@ -36,6 +36,7 @@ import {
   type ClientFormValues,
 } from "@/lib/validation/client";
 import { LeadPaste } from "@/components/clients/lead-paste";
+import { PhoneInput } from "@/components/phone-input";
 import type { ExtractedLead } from "@/lib/actions/leads";
 import {
   clientsPath,
@@ -167,9 +168,11 @@ export function ClientForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input placeholder="+34 600 000 000" {...field} />
-                </FormControl>
+                <PhoneInput
+                  value={field.value ?? ""}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                />
                 <FormMessage />
               </FormItem>
             )}
