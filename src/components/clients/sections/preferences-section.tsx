@@ -5,7 +5,16 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Loader2, Pencil, Plus } from "lucide-react";
+import {
+  Bath,
+  BedDouble,
+  Home,
+  Loader2,
+  MapPin,
+  Pencil,
+  Plus,
+  Wallet,
+} from "lucide-react";
 
 import {
   Card,
@@ -46,6 +55,11 @@ import {
   type PropertyType,
 } from "@/lib/crm";
 import { cn } from "@/lib/utils";
+import {
+  DETAIL_LIST,
+  DetailBlock,
+  DetailRow,
+} from "@/components/clients/detail-row";
 import type { BuyerPreferences } from "@/lib/supabase/types";
 
 function budgetText(min: number | null, max: number | null) {
@@ -81,46 +95,35 @@ export function PreferencesSection({
       </CardHeader>
       <CardContent className="@container">
         {prefs ? (
-          <dl className="grid gap-x-6 gap-y-4 @sm:grid-cols-2">
-            <div className="@sm:col-span-2">
-              <dt className="text-muted-foreground text-xs">Property types</dt>
-              <dd className="mt-1.5 flex flex-wrap gap-1.5">
-                {prefs.property_types.length ? (
-                  prefs.property_types.map((t) => (
+          <dl className={DETAIL_LIST}>
+            <DetailBlock icon={Home} label="Property types">
+              {prefs.property_types.length ? (
+                <div className="flex flex-wrap gap-1.5">
+                  {prefs.property_types.map((t) => (
                     <Badge key={t} variant="secondary">
                       {PROPERTY_TYPE_LABELS[t as PropertyType] ?? t}
                     </Badge>
-                  ))
-                ) : (
-                  <span className="text-sm">—</span>
-                )}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-muted-foreground text-xs">Budget</dt>
-              <dd className="mt-1 text-sm font-medium tabular-nums">
-                {budget ?? "—"}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-muted-foreground text-xs">Bedrooms</dt>
-              <dd className="mt-1 text-sm font-medium">
-                {prefs.bedrooms ?? "—"}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-muted-foreground text-xs">Bathrooms</dt>
-              <dd className="mt-1 text-sm font-medium">
-                {prefs.bathrooms ?? "—"}
-              </dd>
-            </div>
+                  ))}
+                </div>
+              ) : (
+                "—"
+              )}
+            </DetailBlock>
+            <DetailRow icon={Wallet} label="Budget" value={budget ?? "—"} />
+            <DetailRow
+              icon={BedDouble}
+              label="Bedrooms"
+              value={prefs.bedrooms ?? "—"}
+            />
+            <DetailRow
+              icon={Bath}
+              label="Bathrooms"
+              value={prefs.bathrooms ?? "—"}
+            />
             {prefs.area_notes && (
-              <div className="@sm:col-span-2">
-                <dt className="text-muted-foreground text-xs">Area notes</dt>
-                <dd className="mt-1 text-sm whitespace-pre-wrap">
-                  {prefs.area_notes}
-                </dd>
-              </div>
+              <DetailBlock icon={MapPin} label="Area notes">
+                <p className="whitespace-pre-wrap">{prefs.area_notes}</p>
+              </DetailBlock>
             )}
           </dl>
         ) : (

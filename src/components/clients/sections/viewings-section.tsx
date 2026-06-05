@@ -6,7 +6,9 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import {
   CalendarClock,
+  Euro,
   FileText,
+  Home,
   ImageIcon,
   Pencil,
   Plus,
@@ -121,103 +123,120 @@ function ViewingCard({
     return true;
   }
 
+  const hasMeta =
+    viewing.scheduled_at ||
+    viewing.property_price != null ||
+    viewing.had_offer;
+
   return (
-    <div className="rounded-lg border p-3">
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <p className="font-medium">
-            {viewing.title || "Untitled property"}
-          </p>
-          {viewing.description && (
-            <p className="text-muted-foreground mt-0.5 text-sm">
-              {viewing.description}
-            </p>
-          )}
-        </div>
-        <div className="flex shrink-0 items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-8"
-            onClick={() => setEditing(true)}
-            aria-label="Edit viewing"
-          >
-            <Pencil className="size-4" />
-          </Button>
-          <ConfirmDialog
-            title="Delete viewing?"
-            description={`This removes “${
-              viewing.title || "Untitled property"
-            }” and its attachments. This can’t be undone.`}
-            onConfirm={onDelete}
-            trigger={
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-destructive size-8"
-                aria-label="Delete viewing"
-              >
-                <Trash2 className="size-4" />
-              </Button>
-            }
-          />
-        </div>
-      </div>
-
-      <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
-        {viewing.scheduled_at && (
-          <span className="text-muted-foreground flex items-center gap-1">
-            <CalendarClock className="size-3.5" />
-            {format(new Date(viewing.scheduled_at), "EEE d MMM, HH:mm")}
-          </span>
-        )}
-        {viewing.property_price != null && (
-          <span className="text-muted-foreground">
-            Asking{" "}
-            <span className="text-foreground font-medium">
-              {formatCurrency(viewing.property_price)}
+    <div className="bg-card overflow-hidden rounded-xl border">
+      <div className="p-3 sm:p-4">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex min-w-0 items-start gap-3">
+            <span className="bg-primary/10 text-primary mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg">
+              <Home className="size-4" />
             </span>
-          </span>
-        )}
-        {viewing.had_offer && (
-          <Badge variant="success">
-            Offer {formatCurrency(viewing.offer_price)}
-          </Badge>
+            <div className="min-w-0">
+              <p className="leading-tight font-medium">
+                {viewing.title || "Untitled property"}
+              </p>
+              {viewing.description && (
+                <p className="text-muted-foreground mt-1 text-sm">
+                  {viewing.description}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="flex shrink-0 items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-8"
+              onClick={() => setEditing(true)}
+              aria-label="Edit viewing"
+            >
+              <Pencil className="size-4" />
+            </Button>
+            <ConfirmDialog
+              title="Delete viewing?"
+              description={`This removes “${
+                viewing.title || "Untitled property"
+              }” and its attachments. This can’t be undone.`}
+              onConfirm={onDelete}
+              trigger={
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-muted-foreground hover:text-destructive size-8"
+                  aria-label="Delete viewing"
+                >
+                  <Trash2 className="size-4" />
+                </Button>
+              }
+            />
+          </div>
+        </div>
+
+        {hasMeta && (
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 pl-11 text-sm">
+            {viewing.scheduled_at && (
+              <span className="text-muted-foreground flex items-center gap-1.5">
+                <CalendarClock className="size-4 opacity-70" />
+                {format(new Date(viewing.scheduled_at), "EEE d MMM, HH:mm")}
+              </span>
+            )}
+            {viewing.property_price != null && (
+              <span className="text-muted-foreground flex items-center gap-1.5">
+                <Euro className="size-4 opacity-70" />
+                Asking{" "}
+                <span className="text-foreground font-medium tabular-nums">
+                  {formatCurrency(viewing.property_price)}
+                </span>
+              </span>
+            )}
+            {viewing.had_offer && (
+              <Badge variant="success" className="tabular-nums">
+                Offer {formatCurrency(viewing.offer_price)}
+              </Badge>
+            )}
+          </div>
         )}
       </div>
 
-      {viewing.attachments.length > 0 && (
-        <div className="mt-3 space-y-1.5">
-          {viewing.attachments.map((a) => (
-            <AttachmentRow key={a.id} clientId={clientId} attachment={a} />
-          ))}
+      {/* Files & actions — visually delimited footer */}
+      <div className="bg-muted/30 border-t px-3 py-3 sm:px-4">
+        {viewing.attachments.length > 0 && (
+          <div className="mb-2.5 space-y-1.5">
+            {viewing.attachments.map((a) => (
+              <AttachmentRow key={a.id} clientId={clientId} attachment={a} />
+            ))}
+          </div>
+        )}
+        <div className="flex flex-wrap gap-2">
+          <UploadButton
+            agentId={agentId}
+            clientId={clientId}
+            folder="viewings"
+            accept="application/pdf"
+            multiple={false}
+            successLabel="Window card"
+            onUploaded={(meta) =>
+              recordAttachment({ ...meta, kind: "window_card" })
+            }
+          >
+            Window card
+          </UploadButton>
+          <UploadButton
+            agentId={agentId}
+            clientId={clientId}
+            folder="viewings"
+            accept="image/*"
+            successLabel="Image"
+            onUploaded={(meta) => recordAttachment({ ...meta, kind: "image" })}
+          >
+            Images
+          </UploadButton>
         </div>
-      )}
-
-      <div className="mt-3 flex flex-wrap gap-2">
-        <UploadButton
-          agentId={agentId}
-          clientId={clientId}
-          folder="viewings"
-          accept="application/pdf"
-          multiple={false}
-          successLabel="Window card"
-          onUploaded={(meta) =>
-            recordAttachment({ ...meta, kind: "window_card" })
-          }
-        >
-          Window card
-        </UploadButton>
-        <UploadButton
-          agentId={agentId}
-          clientId={clientId}
-          folder="viewings"
-          accept="image/*"
-          successLabel="Image"
-          onUploaded={(meta) => recordAttachment({ ...meta, kind: "image" })}
-        >
-          Images
-        </UploadButton>
       </div>
 
       <ViewingDialog
@@ -266,7 +285,7 @@ function AttachmentRow({
   }
 
   return (
-    <div className="bg-muted/40 flex items-center gap-2 rounded-md px-2 py-1.5 text-sm">
+    <div className="bg-background flex items-center gap-2 rounded-md border px-2 py-1.5 text-sm">
       {attachment.kind === "window_card" ? (
         <FileText className="text-muted-foreground size-4 shrink-0" />
       ) : (

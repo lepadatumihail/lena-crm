@@ -6,7 +6,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
-import { Loader2, Pencil, Plus } from "lucide-react";
+import {
+  CalendarCheck,
+  HandCoins,
+  Loader2,
+  Pencil,
+  Plus,
+  Receipt,
+  ScrollText,
+  Stamp,
+  Wallet,
+} from "lucide-react";
 
 import {
   Card,
@@ -41,6 +51,11 @@ import {
   type ReservationFormValues,
 } from "@/lib/validation/buyer";
 import { formatCurrency } from "@/lib/crm";
+import {
+  DETAIL_LIST,
+  DetailBlock,
+  DetailRow,
+} from "@/components/clients/detail-row";
 import type { Reservation } from "@/lib/supabase/types";
 
 function fmtDate(d: string | null) {
@@ -72,19 +87,6 @@ export function ReservationSection({
   const [open, setOpen] = useState(false);
   const r = reservation;
 
-  const rows: { label: string; value: string | null }[] = r
-    ? [
-        {
-          label: "Down payment",
-          value: amountOn(r.down_payment, r.down_payment_date),
-        },
-        { label: "PPC", value: amountOn(r.ppc, r.ppc_date) },
-        { label: "Commission", value: money(r.commission) },
-        { label: "Notary", value: fmtDate(r.notary_date) },
-        { label: "Closed", value: fmtDate(r.closed_at) },
-      ]
-    : [];
-
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -99,22 +101,36 @@ export function ReservationSection({
       </CardHeader>
       <CardContent className="@container">
         {r ? (
-          <dl className="grid gap-x-6 gap-y-4 @sm:grid-cols-2">
-            {rows.map((row) => (
-              <div key={row.label}>
-                <dt className="text-muted-foreground text-xs">{row.label}</dt>
-                <dd className="mt-1 text-sm font-medium tabular-nums">
-                  {row.value ?? "—"}
-                </dd>
-              </div>
-            ))}
+          <dl className={DETAIL_LIST}>
+            <DetailRow
+              icon={Wallet}
+              label="Down payment"
+              value={amountOn(r.down_payment, r.down_payment_date) ?? "—"}
+            />
+            <DetailRow
+              icon={Receipt}
+              label="PPC"
+              value={amountOn(r.ppc, r.ppc_date) ?? "—"}
+            />
+            <DetailRow
+              icon={HandCoins}
+              label="Commission"
+              value={money(r.commission) ?? "—"}
+            />
+            <DetailRow
+              icon={Stamp}
+              label="Notary"
+              value={fmtDate(r.notary_date) ?? "—"}
+            />
+            <DetailRow
+              icon={CalendarCheck}
+              label="Closed"
+              value={fmtDate(r.closed_at) ?? "—"}
+            />
             {r.notary_notes && (
-              <div className="@sm:col-span-2">
-                <dt className="text-muted-foreground text-xs">Notary notes</dt>
-                <dd className="mt-1 text-sm whitespace-pre-wrap">
-                  {r.notary_notes}
-                </dd>
-              </div>
+              <DetailBlock icon={ScrollText} label="Notary notes">
+                <p className="whitespace-pre-wrap">{r.notary_notes}</p>
+              </DetailBlock>
             )}
           </dl>
         ) : (
