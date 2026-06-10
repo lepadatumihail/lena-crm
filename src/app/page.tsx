@@ -1,19 +1,13 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  Building2,
   Check,
   Clock,
-  Euro,
-  FileText,
-  Layers,
   Mail,
   Send,
   ShieldCheck,
   Smartphone,
   Sparkles,
-  Tag,
-  Users,
   X,
 } from "lucide-react";
 
@@ -22,41 +16,9 @@ import { Badge } from "@/components/ui/badge";
 import { AuthErrorListener } from "@/components/auth-error-listener";
 import { MarketingNav } from "@/components/marketing-nav";
 import { Reveal } from "@/components/reveal";
+import { FeatureGrid } from "@/components/landing/feature-grid";
 import { FeatureDeepDives } from "@/components/landing/feature-deep-dives";
 import { AppPreview } from "@/components/landing/app-preview";
-
-const FEATURES = [
-  {
-    icon: Layers,
-    title: "A pipeline that moves",
-    body: "Drag every buyer and seller through clear stages — new, contacted, qualified, viewing, reserved — so nothing stalls.",
-  },
-  {
-    icon: Users,
-    title: "Clients in focus",
-    body: "Names, languages, nationalities, notes. Flag the hot ones, hide the cold, and always know who to call next.",
-  },
-  {
-    icon: Building2,
-    title: "Properties & viewings",
-    body: "Log every property a buyer views, attach the window card and photos, and keep the details in one place.",
-  },
-  {
-    icon: Euro,
-    title: "Offers, tracked",
-    body: "Record each offer against the asking price, so you always know exactly where a deal stands.",
-  },
-  {
-    icon: FileText,
-    title: "Documents, organised",
-    body: "Contracts, IDs, reservation papers — upload anything and keep it filed against the right client.",
-  },
-  {
-    icon: Tag,
-    title: "One CRM, every agency",
-    body: "Work with more than one agency? Tag each lead by agency so your whole book finally lives in a single place.",
-  },
-];
 
 const BUYER_STEPS = ["New", "Contacted", "Qualified", "Viewing", "Reserved"];
 
@@ -129,21 +91,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map((f, i) => (
-            <Reveal key={f.title} delay={i * 70}>
-              <div className="group bg-card hover:border-primary/30 h-full rounded-xl border p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
-                <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-lg transition-transform group-hover:scale-110">
-                  <f.icon className="size-5" />
-                </div>
-                <h3 className="mt-4 font-semibold">{f.title}</h3>
-                <p className="text-muted-foreground mt-1.5 text-sm">
-                  {f.body}
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        <FeatureGrid />
       </section>
 
       {/* Feature deep-dives */}
