@@ -17,6 +17,7 @@ import { AuthErrorListener } from "@/components/auth-error-listener";
 import { MarketingNav } from "@/components/marketing-nav";
 import { Reveal } from "@/components/reveal";
 import { FeatureGrid } from "@/components/landing/feature-grid";
+import { HowItWorks } from "@/components/landing/how-it-works";
 import { FeatureDeepDives } from "@/components/landing/feature-deep-dives";
 import { AppPreview } from "@/components/landing/app-preview";
 
@@ -65,7 +66,7 @@ export default function Home() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link href="#features">See how it works</Link>
+              <Link href="#how-it-works">See how it works</Link>
             </Button>
           </div>
           <p className="text-muted-foreground mt-4 text-sm">
@@ -92,6 +93,27 @@ export default function Home() {
         </div>
 
         <FeatureGrid />
+      </section>
+
+      {/* How it works */}
+      <section
+        id="how-it-works"
+        className="mx-auto w-full max-w-6xl scroll-mt-20 px-4 py-16"
+      >
+        <div className="mx-auto max-w-2xl text-center">
+          <Badge variant="secondary" className="mb-4">
+            How it works
+          </Badge>
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            Three steps from hello to keys in hand
+          </h2>
+          <p className="text-muted-foreground mt-3">
+            Add a client, move them through the pipeline, and let Lena handle
+            the follow-up. The whole job, in the order you actually work it.
+          </p>
+        </div>
+
+        <HowItWorks />
       </section>
 
       {/* Feature deep-dives */}

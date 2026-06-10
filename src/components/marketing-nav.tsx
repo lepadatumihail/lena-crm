@@ -21,7 +21,7 @@ export function MarketingNav({
           {variant === "landing" ? (
             <>
               <Button asChild variant="ghost" size="sm">
-                <Link href="#features">How it works</Link>
+                <Link href="#how-it-works">How it works</Link>
               </Button>
               <Button asChild size="sm">
                 <Link href="/login">Sign in</Link>
