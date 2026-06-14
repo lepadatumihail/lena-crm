@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Building2,
+  Calculator,
   CalendarDays,
   FileText,
   Home,
@@ -37,6 +38,7 @@ const ACTIVE_CLASSES =
 export function AppSidebar({ email }: { email: string }) {
   const pathname = usePathname();
   const onHome = pathname === "/home";
+  const onCalculator = pathname.startsWith("/calculator");
   const onCalendar = pathname.startsWith("/calendar");
   const onTemplates = pathname.startsWith("/templates");
   const activeSide: ClientSide | null = pathname.startsWith("/clients/sellers")
@@ -116,6 +118,19 @@ export function AppSidebar({ email }: { email: string }) {
                   <Link href="/templates">
                     <FileText />
                     <span>Templates</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={onCalculator}
+                  tooltip="Calculator"
+                  className={ACTIVE_CLASSES}
+                >
+                  <Link href="/calculator">
+                    <Calculator />
+                    <span>Calculator</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
