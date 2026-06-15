@@ -25,6 +25,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 const PIPELINE = [
@@ -37,6 +38,10 @@ const ACTIVE_CLASSES =
 
 export function AppSidebar({ email }: { email: string }) {
   const pathname = usePathname();
+  const { setOpenMobile } = useSidebar();
+  // Close the mobile drawer (a Sheet) whenever a nav item is tapped — including
+  // re-tapping the current page, which wouldn't trigger a route change.
+  const closeMobile = () => setOpenMobile(false);
   const onHome = pathname === "/home";
   const onCalculator = pathname.startsWith("/calculator");
   const onCalendar = pathname.startsWith("/calendar");
@@ -52,6 +57,7 @@ export function AppSidebar({ email }: { email: string }) {
       <SidebarHeader>
         <Link
           href="/home"
+          onClick={closeMobile}
           className="flex items-center gap-2 px-1 py-1.5"
         >
           <span className="bg-primary text-primary-foreground flex size-7 shrink-0 items-center justify-center rounded-md text-sm font-bold">
@@ -74,7 +80,7 @@ export function AppSidebar({ email }: { email: string }) {
                   tooltip="Home"
                   className={ACTIVE_CLASSES}
                 >
-                  <Link href="/home">
+                  <Link href="/home" onClick={closeMobile}>
                     <Home />
                     <span>Home</span>
                   </Link>
@@ -88,7 +94,7 @@ export function AppSidebar({ email }: { email: string }) {
                     tooltip={item.label}
                     className={ACTIVE_CLASSES}
                   >
-                    <Link href={clientsPath(item.side)}>
+                    <Link href={clientsPath(item.side)} onClick={closeMobile}>
                       <item.icon />
                       <span>{item.label}</span>
                     </Link>
@@ -102,7 +108,7 @@ export function AppSidebar({ email }: { email: string }) {
                   tooltip="Calendar"
                   className={ACTIVE_CLASSES}
                 >
-                  <Link href="/calendar">
+                  <Link href="/calendar" onClick={closeMobile}>
                     <CalendarDays />
                     <span>Calendar</span>
                   </Link>
@@ -115,7 +121,7 @@ export function AppSidebar({ email }: { email: string }) {
                   tooltip="Templates"
                   className={ACTIVE_CLASSES}
                 >
-                  <Link href="/templates">
+                  <Link href="/templates" onClick={closeMobile}>
                     <FileText />
                     <span>Templates</span>
                   </Link>
@@ -128,7 +134,7 @@ export function AppSidebar({ email }: { email: string }) {
                   tooltip="Calculator"
                   className={ACTIVE_CLASSES}
                 >
-                  <Link href="/calculator">
+                  <Link href="/calculator" onClick={closeMobile}>
                     <Calculator />
                     <span>Calculator</span>
                   </Link>

@@ -238,7 +238,7 @@ export function CalculatorScreen({
         <Form {...form}>
           <form
             onSubmit={onSave}
-            className="bg-card h-fit space-y-5 rounded-xl border p-4"
+            className="bg-card @container h-fit space-y-5 rounded-xl border p-4"
           >
             <div className="flex flex-wrap gap-2">
               <Button type="submit" disabled={pending} className="flex-1">
@@ -281,7 +281,7 @@ export function CalculatorScreen({
                 label="Title"
                 placeholder="Renovation Project Coto Real"
               />
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 @sm:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="analysis_date"
@@ -289,7 +289,7 @@ export function CalculatorScreen({
                     <FormItem>
                       <FormLabel>Date</FormLabel>
                       <FormControl>
-                        <Input type="date" {...field} />
+                        <Input type="date" className="min-w-0" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
