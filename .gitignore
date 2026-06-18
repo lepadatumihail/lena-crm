@@ -42,6 +42,13 @@ skills-lock.json
 # vercel
 .vercel
 
+# design-sync (staged converter, build output, machine state)
+/.ds-sync/
+/ds-bundle/
+/.design-sync/.cache/
+/.design-sync/learnings/
+/.design-sync/node_modules
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

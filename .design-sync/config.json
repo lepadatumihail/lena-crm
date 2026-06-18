@@ -1,0 +1,13 @@
+{
+  "pkg": "lena",
+  "globalName": "LenaUI",
+  "shape": "package",
+  "tsconfig": "tsconfig.json",
+  "componentSrcMap": {
+    "Button": "src/components/ui/button.tsx",
+    "Badge": "src/components/ui/badge.tsx",
+    "Card": "src/components/ui/card.tsx",
+    "Input": "src/components/ui/input.tsx"
+  },
+  "cssEntry": ".design-sync/.cache/compiled.css"
+}
