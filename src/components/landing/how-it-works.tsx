@@ -331,7 +331,7 @@ function PipelineTile() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Step 03 — Let Lena follow up                                        */
+/* Step 03 — Let LeadWing follow up                                        */
 /* ------------------------------------------------------------------ */
 
 const NUDGES = [
@@ -462,7 +462,7 @@ const STEPS = [
     number: "01",
     title: "Plan the viewing",
     blurb:
-      "Add a buyer and book the tour. Lena keeps the date, the reminder and the bell together — and syncs to your Google Calendar so it shows up everywhere you already look.",
+      "Add a buyer and book the tour. LeadWing keeps the date, the reminder and the bell together — and syncs to your Google Calendar so it shows up everywhere you already look.",
     Tile: CalendarTile,
   },
   {
@@ -474,9 +474,9 @@ const STEPS = [
   },
   {
     number: "03",
-    title: "Let Lena follow up",
+    title: "Let LeadWing follow up",
     blurb:
-      "Lena spots clients going quiet and drafts a warm message in their language. You read it, tweak if you like, and send — no blank page, no chasing.",
+      "LeadWing spots clients going quiet and drafts a warm message in their language. You read it, tweak if you like, and send — no blank page, no chasing.",
     Tile: FollowUpTile,
   },
 ] as const;

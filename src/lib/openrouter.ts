@@ -19,7 +19,7 @@ export async function openrouterChat(
     headers: {
       Authorization: `Bearer ${key}`,
       "Content-Type": "application/json",
-      "X-Title": "Lena CRM",
+      "X-Title": "LeadWing CRM",
     },
     body: JSON.stringify({
       model: process.env.OPENROUTER_MODEL ?? DEFAULT_MODEL,

@@ -25,7 +25,7 @@ export function buildICS(calName: string, events: ICSEvent[]): string {
   const lines: string[] = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Lena//Calendar//EN",
+    "PRODID:-//LeadWing//Calendar//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     `X-WR-CALNAME:${esc(calName)}`,

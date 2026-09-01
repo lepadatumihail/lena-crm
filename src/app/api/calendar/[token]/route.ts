@@ -64,7 +64,7 @@ export async function GET(
     const start = new Date(a.starts_at);
     const cn = fullName(one(a.client));
     events.push({
-      uid: `lena-appt-${a.id}@lena.app`,
+      uid: `leadwing-appt-${a.id}@leadwing.app`,
       start,
       end: a.ends_at ? new Date(a.ends_at) : new Date(start.getTime() + 3600000),
       summary: a.title?.trim() || (cn ? `Meeting with ${cn}` : "Meeting"),
@@ -77,7 +77,7 @@ export async function GET(
     const start = new Date(v.scheduled_at);
     const cn = fullName(one(v.client));
     events.push({
-      uid: `lena-view-${v.id}@lena.app`,
+      uid: `leadwing-view-${v.id}@leadwing.app`,
       start,
       end: new Date(start.getTime() + 3600000),
       summary: v.title?.trim() || (cn ? `Viewing with ${cn}` : "Viewing"),
@@ -85,12 +85,12 @@ export async function GET(
     });
   }
 
-  const ics = buildICS("Lena", events);
+  const ics = buildICS("LeadWing", events);
   return new Response(ics, {
     headers: {
       "Content-Type": "text/calendar; charset=utf-8",
       "Cache-Control": "public, max-age=3600",
-      "Content-Disposition": 'inline; filename="lena.ics"',
+      "Content-Disposition": 'inline; filename="leadwing.ics"',
     },
   });
 }
