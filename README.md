@@ -76,3 +76,23 @@ Email follow-up automation (send-as-agent via Gmail API / Microsoft Graph with a
 Resend fallback) is designed into the schema (`email_accounts`,
 `email_templates`, `scheduled_emails`) but not built in v1.
 
+## Invites, referrals and billing
+
+Open signup at €29/mo standard. An invite code is not a gate: it reserves a
+**Founding** spot (€19/mo locked for life, a Founding number, 3 invites) for
+the first 20 paying founders. Trial is a 7-day DB flag, then a hard paywall.
+
+- `/join/[code]` — invite landing; `accept` stores the code in an httpOnly
+  cookie, `/join/claim` redeems it after sign-in via `claim_founding_invite`.
+- `/invites` — an agent's codes, their state, and free-month credits.
+- `/admin` — founder-only: seed codes, founder counter, record payments by
+  hand until Stripe is wired (`is_admin` is flipped in Supabase Studio).
+- `/api/stripe/webhook` — links customers, counts paid invoices (the 2nd one
+  credits both sides €19 via a customer balance transaction), mirrors
+  subscription status. Idempotent through `stripe_events`.
+
+Engine: `src/lib/referrals/engine.ts`; atomic pieces are the RPCs in
+`supabase/migrations/2026062512*_invites_referrals.sql` and
+`20260902120000_referral_engine.sql`. Apply both with `supabase db push` (or
+paste into the SQL editor) before enabling any of this in production; the
+first one starts every existing user's 7-day trial when it runs.

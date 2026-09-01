@@ -7,8 +7,10 @@ import {
   Calculator,
   CalendarDays,
   FileText,
+  Gift,
   Home,
   LogOut,
+  ShieldCheck,
   Users,
 } from "lucide-react";
 
@@ -37,7 +39,15 @@ const PIPELINE = [
 const ACTIVE_CLASSES =
   "data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:hover:bg-primary/15 data-[active=true]:[&>svg]:text-primary";
 
-export function AppSidebar({ email }: { email: string }) {
+export function AppSidebar({
+  email,
+  isAdmin = false,
+  foundingNumber = null,
+}: {
+  email: string;
+  isAdmin?: boolean;
+  foundingNumber?: number | null;
+}) {
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
   // Close the mobile drawer (a Sheet) whenever a nav item is tapped — including
@@ -47,6 +57,8 @@ export function AppSidebar({ email }: { email: string }) {
   const onCalculator = pathname.startsWith("/calculator");
   const onCalendar = pathname.startsWith("/calendar");
   const onTemplates = pathname.startsWith("/templates");
+  const onInvites = pathname.startsWith("/invites");
+  const onAdmin = pathname.startsWith("/admin");
   const activeSide: ClientSide | null = pathname.startsWith("/clients/sellers")
     ? "seller"
     : pathname.startsWith("/clients")
@@ -137,12 +149,45 @@ export function AppSidebar({ email }: { email: string }) {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={onInvites}
+                  tooltip="Invites"
+                  className={ACTIVE_CLASSES}
+                >
+                  <Link href="/invites" onClick={closeMobile}>
+                    <Gift />
+                    <span>Invites</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              {isAdmin ? (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={onAdmin}
+                    tooltip="Admin"
+                    className={ACTIVE_CLASSES}
+                  >
+                    <Link href="/admin" onClick={closeMobile}>
+                      <ShieldCheck />
+                      <span>Admin</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ) : null}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter>
+        {foundingNumber != null ? (
+          <div className="text-primary truncate px-2 text-xs font-medium group-data-[collapsible=icon]:hidden">
+            Founding Agent #{foundingNumber}
+          </div>
+        ) : null}
         <div className="text-muted-foreground truncate px-2 text-xs group-data-[collapsible=icon]:hidden">
           {email}
         </div>

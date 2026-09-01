@@ -36,8 +36,14 @@ export async function updateSession(request: NextRequest) {
   const isAuthRoute =
     pathname.startsWith("/login") || pathname.startsWith("/auth");
   // The calendar ICS feed is fetched by Google with no session — keep it public.
+  // Invite landings are pre-signup by definition; Stripe calls the webhook
+  // with a signature, not a session.
   const isPublicRoute =
-    pathname === "/" || isAuthRoute || pathname.startsWith("/api/calendar");
+    pathname === "/" ||
+    isAuthRoute ||
+    pathname.startsWith("/api/calendar") ||
+    pathname.startsWith("/api/stripe") ||
+    pathname.startsWith("/join");
 
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();

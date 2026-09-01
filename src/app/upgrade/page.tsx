@@ -42,13 +42,26 @@ export default async function UpgradePage() {
   const monthly = founding ? 19 : 29;
   const annual = founding ? 190 : 290;
 
+  // Payment Links accept these two params, which is how the webhook maps the
+  // Stripe customer back to this agent (client_reference_id = auth user id).
+  const withIdentity = (link?: string) => {
+    if (!link) return undefined;
+    const url = new URL(link);
+    url.searchParams.set("client_reference_id", user.id);
+    if (user.email) url.searchParams.set("prefilled_email", user.email);
+    return url.toString();
+  };
   const links = {
-    monthly: founding
-      ? process.env.NEXT_PUBLIC_STRIPE_LINK_FOUNDING_MONTHLY
-      : process.env.NEXT_PUBLIC_STRIPE_LINK_STANDARD_MONTHLY,
-    annual: founding
-      ? process.env.NEXT_PUBLIC_STRIPE_LINK_FOUNDING_ANNUAL
-      : process.env.NEXT_PUBLIC_STRIPE_LINK_STANDARD_ANNUAL,
+    monthly: withIdentity(
+      founding
+        ? process.env.NEXT_PUBLIC_STRIPE_LINK_FOUNDING_MONTHLY
+        : process.env.NEXT_PUBLIC_STRIPE_LINK_STANDARD_MONTHLY
+    ),
+    annual: withIdentity(
+      founding
+        ? process.env.NEXT_PUBLIC_STRIPE_LINK_FOUNDING_ANNUAL
+        : process.env.NEXT_PUBLIC_STRIPE_LINK_STANDARD_ANNUAL
+    ),
   };
 
   return (

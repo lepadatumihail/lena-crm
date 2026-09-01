@@ -739,6 +739,12 @@ export type Database = {
         };
         Relationships: [];
       };
+      stripe_events: {
+        Row: { id: string; type: string; received_at: string };
+        Insert: { id: string; type: string; received_at?: string };
+        Update: { id?: string; type?: string; received_at?: string };
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: {
@@ -749,6 +755,14 @@ export type Database = {
       allocate_founding_number: {
         Args: { p_user_id: string };
         Returns: number;
+      };
+      record_paid_invoice: {
+        Args: { p_user_id: string };
+        Returns: Json;
+      };
+      void_referral: {
+        Args: { p_user_id: string };
+        Returns: boolean;
       };
     };
     Enums: {

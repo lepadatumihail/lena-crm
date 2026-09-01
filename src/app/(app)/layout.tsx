@@ -32,7 +32,7 @@ export default async function AppLayout({
   // (/upgrade lives outside this group so the gate can't loop on itself.)
   const { data: profile } = await supabase
     .from("profiles")
-    .select("subscription_status, trial_ends_at")
+    .select("subscription_status, trial_ends_at, is_admin, founding_number")
     .eq("id", user.id)
     .maybeSingle();
   if (profile && !hasAccess(profile)) redirect("/upgrade");
@@ -42,7 +42,11 @@ export default async function AppLayout({
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      <AppSidebar email={user.email ?? ""} />
+      <AppSidebar
+        email={user.email ?? ""}
+        isAdmin={profile?.is_admin ?? false}
+        foundingNumber={profile?.founding_number ?? null}
+      />
       <SidebarInset>
         <header className="bg-background/80 sticky top-0 z-10 flex h-14 items-center gap-2 border-b px-4 backdrop-blur">
           <SidebarTrigger className="-ml-1" />
