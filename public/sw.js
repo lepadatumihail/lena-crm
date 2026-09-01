@@ -1,6 +1,6 @@
 // Minimal service worker: makes the app installable and provides a
 // network-first cache so previously loaded pages/data stay readable offline.
-const CACHE = "lena-v1";
+const CACHE = "leadwing-v1";
 
 self.addEventListener("install", () => {
   self.skipWaiting();

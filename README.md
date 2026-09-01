@@ -1,4 +1,4 @@
-# Lena — Real Estate CRM
+# LeadWing — Real Estate CRM
 
 A CRM for independent real estate agents on the Costa del Sol. Each agent is an
 isolated tenant (Row Level Security keys every row to `auth.uid()`), tracking

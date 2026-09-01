@@ -37,6 +37,11 @@ export async function createDealAnalysis(
   if (!parsed.success) return { error: "Please check the form and try again." };
 
   const supabase = await createSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+
   const { data, error } = await supabase
     .from("deal_analyses")
     .insert(toRow(parsed.data))
@@ -56,6 +61,17 @@ export async function updateDealAnalysis(
   if (!parsed.success) return { error: "Please check the form and try again." };
 
   const supabase = await createSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+  const { data: owned } = await supabase
+    .from("deal_analyses")
+    .select("id")
+    .eq("id", id)
+    .maybeSingle();
+  if (!owned) return { error: "Analysis not found" };
+
   const { error } = await supabase
     .from("deal_analyses")
     .update(toRow(parsed.data))
@@ -68,6 +84,17 @@ export async function updateDealAnalysis(
 
 export async function deleteDealAnalysis(id: string): Promise<ActionResult> {
   const supabase = await createSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+  const { data: owned } = await supabase
+    .from("deal_analyses")
+    .select("id")
+    .eq("id", id)
+    .maybeSingle();
+  if (!owned) return { error: "Analysis not found" };
+
   const { error } = await supabase.from("deal_analyses").delete().eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/calculator");

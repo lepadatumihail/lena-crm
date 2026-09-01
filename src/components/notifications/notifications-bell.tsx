@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState, type ComponentType } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ComponentType,
+} from "react";
 import { useRouter } from "next/navigation";
 import {
   endOfDay,
@@ -51,6 +57,7 @@ function buildContext(): SyncContext {
     dayStartISO: startOfDay(now).toISOString(),
     dayEndISO: endOfDay(now).toISOString(),
     todayKey: format(now, "yyyy-MM-dd"),
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   };
 }
 
@@ -60,8 +67,13 @@ export function NotificationsBell() {
   const [items, setItems] = useState<Notification[]>([]);
   const [unread, setUnread] = useState(0);
   const [hasMore, setHasMore] = useState(false);
+  const inFlight = useRef(false);
 
   const refresh = useCallback(async () => {
+    // A poll and a popover-open can fire together; one sync at a time is enough
+    // (the upsert is idempotent — this just avoids wasted round-trips).
+    if (inFlight.current) return;
+    inFlight.current = true;
     try {
       const feed = await loadNotifications(buildContext());
       setItems(feed.items);
@@ -69,6 +81,8 @@ export function NotificationsBell() {
       setHasMore(feed.hasMore);
     } catch {
       // keep whatever we already have
+    } finally {
+      inFlight.current = false;
     }
   }, []);
 

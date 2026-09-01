@@ -1,7 +1,9 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 import { createClient } from "@/lib/supabase/server";
+import { hasAccess } from "@/lib/access";
 import { AppSidebar } from "@/components/app-sidebar";
 import { NotificationsBell } from "@/components/notifications/notifications-bell";
 import {
@@ -9,6 +11,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function AppLayout({
   children,
@@ -21,6 +27,15 @@ export default async function AppLayout({
   } = await supabase.auth.getUser();
 
   if (!user) redirect("/login");
+
+  // Hard paywall: expired trial / no active subscription → /upgrade.
+  // (/upgrade lives outside this group so the gate can't loop on itself.)
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("subscription_status, trial_ends_at")
+    .eq("id", user.id)
+    .maybeSingle();
+  if (profile && !hasAccess(profile)) redirect("/upgrade");
 
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";

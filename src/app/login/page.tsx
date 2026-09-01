@@ -140,7 +140,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <p className="text-primary text-sm font-semibold tracking-wide uppercase">
-            Lena
+            LeadWing
           </p>
           <CardTitle className="text-2xl">
             {step === "email" ? "Welcome back" : "Enter your code"}

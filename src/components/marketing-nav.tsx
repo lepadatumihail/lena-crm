@@ -13,9 +13,9 @@ export function MarketingNav({
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <span className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-md text-sm font-bold">
-            L
+            LW
           </span>
-          <span className="font-semibold tracking-tight">Lena</span>
+          <span className="font-semibold tracking-tight">LeadWing</span>
         </Link>
         <div className="flex items-center gap-2">
           {variant === "landing" ? (

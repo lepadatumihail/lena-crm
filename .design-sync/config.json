@@ -1,13 +1,34 @@
 {
   "pkg": "lena",
   "globalName": "LenaUI",
+  "projectId": "00d21a83-9ef2-4f9a-aaa1-7806add96cdb",
   "shape": "package",
   "tsconfig": "tsconfig.json",
   "componentSrcMap": {
     "Button": "src/components/ui/button.tsx",
     "Badge": "src/components/ui/badge.tsx",
     "Card": "src/components/ui/card.tsx",
-    "Input": "src/components/ui/input.tsx"
+    "Input": "src/components/ui/input.tsx",
+    "Label": "src/components/ui/label.tsx",
+    "Textarea": "src/components/ui/textarea.tsx",
+    "Separator": "src/components/ui/separator.tsx",
+    "Skeleton": "src/components/ui/skeleton.tsx",
+    "Switch": "src/components/ui/switch.tsx",
+    "Table": "src/components/ui/table.tsx",
+    "Select": "src/components/ui/select.tsx",
+    "InputOTP": "src/components/ui/input-otp.tsx",
+    "Dialog": "src/components/ui/dialog.tsx",
+    "Popover": "src/components/ui/popover.tsx",
+    "Tooltip": "src/components/ui/tooltip.tsx",
+    "Sheet": "src/components/ui/sheet.tsx"
   },
-  "cssEntry": ".design-sync/.cache/compiled.css"
+  "overrides": {
+    "Dialog": { "cardMode": "single", "viewport": "560x440" },
+    "Sheet": { "cardMode": "single", "viewport": "560x440" },
+    "Popover": { "cardMode": "single", "viewport": "440x340" },
+    "Select": { "cardMode": "single", "viewport": "440x420" },
+    "Tooltip": { "cardMode": "single", "viewport": "360x220" }
+  },
+  "cssEntry": ".design-sync/.cache/compiled.css",
+  "readmeHeader": ".design-sync/conventions.md"
 }

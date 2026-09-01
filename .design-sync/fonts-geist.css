@@ -1,0 +1,10 @@
+/* Geist + Geist Mono — sourced from Google Fonts, the same families next/font/google
+   pulls in the app. In the running app next/font injects --font-geist-sans / -mono at
+   runtime; the standalone design-sync bundle has no Next runtime, so we define them here
+   and load the faces. Concatenated to the FRONT of the compiled Tailwind CSS so the
+   @import leads the file (see .design-sync/NOTES.md → Build setup). */
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100;200;300;400;500;600;700;800;900&family=Geist+Mono:wght@100;200;300;400;500;600;700;800;900&display=swap');
+:root {
+  --font-geist-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-geist-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}

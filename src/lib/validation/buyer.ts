@@ -11,7 +11,7 @@ const numericString = (opts?: { int?: boolean }) =>
   z.string().trim().refine(
     (v) =>
       v === "" ||
-      ((opts?.int ? Number.isInteger(Number(v)) : !Number.isNaN(Number(v))) &&
+      ((opts?.int ? Number.isInteger(Number(v)) : Number.isFinite(Number(v))) &&
         Number(v) >= 0),
     { message: opts?.int ? "Enter a whole number" : "Enter a valid amount" }
   );
@@ -21,7 +21,7 @@ export function toNumberOrNull(v: string | undefined | null): number | null {
   const t = v.trim();
   if (t === "") return null;
   const n = Number(t);
-  return Number.isNaN(n) ? null : n;
+  return Number.isFinite(n) ? n : null;
 }
 
 export function emptyToNull(v: string | undefined | null): string | null {
@@ -53,6 +53,14 @@ export const viewingFormSchema = z.object({
   reminder: z.string(),
 });
 export type ViewingFormValues = z.infer<typeof viewingFormSchema>;
+
+// The viewing dialog's scheduling block is passed to saveViewing as a second
+// argument alongside the (already-validated) form values; validate it too so a
+// crafted call can't write garbage scheduled_at / reminder_minutes.
+export const viewingScheduleSchema = z.object({
+  scheduled_at: z.iso.datetime().nullable(),
+  reminder_minutes: z.number().int().min(0).max(10080).nullable(),
+});
 
 export const reservationFormSchema = z.object({
   down_payment: numericString(),

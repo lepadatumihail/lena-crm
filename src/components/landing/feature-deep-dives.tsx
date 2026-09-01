@@ -188,7 +188,7 @@ const FEATURES: Feature[] = [
     accent: "success",
     icon: MessageCircle,
     title: "AI-written WhatsApp messages",
-    body: "Tap a client and Lena drafts the WhatsApp message for you — warm, personal, and in their language. Read it, tweak it, send it.",
+    body: "Tap a client and LeadWing drafts the WhatsApp message for you — warm, personal, and in their language. Read it, tweak it, send it.",
     points: [
       "Opens straight in WhatsApp",
       "Written in the client's own language",
@@ -200,7 +200,7 @@ const FEATURES: Feature[] = [
     accent: "primary",
     icon: BadgeCheck,
     title: "Buyer ↔ listing auto-match",
-    body: "Because you track buyers and sellers in one place, Lena instantly shows which of your listings fit each buyer's budget, type and bedrooms.",
+    body: "Because you track buyers and sellers in one place, LeadWing instantly shows which of your listings fit each buyer's budget, type and bedrooms.",
     points: [
       "Matches on budget, type & bedrooms",
       "One tap from buyer to the seller",
@@ -212,7 +212,7 @@ const FEATURES: Feature[] = [
     accent: "warning",
     icon: Inbox,
     title: "Portal lead capture",
-    body: "Paste an enquiry from Idealista, Fotocasa, Kyero, an email or a WhatsApp — Lena reads it and fills a ready-to-save lead. No retyping.",
+    body: "Paste an enquiry from Idealista, Fotocasa, Kyero, an email or a WhatsApp — LeadWing reads it and fills a ready-to-save lead. No retyping.",
     points: [
       "Works with any portal, email or WhatsApp",
       "Pulls out name, phone, language & budget",

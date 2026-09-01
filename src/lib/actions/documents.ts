@@ -18,6 +18,22 @@ export async function addDocument(
   }
 ): Promise<ActionResult> {
   const supabase = await createSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+  if (!meta.storage_path.startsWith(`${user.id}/${clientId}/`))
+    return { error: "Invalid file path" };
+  if (meta.file_name.length > 200) return { error: "File name is too long" };
+  if (meta.size != null && meta.size > 15 * 1024 * 1024)
+    return { error: "File is too large" };
+  const { data: owned } = await supabase
+    .from("clients")
+    .select("id")
+    .eq("id", clientId)
+    .maybeSingle();
+  if (!owned) return { error: "Client not found" };
+
   const { error } = await supabase.from("documents").insert({
     client_id: clientId,
     storage_path: meta.storage_path,

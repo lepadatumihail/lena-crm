@@ -1,4 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Lena">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="LeadWing">
   <rect width="512" height="512" rx="112" fill="#c0603f"/>
-  <text x="50%" y="53%" dominant-baseline="central" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="300" font-weight="700" fill="#faf8f3">L</text>
+  <g fill="none" stroke="#faf8f3" stroke-width="54" stroke-linecap="round">
+    <path d="M118 372 C 210 356, 320 300, 404 156"/>
+    <path d="M150 430 C 232 418, 318 372, 388 276"/>
+    <path d="M198 474 C 258 468, 316 446, 356 392"/>
+  </g>
 </svg>

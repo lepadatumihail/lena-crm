@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
-import { defaultStageForSide } from "@/lib/crm";
+import { BUYER_STAGES, SELLER_STAGES, defaultStageForSide } from "@/lib/crm";
 import {
   clientFormSchema,
   type ClientFormValues,
@@ -118,10 +118,14 @@ export async function deleteClient(id: string): Promise<ActionResult> {
   return { error: null };
 }
 
+const VALID_STAGES: readonly string[] = [...BUYER_STAGES, ...SELLER_STAGES];
+
 export async function updateClientStage(
   id: string,
   stage: string
 ): Promise<ActionResult> {
+  if (!VALID_STAGES.includes(stage)) return { error: "Invalid stage" };
+
   const supabase = await createSupabase();
   const { error } = await supabase
     .from("clients")

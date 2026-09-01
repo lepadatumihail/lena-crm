@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -20,13 +21,71 @@ import { FeatureGrid } from "@/components/landing/feature-grid";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { FeatureDeepDives } from "@/components/landing/feature-deep-dives";
 import { AppPreview } from "@/components/landing/app-preview";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 
 const BUYER_STEPS = ["New", "Contacted", "Qualified", "Viewing", "Reserved"];
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
+// Structured data for the marketing page: who we are and what the product is.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: `${SITE_URL}/icon-512.png`,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: SITE_NAME,
+      url: SITE_URL,
+      description: SITE_DESCRIPTION,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      slogan: SITE_TAGLINE,
+      offers: [
+        {
+          "@type": "Offer",
+          name: "Monthly",
+          price: "29",
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        },
+        {
+          "@type": "Offer",
+          name: "Yearly",
+          price: "290",
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        },
+      ],
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+  ],
+};
 
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col">
       <AuthErrorListener />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
 
       {/* Nav */}
       <MarketingNav />
@@ -55,7 +114,7 @@ export default function Home() {
             </span>
           </h1>
           <p className="text-muted-foreground mt-5 max-w-xl text-lg text-pretty">
-            Lena is the CRM for independent real-estate agents on the Costa del
+            LeadWing is the CRM for independent real-estate agents on the Costa del
             Sol. Track every buyer and seller from first hello to keys in hand —
             across all the agencies you work with, in one place.
           </p>
@@ -87,7 +146,7 @@ export default function Home() {
             Everything a deal needs, nothing it doesn&apos;t
           </h2>
           <p className="text-muted-foreground mt-3">
-            Spreadsheets and scattered chats don&apos;t scale. Lena gives every
+            Spreadsheets and scattered chats don&apos;t scale. LeadWing gives every
             lead a place — and a next step.
           </p>
         </div>
@@ -108,7 +167,7 @@ export default function Home() {
             Three steps from hello to keys in hand
           </h2>
           <p className="text-muted-foreground mt-3">
-            Add a client, move them through the pipeline, and let Lena handle
+            Add a client, move them through the pipeline, and let LeadWing handle
             the follow-up. The whole job, in the order you actually work it.
           </p>
         </div>
@@ -163,7 +222,7 @@ export default function Home() {
           </h2>
           <p className="text-muted-foreground mt-3">
             Most CRMs are built for big brokerages and bury solo agents in tools
-            they&apos;ll never touch. Lena is the opposite — the essentials,
+            they&apos;ll never touch. LeadWing is the opposite — the essentials,
             done well, and we leave the rest out on purpose.
           </p>
         </Reveal>
@@ -239,12 +298,12 @@ export default function Home() {
             <Sparkles className="size-3.5" /> Built in · AI
           </Badge>
           <h2 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-            Stop chasing. Let Lena do the{" "}
+            Stop chasing. Let LeadWing do the{" "}
             <span className="whitespace-nowrap">follow-ups.</span>
           </h2>
           <p className="text-muted-foreground mx-auto mt-3 max-w-xl">
             The part every agent dreads — remembering who to email and what to
-            say — handled for you. You stay in control: Lena drafts, you
+            say — handled for you. You stay in control: LeadWing drafts, you
             approve. No more doing it by hand.
           </p>
         </Reveal>
@@ -261,7 +320,7 @@ export default function Home() {
                 </h3>
               </div>
               <p className="text-muted-foreground mt-3 text-sm">
-                Lena writes a warm, personal email for each client — in their
+                LeadWing writes a warm, personal email for each client — in their
                 language, referencing their budget, the properties they&apos;ve
                 seen, and where they are in the journey. No blank page, no
                 copy-paste. You review and send.
@@ -309,7 +368,7 @@ export default function Home() {
                 </h3>
               </div>
               <p className="text-muted-foreground mt-3 text-sm">
-                Leads go cold when they slip your mind. Lena watches for clients
+                Leads go cold when they slip your mind. LeadWing watches for clients
                 going quiet and surfaces them before you lose them — with a
                 ready-to-send nudge. No spreadsheets, no reminders, nothing
                 falling through the cracks.
@@ -383,7 +442,7 @@ export default function Home() {
               Sales today. Rentals next.
             </h2>
             <p className="text-muted-foreground max-w-lg">
-              Lena handles your sales pipeline now — long and short-term rentals
+              LeadWing handles your sales pipeline now — long and short-term rentals
               are on the way, in the same simple flow you already know.
             </p>
           </div>
@@ -397,7 +456,7 @@ export default function Home() {
             Ready to simplify your day?
           </h2>
           <p className="text-muted-foreground mx-auto mt-3 max-w-md">
-            Set up takes a minute. Bring your first client into Lena and feel
+            Set up takes a minute. Bring your first client into LeadWing and feel
             the difference.
           </p>
           <Button asChild size="lg" className="mt-6">
@@ -413,12 +472,12 @@ export default function Home() {
         <div className="text-muted-foreground mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 px-4 py-8 text-sm sm:flex-row">
           <div className="flex items-center gap-2">
             <span className="bg-primary text-primary-foreground flex size-5 items-center justify-center rounded text-[10px] font-bold">
-              L
+              LW
             </span>
-            <span className="text-foreground font-medium">Lena</span>
+            <span className="text-foreground font-medium">LeadWing</span>
             <span>— real-estate CRM for the Costa del Sol</span>
           </div>
-          <span>© {new Date().getFullYear()} Lena</span>
+          <span>© {new Date().getFullYear()} LeadWing</span>
         </div>
       </footer>
     </div>
