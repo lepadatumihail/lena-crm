@@ -66,7 +66,7 @@ export async function draftMessage(input: {
       parts.push(`types: ${prefs.property_types.join(", ")}`);
     if (parts.length) ctx.push(`Preferences: ${parts.join("; ")}.`);
   }
-  const property = input.property?.trim();
+  const property = input.property?.trim().slice(0, 300);
   const lastViewing = (viewingsRes.data ?? [])[0];
   if (property) {
     ctx.push(`Property this message is about: ${property}.`);
@@ -103,8 +103,8 @@ export async function draftMessage(input: {
     `Respond ONLY with a JSON object: {"subject": string, "body": string}. For WhatsApp set subject to "".`,
   ].join(" ");
 
-  const draft = input.draft?.trim();
-  const instruction = input.instruction?.trim();
+  const draft = input.draft?.trim().slice(0, 4000);
+  const instruction = input.instruction?.trim().slice(0, 1000);
   const user = [
     draft
       ? `Polish and personalise this draft into a natural, warm ${channelLabel} — keep its meaning and intent, don't invent facts:\n"""${draft}"""`

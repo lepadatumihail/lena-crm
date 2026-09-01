@@ -1,17 +1,20 @@
 "use server";
 
-import {
-  differenceInCalendarDays,
-  format,
-  getISOWeek,
-  getISOWeekYear,
-} from "date-fns";
+import { getISOWeek, getISOWeekYear } from "date-fns";
+import { z } from "zod";
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
 import {
   getNotificationFeed,
   type NotificationFeed,
 } from "@/lib/data/notifications";
+import { getAttentionSignals } from "@/lib/data/attention";
+import {
+  formatDateKey,
+  formatInTimeZone,
+  formatTimeInTimeZone,
+  relativeDayLabel,
+} from "@/lib/attention";
 import { appointmentTitle, type AppointmentType } from "@/lib/calendar";
 import { STAGE_LABELS, type Stage } from "@/lib/crm";
 import type { Enums } from "@/lib/supabase/types";
@@ -28,7 +31,18 @@ export type SyncContext = {
   dayStartISO: string;
   dayEndISO: string;
   todayKey: string; // yyyy-MM-dd (local)
+  timeZone: string; // IANA zone (browser), used to format bodies server-side
 };
+
+// The browser supplies SyncContext; malformed values produce Invalid Date /
+// NaN comparisons and garbage due_at/dedupe_key rows, so reject them up front.
+const syncContextSchema = z.object({
+  nowISO: z.iso.datetime(),
+  dayStartISO: z.iso.datetime(),
+  dayEndISO: z.iso.datetime(),
+  todayKey: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  timeZone: z.string().max(64),
+});
 
 type NotificationInsert = {
   agent_id: string;
@@ -60,6 +74,9 @@ export async function syncNotifications(
   if (!user) return { error: "Not authenticated" };
   const agentId = user.id;
 
+  const parsed = syncContextSchema.safeParse(ctx);
+  if (!parsed.success) return { error: "Invalid sync context" };
+
   const now = new Date(ctx.nowISO);
   const dayStart = new Date(ctx.dayStartISO);
   const dayEnd = new Date(ctx.dayEndISO);
@@ -90,6 +107,11 @@ export async function syncNotifications(
     reminder_minutes: number | null;
     client: Embedded<{ first_name: string; last_name: string }>;
   };
+  // The largest reminder preset is 1 day, so nothing scheduled beyond
+  // dayEnd + 2 days can ever produce a reminder or today-digest row.
+  const upperISO = new Date(
+    new Date(ctx.dayEndISO).getTime() + 2 * 86_400_000
+  ).toISOString();
   const [apptRes, viewRes] = await Promise.all([
     supabase
       .from("appointments")
@@ -97,6 +119,7 @@ export async function syncNotifications(
         "id, type, title, client_id, starts_at, location, reminder_minutes, property_label, client:clients(first_name, last_name), property:properties(address, property_type)"
       )
       .gte("starts_at", ctx.dayStartISO)
+      .lte("starts_at", upperISO)
       .order("starts_at", { ascending: true }),
     supabase
       .from("viewings")
@@ -104,8 +127,11 @@ export async function syncNotifications(
         "id, title, client_id, scheduled_at, reminder_minutes, client:clients(first_name, last_name)"
       )
       .not("scheduled_at", "is", null)
-      .gte("scheduled_at", ctx.dayStartISO),
+      .gte("scheduled_at", ctx.dayStartISO)
+      .lte("scheduled_at", upperISO),
   ]);
+  if (apptRes.error) return { error: apptRes.error.message };
+  if (viewRes.error) return { error: viewRes.error.message };
 
   type SchedEvent = {
     key: string; // dedupe namespace, e.g. "appt:<id>" / "viewing:<id>"
@@ -161,7 +187,7 @@ export async function syncNotifications(
           agent_id: agentId,
           type: "appointment_reminder",
           title: e.title,
-          body: `${format(start, "EEE d MMM, HH:mm")}${
+          body: `${formatInTimeZone(e.starts_at, ctx.timeZone)}${
             e.location ? ` · ${e.location}` : ""
           }`,
           client_id: e.client_id,
@@ -178,7 +204,7 @@ export async function syncNotifications(
     todays.sort((a, b) => a.starts_at.localeCompare(b.starts_at));
     const lines = todays
       .slice(0, 3)
-      .map((e) => `${format(new Date(e.starts_at), "HH:mm")} · ${e.title}`);
+      .map((e) => `${formatTimeInTimeZone(e.starts_at, ctx.timeZone)} · ${e.title}`);
     if (todays.length > 3) lines.push(`+${todays.length - 3} more`);
     rows.push({
       agent_id: agentId,
@@ -194,125 +220,57 @@ export async function syncNotifications(
     });
   }
 
-  // ---- 3: follow-up nudges (any active, non-reserved buyer, 7+ days idle) ----
-  const staleBefore = new Date(
-    now.getTime() - 7 * 24 * 60 * 60 * 1000
-  ).toISOString();
-  type StaleRow = {
-    id: string;
-    first_name: string;
-    last_name: string;
-    stage: string;
-    updated_at: string;
-  };
-  const staleRes = await supabase
-    .from("clients")
-    .select("id, first_name, last_name, stage, updated_at")
-    .eq("side", "buyer")
-    .eq("is_active", true)
-    .neq("stage", "reserved")
-    .lte("updated_at", staleBefore);
-  for (const c of (staleRes.data ?? []) as StaleRow[]) {
-    const days = Math.max(
-      1,
-      differenceInCalendarDays(now, new Date(c.updated_at))
-    );
-    rows.push({
-      agent_id: agentId,
-      type: "follow_up",
-      title: `Follow up with ${fullName(c)}`,
-      body: `${STAGE_LABELS[c.stage as Stage] ?? c.stage} · no update in ${days} days`,
-      client_id: c.id,
-      appointment_id: null,
-      dedupe_key: `followup:${c.id}:${weekKey}`,
-      due_at: ctx.nowISO,
+  // ---- 3-5: shared attention signals (stalled offers, stale buyers,
+  // reservation key dates). The stalled-vs-follow-up dedupe lives in the
+  // shared module, so both the bell and Home stay in lockstep. ----
+  let signals;
+  try {
+    signals = await getAttentionSignals(supabase, {
+      nowISO: ctx.nowISO,
+      todayKey: ctx.todayKey,
     });
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : "Failed to load signals" };
   }
 
-  // ---- 4: reservation key dates within the next 5 days ----
-  type ResRow = {
-    client_id: string;
-    ppc_date: string | null;
-    notary_date: string | null;
-    down_payment_date: string | null;
-    client: Embedded<{ first_name: string; last_name: string; is_active: boolean }>;
-  };
-  const resRes = await supabase
-    .from("reservations")
-    .select(
-      "client_id, ppc_date, notary_date, down_payment_date, client:clients(first_name, last_name, is_active)"
-    );
-  const dateFields = [
-    { key: "ppc", col: "ppc_date", label: "PPC payment" },
-    { key: "notary", col: "notary_date", label: "Notary" },
-    { key: "downpayment", col: "down_payment_date", label: "Down payment" },
-  ] as const;
-  for (const r of (resRes.data ?? []) as unknown as ResRow[]) {
-    const client = one(r.client);
-    if (!client || client.is_active === false) continue;
-    for (const f of dateFields) {
-      const dateStr = r[f.col];
-      if (!dateStr) continue;
-      const d = new Date(`${dateStr}T00:00:00`);
-      const diff = differenceInCalendarDays(d, now);
-      if (diff < 0 || diff > 5) continue;
-      const when = diff === 0 ? "today" : diff === 1 ? "tomorrow" : `in ${diff} days`;
-      rows.push({
-        agent_id: agentId,
-        type: "reservation_date",
-        title: `${f.label} · ${fullName(client)}`,
-        body: `${format(d, "EEE d MMM")} (${when})`,
-        client_id: r.client_id,
-        appointment_id: null,
-        dedupe_key: `resdate:${r.client_id}:${f.key}:${dateStr}`,
-        due_at: d.toISOString(),
-      });
-    }
-  }
-
-  // ---- 5: stalled offers (offer made but buyer not reserved) ----
-  type OfferRow = {
-    client_id: string;
-    client: Embedded<{
-      first_name: string;
-      last_name: string;
-      side: string;
-      is_active: boolean;
-      stage: string;
-    }>;
-  };
-  const offerRes = await supabase
-    .from("viewings")
-    .select(
-      "client_id, client:clients(first_name, last_name, side, is_active, stage)"
-    )
-    .eq("had_offer", true);
-  const seen = new Set<string>();
-  for (const v of (offerRes.data ?? []) as unknown as OfferRow[]) {
-    const c = one(v.client);
-    if (!c || c.side !== "buyer" || c.is_active === false) continue;
-    if (c.stage === "reserved" || seen.has(v.client_id)) continue;
-    seen.add(v.client_id);
+  for (const o of signals.stalledOffers) {
     rows.push({
       agent_id: agentId,
       type: "stalled_offer",
-      title: `Offer pending · ${fullName(c)}`,
+      title: `Offer pending · ${o.name}`,
       body: "Made an offer but isn't reserved yet — worth a nudge.",
-      client_id: v.client_id,
+      client_id: o.clientId,
       appointment_id: null,
-      dedupe_key: `stalled:${v.client_id}:${weekKey}`,
+      dedupe_key: `stalled:${o.clientId}:${weekKey}`,
       due_at: ctx.nowISO,
     });
   }
+  for (const b of signals.staleBuyers) {
+    rows.push({
+      agent_id: agentId,
+      type: "follow_up",
+      title: `Follow up with ${b.name}`,
+      body: `${STAGE_LABELS[b.stage as Stage] ?? b.stage} · no update in ${b.quietDays} days`,
+      client_id: b.clientId,
+      appointment_id: null,
+      dedupe_key: `followup:${b.clientId}:${weekKey}`,
+      due_at: ctx.nowISO,
+    });
+  }
+  for (const r of signals.reservationDates) {
+    rows.push({
+      agent_id: agentId,
+      type: "reservation_date",
+      title: `${r.label} · ${r.name}`,
+      body: `${formatDateKey(r.dateStr)} (${relativeDayLabel(r.diff)})`,
+      client_id: r.clientId,
+      appointment_id: null,
+      dedupe_key: `resdate:${r.clientId}:${r.field}:${r.dateStr}`,
+      due_at: `${r.dateStr}T00:00:00Z`,
+    });
+  }
 
-  // A client with a pending-offer nudge doesn't also need a generic follow-up.
-  const stalledClients = new Set(
-    rows.filter((r) => r.type === "stalled_offer").map((r) => r.client_id)
-  );
-  const toUpsert = rows.filter(
-    (r) =>
-      !(r.type === "follow_up" && r.client_id && stalledClients.has(r.client_id))
-  );
+  const toUpsert = rows;
 
   if (toUpsert.length > 0) {
     // Upsert refreshes title/body/due_at but leaves read_at untouched
@@ -335,7 +293,8 @@ export async function syncNotifications(
 export async function loadNotifications(
   ctx: SyncContext
 ): Promise<NotificationFeed> {
-  await syncNotifications(ctx);
+  const { error } = await syncNotifications(ctx);
+  if (error) throw new Error(error);
   return getNotificationFeed();
 }
 

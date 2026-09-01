@@ -9,6 +9,7 @@ import {
   reservationFormSchema,
   toNumberOrNull,
   viewingFormSchema,
+  viewingScheduleSchema,
   type PreferencesFormValues,
   type ReservationFormValues,
   type ViewingFormValues,
@@ -54,6 +55,10 @@ export async function saveViewing(
   if (!parsed.success) return { error: "Please check the form." };
   const v = parsed.data;
 
+  const parsedSchedule = viewingScheduleSchema.safeParse(schedule);
+  if (!parsedSchedule.success) return { error: "Please check the form." };
+  const s = parsedSchedule.data;
+
   const supabase = await createSupabase();
   const row = {
     title: emptyToNull(v.title),
@@ -61,8 +66,8 @@ export async function saveViewing(
     property_price: toNumberOrNull(v.property_price),
     had_offer: v.had_offer,
     offer_price: v.had_offer ? toNumberOrNull(v.offer_price) : null,
-    scheduled_at: schedule.scheduled_at,
-    reminder_minutes: schedule.reminder_minutes,
+    scheduled_at: s.scheduled_at,
+    reminder_minutes: s.reminder_minutes,
   };
 
   if (viewingId) {
@@ -124,6 +129,20 @@ export async function addViewingAttachment(
   }
 ): Promise<ActionResult> {
   const supabase = await createSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+  if (!meta.storage_path.startsWith(`${user.id}/${clientId}/`))
+    return { error: "Invalid file path" };
+  const { data: viewing } = await supabase
+    .from("viewings")
+    .select("id, client_id")
+    .eq("id", viewingId)
+    .maybeSingle();
+  if (!viewing || viewing.client_id !== clientId)
+    return { error: "Viewing not found" };
+
   const { error } = await supabase.from("viewing_attachments").insert({
     viewing_id: viewingId,
     storage_path: meta.storage_path,

@@ -1,5 +1,6 @@
 "use server";
 
+import { createClient as createSupabase } from "@/lib/supabase/server";
 import { openrouterChat } from "@/lib/openrouter";
 
 export type ExtractedLead = {
@@ -21,6 +22,17 @@ export async function extractLead(
 ): Promise<{ data: ExtractedLead | null; error: string | null }> {
   const input = text.trim();
   if (!input) return { data: null, error: "Paste a lead message first" };
+
+  const supabase = await createSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { data: null, error: "Not authenticated" };
+  if (input.length > 4000)
+    return {
+      data: null,
+      error: "That message is too long — paste just the inquiry text.",
+    };
 
   const system = [
     "You extract a real-estate lead's details from a raw message — a portal inquiry (Idealista, Fotocasa, Kyero), a forwarded email, or a WhatsApp/SMS text.",
