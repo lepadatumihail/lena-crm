@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated / git-ignored tooling scratch (design-sync converter + output).
+    ".ds-sync/**",
+    "ds-bundle/**",
+    ".design-sync/**",
   ]),
 ]);
 
