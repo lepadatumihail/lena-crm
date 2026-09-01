@@ -580,9 +580,177 @@ export type Database = {
         };
         Relationships: [];
       };
+      profiles: {
+        Row: {
+          id: string;
+          email: string | null;
+          full_name: string | null;
+          is_admin: boolean;
+          cohort: Database["public"]["Enums"]["cohort"];
+          founding_intent: boolean;
+          founding_number: number | null;
+          invite_quota: number;
+          referred_by: string | null;
+          stripe_customer_id: string | null;
+          subscription_status: Database["public"]["Enums"]["sub_status"];
+          trial_ends_at: string | null;
+          price_locked_eur: number | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id: string;
+          email?: string | null;
+          full_name?: string | null;
+          is_admin?: boolean;
+          cohort?: Database["public"]["Enums"]["cohort"];
+          founding_intent?: boolean;
+          founding_number?: number | null;
+          invite_quota?: number;
+          referred_by?: string | null;
+          stripe_customer_id?: string | null;
+          subscription_status?: Database["public"]["Enums"]["sub_status"];
+          trial_ends_at?: string | null;
+          price_locked_eur?: number | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          email?: string | null;
+          full_name?: string | null;
+          is_admin?: boolean;
+          cohort?: Database["public"]["Enums"]["cohort"];
+          founding_intent?: boolean;
+          founding_number?: number | null;
+          invite_quota?: number;
+          referred_by?: string | null;
+          stripe_customer_id?: string | null;
+          subscription_status?: Database["public"]["Enums"]["sub_status"];
+          trial_ends_at?: string | null;
+          price_locked_eur?: number | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      invites: {
+        Row: {
+          id: string;
+          code: string;
+          inviter_id: string | null;
+          note: string | null;
+          status: Database["public"]["Enums"]["invite_status"];
+          redeemed_by: string | null;
+          redeemed_at: string | null;
+          expires_at: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          code: string;
+          inviter_id?: string | null;
+          note?: string | null;
+          status?: Database["public"]["Enums"]["invite_status"];
+          redeemed_by?: string | null;
+          redeemed_at?: string | null;
+          expires_at?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          code?: string;
+          inviter_id?: string | null;
+          note?: string | null;
+          status?: Database["public"]["Enums"]["invite_status"];
+          redeemed_by?: string | null;
+          redeemed_at?: string | null;
+          expires_at?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      referrals: {
+        Row: {
+          id: string;
+          inviter_id: string;
+          invitee_id: string;
+          invite_id: string | null;
+          status: Database["public"]["Enums"]["referral_status"];
+          paid_invoice_count: number;
+          qualified_at: string | null;
+          rewarded_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          inviter_id: string;
+          invitee_id: string;
+          invite_id?: string | null;
+          status?: Database["public"]["Enums"]["referral_status"];
+          paid_invoice_count?: number;
+          qualified_at?: string | null;
+          rewarded_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          inviter_id?: string;
+          invitee_id?: string;
+          invite_id?: string | null;
+          status?: Database["public"]["Enums"]["referral_status"];
+          paid_invoice_count?: number;
+          qualified_at?: string | null;
+          rewarded_at?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      referral_credits: {
+        Row: {
+          id: string;
+          agent_id: string;
+          amount_eur: number;
+          reason: string;
+          referral_id: string | null;
+          applied_to_stripe: boolean;
+          stripe_balance_txn_id: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          agent_id: string;
+          amount_eur: number;
+          reason: string;
+          referral_id?: string | null;
+          applied_to_stripe?: boolean;
+          stripe_balance_txn_id?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          agent_id?: string;
+          amount_eur?: number;
+          reason?: string;
+          referral_id?: string | null;
+          applied_to_stripe?: boolean;
+          stripe_balance_txn_id?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
-    Functions: Record<never, never>;
+    Functions: {
+      claim_founding_invite: {
+        Args: { p_code: string; p_user_id: string };
+        Returns: string;
+      };
+      allocate_founding_number: {
+        Args: { p_user_id: string };
+        Returns: number;
+      };
+    };
     Enums: {
       client_side: "buyer" | "seller";
       deal_property_type: "resale" | "new_build";
@@ -599,6 +767,10 @@ export type Database = {
         | "follow_up"
         | "reservation_date"
         | "stalled_offer";
+      cohort: "founding" | "standard";
+      invite_status: "active" | "redeemed" | "revoked" | "expired";
+      referral_status: "pending" | "qualified" | "rewarded" | "void";
+      sub_status: "none" | "trialing" | "active" | "past_due" | "canceled";
     };
     CompositeTypes: Record<never, never>;
   };
@@ -629,3 +801,7 @@ export type ScheduledEmail = Tables<"scheduled_emails">;
 export type Appointment = Tables<"appointments">;
 export type Notification = Tables<"notifications">;
 export type DealAnalysis = Tables<"deal_analyses">;
+export type Profile = Tables<"profiles">;
+export type Invite = Tables<"invites">;
+export type Referral = Tables<"referrals">;
+export type ReferralCredit = Tables<"referral_credits">;
