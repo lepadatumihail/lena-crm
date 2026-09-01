@@ -14,6 +14,7 @@ import {
 
 import { signOut } from "@/lib/actions/auth";
 import { clientsPath, type ClientSide } from "@/lib/crm";
+import { LogoMark, Wordmark } from "@/components/brand/logo";
 import {
   Sidebar,
   SidebarContent,
@@ -60,12 +61,8 @@ export function AppSidebar({ email }: { email: string }) {
           onClick={closeMobile}
           className="flex items-center gap-2 px-1 py-1.5"
         >
-          <span className="bg-primary text-primary-foreground flex size-7 shrink-0 items-center justify-center rounded-md text-sm font-bold">
-            LW
-          </span>
-          <span className="font-semibold tracking-tight group-data-[collapsible=icon]:hidden">
-            LeadWing
-          </span>
+          <LogoMark />
+          <Wordmark className="group-data-[collapsible=icon]:hidden" />
         </Link>
       </SidebarHeader>
 

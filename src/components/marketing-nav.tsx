@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/brand/logo";
 
 export function MarketingNav({
   variant = "landing",
@@ -12,10 +13,7 @@ export function MarketingNav({
     <header className="sticky top-0 z-20 border-b border-border/60 bg-background/70 backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <span className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-md text-sm font-bold">
-            LW
-          </span>
-          <span className="font-semibold tracking-tight">LeadWing</span>
+          <Logo />
         </Link>
         <div className="flex items-center gap-2">
           {variant === "landing" ? (

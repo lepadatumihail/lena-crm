@@ -22,6 +22,7 @@ import { HowItWorks } from "@/components/landing/how-it-works";
 import { FeatureDeepDives } from "@/components/landing/feature-deep-dives";
 import { AppPreview } from "@/components/landing/app-preview";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
+import { Logo } from "@/components/brand/logo";
 
 const BUYER_STEPS = ["New", "Contacted", "Qualified", "Viewing", "Reserved"];
 
@@ -471,10 +472,7 @@ export default function Home() {
       <footer className="border-t">
         <div className="text-muted-foreground mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 px-4 py-8 text-sm sm:flex-row">
           <div className="flex items-center gap-2">
-            <span className="bg-primary text-primary-foreground flex size-5 items-center justify-center rounded text-[10px] font-bold">
-              LW
-            </span>
-            <span className="text-foreground font-medium">LeadWing</span>
+            <Logo markClassName="size-5" wordmarkClassName="text-foreground font-medium" />
             <span>— real-estate CRM for the Costa del Sol</span>
           </div>
           <span>© {new Date().getFullYear()} LeadWing</span>

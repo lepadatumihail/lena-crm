@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
+import { WING_PATHS } from "@/lib/brand-mark";
 import {
   BRAND,
   SITE_DESCRIPTION,
@@ -88,15 +89,10 @@ export default async function Image() {
           <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
             <svg width="84" height="84" viewBox="0 0 512 512">
               <rect width="512" height="512" rx="112" fill={BRAND.primary} />
-              <g
-                fill="none"
-                stroke={BRAND.background}
-                strokeWidth="54"
-                strokeLinecap="round"
-              >
-                <path d="M118 372 C 210 356, 320 300, 404 156" />
-                <path d="M150 430 C 232 418, 318 372, 388 276" />
-                <path d="M198 474 C 258 468, 316 446, 356 392" />
+              <g fill={BRAND.background}>
+                {WING_PATHS.map((d, i) => (
+                  <path key={i} d={d} />
+                ))}
               </g>
             </svg>
             <div
