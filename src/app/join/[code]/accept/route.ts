@@ -1,18 +1,18 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
-import { findActiveInvite } from "@/lib/referrals/engine";
+import { findInviterByCode } from "@/lib/referrals/engine";
 import {
-  INVITE_COOKIE,
-  INVITE_COOKIE_MAX_AGE,
-  isValidInviteCode,
-  normalizeInviteCode,
-} from "@/lib/invites";
+  REFERRAL_COOKIE,
+  REFERRAL_COOKIE_MAX_AGE,
+  isValidReferralCode,
+  normalizeReferralCode,
+} from "@/lib/referrals/links";
 
 /**
- * Stores the invite in an httpOnly cookie that survives the sign-in
+ * Stores the referral code in an httpOnly cookie that survives the sign-in
  * round-trip (Google OAuth or the email code), then sends the visitor to
- * sign in. /join/claim redeems it afterwards. The cookie is only a pointer:
+ * sign in. /join/claim records it afterwards. The cookie is only a pointer:
  * the code is re-validated against the database at claim time.
  */
 export async function GET(
@@ -20,8 +20,8 @@ export async function GET(
   { params }: { params: Promise<{ code: string }> }
 ) {
   const { code: raw } = await params;
-  const code = normalizeInviteCode(decodeURIComponent(raw));
-  const valid = isValidInviteCode(code) && (await findActiveInvite(code)) !== null;
+  const code = normalizeReferralCode(decodeURIComponent(raw));
+  const valid = isValidReferralCode(code) && (await findInviterByCode(code)) !== null;
   if (!valid) {
     return NextResponse.redirect(new URL(`/join/${encodeURIComponent(code || raw)}`, request.url));
   }
@@ -34,13 +34,13 @@ export async function GET(
   const destination = user ? "/join/claim" : "/login?next=%2Fjoin%2Fclaim";
   const res = NextResponse.redirect(new URL(destination, request.url));
   res.cookies.set({
-    name: INVITE_COOKIE,
+    name: REFERRAL_COOKIE,
     value: code,
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    maxAge: INVITE_COOKIE_MAX_AGE,
+    maxAge: REFERRAL_COOKIE_MAX_AGE,
   });
   return res;
 }

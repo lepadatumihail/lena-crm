@@ -76,23 +76,38 @@ Email follow-up automation (send-as-agent via Gmail API / Microsoft Graph with a
 Resend fallback) is designed into the schema (`email_accounts`,
 `email_templates`, `scheduled_emails`) but not built in v1.
 
-## Invites, referrals and billing
+## Plans, founding cohort and referrals
 
-Open signup at €29/mo standard. An invite code is not a gate: it reserves a
-**Founding** spot (€19/mo locked for life, a Founding number, 3 invites) for
-the first 20 paying founders. Trial is a 7-day DB flag, then a hard paywall.
+Two plans, one difference. **Free** holds 3 clients (every row counts,
+inactive too; nothing is ever deleted, only adding a 4th is blocked). **Pro**
+is unlimited: €29/mo or €276/yr, and the first 20 paying agents lock
+€19/mo or €180/yr for life. There is no time trial. Decision record:
+`plans/free-pro-pricing.md`.
 
-- `/join/[code]` — invite landing; `accept` stores the code in an httpOnly
-  cookie, `/join/claim` redeems it after sign-in via `claim_founding_invite`.
-- `/invites` — an agent's codes, their state, and free-month credits.
-- `/admin` — founder-only: seed codes, founder counter, record payments by
-  hand until Stripe is wired (`is_admin` is flipped in Supabase Studio).
-- `/api/stripe/webhook` — links customers, counts paid invoices (the 2nd one
-  credits both sides €19 via a customer balance transaction), mirrors
-  subscription status. Idempotent through `stripe_events`.
+- The cap: `src/lib/access.ts` (`isPro`, `canAddClient`) in the app, the
+  trigger `clients_enforce_free_limit` in the database as the backstop.
+  Pro = a live Stripe subscription (dunning included) or comped time
+  (`profiles.pro_until`).
+- `/pricing` — Free vs Pro with a monthly/yearly toggle, the founding spots
+  left, Stripe Payment Links tagged with the agent's id, and the Customer
+  Portal for subscribers.
+- `/join/[code]` — referral landing; `accept` stores the code in an httpOnly
+  cookie, `/join/claim` records it after sign-in via `claim_referral`. Every
+  agent gets one permanent code (`profiles.referral_code`).
+- `/referrals` — the agent's link, the agents they referred (signed up →
+  subscribed → free month earned), and their rewards.
+- `/admin` — founder-only: founder counter, record payments by hand, make
+  founders, comp Pro months (`is_admin` is flipped in Supabase Studio).
+- `/api/stripe/webhook` — links customers, reads the plan from the price's
+  lookup key, allocates founding numbers, counts paid invoices (the 2nd one
+  rewards both sides), mirrors subscription status. Idempotent through
+  `stripe_events`.
+
+A referral reward is one free month each. Subscribers get it as a Stripe
+customer-balance credit worth a month of their plan; anyone else gets a
+month of Pro from the backend, no card needed.
 
 Engine: `src/lib/referrals/engine.ts`; atomic pieces are the RPCs in
-`supabase/migrations/2026062512*_invites_referrals.sql` and
-`20260902120000_referral_engine.sql`. Apply both with `supabase db push` (or
-paste into the SQL editor) before enabling any of this in production; the
-first one starts every existing user's 7-day trial when it runs.
+`supabase/migrations/20260906120000_billing_referrals.sql`. Apply it with
+`supabase db push` (or paste into the SQL editor) before deploying; it also
+creates profiles for existing users, who start on Free.

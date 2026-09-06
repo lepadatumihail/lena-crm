@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 
 import { getStripe } from "@/lib/stripe";
+import { isFoundingPlan, planFromLookupKey, planMonthlyEur } from "@/lib/billing";
 import { mapStripeSubscriptionStatus } from "@/lib/referrals/stripe-status";
 import {
+  applyPendingCredits,
   claimStripeEvent,
   findProfileByEmail,
   findProfileByStripeCustomer,
-  getProfile,
   promoteToFounder,
   recordPaidInvoice,
   setSubscriptionStatus,
@@ -15,14 +16,16 @@ import {
 } from "@/lib/referrals/engine";
 
 /**
- * Stripe → LeadWing. Drives the whole billing side of the referral model:
- *   checkout.session.completed  → link the Stripe customer, mark active,
- *                                 allocate a Founding number if invited
+ * Stripe → LeadWing. Drives the whole billing side:
+ *   checkout.session.completed  → link the Stripe customer, mark subscribed,
+ *                                 read the plan from the price's lookup key,
+ *                                 allocate a Founding number on a founding
+ *                                 price, push any banked credits
  *   invoice.paid                → count the invoice towards the referral
- *                                 reward (2nd one pays both sides)
- *   invoice.payment_failed      → past_due (dunning grace)
- *   customer.subscription.*     → mirror status; cancellation voids a pending
- *                                 referral
+ *                                 reward (the 2nd one pays both sides)
+ *   invoice.payment_failed      → past_due (dunning grace, still Pro)
+ *   customer.subscription.*     → mirror status; cancellation = back to Free
+ *                                 and voids a pending referral
  * Every event id is recorded first so Stripe's retries are harmless.
  */
 export async function POST(request: Request) {
@@ -45,7 +48,7 @@ export async function POST(request: Request) {
     if (!(await claimStripeEvent(event.id, event.type))) {
       return NextResponse.json({ received: true, duplicate: true });
     }
-    await handle(event);
+    await handle(stripe, event);
   } catch (err) {
     console.error(`stripe webhook ${event.type} failed`, err);
     return NextResponse.json({ error: "Handler failed" }, { status: 500 });
@@ -60,14 +63,16 @@ function customerId(
   return typeof c === "string" ? c : c.id;
 }
 
-async function foundingAllocation(userId: string) {
-  const profile = await getProfile(userId);
-  if (profile?.founding_intent && profile.founding_number == null) {
-    await promoteToFounder(userId);
-  }
+/** The plan is the price's lookup key; anything unknown leaves the profile's plan alone. */
+async function planForSession(stripe: Stripe, session: Stripe.Checkout.Session) {
+  const subscriptionId =
+    typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
+  if (!subscriptionId) return null;
+  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+  return planFromLookupKey(subscription.items.data[0]?.price?.lookup_key);
 }
 
-async function handle(event: Stripe.Event) {
+async function handle(stripe: Stripe, event: Stripe.Event) {
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object;
@@ -76,17 +81,33 @@ async function handle(event: Stripe.Event) {
       const userId =
         session.client_reference_id ?? (email ? (await findProfileByEmail(email))?.id ?? null : null);
       if (!userId) return;
-      await setSubscriptionStatus(userId, "active", customer ? { stripe_customer_id: customer } : {});
-      await foundingAllocation(userId);
+
+      const plan = await planForSession(stripe, session);
+      await setSubscriptionStatus(userId, "active", {
+        ...(customer ? { stripe_customer_id: customer } : {}),
+        ...(plan ? { plan, plan_monthly_eur: planMonthlyEur(plan) } : {}),
+      });
+      if (isFoundingPlan(plan)) await promoteToFounder(userId);
+      await applyPendingCredits(userId);
       return;
     }
     case "invoice.paid": {
-      const customer = customerId(event.data.object.customer);
-      if (!customer) return;
-      const profile = await findProfileByStripeCustomer(customer);
+      const invoice = event.data.object;
+      const customer = customerId(invoice.customer);
+      // The first invoice can land before checkout.session.completed has
+      // linked the customer; fall back to the email so it is never lost.
+      let profile = customer ? await findProfileByStripeCustomer(customer) : null;
+      if (!profile && invoice.customer_email) {
+        profile = await findProfileByEmail(invoice.customer_email);
+        if (profile && customer) {
+          await setSubscriptionStatus(profile.id, "active", { stripe_customer_id: customer });
+        }
+      }
       if (!profile) return;
       await setSubscriptionStatus(profile.id, "active");
-      await foundingAllocation(profile.id);
+      if (isFoundingPlan(profile.plan) && profile.founding_number == null) {
+        await promoteToFounder(profile.id);
+      }
       await recordPaidInvoice(profile.id);
       return;
     }

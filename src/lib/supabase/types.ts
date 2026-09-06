@@ -587,14 +587,14 @@ export type Database = {
           full_name: string | null;
           is_admin: boolean;
           cohort: Database["public"]["Enums"]["cohort"];
-          founding_intent: boolean;
           founding_number: number | null;
-          invite_quota: number;
+          referral_code: string;
           referred_by: string | null;
           stripe_customer_id: string | null;
           subscription_status: Database["public"]["Enums"]["sub_status"];
-          trial_ends_at: string | null;
-          price_locked_eur: number | null;
+          plan: Database["public"]["Enums"]["billing_plan"] | null;
+          plan_monthly_eur: number | null;
+          pro_until: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -604,14 +604,14 @@ export type Database = {
           full_name?: string | null;
           is_admin?: boolean;
           cohort?: Database["public"]["Enums"]["cohort"];
-          founding_intent?: boolean;
           founding_number?: number | null;
-          invite_quota?: number;
+          referral_code?: string;
           referred_by?: string | null;
           stripe_customer_id?: string | null;
           subscription_status?: Database["public"]["Enums"]["sub_status"];
-          trial_ends_at?: string | null;
-          price_locked_eur?: number | null;
+          plan?: Database["public"]["Enums"]["billing_plan"] | null;
+          plan_monthly_eur?: number | null;
+          pro_until?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -621,52 +621,16 @@ export type Database = {
           full_name?: string | null;
           is_admin?: boolean;
           cohort?: Database["public"]["Enums"]["cohort"];
-          founding_intent?: boolean;
           founding_number?: number | null;
-          invite_quota?: number;
+          referral_code?: string;
           referred_by?: string | null;
           stripe_customer_id?: string | null;
           subscription_status?: Database["public"]["Enums"]["sub_status"];
-          trial_ends_at?: string | null;
-          price_locked_eur?: number | null;
+          plan?: Database["public"]["Enums"]["billing_plan"] | null;
+          plan_monthly_eur?: number | null;
+          pro_until?: string | null;
           created_at?: string;
           updated_at?: string;
-        };
-        Relationships: [];
-      };
-      invites: {
-        Row: {
-          id: string;
-          code: string;
-          inviter_id: string | null;
-          note: string | null;
-          status: Database["public"]["Enums"]["invite_status"];
-          redeemed_by: string | null;
-          redeemed_at: string | null;
-          expires_at: string;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          code: string;
-          inviter_id?: string | null;
-          note?: string | null;
-          status?: Database["public"]["Enums"]["invite_status"];
-          redeemed_by?: string | null;
-          redeemed_at?: string | null;
-          expires_at?: string;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          code?: string;
-          inviter_id?: string | null;
-          note?: string | null;
-          status?: Database["public"]["Enums"]["invite_status"];
-          redeemed_by?: string | null;
-          redeemed_at?: string | null;
-          expires_at?: string;
-          created_at?: string;
         };
         Relationships: [];
       };
@@ -675,7 +639,6 @@ export type Database = {
           id: string;
           inviter_id: string;
           invitee_id: string;
-          invite_id: string | null;
           status: Database["public"]["Enums"]["referral_status"];
           paid_invoice_count: number;
           qualified_at: string | null;
@@ -686,7 +649,6 @@ export type Database = {
           id?: string;
           inviter_id: string;
           invitee_id: string;
-          invite_id?: string | null;
           status?: Database["public"]["Enums"]["referral_status"];
           paid_invoice_count?: number;
           qualified_at?: string | null;
@@ -697,7 +659,6 @@ export type Database = {
           id?: string;
           inviter_id?: string;
           invitee_id?: string;
-          invite_id?: string | null;
           status?: Database["public"]["Enums"]["referral_status"];
           paid_invoice_count?: number;
           qualified_at?: string | null;
@@ -710,7 +671,9 @@ export type Database = {
         Row: {
           id: string;
           agent_id: string;
+          kind: Database["public"]["Enums"]["credit_kind"];
           amount_eur: number;
+          months: number;
           reason: string;
           referral_id: string | null;
           applied_to_stripe: boolean;
@@ -720,7 +683,9 @@ export type Database = {
         Insert: {
           id?: string;
           agent_id: string;
-          amount_eur: number;
+          kind: Database["public"]["Enums"]["credit_kind"];
+          amount_eur?: number;
+          months?: number;
           reason: string;
           referral_id?: string | null;
           applied_to_stripe?: boolean;
@@ -730,7 +695,9 @@ export type Database = {
         Update: {
           id?: string;
           agent_id?: string;
+          kind?: Database["public"]["Enums"]["credit_kind"];
           amount_eur?: number;
+          months?: number;
           reason?: string;
           referral_id?: string | null;
           applied_to_stripe?: boolean;
@@ -748,13 +715,25 @@ export type Database = {
     };
     Views: Record<never, never>;
     Functions: {
-      claim_founding_invite: {
+      is_pro: {
+        Args: { p_user_id: string };
+        Returns: boolean;
+      };
+      claim_referral: {
         Args: { p_code: string; p_user_id: string };
         Returns: string;
       };
       allocate_founding_number: {
         Args: { p_user_id: string };
-        Returns: number;
+        Returns: number | null;
+      };
+      grant_pro_time: {
+        Args: { p_user_id: string; p_months: number; p_reason: string; p_referral_id?: string | null };
+        Returns: string;
+      };
+      grant_free_month: {
+        Args: { p_user_id: string; p_reason: string; p_referral_id: string | null };
+        Returns: undefined;
       };
       record_paid_invoice: {
         Args: { p_user_id: string };
@@ -782,9 +761,10 @@ export type Database = {
         | "reservation_date"
         | "stalled_offer";
       cohort: "founding" | "standard";
-      invite_status: "active" | "redeemed" | "revoked" | "expired";
       referral_status: "pending" | "qualified" | "rewarded" | "void";
-      sub_status: "none" | "trialing" | "active" | "past_due" | "canceled";
+      sub_status: "none" | "active" | "past_due" | "canceled";
+      billing_plan: "founding_monthly" | "founding_yearly" | "standard_monthly" | "standard_yearly";
+      credit_kind: "stripe_balance" | "pro_time";
     };
     CompositeTypes: Record<never, never>;
   };
@@ -816,6 +796,5 @@ export type Appointment = Tables<"appointments">;
 export type Notification = Tables<"notifications">;
 export type DealAnalysis = Tables<"deal_analyses">;
 export type Profile = Tables<"profiles">;
-export type Invite = Tables<"invites">;
 export type Referral = Tables<"referrals">;
 export type ReferralCredit = Tables<"referral_credits">;

@@ -21,6 +21,9 @@ export function MarketingNav({
               <Button asChild variant="ghost" size="sm">
                 <Link href="#how-it-works">How it works</Link>
               </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="#pricing">Pricing</Link>
+              </Button>
               <Button asChild size="sm">
                 <Link href="/login">Sign in</Link>
               </Button>

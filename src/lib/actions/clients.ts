@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
+import { FREE_CLIENT_LIMIT, canAddClient } from "@/lib/access";
 import { BUYER_STAGES, SELLER_STAGES, defaultStageForSide } from "@/lib/crm";
 import {
   clientFormSchema,
@@ -14,14 +15,53 @@ type ActionResult = { error: string | null };
 const STORAGE_BUCKET = "attachments";
 const REMOVE_CHUNK_SIZE = 100;
 
+export type CreateClientResult = {
+  error: string | null;
+  id?: string;
+  /** The Free plan's client cap was hit; the UI shows the upgrade prompt. */
+  limitReached?: boolean;
+};
+
+const LIMIT_MESSAGE = `You've used your ${FREE_CLIENT_LIMIT} free clients. Pro is unlimited.`;
+
+/**
+ * Free agents may hold FREE_CLIENT_LIMIT clients. Checked here for a friendly
+ * answer; the database trigger `clients_enforce_free_limit` is the backstop.
+ * Missing profile data (e.g. before the billing migration runs) is left to
+ * the trigger rather than blocking anyone in the app.
+ */
+async function freeLimitReached(
+  supabase: Awaited<ReturnType<typeof createSupabase>>,
+  userId: string
+): Promise<boolean> {
+  const [{ data: profile, error }, { count }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("subscription_status, pro_until")
+      .eq("id", userId)
+      .maybeSingle(),
+    supabase.from("clients").select("id", { count: "exact", head: true }),
+  ]);
+  if (error) return false;
+  return !canAddClient(profile, count ?? 0);
+}
+
 export async function createClient(
   values: ClientFormValues
-): Promise<{ error: string | null; id?: string }> {
+): Promise<CreateClientResult> {
   const parsed = clientFormSchema.safeParse(values);
   if (!parsed.success) return { error: "Please check the form and try again." };
   const v = parsed.data;
 
   const supabase = await createSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+  if (await freeLimitReached(supabase, user.id)) {
+    return { error: LIMIT_MESSAGE, limitReached: true };
+  }
+
   const { data, error } = await supabase
     .from("clients")
     .insert({
@@ -42,7 +82,12 @@ export async function createClient(
     .select("id")
     .single();
 
-  if (error) return { error: error.message };
+  if (error) {
+    if (error.message.includes("client_limit_reached")) {
+      return { error: LIMIT_MESSAGE, limitReached: true };
+    }
+    return { error: error.message };
+  }
   revalidatePath("/clients");
   return { error: null, id: data.id };
 }

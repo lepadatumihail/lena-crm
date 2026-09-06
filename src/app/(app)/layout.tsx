@@ -3,8 +3,8 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 import { createClient } from "@/lib/supabase/server";
-import { hasAccess } from "@/lib/access";
-import { AppSidebar } from "@/components/app-sidebar";
+import { planState } from "@/lib/access";
+import { AppSidebar, type SidebarPlan } from "@/components/app-sidebar";
 import { NotificationsBell } from "@/components/notifications/notifications-bell";
 import {
   SidebarInset,
@@ -15,6 +15,10 @@ import {
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
+
+function shortDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+}
 
 export default async function AppLayout({
   children,
@@ -28,14 +32,28 @@ export default async function AppLayout({
 
   if (!user) redirect("/login");
 
-  // Hard paywall: expired trial / no active subscription → /upgrade.
-  // (/upgrade lives outside this group so the gate can't loop on itself.)
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("subscription_status, trial_ends_at, is_admin, founding_number")
-    .eq("id", user.id)
-    .maybeSingle();
-  if (profile && !hasAccess(profile)) redirect("/upgrade");
+  // The app is always open. The only gate is the Free plan's client cap,
+  // enforced where a client is added; the sidebar just shows where they stand.
+  const [{ data: profile }, { count }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("is_admin, founding_number, subscription_status, pro_until")
+      .eq("id", user.id)
+      .maybeSingle(),
+    supabase.from("clients").select("id", { count: "exact", head: true }),
+  ]);
+
+  let plan: SidebarPlan | null = null;
+  if (profile) {
+    const state = planState(profile);
+    plan = {
+      tier: state.tier,
+      source: state.source,
+      proUntilLabel: state.proUntil ? shortDate(state.proUntil) : null,
+      limit: state.limit,
+      clientCount: count ?? 0,
+    };
+  }
 
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
@@ -46,6 +64,7 @@ export default async function AppLayout({
         email={user.email ?? ""}
         isAdmin={profile?.is_admin ?? false}
         foundingNumber={profile?.founding_number ?? null}
+        plan={plan}
       />
       <SidebarInset>
         <header className="bg-background/80 sticky top-0 z-10 flex h-14 items-center gap-2 border-b px-4 backdrop-blur">

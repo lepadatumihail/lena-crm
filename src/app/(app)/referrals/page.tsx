@@ -1,11 +1,11 @@
 import { getMyReferralOverview } from "@/lib/data/referrals";
-import { InvitesView } from "@/components/invites/invites-view";
+import { ReferralsView } from "@/components/referrals/referrals-view";
 
-export default async function InvitesPage({
+export default async function ReferralsPage({
   searchParams,
 }: {
   searchParams: Promise<{ claimed?: string }>;
 }) {
   const [{ claimed }, overview] = await Promise.all([searchParams, getMyReferralOverview()]);
-  return <InvitesView overview={overview} claimed={claimed} />;
+  return <ReferralsView overview={overview} claimed={claimed} />;
 }

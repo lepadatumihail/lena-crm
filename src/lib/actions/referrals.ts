@@ -5,9 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import {
-  createInvitesForAgent,
-  getProfile,
-  mintInvites,
+  grantProTime,
   promoteToFounder,
   recordPaidInvoice,
   setSubscriptionStatus,
@@ -16,7 +14,7 @@ import {
 import type { SubStatus } from "@/lib/referrals/stripe-status";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const STATUSES: SubStatus[] = ["none", "trialing", "active", "past_due", "canceled"];
+const STATUSES: SubStatus[] = ["none", "active", "past_due", "canceled"];
 
 async function requireUser() {
   const supabase = await createClient();
@@ -45,46 +43,31 @@ function userIdFrom(formData: FormData): string {
   return id;
 }
 
-/** Founding agents mint their remaining codes themselves. */
-export async function createMyInviteCodes() {
-  const user = await requireUser();
-  await createInvitesForAgent(user.id);
-  revalidatePath("/invites");
+function revalidateAll() {
+  revalidatePath("/admin");
+  revalidatePath("/referrals");
+  revalidatePath("/pricing");
 }
 
 // ---------------- admin ----------------
 
-export async function adminSeedInvites(formData: FormData) {
-  await requireAdmin();
-  const count = Math.min(20, Math.max(1, Number(formData.get("count")) || 1));
-  const note = String(formData.get("note") ?? "").trim().slice(0, 120) || null;
-  await mintInvites({ inviterId: null, count, note });
-  revalidatePath("/admin");
-}
-
 /**
  * Manual stand-in for the Stripe "invoice.paid" webhook: mark the agent
- * paying, allocate a Founding number if they were invited, count the invoice
- * towards the referral reward.
+ * subscribed and count the invoice towards their referrer's reward.
  */
 export async function adminRecordPaidInvoice(formData: FormData) {
   await requireAdmin();
   const userId = userIdFrom(formData);
   await setSubscriptionStatus(userId, "active");
-  const profile = await getProfile(userId);
-  if (profile?.founding_intent && profile.founding_number == null) {
-    await promoteToFounder(userId);
-  }
   await recordPaidInvoice(userId);
-  revalidatePath("/admin");
-  revalidatePath("/invites");
+  revalidateAll();
 }
 
+/** Hand out a Founding number by hand (a payment recorded outside Stripe). */
 export async function adminAllocateFounding(formData: FormData) {
   await requireAdmin();
   await promoteToFounder(userIdFrom(formData));
-  revalidatePath("/admin");
-  revalidatePath("/invites");
+  revalidateAll();
 }
 
 export async function adminSetStatus(formData: FormData) {
@@ -94,17 +77,14 @@ export async function adminSetStatus(formData: FormData) {
   if (!STATUSES.includes(status)) throw new Error("Invalid status");
   await setSubscriptionStatus(userId, status);
   if (status === "canceled") await voidReferral(userId);
-  revalidatePath("/admin");
+  revalidateAll();
 }
 
-export async function adminRevokeInvite(formData: FormData) {
+/** Comp a month of Pro from the backend: design partners, goodwill, testing. */
+export async function adminCompMonth(formData: FormData) {
   await requireAdmin();
-  const id = String(formData.get("inviteId") ?? "");
-  if (!UUID.test(id)) throw new Error("Invalid invite id");
-  await createAdminClient()
-    .from("invites")
-    .update({ status: "revoked" })
-    .eq("id", id)
-    .eq("status", "active");
-  revalidatePath("/admin");
+  const userId = userIdFrom(formData);
+  const months = Math.min(12, Math.max(1, Number(formData.get("months")) || 1));
+  await grantProTime(userId, months, "manual_comp");
+  revalidateAll();
 }

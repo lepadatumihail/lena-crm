@@ -82,6 +82,14 @@ export function ClientForm({
     setSubmitting(true);
     if (mode === "create") {
       const res = await createClientAction(values);
+      if (res.limitReached) {
+        setSubmitting(false);
+        toast.error(res.error ?? "You've reached the Free plan's client limit", {
+          description: "Pro is unlimited, and nothing you've added goes anywhere.",
+          action: { label: "See plans", onClick: () => router.push("/pricing") },
+        });
+        return;
+      }
       if (res.error || !res.id) {
         setSubmitting(false);
         toast.error("Couldn't create client", {

@@ -1,52 +1,39 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getStripe } from "@/lib/stripe";
-import {
-  type ClaimResult,
-  generateInviteCode,
-} from "@/lib/invites";
-import type { Enums, Invite, Profile } from "@/lib/supabase/types";
+import type { BillingPlan } from "@/lib/billing";
+import type { ClaimResult } from "@/lib/referrals/links";
 import type { SubStatus } from "@/lib/referrals/stripe-status";
+import type { Enums, Profile } from "@/lib/supabase/types";
 
 /**
- * The referral engine. Every function here uses the service-role client and
- * is therefore only ever called from trusted server code: server actions
- * that have checked the caller, route handlers, and the Stripe webhook.
- * Anything atomic lives in the database (the RPCs); this file sequences them.
+ * The referral + billing engine. Every function here uses the service-role
+ * client and is therefore only ever called from trusted server code: server
+ * actions that have checked the caller, route handlers, and the Stripe
+ * webhook. Anything atomic lives in the database (the RPCs); this file
+ * sequences them.
  */
 
 type Admin = ReturnType<typeof createAdminClient>;
 
-export type ActiveInvite = {
-  invite: Invite;
-  inviter: Pick<Profile, "id" | "full_name" | "email"> | null;
-};
+export type Inviter = Pick<Profile, "id" | "full_name" | "email" | "referral_code">;
 
-export async function findActiveInvite(code: string): Promise<ActiveInvite | null> {
-  const admin = createAdminClient();
-  const { data: invite, error } = await admin
-    .from("invites")
-    .select("*")
-    .eq("code", code)
-    .eq("status", "active")
-    .gt("expires_at", new Date().toISOString())
+/** The agent behind a referral code, or null if the code is unknown. */
+export async function findInviterByCode(
+  code: string,
+  admin: Admin = createAdminClient(),
+): Promise<Inviter | null> {
+  const { data, error } = await admin
+    .from("profiles")
+    .select("id, full_name, email, referral_code")
+    .eq("referral_code", code)
     .maybeSingle();
-  if (error || !invite) return null;
-
-  let inviter: ActiveInvite["inviter"] = null;
-  if (invite.inviter_id) {
-    const { data } = await admin
-      .from("profiles")
-      .select("id, full_name, email")
-      .eq("id", invite.inviter_id)
-      .maybeSingle();
-    inviter = data ?? null;
-  }
-  return { invite, inviter };
+  if (error) return null;
+  return data;
 }
 
-export async function claimInvite(code: string, userId: string): Promise<ClaimResult> {
+export async function claimReferral(code: string, userId: string): Promise<ClaimResult> {
   const admin = createAdminClient();
-  const { data, error } = await admin.rpc("claim_founding_invite", {
+  const { data, error } = await admin.rpc("claim_referral", {
     p_code: code,
     p_user_id: userId,
   });
@@ -82,62 +69,16 @@ export async function findProfileByEmail(email: string) {
   return data;
 }
 
-/** Mint codes. inviterId null = founder seed (no quota). Retries on code collision. */
-export async function mintInvites(opts: {
-  inviterId: string | null;
-  count: number;
-  note?: string | null;
-  admin?: Admin;
-}): Promise<Invite[]> {
-  const admin = opts.admin ?? createAdminClient();
-  const minted: Invite[] = [];
-  for (let i = 0; i < opts.count; i++) {
-    for (let attempt = 0; attempt < 5; attempt++) {
-      const { data, error } = await admin
-        .from("invites")
-        .insert({ code: generateInviteCode(), inviter_id: opts.inviterId, note: opts.note ?? null })
-        .select("*")
-        .single();
-      if (!error && data) {
-        minted.push(data);
-        break;
-      }
-      if (error?.code !== "23505") throw new Error(error?.message ?? "Could not create invite");
-    }
-  }
-  return minted;
-}
-
-export async function inviteQuota(userId: string, admin: Admin = createAdminClient()) {
-  const [{ data: profile }, { count }] = await Promise.all([
-    admin.from("profiles").select("invite_quota").eq("id", userId).maybeSingle(),
-    admin.from("invites").select("id", { count: "exact", head: true }).eq("inviter_id", userId),
-  ]);
-  const quota = profile?.invite_quota ?? 0;
-  const used = count ?? 0;
-  return { quota, used, remaining: Math.max(0, quota - used) };
-}
-
-/** Mint whatever the agent's quota still allows. */
-export async function createInvitesForAgent(userId: string, note?: string): Promise<Invite[]> {
-  const admin = createAdminClient();
-  const { remaining } = await inviteQuota(userId, admin);
-  if (remaining <= 0) return [];
-  return mintInvites({ inviterId: userId, count: remaining, note: note ?? null, admin });
-}
-
 /**
- * First payment by someone with founding intent: take a Founding number if
- * the cohort of 20 still has room, then hand out their three codes.
- * Returns the number, or null when the cohort is full or already allocated.
+ * A paying agent takes the next Founding number while the cohort of 20 has
+ * room. Returns the number (the existing one if already allocated), or null
+ * when the cohort is full.
  */
 export async function promoteToFounder(userId: string): Promise<number | null> {
   const admin = createAdminClient();
   const { data, error } = await admin.rpc("allocate_founding_number", { p_user_id: userId });
   if (error) throw new Error(error.message);
-  const number = data ?? null;
-  if (number != null) await createInvitesForAgent(userId, "Founding allocation");
-  return number;
+  return data ?? null;
 }
 
 export type PaidInvoiceResult = {
@@ -146,7 +87,11 @@ export type PaidInvoiceResult = {
   rewarded: boolean;
 };
 
-/** Count a paid invoice for the invitee; on the 2nd one both sides get a free month. */
+/**
+ * Count a paid invoice for a referred agent; on the 2nd one both sides get a
+ * free month (decided in the database: a balance credit for subscribers,
+ * comped Pro time for everyone else). Credits are then pushed to Stripe.
+ */
 export async function recordPaidInvoice(userId: string): Promise<PaidInvoiceResult> {
   const admin = createAdminClient();
   const { data, error } = await admin.rpc("record_paid_invoice", { p_user_id: userId });
@@ -178,10 +123,16 @@ export async function voidReferral(userId: string): Promise<boolean> {
   return Boolean(data);
 }
 
+export type SubscriptionPatch = {
+  stripe_customer_id?: string;
+  plan?: BillingPlan | null;
+  plan_monthly_eur?: number | null;
+};
+
 export async function setSubscriptionStatus(
   userId: string,
   status: SubStatus,
-  extra: { stripe_customer_id?: string } = {}
+  extra: SubscriptionPatch = {},
 ) {
   const admin = createAdminClient();
   const { error } = await admin
@@ -191,14 +142,31 @@ export async function setSubscriptionStatus(
   if (error) throw new Error(error.message);
 }
 
+/** Comp Pro time from the backend (admin comps, design partners). Returns the new pro_until. */
+export async function grantProTime(
+  userId: string,
+  months: number,
+  reason: string,
+): Promise<string | null> {
+  const admin = createAdminClient();
+  const { data, error } = await admin.rpc("grant_pro_time", {
+    p_user_id: userId,
+    p_months: months,
+    p_reason: reason,
+  });
+  if (error) throw new Error(error.message);
+  return data ?? null;
+}
+
 /**
- * Push unapplied credits to Stripe as customer-balance transactions, so the
- * next invoice drops by 19 EUR per credit. A no-op until Stripe is configured
- * or until the agent has a Stripe customer; the credits stay in the ledger.
+ * Push unapplied balance credits to Stripe as customer-balance transactions,
+ * so the next invoice drops by one month of the agent's plan per credit.
+ * A no-op until Stripe is configured or until the agent has a Stripe
+ * customer; the credits stay in the ledger.
  */
 export async function applyPendingCredits(
   agentId: string,
-  admin: Admin = createAdminClient()
+  admin: Admin = createAdminClient(),
 ): Promise<number> {
   const stripe = getStripe();
   if (!stripe) return 0;
@@ -209,14 +177,17 @@ export async function applyPendingCredits(
     .from("referral_credits")
     .select("*")
     .eq("agent_id", agentId)
+    .eq("kind", "stripe_balance")
     .eq("applied_to_stripe", false);
 
   let applied = 0;
   for (const credit of credits ?? []) {
+    const amount = Math.round(Number(credit.amount_eur) * 100);
+    if (amount <= 0) continue;
     const txn = await stripe.customers.createBalanceTransaction(profile.stripe_customer_id, {
-      amount: -Math.round(Number(credit.amount_eur) * 100),
+      amount: -amount,
       currency: "eur",
-      description: `LeadWing referral credit (${credit.reason})`,
+      description: `LeadWing free month (${credit.reason})`,
     });
     await admin
       .from("referral_credits")

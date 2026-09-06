@@ -6,6 +6,7 @@ import {
   Building2,
   Calculator,
   CalendarDays,
+  CreditCard,
   FileText,
   Gift,
   Home,
@@ -16,6 +17,7 @@ import {
 
 import { signOut } from "@/lib/actions/auth";
 import { clientsPath, type ClientSide } from "@/lib/crm";
+import { cn } from "@/lib/utils";
 import { LogoMark, Wordmark } from "@/components/brand/logo";
 import {
   Sidebar,
@@ -39,14 +41,25 @@ const PIPELINE = [
 const ACTIVE_CLASSES =
   "data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:hover:bg-primary/15 data-[active=true]:[&>svg]:text-primary";
 
+/** Where the agent stands on the Free/Pro line, pre-formatted by the layout. */
+export type SidebarPlan = {
+  tier: "free" | "pro";
+  source: "subscription" | "comp" | null;
+  proUntilLabel: string | null;
+  limit: number | null;
+  clientCount: number;
+};
+
 export function AppSidebar({
   email,
   isAdmin = false,
   foundingNumber = null,
+  plan = null,
 }: {
   email: string;
   isAdmin?: boolean;
   foundingNumber?: number | null;
+  plan?: SidebarPlan | null;
 }) {
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
@@ -57,7 +70,7 @@ export function AppSidebar({
   const onCalculator = pathname.startsWith("/calculator");
   const onCalendar = pathname.startsWith("/calendar");
   const onTemplates = pathname.startsWith("/templates");
-  const onInvites = pathname.startsWith("/invites");
+  const onReferrals = pathname.startsWith("/referrals");
   const onAdmin = pathname.startsWith("/admin");
   const activeSide: ClientSide | null = pathname.startsWith("/clients/sellers")
     ? "seller"
@@ -152,13 +165,21 @@ export function AppSidebar({
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={onInvites}
-                  tooltip="Invites"
+                  isActive={onReferrals}
+                  tooltip="Referrals"
                   className={ACTIVE_CLASSES}
                 >
-                  <Link href="/invites" onClick={closeMobile}>
+                  <Link href="/referrals" onClick={closeMobile}>
                     <Gift />
-                    <span>Invites</span>
+                    <span>Referrals</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Plan & billing" className={ACTIVE_CLASSES}>
+                  <Link href="/pricing" onClick={closeMobile}>
+                    <CreditCard />
+                    <span>Plan & billing</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -183,6 +204,7 @@ export function AppSidebar({
       </SidebarContent>
 
       <SidebarFooter>
+        {plan ? <PlanMeter plan={plan} onNavigate={closeMobile} /> : null}
         {foundingNumber != null ? (
           <div className="text-primary truncate px-2 text-xs font-medium group-data-[collapsible=icon]:hidden">
             Founding Agent #{foundingNumber}
@@ -205,5 +227,50 @@ export function AppSidebar({
 
       <SidebarRail />
     </Sidebar>
+  );
+}
+
+/** Free: a "2 of 3 clients" bar. Pro: a quiet badge. Both link to the plans page. */
+function PlanMeter({ plan, onNavigate }: { plan: SidebarPlan; onNavigate: () => void }) {
+  const limit = plan.limit ?? 0;
+  const used = Math.min(plan.clientCount, limit);
+  const atCap = plan.tier === "free" && plan.clientCount >= limit;
+  return (
+    <Link
+      href="/pricing"
+      onClick={onNavigate}
+      className="hover:bg-sidebar-accent mb-1 block rounded-md border px-2 py-1.5 text-xs group-data-[collapsible=icon]:hidden"
+    >
+      {plan.tier === "pro" ? (
+        <>
+          <div className="text-primary font-medium">
+            Pro{plan.source === "comp" ? " · comped" : ""}
+          </div>
+          <div className="text-muted-foreground">
+            {plan.source === "comp" && plan.proUntilLabel
+              ? `Until ${plan.proUntilLabel}`
+              : "Unlimited clients"}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="flex items-center justify-between">
+            <span className="font-medium">Free</span>
+            <span className="text-muted-foreground tabular-nums">
+              {used} of {limit} clients
+            </span>
+          </div>
+          <div className="bg-sidebar-border mt-1.5 h-1.5 overflow-hidden rounded-full">
+            <div
+              className={cn("h-full rounded-full", atCap ? "bg-warning" : "bg-primary")}
+              style={{ width: `${limit ? (used / limit) * 100 : 0}%` }}
+            />
+          </div>
+          {atCap ? (
+            <div className="text-muted-foreground mt-1">Upgrade to add more</div>
+          ) : null}
+        </>
+      )}
+    </Link>
   );
 }

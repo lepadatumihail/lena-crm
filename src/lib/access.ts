@@ -1,53 +1,77 @@
 import type { Profile } from "@/lib/supabase/types";
 
 /**
- * Single source of truth for "can this agent use the app?".
+ * Single source of truth for "what can this agent do?".
  *
- * Access model (see plans/invite-referral-spec.md §3-F):
- *   - active                          → in
- *   - past_due                        → in (Stripe dunning grace; locks only once it cancels)
- *   - trialing AND now < trial_ends_at → in
- *   - everything else (expired trial, canceled, none) → HARD paywall at /upgrade
+ * Two tiers, one difference:
+ *   Free — up to FREE_CLIENT_LIMIT clients (every row counts, inactive too).
+ *   Pro  — unlimited. Reached through a live Stripe subscription (dunning
+ *          included: Stripe is still retrying) OR comped Pro time running
+ *          (a referral reward or an admin comp, stored as pro_until).
  *
- * Pure and time-injectable so it can be unit-tested without a clock.
+ * Nothing is ever locked or deleted: over the cap, only *adding* a client
+ * is blocked. The trigger `clients_enforce_free_limit` mirrors this in the
+ * database as the backstop. Pure and time-injectable for tests.
  */
-export type AccessProfile = Pick<
-  Profile,
-  "subscription_status" | "trial_ends_at"
->;
+export const FREE_CLIENT_LIMIT = 3;
 
-export type AccessReason =
-  | "trial_expired"
-  | "canceled"
-  | "no_subscription";
+export type AccessProfile = Pick<Profile, "subscription_status" | "pro_until">;
 
-export type AccessState =
-  | { ok: true }
-  | { ok: false; reason: AccessReason };
-
-export function accessState(
-  profile: AccessProfile,
-  now: Date = new Date(),
-): AccessState {
-  switch (profile.subscription_status) {
-    case "active":
-    case "past_due":
-      return { ok: true };
-    case "trialing": {
-      const ends = profile.trial_ends_at
-        ? new Date(profile.trial_ends_at)
-        : null;
-      if (ends && now.getTime() < ends.getTime()) return { ok: true };
-      return { ok: false, reason: "trial_expired" };
-    }
-    case "canceled":
-      return { ok: false, reason: "canceled" };
-    case "none":
-    default:
-      return { ok: false, reason: "no_subscription" };
-  }
+/** A live Stripe subscription, dunning included. */
+export function isSubscribed(profile: AccessProfile): boolean {
+  return (
+    profile.subscription_status === "active" || profile.subscription_status === "past_due"
+  );
 }
 
-export function hasAccess(profile: AccessProfile, now: Date = new Date()): boolean {
-  return accessState(profile, now).ok;
+/** Comped Pro time that has not run out yet. */
+export function hasProTime(profile: AccessProfile, now: Date = new Date()): boolean {
+  if (!profile.pro_until) return false;
+  return new Date(profile.pro_until).getTime() > now.getTime();
+}
+
+export function isPro(
+  profile: AccessProfile | null | undefined,
+  now: Date = new Date(),
+): boolean {
+  if (!profile) return false;
+  return isSubscribed(profile) || hasProTime(profile, now);
+}
+
+/** How many clients this agent may have; null means unlimited. */
+export function clientLimit(
+  profile: AccessProfile | null | undefined,
+  now: Date = new Date(),
+): number | null {
+  return isPro(profile, now) ? null : FREE_CLIENT_LIMIT;
+}
+
+export function canAddClient(
+  profile: AccessProfile | null | undefined,
+  clientCount: number,
+  now: Date = new Date(),
+): boolean {
+  const limit = clientLimit(profile, now);
+  return limit === null || clientCount < limit;
+}
+
+export type PlanState = {
+  tier: "free" | "pro";
+  /** Why they are Pro: a subscription, comped time, or neither (Free). */
+  source: "subscription" | "comp" | null;
+  proUntil: string | null;
+  limit: number | null;
+};
+
+export function planState(
+  profile: AccessProfile | null | undefined,
+  now: Date = new Date(),
+): PlanState {
+  if (profile && isSubscribed(profile)) {
+    return { tier: "pro", source: "subscription", proUntil: null, limit: null };
+  }
+  if (profile && hasProTime(profile, now)) {
+    return { tier: "pro", source: "comp", proUntil: profile.pro_until, limit: null };
+  }
+  return { tier: "free", source: null, proUntil: null, limit: FREE_CLIENT_LIMIT };
 }

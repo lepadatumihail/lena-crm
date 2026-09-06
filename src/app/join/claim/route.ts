@@ -1,10 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
-import { claimInvite } from "@/lib/referrals/engine";
-import { INVITE_COOKIE, type ClaimResult, normalizeInviteCode } from "@/lib/invites";
+import { claimReferral } from "@/lib/referrals/engine";
+import { REFERRAL_COOKIE, type ClaimResult, normalizeReferralCode } from "@/lib/referrals/links";
 
-/** Redeems the invite cookie for the signed-in user, once, then clears it. */
+/** Records the referral cookie for the signed-in user, once, then clears it. */
 export async function GET(request: NextRequest) {
   const supabase = await createClient();
   const {
@@ -15,18 +15,18 @@ export async function GET(request: NextRequest) {
   }
 
   const clear = (res: NextResponse) => {
-    res.cookies.set({ name: INVITE_COOKIE, value: "", path: "/", maxAge: 0 });
+    res.cookies.set({ name: REFERRAL_COOKIE, value: "", path: "/", maxAge: 0 });
     return res;
   };
 
-  const code = request.cookies.get(INVITE_COOKIE)?.value;
+  const code = request.cookies.get(REFERRAL_COOKIE)?.value;
   if (!code) return clear(NextResponse.redirect(new URL("/home", request.url)));
 
   let result: ClaimResult = "invalid";
   try {
-    result = await claimInvite(normalizeInviteCode(code), user.id);
+    result = await claimReferral(normalizeReferralCode(code), user.id);
   } catch {
     result = "invalid";
   }
-  return clear(NextResponse.redirect(new URL(`/invites?claimed=${result}`, request.url)));
+  return clear(NextResponse.redirect(new URL(`/referrals?claimed=${result}`, request.url)));
 }

@@ -11,9 +11,9 @@
 | Question | Recommendation |
 |---|---|
 | **Positioning** | Lead with **multi-agency consolidation** — *"Every client, every agency you work with, one place."* Demote "simple" and "AI" to supporting acts. |
-| **Free vs paid** | **Paid from day one.** 14-day trial, **no card up front**, framed as a curated *Founding Agent* cohort. No freemium. |
-| **Price** | **€19/mo founding (locked for life) · €29/mo standard.** Annual marketed as "2 months free" (€190 / €290). One plan, nothing gated. |
-| **Invite-only?** | **Hybrid.** "By invitation" framing + *immediate* access. Invitation = curation/bandwidth gate, never a public waitlist counter. |
+| **Free vs paid** | **Free + Pro (decided 2026-09-06).** Free forever, capped at **3 clients**; Pro **€29/mo** unlocks unlimited. **No time trial** — Free *is* the trial. Founding cohort kept as the Pro discount. ~~Paid from day one, 14-day trial~~ |
+| **Price** | **Pro €29/mo or €276/yr + IVA**; the **first 20 paying agents lock €19/mo or €180/yr for life** (founding, public, spots-left counter). Inside Pro, nothing gated. |
+| **Invite-only?** | ~~**Hybrid.** "By invitation" framing + *immediate* access. Invitation = curation/bandwidth gate, never a public waitlist counter.~~ *(2026-09-06: open signup on Free; founding is public with a spots-left counter; invites are plain referral links.)* |
 | **Referrals** | **Two-sided 1 free month**, triggered on *sustained payment*. Status (Founding badge + locked price) is the real reward. Reframe referrals toward **co-brokerage partners**, not rivals. |
 | **Name** | **Replace "Lena"** (direct competitor collision: lenaai.net is a near-identical product+name). Top pick **Marlumo** (marlumo.com is free); runner-up **Claveo**. |
 | **Riskiest assumption** | That cross-agency fragmentation is an *acute, switch-worthy* pain — not a tolerable annoyance. **Validate in the first 5 interviews before locking the landing page + name to it.** |
@@ -88,7 +88,9 @@ The current headline leads with "properties" → pulls toward the listing/agency
 
 ## 4. Pricing & packaging
 
-**Model: paid-only, 14-day no-card trial, sold as a capped "Founding Agent" cohort.** Charging *is* the validation — the one thing to learn is "will a Marbella agent put a card down?" Freemium optimizes for the wrong number (signups, not payers) and adds a free tier to build/gate/support with no viral loop to justify it.
+> **Update 2026-09-06 — Free + Pro.** Model changed to a **Free tier capped at 3 clients** (buyers + sellers together; inactive rows count; nothing is ever deleted, only *adding* a 4th client is blocked) and **Pro at €29/mo + IVA**, unlimited. **No time trial** — a usage cap converts exactly when the product is working, which suits a CRM better than a 7/14-day clock. Founding stays as the Pro discount: **first 20 paying agents lock €19/mo (or €180/yr) for life** — public, anyone who pays while spots remain, with a spots-left counter on the pricing page. Yearly at ≈20% off (€276 standard / €180 founding). Referral reward unchanged (1 free month each side on the referred agent's 2nd paid invoice); a referrer without a subscription gets a comped Pro month from the backend, a subscriber gets a balance credit. Decision record + change list: `plans/free-pro-pricing.md`. The original paid-only reasoning is kept below for history.
+
+**Model: paid-only, 14-day no-card trial, sold as a capped "Founding Agent" cohort.** *(superseded, see above)* Charging *is* the validation — the one thing to learn is "will a Marbella agent put a card down?" Freemium optimizes for the wrong number (signups, not payers) and adds a free tier to build/gate/support with no viral loop to justify it.
 
 **Price: €19/mo founding (locked for life) · €29/mo standard.** Annual = €190 / €290, marketed as **"2 months free"** (not "17% off").
 - *Competitor anchor:* ES solo CRMs cluster €25–29; Inmovilla €79 reads "expensive/team." €29 is credible-not-cheap, €19 visibly a discount.
@@ -102,7 +104,7 @@ The current headline leads with "properties" → pulls toward the listing/agency
 - Two *human* touchpoints, not emails: day-7 check-in, day-12/13 personal WhatsApp ("trial ends Friday — switch you to Founding?").
 - Close at day 14 to €19 lifetime-locked; make the discount contingent on a light commitment (testimonial or monthly 30-min feedback call). Each founder gets a personal invite link.
 
-**Avoid:** per-seat pricing; permanent free tier; card-up-front at this stage; discounting beyond the cohort (cap the lifetime lock hard at ~20); treating 5–20 agents as a quantitative A/B test (it's qualitative). **If rebranding, do it BEFORE the cohort locks in** so evangelists market the final name.
+**Avoid:** per-seat pricing; a free tier without a hard cap (3 clients, decided 2026-09-06); card-up-front at this stage; discounting beyond the cohort (cap the lifetime lock hard at ~20); treating 5–20 agents as a quantitative A/B test (it's qualitative). **If rebranding, do it BEFORE the cohort locks in** so evangelists market the final name.
 
 **6–12 month price path:** Months 0–3 founding cohort open (€19, no card, concierge each) → Months 3–6 close founding publicly ("spots full"), new signups to standard €29 (the closed €19 makes €29 feel earned) → Months 6–12 introduce Pro €39–49 as rentals/email-sending land; founders never move (the whole point of the lock).
 
@@ -128,10 +130,10 @@ The current headline leads with "properties" → pulls toward the listing/agency
 **The core unlock is a reframe, not a bribe.** The "why arm a rival?" objection is beaten by *who* you refer: Lena's wedge is consolidation across the agencies you **collaborate** with — so the natural referral target is your **co-brokerage partners**. When they're on Lena too, *your shared deals get cleaner* (consistent records, legible offer/reservation milestones, fewer "who told the client what" mix-ups). Zero-sum fear → positive-sum: *"I want the people I do deals with on this."* No other CRM can make this move.
 
 **Design:**
-- **Two-sided give-get: 1 free month each**, triggered only when the referred agent becomes a *sustained payer* (month 1–2 complete) — never on signup.
+- **Two-sided give-get: 1 free month each**, triggered only when the referred agent becomes a *sustained payer* (month 1–2 complete) — never on signup. Free-tier referrers get a comped Pro month from the backend instead of a credit (2026-09-06).
 - **No cash** (cheapens premium positioning, invites gaming in a small market).
 - **Status is the real reward:** Founding badge + locked price.
-- **Each Founding Agent gets 3 personal invite codes** → limited codes make each invite a status gift, route naturally to collaborators, and keep scarcity *real*.
+- ~~**Each Founding Agent gets 3 personal invite codes** → limited codes make each invite a status gift, route naturally to collaborators, and keep scarcity *real*.~~ *(2026-09-06: every agent gets one permanent referral link; scarcity lives in the 20 founding spots, shown publicly.)*
 - **No public leaderboards** (exposes advocates' networks to poaching).
 
 **The flywheel:** curated entry → status chatter → invites flow to collaborators → cluster adopts together → shared deals get cleaner → retention + more invites. Keep it **manual and founder-driven** until PMF is clear — referrals amplify existing word-of-mouth, they can't manufacture it.

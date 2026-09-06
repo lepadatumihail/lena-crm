@@ -22,6 +22,8 @@ import { HowItWorks } from "@/components/landing/how-it-works";
 import { FeatureDeepDives } from "@/components/landing/feature-deep-dives";
 import { AppPreview } from "@/components/landing/app-preview";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
+import { FREE_CLIENT_LIMIT } from "@/lib/access";
+import { FOUNDING_CAP, PRICES, yearlySavingPct } from "@/lib/billing";
 import { Logo } from "@/components/brand/logo";
 
 const BUYER_STEPS = ["New", "Contacted", "Qualified", "Viewing", "Reserved"];
@@ -59,15 +61,22 @@ const jsonLd = {
       offers: [
         {
           "@type": "Offer",
-          name: "Monthly",
-          price: "29",
+          name: "Free",
+          price: "0",
           priceCurrency: "EUR",
           availability: "https://schema.org/InStock",
         },
         {
           "@type": "Offer",
-          name: "Yearly",
-          price: "290",
+          name: "Pro monthly",
+          price: String(PRICES.standard.monthly),
+          priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+        },
+        {
+          "@type": "Offer",
+          name: "Pro yearly",
+          price: String(PRICES.standard.yearly),
           priceCurrency: "EUR",
           availability: "https://schema.org/InStock",
         },
@@ -434,6 +443,58 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Pricing */}
+      <section id="pricing" className="bg-muted/40 border-y">
+        <div className="mx-auto w-full max-w-6xl px-4 py-16">
+          <Reveal>
+            <div className="text-center">
+              <h2 className="text-3xl font-semibold tracking-tight">
+                Free to start. One plan when you grow.
+              </h2>
+              <p className="text-muted-foreground mx-auto mt-3 max-w-xl">
+                Every feature on both plans. The only difference is how many
+                clients you can hold.
+              </p>
+            </div>
+          </Reveal>
+          <div className="mx-auto mt-10 grid max-w-3xl gap-5 sm:grid-cols-2">
+            <Reveal>
+              <PlanCard
+                name="Free"
+                price="€0"
+                period="forever"
+                items={[
+                  `Up to ${FREE_CLIENT_LIMIT} clients, buyers and sellers together`,
+                  "Every feature, nothing gated",
+                  "No card, no time limit",
+                ]}
+              />
+            </Reveal>
+            <Reveal delay={100}>
+              <PlanCard
+                highlighted
+                name="Pro"
+                price={`€${PRICES.standard.monthly}`}
+                period="per month + IVA"
+                note={`or €${PRICES.standard.yearly} a year, save ${yearlySavingPct("standard")}%`}
+                items={[
+                  "Unlimited clients",
+                  "Everything in Free",
+                  "A free month for every agent you refer",
+                ]}
+              />
+            </Reveal>
+          </div>
+          <Reveal>
+            <p className="text-muted-foreground mx-auto mt-8 max-w-xl text-center text-sm">
+              The first {FOUNDING_CAP} paying agents lock Pro at €
+              {PRICES.founding.monthly} a month for life. Sign in to see how many
+              founding spots are left.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
       {/* Rentals coming soon */}
       <section className="mx-auto w-full max-w-6xl px-4 pb-16">
         <Reveal>
@@ -500,6 +561,53 @@ function TrustItem({
         <h3 className="font-semibold">{title}</h3>
         <p className="text-muted-foreground mt-1 text-sm">{body}</p>
       </div>
+    </div>
+  );
+}
+
+
+function PlanCard({
+  name,
+  price,
+  period,
+  note,
+  items,
+  highlighted = false,
+}: {
+  name: string;
+  price: string;
+  period: string;
+  note?: string;
+  items: string[];
+  highlighted?: boolean;
+}) {
+  return (
+    <div
+      className={
+        highlighted
+          ? "bg-card border-primary/60 rounded-2xl border p-6 shadow-md"
+          : "bg-card rounded-2xl border p-6 shadow-sm"
+      }
+    >
+      <h3 className="text-lg font-semibold">{name}</h3>
+      <div className="mt-2 flex items-baseline gap-2">
+        <span className="text-4xl font-semibold tracking-tight">{price}</span>
+        <span className="text-muted-foreground text-sm">{period}</span>
+      </div>
+      {note ? <p className="text-muted-foreground mt-1 text-sm">{note}</p> : null}
+      <ul className="mt-5 space-y-2 text-sm">
+        {items.map((item) => (
+          <li key={item} className="flex items-start gap-2">
+            <Check className="text-primary mt-0.5 size-4 shrink-0" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+      <Button asChild className="mt-6 w-full" variant={highlighted ? "default" : "outline"}>
+        <Link href="/login">
+          {highlighted ? "Start free, upgrade any time" : "Start free"}
+        </Link>
+      </Button>
     </div>
   );
 }

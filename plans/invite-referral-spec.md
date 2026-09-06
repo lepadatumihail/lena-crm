@@ -4,6 +4,8 @@
 
 **Founder decisions baked in (2026-06-25):** Billing = **Stripe + Stripe Tax** · Cohort = **first 20 *paying* founders, then close publicly** · **Open signup allowed at €29 standard** (invite is NOT an access gate) · Trial = **7 days, then HARD paywall** ("upgrade to keep your leads") · **Annual billing at launch** (€190 founding / €290 standard) · Status = **refining spec, not building yet**.
 
+> **⚠️ Superseded in part on 2026-09-06 — Free + Pro model.** The trial, the hard paywall, the four prices and the "no free tier" stance below are replaced by: a **Free tier capped at 3 clients** (every row, incl. inactive), **Pro at €29/mo or €276/yr + IVA**, **Founding = first 20 paying agents lock €19/mo or €180/yr for life** (public — anyone, with a spots-left counter on the pricing page; invites become plain referral links, one permanent link per agent), **no time trial**, **nothing deleted on cancel** (only *adding* a client is blocked over the cap), referral reward unchanged (2nd paid invoice, both sides), referrers without a subscription get **a comped Pro month from the backend** (`pro_until`), subscribers get a balance credit worth one month of their plan. Decision record + change list: `plans/free-pro-pricing.md`. Sections marked *(superseded)* are kept for history.
+
 ---
 
 ## 0. The model (read this first — it changed)
@@ -24,7 +26,7 @@ So there are two doors into Lena:
 
 **Referral reward is an ongoing mechanic, independent of founding status.** Even after the cohort closes, an invite code still records a referral and still pays both sides a free month. Founding status is the *launch-phase bonus* layered on top of invites for the first 20.
 
-> **One primitive does the payouts:** "free month" = a **€19 credit applied to the next invoice** (Stripe customer balance transaction). The same primitive comps a design partner. No permanent free tier exists — the closest thing to "free" is a credit on a real subscription. (This is the direct answer to "are we just giving free access?": no — everyone's on a real sub; credits are the only "free.")
+> **One primitive does the payouts:** "free month" = a **€19 credit applied to the next invoice** (Stripe customer balance transaction). The same primitive comps a design partner. *(2026-09-06: a Free tier capped at 3 clients now exists and founding is public — see the note at the top. Invites are plain referral links; a Free referrer's reward is a comped Pro month, a subscriber's is a balance credit.)*
 
 ---
 
@@ -192,7 +194,7 @@ Admin-only server action `mintInvite({ note, inviterId? })` → unique Crockford
 ```
 Founding *number* and `cohort='founding'` are **not** set here — they're allocated at first payment (§3-C), so the cap counts only paying founders. `founding_intent=true` is what makes `/onboarding` show the €19 price + "your Founding spot is reserved."
 
-### C. Trial (7 days, DB-only) → paid (Stripe), and founding allocation
+### C. Trial (7 days, DB-only) → paid (Stripe), and founding allocation *(superseded 2026-09-06: no trial — signup lands on Free; founding allocation at first payment unchanged)*
 - **Trial starts at signup** as a pure DB flag — the `handle_new_user` trigger sets `subscription_status='trialing'`, `trial_ends_at = now()+7d`. **No Stripe call at signup**; full app access for 7 days.
 - `/onboarding` is *product* onboarding (concierge for founders), **not** a payment step.
 - **Conversion happens at the paywall** (§3-F) or whenever the agent clicks "Upgrade": Stripe Checkout (subscription mode, **card required, no Stripe trial** — the 7-day window already elapsed in-app), `automatic_tax` on. Price chosen by `(founding_intent ? founding : standard) × (monthly | annual)` → one of **4 price IDs**.
@@ -230,7 +232,7 @@ A **credit applier** (inline in the webhook, or a cron over `referral_credits wh
 - **Optional flywheel (off until PMF):** `+1` code when one of their referrals reaches `qualified` — rewards productive referrers without manufacturing growth.
 - Standard signups get **0 codes** during launch (revisit once the founding loop is proven).
 
-### F. Trial expiry → hard paywall ("upgrade to keep your leads")
+### F. Trial expiry → hard paywall ("upgrade to keep your leads") *(superseded 2026-09-06: no paywall — the 3-client cap gates "add client", nothing else is locked)*
 - **Access helper** `hasAccess(profile)` = `subscription_status='active'` **OR** (`subscription_status='trialing'` AND `now() < trial_ends_at`). (`past_due` → short dunning grace with a banner; `canceled` / `none` / expired-trial → no access.)
 - Enforced in **`src/lib/supabase/middleware.ts`** / the `(app)` layout: no access → redirect to **`/upgrade`**, the only reachable app route besides `/settings/billing` and sign-out.
 - **`/upgrade`** = the hard paywall: *"Your trial's over — upgrade to keep your leads."* Surfaces what they'd lose ("you've added 14 clients across 3 agencies — don't lose them"), the price (founding €19 / €190 if `founding_intent`, else €29 / €290), monthly/annual toggle, Checkout button.
@@ -264,7 +266,7 @@ Webhook: **`src/app/api/stripe/webhook/route.ts`** (verify signature, admin clie
 ---
 
 ## 6. Stripe specifics (decision locked)
-- **Four recurring prices:** `price_founding_m` €19/mo · `price_founding_y` €190/yr · `price_standard_m` €29/mo · `price_standard_y` €290/yr (annual ≈ 2 months free). Checkout shows a monthly/annual toggle; founders stay locked on whichever they pick.
+- **Four recurring prices (2026-09-06):** `founding_monthly` €19 · `founding_yearly` €180 · `standard_monthly` €29 · `standard_yearly` €276 (yearly ≈ 20% off), tax-exclusive ("+ IVA"), sold through four Payment Links, recognised in the webhook by lookup key. Founders stay locked on whichever founding price they picked. *(Was: €190 / €290 annual.)*
 - **Trial is DB-only, 7 days, no card** (set at signup by the trigger). **Stripe Checkout has NO `trial_period_days`** — by the time someone converts (at the paywall or "Upgrade"), the in-app trial has elapsed, so Checkout is a normal **card-required, charge-now** subscription start. Cleaner than a no-card Stripe trial that silently lapses.
 - **Stripe Tax:** `automatic_tax: { enabled: true }`; collect tax IDs at checkout (`tax_id_collection`) so Spanish *autónomo* buyers get B2B reverse-charge. You register/remit EU VAT (OSS) yourself — Stripe Tax calculates; budget for a gestor to file.
 - **Referral credit = customer balance transaction** (`amount: -1900`), the cleanest "one free month" mechanic — auto-applies to the next invoice, no coupon juggling.
@@ -299,14 +301,16 @@ Webhook: **`src/app/api/stripe/webhook/route.ts`** (verify signature, admin clie
 
 ## 9. Resolved decisions
 - ✅ **Billing:** Stripe + Stripe Tax (credits via customer balance transactions; budget a gestor for EU OSS filing).
-- ✅ **Trial:** **7 days, no card, DB-flag** — then a **hard paywall** at `/upgrade` ("upgrade to keep your leads"); data retained, locked, not deleted.
-- ✅ **Annual at launch:** 4 prices — €19/€190 founding, €29/€290 standard; founders locked on monthly *or* annual.
-- ✅ **Founding cap:** first **20 paying** founders, then close publicly; allocated atomically at first payment.
-- ✅ **No-invite arrivals:** **open signup at €29 standard** — invite is a founding+referral token, not an access gate; exclusivity lives in the Founding tier.
-- ✅ **Codes per founder:** 3; standard users get 0 during launch.
+- ✅ **Tiers (2026-09-06):** **Free** (max **3 clients**, every row incl. inactive; nothing ever deleted — only *adding* is blocked over the cap) and **Pro €29/mo + IVA**. **No time trial** — Free is the trial. ~~7-day trial + hard paywall~~.
+- ✅ **Prices (2026-09-06):** €19/mo or €180/yr founding · €29/mo or €276/yr standard (yearly ≈ 20% off). ~~€190 / €290 annual~~.
+- ✅ **Founding cap:** first **20 paying** agents — **public since 2026-09-06**, no invite needed; the pricing page shows spots left and flips to standard at 0; allocated atomically at first payment. **€19 locked for life** — Stripe keeps a subscription on its original price object, so the lock needs no code.
+- ✅ **No-invite arrivals:** **open signup on Free**, Pro at €29 standard — invite is a founding+referral token, not an access gate; exclusivity lives in the Founding tier.
+- ✅ **Codes per founder:** ~~3; standard users get 0 during launch~~ **(2026-09-06: every agent gets one permanent referral link; codes, quota, expiry and seeding are gone).**
+- ✅ **Free referrers (2026-09-06):** a comped Pro month from the backend (`pro_until`), no subscription needed; subscribers get a balance credit worth one month of their plan. The reward still fires only on the invitee's 2nd paid invoice.
+- ✅ **Cancel path (2026-09-06):** Stripe Customer Portal (cancel + payment method only, no plan switching); cancellation = back to Free, data untouched.
 
 ### Remaining judgment call (flag, don't block)
 1. **In-flight trialist honor policy** when the 20th slot fills — recommend a written default ("invited + trialing before close ⇒ keep €19") so it's not ad-hoc.
 
-### ⚠️ One risk to watch
+### ⚠️ One risk to watch *(moot since 2026-09-06 — there is no trial)*
 A **7-day** trial is tight for time-to-value — the pricing research flagged that loading real cross-agency clients + seeing an AI follow-up cycle can take longer than a week. It works **if** activation is front-loaded: concierge onboarding on day 1 for founders (you're doing this anyway), and for self-serve standard signups, an onboarding checklist that gets them to the "aha" fast. Watch self-serve trial→paid conversion; trivial to extend to 14 days later if it's too short.
