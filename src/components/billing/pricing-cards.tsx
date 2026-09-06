@@ -103,7 +103,7 @@ export function PricingCards({
               ) : null}
             </div>
             <div className="mt-2 flex items-baseline gap-1">
-              <span className="text-4xl font-semibold tracking-tight">€0</span>
+              <span className="text-4xl font-semibold tracking-tight">{formatCurrency(0, tag)}</span>
               <span className="text-muted-foreground text-sm">{t("pricing.forever")}</span>
             </div>
           </CardHeader>
