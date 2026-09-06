@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { intlTag } from "@/i18n/config";
+import { formatCurrency } from "@/lib/crm";
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import {
   FOUNDING_CAP,
@@ -131,9 +132,9 @@ export function PricingCards({
               ) : null}
             </div>
             <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-4xl font-semibold tracking-tight">€{price}</span>
+              <span className="text-4xl font-semibold tracking-tight">{formatCurrency(price, tag)}</span>
               {founding ? (
-                <span className="text-muted-foreground text-sm line-through">€{standardPrice}</span>
+                <span className="text-muted-foreground text-sm line-through">{formatCurrency(standardPrice, tag)}</span>
               ) : null}
               <span className="text-muted-foreground text-sm">
                 {interval === "monthly" ? t("plan.perMonth") : t("plan.perYear")}

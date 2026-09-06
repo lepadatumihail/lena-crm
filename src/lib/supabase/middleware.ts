@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import type { Database } from "@/lib/supabase/types";
 import { SUPABASE_KEY, SUPABASE_URL } from "@/lib/supabase/config";
+import { isProtectedPath } from "@/lib/routes";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -35,17 +36,13 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isAuthRoute =
     pathname.startsWith("/login") || pathname.startsWith("/auth");
-  // The calendar ICS feed is fetched by Google with no session — keep it public.
-  // Invite landings are pre-signup by definition; Stripe calls the webhook
-  // with a signature, not a session.
-  const isPublicRoute =
-    pathname === "/" ||
-    isAuthRoute ||
-    pathname.startsWith("/api/calendar") ||
-    pathname.startsWith("/api/stripe") ||
-    pathname.startsWith("/join");
 
-  if (!user && !isPublicRoute) {
+  // Only the app itself needs a session. The marketing page, sign-in, invite
+  // landings, the ICS feed, Stripe's webhook, robots/sitemap/llms.txt and any
+  // URL that doesn't exist all pass through, so crawlers and dead links get a
+  // real 404 instead of a bounce to /login. The protected pages check the
+  // session again themselves; this layer's job is to preserve `next`.
+  if (!user && isProtectedPath(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("next", pathname);

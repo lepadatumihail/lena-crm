@@ -44,7 +44,6 @@ import {
   languageLabel,
   sellerRoleLabel,
 } from "@/i18n/labels";
-import { buildVars } from "@/lib/message-templates";
 
 function InfoRow({
   icon,
@@ -111,14 +110,14 @@ export default async function ClientDetailPage({
         })
       : [];
 
-  const messageVars = buildVars({
+  const messageVarsInput = {
     first_name: client.first_name,
     last_name: client.last_name,
     agency: client.agency,
     budgetMin: prefs?.budget_min ?? null,
     budgetMax: prefs?.budget_max ?? null,
     property: viewings[0]?.title ?? null,
-  });
+  };
 
   const propertyOptions = isBuyer
     ? viewings.map((v) => v.title).filter((t): t is string => Boolean(t))
@@ -233,7 +232,7 @@ export default async function ClientDetailPage({
                   email: client.email,
                   language: client.language,
                 }}
-                vars={messageVars}
+                varsInput={messageVarsInput}
                 customTemplates={customTemplates}
                 propertyOptions={propertyOptions}
                 autoOpenTemplate={compose ?? null}

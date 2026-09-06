@@ -3,6 +3,7 @@ import {
   fillTemplate,
   buildVars,
   getTemplate,
+  templateCopy,
   type MessageVars,
 } from "./message-templates";
 
@@ -95,11 +96,63 @@ describe("buildVars", () => {
   });
 });
 
+describe("buildVars in the client's language", () => {
+  it("phrases and formats a Spanish budget in Spanish", () => {
+    const min = buildVars({ first_name: "Ana", last_name: "Ruiz", budgetMin: 250_000 }, "Spanish");
+    const max = buildVars({ first_name: "Ana", last_name: "Ruiz", budgetMax: 400_000 }, "Spanish");
+    expect(min.budget.startsWith("desde ")).toBe(true);
+    expect(max.budget.startsWith("hasta ")).toBe(true);
+    expect(min.budget).toContain("€");
+    expect(min.budget).toMatch(/250\.000/); // es-ES grouping
+  });
+
+  it("keeps English phrasing for languages without native copy", () => {
+    const v = buildVars({ first_name: "Anna", last_name: "Schmidt", budgetMin: 250_000 }, "German");
+    expect(v.budget.startsWith("from ")).toBe(true);
+  });
+});
+
+describe("templateCopy", () => {
+  it("returns the Spanish copy for Spanish clients", () => {
+    const es = templateCopy("intro", "Spanish");
+    expect(es?.body.startsWith("Hola {{first_name}}")).toBe(true);
+    expect(es?.subject).toContain("{{first_name}}");
+  });
+
+  it("falls back to English for other languages and when none is given", () => {
+    expect(templateCopy("intro", "German")).toEqual(templateCopy("intro", "English"));
+    expect(templateCopy("intro")).toEqual(templateCopy("intro", "English"));
+  });
+
+  it("returns null for unknown ids", () => {
+    expect(templateCopy("missing", "Spanish")).toBeNull();
+    expect(templateCopy(null)).toBeNull();
+  });
+
+  it("keeps every placeholder identical between languages", () => {
+    for (const id of ["intro", "new_matches", "viewing_confirm", "offer_followup", "reservation_next", "check_in"]) {
+      const vars = (s: string) => (s.match(/\{\{\w+\}\}/g) ?? []).sort();
+      const en = templateCopy(id, "English")!;
+      const es = templateCopy(id, "Spanish")!;
+      expect(vars(es.body)).toEqual(vars(en.body));
+      expect(vars(es.subject)).toEqual(vars(en.subject));
+    }
+  });
+});
+
 describe("getTemplate", () => {
   it("returns a template by id", () => {
     const t = getTemplate("intro");
     expect(t).not.toBeNull();
     expect(t!.id).toBe("intro");
+  });
+
+  it("swaps subject and body for the client's language, keeping the agent-facing copy", () => {
+    const en = getTemplate("intro")!;
+    const es = getTemplate("intro", "Spanish")!;
+    expect(es.label).toBe(en.label);
+    expect(es.body).not.toBe(en.body);
+    expect(es.body.startsWith("Hola ")).toBe(true);
   });
 
   it("returns null for a missing id or nullish input", () => {

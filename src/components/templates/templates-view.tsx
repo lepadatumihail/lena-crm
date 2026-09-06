@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,6 +45,7 @@ import {
 import {
   fillTemplate,
   MESSAGE_TEMPLATES,
+  templateCopy,
   templateDescription,
   templateLabel,
   type MessageVars,
@@ -69,7 +70,10 @@ export function TemplatesView({
   clients: ClientOption[];
 }) {
   const t = useTranslations("templates");
+  const locale = useLocale();
   const [createInit, setCreateInit] = useState<TemplateFormValues | null>(null);
+  // A starter customised from a Spanish UI starts from its Spanish copy.
+  const starterLanguage = locale === "es" ? "Spanish" : "English";
 
   return (
     <div className="space-y-6">
@@ -129,8 +133,10 @@ export function TemplatesView({
                   onClick={() =>
                     setCreateInit({
                       name: templateLabel(t, tpl.id),
-                      subject: tpl.subject,
-                      body: tpl.body,
+                      ...(templateCopy(tpl.id, starterLanguage) ?? {
+                        subject: tpl.subject,
+                        body: tpl.body,
+                      }),
                     })
                   }
                 >

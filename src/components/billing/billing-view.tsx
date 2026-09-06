@@ -43,7 +43,7 @@ import {
   type BillingKey,
   type BillingT,
 } from "@/lib/billing";
-import { clientsPath } from "@/lib/crm";
+import { clientsPath, formatCurrency } from "@/lib/crm";
 import type { BillingOverview } from "@/lib/data/billing";
 import {
   formatBillingDate,
@@ -214,7 +214,7 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
             : t("plan.plusIva");
     } else if (knownPlan) {
       const interval = planInterval(knownPlan);
-      priceMain = `€${PRICES[planTier(knownPlan)][interval]}`;
+      priceMain = formatCurrency(PRICES[planTier(knownPlan)][interval], tag);
       priceNote = interval === "yearly" ? t("plan.perYear") : t("plan.perMonth");
     } else {
       priceMain = t("plan.titlePro");
@@ -227,19 +227,19 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
       label: t("plan.badgeUntil", { date: formatBillingDate(plan.proUntil, tag) ?? "" }),
       tone: "default",
     };
-    priceMain = "€0";
+    priceMain = formatCurrency(0, tag);
     priceNote = t("plan.priceForNow");
   } else if (plan.source === "admin") {
     title = t("plan.titlePro");
     description = t("plan.descAdmin");
     badge = { label: t("plan.badgeAdmin"), tone: "secondary" };
-    priceMain = "€0";
+    priceMain = formatCurrency(0, tag);
     priceNote = t("plan.priceAdmin");
   } else {
     title = t("plan.titleFree");
     description = t("plan.descFree", { limit: FREE_CLIENT_LIMIT });
     badge = { label: t("plan.badgeFree"), tone: "secondary" };
-    priceMain = "€0";
+    priceMain = formatCurrency(0, tag);
     priceNote = t("plan.priceForever");
   }
 
@@ -593,7 +593,7 @@ function CreditsCard({ overview, wide }: { overview: BillingOverview; wide: bool
                   <span className="shrink-0 font-medium tabular-nums">
                     {credit.kind === "pro_time"
                       ? t("credits.monthsShort", { count: credit.months })
-                      : `€${Number(credit.amount_eur)}`}
+                      : formatCurrency(Number(credit.amount_eur), tag)}
                   </span>
                 </li>
               );

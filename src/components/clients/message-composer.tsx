@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Loader2, Mail, MessageCircle, Send, Sparkles } from "lucide-react";
@@ -28,12 +28,14 @@ import {
 } from "@/components/ui/select";
 import { draftMessage } from "@/lib/actions/messages";
 import {
+  MESSAGE_TEMPLATES,
+  type TemplateVarsInput,
+  buildVars,
   fillTemplate,
   getTemplate,
-  MESSAGE_TEMPLATES,
+  templateCopy,
   templateDescription,
   templateLabel,
-  type MessageVars,
 } from "@/lib/message-templates";
 import { whatsappLink } from "@/lib/whatsapp";
 import { languageLabel } from "@/i18n/labels";
@@ -54,7 +56,7 @@ export type ComposerTemplate = {
 
 export function MessageComposer({
   client,
-  vars,
+  varsInput,
   customTemplates = [],
   propertyOptions = [],
   autoOpenTemplate,
@@ -66,7 +68,7 @@ export function MessageComposer({
     email: string | null;
     language: string | null;
   };
-  vars: MessageVars;
+  varsInput: TemplateVarsInput;
   customTemplates?: ComposerTemplate[];
   propertyOptions?: string[];
   autoOpenTemplate?: string | null;
@@ -78,15 +80,19 @@ export function MessageComposer({
   const hasWhatsApp = whatsappLink(client.phone) != null;
   const hasEmail = Boolean(client.email);
 
-  const initial = autoOpenTemplate
-    ? getTemplate(autoOpenTemplate) ??
-      customTemplates.find((tpl) => tpl.id === autoOpenTemplate) ??
-      null
-    : null;
   const defaultLanguage =
     client.language && (LANGUAGES as readonly string[]).includes(client.language)
       ? client.language
       : "English";
+  // Starters and the {{budget}} fill follow the client's language, so both
+  // are resolved here against the language the agent is composing in.
+  const initial = autoOpenTemplate
+    ? getTemplate(autoOpenTemplate, defaultLanguage) ??
+      customTemplates.find((tpl) => tpl.id === autoOpenTemplate) ??
+      null
+    : null;
+  const [language, setLanguage] = useState(defaultLanguage);
+  const vars = useMemo(() => buildVars(varsInput, language), [varsInput, language]);
   const propertyChoices = Array.from(
     new Set([vars.property, ...propertyOptions].filter(Boolean))
   );
@@ -96,32 +102,57 @@ export function MessageComposer({
     hasWhatsApp ? "whatsapp" : "email"
   );
   const [templateId, setTemplateId] = useState(initial?.id ?? "");
-  const [language, setLanguage] = useState(defaultLanguage);
   const [propertyLabel, setPropertyLabel] = useState(vars.property ?? "");
   const [instruction, setInstruction] = useState("");
-  const [subject, setSubject] = useState(
+  const [subject, setSubject] = useState(() =>
     initial ? fillTemplate(initial.subject, vars) : ""
   );
-  const [body, setBody] = useState(
+  const [body, setBody] = useState(() =>
     initial ? fillTemplate(initial.body, vars) : ""
+  );
+  // What the last applied template produced, to tell an untouched draft from
+  // one the agent has edited before swapping language.
+  const [lastFill, setLastFill] = useState<{ subject: string; body: string } | null>(
+    () =>
+      initial
+        ? { subject: fillTemplate(initial.subject, vars), body: fillTemplate(initial.body, vars) }
+        : null
   );
   const [aiLoading, setAiLoading] = useState(false);
 
   function findTemplate(
-    id: string
+    id: string,
+    lang: string
   ): { subject: string; body: string } | null {
-    const builtin = getTemplate(id);
-    if (builtin) return { subject: builtin.subject, body: builtin.body };
-    return customTemplates.find((tpl) => tpl.id === id) ?? null;
+    return templateCopy(id, lang) ?? customTemplates.find((tpl) => tpl.id === id) ?? null;
+  }
+
+  function applyTemplate(id: string, lang: string) {
+    const tpl = findTemplate(id, lang);
+    if (!tpl) return;
+    const langVars = buildVars(varsInput, lang);
+    const filled = { ...langVars, property: propertyLabel || langVars.property };
+    const next = {
+      subject: fillTemplate(tpl.subject, filled),
+      body: fillTemplate(tpl.body, filled),
+    };
+    setSubject(next.subject);
+    setBody(next.body);
+    setLastFill(next);
   }
 
   function selectTemplate(id: string) {
     setTemplateId(id);
-    const tpl = findTemplate(id);
-    if (tpl) {
-      const filled = { ...vars, property: propertyLabel || vars.property };
-      setSubject(fillTemplate(tpl.subject, filled));
-      setBody(fillTemplate(tpl.body, filled));
+    applyTemplate(id, language);
+  }
+
+  /** Re-apply a built-in starter in the new language unless the agent has edited it. */
+  function changeLanguage(next: string) {
+    setLanguage(next);
+    const untouched =
+      lastFill != null && body === lastFill.body && subject === lastFill.subject;
+    if (templateId && untouched && templateCopy(templateId, next)) {
+      applyTemplate(templateId, next);
     }
   }
 
@@ -275,7 +306,7 @@ export function MessageComposer({
 
           <div className="space-y-1.5">
             <Label>{t("language")}</Label>
-            <Select value={language} onValueChange={setLanguage}>
+            <Select value={language} onValueChange={changeLanguage}>
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
