@@ -11,6 +11,7 @@ import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import {
   FOUNDING_CAP,
   PRICES,
+  foundingSpotsLabel,
   yearlySavingPct,
   type BillingInterval,
   type BillingTier,
@@ -121,7 +122,7 @@ export function PricingCards({
               ) : founding ? (
                 <Badge variant="warning" className="gap-1">
                   <Sparkles className="size-3" />
-                  {spotsLeft} of {FOUNDING_CAP} founding spots left
+                  {foundingSpotsLabel(spotsLeft)}
                 </Badge>
               ) : null}
             </div>

@@ -76,6 +76,12 @@ export function foundingSpotsLeft(founderCount: number): number {
   return Math.max(0, FOUNDING_CAP - founderCount);
 }
 
+/** "19 founding spots left" / "1 founding spot left". `bare` drops the word founding. */
+export function foundingSpotsLabel(spotsLeft: number, bare = false): string {
+  const noun = spotsLeft === 1 ? "spot" : "spots";
+  return `${spotsLeft} ${bare ? "" : "founding "}${noun} left`;
+}
+
 export function foundingOpen(founderCount: number): boolean {
   return foundingSpotsLeft(founderCount) > 0;
 }

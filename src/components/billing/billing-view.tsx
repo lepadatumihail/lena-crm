@@ -32,8 +32,8 @@ import { RefreshWhilePending } from "@/components/billing/refresh-while-pending"
 import { openBillingPortal } from "@/lib/actions/billing";
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import {
-  FOUNDING_CAP,
   PRICES,
+  foundingSpotsLabel,
   foundingSpotsLeft,
   isFoundingPlan,
   planInterval,
@@ -350,9 +350,7 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
               <Fact
                 label="Founding price"
                 value={
-                  spotsLeft > 0
-                    ? `${spotsLeft} of ${FOUNDING_CAP} spots left`
-                    : "Cohort full"
+                  spotsLeft > 0 ? foundingSpotsLabel(spotsLeft, true) : "Cohort full"
                 }
                 hint={
                   spotsLeft > 0

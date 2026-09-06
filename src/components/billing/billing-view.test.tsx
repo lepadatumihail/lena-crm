@@ -191,7 +191,8 @@ describe("BillingView", () => {
       "/pricing",
     );
     expect(text).toContain("12 of 3");
-    expect(text).toContain("19 of 20 spots left");
+    expect(text).toContain("19 spots left");
+    expect(text).not.toContain("of 20");
     expect(screen.queryByText("Payment method")).toBeNull();
   });
 

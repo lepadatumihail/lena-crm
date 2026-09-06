@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { CopyButton } from "@/components/referrals/copy-button";
 import { planState } from "@/lib/access";
-import { FOUNDING_CAP, PRICES, foundingSpotsLeft } from "@/lib/billing";
+import { FOUNDING_CAP, PRICES, foundingSpotsLabel, foundingSpotsLeft } from "@/lib/billing";
 import type { ReferralOverview } from "@/lib/data/referrals";
 import {
   REFERRAL_STATE_LABEL,
@@ -80,14 +80,16 @@ export function ReferralsView({
             {isFounder
               ? `Founding Agent #${profile?.founding_number}`
               : spotsLeft > 0
-                ? `${spotsLeft} of ${FOUNDING_CAP} founding spots left`
+                ? foundingSpotsLabel(spotsLeft)
                 : "The founding cohort is full"}
           </CardTitle>
           <CardDescription>
             {isFounder ? (
               <>
-                Your price is locked for life. {founderCount} of {FOUNDING_CAP} founding spots are
-                taken.
+                Your price is locked for life.{" "}
+                {spotsLeft > 0
+                  ? `${foundingSpotsLabel(spotsLeft)}.`
+                  : "The founding cohort is full."}
               </>
             ) : spotsLeft > 0 ? (
               <>

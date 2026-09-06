@@ -4,6 +4,7 @@ import {
   FOUNDING_CAP,
   checkoutUrl,
   currentTier,
+  foundingSpotsLabel,
   foundingSpotsLeft,
   isFoundingPlan,
   planFromLookupKey,
@@ -66,5 +67,13 @@ describe("checkoutUrl", () => {
 
   it("is undefined when the link is not configured", () => {
     expect(checkoutUrl(undefined, "user-1")).toBeUndefined();
+  });
+});
+
+describe("founding spots label", () => {
+  it("never mentions the cap and pluralises", () => {
+    expect(foundingSpotsLabel(19)).toBe("19 founding spots left");
+    expect(foundingSpotsLabel(1)).toBe("1 founding spot left");
+    expect(foundingSpotsLabel(3, true)).toBe("3 spots left");
   });
 });
