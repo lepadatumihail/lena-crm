@@ -89,8 +89,11 @@ is unlimited: €29/mo or €276/yr, and the first 20 paying agents lock
   Pro = a live Stripe subscription (dunning included) or comped time
   (`profiles.pro_until`).
 - `/pricing` — Free vs Pro with a monthly/yearly toggle, the founding spots
-  left, Stripe Payment Links tagged with the agent's id, and the Customer
-  Portal for subscribers.
+  left and Stripe Payment Links tagged with the agent's id. Checkout returns
+  to `/billing`.
+- `/billing` — the agent's plan, next invoice, payment method, free-month
+  credits and invoice history, read live from Stripe, with the Customer
+  Portal behind "Manage subscription".
 - `/join/[code]` — referral landing; `accept` stores the code in an httpOnly
   cookie, `/join/claim` records it after sign-in via `claim_referral`. Every
   agent gets one permanent code (`profiles.referral_code`).

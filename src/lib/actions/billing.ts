@@ -9,7 +9,8 @@ import { SITE_URL } from "@/lib/site";
 /**
  * Stripe Customer Portal: cancel, change the card, see invoices. The portal
  * configuration in the Stripe dashboard must have plan switching disabled so
- * nobody can be moved on or off the founding price.
+ * nobody can be moved on or off the founding price. Opens from /billing and
+ * returns there.
  */
 export async function openBillingPortal() {
   const supabase = await createClient();
@@ -25,11 +26,11 @@ export async function openBillingPortal() {
     .maybeSingle();
 
   const stripe = getStripe();
-  if (!stripe || !profile?.stripe_customer_id) redirect("/pricing?portal=unavailable");
+  if (!stripe || !profile?.stripe_customer_id) redirect("/billing?portal=unavailable");
 
   const session = await stripe.billingPortal.sessions.create({
     customer: profile.stripe_customer_id,
-    return_url: `${SITE_URL}/pricing`,
+    return_url: `${SITE_URL}/billing`,
   });
   redirect(session.url);
 }

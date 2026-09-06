@@ -13,7 +13,7 @@
  *      by giving them the lookup key; missing ones are created. Tax behaviour
  *      is exclusive ("+ IVA").
  *   3. One Payment Link per price: Stripe Tax + tax-ID collection on, promo
- *      codes off, redirect to /pricing?upgraded=1. The link id is stored in
+ *      codes off, redirect to /billing?upgraded=1. The link id is stored in
  *      the price's metadata so re-runs reuse it.
  *   4. The webhook endpoint (www host, five events). The signing secret is
  *      only shown when the endpoint is created.
@@ -210,7 +210,7 @@ async function ensurePaymentLink(
     line_items: [{ price: price.id, quantity: 1 }],
     after_completion: {
       type: "redirect",
-      redirect: { url: `${SITE}/pricing?upgraded=1` },
+      redirect: { url: `${SITE}/billing?upgraded=1` },
     },
     allow_promotion_codes: false,
     billing_address_collection: "required",
@@ -288,7 +288,7 @@ async function ensurePortal(): Promise<void> {
   if (current) {
     await stripe.billingPortal.configurations.update(current.id, {
       features,
-      default_return_url: `${SITE}/pricing`,
+      default_return_url: `${SITE}/billing`,
       business_profile: { headline: "LeadWing — manage your Pro subscription" },
     });
     console.log(
@@ -298,7 +298,7 @@ async function ensurePortal(): Promise<void> {
   }
   const created = await stripe.billingPortal.configurations.create({
     features,
-    default_return_url: `${SITE}/pricing`,
+    default_return_url: `${SITE}/billing`,
     business_profile: { headline: "LeadWing — manage your Pro subscription" },
   });
   console.log(`Portal: created ${created.id}`);

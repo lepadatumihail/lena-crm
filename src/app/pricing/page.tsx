@@ -17,7 +17,6 @@ import {
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 import { PricingCards } from "@/components/billing/pricing-cards";
-import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Plans & pricing",
@@ -26,19 +25,21 @@ export const metadata: Metadata = {
 
 /**
  * Plans page for signed-in agents. Lives OUTSIDE the (app) group: it is the
- * destination of the client-cap prompt and of Stripe's post-checkout
- * redirect, and needs the user's id to tag the Payment Links.
+ * destination of the client-cap prompt and needs the user's id to tag the
+ * Payment Links. Stripe's post-checkout redirect may still land here; it is
+ * forwarded to /billing, where the subscription details live.
  */
 export default async function PricingPage({
   searchParams,
 }: {
-  searchParams: Promise<{ portal?: string; upgraded?: string }>;
+  searchParams: Promise<{ upgraded?: string }>;
 }) {
-  const [{ portal, upgraded }, supabase] = await Promise.all([searchParams, createClient()]);
+  const [{ upgraded }, supabase] = await Promise.all([searchParams, createClient()]);
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login?next=%2Fpricing");
+  if (upgraded === "1") redirect("/billing?upgraded=1");
 
   const [{ data: profile }, { count: clientCount }, { data: credits }, founderCount] =
     await Promise.all([
@@ -57,19 +58,6 @@ export default async function PricingPage({
   const unappliedCreditEur = (credits ?? [])
     .filter((c) => c.kind === "stripe_balance" && !c.applied_to_stripe)
     .reduce((acc, c) => acc + Number(c.amount_eur), 0);
-
-  const notice =
-    upgraded === "1"
-      ? {
-          tone: "success" as const,
-          text: "Thank you — you're on Pro. If it doesn't show here yet, give it a few seconds and refresh.",
-        }
-      : portal === "unavailable"
-        ? {
-            tone: "info" as const,
-            text: "The billing portal isn't available for this account yet. Get in touch and we'll sort it by hand.",
-          }
-        : null;
 
   return (
     <div className="flex min-h-svh flex-col">
@@ -97,19 +85,6 @@ export default async function PricingPage({
           </p>
         </div>
 
-        {notice ? (
-          <div
-            className={cn(
-              "mx-auto mt-6 max-w-2xl rounded-lg border px-4 py-3 text-center text-sm",
-              notice.tone === "success"
-                ? "border-success/40 bg-success/10"
-                : "border-border bg-muted",
-            )}
-          >
-            {notice.text}
-          </div>
-        ) : null}
-
         <PricingCards
           tier={tier}
           spotsLeft={foundingSpotsLeft(founderCount)}
@@ -121,7 +96,6 @@ export default async function PricingPage({
             proUntil: state.proUntil,
             planLabel: profile?.plan ? planLabel(profile.plan) : null,
             foundingNumber: profile?.founding_number ?? null,
-            canManage: Boolean(profile?.stripe_customer_id),
           }}
           unappliedCreditEur={unappliedCreditEur}
         />

@@ -71,6 +71,7 @@ export function AppSidebar({
   const onCalendar = pathname.startsWith("/calendar");
   const onTemplates = pathname.startsWith("/templates");
   const onReferrals = pathname.startsWith("/referrals");
+  const onBilling = pathname.startsWith("/billing");
   const onAdmin = pathname.startsWith("/admin");
   const activeSide: ClientSide | null = pathname.startsWith("/clients/sellers")
     ? "seller"
@@ -176,10 +177,15 @@ export function AppSidebar({
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Plan & billing" className={ACTIVE_CLASSES}>
-                  <Link href="/pricing" onClick={closeMobile}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={onBilling}
+                  tooltip="Billing"
+                  className={ACTIVE_CLASSES}
+                >
+                  <Link href="/billing" onClick={closeMobile}>
                     <CreditCard />
-                    <span>Plan & billing</span>
+                    <span>Billing</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -230,14 +236,14 @@ export function AppSidebar({
   );
 }
 
-/** Free: a "2 of 3 clients" bar. Pro: a quiet badge. Both link to the plans page. */
+/** Free: a "2 of 3 clients" bar linking to the plans page. Pro: a quiet badge linking to billing. */
 function PlanMeter({ plan, onNavigate }: { plan: SidebarPlan; onNavigate: () => void }) {
   const limit = plan.limit ?? 0;
   const used = Math.min(plan.clientCount, limit);
   const atCap = plan.tier === "free" && plan.clientCount >= limit;
   return (
     <Link
-      href="/pricing"
+      href={plan.tier === "pro" ? "/billing" : "/pricing"}
       onClick={onNavigate}
       className="hover:bg-sidebar-accent mb-1 block rounded-md border px-2 py-1.5 text-xs group-data-[collapsible=icon]:hidden"
     >

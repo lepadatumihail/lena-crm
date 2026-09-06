@@ -7,7 +7,6 @@ import { ArrowRight, Check, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { openBillingPortal } from "@/lib/actions/billing";
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import {
   FOUNDING_CAP,
@@ -24,8 +23,6 @@ export type CurrentPlan = {
   proUntil: string | null;
   planLabel: string | null;
   foundingNumber: number | null;
-  /** A Stripe customer exists, so the portal can open. */
-  canManage: boolean;
 };
 
 const FREE_FEATURES = [
@@ -163,17 +160,11 @@ export function PricingCards({
                   ) : null}
                   .
                 </p>
-                {current.canManage ? (
-                  <form action={openBillingPortal}>
-                    <Button type="submit" variant="outline" className="w-full">
-                      Manage subscription
-                    </Button>
-                  </form>
-                ) : (
-                  <p className="text-muted-foreground text-xs">
-                    Your subscription is managed by hand for now.
-                  </p>
-                )}
+                <Button asChild variant="outline" className="w-full">
+                  <Link href="/billing">
+                    Manage subscription <ArrowRight />
+                  </Link>
+                </Button>
               </div>
             ) : (
               <div className="space-y-3">

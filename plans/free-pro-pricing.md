@@ -72,6 +72,7 @@ Verified 2026-09-06: the live project has `clients` but **no** `profiles`, `refe
 
 ### 3.5 Billing UI
 - Server action `openBillingPortal()`: `stripe.billingPortal.sessions.create({ customer, return_url })` → redirect. Button on `/pricing` and in settings for subscribers. Needs `stripe_customer_id`, which the webhook stores.
+- *Revised 2026-09-06, after the first live checkout:* the portal button lives on a dedicated **`/billing`** page inside the app shell (plan and status, next invoice from Stripe's preview, payment method, free-month credits, invoice history with PDF links). `/pricing` links there for subscribers, and both checkout (`/billing?upgraded=1`) and the portal return there.
 
 ### 3.6 Webhook — `src/app/api/stripe/webhook/route.ts`
 - `checkout.session.completed`: link the customer, set `active`, retrieve the subscription and read `items[0].price.lookup_key` → `plan` + `plan_monthly_eur`; if the key starts with `founding_` call `allocate_founding_number` (if the cap filled during checkout they keep the €19 price — Stripe already charged it — but get no number; that is the accepted boundary case); then `applyPendingCredits(userId)` so earlier credits land on the next invoice.
