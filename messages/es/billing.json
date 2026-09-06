@@ -1,0 +1,197 @@
+{
+  "meta": {
+    "title": "Facturación",
+    "pricingTitle": "Planes y precios"
+  },
+  "title": "Facturación",
+  "subtitle": "Tu plan, la próxima factura, el método de pago y los recibos.",
+  "notices": {
+    "pending": "¡Gracias! Stripe está confirmando tu pago. Esta página se actualiza sola durante unos segundos; si no cambia nada, espera un minuto y recárgala.",
+    "upgraded": "Gracias: ya estás en Pro. Todo lo de tu suscripción vive aquí.",
+    "portalUnavailable": "El portal de facturación todavía no está disponible para esta cuenta. Escríbenos y lo arreglamos a mano.",
+    "stripeUnavailable": "Stripe no ha respondido ahora mismo, así que puede que falten el método de pago y las facturas de abajo. Tu plan no se ve afectado; recarga en un momento."
+  },
+  "footer": {
+    "note": "Los precios no incluyen IVA. Cancela cuando quieras desde el portal de facturación; tus datos se quedan exactamente donde están."
+  },
+  "plan": {
+    "titleFounding": "Pro · Fundador",
+    "titlePro": "Pro",
+    "titleFree": "Gratis",
+    "descFounding": "Tu precio queda bloqueado de por vida. Clientes ilimitados y todas las funciones.",
+    "descPro": "Clientes ilimitados y todas las funciones.",
+    "descComp": "Tiempo Pro de cortesía: sin tarjeta y sin suscripción. Clientes ilimitados mientras dure.",
+    "descAdmin": "Estás en Pro como admin. Suscribirte solo sirve para probar el checkout.",
+    "descFree": "Todas las funciones, hasta {limit} clientes. Mejora tu plan cuando se te quede corto; nunca se borra nada.",
+    "badgeEnds": "Termina el {date}",
+    "badgeUntil": "Hasta el {date}",
+    "badgeAdmin": "Admin",
+    "badgeFree": "Plan Gratis",
+    "perMonth": "al mes + IVA",
+    "perYear": "al año + IVA",
+    "plusIva": "+ IVA",
+    "priceForNow": "por ahora",
+    "priceAdmin": "cuenta de admin",
+    "priceForever": "para siempre",
+    "foundingAgent": "Agente fundador n.º {number}"
+  },
+  "facts": {
+    "plan": "Plan",
+    "nextInvoice": "Próxima factura",
+    "ends": "Termina",
+    "ended": "Terminó",
+    "subscribedSince": "Suscrito desde",
+    "currentPeriod": "Periodo actual",
+    "proUntil": "Pro hasta",
+    "afterThat": "Después",
+    "backToFree": "Vuelta a Gratis",
+    "nothingDeleted": "No se borra nada.",
+    "clients": "Clientes",
+    "clientsValue": "{count} de {limit}",
+    "foundingPrice": "Precio fundador",
+    "cohortFull": "Cohorte completa",
+    "foundingHint": "{price} € al mes de por vida en lugar de {standard} €.",
+    "previousSubscription": "Suscripción anterior",
+    "endedOn": "Terminó el {date}"
+  },
+  "nextInvoice": {
+    "inclIva": "{amount} IVA incl.",
+    "plusIva": "{amount} + IVA",
+    "onDate": "{amount} el {date}",
+    "creditHint": "{amount} de crédito de meses gratis ya descontados"
+  },
+  "messages": {
+    "pastDue": "Tu último pago no salió adelante. Stripe lo está reintentando; actualiza tu tarjeta para mantener Pro sin cortes.",
+    "ending": "Tu suscripción termina el {date}. Mantienes Pro hasta entonces, y después todo se queda exactamente donde está. ¿Has cambiado de idea? Reanúdala desde el portal.",
+    "canceled": "Stripe indica que esta suscripción terminó el {date}. Si te sorprende, escríbenos."
+  },
+  "actions": {
+    "updatePaymentMethod": "Actualizar método de pago",
+    "resumeOrManage": "Reanudar o gestionar",
+    "manageSubscription": "Gestionar suscripción",
+    "portalHint": "Cambia tu tarjeta, descarga facturas o cancela. Lo gestiona Stripe.",
+    "manualHint": "Tu suscripción se gestiona a mano. Escríbenos para cambiar cualquier cosa.",
+    "subscribeToKeepPro": "Suscríbete para mantener Pro",
+    "seePlans": "Ver planes",
+    "upgradeToPro": "Mejorar a Pro"
+  },
+  "clients": {
+    "title": "Clientes",
+    "unlimited": "Ilimitados en Pro, compradores y vendedores juntos.",
+    "limited": "Hasta {limit} en Gratis, compradores y vendedores juntos.",
+    "count": "{count, plural, one {cliente} other {clientes}}",
+    "ofLimit": "de {limit}",
+    "atCap": "Has llegado al límite. Añadir otro requiere Pro; todo lo que tienes se queda como está.",
+    "openPipelines": "Abrir embudos"
+  },
+  "payment": {
+    "title": "Método de pago",
+    "description": "Lo guarda Stripe. Nosotros nunca vemos los números.",
+    "loadFailed": "No hemos podido cargarlo desde Stripe ahora mismo.",
+    "none": "No hay ningún método de pago guardado.",
+    "change": "Cambiar método de pago"
+  },
+  "method": {
+    "card": "Tarjeta",
+    "cardEnding": "{brand} terminada en {last4}",
+    "expires": "Caduca {month}/{year}",
+    "sepa": "Domiciliación SEPA",
+    "sepaEnding": "Domiciliación SEPA terminada en {last4}"
+  },
+  "credits": {
+    "title": "Meses gratis",
+    "description": "Uno por cada agente que refieras que se suscriba y pague su segundo mes. Él también consigue uno.",
+    "earnedSoFar": "conseguidos hasta ahora",
+    "onStripe": "<b>{amount}</b> de crédito están en tu cuenta de Stripe y se descuentan solos de tu próxima factura.",
+    "waiting": "<b>{amount} €</b> en meses gratis están esperando y se descontarán de tus facturas cuando te suscribas.",
+    "compedUntil": "Pro es de cortesía hasta el <b>{date}</b>.",
+    "empty": "Nada todavía. Comparte tu enlace de referido con los agentes con los que compartes operaciones.",
+    "referAnAgent": "Referir a un agente",
+    "months": "{count, plural, one {# mes de Pro} other {# meses de Pro}}",
+    "creditedToStripe": "abonado a tu saldo de Stripe",
+    "waitingFirstInvoice": "esperando a tu primera factura",
+    "monthsShort": "{count, plural, one {+# mes} other {+# meses}}",
+    "reason": {
+      "referral_inviter": "Un agente al que referiste pagó su segundo mes",
+      "referral_invitee": "Te uniste por un referido y pagaste tu segundo mes",
+      "manual_comp": "Cortesía de LeadWing"
+    }
+  },
+  "invoices": {
+    "title": "Facturas",
+    "description": "Todas las facturas que Stripe ha emitido para tu cuenta, con un PDF para tu gestoría.",
+    "all": "Todas las facturas",
+    "emptyStripeDown": "No hemos podido cargar tus facturas desde Stripe ahora mismo. Recarga en un momento o abre el portal de facturación.",
+    "emptySubscribed": "Tus facturas aparecerán aquí en cuanto Stripe emita la primera.",
+    "empty": "Todavía no hay facturas. Aparecerán aquí en cuanto te suscribas.",
+    "date": "Fecha",
+    "period": "Periodo",
+    "amount": "Importe",
+    "status": "Estado",
+    "open": "Abrir"
+  },
+  "invoiceStatus": {
+    "paid": "Pagada",
+    "open": "Pendiente",
+    "void": "Anulada",
+    "uncollectible": "Impagada",
+    "draft": "Borrador",
+    "unknown": "—"
+  },
+  "phase": {
+    "active": "Activa",
+    "past_due": "Pago vencido",
+    "ending": "Termina",
+    "canceled": "Cancelada",
+    "incomplete": "Incompleta"
+  },
+  "planName": {
+    "founding": "Fundador · {price}",
+    "pro": "Pro · {price}",
+    "monthly": "{amount} €/mes",
+    "yearly": "{amount} €/año"
+  },
+  "founding": {
+    "spots": "{count, plural, one {queda # plaza fundadora} other {quedan # plazas fundadoras}}",
+    "spotsBare": "{count, plural, one {queda # plaza} other {quedan # plazas}}"
+  },
+  "upgradePrompt": {
+    "title": "Has usado tus {limit} clientes gratis",
+    "description": "Pro es ilimitado: {standard} € al mes, o {founding} € al mes de por vida mientras queden plazas para los {cap} primeros agentes de pago. Todo lo que has añadido se queda exactamente donde está."
+  },
+  "pricing": {
+    "freeTitle": "Gratis",
+    "proTitle": "Pro",
+    "yourPlan": "Tu plan",
+    "forever": "para siempre",
+    "monthly": "Mensual",
+    "yearlySave": "Anual · ahorra un {pct} %",
+    "freeFeatures": {
+      "clients": "Hasta {limit} clientes, compradores y vendedores juntos",
+      "everything": "Todas las funciones: embudos, visitas, ofertas, calendario, plantillas, calculadora",
+      "noCard": "Gratis para siempre, sin tarjeta"
+    },
+    "proFeatures": {
+      "unlimited": "Clientes ilimitados",
+      "everythingInFree": "Todo lo de Gratis",
+      "referral": "Un mes gratis por cada agente que refieras que se suscriba",
+      "founding": "Un número de Agente fundador y este precio para siempre"
+    },
+    "clientsUsed": "{count} de {limit} clientes usados.",
+    "foundingLocked": "Precio fundador, bloqueado de por vida para los {cap} primeros agentes de pago.",
+    "cohortFull": "La cohorte fundadora está completa. Este es el precio estándar.",
+    "onPlan": "Estás en <b>{plan}</b>.",
+    "onPlanFounding": "Estás en <b>{plan}</b><f> · Agente fundador n.º {number}</f>.",
+    "compedUntil": "Estás en Pro hasta el <b>{date}</b>, conseguido por un referido. Suscríbete para mantenerlo.",
+    "adminNote": "Estás en Pro como admin. Suscribirte aquí solo sirve para probar el checkout.",
+    "subscribe": "Suscribirse",
+    "checkoutSoon": "Checkout disponible pronto",
+    "creditWaiting": "{amount} € en meses gratis están esperando y se descontarán de tus facturas cuando te suscribas.",
+    "footer": "Los precios no incluyen IVA. Los planes anuales se cobran una vez al año. Cancela cuando quieras desde el portal de facturación; tus datos se quedan exactamente donde están."
+  },
+  "pricingPage": {
+    "back": "Volver a la app",
+    "heading": "Empieza gratis. Un plan cuando crezcas.",
+    "subheading": "Todas las funciones en los dos planes. La única diferencia es cuántos clientes puedes tener. Nada de lo que has añadido se borra nunca."
+  }
+}

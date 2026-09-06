@@ -1,5 +1,7 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
+
 import { revalidatePath } from "next/cache";
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
@@ -17,22 +19,24 @@ export async function addDocument(
     size: number | null;
   }
 ): Promise<ActionResult> {
+  const t = await getTranslations("clientDetail.errors");
   const supabase = await createSupabase();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { error: "Not authenticated" };
+  if (!user)
+    return { error: (await getTranslations("common"))("errors.notAuthenticated") };
   if (!meta.storage_path.startsWith(`${user.id}/${clientId}/`))
-    return { error: "Invalid file path" };
-  if (meta.file_name.length > 200) return { error: "File name is too long" };
+    return { error: t("invalidFilePath") };
+  if (meta.file_name.length > 200) return { error: t("fileNameTooLong") };
   if (meta.size != null && meta.size > 15 * 1024 * 1024)
-    return { error: "File is too large" };
+    return { error: t("fileTooLarge") };
   const { data: owned } = await supabase
     .from("clients")
     .select("id")
     .eq("id", clientId)
     .maybeSingle();
-  if (!owned) return { error: "Client not found" };
+  if (!owned) return { error: t("clientNotFound") };
 
   const { error } = await supabase.from("documents").insert({
     client_id: clientId,

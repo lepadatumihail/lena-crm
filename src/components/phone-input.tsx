@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { ChevronDown, Search } from "lucide-react";
 
+import { intlTag } from "@/i18n/config";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,8 +12,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { COUNTRIES, flagEmoji, parsePhone } from "@/lib/countries";
+import { COUNTRIES, countryName, flagEmoji, parsePhone } from "@/lib/countries";
 import { cn } from "@/lib/utils";
+
+/** Lower-case and strip accents, so typing "espana" finds "España". */
+function fold(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
 
 export function PhoneInput({
   value,
@@ -22,6 +32,8 @@ export function PhoneInput({
   onChange: (value: string) => void;
   onBlur?: () => void;
 }) {
+  const t = useTranslations("common");
+  const locale = useLocale();
   const [dial, setDial] = useState(() => parsePhone(value ?? "").dial);
   const [number, setNumber] = useState(() => parsePhone(value ?? "").number);
   const [lastValue, setLastValue] = useState(value ?? "");
@@ -53,14 +65,24 @@ export function PhoneInput({
     setSearch("");
   }
 
-  const selected = COUNTRIES.find((c) => c.dial === dial);
-  const q = search.trim().toLowerCase();
-  const filtered = COUNTRIES.filter(
+  // Names follow the UI language, so the list is re-sorted for it too. The
+  // English name stays searchable — agents type either one.
+  const countries = useMemo(() => {
+    const collator = new Intl.Collator(intlTag(locale));
+    return COUNTRIES.map((c) => ({ ...c, label: countryName(c.iso, locale) })).sort(
+      (a, b) => collator.compare(a.label, b.label)
+    );
+  }, [locale]);
+
+  const selected = countries.find((c) => c.dial === dial);
+  const q = fold(search.trim());
+  const filtered = countries.filter(
     (c) =>
       !q ||
-      c.name.toLowerCase().includes(q) ||
+      fold(c.label).includes(q) ||
+      fold(c.name).includes(q) ||
       c.dial.includes(q) ||
-      c.iso.toLowerCase().includes(q)
+      fold(c.iso).includes(q)
   );
 
   return (
@@ -86,14 +108,14 @@ export function PhoneInput({
               autoFocus
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search country…"
+              placeholder={t("searchCountry")}
               className="w-full bg-transparent py-2.5 pr-3 pl-8 text-sm outline-none"
             />
           </div>
           <div className="max-h-64 overflow-y-auto p-1">
             {filtered.length === 0 ? (
               <p className="text-muted-foreground px-2 py-4 text-center text-sm">
-                No match
+                {t("noMatch")}
               </p>
             ) : (
               filtered.map((c) => (
@@ -109,7 +131,7 @@ export function PhoneInput({
                   <span className="text-base leading-none">
                     {flagEmoji(c.iso)}
                   </span>
-                  <span className="min-w-0 flex-1 truncate">{c.name}</span>
+                  <span className="min-w-0 flex-1 truncate">{c.label}</span>
                   <span className="text-muted-foreground">{c.dial}</span>
                 </button>
               ))

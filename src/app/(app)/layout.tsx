@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { getLocale } from "next-intl/server";
 
 import { createClient } from "@/lib/supabase/server";
+import { intlTag } from "@/i18n/config";
 import { planState } from "@/lib/access";
 import { AppSidebar, type SidebarPlan } from "@/components/app-sidebar";
 import { NotificationsBell } from "@/components/notifications/notifications-bell";
@@ -16,8 +18,11 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-function shortDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+function shortDate(iso: string, locale: string) {
+  return new Date(iso).toLocaleDateString(intlTag(locale), {
+    day: "numeric",
+    month: "short",
+  });
 }
 
 export default async function AppLayout({
@@ -25,7 +30,7 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
+  const [supabase, locale] = await Promise.all([createClient(), getLocale()]);
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -49,7 +54,7 @@ export default async function AppLayout({
     plan = {
       tier: state.tier,
       source: state.source,
-      proUntilLabel: state.proUntil ? shortDate(state.proUntil) : null,
+      proUntilLabel: state.proUntil ? shortDate(state.proUntil, locale) : null,
       limit: state.limit,
       clientCount: count ?? 0,
     };

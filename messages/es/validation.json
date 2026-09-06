@@ -1,0 +1,15 @@
+{
+  "firstNameRequired": "El nombre es obligatorio",
+  "lastNameRequired": "Los apellidos son obligatorios",
+  "invalidEmail": "Introduce un email válido",
+  "invalidAmount": "Introduce un importe válido",
+  "wholeNumber": "Introduce un número entero",
+  "pickDate": "Elige una fecha",
+  "pickTime": "Elige una hora",
+  "chooseClient": "Elige un cliente",
+  "titleRequired": "El título es obligatorio",
+  "dateRequired": "La fecha es obligatoria",
+  "nameRequired": "Ponle un nombre",
+  "messageRequired": "Escribe el mensaje",
+  "numberBetween": "Introduce un número entre 0 y {max}"
+}

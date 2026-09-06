@@ -1,3 +1,5 @@
+import { useLocale, useTranslations } from "next-intl";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,26 +25,25 @@ import {
   adminSetStatus,
 } from "@/lib/actions/referrals";
 import type { AdminOverview } from "@/lib/data/referrals";
+import { intlTag } from "@/i18n/config";
 import { FREE_CLIENT_LIMIT, planState } from "@/lib/access";
-import { FOUNDING_CAP, planLabel } from "@/lib/billing";
+import { FOUNDING_CAP, planName } from "@/lib/billing";
 
 const STATUSES = ["none", "active", "past_due", "canceled"] as const;
 
-function when(iso: string | null) {
-  return iso ? new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "—";
-}
-
 export function AdminView({ overview }: { overview: AdminOverview }) {
+  const t = useTranslations("admin");
+  const billing = useTranslations("billing");
+  const tag = intlTag(useLocale());
+  const when = (iso: string | null) =>
+    iso ? new Date(iso).toLocaleDateString(tag, { day: "numeric", month: "short" }) : "—";
   const { founderCount, profiles, referrals, credits } = overview;
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Admin</h1>
-        <p className="text-muted-foreground text-sm">
-          Founding cohort, plans and referrals. Until Stripe webhooks are live, payments are
-          recorded here by hand.
-        </p>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+        <p className="text-muted-foreground text-sm">{t("subtitle")}</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -51,41 +52,32 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
             <CardTitle className="text-3xl tabular-nums">
               {founderCount} / {FOUNDING_CAP}
             </CardTitle>
-            <CardDescription>
-              Founding Agents allocated. Numbers go to the first {FOUNDING_CAP} paying agents, in
-              order of payment.
-            </CardDescription>
+            <CardDescription>{t("stats.founders", { cap: FOUNDING_CAP })}</CardDescription>
           </CardHeader>
         </Card>
         <Card>
           <CardHeader>
             <CardTitle className="text-3xl tabular-nums">{profiles.length}</CardTitle>
-            <CardDescription>
-              Agents signed up. Free holds {FREE_CLIENT_LIMIT} clients; Pro is unlimited.
-            </CardDescription>
+            <CardDescription>{t("stats.agents", { limit: FREE_CLIENT_LIMIT })}</CardDescription>
           </CardHeader>
         </Card>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Agents</CardTitle>
-          <CardDescription>
-            &quot;Paid invoice&quot; does what the Stripe webhook will do: marks them subscribed and
-            counts the invoice towards their referrer&apos;s reward. &quot;Comp&quot; gives Pro time
-            from the backend, no card involved.
-          </CardDescription>
+          <CardTitle>{t("agents.title")}</CardTitle>
+          <CardDescription>{t("agents.description")}</CardDescription>
         </CardHeader>
         <CardContent className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Agent</TableHead>
-                <TableHead>Plan</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Clients</TableHead>
-                <TableHead>Stripe</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead>{t("agents.columns.agent")}</TableHead>
+                <TableHead>{t("agents.columns.plan")}</TableHead>
+                <TableHead>{t("agents.columns.status")}</TableHead>
+                <TableHead>{t("agents.columns.clients")}</TableHead>
+                <TableHead>{t("agents.columns.stripe")}</TableHead>
+                <TableHead>{t("agents.columns.actions")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -101,19 +93,27 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
                     <TableCell>
                       <div className="flex flex-wrap items-center gap-1">
                         {plan.tier === "pro" ? (
-                          <Badge>{plan.source === "comp" ? "Pro · comped" : "Pro"}</Badge>
+                          <Badge>
+                            {plan.source === "comp" ? t("agents.proComped") : t("agents.pro")}
+                          </Badge>
                         ) : (
-                          <Badge variant="outline">Free</Badge>
+                          <Badge variant="outline">{t("agents.free")}</Badge>
                         )}
                         {p.founding_number != null ? (
-                          <Badge variant="warning">Founding #{p.founding_number}</Badge>
+                          <Badge variant="warning">
+                            {t("agents.founding", { number: p.founding_number })}
+                          </Badge>
                         ) : null}
                         {p.is_admin ? (
-                          <span className="text-muted-foreground text-xs">admin</span>
+                          <span className="text-muted-foreground text-xs">{t("agents.admin")}</span>
                         ) : null}
                       </div>
                       <div className="text-muted-foreground mt-0.5 text-xs">
-                        {p.plan ? planLabel(p.plan) : plan.proUntil ? `until ${when(plan.proUntil)}` : ""}
+                        {p.plan
+                          ? planName(billing, p.plan)
+                          : plan.proUntil
+                            ? t("agents.until", { date: when(plan.proUntil) })
+                            : ""}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -121,7 +121,9 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
                     </TableCell>
                     <TableCell className="text-xs tabular-nums">
                       {p.clientCount}
-                      {atCap ? <span className="text-warning ml-1">at cap</span> : null}
+                      {atCap ? (
+                        <span className="text-warning ml-1">{t("agents.atCap")}</span>
+                      ) : null}
                     </TableCell>
                     <TableCell className="text-muted-foreground font-mono text-xs">
                       {p.stripe_customer_id ?? "—"}
@@ -131,14 +133,14 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
                         <form action={adminRecordPaidInvoice}>
                           <input type="hidden" name="userId" value={p.id} />
                           <Button type="submit" size="sm" variant="outline">
-                            Paid invoice
+                            {t("agents.paidInvoice")}
                           </Button>
                         </form>
                         {p.founding_number == null ? (
                           <form action={adminAllocateFounding}>
                             <input type="hidden" name="userId" value={p.id} />
                             <Button type="submit" size="sm" variant="outline">
-                              Make founder
+                              {t("agents.makeFounder")}
                             </Button>
                           </form>
                         ) : null}
@@ -150,11 +152,11 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
                             min={1}
                             max={12}
                             defaultValue={1}
-                            aria-label="Months to comp"
+                            aria-label={t("agents.monthsToComp")}
                             className="h-8 w-14 text-xs"
                           />
                           <Button type="submit" size="sm" variant="outline">
-                            Comp
+                            {t("agents.comp")}
                           </Button>
                         </form>
                         <form action={adminSetStatus} className="flex items-center gap-1">
@@ -171,7 +173,7 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
                             ))}
                           </select>
                           <Button type="submit" size="sm" variant="ghost">
-                            Set
+                            {t("agents.set")}
                           </Button>
                         </form>
                       </div>
@@ -186,28 +188,25 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Referrals</CardTitle>
-          <CardDescription>
-            Qualifies at the referred agent&apos;s second paid invoice; both sides then get a free
-            month.
-          </CardDescription>
+          <CardTitle>{t("referrals.title")}</CardTitle>
+          <CardDescription>{t("referrals.description")}</CardDescription>
         </CardHeader>
         <CardContent className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Referrer</TableHead>
-                <TableHead>Referred</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Paid invoices</TableHead>
-                <TableHead>Rewarded</TableHead>
+                <TableHead>{t("referrals.columns.referrer")}</TableHead>
+                <TableHead>{t("referrals.columns.referred")}</TableHead>
+                <TableHead>{t("referrals.columns.status")}</TableHead>
+                <TableHead>{t("referrals.columns.paidInvoices")}</TableHead>
+                <TableHead>{t("referrals.columns.rewarded")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {referrals.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-muted-foreground text-center">
-                    No referrals yet.
+                    {t("referrals.empty")}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -230,28 +229,25 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Free months</CardTitle>
-          <CardDescription>
-            Balance credits are pushed to Stripe once the agent has a Stripe customer. Comped Pro
-            time is applied the moment it is granted.
-          </CardDescription>
+          <CardTitle>{t("credits.title")}</CardTitle>
+          <CardDescription>{t("credits.description")}</CardDescription>
         </CardHeader>
         <CardContent className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Agent</TableHead>
-                <TableHead>Kind</TableHead>
-                <TableHead>Value</TableHead>
-                <TableHead>Reason</TableHead>
-                <TableHead>Applied</TableHead>
+                <TableHead>{t("credits.columns.agent")}</TableHead>
+                <TableHead>{t("credits.columns.kind")}</TableHead>
+                <TableHead>{t("credits.columns.value")}</TableHead>
+                <TableHead>{t("credits.columns.reason")}</TableHead>
+                <TableHead>{t("credits.columns.applied")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {credits.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-muted-foreground text-center">
-                    No free months yet.
+                    {t("credits.empty")}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -259,19 +255,19 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
                   <TableRow key={c.id}>
                     <TableCell className="text-xs">{c.agentEmail ?? c.agent_id.slice(0, 8)}</TableCell>
                     <TableCell className="font-mono text-xs">
-                      {c.kind === "pro_time" ? "pro time" : "balance"}
+                      {c.kind === "pro_time" ? t("credits.kind.proTime") : t("credits.kind.balance")}
                     </TableCell>
                     <TableCell className="text-xs tabular-nums">
                       {c.kind === "pro_time"
-                        ? `${c.months} month${c.months === 1 ? "" : "s"}`
+                        ? t("credits.months", { count: c.months })
                         : `€${Number(c.amount_eur)}`}
                     </TableCell>
                     <TableCell className="font-mono text-xs">{c.reason}</TableCell>
                     <TableCell className="text-xs">
                       {c.applied_to_stripe ? (
-                        <Badge variant="success">applied</Badge>
+                        <Badge variant="success">{t("credits.applied")}</Badge>
                       ) : (
-                        <Badge variant="outline">pending</Badge>
+                        <Badge variant="outline">{t("credits.pending")}</Badge>
                       )}
                     </TableCell>
                   </TableRow>

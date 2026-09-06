@@ -1,3 +1,4 @@
+import type enBilling from "../../messages/en/billing.json";
 import type { Enums } from "@/lib/supabase/types";
 
 /**
@@ -64,6 +65,31 @@ export function priceLabel(tier: BillingTier, interval: BillingInterval): string
 export function planLabel(plan: BillingPlan): string {
   const tier = planTier(plan);
   return `${tier === "founding" ? "Founding" : "Pro"} · ${priceLabel(tier, planInterval(plan))}`;
+}
+
+/**
+ * The `billing` translator, typed the same way as `CrmT` in i18n/labels.ts:
+ * every helper below takes it so the wording lives in the catalogs rather
+ * than in this file. Pass `useTranslations("billing")` in components or
+ * `await getTranslations("billing")` on the server.
+ */
+type NestedKeys<T, Prefix extends string = ""> = {
+  [K in keyof T & string]: T[K] extends string
+    ? `${Prefix}${K}`
+    : NestedKeys<T[K], `${Prefix}${K}.`>;
+}[keyof T & string];
+
+export type BillingKey = NestedKeys<typeof enBilling>;
+export type BillingT = (key: BillingKey, values?: Record<string, string | number>) => string;
+
+/** Translated "Founding · €19/mo" / "Pro · €276/yr". */
+export function planName(t: BillingT, plan: BillingPlan): string {
+  const tier = planTier(plan);
+  const interval = planInterval(plan);
+  const price = t(interval === "monthly" ? "planName.monthly" : "planName.yearly", {
+    amount: PRICES[tier][interval],
+  });
+  return t(tier === "founding" ? "planName.founding" : "planName.pro", { price });
 }
 
 /** Whole-percent saving of yearly over twelve monthly payments. */

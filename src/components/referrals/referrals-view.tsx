@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { ArrowRight, Gift, Link2, Sparkles, Users } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -11,11 +12,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CopyButton } from "@/components/referrals/copy-button";
+import { intlTag } from "@/i18n/config";
 import { planState } from "@/lib/access";
-import { FOUNDING_CAP, PRICES, foundingSpotsLabel, foundingSpotsLeft } from "@/lib/billing";
+import { FOUNDING_CAP, PRICES, foundingSpotsLeft } from "@/lib/billing";
 import type { ReferralOverview } from "@/lib/data/referrals";
 import {
-  REFERRAL_STATE_LABEL,
+  REFERRAL_STATE_KEY,
   type ReferralState,
   claimMessage,
   formatReferralCode,
@@ -38,10 +40,6 @@ const TONE_CLASSES = {
   error: "border-destructive/40 bg-destructive/10",
 } as const;
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
-}
-
 export function ReferralsView({
   overview,
   claimed,
@@ -49,6 +47,10 @@ export function ReferralsView({
   overview: ReferralOverview;
   claimed?: string;
 }) {
+  const t = useTranslations("referrals");
+  const tag = intlTag(useLocale());
+  const formatDate = (iso: string) =>
+    new Date(iso).toLocaleDateString(tag, { day: "numeric", month: "short" });
   const { profile, referralUrl, referred, monthsEarned, unappliedCreditEur, referredBy, founderCount } =
     overview;
   const message = claimMessage(claimed);
@@ -59,16 +61,13 @@ export function ReferralsView({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Referrals</h1>
-        <p className="text-muted-foreground text-sm">
-          Share your link with the agents you co-broke with. When one of them subscribes and pays
-          their second month, you both get a free month.
-        </p>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+        <p className="text-muted-foreground text-sm">{t("subtitle")}</p>
       </div>
 
       {message ? (
         <div className={cn("rounded-lg border px-4 py-3 text-sm", TONE_CLASSES[message.tone])}>
-          {message.text}
+          {t(message.key)}
         </div>
       ) : null}
 
@@ -78,34 +77,30 @@ export function ReferralsView({
           <CardTitle className="flex items-center gap-2">
             <Sparkles className="text-primary size-4" />
             {isFounder
-              ? `Founding Agent #${profile?.founding_number}`
+              ? t("founding.youAre", { number: profile?.founding_number ?? 0 })
               : spotsLeft > 0
-                ? foundingSpotsLabel(spotsLeft)
-                : "The founding cohort is full"}
+                ? t("founding.spots", { count: spotsLeft })
+                : t("founding.full")}
           </CardTitle>
           <CardDescription>
-            {isFounder ? (
-              <>
-                Your price is locked for life.{" "}
-                {spotsLeft > 0
-                  ? `${foundingSpotsLabel(spotsLeft)}.`
-                  : "The founding cohort is full."}
-              </>
-            ) : spotsLeft > 0 ? (
-              <>
-                The first {FOUNDING_CAP} paying agents lock Pro at €{PRICES.founding.monthly} a
-                month for life, instead of €{PRICES.standard.monthly}.
-              </>
-            ) : (
-              <>Pro is €{PRICES.standard.monthly} a month, unlimited clients.</>
-            )}
+            {isFounder
+              ? spotsLeft > 0
+                ? t("founding.lockedWithSpots", { count: spotsLeft })
+                : t("founding.lockedFull")
+              : spotsLeft > 0
+                ? t("founding.offer", {
+                    cap: FOUNDING_CAP,
+                    price: PRICES.founding.monthly,
+                    standard: PRICES.standard.monthly,
+                  })
+                : t("founding.standard", { price: PRICES.standard.monthly })}
           </CardDescription>
         </CardHeader>
         {!isFounder && plan.source !== "subscription" ? (
           <CardContent>
             <Button asChild>
               <Link href="/pricing">
-                See plans <ArrowRight />
+                {t("founding.seePlans")} <ArrowRight />
               </Link>
             </Button>
           </CardContent>
@@ -117,12 +112,9 @@ export function ReferralsView({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Link2 className="text-primary size-4" />
-            Your referral link
+            {t("link.title")}
           </CardTitle>
-          <CardDescription>
-            Anyone who signs up through it counts as your referral. New accounts only, and each
-            agent can be referred once.
-          </CardDescription>
+          <CardDescription>{t("link.description")}</CardDescription>
         </CardHeader>
         <CardContent>
           {profile && referralUrl ? (
@@ -136,7 +128,7 @@ export function ReferralsView({
               <CopyButton text={referralUrl} />
             </div>
           ) : (
-            <p className="text-muted-foreground text-sm">Your link will appear here shortly.</p>
+            <p className="text-muted-foreground text-sm">{t("link.pending")}</p>
           )}
         </CardContent>
       </Card>
@@ -146,17 +138,13 @@ export function ReferralsView({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="text-primary size-4" />
-            Agents you referred
+            {t("agents.title")}
           </CardTitle>
-          <CardDescription>
-            Signed up → Subscribed → Free month earned, once they pay their second month.
-          </CardDescription>
+          <CardDescription>{t("agents.description")}</CardDescription>
         </CardHeader>
         <CardContent>
           {referred.length === 0 ? (
-            <p className="text-muted-foreground text-sm">
-              No one yet. Send your link to a colleague you share deals with.
-            </p>
+            <p className="text-muted-foreground text-sm">{t("agents.empty")}</p>
           ) : (
             <ul className="divide-y rounded-lg border">
               {referred.map((agent) => (
@@ -166,17 +154,19 @@ export function ReferralsView({
                 >
                   <div className="min-w-0">
                     <div className="truncate text-sm font-medium">
-                      {agent.name || agent.email || "An agent"}
+                      {agent.name || agent.email || t("agents.anonymous")}
                     </div>
                     <div className="text-muted-foreground text-xs">
-                      Joined {formatDate(agent.joinedAt)}
                       {agent.paidInvoices > 0
-                        ? ` · ${agent.paidInvoices} paid month${agent.paidInvoices === 1 ? "" : "s"}`
-                        : ""}
+                        ? t("agents.joinedWithPaid", {
+                            date: formatDate(agent.joinedAt),
+                            count: agent.paidInvoices,
+                          })
+                        : t("agents.joined", { date: formatDate(agent.joinedAt) })}
                     </div>
                   </div>
                   <Badge variant={STATE_VARIANT[agent.state]}>
-                    {REFERRAL_STATE_LABEL[agent.state]}
+                    {t(REFERRAL_STATE_KEY[agent.state])}
                   </Badge>
                 </li>
               ))}
@@ -190,36 +180,31 @@ export function ReferralsView({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Gift className="text-primary size-4" />
-            Your free months
+            {t("rewards.title")}
           </CardTitle>
-          <CardDescription>
-            On Pro, a free month comes off your next invoice. Not subscribed yet? You get a month
-            of Pro straight away, no card needed.
-          </CardDescription>
+          <CardDescription>{t("rewards.description")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-1 text-sm">
           {monthsEarned > 0 ? (
             <p>
-              <span className="font-medium">
-                {monthsEarned} free month{monthsEarned === 1 ? "" : "s"} earned
-              </span>
+              <span className="font-medium">{t("rewards.earned", { count: monthsEarned })}</span>
             </p>
           ) : (
-            <p className="text-muted-foreground">Nothing earned yet.</p>
+            <p className="text-muted-foreground">{t("rewards.none")}</p>
           )}
           {plan.source === "comp" && plan.proUntil ? (
             <p className="text-muted-foreground">
-              You&apos;re on Pro until {formatDate(plan.proUntil)}.
+              {t("rewards.proUntil", { date: formatDate(plan.proUntil) })}
             </p>
           ) : null}
           {unappliedCreditEur > 0 ? (
             <p className="text-muted-foreground">
-              €{unappliedCreditEur} will come off your invoices once you subscribe.
+              {t("rewards.credit", { amount: unappliedCreditEur })}
             </p>
           ) : null}
           {referredBy ? (
             <p className="text-muted-foreground">
-              Referred by {referredBy.name || referredBy.email}.
+              {t("rewards.referredBy", { name: referredBy.name || referredBy.email || "" })}
             </p>
           ) : null}
         </CardContent>

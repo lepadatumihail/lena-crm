@@ -1,5 +1,7 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
+
 import { revalidatePath } from "next/cache";
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
@@ -33,14 +35,19 @@ function toRow(v: DealFormValues) {
 export async function createDealAnalysis(
   values: DealFormValues
 ): Promise<{ error: string | null; id?: string }> {
-  const parsed = dealFormSchema.safeParse(values);
-  if (!parsed.success) return { error: "Please check the form and try again." };
+  const [tv, t, tc] = await Promise.all([
+    getTranslations("validation"),
+    getTranslations("calculator"),
+    getTranslations("common"),
+  ]);
+  const parsed = dealFormSchema(tv).safeParse(values);
+  if (!parsed.success) return { error: t("errors.invalidForm") };
 
   const supabase = await createSupabase();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { error: "Not authenticated" };
+  if (!user) return { error: tc("errors.notAuthenticated") };
 
   const { data, error } = await supabase
     .from("deal_analyses")
@@ -57,20 +64,25 @@ export async function updateDealAnalysis(
   id: string,
   values: DealFormValues
 ): Promise<ActionResult> {
-  const parsed = dealFormSchema.safeParse(values);
-  if (!parsed.success) return { error: "Please check the form and try again." };
+  const [tv, t, tc] = await Promise.all([
+    getTranslations("validation"),
+    getTranslations("calculator"),
+    getTranslations("common"),
+  ]);
+  const parsed = dealFormSchema(tv).safeParse(values);
+  if (!parsed.success) return { error: t("errors.invalidForm") };
 
   const supabase = await createSupabase();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { error: "Not authenticated" };
+  if (!user) return { error: tc("errors.notAuthenticated") };
   const { data: owned } = await supabase
     .from("deal_analyses")
     .select("id")
     .eq("id", id)
     .maybeSingle();
-  if (!owned) return { error: "Analysis not found" };
+  if (!owned) return { error: t("errors.notFound") };
 
   const { error } = await supabase
     .from("deal_analyses")
@@ -83,17 +95,21 @@ export async function updateDealAnalysis(
 }
 
 export async function deleteDealAnalysis(id: string): Promise<ActionResult> {
+  const [t, tc] = await Promise.all([
+    getTranslations("calculator"),
+    getTranslations("common"),
+  ]);
   const supabase = await createSupabase();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { error: "Not authenticated" };
+  if (!user) return { error: tc("errors.notAuthenticated") };
   const { data: owned } = await supabase
     .from("deal_analyses")
     .select("id")
     .eq("id", id)
     .maybeSingle();
-  if (!owned) return { error: "Analysis not found" };
+  if (!owned) return { error: t("errors.notFound") };
 
   const { error } = await supabase.from("deal_analyses").delete().eq("id", id);
   if (error) return { error: error.message };

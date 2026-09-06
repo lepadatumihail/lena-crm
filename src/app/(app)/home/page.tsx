@@ -1,13 +1,12 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowRight, CalendarPlus, ClipboardPaste, Plus } from "lucide-react";
 
 import { getCalendarEvents } from "@/lib/data/calendar";
 import { getCommissionSummary } from "@/lib/data/buyer";
-import {
-  getNeedsAttention,
-  getPipelineCounts,
-  type StageCount,
-} from "@/lib/data/dashboard";
+import { getNeedsAttention, getPipelineCounts } from "@/lib/data/dashboard";
+import { intlTag } from "@/i18n/config";
+import { sideLabel, stageLabel } from "@/i18n/labels";
 import { UpcomingPanel } from "@/components/home/upcoming-panel";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +28,9 @@ const ATTENTION_DOT: Record<string, string> = {
 };
 
 export default async function HomePage() {
+  const t = await getTranslations("home");
+  const tCrm = await getTranslations("crm");
+  const locale = await getLocale();
   const now = new Date().getTime();
   const [events, commission, attention, counts] = await Promise.all([
     getCalendarEvents(
@@ -46,31 +48,29 @@ export default async function HomePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Home</h1>
-        <p className="text-muted-foreground text-sm">
-          Everything that needs you, in one place.
-        </p>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+        <p className="text-muted-foreground text-sm">{t("subtitle")}</p>
       </div>
 
       <div className="flex flex-wrap gap-2">
         <Button asChild size="sm">
           <Link href="/clients/new?side=buyer">
-            <Plus /> New buyer
+            <Plus /> {t("actions.newBuyer")}
           </Link>
         </Button>
         <Button asChild size="sm" variant="outline">
           <Link href="/clients/new?side=seller">
-            <Plus /> New seller
+            <Plus /> {t("actions.newSeller")}
           </Link>
         </Button>
         <Button asChild size="sm" variant="outline">
           <Link href="/calendar">
-            <CalendarPlus /> New appointment
+            <CalendarPlus /> {t("actions.newAppointment")}
           </Link>
         </Button>
         <Button asChild size="sm" variant="outline">
           <Link href="/clients/new?side=buyer">
-            <ClipboardPaste /> Paste a lead
+            <ClipboardPaste /> {t("actions.pasteLead")}
           </Link>
         </Button>
       </div>
@@ -78,10 +78,10 @@ export default async function HomePage() {
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-base">Upcoming</CardTitle>
+            <CardTitle className="text-base">{t("upcoming.title")}</CardTitle>
             <Button asChild variant="ghost" size="sm" className="-mr-2">
               <Link href="/calendar">
-                Calendar <ArrowRight />
+                {t("upcoming.calendar")} <ArrowRight />
               </Link>
             </Button>
           </CardHeader>
@@ -93,7 +93,7 @@ export default async function HomePage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
-              Needs attention
+              {t("attention.title")}
               {attention.length > 0 && (
                 <Badge variant="secondary">{attention.length}</Badge>
               )}
@@ -102,7 +102,7 @@ export default async function HomePage() {
           <CardContent>
             {attention.length === 0 ? (
               <p className="text-muted-foreground text-sm">
-                You&apos;re all caught up. Nice.
+                {t("attention.empty")}
               </p>
             ) : (
               <div className="space-y-2">
@@ -125,7 +125,9 @@ export default async function HomePage() {
                       </p>
                     </div>
                     <span className="text-primary shrink-0 text-xs font-medium">
-                      {a.kind === "reservation" ? "Open" : "Draft"}
+                      {a.kind === "reservation"
+                        ? t("attention.open")
+                        : t("attention.draft")}
                     </span>
                   </Link>
                 ))}
@@ -137,31 +139,43 @@ export default async function HomePage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Pipeline</CardTitle>
+          <CardTitle className="text-base">{t("pipeline.title")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <PipelineRow
-            label="Buyers"
+            label={sideLabel(tCrm, "buyer", true)}
             href={clientsPath("buyer")}
             total={counts.buyerTotal}
-            stages={counts.buyer}
+            stages={counts.buyer.map((s) => ({
+              stage: s.stage,
+              label: stageLabel(tCrm, s.stage),
+              count: s.count,
+            }))}
           />
           <PipelineRow
-            label="Sellers"
+            label={sideLabel(tCrm, "seller", true)}
             href={clientsPath("seller")}
             total={counts.sellerTotal}
-            stages={counts.seller}
+            stages={counts.seller.map((s) => ({
+              stage: s.stage,
+              label: stageLabel(tCrm, s.stage),
+              count: s.count,
+            }))}
           />
           {hasCommission && (
             <div className="flex flex-wrap gap-2 border-t pt-3">
               {commission.pipeline > 0 && (
                 <Badge variant="warning">
-                  {formatCurrency(commission.pipeline)} in pipeline
+                  {t("pipeline.commissionPipeline", {
+                    amount: formatCurrency(commission.pipeline, intlTag(locale)),
+                  })}
                 </Badge>
               )}
               {commission.closed > 0 && (
                 <Badge variant="success">
-                  {formatCurrency(commission.closed)} closed
+                  {t("pipeline.commissionClosed", {
+                    amount: formatCurrency(commission.closed, intlTag(locale)),
+                  })}
                 </Badge>
               )}
             </div>
@@ -181,7 +195,8 @@ function PipelineRow({
   label: string;
   href: string;
   total: number;
-  stages: StageCount[];
+  /** Stage counts with their labels already translated by the page. */
+  stages: { stage: string; label: string; count: number }[];
 }) {
   return (
     <div>

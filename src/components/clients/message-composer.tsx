@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Loader2, Mail, MessageCircle, Send, Sparkles } from "lucide-react";
 
@@ -30,9 +31,12 @@ import {
   fillTemplate,
   getTemplate,
   MESSAGE_TEMPLATES,
+  templateDescription,
+  templateLabel,
   type MessageVars,
 } from "@/lib/message-templates";
 import { whatsappLink } from "@/lib/whatsapp";
+import { languageLabel } from "@/i18n/labels";
 import { LANGUAGES } from "@/lib/crm";
 import { cn } from "@/lib/utils";
 
@@ -67,12 +71,16 @@ export function MessageComposer({
   propertyOptions?: string[];
   autoOpenTemplate?: string | null;
 }) {
+  const t = useTranslations("clientDetail.composer");
+  const tCrm = useTranslations("crm");
+  const tCommon = useTranslations("common");
+  const tTemplates = useTranslations("templates");
   const hasWhatsApp = whatsappLink(client.phone) != null;
   const hasEmail = Boolean(client.email);
 
   const initial = autoOpenTemplate
     ? getTemplate(autoOpenTemplate) ??
-      customTemplates.find((t) => t.id === autoOpenTemplate) ??
+      customTemplates.find((tpl) => tpl.id === autoOpenTemplate) ??
       null
     : null;
   const defaultLanguage =
@@ -104,16 +112,16 @@ export function MessageComposer({
   ): { subject: string; body: string } | null {
     const builtin = getTemplate(id);
     if (builtin) return { subject: builtin.subject, body: builtin.body };
-    return customTemplates.find((t) => t.id === id) ?? null;
+    return customTemplates.find((tpl) => tpl.id === id) ?? null;
   }
 
   function selectTemplate(id: string) {
     setTemplateId(id);
-    const t = findTemplate(id);
-    if (t) {
+    const tpl = findTemplate(id);
+    if (tpl) {
       const filled = { ...vars, property: propertyLabel || vars.property };
-      setSubject(fillTemplate(t.subject, filled));
-      setBody(fillTemplate(t.body, filled));
+      setSubject(fillTemplate(tpl.subject, filled));
+      setBody(fillTemplate(tpl.body, filled));
     }
   }
 
@@ -129,12 +137,12 @@ export function MessageComposer({
     });
     setAiLoading(false);
     if (res.error) {
-      toast.error("Couldn't draft with AI", { description: res.error });
+      toast.error(t("aiError"), { description: res.error });
       return;
     }
     if (res.subject) setSubject(res.subject);
     setBody(res.body);
-    toast.success("Draft ready — review before sending");
+    toast.success(t("aiReady"));
   }
 
   function send() {
@@ -143,7 +151,7 @@ export function MessageComposer({
     if (channel === "whatsapp") {
       const url = whatsappLink(client.phone, text);
       if (!url) {
-        toast.error("No usable phone number for this client");
+        toast.error(t("noPhone"));
         return;
       }
       window.open(url, "_blank", "noopener,noreferrer");
@@ -167,15 +175,12 @@ export function MessageComposer({
         className="w-full"
         onClick={() => setOpen(true)}
       >
-        <Sparkles /> Draft a message
+        <Sparkles /> {t("trigger")}
       </Button>
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Message {client.first_name}</DialogTitle>
-          <DialogDescription>
-            Pick a starting point, personalise it with AI, then send from your
-            own WhatsApp or email.
-          </DialogDescription>
+          <DialogTitle>{t("title", { name: client.first_name })}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
@@ -204,13 +209,13 @@ export function MessageComposer({
                   : "hover:bg-accent"
               )}
             >
-              <Mail className="size-4" /> Email
+              <Mail className="size-4" /> {t("email")}
             </button>
           </div>
 
           {propertyChoices.length > 0 && (
             <div className="space-y-1.5">
-              <Label>Property</Label>
+              <Label>{t("property")}</Label>
               <Select
                 value={propertyLabel || NO_PROPERTY}
                 onValueChange={(v) =>
@@ -222,7 +227,7 @@ export function MessageComposer({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value={NO_PROPERTY}>
-                    No specific property
+                    {t("noProperty")}
                   </SelectItem>
                   {propertyChoices.map((p) => (
                     <SelectItem key={p} value={p}>
@@ -235,7 +240,7 @@ export function MessageComposer({
           )}
 
           <div className="space-y-1.5">
-            <Label>Template</Label>
+            <Label>{t("template")}</Label>
             <Select
               value={templateId || BLANK}
               onValueChange={(v) => selectTemplate(v === BLANK ? "" : v)}
@@ -244,21 +249,22 @@ export function MessageComposer({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={BLANK}>Blank / write your own</SelectItem>
+                <SelectItem value={BLANK}>{t("blank")}</SelectItem>
                 <SelectGroup>
-                  <SelectLabel>Starters</SelectLabel>
-                  {MESSAGE_TEMPLATES.map((t) => (
-                    <SelectItem key={t.id} value={t.id}>
-                      {t.label} — {t.description}
+                  <SelectLabel>{t("starters")}</SelectLabel>
+                  {MESSAGE_TEMPLATES.map((tpl) => (
+                    <SelectItem key={tpl.id} value={tpl.id}>
+                      {templateLabel(tTemplates, tpl.id)} —{" "}
+                      {templateDescription(tTemplates, tpl.id)}
                     </SelectItem>
                   ))}
                 </SelectGroup>
                 {customTemplates.length > 0 && (
                   <SelectGroup>
-                    <SelectLabel>My templates</SelectLabel>
-                    {customTemplates.map((t) => (
-                      <SelectItem key={t.id} value={t.id}>
-                        {t.name}
+                    <SelectLabel>{t("myTemplates")}</SelectLabel>
+                    {customTemplates.map((tpl) => (
+                      <SelectItem key={tpl.id} value={tpl.id}>
+                        {tpl.name}
                       </SelectItem>
                     ))}
                   </SelectGroup>
@@ -268,7 +274,7 @@ export function MessageComposer({
           </div>
 
           <div className="space-y-1.5">
-            <Label>Language</Label>
+            <Label>{t("language")}</Label>
             <Select value={language} onValueChange={setLanguage}>
               <SelectTrigger className="w-full">
                 <SelectValue />
@@ -276,7 +282,7 @@ export function MessageComposer({
               <SelectContent>
                 {LANGUAGES.map((l) => (
                   <SelectItem key={l} value={l}>
-                    {l}
+                    {languageLabel(tCrm, l)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -285,22 +291,25 @@ export function MessageComposer({
 
           {channel === "email" && (
             <div className="space-y-1.5">
-              <Label htmlFor="msg-subject">Subject</Label>
+              <Label htmlFor="msg-subject">{t("subject")}</Label>
               <Input
                 id="msg-subject"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                placeholder="Subject"
+                placeholder={t("subjectPlaceholder")}
               />
             </div>
           )}
 
           <div className="space-y-1.5">
             <Label htmlFor="msg-ai">
-              Personalise with AI{" "}
-              <span className="text-muted-foreground font-normal">
-                (optional)
-              </span>
+              {t.rich("aiLabel", {
+                muted: (chunks) => (
+                  <span className="text-muted-foreground font-normal">
+                    {chunks}
+                  </span>
+                ),
+              })}
             </Label>
             <div className="flex gap-2">
               <Input
@@ -313,7 +322,7 @@ export function MessageComposer({
                     writeWithAI();
                   }
                 }}
-                placeholder="e.g. shorter and more formal, mention the sea view"
+                placeholder={t("aiPlaceholder")}
               />
               <Button
                 type="button"
@@ -322,30 +331,30 @@ export function MessageComposer({
                 className="shrink-0"
               >
                 {aiLoading ? <Loader2 className="animate-spin" /> : <Sparkles />}
-                {body.trim() ? "Rewrite" : "Write"}
+                {body.trim() ? t("rewrite") : t("write")}
               </Button>
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="msg-body">Message</Label>
+            <Label htmlFor="msg-body">{t("message")}</Label>
             <Textarea
               id="msg-body"
               rows={6}
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              placeholder="Write your message, or let AI draft it…"
+              placeholder={t("messagePlaceholder")}
             />
           </div>
         </div>
 
         <DialogFooter>
           <Button variant="ghost" onClick={() => setOpen(false)}>
-            Cancel
+            {tCommon("cancel")}
           </Button>
           <Button onClick={send} disabled={!canSend}>
             <Send />
-            {channel === "whatsapp" ? "Open in WhatsApp" : "Open in email"}
+            {channel === "whatsapp" ? t("openWhatsApp") : t("openEmail")}
           </Button>
         </DialogFooter>
       </DialogContent>

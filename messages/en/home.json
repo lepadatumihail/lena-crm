@@ -1,0 +1,41 @@
+{
+  "title": "Home",
+  "subtitle": "Everything that needs you, in one place.",
+  "actions": {
+    "newBuyer": "New buyer",
+    "newSeller": "New seller",
+    "newAppointment": "New appointment",
+    "pasteLead": "Paste a lead"
+  },
+  "upcoming": {
+    "title": "Upcoming",
+    "calendar": "Calendar",
+    "empty": "Nothing scheduled. <link>Open the calendar</link> to add a viewing or meeting.",
+    "remindTitle": "Remind on WhatsApp",
+    "remindAria": "Send a WhatsApp reminder"
+  },
+  "attention": {
+    "title": "Needs attention",
+    "empty": "You're all caught up. Nice.",
+    "open": "Open",
+    "draft": "Draft",
+    "stalledOffer": "Made an offer — not reserved yet",
+    "followUp": "{stage} · quiet {days, plural, one {# day} other {# days}}",
+    "reservation": "{label} · {date} ({when})",
+    "reservationFields": {
+      "ppc": "PPC payment",
+      "notary": "Notary",
+      "downpayment": "Down payment"
+    },
+    "relative": {
+      "today": "today",
+      "tomorrow": "tomorrow",
+      "inDays": "in {count, plural, one {# day} other {# days}}"
+    }
+  },
+  "pipeline": {
+    "title": "Pipeline",
+    "commissionPipeline": "{amount} in pipeline",
+    "commissionClosed": "{amount} closed"
+  }
+}

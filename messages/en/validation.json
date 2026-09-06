@@ -1,0 +1,15 @@
+{
+  "firstNameRequired": "First name is required",
+  "lastNameRequired": "Last name is required",
+  "invalidEmail": "Enter a valid email",
+  "invalidAmount": "Enter a valid amount",
+  "wholeNumber": "Enter a whole number",
+  "pickDate": "Pick a date",
+  "pickTime": "Pick a time",
+  "chooseClient": "Choose a client",
+  "titleRequired": "Title is required",
+  "dateRequired": "Date is required",
+  "nameRequired": "Give it a name",
+  "messageRequired": "Write the message",
+  "numberBetween": "Enter a number between 0 and {max}"
+}

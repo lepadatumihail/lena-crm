@@ -1,5 +1,8 @@
+import { createTranslator } from "next-intl";
 import { describe, expect, it } from "vitest";
 
+import { messagesFor } from "@/i18n/messages";
+import type { BillingT } from "@/lib/billing";
 import {
   creditApplied,
   formatMoney,
@@ -9,6 +12,14 @@ import {
   subscriptionEndsOn,
   subscriptionPhase,
 } from "@/lib/subscription";
+
+// The label helpers take the `billing` translator; assert against the real
+// English catalog rather than a stub, so a reworded key is caught here.
+const t: BillingT = createTranslator({
+  locale: "en",
+  messages: messagesFor("en"),
+  namespace: "billing",
+});
 
 // Noon UTC so the day is the same in every timezone a test might run in.
 const base = {
@@ -93,41 +104,43 @@ describe("paymentMethodLabel", () => {
   const card = { type: "card", brand: "visa", last4: "4242", expMonth: 4, expYear: 2028, email: null };
 
   it("names cards by brand and last four", () => {
-    expect(paymentMethodLabel(card)).toEqual({
+    expect(paymentMethodLabel(t, card)).toEqual({
       title: "Visa ending 4242",
       detail: "Expires 04/2028",
     });
-    expect(paymentMethodLabel({ ...card, brand: "cartes_bancaires" }).title).toBe(
+    expect(paymentMethodLabel(t, { ...card, brand: "cartes_bancaires" }).title).toBe(
       "Cartes Bancaires ending 4242",
     );
-    expect(paymentMethodLabel({ ...card, brand: "somethingnew" }).title).toBe(
+    expect(paymentMethodLabel(t, { ...card, brand: "somethingnew" }).title).toBe(
       "Somethingnew ending 4242",
     );
-    expect(paymentMethodLabel({ ...card, expMonth: null }).detail).toBeNull();
+    expect(paymentMethodLabel(t, { ...card, expMonth: null }).detail).toBeNull();
   });
 
   it("handles SEPA, Link, PayPal and anything new", () => {
-    expect(paymentMethodLabel({ ...card, type: "sepa_debit", brand: null, last4: "3000" })).toEqual(
-      { title: "SEPA direct debit ending 3000", detail: null },
-    );
-    expect(paymentMethodLabel({ ...card, type: "link", email: "a@b.c" })).toEqual({
+    expect(
+      paymentMethodLabel(t, { ...card, type: "sepa_debit", brand: null, last4: "3000" }),
+    ).toEqual({ title: "SEPA direct debit ending 3000", detail: null });
+    expect(paymentMethodLabel(t, { ...card, type: "link", email: "a@b.c" })).toEqual({
       title: "Link",
       detail: "a@b.c",
     });
-    expect(paymentMethodLabel({ ...card, type: "paypal", email: "a@b.c" })).toEqual({
+    expect(paymentMethodLabel(t, { ...card, type: "paypal", email: "a@b.c" })).toEqual({
       title: "PayPal",
       detail: "a@b.c",
     });
-    expect(paymentMethodLabel({ ...card, type: "us_bank_account" }).title).toBe("Us Bank Account");
+    expect(paymentMethodLabel(t, { ...card, type: "us_bank_account" }).title).toBe(
+      "Us Bank Account",
+    );
   });
 });
 
 describe("invoiceStatusBadge", () => {
   it("maps Stripe statuses to badges", () => {
-    expect(invoiceStatusBadge("paid")).toEqual({ label: "Paid", tone: "success" });
-    expect(invoiceStatusBadge("open").tone).toBe("warning");
-    expect(invoiceStatusBadge("uncollectible").tone).toBe("destructive");
-    expect(invoiceStatusBadge(null).label).toBe("—");
+    expect(invoiceStatusBadge(t, "paid")).toEqual({ label: "Paid", tone: "success" });
+    expect(invoiceStatusBadge(t, "open").tone).toBe("warning");
+    expect(invoiceStatusBadge(t, "uncollectible").tone).toBe("destructive");
+    expect(invoiceStatusBadge(t, null).label).toBe("—");
   });
 });
 

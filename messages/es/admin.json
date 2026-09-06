@@ -1,0 +1,63 @@
+{
+  "title": "Admin",
+  "subtitle": "Cohorte fundadora, planes y referidos. Hasta que los webhooks de Stripe estén activos, los pagos se registran aquí a mano.",
+  "stats": {
+    "founders": "Agentes fundadores asignados. Los números van a los {cap} primeros agentes de pago, por orden de pago.",
+    "agents": "Agentes registrados. Gratis admite {limit} clientes; Pro es ilimitado."
+  },
+  "agents": {
+    "title": "Agentes",
+    "description": "«Factura pagada» hace lo que hará el webhook de Stripe: los marca como suscritos y cuenta la factura para la recompensa de quien los refirió. «Cortesía» da tiempo Pro desde el backend, sin tarjeta.",
+    "columns": {
+      "agent": "Agente",
+      "plan": "Plan",
+      "status": "Estado",
+      "clients": "Clientes",
+      "stripe": "Stripe",
+      "actions": "Acciones"
+    },
+    "proComped": "Pro · cortesía",
+    "pro": "Pro",
+    "free": "Gratis",
+    "founding": "Fundador n.º {number}",
+    "admin": "admin",
+    "until": "hasta el {date}",
+    "atCap": "en el límite",
+    "paidInvoice": "Factura pagada",
+    "makeFounder": "Hacer fundador",
+    "monthsToComp": "Meses de cortesía",
+    "comp": "Cortesía",
+    "set": "Aplicar"
+  },
+  "referrals": {
+    "title": "Referidos",
+    "description": "Se cualifica en la segunda factura pagada del agente referido; entonces los dos consiguen un mes gratis.",
+    "columns": {
+      "referrer": "Quien refiere",
+      "referred": "Referido",
+      "status": "Estado",
+      "paidInvoices": "Facturas pagadas",
+      "rewarded": "Recompensado"
+    },
+    "empty": "Todavía no hay referidos."
+  },
+  "credits": {
+    "title": "Meses gratis",
+    "description": "Los créditos de saldo se envían a Stripe en cuanto el agente tiene un cliente de Stripe. El tiempo Pro de cortesía se aplica en el momento en que se concede.",
+    "columns": {
+      "agent": "Agente",
+      "kind": "Tipo",
+      "value": "Valor",
+      "reason": "Motivo",
+      "applied": "Aplicado"
+    },
+    "empty": "Todavía no hay meses gratis.",
+    "kind": {
+      "proTime": "tiempo pro",
+      "balance": "saldo"
+    },
+    "months": "{count, plural, one {# mes} other {# meses}}",
+    "applied": "aplicado",
+    "pending": "pendiente"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "title": "Referidos",
+  "subtitle": "Comparte tu enlace con los agentes con los que compartes operaciones. Cuando uno de ellos se suscriba y pague su segundo mes, los dos conseguís un mes gratis.",
+  "claim": {
+    "claimed": "Referido registrado. Cuando estés en Pro y pagues tu segundo mes, tú y el agente que te refirió conseguís un mes gratis cada uno.",
+    "alreadyClaimed": "Ya habías usado un enlace de referido, así que no ha cambiado nada.",
+    "notEligible": "Los enlaces de referido son para cuentas nuevas, así que este no se ha aplicado. Aun así puedes compartir el tuyo.",
+    "selfReferral": "Ese es tu propio enlace de referido. Compártelo con un compañero.",
+    "invalid": "Ese enlace de referido no es válido. Puedes usar LeadWing igualmente: empezar es gratis."
+  },
+  "founding": {
+    "youAre": "Agente fundador n.º {number}",
+    "spots": "{count, plural, one {queda # plaza fundadora} other {quedan # plazas fundadoras}}",
+    "full": "La cohorte fundadora está completa",
+    "lockedWithSpots": "Tu precio queda bloqueado de por vida. {count, plural, one {Queda # plaza fundadora} other {Quedan # plazas fundadoras}}.",
+    "lockedFull": "Tu precio queda bloqueado de por vida. La cohorte fundadora está completa.",
+    "offer": "Los {cap} primeros agentes de pago fijan Pro en {price} € al mes de por vida, en lugar de {standard} €.",
+    "standard": "Pro son {price} € al mes, con clientes ilimitados.",
+    "seePlans": "Ver planes"
+  },
+  "link": {
+    "title": "Tu enlace de referido",
+    "description": "Quien se registre a través de él cuenta como tu referido. Solo cuentas nuevas, y cada agente puede ser referido una vez.",
+    "pending": "Tu enlace aparecerá aquí en breve.",
+    "copy": "Copiar enlace",
+    "copyFailed": "No se ha podido copiar"
+  },
+  "agents": {
+    "title": "Agentes que has referido",
+    "description": "Registrado → Suscrito → Mes gratis conseguido, en cuanto pague su segundo mes.",
+    "empty": "Todavía nadie. Envía tu enlace a un compañero con el que compartas operaciones.",
+    "anonymous": "Un agente",
+    "joined": "Se unió el {date}",
+    "joinedWithPaid": "Se unió el {date} · {count, plural, one {# mes pagado} other {# meses pagados}}"
+  },
+  "state": {
+    "signed_up": "Registrado",
+    "subscribed": "Suscrito",
+    "rewarded": "Mes gratis conseguido",
+    "left": "Se fue"
+  },
+  "rewards": {
+    "title": "Tus meses gratis",
+    "description": "En Pro, un mes gratis se descuenta de tu próxima factura. ¿Todavía no te has suscrito? Consigues un mes de Pro al momento, sin tarjeta.",
+    "earned": "{count, plural, one {# mes gratis conseguido} other {# meses gratis conseguidos}}",
+    "none": "Todavía no has conseguido nada.",
+    "proUntil": "Estás en Pro hasta el {date}.",
+    "credit": "{amount} € se descontarán de tus facturas cuando te suscribas.",
+    "referredBy": "Te refirió {name}."
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,12 +39,12 @@ import {
 import { LeadPaste } from "@/components/clients/lead-paste";
 import { PhoneInput } from "@/components/phone-input";
 import type { ExtractedLead } from "@/lib/actions/leads";
-import {
-  clientsPath,
-  DEAL_TYPE_LABELS,
-  SELLER_ROLE_LABELS,
-  type ClientSide,
-} from "@/lib/crm";
+import { dealTypeLabel, sellerRoleLabel } from "@/i18n/labels";
+import { clientsPath, type ClientSide } from "@/lib/crm";
+import type { Enums } from "@/lib/supabase/types";
+
+const DEAL_TYPES: readonly Enums<"deal_type">[] = ["direct", "collab"];
+const SELLER_ROLES: readonly Enums<"seller_role">[] = ["owner", "representative"];
 
 export function ClientForm({
   side,
@@ -59,8 +60,13 @@ export function ClientForm({
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
+  const t = useTranslations("clients.form");
+  const tCommon = useTranslations("common");
+  const tCrm = useTranslations("crm");
+  const tv = useTranslations("validation");
+  const schema = useMemo(() => clientFormSchema(tv), [tv]);
   const form = useForm<ClientFormValues>({
-    resolver: zodResolver(clientFormSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       side,
       first_name: "",
@@ -84,29 +90,32 @@ export function ClientForm({
       const res = await createClientAction(values);
       if (res.limitReached) {
         setSubmitting(false);
-        toast.error(res.error ?? "You've reached the Free plan's client limit", {
-          description: "Pro is unlimited, and nothing you've added goes anywhere.",
-          action: { label: "See plans", onClick: () => router.push("/pricing") },
+        toast.error(res.error ?? t("toasts.limitTitle"), {
+          description: t("toasts.limitDescription"),
+          action: {
+            label: t("toasts.seePlans"),
+            onClick: () => router.push("/pricing"),
+          },
         });
         return;
       }
       if (res.error || !res.id) {
         setSubmitting(false);
-        toast.error("Couldn't create client", {
+        toast.error(t("toasts.createFailed"), {
           description: res.error ?? undefined,
         });
         return;
       }
-      toast.success("Client created");
+      toast.success(t("toasts.created"));
       router.push(`/clients/${res.id}`);
     } else {
       const res = await updateClient(clientId!, values);
       setSubmitting(false);
       if (res.error) {
-        toast.error("Couldn't save changes", { description: res.error });
+        toast.error(t("toasts.saveFailed"), { description: res.error });
         return;
       }
-      toast.success("Changes saved");
+      toast.success(t("toasts.saved"));
       router.push(`/clients/${clientId}`);
       router.refresh();
     }
@@ -136,9 +145,9 @@ export function ClientForm({
             name="first_name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>First name</FormLabel>
+                <FormLabel>{t("firstName")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Maria" {...field} />
+                  <Input placeholder={t("firstNamePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -149,9 +158,9 @@ export function ClientForm({
             name="last_name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Last name</FormLabel>
+                <FormLabel>{t("lastName")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="García" {...field} />
+                  <Input placeholder={t("lastNamePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -162,9 +171,13 @@ export function ClientForm({
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t("email")}</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="maria@example.com" {...field} />
+                  <Input
+                    type="email"
+                    placeholder={t("emailPlaceholder")}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -175,7 +188,7 @@ export function ClientForm({
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone</FormLabel>
+                <FormLabel>{t("phone")}</FormLabel>
                 <PhoneInput
                   value={field.value ?? ""}
                   onChange={field.onChange}
@@ -190,9 +203,9 @@ export function ClientForm({
             name="language"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Language</FormLabel>
+                <FormLabel>{t("language")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="English" {...field} />
+                  <Input placeholder={t("languagePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -203,9 +216,9 @@ export function ClientForm({
             name="nationality"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nationality</FormLabel>
+                <FormLabel>{t("nationality")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="British" {...field} />
+                  <Input placeholder={t("nationalityPlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -220,20 +233,20 @@ export function ClientForm({
               name="deal_type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Deal type</FormLabel>
+                  <FormLabel>{t("dealType")}</FormLabel>
                   <Select
                     value={field.value}
                     onValueChange={field.onChange}
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select…" />
+                        <SelectValue placeholder={t("selectPlaceholder")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {Object.entries(DEAL_TYPE_LABELS).map(([v, label]) => (
+                      {DEAL_TYPES.map((v) => (
                         <SelectItem key={v} value={v}>
-                          {label}
+                          {dealTypeLabel(tCrm, v)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -248,20 +261,20 @@ export function ClientForm({
               name="seller_role"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Role</FormLabel>
+                  <FormLabel>{t("role")}</FormLabel>
                   <Select
                     value={field.value}
                     onValueChange={field.onChange}
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select…" />
+                        <SelectValue placeholder={t("selectPlaceholder")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {Object.entries(SELLER_ROLE_LABELS).map(([v, label]) => (
+                      {SELLER_ROLES.map((v) => (
                         <SelectItem key={v} value={v}>
-                          {label}
+                          {sellerRoleLabel(tCrm, v)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -276,13 +289,11 @@ export function ClientForm({
             name="agency"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Agency</FormLabel>
+                <FormLabel>{t("agency")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="e.g. Marbella Homes" {...field} />
+                  <Input placeholder={t("agencyPlaceholder")} {...field} />
                 </FormControl>
-                <FormDescription>
-                  Which agency is this client for?
-                </FormDescription>
+                <FormDescription>{t("agencyDescription")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -294,11 +305,11 @@ export function ClientForm({
           name="notes"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Notes</FormLabel>
+              <FormLabel>{t("notes")}</FormLabel>
               <FormControl>
                 <Textarea
                   rows={4}
-                  placeholder="Anything worth remembering…"
+                  placeholder={t("notesPlaceholder")}
                   {...field}
                 />
               </FormControl>
@@ -313,10 +324,8 @@ export function ClientForm({
           render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
               <div className="space-y-0.5">
-                <FormLabel>Priority</FormLabel>
-                <FormDescription>
-                  Flag this client to sort them to the top.
-                </FormDescription>
+                <FormLabel>{t("priority")}</FormLabel>
+                <FormDescription>{t("priorityDescription")}</FormDescription>
               </div>
               <FormControl>
                 <Switch
@@ -335,11 +344,11 @@ export function ClientForm({
             onClick={() => router.push(cancelHref)}
             disabled={submitting}
           >
-            Cancel
+            {tCommon("cancel")}
           </Button>
           <Button type="submit" disabled={submitting}>
             {submitting && <Loader2 className="animate-spin" />}
-            {mode === "create" ? "Create client" : "Save changes"}
+            {mode === "create" ? t("create") : t("save")}
           </Button>
         </div>
       </form>

@@ -1,9 +1,12 @@
-import type { BillingPlan } from "@/lib/billing";
+import type { BillingPlan, BillingT } from "@/lib/billing";
 
 /**
  * Pure helpers for the billing page: what Stripe and the profile know,
  * turned into labels. No I/O here, so all of it is unit-tested. The
  * snapshots are built by src/lib/data/billing.ts from live Stripe objects.
+ *
+ * Anything the agent reads takes the `billing` translator (`BillingT`);
+ * brand names (Visa, PayPal, SEPA…) stay as they are in every language.
  */
 
 /** A Stripe subscription, flattened to what the page shows. Dates are ISO strings. */
@@ -96,35 +99,45 @@ export function subscriptionEndsOn(
   );
 }
 
-export const PHASE_BADGE: Record<SubscriptionPhase, { label: string; tone: BadgeTone }> = {
-  active: { label: "Active", tone: "success" },
-  past_due: { label: "Payment past due", tone: "warning" },
-  ending: { label: "Ending", tone: "warning" },
-  canceled: { label: "Canceled", tone: "outline" },
-  incomplete: { label: "Incomplete", tone: "secondary" },
+const PHASE_TONE: Record<SubscriptionPhase, BadgeTone> = {
+  active: "success",
+  past_due: "warning",
+  ending: "warning",
+  canceled: "outline",
+  incomplete: "secondary",
 };
 
-export function invoiceStatusBadge(status: string | null): { label: string; tone: BadgeTone } {
+export function phaseBadge(
+  t: BillingT,
+  phase: SubscriptionPhase,
+): { label: string; tone: BadgeTone } {
+  return { label: t(`phase.${phase}`), tone: PHASE_TONE[phase] };
+}
+
+export function invoiceStatusBadge(
+  t: BillingT,
+  status: string | null,
+): { label: string; tone: BadgeTone } {
   switch (status) {
     case "paid":
-      return { label: "Paid", tone: "success" };
+      return { label: t("invoiceStatus.paid"), tone: "success" };
     case "open":
-      return { label: "Due", tone: "warning" };
+      return { label: t("invoiceStatus.open"), tone: "warning" };
     case "void":
-      return { label: "Void", tone: "outline" };
+      return { label: t("invoiceStatus.void"), tone: "outline" };
     case "uncollectible":
-      return { label: "Unpaid", tone: "destructive" };
+      return { label: t("invoiceStatus.uncollectible"), tone: "destructive" };
     case "draft":
-      return { label: "Draft", tone: "secondary" };
+      return { label: t("invoiceStatus.draft"), tone: "secondary" };
     default:
-      return { label: "—", tone: "outline" };
+      return { label: t("invoiceStatus.unknown"), tone: "outline" };
   }
 }
 
 /** "€19" for whole amounts, "€22.99" otherwise. Stripe amounts are in cents. */
-export function formatMoney(cents: number, currency = "eur"): string {
+export function formatMoney(cents: number, currency = "eur", locale = "en-GB"): string {
   const whole = cents % 100 === 0;
-  return new Intl.NumberFormat("en-GB", {
+  return new Intl.NumberFormat(locale, {
     style: "currency",
     currency: currency.toUpperCase(),
     minimumFractionDigits: whole ? 0 : 2,
@@ -133,9 +146,12 @@ export function formatMoney(cents: number, currency = "eur"): string {
 }
 
 /** "6 Oct 2026" */
-export function formatBillingDate(iso: string | null | undefined): string | null {
+export function formatBillingDate(
+  iso: string | null | undefined,
+  locale = "en-GB"
+): string | null {
   if (!iso) return null;
-  return new Date(iso).toLocaleDateString("en-GB", {
+  return new Date(iso).toLocaleDateString(locale, {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -143,21 +159,20 @@ export function formatBillingDate(iso: string | null | undefined): string | null
 }
 
 /** "6 Sep – 6 Oct 2026", dropping the first year when both dates share it. */
-export function formatPeriod(startIso: string | null, endIso: string | null): string | null {
+export function formatPeriod(
+  startIso: string | null,
+  endIso: string | null,
+  locale = "en-GB"
+): string | null {
   if (!startIso || !endIso) return null;
   const start = new Date(startIso);
   const end = new Date(endIso);
   const sameYear = start.getFullYear() === end.getFullYear();
   const startLabel = start.toLocaleDateString(
-    "en-GB",
+    locale,
     sameYear ? { day: "numeric", month: "short" } : { day: "numeric", month: "short", year: "numeric" },
   );
-  return `${startLabel} – ${formatBillingDate(endIso)}`;
-}
-
-/** "per month" / "per year" */
-export function intervalLabel(interval: "month" | "year" | null): string | null {
-  return interval === "month" ? "per month" : interval === "year" ? "per year" : null;
+  return `${startLabel} – ${formatBillingDate(endIso, locale)}`;
 }
 
 const CARD_BRANDS: Record<string, string> = {
@@ -180,24 +195,30 @@ function titleCase(value: string): string {
 }
 
 /** "Visa ending 4242" + "Expires 04/2028"; SEPA, Link and PayPal get their own wording. */
-export function paymentMethodLabel(pm: PaymentMethodSnapshot): {
+export function paymentMethodLabel(
+  t: BillingT,
+  pm: PaymentMethodSnapshot,
+): {
   title: string;
   detail: string | null;
 } {
   switch (pm.type) {
     case "card": {
-      const brand = pm.brand ? (CARD_BRANDS[pm.brand] ?? titleCase(pm.brand)) : "Card";
+      const brand = pm.brand ? (CARD_BRANDS[pm.brand] ?? titleCase(pm.brand)) : t("method.card");
       return {
-        title: pm.last4 ? `${brand} ending ${pm.last4}` : brand,
+        title: pm.last4 ? t("method.cardEnding", { brand, last4: pm.last4 }) : brand,
         detail:
           pm.expMonth && pm.expYear
-            ? `Expires ${String(pm.expMonth).padStart(2, "0")}/${pm.expYear}`
+            ? t("method.expires", {
+                month: String(pm.expMonth).padStart(2, "0"),
+                year: String(pm.expYear),
+              })
             : null,
       };
     }
     case "sepa_debit":
       return {
-        title: pm.last4 ? `SEPA direct debit ending ${pm.last4}` : "SEPA direct debit",
+        title: pm.last4 ? t("method.sepaEnding", { last4: pm.last4 }) : t("method.sepa"),
         detail: null,
       };
     case "link":

@@ -1,0 +1,34 @@
+{
+  "appointments": {
+    "aClient": "un cliente",
+    "viewing": "Visita",
+    "viewingWith": "Visita con {name}",
+    "viewingAt": "Visita en {place}",
+    "viewingWithAt": "Visita · {name} en {place}",
+    "meeting": "Reunión",
+    "meetingWith": "Reunión con {name}"
+  },
+  "notifications": {
+    "appointmentsToday": "{count, plural, one {# cita hoy} other {# citas hoy}}",
+    "more": "+{count} más",
+    "offerPending": "Oferta pendiente · {name}",
+    "offerPendingBody": "Hizo una oferta pero aún no ha reservado. Merece un toque.",
+    "followUp": "Haz seguimiento a {name}",
+    "followUpBody": "{stage} · sin novedades desde hace {days, plural, one {# día} other {# días}}",
+    "keyDate": "{label} · {name}",
+    "keyDateBody": "{date} ({when})",
+    "keyDates": {
+      "ppc": "Pago del contrato de arras (PPC)",
+      "notary": "Notaría",
+      "downpayment": "Señal"
+    },
+    "today": "hoy",
+    "tomorrow": "mañana",
+    "inDays": "en {count, plural, one {# día} other {# días}}",
+    "errors": {
+      "notAuthenticated": "No has iniciado sesión",
+      "invalidContext": "Contexto de sincronización no válido",
+      "signals": "No se pudieron cargar las señales"
+    }
+  }
+}

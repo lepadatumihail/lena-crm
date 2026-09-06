@@ -1,7 +1,9 @@
 import { cleanup, render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { BillingView } from "@/components/billing/billing-view";
+import { messagesFor } from "@/i18n/messages";
 import { planState } from "@/lib/access";
 import type { BillingOverview, StripeSnapshot } from "@/lib/data/billing";
 import type { SubscriptionSnapshot } from "@/lib/subscription";
@@ -21,6 +23,7 @@ const founder: Profile = {
   id: "user-1",
   email: "agent@example.com",
   full_name: "Agent",
+  locale: "en",
   is_admin: false,
   cohort: "founding",
   founding_number: 1,
@@ -114,13 +117,17 @@ function overview(profile: Profile, extra: Partial<BillingOverview> = {}): Billi
   };
 }
 
+// The view reads its copy from the English catalog, so the assertions below
+// are assertions about `messages/en/billing.json`.
 function show(view: BillingOverview, flags: { upgraded?: boolean; portalUnavailable?: boolean } = {}) {
   return render(
-    <BillingView
-      overview={view}
-      upgraded={flags.upgraded ?? false}
-      portalUnavailable={flags.portalUnavailable ?? false}
-    />,
+    <NextIntlClientProvider locale="en" messages={messagesFor("en")}>
+      <BillingView
+        overview={view}
+        upgraded={flags.upgraded ?? false}
+        portalUnavailable={flags.portalUnavailable ?? false}
+      />
+    </NextIntlClientProvider>,
   );
 }
 

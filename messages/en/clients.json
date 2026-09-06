@@ -1,0 +1,122 @@
+{
+  "list": {
+    "count": "{count, plural, one {# client} other {# clients}}",
+    "countWithInactive": "{count, plural, one {# client (incl. inactive)} other {# clients (incl. inactive)}}",
+    "commissionPipeline": "{amount} in pipeline",
+    "commissionClosed": "{amount} closed",
+    "newClient": "{side, select, buyer {New buyer} other {New seller}}",
+    "searchPlaceholder": "Search name, email, phone, agency…",
+    "stagePlaceholder": "Stage",
+    "allStages": "All stages",
+    "priority": "Priority",
+    "table": "Table",
+    "board": "Board",
+    "inactive": "Inactive",
+    "noMatches": "No clients match your filters.",
+    "empty": {
+      "title": "{side, select, buyer {No buyers yet} other {No sellers yet}}",
+      "body": "{side, select, buyer {Add your first buyer to start tracking them through your pipeline.} other {Add your first seller to start tracking them through your pipeline.}}"
+    },
+    "toasts": {
+      "moveFailed": "Couldn't move client",
+      "moved": "Moved to {stage}",
+      "priorityFailed": "Couldn't update priority"
+    }
+  },
+  "priority": {
+    "flag": "Flag priority",
+    "unflag": "Unflag priority"
+  },
+  "table": {
+    "name": "Name",
+    "stage": "Stage",
+    "type": "Type",
+    "agency": "Agency",
+    "contact": "Contact",
+    "updated": "Updated"
+  },
+  "kanban": {
+    "dropHere": "Drop here"
+  },
+  "controls": {
+    "active": "Active",
+    "deleteClient": "Delete client",
+    "deleteTitle": "Delete client?",
+    "deleteDescription": "This permanently deletes {name} and all their data — preferences, viewings, offers and documents. This can't be undone.",
+    "toasts": {
+      "stageFailed": "Couldn't change stage",
+      "stageUpdated": "Stage updated",
+      "priorityFailed": "Couldn't update priority",
+      "updateFailed": "Couldn't update",
+      "reactivated": "Client reactivated",
+      "hidden": "Client hidden",
+      "deleteFailed": "Couldn't delete client",
+      "deleted": "Client deleted"
+    }
+  },
+  "form": {
+    "firstName": "First name",
+    "firstNamePlaceholder": "Maria",
+    "lastName": "Last name",
+    "lastNamePlaceholder": "García",
+    "email": "Email",
+    "emailPlaceholder": "maria@example.com",
+    "phone": "Phone",
+    "language": "Language",
+    "languagePlaceholder": "English",
+    "nationality": "Nationality",
+    "nationalityPlaceholder": "British",
+    "dealType": "Deal type",
+    "role": "Role",
+    "selectPlaceholder": "Select…",
+    "agency": "Agency",
+    "agencyPlaceholder": "e.g. Marbella Homes",
+    "agencyDescription": "Which agency is this client for?",
+    "notes": "Notes",
+    "notesPlaceholder": "Anything worth remembering…",
+    "priority": "Priority",
+    "priorityDescription": "Flag this client to sort them to the top.",
+    "create": "Create client",
+    "save": "Save changes",
+    "toasts": {
+      "limitTitle": "You've reached the Free plan's client limit",
+      "limitDescription": "Pro is unlimited, and nothing you've added goes anywhere.",
+      "seePlans": "See plans",
+      "createFailed": "Couldn't create client",
+      "created": "Client created",
+      "saveFailed": "Couldn't save changes",
+      "saved": "Changes saved"
+    }
+  },
+  "leadPaste": {
+    "triggerTitle": "Paste a lead to auto-fill",
+    "triggerDescription": "From Idealista, an email or WhatsApp — AI fills the form for you.",
+    "dialogTitle": "Paste a lead",
+    "dialogDescription": "Drop in the raw inquiry — a portal message, forwarded email or WhatsApp text — and AI pulls out the details.",
+    "placeholder": "Hi, I saw your listing on Idealista. My name is Anya Petrova, I'm after a 2-bed apartment in Marbella up to €600,000. You can reach me on +34 600 123 456…",
+    "extract": "Extract details",
+    "toasts": {
+      "failed": "Couldn't read that lead",
+      "filled": "Filled from the lead — review and save"
+    },
+    "errors": {
+      "empty": "Paste a lead message first",
+      "tooLong": "That message is too long — paste just the inquiry text.",
+      "aiFailed": "AI request failed",
+      "unreadable": "Couldn't read the AI response."
+    }
+  },
+  "new": {
+    "back": "{side, select, buyer {Back to buyers} other {Back to sellers}}",
+    "title": "{side, select, buyer {New buyer} other {New seller}}",
+    "description": "{side, select, buyer {Add a new buyer to your pipeline.} other {Add a new seller to your pipeline.}}"
+  },
+  "edit": {
+    "title": "Edit {name}"
+  },
+  "errors": {
+    "invalidForm": "Please check the form and try again.",
+    "limitReached": "You've used your {limit} free clients. Pro is unlimited.",
+    "invalidStage": "Invalid stage"
+  }
+}

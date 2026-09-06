@@ -1,0 +1,83 @@
+{
+  "title": "Calendar",
+  "actions": {
+    "new": "New",
+    "create": "Create",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month"
+  },
+  "grid": {
+    "more": "+{count} more"
+  },
+  "day": {
+    "description": "Meetings and viewings scheduled for this day.",
+    "empty": "Nothing scheduled.",
+    "asking": "Asking {price}",
+    "offer": "Offer {price}",
+    "remind": "Remind on WhatsApp",
+    "remindAria": "Send a WhatsApp reminder"
+  },
+  "add": {
+    "title": "Add to {date}",
+    "description": "Choose whether to add a meeting or a viewing."
+  },
+  "form": {
+    "newTitle": "New meeting",
+    "editTitle": "Edit meeting",
+    "description": "Schedule a meeting with a client and set an optional reminder.",
+    "client": "Client",
+    "clientPlaceholder": "Select a client…",
+    "noClients": "No clients yet",
+    "title": "Title (optional)",
+    "titlePlaceholder": "Defaults to client name",
+    "date": "Date",
+    "time": "Time",
+    "duration": "Duration",
+    "location": "Location (optional)",
+    "locationPlaceholder": "Office, address, video call…",
+    "reminder": "Reminder",
+    "notes": "Notes (optional)",
+    "notesPlaceholder": "Anything to remember…",
+    "deleteTitle": "Delete meeting?",
+    "deleteDescription": "This meeting will be permanently deleted."
+  },
+  "durations": {
+    "30": "30 minutes",
+    "45": "45 minutes",
+    "60": "1 hour",
+    "90": "1.5 hours",
+    "120": "2 hours"
+  },
+  "toasts": {
+    "invalidDateTime": "Invalid date or time",
+    "saveFailed": "Couldn't save meeting",
+    "created": "Meeting created",
+    "updated": "Meeting updated",
+    "deleteFailed": "Couldn't delete",
+    "deleted": "Meeting deleted"
+  },
+  "sync": {
+    "button": "Sync",
+    "title": "Sync to Google Calendar",
+    "description": "Subscribe once and your viewings & meetings appear in Google automatically.",
+    "linkLabel": "Your private calendar link",
+    "generating": "Generating…",
+    "copyLink": "Copy link",
+    "privacy": "Keep this link private — anyone with it can see your schedule.",
+    "howTitle": "How to add it",
+    "step1": "Copy the link above.",
+    "step2": "In Google Calendar, next to “Other calendars”, click <b>+ → From URL</b>.",
+    "step3": "Paste the link and add it.",
+    "openGoogle": "Open Google Calendar",
+    "note": "Subscribed calendars refresh every few hours, so a newly added event can take a little while to appear in Google.",
+    "linkFailed": "Couldn't generate your sync link",
+    "copyFailed": "Couldn't copy — select and copy manually"
+  },
+  "picker": {
+    "pickDate": "Pick a date"
+  },
+  "errors": {
+    "notSignedIn": "Not signed in",
+    "checkForm": "Please check the form."
+  }
+}

@@ -1,5 +1,7 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
+
 import { revalidatePath } from "next/cache";
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
@@ -14,8 +16,10 @@ export async function saveTemplate(
   templateId: string | null,
   values: TemplateFormValues
 ): Promise<{ error: string | null; id?: string }> {
-  const parsed = templateFormSchema.safeParse(values);
-  if (!parsed.success) return { error: "Please check the form." };
+  const parsed = templateFormSchema(await getTranslations("validation")).safeParse(values);
+  if (!parsed.success) {
+    return { error: (await getTranslations("templates"))("errors.checkForm") };
+  }
   const v = parsed.data;
 
   const row = {

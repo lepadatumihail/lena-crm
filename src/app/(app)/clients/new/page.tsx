@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { ArrowLeft } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/server";
@@ -15,6 +16,7 @@ export default async function NewClientPage({
 }) {
   const sp = await searchParams;
   const side: ClientSide = sp.side === "seller" ? "seller" : "buyer";
+  const t = await getTranslations("clients.new");
 
   // Free agents hold FREE_CLIENT_LIMIT clients. Show the prompt instead of a
   // form that would only fail on submit. No profile row = let the form try;
@@ -34,7 +36,12 @@ export default async function NewClientPage({
   const blocked = profile ? !canAddClient(profile, count ?? 0) : false;
 
   if (blocked) {
-    return <UpgradePrompt backHref={clientsPath(side)} backLabel={`Back to ${side}s`} />;
+    return (
+      <UpgradePrompt
+        backHref={clientsPath(side)}
+        backLabel={t("back", { side })}
+      />
+    );
   }
 
   return (
@@ -42,14 +49,14 @@ export default async function NewClientPage({
       <div>
         <Button asChild variant="ghost" size="sm" className="-ml-2 mb-1">
           <Link href={clientsPath(side)}>
-            <ArrowLeft /> Back to {side}s
+            <ArrowLeft /> {t("back", { side })}
           </Link>
         </Button>
         <h1 className="text-2xl font-semibold tracking-tight">
-          New {side}
+          {t("title", { side })}
         </h1>
         <p className="text-muted-foreground text-sm">
-          Add a new {side} to your pipeline.
+          {t("description", { side })}
         </p>
       </div>
       <ClientForm side={side} mode="create" />

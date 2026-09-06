@@ -1,6 +1,6 @@
 # LeadWing — Real Estate CRM
 
-A CRM for independent real estate agents on the Costa del Sol. Each agent is an
+A CRM for independent real estate agents. Each agent is an
 isolated tenant (Row Level Security keys every row to `auth.uid()`), tracking
 **buyers** and **sellers** through stage-based pipelines with documents, viewings
 and offers.
@@ -114,3 +114,23 @@ Engine: `src/lib/referrals/engine.ts`; atomic pieces are the RPCs in
 `supabase/migrations/20260906120000_billing_referrals.sql`. Apply it with
 `supabase db push` (or paste into the SQL editor) before deploying; it also
 creates profiles for existing users, who start on Free.
+
+## Languages (i18n)
+
+The UI ships in English and Spanish via `next-intl` (no URL prefixes). The
+agent's choice lives in the `NEXT_LOCALE` cookie for rendering and in
+`profiles.locale` for sign-in on a new device and for server jobs that run
+without a request (the calendar feed).
+
+- Catalogs: `messages/<en|es>/<namespace>.json`, one file per area, registered
+  in `src/i18n/messages.ts`. English types every `t()` call; Spanish is
+  deep-merged over it, so an untranslated key falls back to English.
+- Components: `useTranslations("<namespace>")`; server code:
+  `await getTranslations("<namespace>")`. Enum labels (stages, property types…)
+  go through `src/i18n/labels.ts`; dates and money take the locale tag from
+  `intlTag(locale)` (`src/i18n/config.ts`).
+- Switcher: `src/components/locale-switcher.tsx` (sidebar footer + marketing nav),
+  backed by the `setLocale` server action in `src/i18n/actions.ts`.
+- Adding a language: extend `LOCALES` in `src/i18n/config.ts`, add
+  `messages/<code>/*.json`, register them in `src/i18n/messages.ts`, and widen
+  the `profiles_locale_check` constraint.

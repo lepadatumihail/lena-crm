@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -32,10 +33,10 @@ import {
   setClientPriority,
   updateClientStage,
 } from "@/lib/actions/clients";
+import { stageLabel } from "@/i18n/labels";
 import {
   clientFullName,
   clientsPath,
-  STAGE_LABELS,
   stagesForSide,
   type ClientSide,
 } from "@/lib/crm";
@@ -44,6 +45,9 @@ import type { Client } from "@/lib/supabase/types";
 
 export function ClientControls({ client }: { client: Client }) {
   const router = useRouter();
+  const t = useTranslations("clients");
+  const tCommon = useTranslations("common");
+  const tCrm = useTranslations("crm");
   const [pending, startTransition] = useTransition();
   const [deleting, setDeleting] = useState(false);
   const side = client.side as ClientSide;
@@ -51,9 +55,10 @@ export function ClientControls({ client }: { client: Client }) {
   function changeStage(stage: string) {
     startTransition(async () => {
       const { error } = await updateClientStage(client.id, stage);
-      if (error) toast.error("Couldn't change stage", { description: error });
+      if (error)
+        toast.error(t("controls.toasts.stageFailed"), { description: error });
       else {
-        toast.success("Stage updated");
+        toast.success(t("controls.toasts.stageUpdated"));
         router.refresh();
       }
     });
@@ -63,7 +68,7 @@ export function ClientControls({ client }: { client: Client }) {
     startTransition(async () => {
       const { error } = await setClientPriority(client.id, !client.priority);
       if (error)
-        toast.error("Couldn't update priority", { description: error });
+        toast.error(t("controls.toasts.priorityFailed"), { description: error });
       else router.refresh();
     });
   }
@@ -71,9 +76,12 @@ export function ClientControls({ client }: { client: Client }) {
   function toggleActive(next: boolean) {
     startTransition(async () => {
       const { error } = await setClientActive(client.id, next);
-      if (error) toast.error("Couldn't update", { description: error });
+      if (error)
+        toast.error(t("controls.toasts.updateFailed"), { description: error });
       else {
-        toast.success(next ? "Client reactivated" : "Client hidden");
+        toast.success(
+          next ? t("controls.toasts.reactivated") : t("controls.toasts.hidden")
+        );
         router.refresh();
       }
     });
@@ -84,10 +92,10 @@ export function ClientControls({ client }: { client: Client }) {
     const { error } = await deleteClient(client.id);
     if (error) {
       setDeleting(false);
-      toast.error("Couldn't delete client", { description: error });
+      toast.error(t("controls.toasts.deleteFailed"), { description: error });
       return;
     }
-    toast.success("Client deleted");
+    toast.success(t("controls.toasts.deleted"));
     router.push(clientsPath(side));
   }
 
@@ -100,7 +108,7 @@ export function ClientControls({ client }: { client: Client }) {
         <SelectContent>
           {stagesForSide(side).map((s) => (
             <SelectItem key={s} value={s}>
-              {STAGE_LABELS[s]}
+              {stageLabel(tCrm, s)}
             </SelectItem>
           ))}
         </SelectContent>
@@ -111,7 +119,9 @@ export function ClientControls({ client }: { client: Client }) {
         size="icon"
         onClick={togglePriority}
         disabled={pending}
-        aria-label={client.priority ? "Unflag priority" : "Flag priority"}
+        aria-label={
+          client.priority ? t("priority.unflag") : t("priority.flag")
+        }
       >
         <Star
           className={cn(
@@ -123,7 +133,7 @@ export function ClientControls({ client }: { client: Client }) {
 
       <Button asChild variant="outline">
         <Link href={`/clients/${client.id}/edit`}>
-          <Pencil /> Edit
+          <Pencil /> {tCommon("edit")}
         </Link>
       </Button>
 
@@ -135,7 +145,7 @@ export function ClientControls({ client }: { client: Client }) {
           disabled={pending}
         />
         <Label htmlFor="active" className="text-muted-foreground text-sm">
-          Active
+          {t("controls.active")}
         </Label>
       </div>
 
@@ -145,23 +155,23 @@ export function ClientControls({ client }: { client: Client }) {
             variant="ghost"
             size="icon"
             className="text-muted-foreground hover:text-destructive ml-auto"
-            aria-label="Delete client"
+            aria-label={t("controls.deleteClient")}
           >
             <Trash2 className="size-4" />
           </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete client?</DialogTitle>
+            <DialogTitle>{t("controls.deleteTitle")}</DialogTitle>
             <DialogDescription>
-              This permanently deletes {clientFullName(client)} and all their
-              data — preferences, viewings, offers and documents. This can&apos;t
-              be undone.
+              {t("controls.deleteDescription", {
+                name: clientFullName(client),
+              })}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="ghost">Cancel</Button>
+              <Button variant="ghost">{tCommon("cancel")}</Button>
             </DialogClose>
             <Button
               variant="destructive"
@@ -169,7 +179,7 @@ export function ClientControls({ client }: { client: Client }) {
               disabled={deleting}
             >
               {deleting && <Loader2 className="animate-spin" />}
-              Delete
+              {tCommon("delete")}
             </Button>
           </DialogFooter>
         </DialogContent>

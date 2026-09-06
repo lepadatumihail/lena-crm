@@ -1,6 +1,7 @@
 "use server";
 
 import { getISOWeek, getISOWeekYear } from "date-fns";
+import { getLocale, getTranslations } from "next-intl/server";
 import { z } from "zod";
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
@@ -13,11 +14,12 @@ import {
   formatDateKey,
   formatInTimeZone,
   formatTimeInTimeZone,
-  relativeDayLabel,
 } from "@/lib/attention";
-import { appointmentTitle, type AppointmentType } from "@/lib/calendar";
-import { STAGE_LABELS, type Stage } from "@/lib/crm";
+import type { AppointmentType } from "@/lib/calendar";
 import type { Enums } from "@/lib/supabase/types";
+import { appointmentTitleFor } from "@/i18n/appointments";
+import { intlTag } from "@/i18n/config";
+import { propertyTypeLabel, stageLabel } from "@/i18n/labels";
 
 type ActionResult = { error: string | null };
 type NotificationType = Enums<"notification_type">;
@@ -60,22 +62,39 @@ function one<T>(value: Embedded<T>): T | null {
   if (Array.isArray(value)) return value[0] ?? null;
   return value ?? null;
 }
-function fullName(c: { first_name: string; last_name: string } | null): string {
-  return c ? `${c.first_name} ${c.last_name}`.trim() : "a client";
+type ServerT = Awaited<ReturnType<typeof getTranslations<"server.notifications">>>;
+function fullName(
+  c: { first_name: string; last_name: string } | null,
+  fallback: string
+): string {
+  return c ? `${c.first_name} ${c.last_name}`.trim() : fallback;
+}
+
+function relativeDay(t: ServerT, diff: number): string {
+  if (diff === 0) return t("today");
+  if (diff === 1) return t("tomorrow");
+  return t("inDays", { count: diff });
 }
 
 export async function syncNotifications(
   ctx: SyncContext
 ): Promise<ActionResult> {
-  const supabase = await createSupabase();
+  const [supabase, t, ta, tc, locale] = await Promise.all([
+    createSupabase(),
+    getTranslations("server.notifications"),
+    getTranslations("server.appointments"),
+    getTranslations("crm"),
+    getLocale(),
+  ]);
+  const tag = intlTag(locale);
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { error: "Not authenticated" };
+  if (!user) return { error: t("errors.notAuthenticated") };
   const agentId = user.id;
 
   const parsed = syncContextSchema.safeParse(ctx);
-  if (!parsed.success) return { error: "Invalid sync context" };
+  if (!parsed.success) return { error: t("errors.invalidContext") };
 
   const now = new Date(ctx.nowISO);
   const dayStart = new Date(ctx.dayStartISO);
@@ -147,12 +166,15 @@ export async function syncNotifications(
   for (const a of (apptRes.data ?? []) as unknown as ApptRow[]) {
     const prop = one(a.property);
     const propLabel =
-      a.property_label || prop?.address || prop?.property_type || null;
+      a.property_label ||
+      prop?.address ||
+      (prop?.property_type ? propertyTypeLabel(tc, prop.property_type) : null);
     events.push({
       key: `appt:${a.id}`,
-      title: appointmentTitle(
+      title: appointmentTitleFor(
+        ta,
         { type: a.type, title: a.title },
-        { clientName: fullName(one(a.client)), property: propLabel }
+        { clientName: fullName(one(a.client), ta("aClient")), property: propLabel }
       ),
       starts_at: a.starts_at,
       reminder_minutes: a.reminder_minutes,
@@ -168,7 +190,9 @@ export async function syncNotifications(
       : null;
     events.push({
       key: `viewing:${v.id}`,
-      title: v.title?.trim() || (buyerName ? `Viewing with ${buyerName}` : "Viewing"),
+      title:
+        v.title?.trim() ||
+        (buyerName ? ta("viewingWith", { name: buyerName }) : ta("viewing")),
       starts_at: v.scheduled_at,
       reminder_minutes: v.reminder_minutes,
       client_id: v.client_id,
@@ -187,7 +211,7 @@ export async function syncNotifications(
           agent_id: agentId,
           type: "appointment_reminder",
           title: e.title,
-          body: `${formatInTimeZone(e.starts_at, ctx.timeZone)}${
+          body: `${formatInTimeZone(e.starts_at, ctx.timeZone, tag)}${
             e.location ? ` · ${e.location}` : ""
           }`,
           client_id: e.client_id,
@@ -204,14 +228,14 @@ export async function syncNotifications(
     todays.sort((a, b) => a.starts_at.localeCompare(b.starts_at));
     const lines = todays
       .slice(0, 3)
-      .map((e) => `${formatTimeInTimeZone(e.starts_at, ctx.timeZone)} · ${e.title}`);
-    if (todays.length > 3) lines.push(`+${todays.length - 3} more`);
+      .map(
+        (e) => `${formatTimeInTimeZone(e.starts_at, ctx.timeZone, tag)} · ${e.title}`
+      );
+    if (todays.length > 3) lines.push(t("more", { count: todays.length - 3 }));
     rows.push({
       agent_id: agentId,
       type: "appointment_today",
-      title: `${todays.length} appointment${
-        todays.length > 1 ? "s" : ""
-      } today`,
+      title: t("appointmentsToday", { count: todays.length }),
       body: lines.join("\n"),
       client_id: null,
       appointment_id: null,
@@ -230,15 +254,15 @@ export async function syncNotifications(
       todayKey: ctx.todayKey,
     });
   } catch (e) {
-    return { error: e instanceof Error ? e.message : "Failed to load signals" };
+    return { error: e instanceof Error ? e.message : t("errors.signals") };
   }
 
   for (const o of signals.stalledOffers) {
     rows.push({
       agent_id: agentId,
       type: "stalled_offer",
-      title: `Offer pending · ${o.name}`,
-      body: "Made an offer but isn't reserved yet — worth a nudge.",
+      title: t("offerPending", { name: o.name }),
+      body: t("offerPendingBody"),
       client_id: o.clientId,
       appointment_id: null,
       dedupe_key: `stalled:${o.clientId}:${weekKey}`,
@@ -249,8 +273,11 @@ export async function syncNotifications(
     rows.push({
       agent_id: agentId,
       type: "follow_up",
-      title: `Follow up with ${b.name}`,
-      body: `${STAGE_LABELS[b.stage as Stage] ?? b.stage} · no update in ${b.quietDays} days`,
+      title: t("followUp", { name: b.name }),
+      body: t("followUpBody", {
+        stage: stageLabel(tc, b.stage),
+        days: b.quietDays,
+      }),
       client_id: b.clientId,
       appointment_id: null,
       dedupe_key: `followup:${b.clientId}:${weekKey}`,
@@ -261,8 +288,11 @@ export async function syncNotifications(
     rows.push({
       agent_id: agentId,
       type: "reservation_date",
-      title: `${r.label} · ${r.name}`,
-      body: `${formatDateKey(r.dateStr)} (${relativeDayLabel(r.diff)})`,
+      title: t("keyDate", { label: t(`keyDates.${r.field}`), name: r.name }),
+      body: t("keyDateBody", {
+        date: formatDateKey(r.dateStr, tag),
+        when: relativeDay(t, r.diff),
+      }),
       client_id: r.clientId,
       appointment_id: null,
       dedupe_key: `resdate:${r.clientId}:${r.field}:${r.dateStr}`,

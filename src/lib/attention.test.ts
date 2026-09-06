@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest";
 
 import {
   calendarDaysFromToday,
-  relativeDayLabel,
   formatInTimeZone,
   formatTimeInTimeZone,
   formatDateKey,
@@ -32,20 +31,6 @@ describe("calendarDaysFromToday", () => {
 
   it("rejects a malformed date key", () => {
     expect(() => calendarDaysFromToday("2026-6-14", "2026-06-14")).toThrow();
-  });
-});
-
-describe("relativeDayLabel", () => {
-  it("labels 0 as today", () => {
-    expect(relativeDayLabel(0)).toBe("today");
-  });
-
-  it("labels 1 as tomorrow", () => {
-    expect(relativeDayLabel(1)).toBe("tomorrow");
-  });
-
-  it("labels N as 'in N days'", () => {
-    expect(relativeDayLabel(3)).toBe("in 3 days");
   });
 });
 

@@ -1,9 +1,17 @@
 import { formatCurrency } from "@/lib/crm";
+import enTemplates from "../../messages/en/templates.json";
 
 /**
  * Built-in starting points for 1:1 client messages. Each is a scaffold the
  * agent can send as-is (after {{variable}} fill) or hand to the AI to
  * personalise. Not marketing automation — one message, one client.
+ *
+ * `subject`/`body` are read by the CLIENT, so they stay English here and are
+ * translated (if at all) into the client's own language by the composer. The
+ * agent-facing `label`/`description`/`purpose` live in the `templates` message
+ * catalog, keyed by template id — read them with `templateLabel()` and friends
+ * so they follow the UI language. `MESSAGE_TEMPLATES` carries the English
+ * catalog values as the fallback for callers with no translator to hand.
  */
 export type MessageTemplate = {
   id: string;
@@ -16,62 +24,76 @@ export type MessageTemplate = {
   purpose: string;
 };
 
-export const MESSAGE_TEMPLATES: MessageTemplate[] = [
+/** Agent-facing copy for the built-ins, keyed by id — `templates.builtin.*`. */
+const BUILTIN_COPY = enTemplates.builtin;
+
+export type BuiltinTemplateId = keyof typeof BUILTIN_COPY;
+
+const BUILTIN: { id: BuiltinTemplateId; subject: string; body: string }[] = [
   {
     id: "intro",
-    label: "Introduce yourself",
-    description: "Warm first hello to a new lead",
     subject: "Lovely to connect, {{first_name}}",
-    body: "Hi {{first_name}}, lovely to connect! I help buyers find the right home on the Costa del Sol. Tell me a bit about what you're looking for and I'll get to work.",
-    purpose:
-      "Introduce yourself warmly to a brand-new lead and invite them to share what they're looking for.",
+    body: "Hi {{first_name}}, lovely to connect! I'd love to help you find the right home. Tell me a bit about what you're looking for and I'll get to work.",
   },
   {
     id: "new_matches",
-    label: "New matching listings",
-    description: "Share properties that fit their criteria",
     subject: "A couple of places I think you'll like",
     body: "Hi {{first_name}}, a few new listings just came up that fit what you're after ({{budget}}). Want me to send the details or set up a viewing this week?",
-    purpose:
-      "Tell the buyer that new listings matching their budget and preferences are available and offer to share details or book a viewing.",
   },
   {
     id: "viewing_confirm",
-    label: "Confirm a viewing",
-    description: "Confirm an upcoming appointment",
     subject: "Confirming your viewing",
     body: "Hi {{first_name}}, just confirming our viewing of {{property}}. Looking forward to showing you around — let me know if anything changes.",
-    purpose:
-      "Confirm an upcoming property viewing and reassure them you're looking forward to it.",
   },
   {
     id: "offer_followup",
-    label: "Offer follow-up",
-    description: "Check in after an offer was made",
     subject: "Update on your offer",
     body: "Hi {{first_name}}, just following up on your offer for {{property}}. I'm chasing the other side and will update you the moment I hear back.",
-    purpose:
-      "Follow up on an offer the buyer made, letting them know you're actively chasing a response.",
   },
   {
     id: "reservation_next",
-    label: "Reservation next steps",
-    description: "Walk through what happens next",
     subject: "Next steps on your reservation",
     body: "Hi {{first_name}}, congratulations again! Here's what happens next with the reservation. I'll guide you through each step — shout with any questions.",
-    purpose:
-      "Reassure a buyer who has reserved a property and outline that you'll guide them through the next steps.",
   },
   {
     id: "check_in",
-    label: "Check in / re-engage",
-    description: "Gently reconnect with a quiet lead",
     subject: "Still thinking about a move?",
     body: "Hi {{first_name}}, it's been a little while — are you still on the lookout? The market's moving and I'd love to help when you're ready.",
-    purpose:
-      "Gently re-engage a lead who has gone quiet, without pressure, and offer to help when they're ready.",
   },
 ];
+
+export const MESSAGE_TEMPLATES: MessageTemplate[] = BUILTIN.map((t) => ({
+  ...t,
+  ...BUILTIN_COPY[t.id],
+}));
+
+/**
+ * The `templates` translator (`useTranslations("templates")` /
+ * `await getTranslations("templates")`), narrowed to the built-in copy keys.
+ */
+export type TemplatesT = (
+  key: `builtin.${BuiltinTemplateId}.${"label" | "description" | "purpose"}`,
+  values?: Record<string, string | number>
+) => string;
+
+export function isBuiltinTemplateId(id: string): id is BuiltinTemplateId {
+  return Object.hasOwn(BUILTIN_COPY, id);
+}
+
+/** Translated name of a built-in template; unknown ids pass through. */
+export function templateLabel(t: TemplatesT, id: string): string {
+  return isBuiltinTemplateId(id) ? t(`builtin.${id}.label`) : id;
+}
+
+/** Translated one-liner under a built-in template's name. */
+export function templateDescription(t: TemplatesT, id: string): string {
+  return isBuiltinTemplateId(id) ? t(`builtin.${id}.description`) : "";
+}
+
+/** Translated intent of a built-in template, used to steer the AI rewrite. */
+export function templatePurpose(t: TemplatesT, id: string): string {
+  return isBuiltinTemplateId(id) ? t(`builtin.${id}.purpose`) : "";
+}
 
 export function getTemplate(id: string | null | undefined): MessageTemplate | null {
   if (!id) return null;

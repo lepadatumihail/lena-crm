@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,6 +45,7 @@ import {
   viewingFormSchema,
   type ViewingFormValues,
 } from "@/lib/validation/buyer";
+import { reminderLabel } from "@/i18n/labels";
 import { REMINDER_PRESETS } from "@/lib/calendar";
 import type { Viewing } from "@/lib/supabase/types";
 
@@ -99,8 +101,13 @@ export function ViewingDialog({
   const [submitting, setSubmitting] = useState(false);
   const showBuyerSelect = !clientId;
 
+  const t = useTranslations("clientDetail.viewingDialog");
+  const tCrm = useTranslations("crm");
+  const tCommon = useTranslations("common");
+  const tv = useTranslations("validation");
+  const schema = useMemo(() => viewingFormSchema(tv), [tv]);
   const form = useForm<ViewingFormValues>({
-    resolver: zodResolver(viewingFormSchema),
+    resolver: zodResolver(schema),
     defaultValues: toFormValues(viewing, clientId, defaultDateKey),
   });
 
@@ -114,14 +121,14 @@ export function ViewingDialog({
   async function onSubmit(values: ViewingFormValues) {
     const targetClientId = clientId || values.client_id || "";
     if (!targetClientId) {
-      toast.error("Choose a buyer");
+      toast.error(t("chooseBuyer"));
       return;
     }
     let scheduledAt: string | null = null;
     if (values.date) {
       const dt = new Date(`${values.date}T${values.time || "10:00"}`);
       if (Number.isNaN(dt.getTime())) {
-        toast.error("Invalid date or time");
+        toast.error(t("invalidDateTime"));
         return;
       }
       scheduledAt = dt.toISOString();
@@ -136,10 +143,10 @@ export function ViewingDialog({
     });
     setSubmitting(false);
     if (error) {
-      toast.error("Couldn't save viewing", { description: error });
+      toast.error(t("saveError"), { description: error });
       return;
     }
-    toast.success(viewing ? "Viewing updated" : "Viewing added");
+    toast.success(viewing ? t("updated") : t("added"));
     onOpenChange(false);
     router.refresh();
   }
@@ -149,10 +156,10 @@ export function ViewingDialog({
     const targetClientId = clientId || viewing.client_id;
     const { error } = await deleteViewing(targetClientId, viewing.id);
     if (error) {
-      toast.error("Couldn't delete", { description: error });
+      toast.error(t("deleteError"), { description: error });
       return false;
     }
-    toast.success("Viewing deleted");
+    toast.success(t("deleted"));
     onOpenChange(false);
     router.refresh();
     return true;
@@ -162,11 +169,8 @@ export function ViewingDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{viewing ? "Edit viewing" : "Add viewing"}</DialogTitle>
-          <DialogDescription>
-            Log a property this buyer viewed — add a date to show it on your
-            calendar.
-          </DialogDescription>
+          <DialogTitle>{viewing ? t("edit") : t("add")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -176,20 +180,20 @@ export function ViewingDialog({
                 name="client_id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Buyer</FormLabel>
+                    <FormLabel>{t("buyer")}</FormLabel>
                     <Select
                       value={field.value || ""}
                       onValueChange={field.onChange}
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select a buyer…" />
+                          <SelectValue placeholder={t("buyerPlaceholder")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {(buyers ?? []).length === 0 ? (
                           <div className="text-muted-foreground px-2 py-1.5 text-sm">
-                            No buyers yet
+                            {t("noBuyers")}
                           </div>
                         ) : (
                           (buyers ?? []).map((b) => (
@@ -211,10 +215,10 @@ export function ViewingDialog({
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Property title</FormLabel>
+                  <FormLabel>{t("propertyTitle")}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="3-bed apartment, Nueva Andalucía"
+                      placeholder={t("propertyTitlePlaceholder")}
                       {...field}
                     />
                   </FormControl>
@@ -227,9 +231,13 @@ export function ViewingDialog({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>{t("descriptionLabel")}</FormLabel>
                   <FormControl>
-                    <Textarea rows={2} placeholder="Notes about the property…" {...field} />
+                    <Textarea
+                      rows={2}
+                      placeholder={t("descriptionPlaceholder")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -240,7 +248,7 @@ export function ViewingDialog({
               name="property_price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Asking price (€)</FormLabel>
+                  <FormLabel>{t("askingPrice")}</FormLabel>
                   <FormControl>
                     <PriceInput
                       placeholder="750.000"
@@ -259,7 +267,7 @@ export function ViewingDialog({
               name="date"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date (optional)</FormLabel>
+                  <FormLabel>{t("date")}</FormLabel>
                   <DatePicker
                     value={field.value ?? ""}
                     onChange={field.onChange}
@@ -273,14 +281,14 @@ export function ViewingDialog({
               name="time"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Time</FormLabel>
+                  <FormLabel>{t("time")}</FormLabel>
                   <TimePicker value={field.value} onChange={field.onChange} />
                   <FormMessage />
                 </FormItem>
               )}
             />
             <p className="text-muted-foreground -mt-2 text-xs">
-              Set a date to show this viewing on your calendar.
+              {t("calendarHint")}
             </p>
 
             <FormField
@@ -288,7 +296,7 @@ export function ViewingDialog({
               name="reminder"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Reminder</FormLabel>
+                  <FormLabel>{t("reminder")}</FormLabel>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger className="w-full">
@@ -297,8 +305,11 @@ export function ViewingDialog({
                     </FormControl>
                     <SelectContent>
                       {REMINDER_PRESETS.map((p) => (
-                        <SelectItem key={p.label} value={reminderValue(p.value)}>
-                          {p.label}
+                        <SelectItem
+                          key={reminderValue(p.value)}
+                          value={reminderValue(p.value)}
+                        >
+                          {reminderLabel(tCrm, p.value)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -312,7 +323,7 @@ export function ViewingDialog({
               name="had_offer"
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
-                  <Label htmlFor="had_offer">Made an offer</Label>
+                  <Label htmlFor="had_offer">{t("madeOffer")}</Label>
                   <FormControl>
                     <Switch
                       id="had_offer"
@@ -330,7 +341,7 @@ export function ViewingDialog({
                 name="offer_price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Offer price (€)</FormLabel>
+                    <FormLabel>{t("offerPrice")}</FormLabel>
                     <FormControl>
                       <PriceInput
                         placeholder="710.000"
@@ -348,8 +359,8 @@ export function ViewingDialog({
             <DialogFooter className="gap-2 sm:justify-between">
               {viewing ? (
                 <ConfirmDialog
-                  title="Delete viewing?"
-                  description="This removes the viewing and its attachments. This can’t be undone."
+                  title={t("deleteConfirmTitle")}
+                  description={t("deleteConfirmDescription")}
                   onConfirm={onDelete}
                   trigger={
                     <Button
@@ -357,7 +368,7 @@ export function ViewingDialog({
                       variant="ghost"
                       className="text-muted-foreground hover:text-destructive"
                     >
-                      <Trash2 /> Delete
+                      <Trash2 /> {tCommon("delete")}
                     </Button>
                   }
                 />
@@ -370,11 +381,11 @@ export function ViewingDialog({
                   variant="ghost"
                   onClick={() => onOpenChange(false)}
                 >
-                  Cancel
+                  {tCommon("cancel")}
                 </Button>
                 <Button type="submit" disabled={submitting}>
                   {submitting && <Loader2 className="animate-spin" />}
-                  {viewing ? "Save" : "Add viewing"}
+                  {viewing ? tCommon("save") : t("add")}
                 </Button>
               </div>
             </DialogFooter>

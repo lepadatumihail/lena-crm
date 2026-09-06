@@ -1,0 +1,63 @@
+{
+  "title": "Admin",
+  "subtitle": "Founding cohort, plans and referrals. Until Stripe webhooks are live, payments are recorded here by hand.",
+  "stats": {
+    "founders": "Founding Agents allocated. Numbers go to the first {cap} paying agents, in order of payment.",
+    "agents": "Agents signed up. Free holds {limit} clients; Pro is unlimited."
+  },
+  "agents": {
+    "title": "Agents",
+    "description": "\"Paid invoice\" does what the Stripe webhook will do: marks them subscribed and counts the invoice towards their referrer's reward. \"Comp\" gives Pro time from the backend, no card involved.",
+    "columns": {
+      "agent": "Agent",
+      "plan": "Plan",
+      "status": "Status",
+      "clients": "Clients",
+      "stripe": "Stripe",
+      "actions": "Actions"
+    },
+    "proComped": "Pro · comped",
+    "pro": "Pro",
+    "free": "Free",
+    "founding": "Founding #{number}",
+    "admin": "admin",
+    "until": "until {date}",
+    "atCap": "at cap",
+    "paidInvoice": "Paid invoice",
+    "makeFounder": "Make founder",
+    "monthsToComp": "Months to comp",
+    "comp": "Comp",
+    "set": "Set"
+  },
+  "referrals": {
+    "title": "Referrals",
+    "description": "Qualifies at the referred agent's second paid invoice; both sides then get a free month.",
+    "columns": {
+      "referrer": "Referrer",
+      "referred": "Referred",
+      "status": "Status",
+      "paidInvoices": "Paid invoices",
+      "rewarded": "Rewarded"
+    },
+    "empty": "No referrals yet."
+  },
+  "credits": {
+    "title": "Free months",
+    "description": "Balance credits are pushed to Stripe once the agent has a Stripe customer. Comped Pro time is applied the moment it is granted.",
+    "columns": {
+      "agent": "Agent",
+      "kind": "Kind",
+      "value": "Value",
+      "reason": "Reason",
+      "applied": "Applied"
+    },
+    "empty": "No free months yet.",
+    "kind": {
+      "proTime": "pro time",
+      "balance": "balance"
+    },
+    "months": "{count, plural, one {# month} other {# months}}",
+    "applied": "applied",
+    "pending": "pending"
+  }
+}

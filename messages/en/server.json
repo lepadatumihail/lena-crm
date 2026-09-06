@@ -1,0 +1,34 @@
+{
+  "appointments": {
+    "aClient": "a client",
+    "viewing": "Viewing",
+    "viewingWith": "Viewing with {name}",
+    "viewingAt": "Viewing @ {place}",
+    "viewingWithAt": "Viewing · {name} @ {place}",
+    "meeting": "Meeting",
+    "meetingWith": "Meeting with {name}"
+  },
+  "notifications": {
+    "appointmentsToday": "{count, plural, one {# appointment today} other {# appointments today}}",
+    "more": "+{count} more",
+    "offerPending": "Offer pending · {name}",
+    "offerPendingBody": "Made an offer but isn't reserved yet — worth a nudge.",
+    "followUp": "Follow up with {name}",
+    "followUpBody": "{stage} · no update in {days, plural, one {# day} other {# days}}",
+    "keyDate": "{label} · {name}",
+    "keyDateBody": "{date} ({when})",
+    "keyDates": {
+      "ppc": "PPC payment",
+      "notary": "Notary",
+      "downpayment": "Down payment"
+    },
+    "today": "today",
+    "tomorrow": "tomorrow",
+    "inDays": "in {count, plural, one {# day} other {# days}}",
+    "errors": {
+      "notAuthenticated": "Not authenticated",
+      "invalidContext": "Invalid sync context",
+      "signals": "Failed to load signals"
+    }
+  }
+}

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   Building2,
   Calculator,
@@ -19,6 +20,7 @@ import { signOut } from "@/lib/actions/auth";
 import { clientsPath, type ClientSide } from "@/lib/crm";
 import { cn } from "@/lib/utils";
 import { LogoMark, Wordmark } from "@/components/brand/logo";
+import { LocaleSelect } from "@/components/locale-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -34,8 +36,8 @@ import {
 } from "@/components/ui/sidebar";
 
 const PIPELINE = [
-  { side: "buyer", label: "Buyers", icon: Users },
-  { side: "seller", label: "Sellers", icon: Building2 },
+  { side: "buyer", labelKey: "buyers", icon: Users },
+  { side: "seller", labelKey: "sellers", icon: Building2 },
 ] as const;
 
 const ACTIVE_CLASSES =
@@ -61,6 +63,7 @@ export function AppSidebar({
   foundingNumber?: number | null;
   plan?: SidebarPlan | null;
 }) {
+  const t = useTranslations("nav");
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
   // Close the mobile drawer (a Sheet) whenever a nav item is tapped — including
@@ -100,12 +103,12 @@ export function AppSidebar({
                 <SidebarMenuButton
                   asChild
                   isActive={onHome}
-                  tooltip="Home"
+                  tooltip={t("home")}
                   className={ACTIVE_CLASSES}
                 >
                   <Link href="/home" onClick={closeMobile}>
                     <Home />
-                    <span>Home</span>
+                    <span>{t("home")}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -114,12 +117,12 @@ export function AppSidebar({
                   <SidebarMenuButton
                     asChild
                     isActive={activeSide === item.side}
-                    tooltip={item.label}
+                    tooltip={t(item.labelKey)}
                     className={ACTIVE_CLASSES}
                   >
                     <Link href={clientsPath(item.side)} onClick={closeMobile}>
                       <item.icon />
-                      <span>{item.label}</span>
+                      <span>{t(item.labelKey)}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -128,12 +131,12 @@ export function AppSidebar({
                 <SidebarMenuButton
                   asChild
                   isActive={onCalendar}
-                  tooltip="Calendar"
+                  tooltip={t("calendar")}
                   className={ACTIVE_CLASSES}
                 >
                   <Link href="/calendar" onClick={closeMobile}>
                     <CalendarDays />
-                    <span>Calendar</span>
+                    <span>{t("calendar")}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -141,12 +144,12 @@ export function AppSidebar({
                 <SidebarMenuButton
                   asChild
                   isActive={onTemplates}
-                  tooltip="Templates"
+                  tooltip={t("templates")}
                   className={ACTIVE_CLASSES}
                 >
                   <Link href="/templates" onClick={closeMobile}>
                     <FileText />
-                    <span>Templates</span>
+                    <span>{t("templates")}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -154,12 +157,12 @@ export function AppSidebar({
                 <SidebarMenuButton
                   asChild
                   isActive={onCalculator}
-                  tooltip="Calculator"
+                  tooltip={t("calculator")}
                   className={ACTIVE_CLASSES}
                 >
                   <Link href="/calculator" onClick={closeMobile}>
                     <Calculator />
-                    <span>Calculator</span>
+                    <span>{t("calculator")}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -167,12 +170,12 @@ export function AppSidebar({
                 <SidebarMenuButton
                   asChild
                   isActive={onReferrals}
-                  tooltip="Referrals"
+                  tooltip={t("referrals")}
                   className={ACTIVE_CLASSES}
                 >
                   <Link href="/referrals" onClick={closeMobile}>
                     <Gift />
-                    <span>Referrals</span>
+                    <span>{t("referrals")}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -180,12 +183,12 @@ export function AppSidebar({
                 <SidebarMenuButton
                   asChild
                   isActive={onBilling}
-                  tooltip="Billing"
+                  tooltip={t("billing")}
                   className={ACTIVE_CLASSES}
                 >
                   <Link href="/billing" onClick={closeMobile}>
                     <CreditCard />
-                    <span>Billing</span>
+                    <span>{t("billing")}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -194,12 +197,12 @@ export function AppSidebar({
                   <SidebarMenuButton
                     asChild
                     isActive={onAdmin}
-                    tooltip="Admin"
+                    tooltip={t("admin")}
                     className={ACTIVE_CLASSES}
                   >
                     <Link href="/admin" onClick={closeMobile}>
                       <ShieldCheck />
-                      <span>Admin</span>
+                      <span>{t("admin")}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -213,18 +216,21 @@ export function AppSidebar({
         {plan ? <PlanMeter plan={plan} onNavigate={closeMobile} /> : null}
         {foundingNumber != null ? (
           <div className="text-primary truncate px-2 text-xs font-medium group-data-[collapsible=icon]:hidden">
-            Founding Agent #{foundingNumber}
+            {t("foundingAgent", { number: foundingNumber })}
           </div>
         ) : null}
         <div className="text-muted-foreground truncate px-2 text-xs group-data-[collapsible=icon]:hidden">
           {email}
         </div>
+        <div className="px-1 group-data-[collapsible=icon]:hidden">
+          <LocaleSelect />
+        </div>
         <SidebarMenu>
           <SidebarMenuItem>
             <form action={signOut}>
-              <SidebarMenuButton type="submit" tooltip="Sign out">
+              <SidebarMenuButton type="submit" tooltip={t("signOut")}>
                 <LogOut />
-                <span>Sign out</span>
+                <span>{t("signOut")}</span>
               </SidebarMenuButton>
             </form>
           </SidebarMenuItem>
@@ -238,6 +244,7 @@ export function AppSidebar({
 
 /** Free: a "2 of 3 clients" bar linking to the plans page. Pro: a quiet badge linking to billing. */
 function PlanMeter({ plan, onNavigate }: { plan: SidebarPlan; onNavigate: () => void }) {
+  const t = useTranslations("nav.plan");
   const limit = plan.limit ?? 0;
   const used = Math.min(plan.clientCount, limit);
   const atCap = plan.tier === "free" && plan.clientCount >= limit;
@@ -250,20 +257,25 @@ function PlanMeter({ plan, onNavigate }: { plan: SidebarPlan; onNavigate: () => 
       {plan.tier === "pro" ? (
         <>
           <div className="text-primary font-medium">
-            Pro{plan.source === "comp" ? " · comped" : plan.source === "admin" ? " · admin" : ""}
+            {t("pro")}
+            {plan.source === "comp"
+              ? ` · ${t("comped")}`
+              : plan.source === "admin"
+                ? ` · ${t("admin")}`
+                : ""}
           </div>
           <div className="text-muted-foreground">
             {plan.source === "comp" && plan.proUntilLabel
-              ? `Until ${plan.proUntilLabel}`
-              : "Unlimited clients"}
+              ? t("until", { date: plan.proUntilLabel })
+              : t("unlimited")}
           </div>
         </>
       ) : (
         <>
           <div className="flex items-center justify-between">
-            <span className="font-medium">Free</span>
+            <span className="font-medium">{t("free")}</span>
             <span className="text-muted-foreground tabular-nums">
-              {used} of {limit} clients
+              {t("usage", { used, limit })}
             </span>
           </div>
           <div className="bg-sidebar-border mt-1.5 h-1.5 overflow-hidden rounded-full">
@@ -273,7 +285,7 @@ function PlanMeter({ plan, onNavigate }: { plan: SidebarPlan; onNavigate: () => 
             />
           </div>
           {atCap ? (
-            <div className="text-muted-foreground mt-1">Upgrade to add more</div>
+            <div className="text-muted-foreground mt-1">{t("upgrade")}</div>
           ) : null}
         </>
       )}

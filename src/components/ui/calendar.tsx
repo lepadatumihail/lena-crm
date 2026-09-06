@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 
+import { dateFnsLocale } from "@/i18n/dates";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
@@ -11,11 +13,23 @@ function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  locale,
+  labels,
   ...props
 }: React.ComponentProps<typeof DayPicker>) {
+  const uiLocale = useLocale();
+  const t = useTranslations("common.calendar");
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      // Month and weekday names follow the agent's UI language unless a caller
+      // pins a locale of its own.
+      locale={locale ?? dateFnsLocale(uiLocale)}
+      labels={{
+        labelPrevious: () => t("previousMonth"),
+        labelNext: () => t("nextMonth"),
+        ...labels,
+      }}
       className={cn("relative p-3", className)}
       classNames={{
         months: "relative flex flex-col gap-4 sm:flex-row",

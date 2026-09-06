@@ -1,0 +1,30 @@
+{
+  "home": "Home",
+  "buyers": "Buyers",
+  "sellers": "Sellers",
+  "calendar": "Calendar",
+  "templates": "Templates",
+  "calculator": "Calculator",
+  "referrals": "Referrals",
+  "billing": "Billing",
+  "admin": "Admin",
+  "signOut": "Sign out",
+  "language": "Language",
+  "foundingAgent": "Founding Agent #{number}",
+  "plan": {
+    "pro": "Pro",
+    "comped": "comped",
+    "admin": "admin",
+    "until": "Until {date}",
+    "unlimited": "Unlimited clients",
+    "free": "Free",
+    "usage": "{used} of {limit} clients",
+    "upgrade": "Upgrade to add more"
+  },
+  "marketing": {
+    "howItWorks": "How it works",
+    "pricing": "Pricing",
+    "signIn": "Sign in",
+    "backHome": "Back to home"
+  }
+}

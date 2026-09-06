@@ -1,0 +1,17 @@
+{
+  "bell": {
+    "aria": "Notificaciones",
+    "ariaUnread": "Notificaciones ({count} sin leer)",
+    "title": "Notificaciones",
+    "markAllRead": "Marcar todo como leído",
+    "empty": "Estás al día.",
+    "hasMore": "Mostrando tus notificaciones más recientes",
+    "types": {
+      "appointment_reminder": "Recordatorio",
+      "appointment_today": "Hoy",
+      "follow_up": "Seguimiento",
+      "reservation_date": "Fecha clave",
+      "stalled_offer": "Oferta"
+    }
+  }
+}

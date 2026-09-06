@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import {
   ArrowRight,
   Check,
@@ -22,17 +23,20 @@ import { HowItWorks } from "@/components/landing/how-it-works";
 import { FeatureDeepDives } from "@/components/landing/feature-deep-dives";
 import { AppPreview } from "@/components/landing/app-preview";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
+import { BUYER_STAGES } from "@/lib/crm";
+import { stageLabel } from "@/i18n/labels";
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { FOUNDING_CAP, PRICES, yearlySavingPct } from "@/lib/billing";
 import { Logo } from "@/components/brand/logo";
 
-const BUYER_STEPS = ["New", "Contacted", "Qualified", "Viewing", "Reserved"];
+const BUYER_STEPS = BUYER_STAGES;
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
 // Structured data for the marketing page: who we are and what the product is.
+// Kept in English on purpose — search engines index the canonical copy.
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -87,6 +91,11 @@ const jsonLd = {
 };
 
 export default function Home() {
+  const t = useTranslations("landing");
+  const tSite = useTranslations("site");
+  const tCrm = useTranslations("crm");
+  const tCommon = useTranslations("common");
+
   return (
     <div className="flex flex-1 flex-col">
       <AuthErrorListener />
@@ -115,32 +124,31 @@ export default function Home() {
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center px-4 pt-16 pb-12 text-center animate-[fade-up_0.7s_ease-out_both] motion-reduce:animate-none sm:pt-24">
           <Badge variant="secondary" className="mb-5 gap-1.5 px-3 py-1">
             <Sparkles className="size-3.5" />
-            Built for independent agents
+            {t("hero.badge")}
           </Badge>
           <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
-            Your clients, properties, and offers.{" "}
-            <span className="from-primary bg-gradient-to-r to-[oklch(0.66_0.12_46)] bg-clip-text text-transparent">
-              Made simple.
-            </span>
+            {t.rich("hero.title", {
+              accent: (chunks) => (
+                <span className="from-primary bg-gradient-to-r to-[oklch(0.66_0.12_46)] bg-clip-text text-transparent">
+                  {chunks}
+                </span>
+              ),
+            })}
           </h1>
           <p className="text-muted-foreground mt-5 max-w-xl text-lg text-pretty">
-            LeadWing is the CRM for independent real-estate agents on the Costa del
-            Sol. Track every buyer and seller from first hello to keys in hand —
-            across all the agencies you work with, in one place.
+            {tSite("description")}
           </p>
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
             <Button asChild size="lg">
               <Link href="/login">
-                Get started <ArrowRight />
+                {t("hero.ctaPrimary")} <ArrowRight />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link href="#how-it-works">See how it works</Link>
+              <Link href="#how-it-works">{t("hero.ctaSecondary")}</Link>
             </Button>
           </div>
-          <p className="text-muted-foreground mt-4 text-sm">
-            No password — sign in with Google or a one-time code.
-          </p>
+          <p className="text-muted-foreground mt-4 text-sm">{t("hero.note")}</p>
 
           <AppPreview />
         </div>
@@ -153,12 +161,9 @@ export default function Home() {
       >
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight">
-            Everything a deal needs, nothing it doesn&apos;t
+            {t("features.heading")}
           </h2>
-          <p className="text-muted-foreground mt-3">
-            Spreadsheets and scattered chats don&apos;t scale. LeadWing gives every
-            lead a place — and a next step.
-          </p>
+          <p className="text-muted-foreground mt-3">{t("features.body")}</p>
         </div>
 
         <FeatureGrid />
@@ -171,15 +176,12 @@ export default function Home() {
       >
         <div className="mx-auto max-w-2xl text-center">
           <Badge variant="secondary" className="mb-4">
-            How it works
+            {t("howItWorks.badge")}
           </Badge>
           <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Three steps from hello to keys in hand
+            {t("howItWorks.heading")}
           </h2>
-          <p className="text-muted-foreground mt-3">
-            Add a client, move them through the pipeline, and let LeadWing handle
-            the follow-up. The whole job, in the order you actually work it.
-          </p>
+          <p className="text-muted-foreground mt-3">{t("howItWorks.body")}</p>
         </div>
 
         <HowItWorks />
@@ -192,11 +194,10 @@ export default function Home() {
       <section className="bg-muted/40 border-y">
         <div className="mx-auto w-full max-w-6xl px-4 py-16 text-center">
           <h2 className="text-3xl font-semibold tracking-tight">
-            From lead to reserved, at a glance
+            {t("pipelineStrip.heading")}
           </h2>
           <p className="text-muted-foreground mx-auto mt-3 max-w-xl">
-            Every buyer follows a simple journey. Move them forward and the
-            right details unlock at each step.
+            {t("pipelineStrip.body")}
           </p>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
@@ -206,7 +207,7 @@ export default function Home() {
                   <span className="bg-primary/10 text-primary flex size-5 items-center justify-center rounded-full text-xs font-semibold">
                     {i + 1}
                   </span>
-                  {step}
+                  {stageLabel(tCrm, step)}
                 </div>
                 {i < BUYER_STEPS.length - 1 && (
                   <ArrowRight className="text-muted-foreground/50 size-4" />
@@ -215,8 +216,7 @@ export default function Home() {
             ))}
           </div>
           <p className="text-muted-foreground mt-6 text-sm">
-            Sellers get their own flow too — pending to qualified, with every
-            listing attached.
+            {t("pipelineStrip.note")}
           </p>
         </div>
       </section>
@@ -225,40 +225,38 @@ export default function Home() {
       <section className="mx-auto w-full max-w-6xl px-4 py-16">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Badge variant="secondary" className="mb-4">
-            Built to stay simple
+            {t("simple.badge")}
           </Badge>
           <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Everything you need. Nothing you don&apos;t.
+            {t("simple.heading")}
           </h2>
-          <p className="text-muted-foreground mt-3">
-            Most CRMs are built for big brokerages and bury solo agents in tools
-            they&apos;ll never touch. LeadWing is the opposite — the essentials,
-            done well, and we leave the rest out on purpose.
-          </p>
+          <p className="text-muted-foreground mt-3">{t("simple.body")}</p>
         </Reveal>
 
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           <Reveal>
             <div className="bg-card h-full rounded-2xl border p-6">
               <h3 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-                Left out — on purpose
+                {t("simple.leftOutTitle")}
               </h3>
               <ul className="mt-4 space-y-2.5">
-                {[
-                  "IDX website builders",
-                  "Power dialers & call centres",
-                  "Team leaderboards & lead-routing rules",
-                  "200-app integration marketplaces",
-                  "Analytics dashboards no one opens",
-                  "Per-seat enterprise pricing",
-                ].map((t) => (
+                {(
+                  [
+                    "idx",
+                    "dialers",
+                    "leaderboards",
+                    "marketplaces",
+                    "dashboards",
+                    "perSeat",
+                  ] as const
+                ).map((key) => (
                   <li
-                    key={t}
+                    key={key}
                     className="text-muted-foreground flex items-center gap-2.5 text-sm"
                   >
                     <X className="text-muted-foreground/50 size-4 shrink-0" />
                     <span className="decoration-muted-foreground/40 line-through">
-                      {t}
+                      {t(`simple.leftOut.${key}`)}
                     </span>
                   </li>
                 ))}
@@ -269,23 +267,25 @@ export default function Home() {
           <Reveal delay={80}>
             <div className="bg-card border-primary/30 h-full rounded-2xl border p-6 shadow-sm">
               <h3 className="text-primary text-xs font-semibold tracking-wide uppercase">
-                What you actually get
+                {t("simple.includedTitle")}
               </h3>
               <ul className="mt-4 space-y-2.5">
-                {[
-                  "Every client in a clear pipeline",
-                  "Follow-ups that write themselves",
-                  "Properties, viewings & offers together",
-                  "Documents filed against each client",
-                  "Installable on your phone",
-                  "One place for every agency you work with",
-                ].map((t) => (
+                {(
+                  [
+                    "pipeline",
+                    "followUps",
+                    "properties",
+                    "documents",
+                    "installable",
+                    "agencies",
+                  ] as const
+                ).map((key) => (
                   <li
-                    key={t}
+                    key={key}
                     className="flex items-center gap-2.5 text-sm font-medium"
                   >
                     <Check className="text-primary size-4 shrink-0" />
-                    {t}
+                    {t(`simple.included.${key}`)}
                   </li>
                 ))}
               </ul>
@@ -295,8 +295,7 @@ export default function Home() {
 
         <Reveal>
           <p className="text-muted-foreground mt-8 text-center text-sm">
-            Not yet another CRM — the only simple one you&apos;ll actually keep
-            using.
+            {t("simple.note")}
           </p>
         </Reveal>
       </section>
@@ -305,16 +304,17 @@ export default function Home() {
       <section className="mx-auto w-full max-w-6xl px-4 py-16">
         <Reveal className="mx-auto max-w-4xl text-center">
           <Badge variant="secondary" className="mb-4 gap-1.5">
-            <Sparkles className="size-3.5" /> Built in · AI
+            <Sparkles className="size-3.5" /> {t("ai.badge")}
           </Badge>
           <h2 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-            Stop chasing. Let LeadWing do the{" "}
-            <span className="whitespace-nowrap">follow-ups.</span>
+            {t.rich("ai.heading", {
+              nowrap: (chunks) => (
+                <span className="whitespace-nowrap">{chunks}</span>
+              ),
+            })}
           </h2>
           <p className="text-muted-foreground mx-auto mt-3 max-w-xl">
-            The part every agent dreads — remembering who to email and what to
-            say — handled for you. You stay in control: LeadWing drafts, you
-            approve. No more doing it by hand.
+            {t("ai.body")}
           </p>
         </Reveal>
 
@@ -325,15 +325,10 @@ export default function Home() {
                 <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-lg">
                   <Mail className="size-5" />
                 </div>
-                <h3 className="text-lg font-semibold">
-                  AI-written, per-client emails
-                </h3>
+                <h3 className="text-lg font-semibold">{t("ai.email.title")}</h3>
               </div>
               <p className="text-muted-foreground mt-3 text-sm">
-                LeadWing writes a warm, personal email for each client — in their
-                language, referencing their budget, the properties they&apos;ve
-                seen, and where they are in the journey. No blank page, no
-                copy-paste. You review and send.
+                {t("ai.email.body")}
               </p>
 
               <div
@@ -341,11 +336,15 @@ export default function Home() {
                 className="bg-muted/40 mt-5 rounded-xl border p-3"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium">To: Sofia Müller</span>
+                  <span className="text-xs font-medium">
+                    {t("mock.to", { name: "Sofia Müller" })}
+                  </span>
                   <span className="bg-primary/10 text-primary inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium">
-                    <Sparkles className="size-3" /> AI draft · German
+                    <Sparkles className="size-3" /> {t("mock.aiDraft")}
                   </span>
                 </div>
+                {/* Sample client-facing message: written in the client's own
+                    language, so it stays German in every UI language. */}
                 <div className="bg-background text-muted-foreground mt-2 rounded-lg border p-3 text-xs leading-relaxed">
                   <p className="text-foreground">Hallo Sofia,</p>
                   <p className="mt-1">
@@ -357,10 +356,10 @@ export default function Home() {
                 </div>
                 <div className="mt-2 flex justify-end gap-1.5">
                   <span className="rounded-md border px-2 py-1 text-[10px] font-medium">
-                    Edit
+                    {tCommon("edit")}
                   </span>
                   <span className="bg-primary text-primary-foreground inline-flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium">
-                    <Send className="size-3" /> Send
+                    <Send className="size-3" /> {tCommon("send")}
                   </span>
                 </div>
               </div>
@@ -373,15 +372,10 @@ export default function Home() {
                 <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-lg">
                   <Clock className="size-5" />
                 </div>
-                <h3 className="text-lg font-semibold">
-                  Auto-engage forgotten clients
-                </h3>
+                <h3 className="text-lg font-semibold">{t("ai.nudge.title")}</h3>
               </div>
               <p className="text-muted-foreground mt-3 text-sm">
-                Leads go cold when they slip your mind. LeadWing watches for clients
-                going quiet and surfaces them before you lose them — with a
-                ready-to-send nudge. No spreadsheets, no reminders, nothing
-                falling through the cracks.
+                {t("ai.nudge.body")}
               </p>
 
               <div
@@ -389,17 +383,21 @@ export default function Home() {
                 className="bg-muted/40 mt-5 rounded-xl border p-3"
               >
                 <div className="mb-2 flex items-center justify-between px-1">
-                  <span className="text-xs font-semibold">Needs a nudge</span>
+                  <span className="text-xs font-semibold">
+                    {t("mock.needsNudge")}
+                  </span>
                   <span className="bg-warning/20 text-warning rounded-full px-1.5 text-[10px] font-medium">
                     3
                   </span>
                 </div>
                 <div className="space-y-1.5">
-                  {[
-                    { n: "James Carter", s: "Qualified", d: "21 days quiet" },
-                    { n: "Lars Nielsen", s: "Viewing", d: "16 days quiet" },
-                    { n: "Anya Petrova", s: "Qualified", d: "12 days quiet" },
-                  ].map((r) => (
+                  {(
+                    [
+                      { n: "James Carter", s: "qualified", d: 21 },
+                      { n: "Lars Nielsen", s: "viewing", d: 16 },
+                      { n: "Anya Petrova", s: "qualified", d: 12 },
+                    ] as const
+                  ).map((r) => (
                     <div
                       key={r.n}
                       className="bg-background flex items-center justify-between gap-2 rounded-lg border p-2"
@@ -407,11 +405,12 @@ export default function Home() {
                       <div className="min-w-0">
                         <p className="truncate text-xs font-medium">{r.n}</p>
                         <p className="text-muted-foreground text-[10px]">
-                          {r.s} · {r.d}
+                          {stageLabel(tCrm, r.s)} ·{" "}
+                          {t("mock.quiet", { days: r.d })}
                         </p>
                       </div>
                       <span className="bg-primary/10 text-primary inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium">
-                        <Sparkles className="size-3" /> Draft
+                        <Sparkles className="size-3" /> {t("mock.draft")}
                       </span>
                     </div>
                   ))}
@@ -427,18 +426,18 @@ export default function Home() {
         <div className="grid gap-5 sm:grid-cols-3">
           <TrustItem
             icon={Smartphone}
-            title="Works everywhere"
-            body="Desktop and mobile, and installable as an app on your phone's home screen."
+            title={t("trust.everywhere.title")}
+            body={t("trust.everywhere.body")}
           />
           <TrustItem
             icon={ShieldCheck}
-            title="Your data, yours only"
-            body="Every agent's clients are fully isolated. Nobody sees your book but you."
+            title={t("trust.data.title")}
+            body={t("trust.data.body")}
           />
           <TrustItem
             icon={Check}
-            title="Nothing to set up"
-            body="Sign in and start adding clients. No training, no clutter, no per-seat sales calls."
+            title={t("trust.setup.title")}
+            body={t("trust.setup.body")}
           />
         </div>
       </section>
@@ -449,47 +448,54 @@ export default function Home() {
           <Reveal>
             <div className="text-center">
               <h2 className="text-3xl font-semibold tracking-tight">
-                Free to start. One plan when you grow.
+                {t("pricing.heading")}
               </h2>
               <p className="text-muted-foreground mx-auto mt-3 max-w-xl">
-                Every feature on both plans. The only difference is how many
-                clients you can hold.
+                {t("pricing.body")}
               </p>
             </div>
           </Reveal>
           <div className="mx-auto mt-10 grid max-w-3xl gap-5 sm:grid-cols-2">
             <Reveal>
               <PlanCard
-                name="Free"
-                price="€0"
-                period="forever"
+                name={t("pricing.free.name")}
+                price={t("pricing.free.price")}
+                period={t("pricing.free.period")}
+                cta={t("pricing.ctaFree")}
                 items={[
-                  `Up to ${FREE_CLIENT_LIMIT} clients, buyers and sellers together`,
-                  "Every feature, nothing gated",
-                  "No card, no time limit",
+                  t("pricing.free.limit", { limit: FREE_CLIENT_LIMIT }),
+                  t("pricing.free.allFeatures"),
+                  t("pricing.free.noCard"),
                 ]}
               />
             </Reveal>
             <Reveal delay={100}>
               <PlanCard
                 highlighted
-                name="Pro"
-                price={`€${PRICES.standard.monthly}`}
-                period="per month + IVA"
-                note={`or €${PRICES.standard.yearly} a year, save ${yearlySavingPct("standard")}%`}
+                name={t("pricing.pro.name")}
+                price={t("pricing.pro.price", {
+                  amount: PRICES.standard.monthly,
+                })}
+                period={t("pricing.pro.period")}
+                note={t("pricing.pro.note", {
+                  yearly: PRICES.standard.yearly,
+                  pct: yearlySavingPct("standard"),
+                })}
+                cta={t("pricing.ctaPro")}
                 items={[
-                  "Unlimited clients",
-                  "Everything in Free",
-                  "A free month for every agent you refer",
+                  t("pricing.pro.unlimited"),
+                  t("pricing.pro.everythingFree"),
+                  t("pricing.pro.referral"),
                 ]}
               />
             </Reveal>
           </div>
           <Reveal>
             <p className="text-muted-foreground mx-auto mt-8 max-w-xl text-center text-sm">
-              The first {FOUNDING_CAP} paying agents lock Pro at €
-              {PRICES.founding.monthly} a month for life. Sign in to see how many
-              founding spots are left.
+              {t("pricing.founding", {
+                cap: FOUNDING_CAP,
+                price: PRICES.founding.monthly,
+              })}
             </p>
           </Reveal>
         </div>
@@ -499,14 +505,11 @@ export default function Home() {
       <section className="mx-auto w-full max-w-6xl px-4 pb-16">
         <Reveal>
           <div className="from-primary/10 to-accent/40 relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border bg-gradient-to-br p-8 text-center sm:p-12">
-            <Badge className="gap-1.5">Coming soon</Badge>
+            <Badge className="gap-1.5">{t("rentals.badge")}</Badge>
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              Sales today. Rentals next.
+              {t("rentals.heading")}
             </h2>
-            <p className="text-muted-foreground max-w-lg">
-              LeadWing handles your sales pipeline now — long and short-term rentals
-              are on the way, in the same simple flow you already know.
-            </p>
+            <p className="text-muted-foreground max-w-lg">{t("rentals.body")}</p>
           </div>
         </Reveal>
       </section>
@@ -515,15 +518,14 @@ export default function Home() {
       <section className="mx-auto w-full max-w-6xl px-4 pb-20 text-center">
         <Reveal>
           <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Ready to simplify your day?
+            {t("finalCta.heading")}
           </h2>
           <p className="text-muted-foreground mx-auto mt-3 max-w-md">
-            Set up takes a minute. Bring your first client into LeadWing and feel
-            the difference.
+            {t("finalCta.body")}
           </p>
           <Button asChild size="lg" className="mt-6">
             <Link href="/login">
-              Get started <ArrowRight />
+              {t("hero.ctaPrimary")} <ArrowRight />
             </Link>
           </Button>
         </Reveal>
@@ -534,7 +536,7 @@ export default function Home() {
         <div className="text-muted-foreground mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 px-4 py-8 text-sm sm:flex-row">
           <div className="flex items-center gap-2">
             <Logo markClassName="size-5" wordmarkClassName="text-foreground font-medium" />
-            <span>— real-estate CRM for the Costa del Sol</span>
+            <span>— {tSite("tagline")}</span>
           </div>
           <span>© {new Date().getFullYear()} LeadWing</span>
         </div>
@@ -572,6 +574,7 @@ function PlanCard({
   period,
   note,
   items,
+  cta,
   highlighted = false,
 }: {
   name: string;
@@ -579,6 +582,7 @@ function PlanCard({
   period: string;
   note?: string;
   items: string[];
+  cta: string;
   highlighted?: boolean;
 }) {
   return (
@@ -604,9 +608,7 @@ function PlanCard({
         ))}
       </ul>
       <Button asChild className="mt-6 w-full" variant={highlighted ? "default" : "outline"}>
-        <Link href="/login">
-          {highlighted ? "Start free, upgrade any time" : "Start free"}
-        </Link>
+        <Link href="/login">{cta}</Link>
       </Button>
     </div>
   );

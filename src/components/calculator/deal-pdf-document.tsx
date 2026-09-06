@@ -11,8 +11,6 @@ import {
 
 import {
   formatEuro,
-  formatEuroPrefix,
-  formatRate,
   formatSignedPercent,
   formatSqm,
 } from "@/lib/calculator/deal";
@@ -188,75 +186,61 @@ function Kpi({
   );
 }
 
-export function DealPdfDocument({ title, dateLabel, input, result: r }: DealView) {
+export function DealPdfDocument({
+  title,
+  dateLabel,
+  input,
+  result: r,
+  labels,
+}: DealView) {
   return (
-    <Document title={title || "Deal Analysis"}>
+    <Document title={title || labels.documentTitle}>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.title}>{title || "Untitled deal"}</Text>
-        <Text style={styles.subtitle}>
-          Deal Analysis · {dateLabel} · All-upfront model
-        </Text>
+        <Text style={styles.title}>{title || labels.untitled}</Text>
+        <Text style={styles.subtitle}>{labels.subtitle}</Text>
         <View style={styles.rule} />
 
         <View style={styles.kpiRow}>
-          <Kpi label="Net Profit" value={formatEuro(r.netProfit)} tone={toneColor(r.netProfit)} divider />
-          <Kpi label="ROI" value={formatSignedPercent(r.roi)} tone={toneColor(r.roi)} divider />
+          <Kpi label={labels.netProfit} value={formatEuro(r.netProfit)} tone={toneColor(r.netProfit)} divider />
+          <Kpi label={labels.roi} value={formatSignedPercent(r.roi)} tone={toneColor(r.roi)} divider />
           <Kpi
-            label={`IRR (${input.durationMonths}M exit)`}
+            label={labels.irrExit}
             value={formatSignedPercent(r.irr)}
             tone={toneColor(r.irr)}
             divider
           />
-          <Kpi label="Capital Deployed" value={formatEuro(r.capitalDeployed)} />
+          <Kpi label={labels.capitalDeployed} value={formatEuro(r.capitalDeployed)} />
         </View>
 
         <View style={styles.columns}>
           <View style={styles.colLeft}>
-            <Text style={styles.sectionLabel}>Acquisition</Text>
-            <Row label="Purchase Price" value={formatEuro(input.askingPrice)} />
-            <Row
-              label={`Transfer Tax (${formatRate(input.transferTaxPct)})`}
-              value={formatEuro(r.transferTax)}
-            />
+            <Text style={styles.sectionLabel}>{labels.acquisition}</Text>
+            <Row label={labels.purchasePrice} value={formatEuro(input.askingPrice)} />
+            <Row label={labels.transferTax} value={formatEuro(r.transferTax)} />
             <View style={styles.gap} />
-            <Row
-              label={`Lawyer Fee (${formatRate(input.lawyerPct)})`}
-              value={formatEuro(r.lawyerFee)}
-            />
-            <Row
-              label={`Notary Fee (${formatRate(input.notaryPct)})`}
-              value={formatEuro(r.notaryFee)}
-            />
-            <Row label="Total Acquisition" value={formatEuro(r.totalAcquisition)} bold top />
+            <Row label={labels.lawyerFee} value={formatEuro(r.lawyerFee)} />
+            <Row label={labels.notaryFee} value={formatEuro(r.notaryFee)} />
+            <Row label={labels.totalAcquisition} value={formatEuro(r.totalAcquisition)} bold top />
           </View>
 
           <View style={styles.col}>
-            <Text style={styles.sectionLabel}>Project</Text>
-            <Row
-              label="Type"
-              value={`Renovation — ${formatEuroPrefix(input.renovationPerSqm)}/m²`}
-            />
-            <Row label="Surface" value={formatSqm(input.surfaceSqm)} />
-            <Row label="Duration" value={`${input.durationMonths} months`} />
-            <Row label="Base Build Cost" value={formatEuro(r.baseBuildCost)} />
-            <Row
-              label={`Contingency (${formatRate(input.contingencyPct)})`}
-              value={formatEuro(r.contingency)}
-            />
-            <Row label="Total Project Cost" value={formatEuro(r.totalProjectCost)} bold top />
+            <Text style={styles.sectionLabel}>{labels.project}</Text>
+            <Row label={labels.projectType} value={labels.projectTypeValue} />
+            <Row label={labels.surface} value={formatSqm(input.surfaceSqm)} />
+            <Row label={labels.duration} value={labels.durationValue} />
+            <Row label={labels.baseBuildCost} value={formatEuro(r.baseBuildCost)} />
+            <Row label={labels.contingency} value={formatEuro(r.contingency)} />
+            <Row label={labels.totalProjectCost} value={formatEuro(r.totalProjectCost)} bold top />
           </View>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>Exit &amp; Returns</Text>
-          <Row label="Gross Sale Price" value={formatEuro(r.grossSalePrice)} />
+          <Text style={styles.sectionLabel}>{labels.exitAndReturns}</Text>
+          <Row label={labels.grossSalePrice} value={formatEuro(r.grossSalePrice)} />
+          <Row label={labels.agentCommission} value={formatEuro(r.agentCommission)} />
+          <Row label={labels.netProceeds} value={formatEuro(r.netProceeds)} bold top />
           <Row
-            label={`Agent Commission (${formatRate(input.agencyFeePct)})`}
-            value={formatEuro(r.agentCommission)}
-          />
-          <Row label="Net Proceeds" value={formatEuro(r.netProceeds)} bold top />
-          <Row
-            label="Net Profit / (Loss)"
+            label={labels.netProfitLoss}
             value={formatEuro(r.netProfit)}
             bold
             tone={toneColor(r.netProfit)}
@@ -264,13 +248,13 @@ export function DealPdfDocument({ title, dateLabel, input, result: r }: DealView
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>Returns by Exit Timeline</Text>
+          <Text style={styles.sectionLabel}>{labels.returnsByExit}</Text>
           <View style={styles.table}>
             <View style={styles.th}>
-              <Text style={[styles.thText, styles.cExit]}>Exit</Text>
-              <Text style={[styles.thText, styles.cNum]}>Net Profit</Text>
-              <Text style={[styles.thText, styles.cNum]}>ROI</Text>
-              <Text style={[styles.thText, styles.cNum]}>IRR (ann.)</Text>
+              <Text style={[styles.thText, styles.cExit]}>{labels.colExit}</Text>
+              <Text style={[styles.thText, styles.cNum]}>{labels.colNetProfit}</Text>
+              <Text style={[styles.thText, styles.cNum]}>{labels.colRoi}</Text>
+              <Text style={[styles.thText, styles.cNum]}>{labels.colIrr}</Text>
             </View>
             {r.exitTimeline.map((row, i) => {
               const isBase = row.months === input.durationMonths;
@@ -278,7 +262,8 @@ export function DealPdfDocument({ title, dateLabel, input, result: r }: DealView
               return (
                 <View key={row.months} style={[styles.tr, { backgroundColor: bg }]}>
                   <Text style={styles.cExitBold}>
-                    {row.months} months{isBase ? " •" : ""}
+                    {labels.exitRow(row.months)}
+                    {isBase ? " •" : ""}
                   </Text>
                   <Text style={[styles.cNum, { color: toneColor(row.netProfit) }]}>
                     {formatEuro(row.netProfit)}
@@ -297,7 +282,7 @@ export function DealPdfDocument({ title, dateLabel, input, result: r }: DealView
 
         <View style={styles.footer} fixed>
           <Text style={styles.footerText}>{dateLabel}</Text>
-          <Text style={styles.footerText}>Confidential — for internal use only</Text>
+          <Text style={styles.footerText}>{labels.confidential}</Text>
         </View>
       </Page>
     </Document>

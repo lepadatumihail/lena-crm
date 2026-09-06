@@ -17,7 +17,7 @@ const base = {
 };
 
 function parseField(field: keyof typeof base, value: string) {
-  return preferencesFormSchema.safeParse({ ...base, [field]: value });
+  return preferencesFormSchema((key) => key).safeParse({ ...base, [field]: value });
 }
 
 describe("numericString (via preferencesFormSchema.budget_min)", () => {

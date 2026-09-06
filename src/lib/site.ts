@@ -4,12 +4,14 @@
  * reads from here so a rename is a one-file change.
  */
 
+import site from "../../messages/en/site.json";
+
 export const SITE_NAME = "LeadWing";
 
-export const SITE_TAGLINE = "The CRM for independent real-estate agents";
+/** English copy, shared with the `site` message namespace (OG image, JSON-LD). */
+export const SITE_TAGLINE: string = site.tagline;
 
-export const SITE_DESCRIPTION =
-  "LeadWing is the CRM for independent real-estate agents. Track every buyer and seller from first hello to keys in hand, across all the agencies you work with, in one place.";
+export const SITE_DESCRIPTION: string = site.description;
 
 /** Public origin, no trailing slash. Falls back to the production domain. */
 export const SITE_URL = (

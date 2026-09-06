@@ -1,9 +1,11 @@
+import { intlTag } from "@/i18n/config";
+
 export type Country = { name: string; iso: string; dial: string };
 
-/** Default to Spain — the Costa del Sol home market. */
+/** Default to Spain — the home market. */
 export const DEFAULT_DIAL = "+34";
 
-// Curated list — Europe-heavy (the Costa del Sol clientele) plus major markets.
+// Curated list — Europe-heavy (typical clientele of Spain-based agents) plus major markets.
 export const COUNTRIES: Country[] = [
   { name: "Argentina", iso: "AR", dial: "+54" },
   { name: "Australia", iso: "AU", dial: "+61" },
@@ -70,6 +72,38 @@ export function flagEmoji(iso: string): string {
   return iso
     .toUpperCase()
     .replace(/./g, (c) => String.fromCodePoint(127397 + c.charCodeAt(0)));
+}
+
+/** English names by ISO code — the reference copy, and the fallback below. */
+const ENGLISH_NAMES = new Map(COUNTRIES.map((c) => [c.iso, c.name]));
+
+const REGION_NAMES = new Map<string, Intl.DisplayNames | null>();
+
+function regionNames(tag: string): Intl.DisplayNames | null {
+  const cached = REGION_NAMES.get(tag);
+  if (cached !== undefined) return cached;
+  let names: Intl.DisplayNames | null = null;
+  try {
+    names = new Intl.DisplayNames([tag], { type: "region" });
+  } catch {
+    names = null;
+  }
+  REGION_NAMES.set(tag, names);
+  return names;
+}
+
+/**
+ * A country's name in the agent's UI language. English keeps the curated names
+ * above (the copy the UI shipped with, e.g. "Turkey" rather than CLDR's
+ * "Türkiye"); other languages come from `Intl.DisplayNames`, falling back to
+ * the English name where the runtime has no translation.
+ */
+export function countryName(iso: string, locale?: string | null): string {
+  const code = iso.toUpperCase();
+  const english = ENGLISH_NAMES.get(code) ?? code;
+  const tag = intlTag(locale);
+  if (tag.startsWith("en")) return english;
+  return regionNames(tag)?.of(code) ?? english;
 }
 
 const DIAL_CODES = [...new Set(COUNTRIES.map((c) => c.dial))];

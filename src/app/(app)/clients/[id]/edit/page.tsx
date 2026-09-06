@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { ArrowLeft } from "lucide-react";
 
 import { getClientById } from "@/lib/data/clients";
@@ -17,6 +18,10 @@ export default async function EditClientPage({
   const client = await getClientById(id);
   if (!client) notFound();
 
+  const [t, tCommon] = await Promise.all([
+    getTranslations("clients.edit"),
+    getTranslations("common"),
+  ]);
   const side = client.side as ClientSide;
   const defaultValues: Partial<ClientFormValues> = {
     side,
@@ -38,11 +43,11 @@ export default async function EditClientPage({
       <div>
         <Button asChild variant="ghost" size="sm" className="-ml-2 mb-1">
           <Link href={`/clients/${id}`}>
-            <ArrowLeft /> Back
+            <ArrowLeft /> {tCommon("back")}
           </Link>
         </Button>
         <h1 className="text-2xl font-semibold tracking-tight">
-          Edit {clientFullName(client)}
+          {t("title", { name: clientFullName(client) })}
         </h1>
       </div>
       <ClientForm

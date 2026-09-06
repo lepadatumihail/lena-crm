@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -17,10 +18,10 @@ import {
 
 export function ConfirmDialog({
   trigger,
-  title = "Are you sure?",
+  title,
   description,
-  confirmLabel = "Delete",
-  cancelLabel = "Cancel",
+  confirmLabel,
+  cancelLabel,
   destructive = true,
   onConfirm,
 }: {
@@ -37,6 +38,7 @@ export function ConfirmDialog({
    */
   onConfirm: () => Promise<boolean | void> | boolean | void;
 }) {
+  const t = useTranslations("common");
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
 
@@ -55,13 +57,13 @@ export function ConfirmDialog({
         {...(description ? {} : { "aria-describedby": undefined })}
       >
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle>{title ?? t("areYouSure")}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="ghost" disabled={pending}>
-              {cancelLabel}
+              {cancelLabel ?? t("cancel")}
             </Button>
           </DialogClose>
           <Button
@@ -70,7 +72,7 @@ export function ConfirmDialog({
             disabled={pending}
           >
             {pending && <Loader2 className="animate-spin" />}
-            {confirmLabel}
+            {confirmLabel ?? t("delete")}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Check, Copy, Info } from "lucide-react";
 
@@ -44,6 +45,7 @@ function GoogleIcon({ className }: { className?: string }) {
 }
 
 export function CalendarSyncDialog() {
+  const t = useTranslations("calendar.sync");
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -56,7 +58,7 @@ export function CalendarSyncDialog() {
       const { token, error } = await getCalendarFeedToken();
       setLoading(false);
       if (error || !token) {
-        toast.error("Couldn't generate your sync link", {
+        toast.error(t("linkFailed"), {
           description: error ?? undefined,
         });
         return;
@@ -72,33 +74,30 @@ export function CalendarSyncDialog() {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      toast.error("Couldn't copy — select and copy manually");
+      toast.error(t("copyFailed"));
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <Button variant="outline" size="sm" onClick={() => handleOpenChange(true)}>
-        <GoogleIcon /> Sync
+        <GoogleIcon /> {t("button")}
       </Button>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <GoogleIcon className="size-5" /> Sync to Google Calendar
+            <GoogleIcon className="size-5" /> {t("title")}
           </DialogTitle>
-          <DialogDescription>
-            Subscribe once and your viewings &amp; meetings appear in Google
-            automatically.
-          </DialogDescription>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label>Your private calendar link</Label>
+            <Label>{t("linkLabel")}</Label>
             <div className="flex gap-2">
               <Input
                 readOnly
-                value={loading ? "Generating…" : url}
+                value={loading ? t("generating") : url}
                 onFocus={(e) => e.currentTarget.select()}
                 className="font-mono text-xs"
               />
@@ -108,7 +107,7 @@ export function CalendarSyncDialog() {
                 size="icon"
                 onClick={copy}
                 disabled={!url}
-                aria-label="Copy link"
+                aria-label={t("copyLink")}
               >
                 {copied ? (
                   <Check className="text-success size-4" />
@@ -117,21 +116,21 @@ export function CalendarSyncDialog() {
                 )}
               </Button>
             </div>
-            <p className="text-muted-foreground text-xs">
-              Keep this link private — anyone with it can see your schedule.
-            </p>
+            <p className="text-muted-foreground text-xs">{t("privacy")}</p>
           </div>
 
           <div className="bg-muted/40 space-y-3 rounded-lg border p-4">
-            <p className="text-sm font-medium">How to add it</p>
+            <p className="text-sm font-medium">{t("howTitle")}</p>
             <ol className="text-muted-foreground list-decimal space-y-1.5 pl-5 text-sm">
-              <li>Copy the link above.</li>
+              <li>{t("step1")}</li>
               <li>
-                In Google Calendar, next to “Other calendars”, click{" "}
-                <span className="text-foreground font-medium">+ → From URL</span>
-                .
+                {t.rich("step2", {
+                  b: (chunks) => (
+                    <span className="text-foreground font-medium">{chunks}</span>
+                  ),
+                })}
               </li>
-              <li>Paste the link and add it.</li>
+              <li>{t("step3")}</li>
             </ol>
             <a
               href={ADD_BY_URL}
@@ -142,16 +141,13 @@ export function CalendarSyncDialog() {
                 "w-full"
               )}
             >
-              <GoogleIcon /> Open Google Calendar
+              <GoogleIcon /> {t("openGoogle")}
             </a>
           </div>
 
           <div className="text-muted-foreground flex gap-2 text-xs">
             <Info className="mt-0.5 size-3.5 shrink-0" />
-            <p>
-              Subscribed calendars refresh every few hours, so a newly added
-              event can take a little while to appear in Google.
-            </p>
+            <p>{t("note")}</p>
           </div>
         </div>
       </DialogContent>

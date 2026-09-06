@@ -1,0 +1,41 @@
+{
+  "title": "Inicio",
+  "subtitle": "Todo lo que necesita tu atención, en un solo sitio.",
+  "actions": {
+    "newBuyer": "Nuevo comprador",
+    "newSeller": "Nuevo vendedor",
+    "newAppointment": "Nueva cita",
+    "pasteLead": "Pegar un lead"
+  },
+  "upcoming": {
+    "title": "Próximas citas",
+    "calendar": "Calendario",
+    "empty": "No hay nada programado. <link>Abre el calendario</link> para añadir una visita o una reunión.",
+    "remindTitle": "Recordar por WhatsApp",
+    "remindAria": "Enviar un recordatorio por WhatsApp"
+  },
+  "attention": {
+    "title": "Necesita tu atención",
+    "empty": "Estás al día. Bien hecho.",
+    "open": "Abrir",
+    "draft": "Redactar",
+    "stalledOffer": "Hizo una oferta — aún sin reservar",
+    "followUp": "{stage} · {days, plural, one {# día} other {# días}} sin novedades",
+    "reservation": "{label} · {date} ({when})",
+    "reservationFields": {
+      "ppc": "Pago de arras (PPC)",
+      "notary": "Notaría",
+      "downpayment": "Señal"
+    },
+    "relative": {
+      "today": "hoy",
+      "tomorrow": "mañana",
+      "inDays": "en {count, plural, one {# día} other {# días}}"
+    }
+  },
+  "pipeline": {
+    "title": "Embudo",
+    "commissionPipeline": "{amount} en el embudo",
+    "commissionClosed": "{amount} cerrado"
+  }
+}

@@ -585,6 +585,7 @@ export type Database = {
           id: string;
           email: string | null;
           full_name: string | null;
+          locale: string;
           is_admin: boolean;
           cohort: Database["public"]["Enums"]["cohort"];
           founding_number: number | null;
@@ -602,6 +603,7 @@ export type Database = {
           id: string;
           email?: string | null;
           full_name?: string | null;
+          locale?: string;
           is_admin?: boolean;
           cohort?: Database["public"]["Enums"]["cohort"];
           founding_number?: number | null;
@@ -619,6 +621,7 @@ export type Database = {
           id?: string;
           email?: string | null;
           full_name?: string | null;
+          locale?: string;
           is_admin?: boolean;
           cohort?: Database["public"]["Enums"]["cohort"];
           founding_number?: number | null;
@@ -742,6 +745,10 @@ export type Database = {
       void_referral: {
         Args: { p_user_id: string };
         Returns: boolean;
+      };
+      set_locale: {
+        Args: { p_locale: string };
+        Returns: undefined;
       };
     };
     Enums: {

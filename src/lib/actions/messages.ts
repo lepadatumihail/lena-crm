@@ -1,5 +1,7 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
+
 import { createClient as createSupabase } from "@/lib/supabase/server";
 import { openrouterChat } from "@/lib/openrouter";
 import { formatCurrency } from "@/lib/crm";
@@ -16,6 +18,7 @@ export async function draftMessage(input: {
   /** The property this message is about (overrides the auto-detected one). */
   property?: string;
 }): Promise<DraftResult> {
+  const t = await getTranslations("clientDetail.errors");
   const supabase = await createSupabase();
 
   const { data: client } = await supabase
@@ -23,7 +26,7 @@ export async function draftMessage(input: {
     .select("first_name, last_name, language, side, stage, deal_type, agency")
     .eq("id", input.clientId)
     .maybeSingle();
-  if (!client) return { subject: "", body: "", error: "Client not found" };
+  if (!client) return { subject: "", body: "", error: t("clientNotFound") };
 
   const [prefsRes, viewingsRes, reservationRes] = await Promise.all([
     supabase
@@ -94,7 +97,7 @@ export async function draftMessage(input: {
   const channelLabel =
     input.channel === "whatsapp" ? "WhatsApp message" : "email";
   const system = [
-    `You are helping an independent real-estate agent on the Costa del Sol (Marbella) write a short, warm, professional ${channelLabel} to a client.`,
+    `You are helping an independent real-estate agent write a short, warm, professional ${channelLabel} to a client.`,
     `Write entirely in ${language}.`,
     input.channel === "whatsapp"
       ? "Keep it brief and conversational like a real WhatsApp message — 1 to 3 short sentences, no subject line."
@@ -127,13 +130,13 @@ export async function draftMessage(input: {
     return {
       subject: "",
       body: "",
-      error: e instanceof Error ? e.message : "AI request failed",
+      error: e instanceof Error ? e.message : t("aiRequestFailed"),
     };
   }
 
   const parsed = parseDraft(content);
   if (!parsed.body)
-    return { subject: "", body: "", error: "Couldn't read the AI response." };
+    return { subject: "", body: "", error: t("aiUnreadable") };
   return { subject: parsed.subject, body: parsed.body, error: null };
 }
 

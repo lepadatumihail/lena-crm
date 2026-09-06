@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +9,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { Loader2, Trash2 } from "lucide-react";
 
+import { reminderLabel } from "@/i18n/labels";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -47,13 +49,8 @@ import type {
   CalendarClientOption,
 } from "@/lib/data/calendar";
 
-const DURATIONS = [
-  { value: "30", label: "30 minutes" },
-  { value: "45", label: "45 minutes" },
-  { value: "60", label: "1 hour" },
-  { value: "90", label: "1.5 hours" },
-  { value: "120", label: "2 hours" },
-];
+const DURATIONS = ["30", "45", "60", "90", "120"] as const;
+const REMINDER_VALUES = REMINDER_PRESETS.map((p) => p.value);
 
 function reminderValue(minutes: number | null): string {
   return minutes == null ? "none" : String(minutes);
@@ -118,8 +115,13 @@ export function AppointmentDialog({
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
+  const t = useTranslations("calendar");
+  const tCommon = useTranslations("common");
+  const tCrm = useTranslations("crm");
+  const tv = useTranslations("validation");
+  const schema = useMemo(() => appointmentFormSchema(tv), [tv]);
   const form = useForm<AppointmentFormValues>({
-    resolver: zodResolver(appointmentFormSchema),
+    resolver: zodResolver(schema),
     defaultValues: toFormValues(appointment, defaultDateKey),
   });
 
@@ -131,7 +133,7 @@ export function AppointmentDialog({
   async function onSubmit(values: AppointmentFormValues) {
     const start = new Date(`${values.date}T${values.time}`);
     if (Number.isNaN(start.getTime())) {
-      toast.error("Invalid date or time");
+      toast.error(t("toasts.invalidDateTime"));
       return;
     }
     const duration = Number(values.duration_minutes) || 60;
@@ -152,10 +154,10 @@ export function AppointmentDialog({
     });
     setSubmitting(false);
     if (error) {
-      toast.error("Couldn't save meeting", { description: error });
+      toast.error(t("toasts.saveFailed"), { description: error });
       return;
     }
-    toast.success(appointment ? "Meeting updated" : "Meeting created");
+    toast.success(t(appointment ? "toasts.updated" : "toasts.created"));
     onOpenChange(false);
     router.refresh();
   }
@@ -164,10 +166,10 @@ export function AppointmentDialog({
     if (!appointment) return true;
     const { error } = await deleteAppointment(appointment.id);
     if (error) {
-      toast.error("Couldn't delete", { description: error });
+      toast.error(t("toasts.deleteFailed"), { description: error });
       return false;
     }
-    toast.success("Meeting deleted");
+    toast.success(t("toasts.deleted"));
     onOpenChange(false);
     router.refresh();
     return true;
@@ -178,11 +180,9 @@ export function AppointmentDialog({
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {appointment ? "Edit meeting" : "New meeting"}
+            {t(appointment ? "form.editTitle" : "form.newTitle")}
           </DialogTitle>
-          <DialogDescription>
-            Schedule a meeting with a client and set an optional reminder.
-          </DialogDescription>
+          <DialogDescription>{t("form.description")}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -191,17 +191,17 @@ export function AppointmentDialog({
               name="client_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Client</FormLabel>
+                  <FormLabel>{t("form.client")}</FormLabel>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a client…" />
+                        <SelectValue placeholder={t("form.clientPlaceholder")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {clients.length === 0 ? (
                         <div className="text-muted-foreground px-2 py-1.5 text-sm">
-                          No clients yet
+                          {t("form.noClients")}
                         </div>
                       ) : (
                         clients.map((c) => (
@@ -222,9 +222,9 @@ export function AppointmentDialog({
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title (optional)</FormLabel>
+                  <FormLabel>{t("form.title")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Defaults to client name" {...field} />
+                    <Input placeholder={t("form.titlePlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -236,7 +236,7 @@ export function AppointmentDialog({
               name="date"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date</FormLabel>
+                  <FormLabel>{t("form.date")}</FormLabel>
                   <DatePicker value={field.value} onChange={field.onChange} />
                   <FormMessage />
                 </FormItem>
@@ -247,7 +247,7 @@ export function AppointmentDialog({
               name="time"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Time</FormLabel>
+                  <FormLabel>{t("form.time")}</FormLabel>
                   <TimePicker value={field.value} onChange={field.onChange} />
                   <FormMessage />
                 </FormItem>
@@ -259,17 +259,17 @@ export function AppointmentDialog({
               name="duration_minutes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Duration</FormLabel>
+                  <FormLabel>{t("form.duration")}</FormLabel>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Duration" />
+                        <SelectValue placeholder={t("form.duration")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {DURATIONS.map((d) => (
-                        <SelectItem key={d.value} value={d.value}>
-                          {d.label}
+                        <SelectItem key={d} value={d}>
+                          {t(`durations.${d}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -283,10 +283,10 @@ export function AppointmentDialog({
               name="location"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Location (optional)</FormLabel>
+                  <FormLabel>{t("form.location")}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Office, address, video call…"
+                      placeholder={t("form.locationPlaceholder")}
                       {...field}
                     />
                   </FormControl>
@@ -300,7 +300,7 @@ export function AppointmentDialog({
               name="reminder"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Reminder</FormLabel>
+                  <FormLabel>{t("form.reminder")}</FormLabel>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger className="w-full">
@@ -308,9 +308,12 @@ export function AppointmentDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {REMINDER_PRESETS.map((p) => (
-                        <SelectItem key={p.label} value={reminderValue(p.value)}>
-                          {p.label}
+                      {REMINDER_VALUES.map((minutes) => (
+                        <SelectItem
+                          key={reminderValue(minutes)}
+                          value={reminderValue(minutes)}
+                        >
+                          {reminderLabel(tCrm, minutes)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -324,9 +327,13 @@ export function AppointmentDialog({
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Notes (optional)</FormLabel>
+                  <FormLabel>{t("form.notes")}</FormLabel>
                   <FormControl>
-                    <Textarea rows={2} placeholder="Anything to remember…" {...field} />
+                    <Textarea
+                      rows={2}
+                      placeholder={t("form.notesPlaceholder")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -336,8 +343,8 @@ export function AppointmentDialog({
             <DialogFooter className="gap-2 sm:justify-between">
               {appointment ? (
                 <ConfirmDialog
-                  title="Delete meeting?"
-                  description="This meeting will be permanently deleted."
+                  title={t("form.deleteTitle")}
+                  description={t("form.deleteDescription")}
                   onConfirm={onDelete}
                   trigger={
                     <Button
@@ -345,7 +352,7 @@ export function AppointmentDialog({
                       variant="ghost"
                       className="text-muted-foreground hover:text-destructive"
                     >
-                      <Trash2 /> Delete
+                      <Trash2 /> {tCommon("delete")}
                     </Button>
                   }
                 />
@@ -358,11 +365,11 @@ export function AppointmentDialog({
                   variant="ghost"
                   onClick={() => onOpenChange(false)}
                 >
-                  Cancel
+                  {tCommon("cancel")}
                 </Button>
                 <Button type="submit" disabled={submitting}>
                   {submitting && <Loader2 className="animate-spin" />}
-                  {appointment ? "Save" : "Create"}
+                  {appointment ? tCommon("save") : t("actions.create")}
                 </Button>
               </div>
             </DialogFooter>

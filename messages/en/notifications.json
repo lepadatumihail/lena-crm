@@ -1,0 +1,17 @@
+{
+  "bell": {
+    "aria": "Notifications",
+    "ariaUnread": "Notifications ({count} unread)",
+    "title": "Notifications",
+    "markAllRead": "Mark all read",
+    "empty": "You're all caught up.",
+    "hasMore": "Showing your most recent notifications",
+    "types": {
+      "appointment_reminder": "Reminder",
+      "appointment_today": "Today",
+      "follow_up": "Follow up",
+      "reservation_date": "Key date",
+      "stalled_offer": "Offer"
+    }
+  }
+}

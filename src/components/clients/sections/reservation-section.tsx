@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,26 +51,34 @@ import {
   reservationFormSchema,
   type ReservationFormValues,
 } from "@/lib/validation/buyer";
+import { intlTag } from "@/i18n/config";
+import { dateFnsLocale } from "@/i18n/dates";
 import { formatCurrency } from "@/lib/crm";
 import { DETAIL_LIST, DetailRow } from "@/components/clients/detail-row";
 import type { Reservation } from "@/lib/supabase/types";
 
-function fmtDate(d: string | null) {
+function fmtDate(d: string | null, locale: string) {
   if (!d) return null;
   try {
-    return format(parseISO(d), "d MMM yyyy");
+    return format(parseISO(d), "d MMM yyyy", { locale: dateFnsLocale(locale) });
   } catch {
     return d;
   }
 }
 
-function money(value: number | null) {
-  return value != null ? formatCurrency(value) : null;
+function money(value: number | null, tag: string) {
+  return value != null ? formatCurrency(value, tag) : null;
 }
 
 /** Pair an amount with the date it happened, e.g. "€50,000 · 4 Jun 2026". */
-function amountOn(amount: number | null, date: string | null) {
-  const parts = [money(amount), fmtDate(date)].filter(Boolean);
+function amountOn(
+  amount: number | null,
+  date: string | null,
+  locale: string
+) {
+  const parts = [money(amount, intlTag(locale)), fmtDate(date, locale)].filter(
+    Boolean
+  );
   return parts.length ? parts.join(" · ") : null;
 }
 
@@ -80,6 +89,9 @@ export function ReservationSection({
   clientId: string;
   reservation: Reservation | null;
 }) {
+  const t = useTranslations("clientDetail.reservation");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const r = reservation;
 
@@ -87,12 +99,12 @@ export function ReservationSection({
     <Card className="overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
-          <CardTitle className="text-base">Reservation</CardTitle>
-          {r?.closed_at && <Badge variant="success">Closed</Badge>}
+          <CardTitle className="text-base">{t("title")}</CardTitle>
+          {r?.closed_at && <Badge variant="success">{t("closedBadge")}</Badge>}
         </div>
         <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
           {r ? <Pencil /> : <Plus />}
-          {r ? "Edit" : "Add"}
+          {r ? tCommon("edit") : tCommon("add")}
         </Button>
       </CardHeader>
       <CardContent className="@container">
@@ -100,36 +112,36 @@ export function ReservationSection({
           <dl className={DETAIL_LIST}>
             <DetailRow
               icon={Wallet}
-              label="Down payment"
-              value={amountOn(r.down_payment, r.down_payment_date) ?? "—"}
+              label={t("downPayment")}
+              value={
+                amountOn(r.down_payment, r.down_payment_date, locale) ?? "—"
+              }
               className="@sm:col-span-2"
             />
             <DetailRow
               icon={Receipt}
-              label="PPC"
-              value={amountOn(r.ppc, r.ppc_date) ?? "—"}
+              label={t("ppc")}
+              value={amountOn(r.ppc, r.ppc_date, locale) ?? "—"}
               className="@sm:col-span-2"
             />
             <DetailRow
               icon={HandCoins}
-              label="Commission"
-              value={money(r.commission) ?? "—"}
+              label={t("commission")}
+              value={money(r.commission, intlTag(locale)) ?? "—"}
             />
             <DetailRow
               icon={Stamp}
-              label="Notary"
-              value={fmtDate(r.notary_date) ?? "—"}
+              label={t("notary")}
+              value={fmtDate(r.notary_date, locale) ?? "—"}
             />
             <DetailRow
               icon={CalendarCheck}
-              label="Closed"
-              value={fmtDate(r.closed_at) ?? "—"}
+              label={t("closedRow")}
+              value={fmtDate(r.closed_at, locale) ?? "—"}
             />
           </dl>
         ) : (
-          <p className="text-muted-foreground text-sm">
-            Offer accepted? Record the reservation details here.
-          </p>
+          <p className="text-muted-foreground text-sm">{t("empty")}</p>
         )}
       </CardContent>
 
@@ -137,7 +149,7 @@ export function ReservationSection({
         <div className="bg-muted/30 -mb-6 border-t px-6 py-4">
           <p className="text-muted-foreground flex items-center gap-2 text-xs">
             <ScrollText className="size-3.5 shrink-0 opacity-70" />
-            Notary notes
+            {t("notaryNotes")}
           </p>
           <p className="mt-1.5 text-sm whitespace-pre-wrap">{r.notary_notes}</p>
         </div>
@@ -167,8 +179,12 @@ function ReservationDialog({
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
+  const t = useTranslations("clientDetail.reservation");
+  const tCommon = useTranslations("common");
+  const tv = useTranslations("validation");
+  const schema = useMemo(() => reservationFormSchema(tv), [tv]);
   const form = useForm<ReservationFormValues>({
-    resolver: zodResolver(reservationFormSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       down_payment:
         reservation?.down_payment != null
@@ -190,10 +206,10 @@ function ReservationDialog({
     const { error } = await upsertReservation(clientId, values);
     setSubmitting(false);
     if (error) {
-      toast.error("Couldn't save reservation", { description: error });
+      toast.error(t("saveError"), { description: error });
       return;
     }
-    toast.success("Reservation saved");
+    toast.success(t("saved"));
     onOpenChange(false);
     router.refresh();
   }
@@ -202,10 +218,8 @@ function ReservationDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Reservation details</DialogTitle>
-          <DialogDescription>
-            Reservation, payment and completion details.
-          </DialogDescription>
+          <DialogTitle>{t("dialogTitle")}</DialogTitle>
+          <DialogDescription>{t("dialogDescription")}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -215,7 +229,7 @@ function ReservationDialog({
                 name="down_payment"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Down payment (€)</FormLabel>
+                    <FormLabel>{t("downPaymentAmount")}</FormLabel>
                     <FormControl>
                       <PriceInput
                         placeholder="50.000"
@@ -233,7 +247,7 @@ function ReservationDialog({
                 name="down_payment_date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Down payment date</FormLabel>
+                    <FormLabel>{t("downPaymentDate")}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -246,7 +260,7 @@ function ReservationDialog({
                 name="ppc"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>PPC (€)</FormLabel>
+                    <FormLabel>{t("ppcAmount")}</FormLabel>
                     <FormControl>
                       <PriceInput
                         placeholder="75.000"
@@ -264,7 +278,7 @@ function ReservationDialog({
                 name="ppc_date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>PPC date</FormLabel>
+                    <FormLabel>{t("ppcDate")}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -277,7 +291,7 @@ function ReservationDialog({
                 name="notary_date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Notary date</FormLabel>
+                    <FormLabel>{t("notaryDate")}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -290,7 +304,7 @@ function ReservationDialog({
                 name="commission"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Commission (€)</FormLabel>
+                    <FormLabel>{t("commissionAmount")}</FormLabel>
                     <FormControl>
                       <PriceInput
                         placeholder="18.000"
@@ -308,7 +322,7 @@ function ReservationDialog({
                 name="closed_at"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Closed date</FormLabel>
+                    <FormLabel>{t("closedDate")}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -322,9 +336,13 @@ function ReservationDialog({
               name="notary_notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Notary notes</FormLabel>
+                  <FormLabel>{t("notaryNotes")}</FormLabel>
                   <FormControl>
-                    <Textarea rows={2} placeholder="Notary, completion notes…" {...field} />
+                    <Textarea
+                      rows={2}
+                      placeholder={t("notaryNotesPlaceholder")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -336,11 +354,11 @@ function ReservationDialog({
                 variant="ghost"
                 onClick={() => onOpenChange(false)}
               >
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button type="submit" disabled={submitting}>
                 {submitting && <Loader2 className="animate-spin" />}
-                Save
+                {tCommon("save")}
               </Button>
             </DialogFooter>
           </form>

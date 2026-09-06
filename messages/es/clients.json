@@ -1,0 +1,122 @@
+{
+  "list": {
+    "count": "{count, plural, one {# cliente} other {# clientes}}",
+    "countWithInactive": "{count, plural, one {# cliente (incl. inactivos)} other {# clientes (incl. inactivos)}}",
+    "commissionPipeline": "{amount} en el embudo",
+    "commissionClosed": "{amount} cerrado",
+    "newClient": "{side, select, buyer {Nuevo comprador} other {Nuevo vendedor}}",
+    "searchPlaceholder": "Busca por nombre, email, teléfono, agencia…",
+    "stagePlaceholder": "Etapa",
+    "allStages": "Todas las etapas",
+    "priority": "Prioridad",
+    "table": "Tabla",
+    "board": "Tablero",
+    "inactive": "Inactivos",
+    "noMatches": "Ningún cliente coincide con tus filtros.",
+    "empty": {
+      "title": "{side, select, buyer {Aún no hay compradores} other {Aún no hay vendedores}}",
+      "body": "{side, select, buyer {Añade tu primer comprador para empezar a seguirlo por tu embudo.} other {Añade tu primer vendedor para empezar a seguirlo por tu embudo.}}"
+    },
+    "toasts": {
+      "moveFailed": "No se ha podido mover el cliente",
+      "moved": "Movido a {stage}",
+      "priorityFailed": "No se ha podido actualizar la prioridad"
+    }
+  },
+  "priority": {
+    "flag": "Marcar como prioridad",
+    "unflag": "Quitar la prioridad"
+  },
+  "table": {
+    "name": "Nombre",
+    "stage": "Etapa",
+    "type": "Tipo",
+    "agency": "Agencia",
+    "contact": "Contacto",
+    "updated": "Actualizado"
+  },
+  "kanban": {
+    "dropHere": "Suelta aquí"
+  },
+  "controls": {
+    "active": "Activo",
+    "deleteClient": "Eliminar cliente",
+    "deleteTitle": "¿Eliminar cliente?",
+    "deleteDescription": "Esto elimina permanentemente a {name} y todos sus datos: preferencias, visitas, ofertas y documentos. No se puede deshacer.",
+    "toasts": {
+      "stageFailed": "No se ha podido cambiar la etapa",
+      "stageUpdated": "Etapa actualizada",
+      "priorityFailed": "No se ha podido actualizar la prioridad",
+      "updateFailed": "No se ha podido actualizar",
+      "reactivated": "Cliente reactivado",
+      "hidden": "Cliente ocultado",
+      "deleteFailed": "No se ha podido eliminar el cliente",
+      "deleted": "Cliente eliminado"
+    }
+  },
+  "form": {
+    "firstName": "Nombre",
+    "firstNamePlaceholder": "Maria",
+    "lastName": "Apellidos",
+    "lastNamePlaceholder": "García",
+    "email": "Email",
+    "emailPlaceholder": "maria@example.com",
+    "phone": "Teléfono",
+    "language": "Idioma",
+    "languagePlaceholder": "English",
+    "nationality": "Nacionalidad",
+    "nationalityPlaceholder": "Británica",
+    "dealType": "Tipo de operación",
+    "role": "Rol",
+    "selectPlaceholder": "Selecciona…",
+    "agency": "Agencia",
+    "agencyPlaceholder": "p. ej. Marbella Homes",
+    "agencyDescription": "¿Para qué agencia es este cliente?",
+    "notes": "Notas",
+    "notesPlaceholder": "Cualquier cosa que merezca la pena recordar…",
+    "priority": "Prioridad",
+    "priorityDescription": "Marca a este cliente para ordenarlo arriba del todo.",
+    "create": "Crear cliente",
+    "save": "Guardar cambios",
+    "toasts": {
+      "limitTitle": "Has alcanzado el límite de clientes del plan Gratis",
+      "limitDescription": "Pro es ilimitado, y nada de lo que has añadido se pierde.",
+      "seePlans": "Ver planes",
+      "createFailed": "No se ha podido crear el cliente",
+      "created": "Cliente creado",
+      "saveFailed": "No se han podido guardar los cambios",
+      "saved": "Cambios guardados"
+    }
+  },
+  "leadPaste": {
+    "triggerTitle": "Pega un lead para autocompletar",
+    "triggerDescription": "De Idealista, un email o WhatsApp: la IA rellena el formulario por ti.",
+    "dialogTitle": "Pega un lead",
+    "dialogDescription": "Pega la consulta tal cual —un mensaje del portal, un email reenviado o un texto de WhatsApp— y la IA extrae los datos.",
+    "placeholder": "Hola, he visto tu anuncio en Idealista. Me llamo Anya Petrova y busco un apartamento de 2 dormitorios en Marbella hasta 600.000 €. Puedes escribirme al +34 600 123 456…",
+    "extract": "Extraer datos",
+    "toasts": {
+      "failed": "No se ha podido leer ese lead",
+      "filled": "Rellenado desde el lead: revísalo y guarda"
+    },
+    "errors": {
+      "empty": "Pega primero un mensaje de lead",
+      "tooLong": "Ese mensaje es demasiado largo: pega solo el texto de la consulta.",
+      "aiFailed": "La petición a la IA ha fallado",
+      "unreadable": "No se ha podido leer la respuesta de la IA."
+    }
+  },
+  "new": {
+    "back": "{side, select, buyer {Volver a compradores} other {Volver a vendedores}}",
+    "title": "{side, select, buyer {Nuevo comprador} other {Nuevo vendedor}}",
+    "description": "{side, select, buyer {Añade un nuevo comprador a tu embudo.} other {Añade un nuevo vendedor a tu embudo.}}"
+  },
+  "edit": {
+    "title": "Editar a {name}"
+  },
+  "errors": {
+    "invalidForm": "Revisa el formulario e inténtalo de nuevo.",
+    "limitReached": "Has usado tus {limit} clientes gratis. Pro es ilimitado.",
+    "invalidStage": "Etapa no válida"
+  }
+}

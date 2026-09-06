@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useTranslations } from "next-intl";
 import {
   AnimatePresence,
   animate,
@@ -27,6 +28,8 @@ import {
   Star,
 } from "lucide-react";
 
+import { stageLabel } from "@/i18n/labels";
+import { BUYER_STAGES } from "@/lib/crm";
 import { cn } from "@/lib/utils";
 
 // Springs lifted from app-preview.tsx so the whole landing speaks one language.
@@ -103,10 +106,12 @@ function TileGlow() {
 /* ------------------------------------------------------------------ */
 
 const DAYS = Array.from({ length: 30 }, (_, i) => i + 1);
-const WEEK = ["M", "T", "W", "T", "F", "S", "S"];
 // day1 = Monday → row 1; the hop runs along the second visual row (cols 2/4/6).
 
 function CalendarTile() {
+  const t = useTranslations("landing");
+  // One key per language: the initials of Mon…Sun, comma separated.
+  const week = t("howItWorks.tiles.calendar.weekdays").split(",");
   // s: 0 idle · 1 hop→12 · 2 land 14 + pill · 3 bell · 4/5 synced + hold
   const { ref, s, reduced } = useTileLoop(6);
   const selected = s === 0 ? 10 : s === 1 ? 12 : 14;
@@ -120,7 +125,9 @@ function CalendarTile() {
       <TileGlow />
       <div className="absolute inset-0 z-10 flex flex-col p-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold">June</span>
+          <span className="text-xs font-semibold">
+            {t("howItWorks.tiles.calendar.month")}
+          </span>
           <span className="relative">
             <motion.span
               animate={ringBell && !reduced ? { rotate: [0, 12, -8, 0] } : { rotate: 0 }}
@@ -144,7 +151,7 @@ function CalendarTile() {
         </div>
 
         <div className="text-muted-foreground mt-1.5 grid grid-cols-7 text-center text-[9px]">
-          {WEEK.map((w, i) => (
+          {week.map((w, i) => (
             <span key={i}>{w}</span>
           ))}
         </div>
@@ -190,7 +197,7 @@ function CalendarTile() {
                 className="bg-card flex items-center gap-1 rounded-lg border px-2 py-1 text-[10px] shadow-sm"
               >
                 <Building2 className="text-primary size-3" />
-                Viewing · Villa · 11:00
+                {t("howItWorks.tiles.calendar.event")}
               </motion.span>
             )}
           </AnimatePresence>
@@ -203,7 +210,8 @@ function CalendarTile() {
                 transition={{ duration: 0.3 }}
                 className="text-muted-foreground ml-auto flex items-center gap-1 text-[9px]"
               >
-                <Check className="text-success size-3" /> Synced
+                <Check className="text-success size-3" />{" "}
+                {t("howItWorks.tiles.calendar.synced")}
               </motion.span>
             )}
           </AnimatePresence>
@@ -217,9 +225,11 @@ function CalendarTile() {
 /* Step 02 — Move them down the pipeline                               */
 /* ------------------------------------------------------------------ */
 
-const STAGES = ["New", "Contacted", "Qualified", "Viewing", "Reserved"];
+const STAGES = BUYER_STAGES;
 
 function PipelineTile() {
+  const t = useTranslations("landing");
+  const tCrm = useTranslations("crm");
   // s: 0 Qualified · 1 Viewing · 2 offer climbs · 3 Reserved · 4/5 hold
   const { ref, s, reduced } = useTileLoop(6);
   const stageIndex = s <= 0 ? 2 : s === 1 ? 3 : s === 2 ? 3 : 4;
@@ -263,7 +273,7 @@ function PipelineTile() {
                       : "bg-muted text-muted-foreground"
                 )}
               >
-                {st}
+                {stageLabel(tCrm, st)}
               </span>
             ))}
           </div>
@@ -292,7 +302,7 @@ function PipelineTile() {
                 transition={reduced ? { duration: 0.2 } : POP_SPRING}
                 className="bg-success/15 text-success flex shrink-0 items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[9px] font-semibold"
               >
-                <Check className="size-3" /> Reserved
+                <Check className="size-3" /> {stageLabel(tCrm, "reserved")}
               </motion.span>
             )}
           </AnimatePresence>
@@ -314,7 +324,8 @@ function PipelineTile() {
         <div className="mt-2">
           <div className="text-muted-foreground mb-1 flex justify-between text-[9px]">
             <span className="flex items-center gap-1">
-              Offer <motion.span className="text-foreground font-medium tabular-nums">{offerText}</motion.span>
+              {t("howItWorks.tiles.pipeline.offer")}{" "}
+              <motion.span className="text-foreground font-medium tabular-nums">{offerText}</motion.span>
             </span>
             <span>/ €740k</span>
           </div>
@@ -334,18 +345,23 @@ function PipelineTile() {
 /* Step 03 — Let LeadWing follow up                                        */
 /* ------------------------------------------------------------------ */
 
+// Sample rows: the names play real clients, the stage and quiet count are labels.
 const NUDGES = [
-  { name: "Sofia Müller", meta: "Qualified · 18 days quiet" },
-  { name: "Lars Nielsen", meta: "Viewing · 16 days quiet" },
-  { name: "Anya Petrova", meta: "Qualified · 12 days quiet" },
-];
+  { name: "Sofia Müller", stage: "qualified", days: 18 },
+  { name: "Lars Nielsen", stage: "viewing", days: 16 },
+  { name: "Anya Petrova", stage: "qualified", days: 12 },
+] as const;
 
+// The draft is client-facing copy: it follows the client's language, not the UI's.
 const DRAFT_LINES = [
   "Hallo Sofia,",
   "zwei neue Apartments mit Meerblick — sollen wir diese Woche eine Besichtigung einplanen?",
 ];
 
 function FollowUpTile() {
+  const t = useTranslations("landing");
+  const tCrm = useTranslations("crm");
+  const tCommon = useTranslations("common");
   // s: 0 rows in · 1 Sofia selected · 2 draft opens · 3 lines typed · 4 sent · 5 hold
   const { ref, s, reduced } = useTileLoop(6, 1250);
   const showDraft = s >= 2;
@@ -362,7 +378,7 @@ function FollowUpTile() {
         transition={{ duration: 0.3 }}
       >
         <div className="mb-2 flex items-center justify-between px-0.5">
-          <span className="text-xs font-semibold">Needs a nudge</span>
+          <span className="text-xs font-semibold">{t("mock.needsNudge")}</span>
           <span className="bg-warning/20 text-warning rounded-full px-1.5 text-[10px] font-medium">
             3
           </span>
@@ -378,10 +394,12 @@ function FollowUpTile() {
             >
               <div className="min-w-0">
                 <p className="truncate text-[11px] font-medium">{n.name}</p>
-                <p className="text-muted-foreground text-[10px]">{n.meta}</p>
+                <p className="text-muted-foreground text-[10px]">
+                  {stageLabel(tCrm, n.stage)} · {t("mock.quiet", { days: n.days })}
+                </p>
               </div>
               <span className="bg-primary/10 text-primary inline-flex shrink-0 items-center gap-1 rounded-md px-1.5 py-1 text-[10px] font-medium">
-                <Sparkles className="size-3" /> Draft
+                <Sparkles className="size-3" /> {t("mock.draft")}
               </span>
             </div>
           ))}
@@ -397,9 +415,11 @@ function FollowUpTile() {
         style={{ pointerEvents: "none" }}
       >
         <div className="flex items-center justify-between">
-          <span className="text-[11px] font-medium">To: Sofia Müller</span>
+          <span className="text-[11px] font-medium">
+            {t("mock.to", { name: "Sofia Müller" })}
+          </span>
           <span className="bg-primary/10 text-primary inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium">
-            <Sparkles className="size-3" /> AI draft · German
+            <Sparkles className="size-3" /> {t("mock.aiDraft")}
           </span>
         </div>
         <div className="bg-background text-muted-foreground mt-2 flex-1 rounded-lg border p-2.5 text-[11px] leading-relaxed">
@@ -419,7 +439,7 @@ function FollowUpTile() {
         </div>
         <div className="mt-2 flex justify-end gap-1.5">
           <span className="rounded-md border px-2 py-1 text-[10px] font-medium">
-            Edit
+            {tCommon("edit")}
           </span>
           <motion.span
             animate={sent && !reduced ? { scale: [1, 0.96, 1] } : { scale: 1 }}
@@ -427,7 +447,7 @@ function FollowUpTile() {
             className="bg-primary text-primary-foreground inline-flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium"
           >
             {sent ? <Check className="size-3" /> : <Send className="size-3" />}
-            {sent ? "Sent" : "Send"}
+            {sent ? t("mock.sent") : tCommon("send")}
           </motion.span>
         </div>
       </motion.div>
@@ -445,7 +465,7 @@ function FollowUpTile() {
             className="bg-popover absolute right-2.5 bottom-2.5 z-20 flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[11px] font-medium shadow-md"
           >
             <MessageCircle className="size-3.5 shrink-0 text-[#25D366]" />
-            Follow-up sent
+            {t("howItWorks.tiles.followUp.sentToast")}
           </motion.div>
         )}
       </AnimatePresence>
@@ -457,31 +477,15 @@ function FollowUpTile() {
 /* Section                                                             */
 /* ------------------------------------------------------------------ */
 
+/** Copy lives in `landing.howItWorks.steps.<key>`. */
 const STEPS = [
-  {
-    number: "01",
-    title: "Plan the viewing",
-    blurb:
-      "Add a buyer and book the tour. LeadWing keeps the date, the reminder and the bell together — and syncs to your Google Calendar so it shows up everywhere you already look.",
-    Tile: CalendarTile,
-  },
-  {
-    number: "02",
-    title: "Move them down the pipeline",
-    blurb:
-      "Drag every buyer through clear stages — new, contacted, qualified, viewing, reserved. Log the offer against the asking price, and watch a deal cross the line.",
-    Tile: PipelineTile,
-  },
-  {
-    number: "03",
-    title: "Let LeadWing follow up",
-    blurb:
-      "LeadWing spots clients going quiet and drafts a warm message in their language. You read it, tweak if you like, and send — no blank page, no chasing.",
-    Tile: FollowUpTile,
-  },
+  { number: "01", key: "plan", Tile: CalendarTile },
+  { number: "02", key: "pipeline", Tile: PipelineTile },
+  { number: "03", key: "followUp", Tile: FollowUpTile },
 ] as const;
 
 export function HowItWorks() {
+  const t = useTranslations("landing");
   const reduced = useReducedMotion();
   const item = makeItem(reduced);
 
@@ -493,7 +497,7 @@ export function HowItWorks() {
       whileInView="show"
       viewport={{ once: true, margin: "0px 0px -10% 0px" }}
     >
-      {STEPS.map(({ number, title, blurb, Tile }) => (
+      {STEPS.map(({ number, key, Tile }) => (
         <motion.div
           key={number}
           variants={item}
@@ -532,10 +536,12 @@ export function HowItWorks() {
             <span className="bg-primary/10 text-primary flex size-6 items-center justify-center rounded-full text-xs font-semibold tabular-nums">
               {number}
             </span>
-            <h3 className="font-semibold tracking-tight">{title}</h3>
+            <h3 className="font-semibold tracking-tight">
+              {t(`howItWorks.steps.${key}.title`)}
+            </h3>
           </div>
           <p className="text-muted-foreground relative mt-1.5 mb-5 text-sm leading-relaxed">
-            {blurb}
+            {t(`howItWorks.steps.${key}.blurb`)}
           </p>
 
           <Tile />

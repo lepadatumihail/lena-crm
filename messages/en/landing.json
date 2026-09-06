@@ -1,0 +1,253 @@
+{
+  "hero": {
+    "badge": "Built for independent agents",
+    "title": "Your clients, properties, and offers. <accent>Made simple.</accent>",
+    "ctaPrimary": "Get started",
+    "ctaSecondary": "See how it works",
+    "note": "No password — sign in with Google or a one-time code."
+  },
+  "preview": {
+    "search": "Search…",
+    "new": "+ New",
+    "toasts": {
+      "moved": "{name} → {stage}",
+      "newLead": "New lead from Idealista",
+      "offerAccepted": "{name} · offer accepted",
+      "reminderSent": "WhatsApp reminder sent to {name}"
+    }
+  },
+  "mock": {
+    "needsNudge": "Needs a nudge",
+    "draft": "Draft",
+    "to": "To: {name}",
+    "aiDraft": "AI draft · German",
+    "sent": "Sent",
+    "quiet": "{days, plural, one {# day quiet} other {# days quiet}}"
+  },
+  "features": {
+    "heading": "Everything a deal needs, nothing it doesn't",
+    "body": "Spreadsheets and scattered chats don't scale. LeadWing gives every lead a place — and a next step.",
+    "items": {
+      "pipeline": {
+        "title": "A pipeline that moves",
+        "body": "Drag every buyer and seller through clear stages — new, contacted, qualified, viewing, reserved — so nothing stalls."
+      },
+      "clients": {
+        "title": "Clients in focus",
+        "body": "Names, languages, nationalities, notes. Flag the hot ones, hide the cold, and always know who to call next."
+      },
+      "properties": {
+        "title": "Properties & viewings",
+        "body": "Log every property a buyer views, attach the window card and photos, and keep the details in one place."
+      },
+      "offers": {
+        "title": "Offers, tracked",
+        "body": "Record each offer against the asking price, so you always know exactly where a deal stands."
+      },
+      "documents": {
+        "title": "Documents, organised",
+        "body": "Contracts, IDs, reservation papers — upload anything and keep it filed against the right client."
+      },
+      "agencies": {
+        "title": "One CRM, every agency",
+        "body": "Work with more than one agency? Tag each lead by agency so your whole book finally lives in a single place."
+      }
+    }
+  },
+  "howItWorks": {
+    "badge": "How it works",
+    "heading": "Three steps from hello to keys in hand",
+    "body": "Add a client, move them through the pipeline, and let LeadWing handle the follow-up. The whole job, in the order you actually work it.",
+    "steps": {
+      "plan": {
+        "title": "Plan the viewing",
+        "blurb": "Add a buyer and book the tour. LeadWing keeps the date, the reminder and the bell together — and syncs to your Google Calendar so it shows up everywhere you already look."
+      },
+      "pipeline": {
+        "title": "Move them down the pipeline",
+        "blurb": "Drag every buyer through clear stages — new, contacted, qualified, viewing, reserved. Log the offer against the asking price, and watch a deal cross the line."
+      },
+      "followUp": {
+        "title": "Let LeadWing follow up",
+        "blurb": "LeadWing spots clients going quiet and drafts a warm message in their language. You read it, tweak if you like, and send — no blank page, no chasing."
+      }
+    },
+    "tiles": {
+      "calendar": {
+        "month": "June",
+        "weekdays": "M,T,W,T,F,S,S",
+        "event": "Viewing · Villa · 11:00",
+        "synced": "Synced"
+      },
+      "pipeline": {
+        "offer": "Offer"
+      },
+      "followUp": {
+        "sentToast": "Follow-up sent"
+      }
+    }
+  },
+  "pipelineStrip": {
+    "heading": "From lead to reserved, at a glance",
+    "body": "Every buyer follows a simple journey. Move them forward and the right details unlock at each step.",
+    "note": "Sellers get their own flow too — pending to qualified, with every listing attached."
+  },
+  "deepDives": {
+    "heading": "Built for how independent agents actually work",
+    "body": "The things the big CRMs miss — WhatsApp, portals, languages — done simply.",
+    "items": {
+      "whatsapp": {
+        "title": "AI-written WhatsApp messages",
+        "body": "Tap a client and LeadWing drafts the WhatsApp message for you — warm, personal, and in their language. Read it, tweak it, send it.",
+        "point1": "Opens straight in WhatsApp",
+        "point2": "Written in the client's own language",
+        "point3": "You always approve before it sends"
+      },
+      "match": {
+        "title": "Buyer ↔ listing auto-match",
+        "body": "Because you track buyers and sellers in one place, LeadWing instantly shows which of your listings fit each buyer's budget, type and bedrooms.",
+        "point1": "Matches on budget, type & bedrooms",
+        "point2": "One tap from buyer to the seller",
+        "point3": "No double-handling between sides"
+      },
+      "portal": {
+        "title": "Portal lead capture",
+        "body": "Paste an enquiry from Idealista, Fotocasa, Kyero, an email or a WhatsApp — LeadWing reads it and fills a ready-to-save lead. No retyping.",
+        "point1": "Works with any portal, email or WhatsApp",
+        "point2": "Pulls out name, phone, language & budget",
+        "point3": "Pre-fills the new-client form for you"
+      },
+      "speed": {
+        "title": "Multilingual speed-to-lead",
+        "body": "When a new lead comes in, draft a first reply in their language in one tap — so you're first to respond, not staring at a blank message.",
+        "point1": "One-tap first reply",
+        "point2": "In the lead's own language",
+        "point3": "Send via WhatsApp or email"
+      },
+      "scheduler": {
+        "title": "Viewing scheduler + reminders",
+        "body": "Book viewings and meetings on a clean calendar, get a reminder before each one, and send the client a WhatsApp confirmation in a tap.",
+        "point1": "A simple month calendar for viewings & meetings",
+        "point2": "Reminders surface in your notifications",
+        "point3": "One-tap WhatsApp confirmation to the client"
+      }
+    },
+    "visuals": {
+      "newLead": "New lead · {name}",
+      "whatsapp": {
+        "online": "online",
+        "draftedBy": "Drafted by AI · German"
+      },
+      "match": {
+        "query": "<b>{name}</b> · wants Villa · €800k–1.2M · 4 bed",
+        "count": "2 of your listings match",
+        "meta1": "€950k · 4 bed",
+        "meta2": "€1.1M · 5 bed"
+      },
+      "portal": {
+        "aiFilled": "AI-filled",
+        "enquiry": "Penthouse · Marbella · enquiry from Idealista"
+      },
+      "speed": {
+        "firstReply": "first reply ready",
+        "aiDraft": "AI draft · Danish"
+      },
+      "scheduler": {
+        "month": "Jun",
+        "event": "Viewing · Villa, Nueva Andalucía",
+        "when": "Sat 12:00 · with {name}",
+        "reminder": "Reminder: your viewing is tomorrow at 12:00.",
+        "whatsapp": "One tap to send on WhatsApp"
+      }
+    }
+  },
+  "simple": {
+    "badge": "Built to stay simple",
+    "heading": "Everything you need. Nothing you don't.",
+    "body": "Most CRMs are built for big brokerages and bury solo agents in tools they'll never touch. LeadWing is the opposite — the essentials, done well, and we leave the rest out on purpose.",
+    "leftOutTitle": "Left out — on purpose",
+    "leftOut": {
+      "idx": "IDX website builders",
+      "dialers": "Power dialers & call centres",
+      "leaderboards": "Team leaderboards & lead-routing rules",
+      "marketplaces": "200-app integration marketplaces",
+      "dashboards": "Analytics dashboards no one opens",
+      "perSeat": "Per-seat enterprise pricing"
+    },
+    "includedTitle": "What you actually get",
+    "included": {
+      "pipeline": "Every client in a clear pipeline",
+      "followUps": "Follow-ups that write themselves",
+      "properties": "Properties, viewings & offers together",
+      "documents": "Documents filed against each client",
+      "installable": "Installable on your phone",
+      "agencies": "One place for every agency you work with"
+    },
+    "note": "Not yet another CRM — the only simple one you'll actually keep using."
+  },
+  "ai": {
+    "badge": "Built in · AI",
+    "heading": "Stop chasing. Let LeadWing do the <nowrap>follow-ups.</nowrap>",
+    "body": "The part every agent dreads — remembering who to email and what to say — handled for you. You stay in control: LeadWing drafts, you approve. No more doing it by hand.",
+    "email": {
+      "title": "AI-written, per-client emails",
+      "body": "LeadWing writes a warm, personal email for each client — in their language, referencing their budget, the properties they've seen, and where they are in the journey. No blank page, no copy-paste. You review and send."
+    },
+    "nudge": {
+      "title": "Auto-engage forgotten clients",
+      "body": "Leads go cold when they slip your mind. LeadWing watches for clients going quiet and surfaces them before you lose them — with a ready-to-send nudge. No spreadsheets, no reminders, nothing falling through the cracks."
+    }
+  },
+  "trust": {
+    "everywhere": {
+      "title": "Works everywhere",
+      "body": "Desktop and mobile, and installable as an app on your phone's home screen."
+    },
+    "data": {
+      "title": "Your data, yours only",
+      "body": "Every agent's clients are fully isolated. Nobody sees your book but you."
+    },
+    "setup": {
+      "title": "Nothing to set up",
+      "body": "Sign in and start adding clients. No training, no clutter, no per-seat sales calls."
+    }
+  },
+  "pricing": {
+    "heading": "Free to start. One plan when you grow.",
+    "body": "Every feature on both plans. The only difference is how many clients you can hold.",
+    "free": {
+      "name": "Free",
+      "price": "€0",
+      "period": "forever",
+      "limit": "Up to {limit} clients, buyers and sellers together",
+      "allFeatures": "Every feature, nothing gated",
+      "noCard": "No card, no time limit"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "€{amount}",
+      "period": "per month + IVA",
+      "note": "or €{yearly} a year, save {pct}%",
+      "unlimited": "Unlimited clients",
+      "everythingFree": "Everything in Free",
+      "referral": "A free month for every agent you refer"
+    },
+    "founding": "The first {cap} paying agents lock Pro at €{price} a month for life. Sign in to see how many founding spots are left.",
+    "ctaFree": "Start free",
+    "ctaPro": "Start free, upgrade any time"
+  },
+  "rentals": {
+    "badge": "Coming soon",
+    "heading": "Sales today. Rentals next.",
+    "body": "LeadWing handles your sales pipeline now — long and short-term rentals are on the way, in the same simple flow you already know."
+  },
+  "finalCta": {
+    "heading": "Ready to simplify your day?",
+    "body": "Set up takes a minute. Bring your first client into LeadWing and feel the difference."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you're looking for doesn't exist or was moved.",
+    "cta": "Go to clients"
+  }
+}

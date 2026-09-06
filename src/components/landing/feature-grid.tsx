@@ -1,6 +1,7 @@
 "use client";
 
 import type { CSSProperties, MouseEvent } from "react";
+import { useTranslations } from "next-intl";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import {
   Building2,
@@ -12,38 +13,15 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-const FEATURES: { icon: LucideIcon; title: string; body: string }[] = [
-  {
-    icon: Layers,
-    title: "A pipeline that moves",
-    body: "Drag every buyer and seller through clear stages — new, contacted, qualified, viewing, reserved — so nothing stalls.",
-  },
-  {
-    icon: Users,
-    title: "Clients in focus",
-    body: "Names, languages, nationalities, notes. Flag the hot ones, hide the cold, and always know who to call next.",
-  },
-  {
-    icon: Building2,
-    title: "Properties & viewings",
-    body: "Log every property a buyer views, attach the window card and photos, and keep the details in one place.",
-  },
-  {
-    icon: Euro,
-    title: "Offers, tracked",
-    body: "Record each offer against the asking price, so you always know exactly where a deal stands.",
-  },
-  {
-    icon: FileText,
-    title: "Documents, organised",
-    body: "Contracts, IDs, reservation papers — upload anything and keep it filed against the right client.",
-  },
-  {
-    icon: Tag,
-    title: "One CRM, every agency",
-    body: "Work with more than one agency? Tag each lead by agency so your whole book finally lives in a single place.",
-  },
-];
+/** Copy lives in `landing.features.items.<key>`; only the icon stays here. */
+const FEATURES = [
+  { key: "pipeline", icon: Layers },
+  { key: "clients", icon: Users },
+  { key: "properties", icon: Building2 },
+  { key: "offers", icon: Euro },
+  { key: "documents", icon: FileText },
+  { key: "agencies", icon: Tag },
+] as const satisfies readonly { key: string; icon: LucideIcon }[];
 
 /** Track the cursor inside a card so the spotlight follows it — no re-render. */
 function handleMove(e: MouseEvent<HTMLDivElement>) {
@@ -54,6 +32,7 @@ function handleMove(e: MouseEvent<HTMLDivElement>) {
 }
 
 export function FeatureGrid() {
+  const t = useTranslations("landing");
   const reduced = useReducedMotion();
 
   const container: Variants = {
@@ -83,7 +62,7 @@ export function FeatureGrid() {
     >
       {FEATURES.map((f) => (
         <motion.div
-          key={f.title}
+          key={f.key}
           variants={item}
           whileHover={
             reduced
@@ -113,9 +92,11 @@ export function FeatureGrid() {
             <div className="from-primary/20 to-primary/5 text-primary ring-primary/10 flex size-11 items-center justify-center rounded-xl bg-gradient-to-br shadow-sm ring-1 transition-[transform,box-shadow] duration-300 group-hover:scale-105 group-hover:ring-4 group-hover:ring-primary/15">
               <f.icon className="size-5 transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-110" />
             </div>
-            <h3 className="mt-4 font-semibold tracking-tight">{f.title}</h3>
+            <h3 className="mt-4 font-semibold tracking-tight">
+              {t(`features.items.${f.key}.title`)}
+            </h3>
             <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
-              {f.body}
+              {t(`features.items.${f.key}.body`)}
             </p>
           </div>
         </motion.div>

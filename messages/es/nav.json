@@ -1,0 +1,30 @@
+{
+  "home": "Inicio",
+  "buyers": "Compradores",
+  "sellers": "Vendedores",
+  "calendar": "Calendario",
+  "templates": "Plantillas",
+  "calculator": "Calculadora",
+  "referrals": "Referidos",
+  "billing": "Facturación",
+  "admin": "Admin",
+  "signOut": "Cerrar sesión",
+  "language": "Idioma",
+  "foundingAgent": "Agente fundador n.º {number}",
+  "plan": {
+    "pro": "Pro",
+    "comped": "cortesía",
+    "admin": "admin",
+    "until": "Hasta el {date}",
+    "unlimited": "Clientes ilimitados",
+    "free": "Gratis",
+    "usage": "{used} de {limit} clientes",
+    "upgrade": "Mejora tu plan para añadir más"
+  },
+  "marketing": {
+    "howItWorks": "Cómo funciona",
+    "pricing": "Precios",
+    "signIn": "Iniciar sesión",
+    "backHome": "Volver al inicio"
+  }
+}

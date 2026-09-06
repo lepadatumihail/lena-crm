@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { whatsappGreeting, whatsappLink } from "@/lib/whatsapp";
@@ -21,6 +23,7 @@ export function WhatsAppButton({
   language: string | null | undefined;
   className?: string;
 }) {
+  const t = useTranslations("clientDetail.whatsapp");
   const href = whatsappLink(phone, whatsappGreeting(firstName, language));
   if (!href) return null;
 
@@ -34,7 +37,7 @@ export function WhatsAppButton({
       <span className="text-[#25D366]">
         <WhatsAppIcon />
       </span>
-      Message on WhatsApp
+      {t("message")}
     </a>
   );
 }

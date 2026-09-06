@@ -1,5 +1,7 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
+
 import { revalidatePath } from "next/cache";
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
@@ -23,8 +25,9 @@ export async function upsertPreferences(
   clientId: string,
   values: PreferencesFormValues
 ): Promise<ActionResult> {
-  const parsed = preferencesFormSchema.safeParse(values);
-  if (!parsed.success) return { error: "Please check the form." };
+  const parsed = preferencesFormSchema(await getTranslations("validation")).safeParse(values);
+  if (!parsed.success)
+    return { error: (await getTranslations("clientDetail.errors"))("checkForm") };
   const v = parsed.data;
 
   const supabase = await createSupabase();
@@ -51,12 +54,13 @@ export async function saveViewing(
   values: ViewingFormValues,
   schedule: { scheduled_at: string | null; reminder_minutes: number | null }
 ): Promise<{ error: string | null; id?: string }> {
-  const parsed = viewingFormSchema.safeParse(values);
-  if (!parsed.success) return { error: "Please check the form." };
+  const t = await getTranslations("clientDetail.errors");
+  const parsed = viewingFormSchema(await getTranslations("validation")).safeParse(values);
+  if (!parsed.success) return { error: t("checkForm") };
   const v = parsed.data;
 
   const parsedSchedule = viewingScheduleSchema.safeParse(schedule);
-  if (!parsedSchedule.success) return { error: "Please check the form." };
+  if (!parsedSchedule.success) return { error: t("checkForm") };
   const s = parsedSchedule.data;
 
   const supabase = await createSupabase();
@@ -128,20 +132,22 @@ export async function addViewingAttachment(
     kind: "window_card" | "image";
   }
 ): Promise<ActionResult> {
+  const t = await getTranslations("clientDetail.errors");
   const supabase = await createSupabase();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { error: "Not authenticated" };
+  if (!user)
+    return { error: (await getTranslations("common"))("errors.notAuthenticated") };
   if (!meta.storage_path.startsWith(`${user.id}/${clientId}/`))
-    return { error: "Invalid file path" };
+    return { error: t("invalidFilePath") };
   const { data: viewing } = await supabase
     .from("viewings")
     .select("id, client_id")
     .eq("id", viewingId)
     .maybeSingle();
   if (!viewing || viewing.client_id !== clientId)
-    return { error: "Viewing not found" };
+    return { error: t("viewingNotFound") };
 
   const { error } = await supabase.from("viewing_attachments").insert({
     viewing_id: viewingId,
@@ -184,8 +190,9 @@ export async function upsertReservation(
   clientId: string,
   values: ReservationFormValues
 ): Promise<ActionResult> {
-  const parsed = reservationFormSchema.safeParse(values);
-  if (!parsed.success) return { error: "Please check the form." };
+  const parsed = reservationFormSchema(await getTranslations("validation")).safeParse(values);
+  if (!parsed.success)
+    return { error: (await getTranslations("clientDetail.errors"))("checkForm") };
   const v = parsed.data;
 
   const supabase = await createSupabase();

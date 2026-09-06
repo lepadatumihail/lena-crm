@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import {
   addMonths,
   eachDayOfInterval,
@@ -24,6 +25,9 @@ import {
   Users,
 } from "lucide-react";
 
+import { intlTag } from "@/i18n/config";
+import { dateFnsLocale } from "@/i18n/dates";
+import { appointmentTypeLabel } from "@/i18n/labels";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
@@ -47,17 +51,6 @@ import type {
 import type { Viewing } from "@/lib/supabase/types";
 
 const DAY_KEY = "yyyy-MM-dd";
-const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-function eventMeta(e: CalendarEvent): string {
-  const parts = [
-    e.kind === "viewing" ? "Viewing" : "Meeting",
-    formatTimeRange(e.starts_at, e.ends_at),
-  ];
-  if (e.kind === "viewing" && e.buyerName) parts.push(e.buyerName);
-  if (e.location) parts.push(e.location);
-  return parts.join(" · ");
-}
 
 function eventDescription(e: CalendarEvent): string | null {
   if (e.kind === "viewing") return e.viewing.description?.trim() || null;
@@ -73,6 +66,25 @@ export function CalendarView({
   events: CalendarEvent[];
   clients: CalendarClientOption[];
 }) {
+  const t = useTranslations("calendar");
+  const tCommon = useTranslations("common");
+  const tCrm = useTranslations("crm");
+  const locale = useLocale();
+  const dateLocale = dateFnsLocale(locale);
+  const tag = intlTag(locale);
+
+  // `e.title` is derived and translated server-side (lib/data/calendar via
+  // i18n/appointments), so it already follows the agent's language here.
+  function eventMeta(e: CalendarEvent): string {
+    const parts = [
+      appointmentTypeLabel(tCrm, e.kind === "viewing" ? "viewing" : "meeting"),
+      formatTimeRange(e.starts_at, e.ends_at),
+    ];
+    if (e.kind === "viewing" && e.buyerName) parts.push(e.buyerName);
+    if (e.location) parts.push(e.location);
+    return parts.join(" · ");
+  }
+
   const base = parseISO(`${monthISO}-01`);
   const gridStart = startOfWeek(startOfMonth(base), { weekStartsOn: 1 });
   const gridEnd = endOfWeek(endOfMonth(base), { weekStartsOn: 1 });
@@ -139,34 +151,48 @@ export function CalendarView({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {format(base, "MMMM yyyy")}
+        <h1 className="text-2xl font-semibold tracking-tight first-letter:uppercase">
+          {format(base, "MMMM yyyy", { locale: dateLocale })}
         </h1>
         <div className="flex items-center gap-2">
-          <Button asChild variant="outline" size="icon" aria-label="Previous month">
+          <Button
+            asChild
+            variant="outline"
+            size="icon"
+            aria-label={t("actions.previousMonth")}
+          >
             <Link href={`/calendar?month=${prevMonth}`}>
               <ChevronLeft />
             </Link>
           </Button>
           <Button asChild variant="outline" size="sm">
-            <Link href="/calendar">Today</Link>
+            <Link href="/calendar">{tCommon("today")}</Link>
           </Button>
-          <Button asChild variant="outline" size="icon" aria-label="Next month">
+          <Button
+            asChild
+            variant="outline"
+            size="icon"
+            aria-label={t("actions.nextMonth")}
+          >
             <Link href={`/calendar?month=${nextMonth}`}>
               <ChevronRight />
             </Link>
           </Button>
           <CalendarSyncDialog />
           <Button size="sm" onClick={() => startChoosing(todayKey)}>
-            <Plus /> New
+            <Plus /> {t("actions.new")}
           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-7 text-center">
-        {WEEKDAYS.map((d) => (
-          <div key={d} className="text-muted-foreground py-1 text-xs font-medium">
-            {d}
+        {/* The grid always starts on a Monday, so its first row names the week. */}
+        {days.slice(0, 7).map((day) => (
+          <div
+            key={format(day, DAY_KEY)}
+            className="text-muted-foreground py-1 text-xs font-medium first-letter:uppercase"
+          >
+            {format(day, "EEE", { locale: dateLocale })}
           </div>
         ))}
       </div>
@@ -212,7 +238,7 @@ export function CalendarView({
                 ))}
                 {items.length > 3 && (
                   <span className="text-muted-foreground px-1 text-[11px]">
-                    +{items.length - 3} more
+                    {t("grid.more", { count: items.length - 3 })}
                   </span>
                 )}
               </div>
@@ -225,16 +251,18 @@ export function CalendarView({
       <Dialog open={dayOpen != null} onOpenChange={(o) => !o && setDayOpen(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              {dayOpen ? format(parseISO(dayOpen), "EEEE d MMMM") : ""}
+            <DialogTitle className="first-letter:uppercase">
+              {dayOpen
+                ? format(parseISO(dayOpen), "EEEE d MMMM", {
+                    locale: dateLocale,
+                  })
+                : ""}
             </DialogTitle>
-            <DialogDescription>
-              Meetings and viewings scheduled for this day.
-            </DialogDescription>
+            <DialogDescription>{t("day.description")}</DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
             {dayList.length === 0 ? (
-              <p className="text-muted-foreground text-sm">Nothing scheduled.</p>
+              <p className="text-muted-foreground text-sm">{t("day.empty")}</p>
             ) : (
               dayList.map((e) => {
                 const remind = eventReminderHref(e);
@@ -272,13 +300,21 @@ export function CalendarView({
                             e.viewing.had_offer) && (
                             <p className="text-muted-foreground mt-1 text-xs">
                               {e.viewing.property_price != null &&
-                                `Asking ${formatCurrency(
-                                  e.viewing.property_price
-                                )}`}
+                                t("day.asking", {
+                                  price: formatCurrency(
+                                    e.viewing.property_price,
+                                    tag
+                                  ),
+                                })}
                               {e.viewing.had_offer &&
                                 `${
                                   e.viewing.property_price != null ? " · " : ""
-                                }Offer ${formatCurrency(e.viewing.offer_price)}`}
+                                }${t("day.offer", {
+                                  price: formatCurrency(
+                                    e.viewing.offer_price,
+                                    tag
+                                  ),
+                                })}`}
                             </p>
                           )}
                       </div>
@@ -292,8 +328,8 @@ export function CalendarView({
                           buttonVariants({ variant: "outline", size: "icon" }),
                           "shrink-0"
                         )}
-                        title="Remind on WhatsApp"
-                        aria-label="Send a WhatsApp reminder"
+                        title={t("day.remind")}
+                        aria-label={t("day.remindAria")}
                       >
                         <MessageCircle className="size-4 text-[#25D366]" />
                       </a>
@@ -308,7 +344,7 @@ export function CalendarView({
             variant="outline"
             className="w-full"
           >
-            <Plus /> Add
+            <Plus /> {tCommon("add")}
           </Button>
         </DialogContent>
       </Dialog>
@@ -318,10 +354,16 @@ export function CalendarView({
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
             <DialogTitle>
-              Add to {choosing ? format(parseISO(choosing), "EEE d MMM") : ""}
+              {t("add.title", {
+                date: choosing
+                  ? format(parseISO(choosing), "EEE d MMM", {
+                      locale: dateLocale,
+                    })
+                  : "",
+              })}
             </DialogTitle>
             <DialogDescription className="sr-only">
-              Choose whether to add a meeting or a viewing.
+              {t("add.description")}
             </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-3">
@@ -330,14 +372,15 @@ export function CalendarView({
               onClick={chooseMeeting}
               className="hover:border-primary hover:bg-accent flex flex-col items-center gap-2 rounded-lg border p-4 text-sm font-medium transition-colors"
             >
-              <Users className="size-5" /> Meeting
+              <Users className="size-5" /> {appointmentTypeLabel(tCrm, "meeting")}
             </button>
             <button
               type="button"
               onClick={chooseViewing}
               className="hover:border-primary hover:bg-accent flex flex-col items-center gap-2 rounded-lg border p-4 text-sm font-medium transition-colors"
             >
-              <CalendarClock className="size-5" /> Viewing
+              <CalendarClock className="size-5" />{" "}
+              {appointmentTypeLabel(tCrm, "viewing")}
             </button>
           </div>
         </DialogContent>

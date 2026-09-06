@@ -1,19 +1,62 @@
 import { cn } from "@/lib/utils";
 import {
   formatEuro,
-  formatEuroPrefix,
-  formatRate,
   formatSignedPercent,
   formatSqm,
   type DealInput,
   type DealResult,
 } from "@/lib/calculator/deal";
 
+/**
+ * Every piece of prose the summary and the PDF render, already translated.
+ * Built once in the calculator screen (where hooks are allowed) because the
+ * @react-pdf renderer runs outside React's tree — no `useTranslations` there.
+ * Labels that embed a computed value (rates, months, €/m²) arrive interpolated.
+ */
+export type DealLabels = {
+  untitled: string;
+  documentTitle: string;
+  subtitle: string;
+  netProfit: string;
+  roi: string;
+  irrExit: string;
+  capitalDeployed: string;
+  acquisition: string;
+  purchasePrice: string;
+  transferTax: string;
+  lawyerFee: string;
+  notaryFee: string;
+  totalAcquisition: string;
+  project: string;
+  projectType: string;
+  projectTypeValue: string;
+  surface: string;
+  duration: string;
+  durationValue: string;
+  baseBuildCost: string;
+  contingency: string;
+  totalProjectCost: string;
+  exitAndReturns: string;
+  grossSalePrice: string;
+  agentCommission: string;
+  netProceeds: string;
+  netProfitLoss: string;
+  returnsByExit: string;
+  colExit: string;
+  colNetProfit: string;
+  colRoi: string;
+  colIrr: string;
+  confidential: string;
+  /** "6 months" — one row of the exit-timeline table. */
+  exitRow: (months: number) => string;
+};
+
 export type DealView = {
   title: string;
   dateLabel: string;
   input: DealInput;
   result: DealResult;
+  labels: DealLabels;
 };
 
 const tone = (n: number) =>
@@ -55,52 +98,45 @@ function SectionLabel({ children }: { children: string }) {
   );
 }
 
-export function DealSummary({ title, dateLabel, input, result }: DealView) {
+export function DealSummary({ title, input, result, labels }: DealView) {
   const r = result;
   return (
     <div className="text-foreground">
       {/* Header */}
       <div className="border-foreground/80 border-b-2 pb-3">
         <h2 className="text-2xl font-bold tracking-tight">
-          {title || "Untitled deal"}
+          {title || labels.untitled}
         </h2>
-        <p className="text-muted-foreground mt-1 text-xs">
-          Deal Analysis · {dateLabel} · All-upfront model
-        </p>
+        <p className="text-muted-foreground mt-1 text-xs">{labels.subtitle}</p>
       </div>
 
       {/* KPI row */}
       <div className="border-border mt-5 grid grid-cols-2 divide-x divide-y rounded-lg border sm:grid-cols-4 sm:divide-y-0">
-        <Kpi label="Net Profit" value={formatEuro(r.netProfit)} valueClass={tone(r.netProfit)} />
-        <Kpi label="ROI" value={formatSignedPercent(r.roi)} valueClass={tone(r.roi)} />
         <Kpi
-          label={`IRR (${input.durationMonths}M exit)`}
+          label={labels.netProfit}
+          value={formatEuro(r.netProfit)}
+          valueClass={tone(r.netProfit)}
+        />
+        <Kpi label={labels.roi} value={formatSignedPercent(r.roi)} valueClass={tone(r.roi)} />
+        <Kpi
+          label={labels.irrExit}
           value={formatSignedPercent(r.irr)}
           valueClass={tone(r.irr)}
         />
-        <Kpi label="Capital Deployed" value={formatEuro(r.capitalDeployed)} />
+        <Kpi label={labels.capitalDeployed} value={formatEuro(r.capitalDeployed)} />
       </div>
 
       {/* Acquisition + Project */}
       <div className="mt-6 grid gap-x-12 gap-y-6 sm:grid-cols-2">
         <div>
-          <SectionLabel>Acquisition</SectionLabel>
-          <Line label="Purchase Price" value={formatEuro(input.askingPrice)} />
-          <Line
-            label={`Transfer Tax (${formatRate(input.transferTaxPct)})`}
-            value={formatEuro(r.transferTax)}
-          />
+          <SectionLabel>{labels.acquisition}</SectionLabel>
+          <Line label={labels.purchasePrice} value={formatEuro(input.askingPrice)} />
+          <Line label={labels.transferTax} value={formatEuro(r.transferTax)} />
           <div className="mt-1.5" />
+          <Line label={labels.lawyerFee} value={formatEuro(r.lawyerFee)} />
+          <Line label={labels.notaryFee} value={formatEuro(r.notaryFee)} />
           <Line
-            label={`Lawyer Fee (${formatRate(input.lawyerPct)})`}
-            value={formatEuro(r.lawyerFee)}
-          />
-          <Line
-            label={`Notary Fee (${formatRate(input.notaryPct)})`}
-            value={formatEuro(r.notaryFee)}
-          />
-          <Line
-            label="Total Acquisition"
+            label={labels.totalAcquisition}
             value={formatEuro(r.totalAcquisition)}
             bold
             divider
@@ -108,20 +144,14 @@ export function DealSummary({ title, dateLabel, input, result }: DealView) {
         </div>
 
         <div>
-          <SectionLabel>Project</SectionLabel>
+          <SectionLabel>{labels.project}</SectionLabel>
+          <Line label={labels.projectType} value={labels.projectTypeValue} />
+          <Line label={labels.surface} value={formatSqm(input.surfaceSqm)} />
+          <Line label={labels.duration} value={labels.durationValue} />
+          <Line label={labels.baseBuildCost} value={formatEuro(r.baseBuildCost)} />
+          <Line label={labels.contingency} value={formatEuro(r.contingency)} />
           <Line
-            label="Type"
-            value={`Renovation — ${formatEuroPrefix(input.renovationPerSqm)}/m²`}
-          />
-          <Line label="Surface" value={formatSqm(input.surfaceSqm)} />
-          <Line label="Duration" value={`${input.durationMonths} months`} />
-          <Line label="Base Build Cost" value={formatEuro(r.baseBuildCost)} />
-          <Line
-            label={`Contingency (${formatRate(input.contingencyPct)})`}
-            value={formatEuro(r.contingency)}
-          />
-          <Line
-            label="Total Project Cost"
+            label={labels.totalProjectCost}
             value={formatEuro(r.totalProjectCost)}
             bold
             divider
@@ -131,15 +161,17 @@ export function DealSummary({ title, dateLabel, input, result }: DealView) {
 
       {/* Exit & returns */}
       <div className="mt-6">
-        <SectionLabel>Exit &amp; Returns</SectionLabel>
-        <Line label="Gross Sale Price" value={formatEuro(r.grossSalePrice)} />
+        <SectionLabel>{labels.exitAndReturns}</SectionLabel>
+        <Line label={labels.grossSalePrice} value={formatEuro(r.grossSalePrice)} />
+        <Line label={labels.agentCommission} value={formatEuro(r.agentCommission)} />
         <Line
-          label={`Agent Commission (${formatRate(input.agencyFeePct)})`}
-          value={formatEuro(r.agentCommission)}
+          label={labels.netProceeds}
+          value={formatEuro(r.netProceeds)}
+          bold
+          divider
         />
-        <Line label="Net Proceeds" value={formatEuro(r.netProceeds)} bold divider />
         <Line
-          label="Net Profit / (Loss)"
+          label={labels.netProfitLoss}
           value={formatEuro(r.netProfit)}
           bold
           valueClass={tone(r.netProfit)}
@@ -148,15 +180,17 @@ export function DealSummary({ title, dateLabel, input, result }: DealView) {
 
       {/* Returns by exit timeline */}
       <div className="mt-6">
-        <SectionLabel>Returns by Exit Timeline</SectionLabel>
+        <SectionLabel>{labels.returnsByExit}</SectionLabel>
         <div className="overflow-hidden rounded-lg border">
           <table className="w-full text-sm tabular-nums">
             <thead>
               <tr className="text-muted-foreground bg-muted/60 text-[11px] tracking-wide uppercase">
-                <th className="px-3 py-2 text-left font-medium">Exit</th>
-                <th className="px-3 py-2 text-right font-medium">Net Profit</th>
-                <th className="px-3 py-2 text-right font-medium">ROI</th>
-                <th className="px-3 py-2 text-right font-medium">IRR (ann.)</th>
+                <th className="px-3 py-2 text-left font-medium">{labels.colExit}</th>
+                <th className="px-3 py-2 text-right font-medium">
+                  {labels.colNetProfit}
+                </th>
+                <th className="px-3 py-2 text-right font-medium">{labels.colRoi}</th>
+                <th className="px-3 py-2 text-right font-medium">{labels.colIrr}</th>
               </tr>
             </thead>
             <tbody>
@@ -171,7 +205,8 @@ export function DealSummary({ title, dateLabel, input, result }: DealView) {
                     )}
                   >
                     <td className="px-3 py-2 text-left font-medium">
-                      {row.months} months{isBase ? " •" : ""}
+                      {labels.exitRow(row.months)}
+                      {isBase ? " •" : ""}
                     </td>
                     <td className={cn("px-3 py-2 text-right", tone(row.netProfit))}>
                       {formatEuro(row.netProfit)}

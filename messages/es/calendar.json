@@ -1,0 +1,83 @@
+{
+  "title": "Calendario",
+  "actions": {
+    "new": "Nuevo",
+    "create": "Crear",
+    "previousMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente"
+  },
+  "grid": {
+    "more": "+{count} más"
+  },
+  "day": {
+    "description": "Reuniones y visitas programadas para este día.",
+    "empty": "Nada programado.",
+    "asking": "Precio {price}",
+    "offer": "Oferta {price}",
+    "remind": "Recordar por WhatsApp",
+    "remindAria": "Enviar un recordatorio por WhatsApp"
+  },
+  "add": {
+    "title": "Añadir al {date}",
+    "description": "Elige si quieres añadir una reunión o una visita."
+  },
+  "form": {
+    "newTitle": "Nueva reunión",
+    "editTitle": "Editar reunión",
+    "description": "Programa una reunión con un cliente y añade un recordatorio opcional.",
+    "client": "Cliente",
+    "clientPlaceholder": "Selecciona un cliente…",
+    "noClients": "Aún no hay clientes",
+    "title": "Título (opcional)",
+    "titlePlaceholder": "Por defecto, el nombre del cliente",
+    "date": "Fecha",
+    "time": "Hora",
+    "duration": "Duración",
+    "location": "Ubicación (opcional)",
+    "locationPlaceholder": "Oficina, dirección, videollamada…",
+    "reminder": "Recordatorio",
+    "notes": "Notas (opcional)",
+    "notesPlaceholder": "Algo que recordar…",
+    "deleteTitle": "¿Eliminar la reunión?",
+    "deleteDescription": "Esta reunión se eliminará de forma permanente."
+  },
+  "durations": {
+    "30": "30 minutos",
+    "45": "45 minutos",
+    "60": "1 hora",
+    "90": "1,5 horas",
+    "120": "2 horas"
+  },
+  "toasts": {
+    "invalidDateTime": "Fecha u hora no válidas",
+    "saveFailed": "No se ha podido guardar la reunión",
+    "created": "Reunión creada",
+    "updated": "Reunión actualizada",
+    "deleteFailed": "No se ha podido eliminar",
+    "deleted": "Reunión eliminada"
+  },
+  "sync": {
+    "button": "Sincronizar",
+    "title": "Sincronizar con Google Calendar",
+    "description": "Suscríbete una vez y tus visitas y reuniones aparecerán en Google automáticamente.",
+    "linkLabel": "Tu enlace privado de calendario",
+    "generating": "Generando…",
+    "copyLink": "Copiar enlace",
+    "privacy": "Mantén este enlace en privado — cualquiera que lo tenga puede ver tu agenda.",
+    "howTitle": "Cómo añadirlo",
+    "step1": "Copia el enlace de arriba.",
+    "step2": "En Google Calendar, junto a «Otros calendarios», haz clic en <b>+ → Desde URL</b>.",
+    "step3": "Pega el enlace y añádelo.",
+    "openGoogle": "Abrir Google Calendar",
+    "note": "Los calendarios suscritos se actualizan cada pocas horas, así que un evento recién añadido puede tardar un poco en aparecer en Google.",
+    "linkFailed": "No se ha podido generar tu enlace de sincronización",
+    "copyFailed": "No se ha podido copiar — selecciona y copia manualmente"
+  },
+  "picker": {
+    "pickDate": "Elige una fecha"
+  },
+  "errors": {
+    "notSignedIn": "No has iniciado sesión",
+    "checkForm": "Revisa el formulario."
+  }
+}

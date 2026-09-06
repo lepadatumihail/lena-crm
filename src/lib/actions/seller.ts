@@ -1,5 +1,7 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
+
 import { revalidatePath } from "next/cache";
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
@@ -16,8 +18,9 @@ export async function saveProperty(
   propertyId: string | null,
   values: PropertyFormValues
 ): Promise<{ error: string | null; id?: string }> {
-  const parsed = propertyFormSchema.safeParse(values);
-  if (!parsed.success) return { error: "Please check the form." };
+  const parsed = propertyFormSchema(await getTranslations("validation")).safeParse(values);
+  if (!parsed.success)
+    return { error: (await getTranslations("clientDetail.errors"))("checkForm") };
   const v = parsed.data;
 
   const supabase = await createSupabase();

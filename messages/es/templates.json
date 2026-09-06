@@ -1,0 +1,85 @@
+{
+  "title": "Plantillas",
+  "subtitle": "Mensajes reutilizables: personaliza cualquiera con IA en el compositor antes de enviarlo.",
+  "new": "Nueva plantilla",
+  "mine": {
+    "title": "Mis plantillas",
+    "empty": "Aún no tienes plantillas. Crea una o personaliza una de las básicas de abajo."
+  },
+  "starters": {
+    "title": "Plantillas básicas",
+    "subtitle": "Incluidas y siempre disponibles. Personaliza una para hacerla tuya.",
+    "customise": "Personalizar"
+  },
+  "card": {
+    "subject": "Asunto: {subject}",
+    "editAria": "Editar plantilla",
+    "deleteAria": "Eliminar plantilla",
+    "deleteTitle": "¿Eliminar la plantilla?",
+    "deleteDescription": "Se eliminará «{name}»."
+  },
+  "use": {
+    "button": "Usar",
+    "title": "Usar esta plantilla",
+    "description": "Elige un cliente: el compositor se abre con esta plantilla cargada, lista para personalizar y enviar.",
+    "placeholder": "Selecciona un cliente…",
+    "noClients": "Aún no tienes clientes",
+    "open": "Abrir el compositor"
+  },
+  "dialog": {
+    "newTitle": "Nueva plantilla",
+    "editTitle": "Editar plantilla",
+    "description": "Usa marcadores como '{{first_name}}': se rellenan con los datos del cliente. Haz clic en una etiqueta para insertar uno.",
+    "name": "Nombre",
+    "namePlaceholder": "p. ej. Aviso de bajada de precio",
+    "subject": "Asunto (solo email, opcional)",
+    "subjectPlaceholder": "Línea de asunto",
+    "message": "Mensaje",
+    "bodyPlaceholder": "Hola '{{first_name}}', …",
+    "preview": "Vista previa (datos de ejemplo)",
+    "previewEmpty": "Aquí aparecerá la vista previa de tu mensaje.",
+    "create": "Crear"
+  },
+  "toasts": {
+    "created": "Plantilla creada",
+    "updated": "Plantilla actualizada",
+    "deleted": "Plantilla eliminada",
+    "saveFailed": "No se ha podido guardar la plantilla",
+    "deleteFailed": "No se ha podido eliminar"
+  },
+  "errors": {
+    "checkForm": "Revisa el formulario."
+  },
+  "builtin": {
+    "intro": {
+      "label": "Preséntate",
+      "description": "Un primer saludo cercano a un lead nuevo",
+      "purpose": "Preséntate con cercanía a un lead recién llegado e invítale a contarte qué está buscando."
+    },
+    "new_matches": {
+      "label": "Anuncios que encajan",
+      "description": "Comparte propiedades que encajan con sus criterios",
+      "purpose": "Cuéntale al comprador que hay nuevos anuncios que encajan con su presupuesto y sus preferencias, y ofrécete a enviarle los detalles o a organizar una visita."
+    },
+    "viewing_confirm": {
+      "label": "Confirmar una visita",
+      "description": "Confirma una cita próxima",
+      "purpose": "Confirma una visita próxima a la propiedad y transmítele que tienes ganas de enseñársela."
+    },
+    "offer_followup": {
+      "label": "Seguimiento de la oferta",
+      "description": "Haz seguimiento después de una oferta",
+      "purpose": "Haz seguimiento de la oferta que hizo el comprador y hazle saber que estás persiguiendo activamente una respuesta."
+    },
+    "reservation_next": {
+      "label": "Siguientes pasos de la reserva",
+      "description": "Explica qué pasa a continuación",
+      "purpose": "Tranquiliza al comprador que ha reservado una propiedad y explícale que le guiarás en cada uno de los siguientes pasos."
+    },
+    "check_in": {
+      "label": "Retomar el contacto",
+      "description": "Reconecta con calma con un lead inactivo",
+      "purpose": "Retoma el contacto con un lead que se ha quedado en silencio, sin presionar, y ofrécele ayuda cuando esté listo."
+    }
+  }
+}

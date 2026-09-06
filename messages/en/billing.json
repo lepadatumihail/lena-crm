@@ -1,0 +1,197 @@
+{
+  "meta": {
+    "title": "Billing",
+    "pricingTitle": "Plans & pricing"
+  },
+  "title": "Billing",
+  "subtitle": "Your plan, next invoice, payment method and receipts.",
+  "notices": {
+    "pending": "Thanks! Stripe is confirming your payment. This page refreshes on its own for a few seconds; if nothing changes, give it a minute and reload.",
+    "upgraded": "Thank you — you're on Pro. Everything about your subscription lives here.",
+    "portalUnavailable": "The billing portal isn't available for this account yet. Get in touch and we'll sort it by hand.",
+    "stripeUnavailable": "Stripe didn't answer just now, so the payment method and invoices may be missing below. Your plan is unaffected; reload in a moment."
+  },
+  "footer": {
+    "note": "Prices exclude IVA. Cancel any time from the billing portal; your data stays exactly where it is."
+  },
+  "plan": {
+    "titleFounding": "Pro · Founding",
+    "titlePro": "Pro",
+    "titleFree": "Free",
+    "descFounding": "Your price is locked for life. Unlimited clients, every feature.",
+    "descPro": "Unlimited clients, every feature.",
+    "descComp": "Comped Pro time: no card, no subscription. Unlimited clients while it lasts.",
+    "descAdmin": "You're on Pro as the admin. Subscribing is only for testing checkout.",
+    "descFree": "Every feature, up to {limit} clients. Upgrade when you outgrow it; nothing is ever deleted.",
+    "badgeEnds": "Ends {date}",
+    "badgeUntil": "Until {date}",
+    "badgeAdmin": "Admin",
+    "badgeFree": "Free plan",
+    "perMonth": "per month + IVA",
+    "perYear": "per year + IVA",
+    "plusIva": "+ IVA",
+    "priceForNow": "for now",
+    "priceAdmin": "admin account",
+    "priceForever": "forever",
+    "foundingAgent": "Founding Agent #{number}"
+  },
+  "facts": {
+    "plan": "Plan",
+    "nextInvoice": "Next invoice",
+    "ends": "Ends",
+    "ended": "Ended",
+    "subscribedSince": "Subscribed since",
+    "currentPeriod": "Current period",
+    "proUntil": "Pro until",
+    "afterThat": "After that",
+    "backToFree": "Back to Free",
+    "nothingDeleted": "Nothing is deleted.",
+    "clients": "Clients",
+    "clientsValue": "{count} of {limit}",
+    "foundingPrice": "Founding price",
+    "cohortFull": "Cohort full",
+    "foundingHint": "€{price} a month for life instead of €{standard}.",
+    "previousSubscription": "Previous subscription",
+    "endedOn": "Ended {date}"
+  },
+  "nextInvoice": {
+    "inclIva": "{amount} incl. IVA",
+    "plusIva": "{amount} + IVA",
+    "onDate": "{amount} on {date}",
+    "creditHint": "{amount} of free-month credit already taken off"
+  },
+  "messages": {
+    "pastDue": "Your last payment didn't go through. Stripe is retrying; update your card to keep Pro without a gap.",
+    "ending": "Your subscription ends on {date}. You keep Pro until then, and everything stays exactly where it is after. Changed your mind? Resume it from the portal.",
+    "canceled": "Stripe shows this subscription ended on {date}. If that's a surprise, get in touch."
+  },
+  "actions": {
+    "updatePaymentMethod": "Update payment method",
+    "resumeOrManage": "Resume or manage",
+    "manageSubscription": "Manage subscription",
+    "portalHint": "Change your card, download invoices or cancel. Handled by Stripe.",
+    "manualHint": "Your subscription is managed by hand. Get in touch to change anything.",
+    "subscribeToKeepPro": "Subscribe to keep Pro",
+    "seePlans": "See plans",
+    "upgradeToPro": "Upgrade to Pro"
+  },
+  "clients": {
+    "title": "Clients",
+    "unlimited": "Unlimited on Pro, buyers and sellers together.",
+    "limited": "Up to {limit} on Free, buyers and sellers together.",
+    "count": "{count, plural, one {client} other {clients}}",
+    "ofLimit": "of {limit}",
+    "atCap": "You're at the cap. Adding another needs Pro; everything you have stays as it is.",
+    "openPipelines": "Open pipelines"
+  },
+  "payment": {
+    "title": "Payment method",
+    "description": "Stored by Stripe. We never see the numbers.",
+    "loadFailed": "Couldn't load it from Stripe just now.",
+    "none": "No payment method on file.",
+    "change": "Change payment method"
+  },
+  "method": {
+    "card": "Card",
+    "cardEnding": "{brand} ending {last4}",
+    "expires": "Expires {month}/{year}",
+    "sepa": "SEPA direct debit",
+    "sepaEnding": "SEPA direct debit ending {last4}"
+  },
+  "credits": {
+    "title": "Free months",
+    "description": "One for every agent you refer who subscribes and pays their second month. They get one too.",
+    "earnedSoFar": "earned so far",
+    "onStripe": "<b>{amount}</b> of credit sits on your Stripe account and comes off your next invoice automatically.",
+    "waiting": "<b>€{amount}</b> in free months is waiting and will come off your invoices once you subscribe.",
+    "compedUntil": "Pro is comped until <b>{date}</b>.",
+    "empty": "Nothing yet. Share your referral link with the agents you co-broke with.",
+    "referAnAgent": "Refer an agent",
+    "months": "{count, plural, one {# month of Pro} other {# months of Pro}}",
+    "creditedToStripe": "credited to your Stripe balance",
+    "waitingFirstInvoice": "waiting for your first invoice",
+    "monthsShort": "+{count} mo",
+    "reason": {
+      "referral_inviter": "An agent you referred paid their second month",
+      "referral_invitee": "You joined through a referral and paid your second month",
+      "manual_comp": "Comped by LeadWing"
+    }
+  },
+  "invoices": {
+    "title": "Invoices",
+    "description": "Every invoice Stripe has issued for your account, with a PDF for your accountant.",
+    "all": "All invoices",
+    "emptyStripeDown": "Couldn't load your invoices from Stripe just now. Reload in a moment, or open the billing portal.",
+    "emptySubscribed": "Your invoices will appear here once Stripe has issued the first one.",
+    "empty": "No invoices yet. Invoices appear here once you subscribe.",
+    "date": "Date",
+    "period": "Period",
+    "amount": "Amount",
+    "status": "Status",
+    "open": "Open"
+  },
+  "invoiceStatus": {
+    "paid": "Paid",
+    "open": "Due",
+    "void": "Void",
+    "uncollectible": "Unpaid",
+    "draft": "Draft",
+    "unknown": "—"
+  },
+  "phase": {
+    "active": "Active",
+    "past_due": "Payment past due",
+    "ending": "Ending",
+    "canceled": "Canceled",
+    "incomplete": "Incomplete"
+  },
+  "planName": {
+    "founding": "Founding · {price}",
+    "pro": "Pro · {price}",
+    "monthly": "€{amount}/mo",
+    "yearly": "€{amount}/yr"
+  },
+  "founding": {
+    "spots": "{count, plural, one {# founding spot left} other {# founding spots left}}",
+    "spotsBare": "{count, plural, one {# spot left} other {# spots left}}"
+  },
+  "upgradePrompt": {
+    "title": "You've used your {limit} free clients",
+    "description": "Pro is unlimited: €{standard} a month, or €{founding} a month for life while spots for the first {cap} paying agents last. Everything you've added stays exactly where it is."
+  },
+  "pricing": {
+    "freeTitle": "Free",
+    "proTitle": "Pro",
+    "yourPlan": "Your plan",
+    "forever": "forever",
+    "monthly": "Monthly",
+    "yearlySave": "Yearly · save {pct}%",
+    "freeFeatures": {
+      "clients": "Up to {limit} clients, buyers and sellers together",
+      "everything": "Every feature: pipelines, viewings, offers, calendar, templates, calculator",
+      "noCard": "Free forever, no card"
+    },
+    "proFeatures": {
+      "unlimited": "Unlimited clients",
+      "everythingInFree": "Everything in Free",
+      "referral": "A free month for every agent you refer who subscribes",
+      "founding": "A Founding Agent number, and this price for good"
+    },
+    "clientsUsed": "{count} of {limit} clients used.",
+    "foundingLocked": "Founding price, locked for life for the first {cap} paying agents.",
+    "cohortFull": "The founding cohort is full. This is the standard price.",
+    "onPlan": "You're on <b>{plan}</b>.",
+    "onPlanFounding": "You're on <b>{plan}</b><f> · Founding Agent #{number}</f>.",
+    "compedUntil": "You're on Pro until <b>{date}</b>, earned from a referral. Subscribe to keep it going.",
+    "adminNote": "You're on Pro as the admin. Subscribing here is only for testing checkout.",
+    "subscribe": "Subscribe",
+    "checkoutSoon": "Checkout coming soon",
+    "creditWaiting": "€{amount} in free months is waiting and will come off your invoices once you subscribe.",
+    "footer": "Prices exclude IVA. Yearly plans are billed once a year. Cancel any time from the billing portal; your data stays exactly where it is."
+  },
+  "pricingPage": {
+    "back": "Back to the app",
+    "heading": "Free to start. One plan when you grow.",
+    "subheading": "Every feature on both plans. The only difference is how many clients you can hold. Nothing you've added is ever deleted."
+  }
+}

@@ -65,12 +65,13 @@ export function referralState(
   }
 }
 
-export const REFERRAL_STATE_LABEL: Record<ReferralState, string> = {
-  signed_up: "Signed up",
-  subscribed: "Subscribed",
-  rewarded: "Free month earned",
-  left: "Left",
-};
+/** Badge wording lives in the `referrals` catalog under `state.*`. */
+export const REFERRAL_STATE_KEY = {
+  signed_up: "state.signed_up",
+  subscribed: "state.subscribed",
+  rewarded: "state.rewarded",
+  left: "state.left",
+} as const satisfies Record<ReferralState, string>;
 
 export type ClaimResult =
   | "claimed"
@@ -79,32 +80,28 @@ export type ClaimResult =
   | "already_claimed"
   | "not_eligible";
 
+/** A key in the `referrals` catalog; the page that shows the banner resolves it. */
+export type ClaimMessageKey =
+  | "claim.claimed"
+  | "claim.alreadyClaimed"
+  | "claim.notEligible"
+  | "claim.selfReferral"
+  | "claim.invalid";
+
 export function claimMessage(
   result: string | undefined,
-): { tone: "success" | "info" | "error"; text: string } | null {
+): { tone: "success" | "info" | "error"; key: ClaimMessageKey } | null {
   switch (result) {
     case "claimed":
-      return {
-        tone: "success",
-        text: "Referral recorded. Once you're on Pro and pay your second month, you and the agent who referred you each get a free month.",
-      };
+      return { tone: "success", key: "claim.claimed" };
     case "already_claimed":
-      return { tone: "info", text: "You had already used a referral link, so nothing changed." };
+      return { tone: "info", key: "claim.alreadyClaimed" };
     case "not_eligible":
-      return {
-        tone: "info",
-        text: "Referral links are for new accounts, so this one didn't apply. You can still share your own link.",
-      };
+      return { tone: "info", key: "claim.notEligible" };
     case "self_referral":
-      return {
-        tone: "error",
-        text: "That's your own referral link. Share it with a colleague instead.",
-      };
+      return { tone: "error", key: "claim.selfReferral" };
     case "invalid":
-      return {
-        tone: "error",
-        text: "That referral link isn't valid. You can still use LeadWing — it's free to start.",
-      };
+      return { tone: "error", key: "claim.invalid" };
     default:
       return null;
   }

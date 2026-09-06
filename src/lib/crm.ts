@@ -15,15 +15,6 @@ export type BuyerStage = (typeof BUYER_STAGES)[number];
 export type SellerStage = (typeof SELLER_STAGES)[number];
 export type Stage = BuyerStage | SellerStage;
 
-export const STAGE_LABELS: Record<Stage, string> = {
-  new: "New",
-  contacted: "Contacted",
-  qualified: "Qualified",
-  viewing: "Viewing",
-  reserved: "Reserved",
-  pending: "Pending",
-};
-
 export type BadgeTone =
   | "default"
   | "secondary"
@@ -75,27 +66,7 @@ export const PROPERTY_TYPES = [
 
 export type PropertyType = (typeof PROPERTY_TYPES)[number];
 
-export const PROPERTY_TYPE_LABELS: Record<PropertyType, string> = {
-  apartment: "Apartment",
-  house: "House",
-  villa: "Villa",
-  townhouse: "Townhouse",
-  new_development: "New development",
-  plot: "Plot",
-  commercial: "Commercial",
-};
-
-export const DEAL_TYPE_LABELS: Record<Enums<"deal_type">, string> = {
-  direct: "Direct",
-  collab: "Collaboration",
-};
-
-export const SELLER_ROLE_LABELS: Record<Enums<"seller_role">, string> = {
-  owner: "Owner",
-  representative: "Representative",
-};
-
-/** Common languages spoken by clients on the Costa del Sol. */
+/** Common languages spoken by clients of Spain-based agents. */
 export const LANGUAGES = [
   "English",
   "Spanish",
@@ -116,9 +87,12 @@ export function clientFullName(c: {
   return `${c.first_name} ${c.last_name}`.trim();
 }
 
-export function formatCurrency(value: number | null | undefined): string {
+export function formatCurrency(
+  value: number | null | undefined,
+  locale = "en-GB"
+): string {
   if (value == null) return "—";
-  return new Intl.NumberFormat("en-GB", {
+  return new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: 0,

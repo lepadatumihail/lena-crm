@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import {
   DndContext,
@@ -15,9 +16,9 @@ import {
 } from "@dnd-kit/core";
 import { Star } from "lucide-react";
 
+import { stageLabel } from "@/i18n/labels";
 import {
   clientFullName,
-  STAGE_LABELS,
   stagesForSide,
   type ClientSide,
   type Stage,
@@ -32,6 +33,7 @@ function CardBody({
   client: Client;
   onTogglePriority?: (id: string, next: boolean) => void;
 }) {
+  const t = useTranslations("clients.priority");
   return (
     <div className="bg-card rounded-lg border p-3 shadow-sm">
       <div className="flex items-start justify-between gap-2">
@@ -39,7 +41,7 @@ function CardBody({
         {onTogglePriority && (
           <button
             type="button"
-            aria-label={client.priority ? "Unflag priority" : "Flag priority"}
+            aria-label={client.priority ? t("unflag") : t("flag")}
             className="-mt-0.5 -mr-0.5 p-0.5"
             onPointerDown={(e) => e.stopPropagation()}
             onClick={(e) => {
@@ -113,12 +115,14 @@ function KanbanColumn({
   clients: Client[];
   onTogglePriority: (id: string, next: boolean) => void;
 }) {
+  const t = useTranslations("clients.kanban");
+  const tCrm = useTranslations("crm");
   const { setNodeRef, isOver } = useDroppable({ id: stage });
 
   return (
     <div className="flex w-72 shrink-0 flex-col">
       <div className="flex items-center justify-between px-1 pb-2">
-        <span className="text-sm font-medium">{STAGE_LABELS[stage]}</span>
+        <span className="text-sm font-medium">{stageLabel(tCrm, stage)}</span>
         <span className="text-muted-foreground text-xs">{clients.length}</span>
       </div>
       <div
@@ -133,7 +137,7 @@ function KanbanColumn({
         ))}
         {clients.length === 0 && (
           <p className="text-muted-foreground/60 px-2 py-6 text-center text-xs">
-            Drop here
+            {t("dropHere")}
           </p>
         )}
       </div>

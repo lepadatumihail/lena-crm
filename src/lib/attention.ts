@@ -39,22 +39,16 @@ export function calendarDaysFromToday(
   return Math.round((target - today) / 86_400_000);
 }
 
-/** "today" | "tomorrow" | "in N days" — phrasing shared by notifications + Home. */
-export function relativeDayLabel(diff: number): string {
-  if (diff === 0) return "today";
-  if (diff === 1) return "tomorrow";
-  return `in ${diff} days`;
-}
-
 /** Resolve an IANA zone, falling back to UTC if it's invalid (Intl throws). */
 function safeFormatter(
   timeZone: string,
-  options: Intl.DateTimeFormatOptions
+  options: Intl.DateTimeFormatOptions,
+  locale = "en-GB"
 ): Intl.DateTimeFormat {
   try {
-    return new Intl.DateTimeFormat("en-GB", { timeZone, ...options });
+    return new Intl.DateTimeFormat(locale, { timeZone, ...options });
   } catch {
-    return new Intl.DateTimeFormat("en-GB", { timeZone: "UTC", ...options });
+    return new Intl.DateTimeFormat(locale, { timeZone: "UTC", ...options });
   }
 }
 
@@ -63,16 +57,24 @@ function safeFormatter(
  * (en-GB, 24-hour). Mirrors `date-fns` `format(d, "EEE d MMM, HH:mm")` but in
  * an explicit zone rather than the process TZ.
  */
-export function formatInTimeZone(isoInstant: string, timeZone: string): string {
+export function formatInTimeZone(
+  isoInstant: string,
+  timeZone: string,
+  locale = "en-GB"
+): string {
   const date = new Date(isoInstant);
-  const parts = safeFormatter(timeZone, {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).formatToParts(date);
+  const parts = safeFormatter(
+    timeZone,
+    {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    },
+    locale
+  ).formatToParts(date);
 
   const get = (type: Intl.DateTimeFormatPartTypes) =>
     parts.find((p) => p.type === type)?.value ?? "";
@@ -85,14 +87,15 @@ export function formatInTimeZone(isoInstant: string, timeZone: string): string {
 /** "10:00" — the instant's wall-clock time in the given IANA `timeZone`. */
 export function formatTimeInTimeZone(
   isoInstant: string,
-  timeZone: string
+  timeZone: string,
+  locale = "en-GB"
 ): string {
   const date = new Date(isoInstant);
-  const parts = safeFormatter(timeZone, {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).formatToParts(date);
+  const parts = safeFormatter(
+    timeZone,
+    { hour: "2-digit", minute: "2-digit", hour12: false },
+    locale
+  ).formatToParts(date);
 
   const get = (type: Intl.DateTimeFormatPartTypes) =>
     parts.find((p) => p.type === type)?.value ?? "";
@@ -105,10 +108,10 @@ export function formatTimeInTimeZone(
  * dates have no time component). Rendered from a noon-UTC instant so the
  * calendar day is stable in every IANA zone, no TZ argument needed.
  */
-export function formatDateKey(dateStr: string): string {
+export function formatDateKey(dateStr: string, locale = "en-GB"): string {
   const [y, m, d] = parseDateKey(dateStr);
   const date = new Date(Date.UTC(y, m, d, 12, 0, 0));
-  const parts = new Intl.DateTimeFormat("en-GB", {
+  const parts = new Intl.DateTimeFormat(locale, {
     timeZone: "UTC",
     weekday: "short",
     day: "numeric",

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm, type Control, type FieldPath } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,8 +28,18 @@ import {
 } from "@/components/ui/select";
 import { PriceInput } from "@/components/price-input";
 import { ConfirmDialog } from "@/components/confirm-dialog";
-import { DealSummary } from "@/components/calculator/deal-summary";
-import { computeDeal, inputFromForm } from "@/lib/calculator/deal";
+import {
+  DealSummary,
+  type DealLabels,
+  type DealView,
+} from "@/components/calculator/deal-summary";
+import {
+  computeDeal,
+  formatEuroPrefix,
+  formatRate,
+  inputFromForm,
+} from "@/lib/calculator/deal";
+import { intlTag } from "@/i18n/config";
 import {
   createDealAnalysis,
   deleteDealAnalysis,
@@ -75,11 +86,11 @@ function rowToForm(row: DealAnalysis): DealFormValues {
   };
 }
 
-function dateLabelFrom(iso: string): string {
+function dateLabelFrom(iso: string, tag: string): string {
   if (!iso) return "—";
   const d = new Date(`${iso}T00:00:00`);
   if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("en-GB", {
+  return new Intl.DateTimeFormat(tag, {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -107,19 +118,69 @@ export function CalculatorScreen({
   const [pending, startTransition] = useTransition();
   const [downloading, setDownloading] = useState(false);
 
+  const t = useTranslations("calculator");
+  const tc = useTranslations("common");
+  const locale = useLocale();
+
+  const tv = useTranslations("validation");
+  const schema = useMemo(() => dealFormSchema(tv), [tv]);
   const form = useForm<DealFormValues>({
-    resolver: zodResolver(dealFormSchema),
+    resolver: zodResolver(schema),
     defaultValues: blankDefaults(today),
     mode: "onChange",
   });
 
   const values = form.watch();
   const input = inputFromForm(values);
-  const view = {
+  const dateLabel = dateLabelFrom(values.analysis_date, intlTag(locale));
+  // Built here, not inside the summary/PDF: @react-pdf renders outside React's
+  // tree, so the document can only ever receive already-translated strings.
+  const labels: DealLabels = {
+    untitled: t("untitled"),
+    documentTitle: t("summary.documentTitle"),
+    subtitle: t("summary.subtitle", { date: dateLabel }),
+    netProfit: t("summary.netProfit"),
+    roi: t("summary.roi"),
+    irrExit: t("summary.irrExit", { months: input.durationMonths }),
+    capitalDeployed: t("summary.capitalDeployed"),
+    acquisition: t("summary.acquisition"),
+    purchasePrice: t("summary.purchasePrice"),
+    transferTax: t("summary.transferTax", { rate: formatRate(input.transferTaxPct) }),
+    lawyerFee: t("summary.lawyerFee", { rate: formatRate(input.lawyerPct) }),
+    notaryFee: t("summary.notaryFee", { rate: formatRate(input.notaryPct) }),
+    totalAcquisition: t("summary.totalAcquisition"),
+    project: t("summary.project"),
+    projectType: t("summary.projectType"),
+    projectTypeValue: t("summary.projectTypeValue", {
+      price: formatEuroPrefix(input.renovationPerSqm),
+    }),
+    surface: t("summary.surface"),
+    duration: t("summary.duration"),
+    durationValue: t("summary.months", { count: input.durationMonths }),
+    baseBuildCost: t("summary.baseBuildCost"),
+    contingency: t("summary.contingency", { rate: formatRate(input.contingencyPct) }),
+    totalProjectCost: t("summary.totalProjectCost"),
+    exitAndReturns: t("summary.exitAndReturns"),
+    grossSalePrice: t("summary.grossSalePrice"),
+    agentCommission: t("summary.agentCommission", {
+      rate: formatRate(input.agencyFeePct),
+    }),
+    netProceeds: t("summary.netProceeds"),
+    netProfitLoss: t("summary.netProfitLoss"),
+    returnsByExit: t("summary.returnsByExit"),
+    colExit: t("summary.colExit"),
+    colNetProfit: t("summary.colNetProfit"),
+    colRoi: t("summary.colRoi"),
+    colIrr: t("summary.colIrr"),
+    confidential: t("summary.confidential"),
+    exitRow: (months) => t("summary.months", { count: months }),
+  };
+  const view: DealView = {
     title: values.title,
-    dateLabel: dateLabelFrom(values.analysis_date),
+    dateLabel,
     input,
     result: computeDeal(input),
+    labels,
   };
 
   function newAnalysis() {
@@ -153,7 +214,7 @@ export function CalculatorScreen({
           toast.error(res.error);
           return;
         }
-        toast.success("Analysis saved");
+        toast.success(t("toasts.saved"));
         router.refresh();
       } else {
         const res = await createDealAnalysis(data);
@@ -162,7 +223,7 @@ export function CalculatorScreen({
           return;
         }
         setCurrentId(res.id ?? null);
-        toast.success("Analysis saved");
+        toast.success(t("toasts.saved"));
         router.refresh();
       }
     });
@@ -175,7 +236,7 @@ export function CalculatorScreen({
       toast.error(res.error);
       return false;
     }
-    toast.success("Analysis deleted");
+    toast.success(t("toasts.deleted"));
     setCurrentId(null);
     form.reset(blankDefaults(today));
     router.refresh();
@@ -189,7 +250,7 @@ export function CalculatorScreen({
       );
       await downloadDealPdf(view, `${slugify(view.title)}.pdf`);
     } catch {
-      toast.error("Could not generate the PDF.");
+      toast.error(t("toasts.pdfFailed"));
     } finally {
       setDownloading(false);
     }
@@ -199,36 +260,32 @@ export function CalculatorScreen({
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">
-            Profit calculator
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            Underwrite a buy-renovate-sell deal and export a one-page PDF.
-          </p>
+          <h1 className="text-xl font-semibold tracking-tight">{t("heading")}</h1>
+          <p className="text-muted-foreground text-sm">{t("subheading")}</p>
         </div>
         <div className="flex items-center gap-2">
           {/* Transient picker: value stays "" so re-selecting the same saved
               analysis still fires onValueChange and reloads (reverting edits). */}
           <Select value="" onValueChange={loadAnalysis}>
             <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Saved analyses…" />
+              <SelectValue placeholder={t("savedPlaceholder")} />
             </SelectTrigger>
             <SelectContent>
               {analyses.length === 0 ? (
                 <div className="text-muted-foreground px-2 py-1.5 text-sm">
-                  No saved analyses yet
+                  {t("noSaved")}
                 </div>
               ) : (
                 analyses.map((a) => (
                   <SelectItem key={a.id} value={a.id}>
-                    {a.title || "Untitled deal"}
+                    {a.title || t("untitled")}
                   </SelectItem>
                 ))
               )}
             </SelectContent>
           </Select>
           <Button variant="outline" onClick={newAnalysis}>
-            <Plus /> New
+            <Plus /> {t("new")}
           </Button>
         </div>
       </div>
@@ -243,7 +300,7 @@ export function CalculatorScreen({
             <div className="flex flex-wrap gap-2">
               <Button type="submit" disabled={pending} className="flex-1">
                 {pending ? <Loader2 className="animate-spin" /> : <Save />}
-                {currentId ? "Save" : "Save analysis"}
+                {currentId ? tc("save") : t("saveAnalysis")}
               </Button>
               <Button
                 type="button"
@@ -252,12 +309,14 @@ export function CalculatorScreen({
                 disabled={downloading}
               >
                 {downloading ? <Loader2 className="animate-spin" /> : <Download />}
-                PDF
+                {t("pdf")}
               </Button>
               {currentId && (
                 <ConfirmDialog
-                  title="Delete analysis?"
-                  description={`“${view.title || "Untitled deal"}” will be removed.`}
+                  title={t("deleteTitle")}
+                  description={t("deleteDescription", {
+                    title: view.title || t("untitled"),
+                  })}
                   onConfirm={onDelete}
                   trigger={
                     <Button
@@ -265,7 +324,7 @@ export function CalculatorScreen({
                       variant="ghost"
                       size="icon"
                       className="text-muted-foreground hover:text-destructive"
-                      aria-label="Delete analysis"
+                      aria-label={t("deleteAria")}
                     >
                       <Trash2 />
                     </Button>
@@ -274,12 +333,12 @@ export function CalculatorScreen({
               )}
             </div>
 
-            <FieldGroup label="Deal">
+            <FieldGroup label={t("form.deal")}>
               <TextField
                 control={form.control}
                 name="title"
-                label="Title"
-                placeholder="Renovation Project Coto Real"
+                label={t("form.title")}
+                placeholder={t("form.titlePlaceholder")}
               />
               <div className="grid grid-cols-1 gap-3 @sm:grid-cols-2">
                 <FormField
@@ -287,7 +346,7 @@ export function CalculatorScreen({
                   name="analysis_date"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Date</FormLabel>
+                      <FormLabel>{t("form.date")}</FormLabel>
                       <FormControl>
                         <Input type="date" className="min-w-0" {...field} />
                       </FormControl>
@@ -296,7 +355,7 @@ export function CalculatorScreen({
                   )}
                 />
                 <FormItem>
-                  <FormLabel>Property type</FormLabel>
+                  <FormLabel>{t("form.propertyType")}</FormLabel>
                   <Select
                     value={values.property_type}
                     onValueChange={(v) =>
@@ -307,82 +366,82 @@ export function CalculatorScreen({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="resale">Resale</SelectItem>
-                      <SelectItem value="new_build">New build</SelectItem>
+                      <SelectItem value="resale">{t("form.resale")}</SelectItem>
+                      <SelectItem value="new_build">{t("form.newBuild")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
               </div>
             </FieldGroup>
 
-            <FieldGroup label="Acquisition">
+            <FieldGroup label={t("form.acquisition")}>
               <MoneyField
                 control={form.control}
                 name="asking_price"
-                label="Asking price (€)"
+                label={t("form.askingPrice")}
               />
               <div className="grid grid-cols-3 gap-3">
                 <NumField
                   control={form.control}
                   name="transfer_tax_pct"
-                  label="Transfer (%)"
+                  label={t("form.transferPct")}
                 />
                 <NumField
                   control={form.control}
                   name="lawyer_pct"
-                  label="Lawyer (%)"
+                  label={t("form.lawyerPct")}
                 />
                 <NumField
                   control={form.control}
                   name="notary_pct"
-                  label="Notary (%)"
+                  label={t("form.notaryPct")}
                 />
               </div>
             </FieldGroup>
 
-            <FieldGroup label="Renovation / project">
+            <FieldGroup label={t("form.renovation")}>
               <div className="grid grid-cols-2 gap-3">
                 <NumField
                   control={form.control}
                   name="renovation_price_per_sqm"
-                  label="Reno (€/m²)"
+                  label={t("form.renoPerSqm")}
                 />
                 <NumField
                   control={form.control}
                   name="surface_sqm"
-                  label="Surface (m²)"
+                  label={t("form.surfaceSqm")}
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <NumField
                   control={form.control}
                   name="contingency_pct"
-                  label="Contingency (%)"
+                  label={t("form.contingencyPct")}
                 />
                 <NumField
                   control={form.control}
                   name="duration_months"
-                  label="Duration (months)"
+                  label={t("form.durationMonths")}
                 />
               </div>
             </FieldGroup>
 
-            <FieldGroup label="Exit">
+            <FieldGroup label={t("form.exit")}>
               <MoneyField
                 control={form.control}
                 name="expected_sale_price"
-                label="Expected sale price (€)"
+                label={t("form.expectedSalePrice")}
               />
               <div className="grid grid-cols-2 gap-3">
                 <NumField
                   control={form.control}
                   name="agency_fee_pct"
-                  label="Agency fee (%)"
+                  label={t("form.agencyFeePct")}
                 />
               </div>
             </FieldGroup>
 
-            <FieldGroup label="Notes">
+            <FieldGroup label={t("form.notes")}>
               <FormField
                 control={form.control}
                 name="notes"
@@ -391,7 +450,7 @@ export function CalculatorScreen({
                     <FormControl>
                       <Textarea
                         rows={2}
-                        placeholder="Internal notes (not shown on the PDF)…"
+                        placeholder={t("form.notesPlaceholder")}
                         {...field}
                       />
                     </FormControl>

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,12 +48,9 @@ import {
   propertyFormSchema,
   type PropertyFormValues,
 } from "@/lib/validation/seller";
-import {
-  formatCurrency,
-  PROPERTY_TYPES,
-  PROPERTY_TYPE_LABELS,
-  type PropertyType,
-} from "@/lib/crm";
+import { intlTag } from "@/i18n/config";
+import { propertyTypeLabel } from "@/i18n/labels";
+import { formatCurrency, PROPERTY_TYPES } from "@/lib/crm";
 import type { Property } from "@/lib/supabase/types";
 
 export function PropertiesSection({
@@ -62,28 +60,27 @@ export function PropertiesSection({
   clientId: string;
   properties: Property[];
 }) {
+  const t = useTranslations("clientDetail.properties");
   const [adding, setAdding] = useState(false);
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle className="text-base">Properties</CardTitle>
+          <CardTitle className="text-base">{t("title")}</CardTitle>
           {properties.length > 0 && (
             <p className="text-muted-foreground mt-0.5 text-xs">
-              {properties.length} listed
+              {t("listed", { count: properties.length })}
             </p>
           )}
         </div>
         <Button variant="outline" size="sm" onClick={() => setAdding(true)}>
-          <Plus /> Add property
+          <Plus /> {t("add")}
         </Button>
       </CardHeader>
       <CardContent className="space-y-3">
         {properties.length === 0 ? (
-          <p className="text-muted-foreground text-sm">
-            No properties yet. Add the listings this seller has.
-          </p>
+          <p className="text-muted-foreground text-sm">{t("empty")}</p>
         ) : (
           properties.map((p) => (
             <PropertyCard key={p.id} clientId={clientId} property={p} />
@@ -107,16 +104,19 @@ function PropertyCard({
   clientId: string;
   property: Property;
 }) {
+  const t = useTranslations("clientDetail.properties");
+  const tCrm = useTranslations("crm");
+  const tag = intlTag(useLocale());
   const router = useRouter();
   const [editing, setEditing] = useState(false);
 
   async function onDelete() {
     const { error } = await deleteProperty(clientId, property.id);
     if (error) {
-      toast.error("Couldn't delete property", { description: error });
+      toast.error(t("deleteError"), { description: error });
       return false;
     }
-    toast.success("Property deleted");
+    toast.success(t("deleted"));
     router.refresh();
     return true;
   }
@@ -124,9 +124,8 @@ function PropertyCard({
   const title =
     property.address ||
     (property.property_type
-      ? PROPERTY_TYPE_LABELS[property.property_type as PropertyType] ??
-        property.property_type
-      : "Property");
+      ? propertyTypeLabel(tCrm, property.property_type)
+      : t("fallbackTitle"));
 
   return (
     <div className="rounded-lg border p-3">
@@ -145,20 +144,20 @@ function PropertyCard({
             size="icon"
             className="size-8"
             onClick={() => setEditing(true)}
-            aria-label="Edit property"
+            aria-label={t("editAria")}
           >
             <Pencil className="size-4" />
           </Button>
           <ConfirmDialog
-            title="Delete property?"
-            description={`“${title}” will be permanently deleted. This can’t be undone.`}
+            title={t("confirmTitle")}
+            description={t("confirmDescription", { title })}
             onConfirm={onDelete}
             trigger={
               <Button
                 variant="ghost"
                 size="icon"
                 className="text-muted-foreground hover:text-destructive size-8"
-                aria-label="Delete property"
+                aria-label={t("deleteAria")}
               >
                 <Trash2 className="size-4" />
               </Button>
@@ -170,12 +169,13 @@ function PropertyCard({
       <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
         {property.property_type && (
           <Badge variant="secondary">
-            {PROPERTY_TYPE_LABELS[property.property_type as PropertyType] ??
-              property.property_type}
+            {propertyTypeLabel(tCrm, property.property_type)}
           </Badge>
         )}
         {property.price != null && (
-          <span className="font-medium">{formatCurrency(property.price)}</span>
+          <span className="font-medium">
+            {formatCurrency(property.price, tag)}
+          </span>
         )}
         {property.bedrooms != null && (
           <span className="text-muted-foreground flex items-center gap-1">
@@ -212,8 +212,13 @@ function PropertyDialog({
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
+  const t = useTranslations("clientDetail.properties");
+  const tCrm = useTranslations("crm");
+  const tCommon = useTranslations("common");
+  const tv = useTranslations("validation");
+  const schema = useMemo(() => propertyFormSchema(tv), [tv]);
   const form = useForm<PropertyFormValues>({
-    resolver: zodResolver(propertyFormSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       property_type: property?.property_type ?? "",
       price: property?.price != null ? String(property.price) : "",
@@ -233,10 +238,10 @@ function PropertyDialog({
     );
     setSubmitting(false);
     if (error) {
-      toast.error("Couldn't save property", { description: error });
+      toast.error(t("saveError"), { description: error });
       return;
     }
-    toast.success(property ? "Property updated" : "Property added");
+    toast.success(property ? t("updated") : t("added"));
     onOpenChange(false);
     if (!property) form.reset();
     router.refresh();
@@ -247,9 +252,9 @@ function PropertyDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {property ? "Edit property" : "Add property"}
+            {property ? t("dialogTitleEdit") : t("add")}
           </DialogTitle>
-          <DialogDescription>Details of this listing.</DialogDescription>
+          <DialogDescription>{t("dialogDescription")}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -259,17 +264,17 @@ function PropertyDialog({
                 name="property_type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Type</FormLabel>
+                    <FormLabel>{t("type")}</FormLabel>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select…" />
+                          <SelectValue placeholder={t("typePlaceholder")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {PROPERTY_TYPES.map((t) => (
-                          <SelectItem key={t} value={t}>
-                            {PROPERTY_TYPE_LABELS[t]}
+                        {PROPERTY_TYPES.map((type) => (
+                          <SelectItem key={type} value={type}>
+                            {propertyTypeLabel(tCrm, type)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -283,7 +288,7 @@ function PropertyDialog({
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price (€)</FormLabel>
+                    <FormLabel>{t("price")}</FormLabel>
                     <FormControl>
                       <PriceInput
                         placeholder="950.000"
@@ -301,7 +306,7 @@ function PropertyDialog({
                 name="bedrooms"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bedrooms</FormLabel>
+                    <FormLabel>{t("bedrooms")}</FormLabel>
                     <FormControl>
                       <Input inputMode="numeric" placeholder="4" {...field} />
                     </FormControl>
@@ -314,7 +319,7 @@ function PropertyDialog({
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>City / area</FormLabel>
+                    <FormLabel>{t("city")}</FormLabel>
                     <FormControl>
                       <Input placeholder="Marbella" {...field} />
                     </FormControl>
@@ -328,9 +333,9 @@ function PropertyDialog({
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>{t("address")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Street, urbanisation…" {...field} />
+                    <Input placeholder={t("addressPlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -341,9 +346,13 @@ function PropertyDialog({
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Notes</FormLabel>
+                  <FormLabel>{t("notes")}</FormLabel>
                   <FormControl>
-                    <Textarea rows={2} placeholder="Comments about the listing…" {...field} />
+                    <Textarea
+                      rows={2}
+                      placeholder={t("notesPlaceholder")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -355,11 +364,11 @@ function PropertyDialog({
                 variant="ghost"
                 onClick={() => onOpenChange(false)}
               >
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button type="submit" disabled={submitting}>
                 {submitting && <Loader2 className="animate-spin" />}
-                {property ? "Save" : "Add property"}
+                {property ? tCommon("save") : t("add")}
               </Button>
             </DialogFooter>
           </form>

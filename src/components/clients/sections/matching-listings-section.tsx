@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { ArrowRight, BedDouble } from "lucide-react";
 
 import {
@@ -7,11 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  formatCurrency,
-  PROPERTY_TYPE_LABELS,
-  type PropertyType,
-} from "@/lib/crm";
+import { intlTag } from "@/i18n/config";
+import { propertyTypeLabel } from "@/i18n/labels";
+import { formatCurrency } from "@/lib/crm";
 import type { ListingMatch } from "@/lib/data/seller";
 
 export function MatchingListingsSection({
@@ -19,29 +18,28 @@ export function MatchingListingsSection({
 }: {
   matches: ListingMatch[];
 }) {
+  const t = useTranslations("clientDetail.matches");
+  const tCrm = useTranslations("crm");
+  const tag = intlTag(useLocale());
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-base">
-          Matching listings{matches.length > 0 ? ` (${matches.length})` : ""}
+          {t("title", { count: matches.length })}
         </CardTitle>
       </CardHeader>
       <CardContent>
         {matches.length === 0 ? (
-          <p className="text-muted-foreground text-sm">
-            None of your seller listings match this buyer&apos;s preferences
-            yet.
-          </p>
+          <p className="text-muted-foreground text-sm">{t("empty")}</p>
         ) : (
           <div className="space-y-2">
             {matches.map(({ property, sellerId, sellerName }) => {
               const title =
                 property.address ||
                 (property.property_type
-                  ? PROPERTY_TYPE_LABELS[
-                      property.property_type as PropertyType
-                    ] ?? property.property_type
-                  : "Property");
+                  ? propertyTypeLabel(tCrm, property.property_type)
+                  : t("propertyFallback"));
               return (
                 <Link
                   key={property.id}
@@ -54,7 +52,7 @@ export function MatchingListingsSection({
                       {property.city && <span>{property.city}</span>}
                       {property.price != null && (
                         <span className="text-foreground font-medium">
-                          {formatCurrency(property.price)}
+                          {formatCurrency(property.price, tag)}
                         </span>
                       )}
                       {property.bedrooms != null && (

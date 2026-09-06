@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 import { getMyBillingOverview } from "@/lib/data/billing";
 import { BillingView } from "@/components/billing/billing-view";
 
-export const metadata: Metadata = {
-  title: "Billing",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("billing");
+  return { title: t("meta.title") };
+}
 
 /**
  * The agent's own billing page, inside the app shell. Stripe is read live

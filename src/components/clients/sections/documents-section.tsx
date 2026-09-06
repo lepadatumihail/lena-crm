@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { File as FileIcon, Trash2 } from "lucide-react";
@@ -38,32 +39,32 @@ export function DocumentsSection({
   agentId: string;
   documents: DocumentRow[];
 }) {
+  const t = useTranslations("clientDetail.documents");
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-base">Documents</CardTitle>
+        <CardTitle className="text-base">{t("title")}</CardTitle>
         <UploadButton
           agentId={agentId}
           clientId={clientId}
           folder="documents"
-          successLabel="Document"
+          successLabel={t("uploadLabel")}
           onUploaded={async (meta) => {
             const { error } = await addDocument(clientId, meta);
             if (error) {
-              toast.error("Couldn't save document", { description: error });
+              toast.error(t("saveError"), { description: error });
               return false;
             }
             return true;
           }}
         >
-          Upload
+          {t("upload")}
         </UploadButton>
       </CardHeader>
       <CardContent className="space-y-1.5">
         {documents.length === 0 ? (
-          <p className="text-muted-foreground text-sm">
-            Upload contracts, IDs, or anything else for this client.
-          </p>
+          <p className="text-muted-foreground text-sm">{t("empty")}</p>
         ) : (
           documents.map((d) => (
             <DocumentRowItem key={d.id} clientId={clientId} doc={d} />
@@ -81,6 +82,7 @@ function DocumentRowItem({
   clientId: string;
   doc: DocumentRow;
 }) {
+  const t = useTranslations("clientDetail.documents");
   const router = useRouter();
   const [busy, setBusy] = useState(false);
 
@@ -92,7 +94,7 @@ function DocumentRowItem({
       .createSignedUrl(doc.storage_path, 60);
     setBusy(false);
     if (error || !data) {
-      toast.error("Couldn't open file");
+      toast.error(t("openError"));
       return;
     }
     window.open(data.signedUrl, "_blank", "noopener,noreferrer");
@@ -101,10 +103,10 @@ function DocumentRowItem({
   async function remove() {
     const { error } = await deleteDocument(clientId, doc.id);
     if (error) {
-      toast.error("Couldn't delete", { description: error });
+      toast.error(t("deleteError"), { description: error });
       return false;
     }
-    toast.success("Document deleted");
+    toast.success(t("deleted"));
     router.refresh();
     return true;
   }
@@ -126,14 +128,14 @@ function DocumentRowItem({
         </span>
       )}
       <ConfirmDialog
-        title="Delete document?"
-        description={`“${doc.file_name}” will be permanently deleted.`}
+        title={t("confirmTitle")}
+        description={t("confirmDescription", { name: doc.file_name })}
         onConfirm={remove}
         trigger={
           <button
             type="button"
             className="text-muted-foreground hover:text-destructive shrink-0"
-            aria-label="Delete document"
+            aria-label={t("deleteAria")}
           >
             <Trash2 className="size-3.5" />
           </button>

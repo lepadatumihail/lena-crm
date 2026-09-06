@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
 import {
@@ -20,7 +21,10 @@ export async function getCalendarFeedToken(): Promise<{
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { token: null, error: "Not signed in" };
+  if (!user) {
+    const t = await getTranslations("calendar");
+    return { token: null, error: t("errors.notSignedIn") };
+  }
   return { token: feedToken(user.id), error: null };
 }
 
@@ -29,7 +33,10 @@ export async function saveAppointment(
   input: AppointmentInput
 ): Promise<{ error: string | null; id?: string }> {
   const parsed = appointmentInputSchema.safeParse(input);
-  if (!parsed.success) return { error: "Please check the form." };
+  if (!parsed.success) {
+    const t = await getTranslations("calendar");
+    return { error: t("errors.checkForm") };
+  }
   const v = parsed.data;
 
   const isViewing = v.type === "viewing";

@@ -1,0 +1,56 @@
+{
+  "side": {
+    "buyer": "Buyer",
+    "seller": "Seller",
+    "buyers": "Buyers",
+    "sellers": "Sellers"
+  },
+  "stages": {
+    "new": "New",
+    "contacted": "Contacted",
+    "qualified": "Qualified",
+    "viewing": "Viewing",
+    "reserved": "Reserved",
+    "pending": "Pending"
+  },
+  "propertyTypes": {
+    "apartment": "Apartment",
+    "house": "House",
+    "villa": "Villa",
+    "townhouse": "Townhouse",
+    "new_development": "New development",
+    "plot": "Plot",
+    "commercial": "Commercial"
+  },
+  "dealTypes": {
+    "direct": "Direct",
+    "collab": "Collaboration"
+  },
+  "sellerRoles": {
+    "owner": "Owner",
+    "representative": "Representative"
+  },
+  "appointmentTypes": {
+    "meeting": "Meeting",
+    "viewing": "Viewing"
+  },
+  "reminders": {
+    "none": "No reminder",
+    "atTime": "At time of event",
+    "minutesBefore": "{count, plural, one {# minute before} other {# minutes before}}",
+    "hoursBefore": "{count, plural, one {# hour before} other {# hours before}}",
+    "daysBefore": "{count, plural, one {# day before} other {# days before}}"
+  },
+  "languages": {
+    "English": "English",
+    "Spanish": "Spanish",
+    "German": "German",
+    "French": "French",
+    "Dutch": "Dutch",
+    "Swedish": "Swedish",
+    "Russian": "Russian",
+    "Arabic": "Arabic",
+    "Italian": "Italian",
+    "Polish": "Polish"
+  }
+}

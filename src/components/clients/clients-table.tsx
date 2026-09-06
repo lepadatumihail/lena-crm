@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import {
   type ColumnDef,
@@ -23,13 +24,9 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { StageBadge } from "@/components/clients/stage-badge";
-import {
-  clientFullName,
-  DEAL_TYPE_LABELS,
-  SELLER_ROLE_LABELS,
-  stageIndex,
-  type ClientSide,
-} from "@/lib/crm";
+import { dateFnsLocale } from "@/i18n/dates";
+import { dealTypeLabel, sellerRoleLabel } from "@/i18n/labels";
+import { clientFullName, stageIndex, type ClientSide } from "@/lib/crm";
 import { cn } from "@/lib/utils";
 import type { Client } from "@/lib/supabase/types";
 
@@ -64,6 +61,9 @@ export function ClientsTable({
   onTogglePriority: (id: string, next: boolean) => void;
 }) {
   const router = useRouter();
+  const t = useTranslations("clients");
+  const tCrm = useTranslations("crm");
+  const locale = useLocale();
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const columns = useMemo<ColumnDef<Client>[]>(
@@ -77,7 +77,7 @@ export function ClientsTable({
           return (
             <button
               type="button"
-              aria-label={c.priority ? "Unflag priority" : "Flag priority"}
+              aria-label={c.priority ? t("priority.unflag") : t("priority.flag")}
               className="flex items-center justify-center p-1"
               onClick={(e) => {
                 e.stopPropagation();
@@ -99,7 +99,9 @@ export function ClientsTable({
       {
         id: "name",
         accessorFn: (c) => clientFullName(c),
-        header: ({ column }) => <SortHeader label="Name" column={column} />,
+        header: ({ column }) => (
+          <SortHeader label={t("table.name")} column={column} />
+        ),
         cell: ({ row }) => (
           <span className="font-medium">{clientFullName(row.original)}</span>
         ),
@@ -107,7 +109,9 @@ export function ClientsTable({
       {
         id: "stage",
         accessorKey: "stage",
-        header: ({ column }) => <SortHeader label="Stage" column={column} />,
+        header: ({ column }) => (
+          <SortHeader label={t("table.stage")} column={column} />
+        ),
         sortingFn: (a, b) =>
           stageIndex(side, a.original.stage) -
           stageIndex(side, b.original.stage),
@@ -115,17 +119,17 @@ export function ClientsTable({
       },
       {
         id: "type",
-        header: "Type",
+        header: t("table.type"),
         enableSorting: false,
         cell: ({ row }) => {
           const c = row.original;
           const label =
             c.side === "buyer"
               ? c.deal_type
-                ? DEAL_TYPE_LABELS[c.deal_type]
+                ? dealTypeLabel(tCrm, c.deal_type)
                 : null
               : c.seller_role
-                ? SELLER_ROLE_LABELS[c.seller_role]
+                ? sellerRoleLabel(tCrm, c.seller_role)
                 : null;
           return (
             <span className="text-muted-foreground text-sm">
@@ -137,7 +141,9 @@ export function ClientsTable({
       {
         id: "agency",
         accessorKey: "agency",
-        header: ({ column }) => <SortHeader label="Agency" column={column} />,
+        header: ({ column }) => (
+          <SortHeader label={t("table.agency")} column={column} />
+        ),
         cell: ({ row }) => (
           <span className="text-muted-foreground text-sm">
             {row.original.agency || "—"}
@@ -146,7 +152,7 @@ export function ClientsTable({
       },
       {
         id: "contact",
-        header: "Contact",
+        header: t("table.contact"),
         enableSorting: false,
         cell: ({ row }) => {
           const c = row.original;
@@ -160,11 +166,14 @@ export function ClientsTable({
       {
         id: "updated_at",
         accessorKey: "updated_at",
-        header: ({ column }) => <SortHeader label="Updated" column={column} />,
+        header: ({ column }) => (
+          <SortHeader label={t("table.updated")} column={column} />
+        ),
         cell: ({ row }) => (
           <span className="text-muted-foreground text-sm">
             {formatDistanceToNow(new Date(row.original.updated_at), {
               addSuffix: true,
+              locale: dateFnsLocale(locale),
             })}
           </span>
         ),
@@ -178,7 +187,7 @@ export function ClientsTable({
         ),
       },
     ],
-    [side, onTogglePriority]
+    [side, onTogglePriority, t, tCrm, locale]
   );
 
   const table = useReactTable({

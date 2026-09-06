@@ -1,5 +1,7 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
+
 import { revalidatePath } from "next/cache";
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
@@ -22,7 +24,10 @@ export type CreateClientResult = {
   limitReached?: boolean;
 };
 
-const LIMIT_MESSAGE = `You've used your ${FREE_CLIENT_LIMIT} free clients. Pro is unlimited.`;
+async function limitMessage(): Promise<string> {
+  const t = await getTranslations("clients.errors");
+  return t("limitReached", { limit: FREE_CLIENT_LIMIT });
+}
 
 /**
  * Free agents may hold FREE_CLIENT_LIMIT clients. Checked here for a friendly
@@ -49,17 +54,21 @@ async function freeLimitReached(
 export async function createClient(
   values: ClientFormValues
 ): Promise<CreateClientResult> {
-  const parsed = clientFormSchema.safeParse(values);
-  if (!parsed.success) return { error: "Please check the form and try again." };
+  const t = await getTranslations("clients.errors");
+  const parsed = clientFormSchema(await getTranslations("validation")).safeParse(values);
+  if (!parsed.success) return { error: t("invalidForm") };
   const v = parsed.data;
 
   const supabase = await createSupabase();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { error: "Not authenticated" };
+  if (!user) {
+    const tCommon = await getTranslations("common");
+    return { error: tCommon("errors.notAuthenticated") };
+  }
   if (await freeLimitReached(supabase, user.id)) {
-    return { error: LIMIT_MESSAGE, limitReached: true };
+    return { error: await limitMessage(), limitReached: true };
   }
 
   const { data, error } = await supabase
@@ -84,7 +93,7 @@ export async function createClient(
 
   if (error) {
     if (error.message.includes("client_limit_reached")) {
-      return { error: LIMIT_MESSAGE, limitReached: true };
+      return { error: await limitMessage(), limitReached: true };
     }
     return { error: error.message };
   }
@@ -96,8 +105,9 @@ export async function updateClient(
   id: string,
   values: ClientFormValues
 ): Promise<ActionResult> {
-  const parsed = clientFormSchema.safeParse(values);
-  if (!parsed.success) return { error: "Please check the form and try again." };
+  const t = await getTranslations("clients.errors");
+  const parsed = clientFormSchema(await getTranslations("validation")).safeParse(values);
+  if (!parsed.success) return { error: t("invalidForm") };
   const v = parsed.data;
 
   const supabase = await createSupabase();
@@ -169,7 +179,10 @@ export async function updateClientStage(
   id: string,
   stage: string
 ): Promise<ActionResult> {
-  if (!VALID_STAGES.includes(stage)) return { error: "Invalid stage" };
+  if (!VALID_STAGES.includes(stage)) {
+    const t = await getTranslations("clients.errors");
+    return { error: t("invalidStage") };
+  }
 
   const supabase = await createSupabase();
   const { error } = await supabase

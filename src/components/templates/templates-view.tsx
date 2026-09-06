@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,6 +45,8 @@ import {
 import {
   fillTemplate,
   MESSAGE_TEMPLATES,
+  templateDescription,
+  templateLabel,
   type MessageVars,
 } from "@/lib/message-templates";
 import type { EmailTemplate } from "@/lib/supabase/types";
@@ -65,35 +68,33 @@ export function TemplatesView({
   templates: EmailTemplate[];
   clients: ClientOption[];
 }) {
+  const t = useTranslations("templates");
   const [createInit, setCreateInit] = useState<TemplateFormValues | null>(null);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Templates</h1>
-          <p className="text-muted-foreground text-sm">
-            Reusable messages — personalise any of them with AI in the composer
-            before sending.
-          </p>
+          <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+          <p className="text-muted-foreground text-sm">{t("subtitle")}</p>
         </div>
         <Button onClick={() => setCreateInit({ name: "", subject: "", body: "" })}>
-          <Plus /> New template
+          <Plus /> {t("new")}
         </Button>
       </div>
 
       <section>
         <h2 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-          My templates
+          {t("mine.title")}
         </h2>
         {templates.length === 0 ? (
           <p className="text-muted-foreground mt-3 rounded-xl border border-dashed py-10 text-center text-sm">
-            No templates yet. Create one, or customise a starter below.
+            {t("mine.empty")}
           </p>
         ) : (
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
-            {templates.map((t) => (
-              <TemplateCard key={t.id} template={t} clients={clients} />
+            {templates.map((tpl) => (
+              <TemplateCard key={tpl.id} template={tpl} clients={clients} />
             ))}
           </div>
         )}
@@ -101,21 +102,24 @@ export function TemplatesView({
 
       <section>
         <h2 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-          Starter templates
+          {t("starters.title")}
         </h2>
         <p className="text-muted-foreground mt-1 text-xs">
-          Built in and always available. Customise one to make it your own.
+          {t("starters.subtitle")}
         </p>
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {MESSAGE_TEMPLATES.map((t) => (
-            <div key={t.id} className="bg-card flex flex-col rounded-lg border p-3">
-              <p className="text-sm font-medium">{t.label}</p>
+          {MESSAGE_TEMPLATES.map((tpl) => (
+            <div
+              key={tpl.id}
+              className="bg-card flex flex-col rounded-lg border p-3"
+            >
+              <p className="text-sm font-medium">{templateLabel(t, tpl.id)}</p>
               <p className="text-muted-foreground mt-0.5 text-xs">
-                {t.description}
+                {templateDescription(t, tpl.id)}
               </p>
               <div className="mt-3 flex gap-2">
                 <UseTemplateButton
-                  templateId={t.id}
+                  templateId={tpl.id}
                   clients={clients}
                   size="sm"
                 />
@@ -124,13 +128,13 @@ export function TemplatesView({
                   size="sm"
                   onClick={() =>
                     setCreateInit({
-                      name: t.label,
-                      subject: t.subject,
-                      body: t.body,
+                      name: templateLabel(t, tpl.id),
+                      subject: tpl.subject,
+                      body: tpl.body,
                     })
                   }
                 >
-                  <Copy /> Customise
+                  <Copy /> {t("starters.customise")}
                 </Button>
               </div>
             </div>
@@ -154,16 +158,17 @@ function TemplateCard({
   template: EmailTemplate;
   clients: ClientOption[];
 }) {
+  const t = useTranslations("templates");
   const router = useRouter();
   const [editing, setEditing] = useState(false);
 
   async function onDelete() {
     const { error } = await deleteTemplate(template.id);
     if (error) {
-      toast.error("Couldn't delete", { description: error });
+      toast.error(t("toasts.deleteFailed"), { description: error });
       return false;
     }
-    toast.success("Template deleted");
+    toast.success(t("toasts.deleted"));
     router.refresh();
     return true;
   }
@@ -178,20 +183,20 @@ function TemplateCard({
             size="icon"
             className="size-8"
             onClick={() => setEditing(true)}
-            aria-label="Edit template"
+            aria-label={t("card.editAria")}
           >
             <Pencil className="size-4" />
           </Button>
           <ConfirmDialog
-            title="Delete template?"
-            description={`“${template.name}” will be removed.`}
+            title={t("card.deleteTitle")}
+            description={t("card.deleteDescription", { name: template.name })}
             onConfirm={onDelete}
             trigger={
               <Button
                 variant="ghost"
                 size="icon"
                 className="text-muted-foreground hover:text-destructive size-8"
-                aria-label="Delete template"
+                aria-label={t("card.deleteAria")}
               >
                 <Trash2 className="size-4" />
               </Button>
@@ -201,7 +206,7 @@ function TemplateCard({
       </div>
       {template.subject && (
         <p className="text-muted-foreground mt-1 text-xs">
-          Subject: {template.subject}
+          {t("card.subject", { subject: template.subject })}
         </p>
       )}
       <p className="text-muted-foreground mt-2 line-clamp-3 flex-1 text-sm whitespace-pre-wrap">
@@ -229,6 +234,8 @@ function UseTemplateButton({
   clients: ClientOption[];
   size?: "default" | "sm";
 }) {
+  const t = useTranslations("templates");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [clientId, setClientId] = useState("");
@@ -241,24 +248,21 @@ function UseTemplateButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Button variant="outline" size={size} onClick={() => setOpen(true)}>
-        <Send /> Use
+        <Send /> {t("use.button")}
       </Button>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle>Use this template</DialogTitle>
-          <DialogDescription>
-            Pick a client — the composer opens with this template loaded, ready
-            to personalise and send.
-          </DialogDescription>
+          <DialogTitle>{t("use.title")}</DialogTitle>
+          <DialogDescription>{t("use.description")}</DialogDescription>
         </DialogHeader>
         <Select value={clientId} onValueChange={setClientId}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select a client…" />
+            <SelectValue placeholder={t("use.placeholder")} />
           </SelectTrigger>
           <SelectContent>
             {clients.length === 0 ? (
               <div className="text-muted-foreground px-2 py-1.5 text-sm">
-                No clients yet
+                {t("use.noClients")}
               </div>
             ) : (
               clients.map((c) => (
@@ -271,10 +275,10 @@ function UseTemplateButton({
         </Select>
         <DialogFooter>
           <Button variant="ghost" onClick={() => setOpen(false)}>
-            Cancel
+            {tCommon("cancel")}
           </Button>
           <Button onClick={go} disabled={!clientId}>
-            Open composer
+            {t("use.open")}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -303,8 +307,12 @@ function TemplateDialog({
     body: template?.body ?? initialValues?.body ?? "",
   });
 
+  const t = useTranslations("templates");
+  const tCommon = useTranslations("common");
+  const tv = useTranslations("validation");
+  const schema = useMemo(() => templateFormSchema(tv), [tv]);
   const form = useForm<TemplateFormValues>({
-    resolver: zodResolver(templateFormSchema),
+    resolver: zodResolver(schema),
     defaultValues: seed(),
   });
 
@@ -340,10 +348,10 @@ function TemplateDialog({
     const { error } = await saveTemplate(template?.id ?? null, values);
     setSubmitting(false);
     if (error) {
-      toast.error("Couldn't save template", { description: error });
+      toast.error(t("toasts.saveFailed"), { description: error });
       return;
     }
-    toast.success(template ? "Template updated" : "Template created");
+    toast.success(t(template ? "toasts.updated" : "toasts.created"));
     onOpenChange(false);
     router.refresh();
   }
@@ -352,11 +360,10 @@ function TemplateDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{template ? "Edit template" : "New template"}</DialogTitle>
-          <DialogDescription>
-            Use placeholders like {"{{first_name}}"} — they fill from the
-            client. Click a chip to insert one.
-          </DialogDescription>
+          <DialogTitle>
+            {t(template ? "dialog.editTitle" : "dialog.newTitle")}
+          </DialogTitle>
+          <DialogDescription>{t("dialog.description")}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -365,9 +372,9 @@ function TemplateDialog({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t("dialog.name")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. Price drop alert" {...field} />
+                    <Input placeholder={t("dialog.namePlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -378,9 +385,12 @@ function TemplateDialog({
               name="subject"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Subject (email only, optional)</FormLabel>
+                  <FormLabel>{t("dialog.subject")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Subject line" {...field} />
+                    <Input
+                      placeholder={t("dialog.subjectPlaceholder")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -391,7 +401,7 @@ function TemplateDialog({
               name="body"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Message</FormLabel>
+                  <FormLabel>{t("dialog.message")}</FormLabel>
                   <div className="flex flex-wrap gap-1.5">
                     {TEMPLATE_VARIABLES.map((v) => (
                       <button
@@ -407,7 +417,7 @@ function TemplateDialog({
                   <FormControl>
                     <Textarea
                       rows={6}
-                      placeholder="Hi {{first_name}}, …"
+                      placeholder={t("dialog.bodyPlaceholder")}
                       {...field}
                       ref={bodyRef}
                     />
@@ -419,7 +429,7 @@ function TemplateDialog({
 
             <div className="space-y-1.5">
               <Label className="text-muted-foreground text-xs">
-                Preview (sample data)
+                {t("dialog.preview")}
               </Label>
               <div className="bg-muted/40 rounded-lg border p-3 text-sm">
                 {watchedSubject?.trim() && (
@@ -429,7 +439,7 @@ function TemplateDialog({
                 )}
                 <p className="text-muted-foreground whitespace-pre-wrap">
                   {fillTemplate(watchedBody ?? "", SAMPLE_VARS) ||
-                    "Your message preview will appear here."}
+                    t("dialog.previewEmpty")}
                 </p>
               </div>
             </div>
@@ -440,11 +450,11 @@ function TemplateDialog({
                 variant="ghost"
                 onClick={() => onOpenChange(false)}
               >
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button type="submit" disabled={submitting}>
                 {submitting && <Loader2 className="animate-spin" />}
-                {template ? "Save" : "Create"}
+                {template ? tCommon("save") : t("dialog.create")}
               </Button>
             </DialogFooter>
           </form>

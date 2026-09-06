@@ -1,22 +1,28 @@
 "use client";
 
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { format, isToday, isTomorrow } from "date-fns";
 import { MessageCircle } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
+import { dateFnsLocale } from "@/i18n/dates";
 import { eventReminderHref } from "@/lib/event-reminder";
 import { cn } from "@/lib/utils";
 import type { CalendarEvent } from "@/lib/data/calendar";
 
-function dayLabel(iso: string): string {
-  const d = new Date(iso);
-  if (isToday(d)) return "Today";
-  if (isTomorrow(d)) return "Tomorrow";
-  return format(d, "EEE d MMM");
-}
-
 export function UpcomingPanel({ events }: { events: CalendarEvent[] }) {
+  const t = useTranslations("home.upcoming");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
+
+  function dayLabel(iso: string): string {
+    const d = new Date(iso);
+    if (isToday(d)) return tCommon("today");
+    if (isTomorrow(d)) return tCommon("tomorrow");
+    return format(d, "EEE d MMM", { locale: dateFnsLocale(locale) });
+  }
+
   const sorted = [...events]
     .sort((a, b) => a.starts_at.localeCompare(b.starts_at))
     .slice(0, 6);
@@ -24,11 +30,13 @@ export function UpcomingPanel({ events }: { events: CalendarEvent[] }) {
   if (sorted.length === 0) {
     return (
       <p className="text-muted-foreground rounded-lg border border-dashed py-8 text-center text-sm">
-        Nothing scheduled.{" "}
-        <Link href="/calendar" className="text-primary hover:underline">
-          Open the calendar
-        </Link>{" "}
-        to add a viewing or meeting.
+        {t.rich("empty", {
+          link: (chunks) => (
+            <Link href="/calendar" className="text-primary hover:underline">
+              {chunks}
+            </Link>
+          ),
+        })}
       </p>
     );
   }
@@ -64,8 +72,8 @@ export function UpcomingPanel({ events }: { events: CalendarEvent[] }) {
                   buttonVariants({ variant: "outline", size: "icon" }),
                   "size-8 shrink-0"
                 )}
-                title="Remind on WhatsApp"
-                aria-label="Send a WhatsApp reminder"
+                title={t("remindTitle")}
+                aria-label={t("remindAria")}
               >
                 <MessageCircle className="size-4 text-[#25D366]" />
               </a>

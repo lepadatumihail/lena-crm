@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import {
   ArrowLeft,
   Building2,
@@ -37,13 +38,12 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { clientFullName, clientsPath, type ClientSide } from "@/lib/crm";
 import {
-  clientFullName,
-  clientsPath,
-  DEAL_TYPE_LABELS,
-  SELLER_ROLE_LABELS,
-  type ClientSide,
-} from "@/lib/crm";
+  dealTypeLabel,
+  languageLabel,
+  sellerRoleLabel,
+} from "@/i18n/labels";
 import { buildVars } from "@/lib/message-templates";
 
 function InfoRow({
@@ -78,6 +78,11 @@ export default async function ClientDetailPage({
   const { compose } = await searchParams;
   const client = await getClientById(id);
   if (!client) notFound();
+
+  const [t, tCrm] = await Promise.all([
+    getTranslations("clientDetail.page"),
+    getTranslations("crm"),
+  ]);
 
   const side = client.side as ClientSide;
   const isBuyer = side === "buyer";
@@ -124,10 +129,10 @@ export default async function ClientDetailPage({
   const typeLabel =
     side === "buyer"
       ? client.deal_type
-        ? DEAL_TYPE_LABELS[client.deal_type]
+        ? dealTypeLabel(tCrm, client.deal_type)
         : null
       : client.seller_role
-        ? SELLER_ROLE_LABELS[client.seller_role]
+        ? sellerRoleLabel(tCrm, client.seller_role)
         : null;
 
   const hasContact =
@@ -143,7 +148,7 @@ export default async function ClientDetailPage({
       <div>
         <Button asChild variant="ghost" size="sm" className="-ml-2 mb-1">
           <Link href={clientsPath(side)}>
-            <ArrowLeft /> Back to {side}s
+            <ArrowLeft /> {t("back", { side })}
           </Link>
         </Button>
         <div className="flex flex-wrap items-center gap-3">
@@ -151,7 +156,9 @@ export default async function ClientDetailPage({
             {clientFullName(client)}
           </h1>
           <StageBadge stage={client.stage} />
-          {!client.is_active && <Badge variant="outline">Inactive</Badge>}
+          {!client.is_active && (
+            <Badge variant="outline">{t("inactive")}</Badge>
+          )}
         </div>
         <div className="mt-3">
           <ClientControls client={client} />
@@ -185,7 +192,7 @@ export default async function ClientDetailPage({
           )}
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Notes</CardTitle>
+              <CardTitle className="text-base">{t("notes")}</CardTitle>
             </CardHeader>
             <CardContent>
               {client.notes ? (
@@ -193,7 +200,9 @@ export default async function ClientDetailPage({
                   {client.notes}
                 </p>
               ) : (
-                <p className="text-muted-foreground text-sm">No notes yet.</p>
+                <p className="text-muted-foreground text-sm">
+                  {t("notesEmpty")}
+                </p>
               )}
             </CardContent>
           </Card>
@@ -207,7 +216,7 @@ export default async function ClientDetailPage({
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Contact</CardTitle>
+              <CardTitle className="text-base">{t("contact")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <WhatsAppButton
@@ -231,37 +240,37 @@ export default async function ClientDetailPage({
               />
               <InfoRow
                 icon={<Mail className="size-4" />}
-                label="Email"
+                label={t("email")}
                 value={client.email}
               />
               <InfoRow
                 icon={<Phone className="size-4" />}
-                label="Phone"
+                label={t("phone")}
                 value={client.phone}
               />
               <InfoRow
                 icon={<Globe2 className="size-4" />}
-                label="Language"
-                value={client.language}
+                label={t("language")}
+                value={languageLabel(tCrm, client.language)}
               />
               <InfoRow
                 icon={<MapPin className="size-4" />}
-                label="Nationality"
+                label={t("nationality")}
                 value={client.nationality}
               />
               <InfoRow
                 icon={<Tag className="size-4" />}
-                label={side === "buyer" ? "Deal type" : "Role"}
+                label={side === "buyer" ? t("dealType") : t("role")}
                 value={typeLabel}
               />
               <InfoRow
                 icon={<Building2 className="size-4" />}
-                label="Agency"
+                label={t("agency")}
                 value={client.agency}
               />
               {!hasContact && (
                 <p className="text-muted-foreground text-sm">
-                  No contact details yet.
+                  {t("contactEmpty")}
                 </p>
               )}
             </CardContent>

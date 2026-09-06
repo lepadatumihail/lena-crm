@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -48,10 +49,11 @@ import {
   preferencesFormSchema,
   type PreferencesFormValues,
 } from "@/lib/validation/buyer";
+import { intlTag } from "@/i18n/config";
+import { propertyTypeLabel } from "@/i18n/labels";
 import {
   formatCurrency,
   PROPERTY_TYPES,
-  PROPERTY_TYPE_LABELS,
   type PropertyType,
 } from "@/lib/crm";
 import { cn } from "@/lib/utils";
@@ -62,18 +64,6 @@ import {
 } from "@/components/clients/detail-row";
 import type { BuyerPreferences } from "@/lib/supabase/types";
 
-function budgetText(min: number | null, max: number | null) {
-  if (min != null && max != null) {
-    // Guard against a swapped range so it never reads "€50,000 – €30,000".
-    const lo = Math.min(min, max);
-    const hi = Math.max(min, max);
-    return `${formatCurrency(lo)} – ${formatCurrency(hi)}`;
-  }
-  if (min != null) return `From ${formatCurrency(min)}`;
-  if (max != null) return `Up to ${formatCurrency(max)}`;
-  return null;
-}
-
 export function PreferencesSection({
   clientId,
   prefs,
@@ -81,27 +71,45 @@ export function PreferencesSection({
   clientId: string;
   prefs: BuyerPreferences | null;
 }) {
+  const t = useTranslations("clientDetail.preferences");
+  const tCrm = useTranslations("crm");
+  const tCommon = useTranslations("common");
+  const tag = intlTag(useLocale());
   const [open, setOpen] = useState(false);
+
+  function budgetText(min: number | null, max: number | null) {
+    if (min != null && max != null) {
+      // Guard against a swapped range so it never reads "€50,000 – €30,000".
+      return t("budgetRange", {
+        min: formatCurrency(Math.min(min, max), tag),
+        max: formatCurrency(Math.max(min, max), tag),
+      });
+    }
+    if (min != null) return t("budgetFrom", { amount: formatCurrency(min, tag) });
+    if (max != null) return t("budgetUpTo", { amount: formatCurrency(max, tag) });
+    return null;
+  }
+
   const budget = prefs ? budgetText(prefs.budget_min, prefs.budget_max) : null;
 
   return (
     <Card className="overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-base">Preferences</CardTitle>
+        <CardTitle className="text-base">{t("title")}</CardTitle>
         <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
           {prefs ? <Pencil /> : <Plus />}
-          {prefs ? "Edit" : "Add"}
+          {prefs ? tCommon("edit") : tCommon("add")}
         </Button>
       </CardHeader>
       <CardContent className="@container">
         {prefs ? (
           <dl className={DETAIL_LIST}>
-            <DetailBlock icon={Home} label="Property types">
+            <DetailBlock icon={Home} label={t("propertyTypes")}>
               {prefs.property_types.length ? (
                 <div className="flex flex-wrap gap-1.5">
-                  {prefs.property_types.map((t) => (
-                    <Badge key={t} variant="secondary">
-                      {PROPERTY_TYPE_LABELS[t as PropertyType] ?? t}
+                  {prefs.property_types.map((type) => (
+                    <Badge key={type} variant="secondary">
+                      {propertyTypeLabel(tCrm, type)}
                     </Badge>
                   ))}
                 </div>
@@ -111,25 +119,23 @@ export function PreferencesSection({
             </DetailBlock>
             <DetailRow
               icon={Wallet}
-              label="Budget"
+              label={t("budget")}
               value={budget ?? "—"}
               className="@sm:col-span-2"
             />
             <DetailRow
               icon={BedDouble}
-              label="Bedrooms"
+              label={t("bedrooms")}
               value={prefs.bedrooms ?? "—"}
             />
             <DetailRow
               icon={Bath}
-              label="Bathrooms"
+              label={t("bathrooms")}
               value={prefs.bathrooms ?? "—"}
             />
           </dl>
         ) : (
-          <p className="text-muted-foreground text-sm">
-            No preferences captured yet. Add what this buyer is looking for.
-          </p>
+          <p className="text-muted-foreground text-sm">{t("empty")}</p>
         )}
       </CardContent>
 
@@ -137,7 +143,7 @@ export function PreferencesSection({
         <div className="bg-muted/30 -mb-6 border-t px-6 py-4">
           <p className="text-muted-foreground flex items-center gap-2 text-xs">
             <MapPin className="size-3.5 shrink-0 opacity-70" />
-            Area notes
+            {t("areaNotes")}
           </p>
           <p className="mt-1.5 text-sm whitespace-pre-wrap">
             {prefs.area_notes}
@@ -169,8 +175,13 @@ function PreferencesDialog({
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
+  const t = useTranslations("clientDetail.preferences");
+  const tCrm = useTranslations("crm");
+  const tCommon = useTranslations("common");
+  const tv = useTranslations("validation");
+  const schema = useMemo(() => preferencesFormSchema(tv), [tv]);
   const form = useForm<PreferencesFormValues>({
-    resolver: zodResolver(preferencesFormSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       property_types: prefs?.property_types ?? [],
       budget_min: prefs?.budget_min != null ? String(prefs.budget_min) : "",
@@ -195,10 +206,10 @@ function PreferencesDialog({
     const { error } = await upsertPreferences(clientId, values);
     setSubmitting(false);
     if (error) {
-      toast.error("Couldn't save preferences", { description: error });
+      toast.error(t("saveError"), { description: error });
       return;
     }
-    toast.success("Preferences saved");
+    toast.success(t("saved"));
     onOpenChange(false);
     router.refresh();
   }
@@ -207,10 +218,8 @@ function PreferencesDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Buyer preferences</DialogTitle>
-          <DialogDescription>
-            Capture what this buyer is looking for.
-          </DialogDescription>
+          <DialogTitle>{t("dialogTitle")}</DialogTitle>
+          <DialogDescription>{t("dialogDescription")}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -219,15 +228,15 @@ function PreferencesDialog({
               name="property_types"
               render={() => (
                 <FormItem>
-                  <FormLabel>Property types</FormLabel>
+                  <FormLabel>{t("propertyTypes")}</FormLabel>
                   <div className="flex flex-wrap gap-2">
-                    {PROPERTY_TYPES.map((t) => {
-                      const active = selectedTypes.includes(t);
+                    {PROPERTY_TYPES.map((type) => {
+                      const active = selectedTypes.includes(type);
                       return (
                         <button
-                          key={t}
+                          key={type}
                           type="button"
-                          onClick={() => toggleType(t)}
+                          onClick={() => toggleType(type)}
                           className={cn(
                             "rounded-full border px-3 py-1 text-sm transition-colors",
                             active
@@ -235,7 +244,7 @@ function PreferencesDialog({
                               : "hover:bg-accent"
                           )}
                         >
-                          {PROPERTY_TYPE_LABELS[t]}
+                          {propertyTypeLabel(tCrm, type)}
                         </button>
                       );
                     })}
@@ -251,7 +260,7 @@ function PreferencesDialog({
                 name="budget_min"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Budget min (€)</FormLabel>
+                    <FormLabel>{t("budgetMin")}</FormLabel>
                     <FormControl>
                       <PriceInput
                         placeholder="500.000"
@@ -269,7 +278,7 @@ function PreferencesDialog({
                 name="budget_max"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Budget max (€)</FormLabel>
+                    <FormLabel>{t("budgetMax")}</FormLabel>
                     <FormControl>
                       <PriceInput
                         placeholder="800.000"
@@ -287,7 +296,7 @@ function PreferencesDialog({
                 name="bedrooms"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bedrooms</FormLabel>
+                    <FormLabel>{t("bedrooms")}</FormLabel>
                     <FormControl>
                       <Input inputMode="numeric" placeholder="3" {...field} />
                     </FormControl>
@@ -300,7 +309,7 @@ function PreferencesDialog({
                 name="bathrooms"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bathrooms</FormLabel>
+                    <FormLabel>{t("bathrooms")}</FormLabel>
                     <FormControl>
                       <Input inputMode="numeric" placeholder="2" {...field} />
                     </FormControl>
@@ -315,11 +324,11 @@ function PreferencesDialog({
               name="area_notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Area notes</FormLabel>
+                  <FormLabel>{t("areaNotes")}</FormLabel>
                   <FormControl>
                     <Textarea
                       rows={3}
-                      placeholder="Preferred areas, must-haves…"
+                      placeholder={t("areaNotesPlaceholder")}
                       {...field}
                     />
                   </FormControl>
@@ -334,11 +343,11 @@ function PreferencesDialog({
                 variant="ghost"
                 onClick={() => onOpenChange(false)}
               >
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button type="submit" disabled={submitting}>
                 {submitting && <Loader2 className="animate-spin" />}
-                Save
+                {tCommon("save")}
               </Button>
             </DialogFooter>
           </form>

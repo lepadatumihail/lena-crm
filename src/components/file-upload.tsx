@@ -2,9 +2,11 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Loader2, Upload } from "lucide-react";
 
+import { intlTag } from "@/i18n/config";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
@@ -31,14 +33,20 @@ export function useFileUpload({
   clientId: string;
   folder: string;
 }) {
+  const t = useTranslations("common.upload");
+  const locale = useLocale();
   const [uploading, setUploading] = useState(false);
 
   async function upload(file: File): Promise<UploadedFileMeta | null> {
     if (file.size > MAX_FILE_BYTES) {
-      toast.error("File too large", {
-        description: `${file.name} is ${(file.size / (1024 * 1024)).toFixed(
-          1
-        )} MB. The limit is 15 MB.`,
+      toast.error(t("tooLarge"), {
+        description: t("tooLargeDescription", {
+          name: file.name,
+          size: new Intl.NumberFormat(intlTag(locale), {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
+          }).format(file.size / (1024 * 1024)),
+        }),
       });
       return null;
     }
@@ -55,7 +63,7 @@ export function useFileUpload({
           contentType: file.type || undefined,
         });
       if (error) {
-        toast.error("Upload failed", { description: error.message });
+        toast.error(t("failed"), { description: error.message });
         return null;
       }
       return {
@@ -80,7 +88,7 @@ export function UploadButton({
   multiple = true,
   variant = "outline",
   size = "sm",
-  successLabel = "File",
+  successLabel,
   children,
   onUploaded,
 }: {
@@ -100,6 +108,7 @@ export function UploadButton({
     file: File
   ) => Promise<boolean | void> | boolean | void;
 }) {
+  const t = useTranslations("common");
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { upload, uploading } = useFileUpload({ agentId, clientId, folder });
@@ -115,7 +124,9 @@ export function UploadButton({
     }
     if (saved > 0) {
       toast.success(
-        saved === 1 ? `${successLabel} uploaded` : `${saved} files uploaded`
+        saved === 1
+          ? t("upload.uploaded", { label: successLabel ?? t("file") })
+          : t("upload.uploadedMany", { count: saved })
       );
       router.refresh();
     }

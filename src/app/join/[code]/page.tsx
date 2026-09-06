@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { ArrowRight, Check } from "lucide-react";
 
 import { MarketingNav } from "@/components/marketing-nav";
@@ -18,16 +19,20 @@ import { FOUNDING_CAP, PRICES, foundingSpotsLeft } from "@/lib/billing";
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { SITE_NAME } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "You're invited",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("auth.join");
+  return {
+    title: t("meta.title"),
+    robots: { index: false, follow: false },
+  };
+}
 
 export default async function JoinPage({
   params,
 }: {
   params: Promise<{ code: string }>;
 }) {
+  const t = await getTranslations("auth.join");
   const { code: raw } = await params;
   const code = normalizeReferralCode(decodeURIComponent(raw));
   const inviter = isValidReferralCode(code) ? await findInviterByCode(code) : null;
@@ -36,11 +41,15 @@ export default async function JoinPage({
   const inviterName = inviter?.full_name?.trim() || inviter?.email?.split("@")[0] || null;
 
   const perks = [
-    `Free forever for up to ${FREE_CLIENT_LIMIT} clients — every feature included`,
+    t("perks.free", { limit: FREE_CLIENT_LIMIT }),
     spotsLeft > 0
-      ? `Be one of the first ${FOUNDING_CAP} paying agents and lock Pro at €${PRICES.founding.monthly}/mo for life (${spotsLeft} spots left)`
-      : `Pro is €${PRICES.standard.monthly}/mo for unlimited clients`,
-    `A free month for you both once you're on Pro`,
+      ? t("perks.founding", {
+          cap: FOUNDING_CAP,
+          price: PRICES.founding.monthly,
+          spots: spotsLeft,
+        })
+      : t("perks.standard", { price: PRICES.standard.monthly }),
+    t("perks.referral"),
   ];
 
   return (
@@ -54,20 +63,18 @@ export default async function JoinPage({
               <>
                 <CardTitle className="text-2xl text-balance">
                   {inviterName
-                    ? `${inviterName} invited you to ${SITE_NAME}`
-                    : `You're invited to ${SITE_NAME}`}
+                    ? t("invitedBy", { name: inviterName, site: SITE_NAME })
+                    : t("invited", { site: SITE_NAME })}
                 </CardTitle>
                 <CardDescription className="text-pretty">
-                  {SITE_NAME} is the CRM for independent real-estate agents: every buyer and
-                  seller, across all the agencies you work with, in one place.
+                  {t("description", { site: SITE_NAME })}
                 </CardDescription>
               </>
             ) : (
               <>
-                <CardTitle className="text-2xl">This link isn&apos;t valid</CardTitle>
+                <CardTitle className="text-2xl">{t("invalidTitle")}</CardTitle>
                 <CardDescription className="text-pretty">
-                  Check it with the agent who sent it. You can still start using {SITE_NAME}{" "}
-                  for free right now.
+                  {t("invalidDescription", { site: SITE_NAME })}
                 </CardDescription>
               </>
             )}
@@ -85,17 +92,17 @@ export default async function JoinPage({
                 </ul>
                 <Button asChild size="lg" className="w-full">
                   <a href={`/join/${code}/accept`}>
-                    Accept invite <ArrowRight />
+                    {t("accept")} <ArrowRight />
                   </a>
                 </Button>
                 <p className="text-muted-foreground text-center text-xs">
-                  No card needed. Sign in with Google or a one-time email code.
+                  {t("note")}
                 </p>
               </>
             ) : (
               <Button asChild size="lg" className="w-full">
                 <Link href="/login">
-                  Start free <ArrowRight />
+                  {t("startFree")} <ArrowRight />
                 </Link>
               </Button>
             )}

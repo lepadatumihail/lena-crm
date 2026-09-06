@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { ArrowLeft, Loader2, Mail } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/client";
+import { syncLocaleFromProfile } from "@/i18n/actions";
 import { AuthErrorListener } from "@/components/auth-error-listener";
 import { MarketingNav } from "@/components/marketing-nav";
 import { Button } from "@/components/ui/button";
@@ -56,6 +58,7 @@ function safeNext(): string {
 }
 
 export default function LoginPage() {
+  const t = useTranslations("auth.login");
   const router = useRouter();
   const [step, setStep] = useState<"email" | "code">("email");
   const [email, setEmail] = useState("");
@@ -89,7 +92,7 @@ export default function LoginPage() {
     });
     setSending(false);
     if (error) {
-      toast.error("Couldn't send code", { description: error.message });
+      toast.error(t("toasts.sendFailed"), { description: error.message });
       return false;
     }
     return true;
@@ -100,8 +103,8 @@ export default function LoginPage() {
     if (await sendCode()) {
       setCode("");
       setStep("code");
-      toast.success("Code sent", {
-        description: `Check ${email} for your 6-digit code.`,
+      toast.success(t("toasts.codeSent"), {
+        description: t("toasts.codeSentDescription", { email }),
       });
     }
   }
@@ -109,7 +112,7 @@ export default function LoginPage() {
   async function handleResend() {
     if (await sendCode()) {
       setCode("");
-      toast.success("New code sent");
+      toast.success(t("toasts.newCodeSent"));
     }
   }
 
@@ -126,9 +129,11 @@ export default function LoginPage() {
     if (error) {
       setVerifying(false);
       setCode("");
-      toast.error("Invalid or expired code", { description: error.message });
+      toast.error(t("toasts.invalidCode"), { description: error.message });
       return;
     }
+    // Best effort: a new device adopts the language saved on the profile.
+    await syncLocaleFromProfile().catch(() => null);
     router.push(safeNext());
     router.refresh();
   }
@@ -145,17 +150,17 @@ export default function LoginPage() {
             LeadWing
           </p>
           <CardTitle className="text-2xl">
-            {step === "email" ? "Welcome back" : "Enter your code"}
+            {step === "email" ? t("title") : t("codeTitle")}
           </CardTitle>
           <CardDescription>
-            {step === "email" ? (
-              "Sign in to your CRM. No password needed."
-            ) : (
-              <>
-                We emailed a 6-digit code to{" "}
-                <span className="text-foreground font-medium">{email}</span>.
-              </>
-            )}
+            {step === "email"
+              ? t("description")
+              : t.rich("codeDescription", {
+                  address: email,
+                  email: (chunks) => (
+                    <span className="text-foreground font-medium">{chunks}</span>
+                  ),
+                })}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -172,22 +177,22 @@ export default function LoginPage() {
                 ) : (
                   <GoogleIcon />
                 )}
-                Continue with Google
+                {t("google")}
               </Button>
 
               <div className="flex items-center gap-3">
                 <span className="bg-border h-px flex-1" />
-                <span className="text-muted-foreground text-xs">or</span>
+                <span className="text-muted-foreground text-xs">{t("or")}</span>
                 <span className="bg-border h-px flex-1" />
               </div>
 
               <form onSubmit={handleSendCode} className="space-y-3">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">{t("emailLabel")}</Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="you@agency.com"
+                    placeholder={t("emailPlaceholder")}
                     autoComplete="email"
                     required
                     value={email}
@@ -200,7 +205,7 @@ export default function LoginPage() {
                   disabled={sending || !email}
                 >
                   {sending ? <Loader2 className="animate-spin" /> : <Mail />}
-                  Email me a code
+                  {t("sendCode")}
                 </Button>
               </form>
             </>
@@ -237,7 +242,7 @@ export default function LoginPage() {
                   disabled={verifying || code.length !== 6}
                 >
                   {verifying && <Loader2 className="animate-spin" />}
-                  Verify &amp; sign in
+                  {t("verify")}
                 </Button>
               </form>
 
@@ -252,7 +257,7 @@ export default function LoginPage() {
                   }}
                   disabled={verifying}
                 >
-                  <ArrowLeft className="size-3.5" /> Different email
+                  <ArrowLeft className="size-3.5" /> {t("differentEmail")}
                 </Button>
                 <Button
                   variant="link"
@@ -261,7 +266,7 @@ export default function LoginPage() {
                   onClick={handleResend}
                   disabled={sending || verifying}
                 >
-                  Resend code
+                  {t("resend")}
                 </Button>
               </div>
             </div>

@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Check, MessageCircle, Search, Star } from "lucide-react";
 
+import { sideLabel, stageLabel } from "@/i18n/labels";
 import { cn } from "@/lib/utils";
 
 type ColId = "qualified" | "viewing" | "reserved";
@@ -20,12 +22,14 @@ type Card = {
 
 type Board = Record<ColId, Card[]>;
 
-const COLUMNS: { id: ColId; label: string; dot: string }[] = [
-  { id: "qualified", label: "Qualified", dot: "bg-primary" },
-  { id: "viewing", label: "Viewing", dot: "bg-warning" },
-  { id: "reserved", label: "Reserved", dot: "bg-success" },
+const COLUMNS: { id: ColId; dot: string }[] = [
+  { id: "qualified", dot: "bg-primary" },
+  { id: "viewing", dot: "bg-warning" },
+  { id: "reserved", dot: "bg-success" },
 ];
 
+// Sample records. Names and their property/budget lines play real rows in the
+// mock board, so they read the same in every UI language.
 const CARDS: Record<string, Card> = {
   sofia: {
     id: "sofia",
@@ -102,9 +106,11 @@ function move(board: Board, from: ColId, to: ColId, id: string): Board {
 }
 
 type ToastTone = "primary" | "warning" | "success" | "whatsapp";
+/** Toasts carry a kind, not text: the copy is translated at render time. */
+type ToastKind = "moved" | "newLead" | "offerAccepted" | "reminderSent";
 type Toast = {
   id: number;
-  text: string;
+  kind: ToastKind;
   tone: ToastTone;
   icon: React.ComponentType<{ className?: string }>;
 };
@@ -117,6 +123,8 @@ const TOAST_TONES: Record<ToastTone, string> = {
 };
 
 export function AppPreview() {
+  const t = useTranslations("landing");
+  const tCrm = useTranslations("crm");
   const reduced = useReducedMotion();
   const [board, setBoard] = useState<Board>(initialBoard);
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -126,13 +134,9 @@ export function AppPreview() {
   useEffect(() => {
     if (reduced) return;
 
-    function pushToast(
-      text: string,
-      tone: ToastTone,
-      icon: Toast["icon"]
-    ) {
+    function pushToast(kind: ToastKind, tone: ToastTone, icon: Toast["icon"]) {
       const id = ++toastIdRef.current;
-      setToasts((t) => [...t, { id, text, tone, icon }].slice(-2));
+      setToasts((t) => [...t, { id, kind, tone, icon }].slice(-2));
       setTimeout(
         () => setToasts((t) => t.filter((x) => x.id !== id)),
         2600
@@ -144,15 +148,15 @@ export function AppPreview() {
       stepRef.current += 1;
       if (step === 0) {
         setBoard((b) => move(b, "qualified", "viewing", "sofia"));
-        pushToast("Sofia Müller → Viewing", "primary", ArrowRight);
+        pushToast("moved", "primary", ArrowRight);
       } else if (step === 1) {
         setBoard((b) => ({ ...b, qualified: [CARDS.tom, ...b.qualified] }));
-        pushToast("New lead from Idealista", "warning", Search);
+        pushToast("newLead", "warning", Search);
       } else if (step === 2) {
         setBoard((b) => move(b, "viewing", "reserved", "olivia"));
-        pushToast("Olivia Brown · offer accepted", "success", Check);
+        pushToast("offerAccepted", "success", Check);
       } else if (step === 3) {
-        pushToast("WhatsApp reminder sent to Lars", "whatsapp", MessageCircle);
+        pushToast("reminderSent", "whatsapp", MessageCircle);
       } else {
         setBoard(initialBoard());
       }
@@ -160,6 +164,22 @@ export function AppPreview() {
 
     return () => clearInterval(interval);
   }, [reduced]);
+
+  function toastText(kind: ToastKind): string {
+    switch (kind) {
+      case "moved":
+        return t("preview.toasts.moved", {
+          name: CARDS.sofia.name,
+          stage: stageLabel(tCrm, "viewing"),
+        });
+      case "newLead":
+        return t("preview.toasts.newLead");
+      case "offerAccepted":
+        return t("preview.toasts.offerAccepted", { name: CARDS.olivia.name });
+      case "reminderSent":
+        return t("preview.toasts.reminderSent", { name: "Lars" });
+    }
+  }
 
   return (
     <div aria-hidden className="relative mt-16 w-full max-w-4xl">
@@ -170,16 +190,18 @@ export function AppPreview() {
         <div className="flex items-center justify-between gap-3 border-b px-3 py-2.5 sm:px-4">
           <div className="bg-muted inline-flex rounded-lg p-0.5 text-xs">
             <span className="bg-background rounded-md px-2.5 py-1 font-medium shadow-sm">
-              Buyers
+              {sideLabel(tCrm, "buyer", true)}
             </span>
-            <span className="text-muted-foreground px-2.5 py-1">Sellers</span>
+            <span className="text-muted-foreground px-2.5 py-1">
+              {sideLabel(tCrm, "seller", true)}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <div className="bg-muted/60 text-muted-foreground hidden items-center gap-1.5 rounded-md px-2 py-1 text-xs sm:flex">
-              <Search className="size-3.5" /> Search…
+              <Search className="size-3.5" /> {t("preview.search")}
             </div>
             <span className="bg-primary text-primary-foreground rounded-md px-2 py-1 text-xs font-medium">
-              + New
+              {t("preview.new")}
             </span>
           </div>
         </div>
@@ -192,7 +214,7 @@ export function AppPreview() {
                 <div className="flex items-center justify-between px-0.5">
                   <span className="flex items-center gap-1.5 text-xs font-semibold">
                     <span className={cn("size-2 rounded-full", col.dot)} />
-                    {col.label}
+                    {stageLabel(tCrm, col.id)}
                   </span>
                   <span className="text-muted-foreground bg-muted rounded-full px-1.5 text-[10px]">
                     {board[col.id].length}
@@ -246,17 +268,19 @@ export function AppPreview() {
           {/* Toasts */}
           <div className="pointer-events-none absolute right-3 bottom-3 flex max-w-[70%] flex-col items-end gap-1.5">
             <AnimatePresence>
-              {toasts.map((t) => (
+              {toasts.map((toast) => (
                 <motion.div
-                  key={t.id}
+                  key={toast.id}
                   initial={{ opacity: 0, x: 24, scale: 0.95 }}
                   animate={{ opacity: 1, x: 0, scale: 1 }}
                   exit={{ opacity: 0, x: 24, scale: 0.95 }}
                   transition={{ type: "spring", stiffness: 400, damping: 32 }}
                   className="bg-popover flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-[11px] font-medium shadow-md"
                 >
-                  <t.icon className={cn("size-3.5 shrink-0", TOAST_TONES[t.tone])} />
-                  <span className="truncate">{t.text}</span>
+                  <toast.icon
+                    className={cn("size-3.5 shrink-0", TOAST_TONES[toast.tone])}
+                  />
+                  <span className="truncate">{toastText(toast.kind)}</span>
                 </motion.div>
               ))}
             </AnimatePresence>

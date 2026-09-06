@@ -1,14 +1,13 @@
-import { createClient as createSupabase } from "@/lib/supabase/server";
-import {
-  BUYER_STAGES,
-  SELLER_STAGES,
-  STAGE_LABELS,
-  type Stage,
-} from "@/lib/crm";
-import { getAttentionSignals } from "@/lib/data/attention";
-import { formatDateKey, relativeDayLabel } from "@/lib/attention";
+import { getLocale, getTranslations } from "next-intl/server";
 
-export type StageCount = { stage: string; label: string; count: number };
+import { createClient as createSupabase } from "@/lib/supabase/server";
+import { BUYER_STAGES, SELLER_STAGES, type Stage } from "@/lib/crm";
+import { getAttentionSignals } from "@/lib/data/attention";
+import { formatDateKey } from "@/lib/attention";
+import { intlTag } from "@/i18n/config";
+import { stageLabel } from "@/i18n/labels";
+
+export type StageCount = { stage: Stage; count: number };
 
 export async function getPipelineCounts(): Promise<{
   buyer: StageCount[];
@@ -27,7 +26,6 @@ export async function getPipelineCounts(): Promise<{
   const tally = (stages: readonly Stage[], side: string): StageCount[] =>
     stages.map((s) => ({
       stage: s,
-      label: STAGE_LABELS[s],
       count: rows.filter((c) => c.side === side && c.stage === s).length,
     }));
 
@@ -50,8 +48,15 @@ export type AttentionItem = {
 /**
  * Action items for the Home cockpit: pending offers, quiet leads, and
  * upcoming reservation dates. Read-only mirror of the notification signals.
+ * Titles are client names; the details are rendered in the agent's UI
+ * language (this always runs inside a request).
  */
 export async function getNeedsAttention(): Promise<AttentionItem[]> {
+  const [t, tCrm, locale] = await Promise.all([
+    getTranslations("home"),
+    getTranslations("crm"),
+    getLocale(),
+  ]);
   const supabase = await createSupabase();
   // Server-clock day boundary (UTC in prod). The bell uses the browser's;
   // near-midnight drift here is accepted.
@@ -72,7 +77,7 @@ export async function getNeedsAttention(): Promise<AttentionItem[]> {
       id: `stalled:${o.clientId}`,
       kind: "stalled_offer",
       title: o.name,
-      detail: "Made an offer — not reserved yet",
+      detail: t("attention.stalledOffer"),
       href: `/clients/${o.clientId}?compose=offer_followup`,
     });
   }
@@ -82,17 +87,31 @@ export async function getNeedsAttention(): Promise<AttentionItem[]> {
       id: `followup:${b.clientId}`,
       kind: "follow_up",
       title: b.name,
-      detail: `${STAGE_LABELS[b.stage as Stage] ?? b.stage} · quiet ${b.quietDays} days`,
+      detail: t("attention.followUp", {
+        stage: stageLabel(tCrm, b.stage),
+        days: b.quietDays,
+      }),
       href: `/clients/${b.clientId}?compose=check_in`,
     });
   }
 
   for (const r of signals.reservationDates) {
+    // `r.label` is the English fallback from the signal; the UI language wins.
+    const when =
+      r.diff === 0
+        ? t("attention.relative.today")
+        : r.diff === 1
+          ? t("attention.relative.tomorrow")
+          : t("attention.relative.inDays", { count: r.diff });
     items.push({
       id: `resdate:${r.clientId}:${RES_COL[r.field]}`,
       kind: "reservation",
       title: r.name,
-      detail: `${r.label} · ${formatDateKey(r.dateStr)} (${relativeDayLabel(r.diff)})`,
+      detail: t("attention.reservation", {
+        label: t(`attention.reservationFields.${r.field}`),
+        date: formatDateKey(r.dateStr, intlTag(locale)),
+        when,
+      }),
       href: `/clients/${r.clientId}`,
     });
   }

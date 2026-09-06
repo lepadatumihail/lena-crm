@@ -1,0 +1,56 @@
+{
+  "save": "Save",
+  "saving": "Saving…",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "edit": "Edit",
+  "add": "Add",
+  "remove": "Remove",
+  "back": "Back",
+  "close": "Close",
+  "confirm": "Confirm",
+  "done": "Done",
+  "loading": "Loading…",
+  "retry": "Try again",
+  "search": "Search",
+  "yes": "Yes",
+  "no": "No",
+  "optional": "Optional",
+  "none": "None",
+  "unknown": "Unknown",
+  "copy": "Copy",
+  "copied": "Copied",
+  "open": "Open",
+  "view": "View",
+  "send": "Send",
+  "next": "Next",
+  "previous": "Previous",
+  "today": "Today",
+  "tomorrow": "Tomorrow",
+  "file": "File",
+  "areYouSure": "Are you sure?",
+  "noMatch": "No match",
+  "searchCountry": "Search country…",
+  "sidebar": {
+    "label": "Sidebar",
+    "description": "Displays the mobile sidebar.",
+    "toggle": "Toggle Sidebar"
+  },
+  "calendar": {
+    "previousMonth": "Go to the Previous Month",
+    "nextMonth": "Go to the Next Month"
+  },
+  "upload": {
+    "tooLarge": "File too large",
+    "tooLargeDescription": "{name} is {size} MB. The limit is 15 MB.",
+    "failed": "Upload failed",
+    "uploaded": "{label} uploaded",
+    "uploadedMany": "{count, plural, one {# file uploaded} other {# files uploaded}}"
+  },
+  "errors": {
+    "generic": "Something went wrong",
+    "tryAgain": "Something went wrong. Please try again.",
+    "notAuthenticated": "Not authenticated",
+    "unexpected": "An unexpected error occurred. Please try again."
+  }
+}

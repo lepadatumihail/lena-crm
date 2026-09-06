@@ -1,0 +1,56 @@
+{
+  "save": "Guardar",
+  "saving": "Guardando…",
+  "cancel": "Cancelar",
+  "delete": "Eliminar",
+  "edit": "Editar",
+  "add": "Añadir",
+  "remove": "Quitar",
+  "back": "Atrás",
+  "close": "Cerrar",
+  "confirm": "Confirmar",
+  "done": "Hecho",
+  "loading": "Cargando…",
+  "retry": "Reintentar",
+  "search": "Buscar",
+  "yes": "Sí",
+  "no": "No",
+  "optional": "Opcional",
+  "none": "Ninguno",
+  "unknown": "Desconocido",
+  "copy": "Copiar",
+  "copied": "Copiado",
+  "open": "Abrir",
+  "view": "Ver",
+  "send": "Enviar",
+  "next": "Siguiente",
+  "previous": "Anterior",
+  "today": "Hoy",
+  "tomorrow": "Mañana",
+  "file": "Archivo",
+  "areYouSure": "¿Estás seguro?",
+  "noMatch": "Sin resultados",
+  "searchCountry": "Buscar país…",
+  "sidebar": {
+    "label": "Barra lateral",
+    "description": "Muestra la barra lateral en móvil.",
+    "toggle": "Mostrar u ocultar la barra lateral"
+  },
+  "calendar": {
+    "previousMonth": "Ir al mes anterior",
+    "nextMonth": "Ir al mes siguiente"
+  },
+  "upload": {
+    "tooLarge": "Archivo demasiado grande",
+    "tooLargeDescription": "{name} ocupa {size} MB. El límite es 15 MB.",
+    "failed": "No se ha podido subir el archivo",
+    "uploaded": "Se ha subido {label}",
+    "uploadedMany": "{count, plural, one {# archivo subido} other {# archivos subidos}}"
+  },
+  "errors": {
+    "generic": "Algo ha salido mal",
+    "tryAgain": "Algo ha salido mal. Inténtalo de nuevo.",
+    "notAuthenticated": "No has iniciado sesión",
+    "unexpected": "Se ha producido un error inesperado. Inténtalo de nuevo."
+  }
+}

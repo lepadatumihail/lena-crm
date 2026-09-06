@@ -8,6 +8,7 @@ import {
   type ComponentType,
 } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import {
   endOfDay,
   format,
@@ -31,13 +32,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { dateFnsLocale } from "@/i18n/dates";
 import {
   loadNotifications,
   markAllNotificationsRead,
   markNotificationRead,
   type SyncContext,
 } from "@/lib/actions/notifications";
-import { NOTIFICATION_TYPE_LABELS } from "@/lib/calendar";
 import type { Enums, Notification } from "@/lib/supabase/types";
 
 type NotificationType = Enums<"notification_type">;
@@ -62,6 +63,8 @@ function buildContext(): SyncContext {
 }
 
 export function NotificationsBell() {
+  const t = useTranslations("notifications.bell");
+  const locale = useLocale();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState<Notification[]>([]);
@@ -141,7 +144,9 @@ export function NotificationsBell() {
           variant="ghost"
           size="icon"
           className="relative"
-          aria-label={`Notifications${unread > 0 ? ` (${unread} unread)` : ""}`}
+          aria-label={
+            unread > 0 ? t("ariaUnread", { count: unread }) : t("aria")
+          }
         >
           <Bell />
           {unread > 0 && (
@@ -153,21 +158,21 @@ export function NotificationsBell() {
       </PopoverTrigger>
       <PopoverContent align="end" className="w-80 p-0 sm:w-96">
         <div className="flex items-center justify-between border-b px-3 py-2.5">
-          <p className="text-sm font-semibold">Notifications</p>
+          <p className="text-sm font-semibold">{t("title")}</p>
           {unread > 0 && (
             <button
               type="button"
               onClick={handleMarkAll}
               className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-xs"
             >
-              <CheckCheck className="size-3.5" /> Mark all read
+              <CheckCheck className="size-3.5" /> {t("markAllRead")}
             </button>
           )}
         </div>
         <div className="max-h-96 overflow-y-auto">
           {items.length === 0 ? (
             <p className="text-muted-foreground px-3 py-8 text-center text-sm">
-              You&apos;re all caught up.
+              {t("empty")}
             </p>
           ) : (
             items.map((n) => {
@@ -208,9 +213,10 @@ export function NotificationsBell() {
                       </p>
                     )}
                     <p className="text-muted-foreground/70 mt-1 text-[11px]">
-                      {NOTIFICATION_TYPE_LABELS[n.type]} ·{" "}
+                      {t(`types.${n.type}`)} ·{" "}
                       {formatDistanceToNow(new Date(n.due_at), {
                         addSuffix: true,
+                        locale: dateFnsLocale(locale),
                       })}
                     </p>
                   </div>
@@ -224,7 +230,7 @@ export function NotificationsBell() {
         </div>
         {hasMore && (
           <p className="text-muted-foreground border-t px-3 py-2 text-center text-xs">
-            Showing your most recent notifications
+            {t("hasMore")}
           </p>
         )}
       </PopoverContent>

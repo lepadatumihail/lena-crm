@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import {
   ArrowRight,
   BadgeCheck,
@@ -12,6 +13,7 @@ import { Reveal } from "@/components/reveal";
 import { cn } from "@/lib/utils";
 
 function VisualWhatsApp() {
+  const t = useTranslations("landing.deepDives.visuals");
   return (
     <div className="bg-card mx-auto max-w-sm rounded-2xl border p-4 shadow-sm">
       <div className="flex items-center gap-2 border-b pb-3">
@@ -20,16 +22,19 @@ function VisualWhatsApp() {
         </div>
         <div>
           <p className="text-sm font-medium">Sofia Müller</p>
-          <p className="text-muted-foreground text-[10px]">online</p>
+          <p className="text-muted-foreground text-[10px]">
+            {t("whatsapp.online")}
+          </p>
         </div>
       </div>
       <div className="space-y-1.5 py-3">
+        {/* Client-facing sample: follows the client's language, not the UI's. */}
         <div className="ml-auto max-w-[88%] rounded-2xl rounded-br-sm bg-[#25D366]/10 p-3 text-xs leading-relaxed">
           Hallo Sofia, zwei neue Apartments mit Meerblick sind in Ihrem Budget
           aufgetaucht — sollen wir diese Woche eine Besichtigung einplanen?
         </div>
         <p className="text-primary flex items-center justify-end gap-1 text-[10px] font-medium">
-          <Sparkles className="size-3" /> Drafted by AI · German
+          <Sparkles className="size-3" /> {t("whatsapp.draftedBy")}
         </p>
       </div>
     </div>
@@ -37,18 +42,21 @@ function VisualWhatsApp() {
 }
 
 function VisualMatch() {
+  const t = useTranslations("landing.deepDives.visuals");
   return (
     <div className="bg-card mx-auto max-w-sm space-y-2 rounded-2xl border p-4 shadow-sm">
       <div className="bg-muted/50 rounded-lg border p-2.5 text-xs">
-        <span className="font-medium">James Carter</span> · wants Villa ·
-        €800k–1.2M · 4 bed
+        {t.rich("match.query", {
+          name: "James Carter",
+          b: (chunks) => <span className="font-medium">{chunks}</span>,
+        })}
       </div>
       <p className="text-muted-foreground text-center text-[10px]">
-        2 of your listings match
+        {t("match.count")}
       </p>
       {[
-        { t: "Villa, Nueva Andalucía", m: "€950k · 4 bed" },
-        { t: "Villa, El Paraíso", m: "€1.1M · 5 bed" },
+        { t: "Villa, Nueva Andalucía", m: t("match.meta1") },
+        { t: "Villa, El Paraíso", m: t("match.meta2") },
       ].map((x) => (
         <div
           key={x.t}
@@ -66,6 +74,7 @@ function VisualMatch() {
 }
 
 function VisualPortal() {
+  const t = useTranslations("landing.deepDives.visuals");
   return (
     <div className="bg-card mx-auto max-w-sm rounded-2xl border p-4 shadow-sm">
       <div className="flex flex-wrap justify-center gap-1.5">
@@ -83,13 +92,15 @@ function VisualPortal() {
       </div>
       <div className="bg-background rounded-lg border p-3">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-sm font-medium">New lead · Anya Petrova</p>
+          <p className="text-sm font-medium">
+            {t("newLead", { name: "Anya Petrova" })}
+          </p>
           <span className="bg-success/15 text-success rounded-full px-1.5 py-0.5 text-[9px] font-semibold">
-            AI-filled
+            {t("portal.aiFilled")}
           </span>
         </div>
         <p className="text-muted-foreground mt-1 text-xs">
-          Penthouse · Marbella · enquiry from Idealista
+          {t("portal.enquiry")}
         </p>
       </div>
     </div>
@@ -97,19 +108,23 @@ function VisualPortal() {
 }
 
 function VisualSpeed() {
+  const t = useTranslations("landing.deepDives.visuals");
   return (
     <div className="bg-card mx-auto max-w-sm rounded-2xl border p-4 shadow-sm">
       <div className="flex items-center justify-between border-b pb-2 text-xs">
-        <span className="font-medium">New lead · Lars Nielsen</span>
+        <span className="font-medium">
+          {t("newLead", { name: "Lars Nielsen" })}
+        </span>
         <span className="text-success inline-flex items-center gap-1 font-medium">
-          <Zap className="size-3" /> first reply ready
+          <Zap className="size-3" /> {t("speed.firstReply")}
         </span>
       </div>
+      {/* Client-facing sample: follows the client's language, not the UI's. */}
       <div className="bg-primary/5 mt-3 rounded-2xl rounded-tl-sm p-3 text-xs leading-relaxed">
         Hej Lars! Tak for din henvendelse — jeg har et par lejligheder i
         Estepona, der passer perfekt. Hvornår passer det at ringe?
         <span className="text-primary mt-1.5 flex items-center gap-1 text-[10px] font-medium">
-          <Sparkles className="size-3" /> AI draft · Danish
+          <Sparkles className="size-3" /> {t("speed.aiDraft")}
         </span>
       </div>
     </div>
@@ -117,23 +132,28 @@ function VisualSpeed() {
 }
 
 function VisualScheduler() {
+  const t = useTranslations("landing.deepDives.visuals");
   return (
     <div className="bg-card mx-auto max-w-sm space-y-3 rounded-2xl border p-4 shadow-sm">
       <div className="flex items-center gap-3 rounded-lg border p-3">
         <div className="bg-primary/10 text-primary flex size-10 flex-col items-center justify-center rounded-lg">
-          <span className="text-[9px] font-semibold uppercase">Jun</span>
+          <span className="text-[9px] font-semibold uppercase">
+            {t("scheduler.month")}
+          </span>
           <span className="text-sm leading-none font-bold">14</span>
         </div>
         <div className="text-xs">
-          <p className="font-medium">Viewing · Villa, Nueva Andalucía</p>
-          <p className="text-muted-foreground">Sat 12:00 · with Olivia Brown</p>
+          <p className="font-medium">{t("scheduler.event")}</p>
+          <p className="text-muted-foreground">
+            {t("scheduler.when", { name: "Olivia Brown" })}
+          </p>
         </div>
       </div>
       <div className="rounded-2xl rounded-bl-sm bg-[#25D366]/10 p-3 text-xs leading-relaxed">
-        Reminder: your viewing is tomorrow at 12:00.
+        {t("scheduler.reminder")}
         <span className="text-muted-foreground mt-1 flex items-center gap-1 text-[10px]">
-          <MessageCircle className="size-3 text-[#25D366]" /> One tap to send on
-          WhatsApp
+          <MessageCircle className="size-3 text-[#25D366]" />{" "}
+          {t("scheduler.whatsapp")}
         </span>
       </div>
     </div>
@@ -174,89 +194,57 @@ const ACCENTS: Record<string, Accent> = {
   },
 };
 
-type Feature = {
-  accent: keyof typeof ACCENTS;
-  icon: React.ComponentType<{ className?: string }>;
-  title: string;
-  body: string;
-  points: string[];
-  visual: React.ReactNode;
-};
-
-const FEATURES: Feature[] = [
+/** Copy lives in `landing.deepDives.items.<key>`; only the shell stays here. */
+const FEATURES = [
   {
+    key: "whatsapp",
     accent: "success",
     icon: MessageCircle,
-    title: "AI-written WhatsApp messages",
-    body: "Tap a client and LeadWing drafts the WhatsApp message for you — warm, personal, and in their language. Read it, tweak it, send it.",
-    points: [
-      "Opens straight in WhatsApp",
-      "Written in the client's own language",
-      "You always approve before it sends",
-    ],
     visual: <VisualWhatsApp />,
   },
   {
+    key: "match",
     accent: "primary",
     icon: BadgeCheck,
-    title: "Buyer ↔ listing auto-match",
-    body: "Because you track buyers and sellers in one place, LeadWing instantly shows which of your listings fit each buyer's budget, type and bedrooms.",
-    points: [
-      "Matches on budget, type & bedrooms",
-      "One tap from buyer to the seller",
-      "No double-handling between sides",
-    ],
     visual: <VisualMatch />,
   },
   {
+    key: "portal",
     accent: "warning",
     icon: Inbox,
-    title: "Portal lead capture",
-    body: "Paste an enquiry from Idealista, Fotocasa, Kyero, an email or a WhatsApp — LeadWing reads it and fills a ready-to-save lead. No retyping.",
-    points: [
-      "Works with any portal, email or WhatsApp",
-      "Pulls out name, phone, language & budget",
-      "Pre-fills the new-client form for you",
-    ],
     visual: <VisualPortal />,
   },
   {
+    key: "speed",
     accent: "destructive",
     icon: Zap,
-    title: "Multilingual speed-to-lead",
-    body: "When a new lead comes in, draft a first reply in their language in one tap — so you're first to respond, not staring at a blank message.",
-    points: [
-      "One-tap first reply",
-      "In the lead's own language",
-      "Send via WhatsApp or email",
-    ],
     visual: <VisualSpeed />,
   },
   {
+    key: "scheduler",
     accent: "primary",
     icon: CalendarClock,
-    title: "Viewing scheduler + reminders",
-    body: "Book viewings and meetings on a clean calendar, get a reminder before each one, and send the client a WhatsApp confirmation in a tap.",
-    points: [
-      "A simple month calendar for viewings & meetings",
-      "Reminders surface in your notifications",
-      "One-tap WhatsApp confirmation to the client",
-    ],
     visual: <VisualScheduler />,
   },
-];
+] as const satisfies readonly {
+  key: string;
+  accent: keyof typeof ACCENTS;
+  icon: React.ComponentType<{ className?: string }>;
+  visual: React.ReactNode;
+}[];
+
+const POINTS = ["point1", "point2", "point3"] as const;
 
 export function FeatureDeepDives() {
+  const t = useTranslations("landing");
+
   return (
     <section className="mx-auto w-full max-w-6xl px-4 py-16">
       <Reveal className="mx-auto max-w-2xl text-center">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          Built for how Costa del Sol agents actually work
+          {t("deepDives.heading")}
         </h2>
-        <p className="text-muted-foreground mt-3">
-          The things the big CRMs miss — WhatsApp, portals, languages — done
-          simply.
-        </p>
+        <p className="text-muted-foreground mt-3">{t("deepDives.body")}</p>
       </Reveal>
 
       <div className="mt-12 space-y-6 sm:space-y-8">
@@ -264,7 +252,7 @@ export function FeatureDeepDives() {
           const accent = ACCENTS[f.accent];
           const reverse = i % 2 === 1;
           return (
-            <Reveal key={f.title}>
+            <Reveal key={f.key}>
               <div
                 className={cn(
                   "relative overflow-hidden rounded-3xl border to-transparent p-6 sm:p-10",
@@ -293,19 +281,21 @@ export function FeatureDeepDives() {
                       </span>
                     </div>
                     <h3 className="text-2xl font-semibold tracking-tight">
-                      {f.title}
+                      {t(`deepDives.items.${f.key}.title`)}
                     </h3>
-                    <p className="text-muted-foreground">{f.body}</p>
+                    <p className="text-muted-foreground">
+                      {t(`deepDives.items.${f.key}.body`)}
+                    </p>
                     <ul className="space-y-2">
-                      {f.points.map((p) => (
+                      {POINTS.map((point) => (
                         <li
-                          key={p}
+                          key={point}
                           className="flex items-start gap-2 text-sm"
                         >
                           <BadgeCheck
                             className={cn("mt-0.5 size-4 shrink-0", accent.check)}
                           />
-                          {p}
+                          {t(`deepDives.items.${f.key}.${point}`)}
                         </li>
                       ))}
                     </ul>

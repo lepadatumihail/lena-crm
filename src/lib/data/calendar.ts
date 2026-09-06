@@ -1,6 +1,9 @@
+import { getTranslations } from "next-intl/server";
+
 import { createClient as createSupabase } from "@/lib/supabase/server";
-import { appointmentTitle } from "@/lib/calendar";
 import type { Appointment, Viewing } from "@/lib/supabase/types";
+import { appointmentTitleFor } from "@/i18n/appointments";
+import { propertyTypeLabel } from "@/i18n/labels";
 
 type Embedded<T> = T | T[] | null;
 
@@ -97,7 +100,9 @@ export async function getCalendarEvents(
   endISO: string
 ): Promise<CalendarEvent[]> {
   const supabase = await createSupabase();
-  const [appointments, viewingsRes] = await Promise.all([
+  const [t, tCrm, appointments, viewingsRes] = await Promise.all([
+    getTranslations("server.appointments"),
+    getTranslations("crm"),
     getAppointmentsInRange(startISO, endISO),
     supabase
       .from("viewings")
@@ -114,15 +119,16 @@ export async function getCalendarEvents(
     id: a.id,
     starts_at: a.starts_at,
     ends_at: a.ends_at,
-    title: appointmentTitle(a, {
+    title: appointmentTitleFor(t, a, {
       clientName: a.client
         ? `${a.client.first_name} ${a.client.last_name}`.trim()
         : null,
       property:
         a.property_label ??
         a.property?.address ??
-        a.property?.property_type ??
-        null,
+        (a.property?.property_type
+          ? propertyTypeLabel(tCrm, a.property.property_type)
+          : null),
     }),
     location: a.location,
     contact: a.client
@@ -157,7 +163,9 @@ export async function getCalendarEvents(
       id: v.id,
       starts_at: v.scheduled_at as string,
       ends_at: null,
-      title: v.title?.trim() || (buyerName ? `Viewing with ${buyerName}` : "Viewing"),
+      title:
+        v.title?.trim() ||
+        (buyerName ? t("viewingWith", { name: buyerName }) : t("viewing")),
       location: null,
       contact: buyer
         ? {

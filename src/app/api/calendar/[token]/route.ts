@@ -1,6 +1,9 @@
+import { getTranslations } from "next-intl/server";
+
 import { createAdminClient } from "@/lib/supabase/admin";
 import { verifyFeedToken } from "@/lib/calendar-feed-token";
 import { buildICS, type ICSEvent } from "@/lib/ics";
+import { DEFAULT_LOCALE, isLocale } from "@/i18n/config";
 
 type Embedded<T> = T | T[] | null;
 function one<T>(v: Embedded<T>): T | null {
@@ -22,6 +25,16 @@ export async function GET(
   const since = new Date(
     new Date().getTime() - 60 * 24 * 60 * 60 * 1000
   ).toISOString();
+
+  // Calendar apps fetch this without the language cookie, so the feed speaks
+  // the language saved on the profile.
+  const { data: profile } = await admin
+    .from("profiles")
+    .select("locale")
+    .eq("id", agentId)
+    .maybeSingle();
+  const locale = isLocale(profile?.locale) ? profile.locale : DEFAULT_LOCALE;
+  const t = await getTranslations({ locale, namespace: "server.appointments" });
 
   type ApptRow = {
     id: string;
@@ -67,7 +80,7 @@ export async function GET(
       uid: `leadwing-appt-${a.id}@leadwing.app`,
       start,
       end: a.ends_at ? new Date(a.ends_at) : new Date(start.getTime() + 3600000),
-      summary: a.title?.trim() || (cn ? `Meeting with ${cn}` : "Meeting"),
+      summary: a.title?.trim() || (cn ? t("meetingWith", { name: cn }) : t("meeting")),
       description: a.notes,
       location: a.location,
     });
@@ -80,7 +93,7 @@ export async function GET(
       uid: `leadwing-view-${v.id}@leadwing.app`,
       start,
       end: new Date(start.getTime() + 3600000),
-      summary: v.title?.trim() || (cn ? `Viewing with ${cn}` : "Viewing"),
+      summary: v.title?.trim() || (cn ? t("viewingWith", { name: cn }) : t("viewing")),
       description: v.description,
     });
   }

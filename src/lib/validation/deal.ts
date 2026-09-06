@@ -1,8 +1,10 @@
 import { z } from "zod";
 
+import type { ValidationT } from "./i18n";
+
 // Numeric fields are kept as strings in forms (what the inputs hold) and coerced
 // to numbers in the server action via toNumber(). Mirrors the buyer-side pattern.
-const numericString = (opts?: { int?: boolean; max?: number }) =>
+const numericString = (t: ValidationT, opts?: { int?: boolean; max?: number }) =>
   z.string().trim().refine(
     (v) => {
       if (v === "") return true;
@@ -14,10 +16,10 @@ const numericString = (opts?: { int?: boolean; max?: number }) =>
     },
     {
       message: opts?.int
-        ? "Enter a whole number"
+        ? t("wholeNumber")
         : opts?.max != null
-          ? `Enter a number between 0 and ${opts.max}`
-          : "Enter a valid amount",
+          ? t("numberBetween", { max: opts.max })
+          : t("invalidAmount"),
     }
   );
 
@@ -29,24 +31,26 @@ export function toNumber(v: string | number | null | undefined): number {
   return Number.isFinite(n) ? n : 0;
 }
 
-export const dealFormSchema = z.object({
-  title: z.string().trim().min(1, "Title is required").max(120),
-  analysis_date: z.string().min(1, "Date is required"),
-  property_type: z.enum(["resale", "new_build"]),
-  // acquisition
-  asking_price: numericString(),
-  transfer_tax_pct: numericString({ max: 100 }),
-  lawyer_pct: numericString({ max: 100 }),
-  notary_pct: numericString({ max: 100 }),
-  // renovation / project
-  renovation_price_per_sqm: numericString(),
-  surface_sqm: numericString(),
-  contingency_pct: numericString({ max: 100 }),
-  duration_months: numericString({ int: true }),
-  // exit
-  expected_sale_price: numericString(),
-  agency_fee_pct: numericString({ max: 100 }),
-  notes: z.string().trim().max(2000).optional().or(z.literal("")),
-});
+export function dealFormSchema(t: ValidationT) {
+  return z.object({
+    title: z.string().trim().min(1, t("titleRequired")).max(120),
+    analysis_date: z.string().min(1, t("dateRequired")),
+    property_type: z.enum(["resale", "new_build"]),
+    // acquisition
+    asking_price: numericString(t),
+    transfer_tax_pct: numericString(t, { max: 100 }),
+    lawyer_pct: numericString(t, { max: 100 }),
+    notary_pct: numericString(t, { max: 100 }),
+    // renovation / project
+    renovation_price_per_sqm: numericString(t),
+    surface_sqm: numericString(t),
+    contingency_pct: numericString(t, { max: 100 }),
+    duration_months: numericString(t, { int: true }),
+    // exit
+    expected_sale_price: numericString(t),
+    agency_fee_pct: numericString(t, { max: 100 }),
+    notes: z.string().trim().max(2000).optional().or(z.literal("")),
+  });
+}
 
-export type DealFormValues = z.infer<typeof dealFormSchema>;
+export type DealFormValues = z.infer<ReturnType<typeof dealFormSchema>>;

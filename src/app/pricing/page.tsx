@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { ArrowLeft } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/server";
@@ -12,16 +13,19 @@ import {
   currentTier,
   foundingSpotsLeft,
   paymentLink,
-  planLabel,
+  planName,
 } from "@/lib/billing";
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 import { PricingCards } from "@/components/billing/pricing-cards";
 
-export const metadata: Metadata = {
-  title: "Plans & pricing",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("billing");
+  return {
+    title: t("meta.pricingTitle"),
+    robots: { index: false, follow: false },
+  };
+}
 
 /**
  * Plans page for signed-in agents. Lives OUTSIDE the (app) group: it is the
@@ -34,7 +38,11 @@ export default async function PricingPage({
 }: {
   searchParams: Promise<{ upgraded?: string }>;
 }) {
-  const [{ upgraded }, supabase] = await Promise.all([searchParams, createClient()]);
+  const [{ upgraded }, supabase, t] = await Promise.all([
+    searchParams,
+    createClient(),
+    getTranslations("billing"),
+  ]);
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -68,7 +76,7 @@ export default async function PricingPage({
           </Link>
           <Button asChild variant="ghost" size="sm">
             <Link href="/home">
-              <ArrowLeft /> Back to the app
+              <ArrowLeft /> {t("pricingPage.back")}
             </Link>
           </Button>
         </div>
@@ -77,11 +85,10 @@ export default async function PricingPage({
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:py-14">
         <div className="text-center">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Free to start. One plan when you grow.
+            {t("pricingPage.heading")}
           </h1>
           <p className="text-muted-foreground mx-auto mt-3 max-w-xl text-pretty">
-            Every feature on both plans. The only difference is how many clients you can hold.
-            Nothing you&apos;ve added is ever deleted.
+            {t("pricingPage.subheading")}
           </p>
         </div>
 
@@ -94,7 +101,7 @@ export default async function PricingPage({
             tier: state.tier,
             source: state.source,
             proUntil: state.proUntil,
-            planLabel: profile?.plan ? planLabel(profile.plan) : null,
+            planLabel: profile?.plan ? planName(t, profile.plan) : null,
             foundingNumber: profile?.founding_number ?? null,
           }}
           unappliedCreditEur={unappliedCreditEur}

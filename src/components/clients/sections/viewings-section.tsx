@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -31,6 +32,8 @@ import {
   deleteViewing,
   deleteViewingAttachment,
 } from "@/lib/actions/buyer";
+import { intlTag } from "@/i18n/config";
+import { dateFnsLocale } from "@/i18n/dates";
 import { formatCurrency } from "@/lib/crm";
 import { createClient } from "@/lib/supabase/client";
 import type { ViewingWithAttachments } from "@/lib/data/buyer";
@@ -45,6 +48,7 @@ export function ViewingsSection({
   agentId: string;
   viewings: ViewingWithAttachments[];
 }) {
+  const t = useTranslations("clientDetail.viewings");
   const [adding, setAdding] = useState(false);
   const offerCount = viewings.filter((v) => v.had_offer).length;
 
@@ -52,22 +56,20 @@ export function ViewingsSection({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle className="text-base">Viewings</CardTitle>
+          <CardTitle className="text-base">{t("title")}</CardTitle>
           {viewings.length > 0 && (
             <p className="text-muted-foreground mt-0.5 text-xs">
-              {viewings.length} viewed · {offerCount} with an offer
+              {t("summary", { count: viewings.length, offers: offerCount })}
             </p>
           )}
         </div>
         <Button variant="outline" size="sm" onClick={() => setAdding(true)}>
-          <Plus /> Add viewing
+          <Plus /> {t("add")}
         </Button>
       </CardHeader>
       <CardContent className="space-y-3">
         {viewings.length === 0 ? (
-          <p className="text-muted-foreground text-sm">
-            No viewings yet. Add properties this buyer has viewed.
-          </p>
+          <p className="text-muted-foreground text-sm">{t("empty")}</p>
         ) : (
           viewings.map((v) => (
             <ViewingCard
@@ -98,16 +100,18 @@ function ViewingCard({
   agentId: string;
   viewing: ViewingWithAttachments;
 }) {
+  const t = useTranslations("clientDetail.viewings");
+  const locale = useLocale();
   const router = useRouter();
   const [editing, setEditing] = useState(false);
 
   async function onDelete() {
     const { error } = await deleteViewing(clientId, viewing.id);
     if (error) {
-      toast.error("Couldn't delete viewing", { description: error });
+      toast.error(t("deleteError"), { description: error });
       return false;
     }
-    toast.success("Viewing deleted");
+    toast.success(t("deleted"));
     router.refresh();
     return true;
   }
@@ -117,7 +121,7 @@ function ViewingCard({
   ) {
     const { error } = await addViewingAttachment(clientId, viewing.id, meta);
     if (error) {
-      toast.error("Couldn't save attachment", { description: error });
+      toast.error(t("attachmentError"), { description: error });
       return false;
     }
     return true;
@@ -138,7 +142,7 @@ function ViewingCard({
             </span>
             <div className="min-w-0">
               <p className="leading-tight font-medium">
-                {viewing.title || "Untitled property"}
+                {viewing.title || t("untitled")}
               </p>
               {viewing.description && (
                 <p className="text-muted-foreground mt-1 text-sm">
@@ -153,22 +157,22 @@ function ViewingCard({
               size="icon"
               className="size-8"
               onClick={() => setEditing(true)}
-              aria-label="Edit viewing"
+              aria-label={t("editAria")}
             >
               <Pencil className="size-4" />
             </Button>
             <ConfirmDialog
-              title="Delete viewing?"
-              description={`This removes “${
-                viewing.title || "Untitled property"
-              }” and its attachments. This can’t be undone.`}
+              title={t("confirmTitle")}
+              description={t("confirmDescription", {
+                title: viewing.title || t("untitled"),
+              })}
               onConfirm={onDelete}
               trigger={
                 <Button
                   variant="ghost"
                   size="icon"
                   className="text-muted-foreground hover:text-destructive size-8"
-                  aria-label="Delete viewing"
+                  aria-label={t("deleteAria")}
                 >
                   <Trash2 className="size-4" />
                 </Button>
@@ -182,21 +186,32 @@ function ViewingCard({
             {viewing.scheduled_at && (
               <span className="text-muted-foreground flex items-center gap-1.5">
                 <CalendarClock className="size-4 opacity-70" />
-                {format(new Date(viewing.scheduled_at), "EEE d MMM, HH:mm")}
+                {format(new Date(viewing.scheduled_at), "EEE d MMM, HH:mm", {
+                  locale: dateFnsLocale(locale),
+                })}
               </span>
             )}
             {viewing.property_price != null && (
               <span className="text-muted-foreground flex items-center gap-1.5">
                 <Euro className="size-4 opacity-70" />
-                Asking{" "}
-                <span className="text-foreground font-medium tabular-nums">
-                  {formatCurrency(viewing.property_price)}
-                </span>
+                {t.rich("asking", {
+                  amount: formatCurrency(
+                    viewing.property_price,
+                    intlTag(locale)
+                  ),
+                  price: (chunks) => (
+                    <span className="text-foreground font-medium tabular-nums">
+                      {chunks}
+                    </span>
+                  ),
+                })}
               </span>
             )}
             {viewing.had_offer && (
               <Badge variant="success" className="tabular-nums">
-                Offer {formatCurrency(viewing.offer_price)}
+                {t("offer", {
+                  price: formatCurrency(viewing.offer_price, intlTag(locale)),
+                })}
               </Badge>
             )}
           </div>
@@ -219,22 +234,22 @@ function ViewingCard({
             folder="viewings"
             accept="application/pdf"
             multiple={false}
-            successLabel="Window card"
+            successLabel={t("windowCard")}
             onUploaded={(meta) =>
               recordAttachment({ ...meta, kind: "window_card" })
             }
           >
-            Window card
+            {t("windowCard")}
           </UploadButton>
           <UploadButton
             agentId={agentId}
             clientId={clientId}
             folder="viewings"
             accept="image/*"
-            successLabel="Image"
+            successLabel={t("imageLabel")}
             onUploaded={(meta) => recordAttachment({ ...meta, kind: "image" })}
           >
-            Images
+            {t("images")}
           </UploadButton>
         </div>
       </div>
@@ -256,6 +271,8 @@ function AttachmentRow({
   clientId: string;
   attachment: ViewingAttachment;
 }) {
+  const t = useTranslations("clientDetail.viewings");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const [busy, setBusy] = useState(false);
 
@@ -267,7 +284,7 @@ function AttachmentRow({
       .createSignedUrl(attachment.storage_path, 60);
     setBusy(false);
     if (error || !data) {
-      toast.error("Couldn't open file");
+      toast.error(t("openError"));
       return;
     }
     window.open(data.signedUrl, "_blank", "noopener,noreferrer");
@@ -276,10 +293,10 @@ function AttachmentRow({
   async function remove() {
     const { error } = await deleteViewingAttachment(clientId, attachment.id);
     if (error) {
-      toast.error("Couldn't remove", { description: error });
+      toast.error(t("removeError"), { description: error });
       return false;
     }
-    toast.success("Attachment removed");
+    toast.success(t("attachmentRemoved"));
     router.refresh();
     return true;
   }
@@ -300,15 +317,17 @@ function AttachmentRow({
         {attachment.file_name}
       </button>
       <ConfirmDialog
-        title="Remove attachment?"
-        description={`“${attachment.file_name}” will be removed from this viewing.`}
-        confirmLabel="Remove"
+        title={t("removeAttachmentTitle")}
+        description={t("removeAttachmentDescription", {
+          name: attachment.file_name,
+        })}
+        confirmLabel={tCommon("remove")}
         onConfirm={remove}
         trigger={
           <button
             type="button"
             className="text-muted-foreground hover:text-destructive shrink-0"
-            aria-label="Remove attachment"
+            aria-label={t("removeAttachmentAria")}
           >
             <Trash2 className="size-3.5" />
           </button>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowRight,
   CreditCard,
@@ -29,27 +30,28 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { RefreshWhilePending } from "@/components/billing/refresh-while-pending";
+import { intlTag } from "@/i18n/config";
 import { openBillingPortal } from "@/lib/actions/billing";
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import {
   PRICES,
-  foundingSpotsLabel,
   foundingSpotsLeft,
   isFoundingPlan,
   planInterval,
-  planLabel,
+  planName,
   planTier,
+  type BillingKey,
+  type BillingT,
 } from "@/lib/billing";
 import { clientsPath } from "@/lib/crm";
 import type { BillingOverview } from "@/lib/data/billing";
 import {
-  PHASE_BADGE,
   formatBillingDate,
   formatMoney,
   formatPeriod,
-  intervalLabel,
   invoiceStatusBadge,
   paymentMethodLabel,
+  phaseBadge,
   subscriptionEndsOn,
   subscriptionPhase,
   type BadgeTone,
@@ -66,12 +68,12 @@ const TONE_CLASSES = {
 
 type Tone = keyof typeof TONE_CLASSES;
 
-/** The ledger stores a machine reason; this is what the agent reads. */
-const CREDIT_REASON: Record<string, string> = {
-  referral_inviter: "An agent you referred paid their second month",
-  referral_invitee: "You joined through a referral and paid your second month",
-  manual_comp: "Comped by LeadWing",
-};
+/** The ledger stores a machine reason; this is the key the agent reads. */
+const CREDIT_REASON = {
+  referral_inviter: "credits.reason.referral_inviter",
+  referral_invitee: "credits.reason.referral_invitee",
+  manual_comp: "credits.reason.manual_comp",
+} as const satisfies Record<string, BillingKey>;
 
 export function BillingView({
   overview,
@@ -82,6 +84,7 @@ export function BillingView({
   upgraded: boolean;
   portalUnavailable: boolean;
 }) {
+  const t = useTranslations("billing");
   const { profile, plan, stripe, stripeUnavailable } = overview;
   const subscribed = plan.source === "subscription";
   const canManage = Boolean(profile?.stripe_customer_id);
@@ -90,20 +93,11 @@ export function BillingView({
   const showPaymentCard = subscribed || stripe !== null;
 
   const notice: { tone: Tone; text: string } | null = pending
-    ? {
-        tone: "info",
-        text: "Thanks! Stripe is confirming your payment. This page refreshes on its own for a few seconds; if nothing changes, give it a minute and reload.",
-      }
+    ? { tone: "info", text: t("notices.pending") }
     : upgraded
-      ? {
-          tone: "success",
-          text: "Thank you — you're on Pro. Everything about your subscription lives here.",
-        }
+      ? { tone: "success", text: t("notices.upgraded") }
       : portalUnavailable
-        ? {
-            tone: "info",
-            text: "The billing portal isn't available for this account yet. Get in touch and we'll sort it by hand.",
-          }
+        ? { tone: "info", text: t("notices.portalUnavailable") }
         : null;
 
   return (
@@ -111,10 +105,8 @@ export function BillingView({
       {pending ? <RefreshWhilePending /> : null}
 
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
-        <p className="text-muted-foreground text-sm">
-          Your plan, next invoice, payment method and receipts.
-        </p>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+        <p className="text-muted-foreground text-sm">{t("subtitle")}</p>
       </div>
 
       {notice ? (
@@ -131,10 +123,7 @@ export function BillingView({
           )}
         >
           <TriangleAlert className="mt-0.5 size-4 shrink-0" />
-          <span>
-            Stripe didn&apos;t answer just now, so the payment method and invoices may be
-            missing below. Your plan is unaffected; reload in a moment.
-          </span>
+          <span>{t("notices.stripeUnavailable")}</span>
         </div>
       ) : null}
 
@@ -150,10 +139,7 @@ export function BillingView({
 
       <InvoicesCard overview={overview} canManage={canManage} />
 
-      <p className="text-muted-foreground text-center text-xs">
-        Prices exclude IVA. Cancel any time from the billing portal; your data stays exactly
-        where it is.
-      </p>
+      <p className="text-muted-foreground text-center text-xs">{t("footer.note")}</p>
     </div>
   );
 }
@@ -189,11 +175,13 @@ function Fact({ label, value, hint }: { label: string; value: string; hint?: str
 /* ------------------------------------------------------------------------ */
 
 function PlanCard({ overview, canManage }: { overview: BillingOverview; canManage: boolean }) {
+  const t = useTranslations("billing");
+  const tag = intlTag(useLocale());
   const { profile, plan, founderCount, clientCount, stripe } = overview;
   const sub = stripe?.subscription ?? null;
   const upcoming = stripe?.upcoming ?? null;
   const phase: SubscriptionPhase | null = sub ? subscriptionPhase(sub) : null;
-  const endsOn = sub ? formatBillingDate(subscriptionEndsOn(sub)) : null;
+  const endsOn = sub ? formatBillingDate(subscriptionEndsOn(sub), tag) : null;
   const foundingNumber = profile?.founding_number ?? null;
   // The profile's plan is what the webhook read at checkout; Stripe's price is the live check.
   const knownPlan = profile?.plan ?? sub?.plan ?? null;
@@ -207,67 +195,79 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
   let priceNote: string | null;
 
   if (plan.source === "subscription") {
-    title = founding ? "Pro · Founding" : "Pro";
-    description = founding
-      ? "Your price is locked for life. Unlimited clients, every feature."
-      : "Unlimited clients, every feature.";
+    title = founding ? t("plan.titleFounding") : t("plan.titlePro");
+    description = founding ? t("plan.descFounding") : t("plan.descPro");
     badge = phase
       ? phase === "ending" && endsOn
-        ? { label: `Ends ${endsOn}`, tone: "warning" }
-        : PHASE_BADGE[phase]
+        ? { label: t("plan.badgeEnds", { date: endsOn }), tone: "warning" }
+        : phaseBadge(t, phase)
       : profile?.subscription_status === "past_due"
-        ? PHASE_BADGE.past_due
-        : PHASE_BADGE.active;
+        ? phaseBadge(t, "past_due")
+        : phaseBadge(t, "active");
     if (sub?.amountCents != null) {
-      priceMain = formatMoney(sub.amountCents, sub.currency);
-      priceNote = [intervalLabel(sub.interval), "+ IVA"].filter(Boolean).join(" ");
+      priceMain = formatMoney(sub.amountCents, sub.currency, tag);
+      priceNote =
+        sub.interval === "month"
+          ? t("plan.perMonth")
+          : sub.interval === "year"
+            ? t("plan.perYear")
+            : t("plan.plusIva");
     } else if (knownPlan) {
       const interval = planInterval(knownPlan);
       priceMain = `€${PRICES[planTier(knownPlan)][interval]}`;
-      priceNote = `per ${interval === "yearly" ? "year" : "month"} + IVA`;
+      priceNote = interval === "yearly" ? t("plan.perYear") : t("plan.perMonth");
     } else {
-      priceMain = "Pro";
+      priceMain = t("plan.titlePro");
       priceNote = null;
     }
   } else if (plan.source === "comp") {
-    title = "Pro";
-    description = "Comped Pro time: no card, no subscription. Unlimited clients while it lasts.";
-    badge = { label: `Until ${formatBillingDate(plan.proUntil)}`, tone: "default" };
+    title = t("plan.titlePro");
+    description = t("plan.descComp");
+    badge = {
+      label: t("plan.badgeUntil", { date: formatBillingDate(plan.proUntil, tag) ?? "" }),
+      tone: "default",
+    };
     priceMain = "€0";
-    priceNote = "for now";
+    priceNote = t("plan.priceForNow");
   } else if (plan.source === "admin") {
-    title = "Pro";
-    description = "You're on Pro as the admin. Subscribing is only for testing checkout.";
-    badge = { label: "Admin", tone: "secondary" };
+    title = t("plan.titlePro");
+    description = t("plan.descAdmin");
+    badge = { label: t("plan.badgeAdmin"), tone: "secondary" };
     priceMain = "€0";
-    priceNote = "admin account";
+    priceNote = t("plan.priceAdmin");
   } else {
-    title = "Free";
-    description = `Every feature, up to ${FREE_CLIENT_LIMIT} clients. Upgrade when you outgrow it; nothing is ever deleted.`;
-    badge = { label: "Free plan", tone: "secondary" };
+    title = t("plan.titleFree");
+    description = t("plan.descFree", { limit: FREE_CLIENT_LIMIT });
+    badge = { label: t("plan.badgeFree"), tone: "secondary" };
     priceMain = "€0";
-    priceNote = "forever";
+    priceNote = t("plan.priceForever");
   }
 
   // The "next invoice" line: Stripe's preview when we have it, else the plan price.
   let nextInvoice: { value: string; hint: string | null } | null = null;
   if (plan.source === "subscription" && (phase === "active" || phase === "past_due" || !sub)) {
-    const date = formatBillingDate(sub?.currentPeriodEnd);
+    const date = formatBillingDate(sub?.currentPeriodEnd, tag);
     let amount: string | null = null;
     let hint: string | null = null;
     if (upcoming) {
-      amount = `${formatMoney(upcoming.amountDueCents, upcoming.currency)} ${
-        upcoming.taxCents > 0 ? "incl. IVA" : "+ IVA"
-      }`;
+      const money = formatMoney(upcoming.amountDueCents, upcoming.currency, tag);
+      amount = t(upcoming.taxCents > 0 ? "nextInvoice.inclIva" : "nextInvoice.plusIva", {
+        amount: money,
+      });
       if (upcoming.creditAppliedCents > 0) {
-        hint = `${formatMoney(upcoming.creditAppliedCents, upcoming.currency)} of free-month credit already taken off`;
+        hint = t("nextInvoice.creditHint", {
+          amount: formatMoney(upcoming.creditAppliedCents, upcoming.currency, tag),
+        });
       }
     } else if (sub?.amountCents != null) {
-      amount = `${formatMoney(sub.amountCents, sub.currency)} + IVA`;
+      amount = t("nextInvoice.plusIva", {
+        amount: formatMoney(sub.amountCents, sub.currency, tag),
+      });
     }
     if (amount || date) {
       nextInvoice = {
-        value: amount && date ? `${amount} on ${date}` : (amount ?? date ?? ""),
+        value:
+          amount && date ? t("nextInvoice.onDate", { amount, date }) : (amount ?? date ?? ""),
         hint,
       };
     }
@@ -275,20 +275,11 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
 
   const message: { tone: Tone; text: string } | null =
     phase === "past_due"
-      ? {
-          tone: "warning",
-          text: "Your last payment didn't go through. Stripe is retrying; update your card to keep Pro without a gap.",
-        }
+      ? { tone: "warning", text: t("messages.pastDue") }
       : phase === "ending"
-        ? {
-            tone: "info",
-            text: `Your subscription ends on ${endsOn}. You keep Pro until then, and everything stays exactly where it is after. Changed your mind? Resume it from the portal.`,
-          }
+        ? { tone: "info", text: t("messages.ending", { date: endsOn ?? "" }) }
         : phase === "canceled" && plan.source === "subscription"
-          ? {
-              tone: "info",
-              text: `Stripe shows this subscription ended on ${endsOn}. If that's a surprise, get in touch.`,
-            }
+          ? { tone: "info", text: t("messages.canceled", { date: endsOn ?? "" }) }
           : null;
 
   return (
@@ -313,7 +304,7 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
         {foundingNumber != null ? (
           <p className="text-primary flex items-center gap-1.5 text-sm font-medium">
             <Sparkles className="size-4" />
-            Founding Agent #{foundingNumber}
+            {t("plan.foundingAgent", { number: foundingNumber })}
           </p>
         ) : null}
 
@@ -321,45 +312,74 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
           {plan.source === "subscription" ? (
             <>
               <Fact
-                label="Plan"
-                value={overview.planLabel ?? (sub?.plan ? planLabel(sub.plan) : "Pro")}
+                label={t("facts.plan")}
+                value={knownPlan ? planName(t, knownPlan) : t("plan.titlePro")}
               />
               {nextInvoice ? (
-                <Fact label="Next invoice" value={nextInvoice.value} hint={nextInvoice.hint} />
+                <Fact
+                  label={t("facts.nextInvoice")}
+                  value={nextInvoice.value}
+                  hint={nextInvoice.hint}
+                />
               ) : null}
-              {phase === "ending" && endsOn ? <Fact label="Ends" value={endsOn} /> : null}
-              {phase === "canceled" && endsOn ? <Fact label="Ended" value={endsOn} /> : null}
+              {phase === "ending" && endsOn ? (
+                <Fact label={t("facts.ends")} value={endsOn} />
+              ) : null}
+              {phase === "canceled" && endsOn ? (
+                <Fact label={t("facts.ended")} value={endsOn} />
+              ) : null}
               {sub ? (
-                <Fact label="Subscribed since" value={formatBillingDate(sub.startedAt) ?? "—"} />
+                <Fact
+                  label={t("facts.subscribedSince")}
+                  value={formatBillingDate(sub.startedAt, tag) ?? "—"}
+                />
               ) : null}
               {sub && phase !== "canceled" ? (
                 <Fact
-                  label="Current period"
-                  value={formatPeriod(sub.currentPeriodStart, sub.currentPeriodEnd) ?? "—"}
+                  label={t("facts.currentPeriod")}
+                  value={formatPeriod(sub.currentPeriodStart, sub.currentPeriodEnd, tag) ?? "—"}
                 />
               ) : null}
             </>
           ) : plan.source === "comp" ? (
             <>
-              <Fact label="Pro until" value={formatBillingDate(plan.proUntil) ?? "—"} />
-              <Fact label="After that" value="Back to Free" hint="Nothing is deleted." />
+              <Fact
+                label={t("facts.proUntil")}
+                value={formatBillingDate(plan.proUntil, tag) ?? "—"}
+              />
+              <Fact
+                label={t("facts.afterThat")}
+                value={t("facts.backToFree")}
+                hint={t("facts.nothingDeleted")}
+              />
             </>
           ) : plan.source === "admin" ? null : (
             <>
-              <Fact label="Clients" value={`${clientCount} of ${FREE_CLIENT_LIMIT}`} />
               <Fact
-                label="Founding price"
+                label={t("facts.clients")}
+                value={t("facts.clientsValue", { count: clientCount, limit: FREE_CLIENT_LIMIT })}
+              />
+              <Fact
+                label={t("facts.foundingPrice")}
                 value={
-                  spotsLeft > 0 ? foundingSpotsLabel(spotsLeft, true) : "Cohort full"
+                  spotsLeft > 0
+                    ? t("founding.spotsBare", { count: spotsLeft })
+                    : t("facts.cohortFull")
                 }
                 hint={
                   spotsLeft > 0
-                    ? `€${PRICES.founding.monthly} a month for life instead of €${PRICES.standard.monthly}.`
+                    ? t("facts.foundingHint", {
+                        price: PRICES.founding.monthly,
+                        standard: PRICES.standard.monthly,
+                      })
                     : null
                 }
               />
               {sub && phase === "canceled" && endsOn ? (
-                <Fact label="Previous subscription" value={`Ended ${endsOn}`} />
+                <Fact
+                  label={t("facts.previousSubscription")}
+                  value={t("facts.endedOn", { date: endsOn })}
+                />
               ) : null}
             </>
           )}
@@ -377,36 +397,32 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
               <>
                 <PortalButton variant={phase === "past_due" ? "default" : "outline"}>
                   {phase === "past_due"
-                    ? "Update payment method"
+                    ? t("actions.updatePaymentMethod")
                     : phase === "ending"
-                      ? "Resume or manage"
-                      : "Manage subscription"}
+                      ? t("actions.resumeOrManage")
+                      : t("actions.manageSubscription")}
                 </PortalButton>
-                <span className="text-muted-foreground text-xs">
-                  Change your card, download invoices or cancel. Handled by Stripe.
-                </span>
+                <span className="text-muted-foreground text-xs">{t("actions.portalHint")}</span>
               </>
             ) : (
-              <span className="text-muted-foreground text-xs">
-                Your subscription is managed by hand. Get in touch to change anything.
-              </span>
+              <span className="text-muted-foreground text-xs">{t("actions.manualHint")}</span>
             )
           ) : plan.source === "comp" ? (
             <Button asChild>
               <Link href="/pricing">
-                Subscribe to keep Pro <ArrowRight />
+                {t("actions.subscribeToKeepPro")} <ArrowRight />
               </Link>
             </Button>
           ) : plan.source === "admin" ? (
             <Button asChild variant="ghost">
               <Link href="/pricing">
-                See plans <ArrowRight />
+                {t("actions.seePlans")} <ArrowRight />
               </Link>
             </Button>
           ) : (
             <Button asChild>
               <Link href="/pricing">
-                Upgrade to Pro <ArrowRight />
+                {t("actions.upgradeToPro")} <ArrowRight />
               </Link>
             </Button>
           )}
@@ -419,6 +435,7 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
 /* ------------------------------------------------------------------------ */
 
 function ClientsCard({ clientCount, limit }: { clientCount: number; limit: number | null }) {
+  const t = useTranslations("billing");
   const unlimited = limit === null;
   const used = unlimited ? clientCount : Math.min(clientCount, limit);
   const atCap = !unlimited && clientCount >= limit;
@@ -427,19 +444,19 @@ function ClientsCard({ clientCount, limit }: { clientCount: number; limit: numbe
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Users className="text-primary size-4" />
-          Clients
+          {t("clients.title")}
         </CardTitle>
         <CardDescription>
-          {unlimited
-            ? "Unlimited on Pro, buyers and sellers together."
-            : `Up to ${limit} on Free, buyers and sellers together.`}
+          {unlimited ? t("clients.unlimited") : t("clients.limited", { limit })}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="flex items-baseline gap-2">
           <span className="text-4xl font-semibold tracking-tight tabular-nums">{clientCount}</span>
           <span className="text-muted-foreground text-sm">
-            {unlimited ? (clientCount === 1 ? "client" : "clients") : `of ${limit}`}
+            {unlimited
+              ? t("clients.count", { count: clientCount })
+              : t("clients.ofLimit", { limit })}
           </span>
         </div>
         {!unlimited ? (
@@ -450,14 +467,10 @@ function ClientsCard({ clientCount, limit }: { clientCount: number; limit: numbe
             />
           </div>
         ) : null}
-        {atCap ? (
-          <p className="text-muted-foreground text-sm">
-            You&apos;re at the cap. Adding another needs Pro; everything you have stays as it is.
-          </p>
-        ) : null}
+        {atCap ? <p className="text-muted-foreground text-sm">{t("clients.atCap")}</p> : null}
         <Button asChild variant="ghost" size="sm" className="-ml-2">
           <Link href={clientsPath("buyer")}>
-            Open pipelines <ArrowRight />
+            {t("clients.openPipelines")} <ArrowRight />
           </Link>
         </Button>
       </CardContent>
@@ -474,16 +487,17 @@ function PaymentMethodCard({
   overview: BillingOverview;
   canManage: boolean;
 }) {
+  const t = useTranslations("billing");
   const pm = overview.stripe?.paymentMethod ?? null;
-  const label = pm ? paymentMethodLabel(pm) : null;
+  const label = pm ? paymentMethodLabel(t, pm) : null;
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <CreditCard className="text-primary size-4" />
-          Payment method
+          {t("payment.title")}
         </CardTitle>
-        <CardDescription>Stored by Stripe. We never see the numbers.</CardDescription>
+        <CardDescription>{t("payment.description")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {label ? (
@@ -495,12 +509,10 @@ function PaymentMethodCard({
           </div>
         ) : (
           <p className="text-muted-foreground text-sm">
-            {overview.stripeUnavailable
-              ? "Couldn't load it from Stripe just now."
-              : "No payment method on file."}
+            {overview.stripeUnavailable ? t("payment.loadFailed") : t("payment.none")}
           </p>
         )}
-        {canManage ? <PortalButton>Change payment method</PortalButton> : null}
+        {canManage ? <PortalButton>{t("payment.change")}</PortalButton> : null}
       </CardContent>
     </Card>
   );
@@ -508,76 +520,79 @@ function PaymentMethodCard({
 
 /* ------------------------------------------------------------------------ */
 
-function creditLine(credit: ReferralCredit): { title: string; detail: string } {
-  const title = CREDIT_REASON[credit.reason] ?? credit.reason;
-  const months = `${credit.months} month${credit.months === 1 ? "" : "s"} of Pro`;
+function creditLine(t: BillingT, credit: ReferralCredit): { title: string; detail: string } {
+  const reasonKey = CREDIT_REASON[credit.reason as keyof typeof CREDIT_REASON];
+  const title = reasonKey ? t(reasonKey) : credit.reason;
   const detail =
     credit.kind === "pro_time"
-      ? months
+      ? t("credits.months", { count: credit.months })
       : credit.applied_to_stripe
-        ? "credited to your Stripe balance"
-        : "waiting for your first invoice";
+        ? t("credits.creditedToStripe")
+        : t("credits.waitingFirstInvoice");
   return { title, detail };
 }
 
 function CreditsCard({ overview, wide }: { overview: BillingOverview; wide: boolean }) {
+  const t = useTranslations("billing");
+  const tag = intlTag(useLocale());
   const { credits, monthsEarned, unappliedCreditEur, stripe, plan } = overview;
   // Stripe keeps the balance negative while the customer is in credit.
   const balanceCents = stripe?.balanceCents ?? 0;
+  const bold = (chunks: React.ReactNode) => <span className="font-medium">{chunks}</span>;
   return (
     <Card className={cn(wide && "lg:col-span-2")}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Gift className="text-primary size-4" />
-          Free months
+          {t("credits.title")}
         </CardTitle>
-        <CardDescription>
-          One for every agent you refer who subscribes and pays their second month. They get one
-          too.
-        </CardDescription>
+        <CardDescription>{t("credits.description")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-baseline gap-2">
           <span className="text-4xl font-semibold tracking-tight tabular-nums">
             {monthsEarned}
           </span>
-          <span className="text-muted-foreground text-sm">earned so far</span>
+          <span className="text-muted-foreground text-sm">{t("credits.earnedSoFar")}</span>
         </div>
 
         {balanceCents < 0 ? (
           <p className="text-sm">
-            <span className="font-medium">{formatMoney(-balanceCents)}</span> of credit sits on
-            your Stripe account and comes off your next invoice automatically.
+            {t.rich("credits.onStripe", {
+              amount: formatMoney(-balanceCents, "eur", tag),
+              b: bold,
+            })}
           </p>
         ) : null}
         {unappliedCreditEur > 0 ? (
           <p className="text-sm">
-            <span className="font-medium">€{unappliedCreditEur}</span> in free months is waiting
-            and will come off your invoices once you subscribe.
+            {t.rich("credits.waiting", { amount: unappliedCreditEur, b: bold })}
           </p>
         ) : null}
         {plan.source === "comp" && plan.proUntil ? (
           <p className="text-sm">
-            Pro is comped until{" "}
-            <span className="font-medium">{formatBillingDate(plan.proUntil)}</span>.
+            {t.rich("credits.compedUntil", {
+              date: formatBillingDate(plan.proUntil, tag) ?? "",
+              b: bold,
+            })}
           </p>
         ) : null}
 
         {credits.length ? (
           <ul className="divide-y text-sm">
             {credits.slice(0, 5).map((credit) => {
-              const line = creditLine(credit);
+              const line = creditLine(t, credit);
               return (
                 <li key={credit.id} className="flex items-center justify-between gap-3 py-2">
                   <div className="min-w-0">
                     <div className="truncate">{line.title}</div>
                     <div className="text-muted-foreground text-xs">
-                      {formatBillingDate(credit.created_at)} · {line.detail}
+                      {formatBillingDate(credit.created_at, tag)} · {line.detail}
                     </div>
                   </div>
                   <span className="shrink-0 font-medium tabular-nums">
                     {credit.kind === "pro_time"
-                      ? `+${credit.months} mo`
+                      ? t("credits.monthsShort", { count: credit.months })
                       : `€${Number(credit.amount_eur)}`}
                   </span>
                 </li>
@@ -585,14 +600,12 @@ function CreditsCard({ overview, wide }: { overview: BillingOverview; wide: bool
             })}
           </ul>
         ) : (
-          <p className="text-muted-foreground text-sm">
-            Nothing yet. Share your referral link with the agents you co-broke with.
-          </p>
+          <p className="text-muted-foreground text-sm">{t("credits.empty")}</p>
         )}
 
         <Button asChild variant="ghost" size="sm" className="-ml-2">
           <Link href="/referrals">
-            Refer an agent <ArrowRight />
+            {t("credits.referAnAgent")} <ArrowRight />
           </Link>
         </Button>
       </CardContent>
@@ -603,16 +616,19 @@ function CreditsCard({ overview, wide }: { overview: BillingOverview; wide: bool
 /* ------------------------------------------------------------------------ */
 
 function InvoicesCard({ overview, canManage }: { overview: BillingOverview; canManage: boolean }) {
+  const t = useTranslations("billing");
+  const common = useTranslations("common");
+  const tag = intlTag(useLocale());
   const { stripe, stripeUnavailable, plan } = overview;
   const invoices = stripe?.invoices ?? [];
 
   let empty: string | null = null;
   if (!invoices.length) {
     empty = stripeUnavailable
-      ? "Couldn't load your invoices from Stripe just now. Reload in a moment, or open the billing portal."
+      ? t("invoices.emptyStripeDown")
       : plan.source === "subscription"
-        ? "Your invoices will appear here once Stripe has issued the first one."
-        : "No invoices yet. Invoices appear here once you subscribe.";
+        ? t("invoices.emptySubscribed")
+        : t("invoices.empty");
   }
 
   return (
@@ -622,13 +638,13 @@ function InvoicesCard({ overview, canManage }: { overview: BillingOverview; canM
           <div>
             <CardTitle className="flex items-center gap-2">
               <Receipt className="text-primary size-4" />
-              Invoices
+              {t("invoices.title")}
             </CardTitle>
-            <CardDescription className="mt-1">
-              Every invoice Stripe has issued for your account, with a PDF for your accountant.
-            </CardDescription>
+            <CardDescription className="mt-1">{t("invoices.description")}</CardDescription>
           </div>
-          {canManage && invoices.length ? <PortalButton>All invoices</PortalButton> : null}
+          {canManage && invoices.length ? (
+            <PortalButton>{t("invoices.all")}</PortalButton>
+          ) : null}
         </div>
       </CardHeader>
       <CardContent>
@@ -639,31 +655,31 @@ function InvoicesCard({ overview, canManage }: { overview: BillingOverview; canM
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Period</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>{t("invoices.date")}</TableHead>
+                  <TableHead>{t("invoices.period")}</TableHead>
+                  <TableHead className="text-right">{t("invoices.amount")}</TableHead>
+                  <TableHead>{t("invoices.status")}</TableHead>
                   <TableHead className="text-right">
-                    <span className="sr-only">Open</span>
+                    <span className="sr-only">{t("invoices.open")}</span>
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {invoices.map((inv) => {
-                  const status = invoiceStatusBadge(inv.status);
+                  const status = invoiceStatusBadge(t, inv.status);
                   return (
                     <TableRow key={inv.id}>
                       <TableCell className="whitespace-nowrap">
-                        <div>{formatBillingDate(inv.createdAt)}</div>
+                        <div>{formatBillingDate(inv.createdAt, tag)}</div>
                         {inv.number ? (
                           <div className="text-muted-foreground text-xs">{inv.number}</div>
                         ) : null}
                       </TableCell>
                       <TableCell className="whitespace-nowrap">
-                        {formatPeriod(inv.periodStart, inv.periodEnd) ?? "—"}
+                        {formatPeriod(inv.periodStart, inv.periodEnd, tag) ?? "—"}
                       </TableCell>
                       <TableCell className="text-right whitespace-nowrap tabular-nums">
-                        {formatMoney(inv.totalCents, inv.currency)}
+                        {formatMoney(inv.totalCents, inv.currency, tag)}
                       </TableCell>
                       <TableCell>
                         <Badge variant={status.tone}>{status.label}</Badge>
@@ -673,7 +689,7 @@ function InvoicesCard({ overview, canManage }: { overview: BillingOverview; canM
                           {inv.hostedUrl ? (
                             <Button asChild variant="ghost" size="sm">
                               <a href={inv.hostedUrl} target="_blank" rel="noreferrer">
-                                View <ExternalLink />
+                                {common("view")} <ExternalLink />
                               </a>
                             </Button>
                           ) : null}

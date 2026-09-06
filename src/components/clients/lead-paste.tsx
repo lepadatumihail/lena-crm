@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Loader2, Sparkles } from "lucide-react";
 
@@ -21,6 +22,8 @@ export function LeadPaste({
 }: {
   onApply: (data: ExtractedLead) => void;
 }) {
+  const t = useTranslations("clients.leadPaste");
+  const tCommon = useTranslations("common");
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,13 +34,13 @@ export function LeadPaste({
     const { data, error } = await extractLead(text);
     setLoading(false);
     if (error || !data) {
-      toast.error("Couldn't read that lead", {
+      toast.error(t("toasts.failed"), {
         description: error ?? undefined,
       });
       return;
     }
     onApply(data);
-    toast.success("Filled from the lead — review and save");
+    toast.success(t("toasts.filled"));
     setOpen(false);
     setText("");
   }
@@ -53,31 +56,26 @@ export function LeadPaste({
           <Sparkles className="size-5" />
         </span>
         <span className="min-w-0">
-          <span className="block text-sm font-medium">
-            Paste a lead to auto-fill
-          </span>
+          <span className="block text-sm font-medium">{t("triggerTitle")}</span>
           <span className="text-muted-foreground block text-xs">
-            From Idealista, an email or WhatsApp — AI fills the form for you.
+            {t("triggerDescription")}
           </span>
         </span>
       </button>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Paste a lead</DialogTitle>
-          <DialogDescription>
-            Drop in the raw inquiry — a portal message, forwarded email or
-            WhatsApp text — and AI pulls out the details.
-          </DialogDescription>
+          <DialogTitle>{t("dialogTitle")}</DialogTitle>
+          <DialogDescription>{t("dialogDescription")}</DialogDescription>
         </DialogHeader>
         <Textarea
           rows={8}
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Hi, I saw your listing on Idealista. My name is Anya Petrova, I'm after a 2-bed apartment in Marbella up to €600,000. You can reach me on +34 600 123 456…"
+          placeholder={t("placeholder")}
         />
         <DialogFooter>
           <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
-            Cancel
+            {tCommon("cancel")}
           </Button>
           <Button
             type="button"
@@ -85,7 +83,7 @@ export function LeadPaste({
             disabled={loading || !text.trim()}
           >
             {loading ? <Loader2 className="animate-spin" /> : <Sparkles />}
-            Extract details
+            {t("extract")}
           </Button>
         </DialogFooter>
       </DialogContent>

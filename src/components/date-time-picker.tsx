@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { format, parse } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 
+import { dateFnsLocale } from "@/i18n/dates";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -27,12 +29,14 @@ const MINUTES = ["00", "15", "30", "45"];
 export function DatePicker({
   value,
   onChange,
-  placeholder = "Pick a date",
+  placeholder,
 }: {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
 }) {
+  const t = useTranslations("calendar");
+  const dateLocale = dateFnsLocale(useLocale());
   const [open, setOpen] = useState(false);
   const selected = value
     ? parse(value, "yyyy-MM-dd", new Date())
@@ -51,13 +55,16 @@ export function DatePicker({
           )}
         >
           <CalendarIcon className="size-4" />
-          {valid ? format(selected, "EEE d MMM yyyy") : placeholder}
+          {valid
+            ? format(selected, "EEE d MMM yyyy", { locale: dateLocale })
+            : (placeholder ?? t("picker.pickDate"))}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
           autoFocus
+          locale={dateLocale}
           selected={valid ? selected : undefined}
           defaultMonth={valid ? selected : undefined}
           onSelect={(date) => {

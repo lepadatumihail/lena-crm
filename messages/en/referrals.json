@@ -1,0 +1,51 @@
+{
+  "title": "Referrals",
+  "subtitle": "Share your link with the agents you co-broke with. When one of them subscribes and pays their second month, you both get a free month.",
+  "claim": {
+    "claimed": "Referral recorded. Once you're on Pro and pay your second month, you and the agent who referred you each get a free month.",
+    "alreadyClaimed": "You had already used a referral link, so nothing changed.",
+    "notEligible": "Referral links are for new accounts, so this one didn't apply. You can still share your own link.",
+    "selfReferral": "That's your own referral link. Share it with a colleague instead.",
+    "invalid": "That referral link isn't valid. You can still use LeadWing — it's free to start."
+  },
+  "founding": {
+    "youAre": "Founding Agent #{number}",
+    "spots": "{count, plural, one {# founding spot left} other {# founding spots left}}",
+    "full": "The founding cohort is full",
+    "lockedWithSpots": "Your price is locked for life. {count, plural, one {# founding spot left} other {# founding spots left}}.",
+    "lockedFull": "Your price is locked for life. The founding cohort is full.",
+    "offer": "The first {cap} paying agents lock Pro at €{price} a month for life, instead of €{standard}.",
+    "standard": "Pro is €{price} a month, unlimited clients.",
+    "seePlans": "See plans"
+  },
+  "link": {
+    "title": "Your referral link",
+    "description": "Anyone who signs up through it counts as your referral. New accounts only, and each agent can be referred once.",
+    "pending": "Your link will appear here shortly.",
+    "copy": "Copy link",
+    "copyFailed": "Couldn't copy"
+  },
+  "agents": {
+    "title": "Agents you referred",
+    "description": "Signed up → Subscribed → Free month earned, once they pay their second month.",
+    "empty": "No one yet. Send your link to a colleague you share deals with.",
+    "anonymous": "An agent",
+    "joined": "Joined {date}",
+    "joinedWithPaid": "Joined {date} · {count, plural, one {# paid month} other {# paid months}}"
+  },
+  "state": {
+    "signed_up": "Signed up",
+    "subscribed": "Subscribed",
+    "rewarded": "Free month earned",
+    "left": "Left"
+  },
+  "rewards": {
+    "title": "Your free months",
+    "description": "On Pro, a free month comes off your next invoice. Not subscribed yet? You get a month of Pro straight away, no card needed.",
+    "earned": "{count, plural, one {# free month earned} other {# free months earned}}",
+    "none": "Nothing earned yet.",
+    "proUntil": "You're on Pro until {date}.",
+    "credit": "€{amount} will come off your invoices once you subscribe.",
+    "referredBy": "Referred by {name}."
+  }
+}

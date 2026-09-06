@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useOptimistic, useState, useTransition } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -24,13 +25,13 @@ import {
   setClientPriority,
   updateClientStage,
 } from "@/lib/actions/clients";
+import { intlTag } from "@/i18n/config";
+import { sideLabel, stageLabel } from "@/i18n/labels";
 import {
   clientsPath,
   formatCurrency,
-  STAGE_LABELS,
   stagesForSide,
   type ClientSide,
-  type Stage,
 } from "@/lib/crm";
 import { cn } from "@/lib/utils";
 import type { Client } from "@/lib/supabase/types";
@@ -51,6 +52,9 @@ export function ClientsView({
   commission?: { pipeline: number; closed: number } | null;
 }) {
   const router = useRouter();
+  const t = useTranslations("clients.list");
+  const tCrm = useTranslations("crm");
+  const locale = useLocale();
   const [, startTransition] = useTransition();
   const [optimisticClients, applyOptimistic] = useOptimistic(
     clients,
@@ -86,8 +90,8 @@ export function ClientsView({
     startTransition(async () => {
       applyOptimistic({ id, changes: { stage } });
       const { error } = await updateClientStage(id, stage);
-      if (error) toast.error("Couldn't move client", { description: error });
-      else toast.success(`Moved to ${STAGE_LABELS[stage as Stage] ?? stage}`);
+      if (error) toast.error(t("toasts.moveFailed"), { description: error });
+      else toast.success(t("toasts.moved", { stage: stageLabel(tCrm, stage) }));
     });
   }
 
@@ -96,7 +100,7 @@ export function ClientsView({
       applyOptimistic({ id, changes: { priority: next } });
       const { error } = await setClientPriority(id, next);
       if (error)
-        toast.error("Couldn't update priority", { description: error });
+        toast.error(t("toasts.priorityFailed"), { description: error });
     });
   }
 
@@ -111,23 +115,27 @@ export function ClientsView({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">
-            {side === "buyer" ? "Buyers" : "Sellers"}
+            {sideLabel(tCrm, side, true)}
           </h1>
           <p className="text-muted-foreground text-sm">
-            {optimisticClients.length}{" "}
-            {optimisticClients.length === 1 ? "client" : "clients"}
-            {includeInactive ? " (incl. inactive)" : ""}
+            {t(includeInactive ? "countWithInactive" : "count", {
+              count: optimisticClients.length,
+            })}
           </p>
           {commission && (commission.pipeline > 0 || commission.closed > 0) && (
             <div className="mt-1.5 flex flex-wrap gap-1.5">
               {commission.pipeline > 0 && (
                 <Badge variant="warning">
-                  {formatCurrency(commission.pipeline)} in pipeline
+                  {t("commissionPipeline", {
+                    amount: formatCurrency(commission.pipeline, intlTag(locale)),
+                  })}
                 </Badge>
               )}
               {commission.closed > 0 && (
                 <Badge variant="success">
-                  {formatCurrency(commission.closed)} closed
+                  {t("commissionClosed", {
+                    amount: formatCurrency(commission.closed, intlTag(locale)),
+                  })}
                 </Badge>
               )}
             </div>
@@ -135,7 +143,7 @@ export function ClientsView({
         </div>
         <Button asChild>
           <Link href={`/clients/new?side=${side}`}>
-            <Plus /> New {side}
+            <Plus /> {t("newClient", { side })}
           </Link>
         </Button>
       </div>
@@ -144,7 +152,7 @@ export function ClientsView({
         <div className="relative min-w-50 flex-1">
           <Search className="text-muted-foreground absolute top-1/2 left-2.5 size-4 -translate-y-1/2" />
           <Input
-            placeholder="Search name, email, phone, agency…"
+            placeholder={t("searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-8"
@@ -153,13 +161,13 @@ export function ClientsView({
 
         <Select value={stageFilter} onValueChange={setStageFilter}>
           <SelectTrigger className="w-40">
-            <SelectValue placeholder="Stage" />
+            <SelectValue placeholder={t("stagePlaceholder")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All stages</SelectItem>
+            <SelectItem value="all">{t("allStages")}</SelectItem>
             {stages.map((s) => (
               <SelectItem key={s} value={s}>
-                {STAGE_LABELS[s]}
+                {stageLabel(tCrm, s)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -170,7 +178,7 @@ export function ClientsView({
           onClick={() => setPriorityOnly((p) => !p)}
         >
           <Star className={cn(priorityOnly && "fill-current")} />
-          Priority
+          {t("priority")}
         </Button>
 
         <div className="bg-muted ml-auto inline-flex rounded-lg p-0.5">
@@ -184,7 +192,7 @@ export function ClientsView({
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
-            <List className="size-4" /> Table
+            <List className="size-4" /> {t("table")}
           </button>
           <button
             type="button"
@@ -196,7 +204,7 @@ export function ClientsView({
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
-            <LayoutGrid className="size-4" /> Board
+            <LayoutGrid className="size-4" /> {t("board")}
           </button>
         </div>
 
@@ -207,7 +215,7 @@ export function ClientsView({
             onCheckedChange={toggleInactive}
           />
           <Label htmlFor="inactive" className="text-muted-foreground text-sm">
-            Inactive
+            {t("inactive")}
           </Label>
         </div>
       </div>
@@ -216,7 +224,7 @@ export function ClientsView({
         <EmptyState side={side} />
       ) : filtered.length === 0 ? (
         <p className="text-muted-foreground rounded-xl border border-dashed py-16 text-center text-sm">
-          No clients match your filters.
+          {t("noMatches")}
         </p>
       ) : view === "table" ? (
         <ClientsTable
@@ -237,18 +245,19 @@ export function ClientsView({
 }
 
 function EmptyState({ side }: { side: ClientSide }) {
+  const t = useTranslations("clients.list");
   return (
     <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-16 text-center">
       <div className="bg-muted text-muted-foreground mb-3 flex size-12 items-center justify-center rounded-full">
         <Users className="size-6" />
       </div>
-      <h3 className="font-medium">No {side}s yet</h3>
+      <h3 className="font-medium">{t("empty.title", { side })}</h3>
       <p className="text-muted-foreground mt-1 max-w-xs text-sm">
-        Add your first {side} to start tracking them through your pipeline.
+        {t("empty.body", { side })}
       </p>
       <Button asChild className="mt-4">
         <Link href={`/clients/new?side=${side}`}>
-          <Plus /> New {side}
+          <Plus /> {t("newClient", { side })}
         </Link>
       </Button>
     </div>

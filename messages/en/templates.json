@@ -1,0 +1,85 @@
+{
+  "title": "Templates",
+  "subtitle": "Reusable messages — personalise any of them with AI in the composer before sending.",
+  "new": "New template",
+  "mine": {
+    "title": "My templates",
+    "empty": "No templates yet. Create one, or customise a starter below."
+  },
+  "starters": {
+    "title": "Starter templates",
+    "subtitle": "Built in and always available. Customise one to make it your own.",
+    "customise": "Customise"
+  },
+  "card": {
+    "subject": "Subject: {subject}",
+    "editAria": "Edit template",
+    "deleteAria": "Delete template",
+    "deleteTitle": "Delete template?",
+    "deleteDescription": "“{name}” will be removed."
+  },
+  "use": {
+    "button": "Use",
+    "title": "Use this template",
+    "description": "Pick a client — the composer opens with this template loaded, ready to personalise and send.",
+    "placeholder": "Select a client…",
+    "noClients": "No clients yet",
+    "open": "Open composer"
+  },
+  "dialog": {
+    "newTitle": "New template",
+    "editTitle": "Edit template",
+    "description": "Use placeholders like '{{first_name}}' — they fill from the client. Click a chip to insert one.",
+    "name": "Name",
+    "namePlaceholder": "e.g. Price drop alert",
+    "subject": "Subject (email only, optional)",
+    "subjectPlaceholder": "Subject line",
+    "message": "Message",
+    "bodyPlaceholder": "Hi '{{first_name}}', …",
+    "preview": "Preview (sample data)",
+    "previewEmpty": "Your message preview will appear here.",
+    "create": "Create"
+  },
+  "toasts": {
+    "created": "Template created",
+    "updated": "Template updated",
+    "deleted": "Template deleted",
+    "saveFailed": "Couldn't save template",
+    "deleteFailed": "Couldn't delete"
+  },
+  "errors": {
+    "checkForm": "Please check the form."
+  },
+  "builtin": {
+    "intro": {
+      "label": "Introduce yourself",
+      "description": "Warm first hello to a new lead",
+      "purpose": "Introduce yourself warmly to a brand-new lead and invite them to share what they're looking for."
+    },
+    "new_matches": {
+      "label": "New matching listings",
+      "description": "Share properties that fit their criteria",
+      "purpose": "Tell the buyer that new listings matching their budget and preferences are available and offer to share details or book a viewing."
+    },
+    "viewing_confirm": {
+      "label": "Confirm a viewing",
+      "description": "Confirm an upcoming appointment",
+      "purpose": "Confirm an upcoming property viewing and reassure them you're looking forward to it."
+    },
+    "offer_followup": {
+      "label": "Offer follow-up",
+      "description": "Check in after an offer was made",
+      "purpose": "Follow up on an offer the buyer made, letting them know you're actively chasing a response."
+    },
+    "reservation_next": {
+      "label": "Reservation next steps",
+      "description": "Walk through what happens next",
+      "purpose": "Reassure a buyer who has reserved a property and outline that you'll guide them through the next steps."
+    },
+    "check_in": {
+      "label": "Check in / re-engage",
+      "description": "Gently reconnect with a quiet lead",
+      "purpose": "Gently re-engage a lead who has gone quiet, without pressure, and offer to help when they're ready."
+    }
+  }
+}
