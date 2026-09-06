@@ -30,6 +30,13 @@ describe("isPro", () => {
     expect(isPro({ subscription_status: "none", pro_until: PAST }, NOW)).toBe(false);
   });
 
+  it("treats the admin as Pro regardless of subscription", () => {
+    expect(isPro({ subscription_status: "none", pro_until: null, is_admin: true }, NOW)).toBe(true);
+    expect(planState({ subscription_status: "none", pro_until: null, is_admin: true }, NOW).source).toBe(
+      "admin",
+    );
+  });
+
   it("is false on Free, after cancelling, and with no profile at all", () => {
     expect(isPro({ subscription_status: "none", pro_until: null }, NOW)).toBe(false);
     expect(isPro({ subscription_status: "canceled", pro_until: null }, NOW)).toBe(false);

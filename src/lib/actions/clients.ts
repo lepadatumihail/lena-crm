@@ -37,7 +37,7 @@ async function freeLimitReached(
   const [{ data: profile, error }, { count }] = await Promise.all([
     supabase
       .from("profiles")
-      .select("subscription_status, pro_until")
+      .select("subscription_status, pro_until, is_admin")
       .eq("id", userId)
       .maybeSingle(),
     supabase.from("clients").select("id", { count: "exact", head: true }),

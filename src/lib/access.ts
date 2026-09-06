@@ -15,7 +15,10 @@ import type { Profile } from "@/lib/supabase/types";
  */
 export const FREE_CLIENT_LIMIT = 3;
 
-export type AccessProfile = Pick<Profile, "subscription_status" | "pro_until">;
+export type AccessProfile = Pick<Profile, "subscription_status" | "pro_until"> & {
+  /** The founder is never capped in their own product. */
+  is_admin?: boolean;
+};
 
 /** A live Stripe subscription, dunning included. */
 export function isSubscribed(profile: AccessProfile): boolean {
@@ -35,7 +38,7 @@ export function isPro(
   now: Date = new Date(),
 ): boolean {
   if (!profile) return false;
-  return isSubscribed(profile) || hasProTime(profile, now);
+  return profile.is_admin === true || isSubscribed(profile) || hasProTime(profile, now);
 }
 
 /** How many clients this agent may have; null means unlimited. */
@@ -57,8 +60,8 @@ export function canAddClient(
 
 export type PlanState = {
   tier: "free" | "pro";
-  /** Why they are Pro: a subscription, comped time, or neither (Free). */
-  source: "subscription" | "comp" | null;
+  /** Why they are Pro: a subscription, comped time, being the admin, or neither (Free). */
+  source: "subscription" | "comp" | "admin" | null;
   proUntil: string | null;
   limit: number | null;
 };
@@ -72,6 +75,9 @@ export function planState(
   }
   if (profile && hasProTime(profile, now)) {
     return { tier: "pro", source: "comp", proUntil: profile.pro_until, limit: null };
+  }
+  if (profile?.is_admin) {
+    return { tier: "pro", source: "admin", proUntil: null, limit: null };
   }
   return { tier: "free", source: null, proUntil: null, limit: FREE_CLIENT_LIMIT };
 }

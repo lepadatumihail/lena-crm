@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 
 export type CurrentPlan = {
   tier: "free" | "pro";
-  source: "subscription" | "comp" | null;
+  source: "subscription" | "comp" | "admin" | null;
   proUntil: string | null;
   planLabel: string | null;
   foundingNumber: number | null;
@@ -182,6 +182,10 @@ export function PricingCards({
                     You&apos;re on Pro until{" "}
                     <span className="font-medium">{formatDate(current.proUntil)}</span>, earned
                     from a referral. Subscribe to keep it going.
+                  </p>
+                ) : current.source === "admin" ? (
+                  <p className="text-sm">
+                    You&apos;re on Pro as the admin. Subscribing here is only for testing checkout.
                   </p>
                 ) : null}
                 {link ? (

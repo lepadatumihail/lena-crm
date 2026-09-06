@@ -44,7 +44,7 @@ const ACTIVE_CLASSES =
 /** Where the agent stands on the Free/Pro line, pre-formatted by the layout. */
 export type SidebarPlan = {
   tier: "free" | "pro";
-  source: "subscription" | "comp" | null;
+  source: "subscription" | "comp" | "admin" | null;
   proUntilLabel: string | null;
   limit: number | null;
   clientCount: number;
@@ -244,7 +244,7 @@ function PlanMeter({ plan, onNavigate }: { plan: SidebarPlan; onNavigate: () => 
       {plan.tier === "pro" ? (
         <>
           <div className="text-primary font-medium">
-            Pro{plan.source === "comp" ? " · comped" : ""}
+            Pro{plan.source === "comp" ? " · comped" : plan.source === "admin" ? " · admin" : ""}
           </div>
           <div className="text-muted-foreground">
             {plan.source === "comp" && plan.proUntilLabel

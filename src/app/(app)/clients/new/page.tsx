@@ -26,7 +26,7 @@ export default async function NewClientPage({
   const [{ data: profile }, { count }] = await Promise.all([
     supabase
       .from("profiles")
-      .select("subscription_status, pro_until")
+      .select("subscription_status, pro_until, is_admin")
       .eq("id", user?.id ?? "")
       .maybeSingle(),
     supabase.from("clients").select("id", { count: "exact", head: true }),

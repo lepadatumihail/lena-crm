@@ -17,7 +17,8 @@ export function UpgradePrompt({ backHref, backLabel }: { backHref: string; backL
         <CardTitle>You&apos;ve used your {FREE_CLIENT_LIMIT} free clients</CardTitle>
         <CardDescription className="text-pretty">
           Pro is unlimited: €{PRICES.standard.monthly} a month, or €{PRICES.founding.monthly} a
-          month for life while spots for the first {FOUNDING_CAP} paying agents last. Everything
+          month for life while spots for the first {FOUNDING_CAP}{" "}
+          paying agents last. Everything
           you&apos;ve added stays exactly where it is.
         </CardDescription>
       </CardHeader>
