@@ -4,15 +4,15 @@
   "actions": {
     "newBuyer": "New buyer",
     "newSeller": "New seller",
-    "newAppointment": "New appointment",
-    "pasteLead": "Paste a lead"
+    "newAppointment": "New appointment"
   },
   "upcoming": {
     "title": "Upcoming",
     "calendar": "Calendar",
     "empty": "Nothing scheduled. <link>Open the calendar</link> to add a viewing or meeting.",
     "remindTitle": "Remind on WhatsApp",
-    "remindAria": "Send a WhatsApp reminder"
+    "remindAria": "Send a WhatsApp reminder",
+    "emptyWaiting": "Nothing scheduled. {count, plural, one {# buyer is} other {# buyers are}} still waiting for a first viewing. <link>Open the calendar</link> to book one."
   },
   "attention": {
     "title": "Needs attention",
@@ -31,11 +31,56 @@
       "today": "today",
       "tomorrow": "tomorrow",
       "inDays": "in {count, plural, one {# day} other {# days}}"
-    }
+    },
+    "newBuyer": "New lead · no contact yet",
+    "newSeller": "New seller · not qualified yet"
   },
   "pipeline": {
     "title": "Pipeline",
-    "commissionPipeline": "{amount} in pipeline",
-    "commissionClosed": "{amount} closed"
+    "viewStage": "View {stage} {side}",
+    "empty": "No {side} yet"
+  },
+  "greeting": {
+    "morning": "Good morning{name}",
+    "afternoon": "Good afternoon{name}",
+    "evening": "Good evening{name}",
+    "named": ", {name}"
+  },
+  "stats": {
+    "buyers": "Active buyers",
+    "sellers": "Active sellers",
+    "viewings": "Viewings, next 7 days",
+    "commission": "Commission in pipeline",
+    "commissionClosed": "{amount} closed",
+    "commissionHint": "Add a reservation to start counting"
+  },
+  "recent": {
+    "title": "Recent clients",
+    "all": "All clients",
+    "empty": "Your clients will show up here as you add them.",
+    "now": "just now",
+    "priority": "Priority"
+  },
+  "onboarding": {
+    "title": "Getting started",
+    "subtitle": "{done} of {total} done",
+    "steps": {
+      "addClient": {
+        "title": "Add your first client",
+        "detail": "A buyer or a seller — takes a minute."
+      },
+      "scheduleAppointment": {
+        "title": "Schedule a viewing or meeting",
+        "detail": "It lands on your calendar with a WhatsApp reminder."
+      },
+      "createTemplate": {
+        "title": "Set up a message template",
+        "detail": "Reuse your best intro or follow-up in one tap."
+      },
+      "inviteColleague": {
+        "title": "Invite a colleague",
+        "detail": "Share your link and earn a free month of Pro."
+      }
+    }
   }
 }

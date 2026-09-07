@@ -4,15 +4,15 @@
   "actions": {
     "newBuyer": "Nuevo comprador",
     "newSeller": "Nuevo vendedor",
-    "newAppointment": "Nueva cita",
-    "pasteLead": "Pegar un lead"
+    "newAppointment": "Nueva cita"
   },
   "upcoming": {
     "title": "Próximas citas",
     "calendar": "Calendario",
     "empty": "No hay nada programado. <link>Abre el calendario</link> para añadir una visita o una reunión.",
     "remindTitle": "Recordar por WhatsApp",
-    "remindAria": "Enviar un recordatorio por WhatsApp"
+    "remindAria": "Enviar un recordatorio por WhatsApp",
+    "emptyWaiting": "No hay nada programado. {count, plural, one {# comprador sigue} other {# compradores siguen}} sin una primera visita. <link>Abre el calendario</link> para programarla."
   },
   "attention": {
     "title": "Necesita tu atención",
@@ -31,11 +31,56 @@
       "today": "hoy",
       "tomorrow": "mañana",
       "inDays": "en {count, plural, one {# día} other {# días}}"
-    }
+    },
+    "newBuyer": "Lead nuevo · sin contactar",
+    "newSeller": "Vendedor nuevo · sin cualificar"
   },
   "pipeline": {
     "title": "Embudo",
-    "commissionPipeline": "{amount} en el embudo",
-    "commissionClosed": "{amount} cerrado"
+    "viewStage": "Ver {side} en {stage}",
+    "empty": "Aún no hay {side}"
+  },
+  "greeting": {
+    "morning": "Buenos días{name}",
+    "afternoon": "Buenas tardes{name}",
+    "evening": "Buenas noches{name}",
+    "named": ", {name}"
+  },
+  "stats": {
+    "buyers": "Compradores activos",
+    "sellers": "Vendedores activos",
+    "viewings": "Visitas, próximos 7 días",
+    "commission": "Comisión en el embudo",
+    "commissionClosed": "{amount} cerrado",
+    "commissionHint": "Añade una reserva para empezar a contar"
+  },
+  "recent": {
+    "title": "Clientes recientes",
+    "all": "Ver todos",
+    "empty": "Tus clientes aparecerán aquí a medida que los añadas.",
+    "now": "ahora mismo",
+    "priority": "Prioritario"
+  },
+  "onboarding": {
+    "title": "Primeros pasos",
+    "subtitle": "{done} de {total} completados",
+    "steps": {
+      "addClient": {
+        "title": "Añade tu primer cliente",
+        "detail": "Un comprador o un vendedor: lleva un minuto."
+      },
+      "scheduleAppointment": {
+        "title": "Programa una visita o una reunión",
+        "detail": "Va a tu calendario con un recordatorio por WhatsApp."
+      },
+      "createTemplate": {
+        "title": "Crea una plantilla de mensaje",
+        "detail": "Reutiliza tu mejor presentación o seguimiento con un toque."
+      },
+      "inviteColleague": {
+        "title": "Invita a un compañero",
+        "detail": "Comparte tu enlace y gana un mes gratis de Pro."
+      }
+    }
   }
 }

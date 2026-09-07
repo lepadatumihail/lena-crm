@@ -11,7 +11,14 @@ import { eventReminderHref } from "@/lib/event-reminder";
 import { cn } from "@/lib/utils";
 import type { CalendarEvent } from "@/lib/data/calendar";
 
-export function UpcomingPanel({ events }: { events: CalendarEvent[] }) {
+export function UpcomingPanel({
+  events,
+  waitingBuyers = 0,
+}: {
+  events: CalendarEvent[];
+  /** Buyers who haven't reached the viewing stage; shapes the empty state. */
+  waitingBuyers?: number;
+}) {
   const t = useTranslations("home.upcoming");
   const tCommon = useTranslations("common");
   const locale = useLocale();
@@ -30,7 +37,8 @@ export function UpcomingPanel({ events }: { events: CalendarEvent[] }) {
   if (sorted.length === 0) {
     return (
       <p className="text-muted-foreground rounded-lg border border-dashed py-8 text-center text-sm">
-        {t.rich("empty", {
+        {t.rich(waitingBuyers > 0 ? "emptyWaiting" : "empty", {
+          count: waitingBuyers,
           link: (chunks) => (
             <Link href="/calendar" className="text-primary hover:underline">
               {chunks}

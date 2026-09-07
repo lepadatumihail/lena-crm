@@ -43,12 +43,15 @@ export function ClientsView({
   side,
   view: initialView,
   includeInactive,
+  initialStage = "all",
   commission,
 }: {
   clients: Client[];
   side: ClientSide;
   view: ViewMode;
   includeInactive: boolean;
+  /** Stage the filter starts on ("all" or a stage of this side). */
+  initialStage?: string;
   commission?: { pipeline: number; closed: number } | null;
 }) {
   const router = useRouter();
@@ -63,7 +66,7 @@ export function ClientsView({
   );
   const [view, setView] = useState<ViewMode>(initialView);
   const [search, setSearch] = useState("");
-  const [stageFilter, setStageFilter] = useState<string>("all");
+  const [stageFilter, setStageFilter] = useState<string>(initialStage);
   const [priorityOnly, setPriorityOnly] = useState(false);
 
   const filtered = useMemo(() => {
