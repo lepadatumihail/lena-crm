@@ -1,17 +1,31 @@
 {
+  "types": {
+    "appointment_reminder": "Reminder",
+    "appointment_today": "Today",
+    "follow_up": "Follow up",
+    "reservation_date": "Key date",
+    "stalled_offer": "Offer"
+  },
   "bell": {
     "aria": "Notifications",
     "ariaUnread": "Notifications ({count} unread)",
     "title": "Notifications",
     "markAllRead": "Mark all read",
     "empty": "You're all caught up.",
-    "hasMore": "Showing your most recent notifications",
-    "types": {
-      "appointment_reminder": "Reminder",
-      "appointment_today": "Today",
-      "follow_up": "Follow up",
-      "reservation_date": "Key date",
-      "stalled_offer": "Offer"
+    "viewAll": "View all"
+  },
+  "page": {
+    "title": "Notifications",
+    "subtitle": "Every reminder and nudge, newest first.",
+    "markAllRead": "Mark all read",
+    "yesterday": "Yesterday",
+    "empty": "Nothing here yet. Reminders and follow-ups will show up as they come due.",
+    "emptyUnread": "You're all caught up.",
+    "loadMore": "Load more",
+    "filters": {
+      "label": "Filter notifications",
+      "all": "All",
+      "unread": "Unread ({count})"
     }
   }
 }

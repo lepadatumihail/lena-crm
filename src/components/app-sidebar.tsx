@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
+  Bell,
   Building2,
   Calculator,
   CalendarDays,
@@ -72,6 +73,7 @@ export function AppSidebar({
   const onHome = pathname === "/home";
   const onCalculator = pathname.startsWith("/calculator");
   const onCalendar = pathname.startsWith("/calendar");
+  const onNotifications = pathname.startsWith("/notifications");
   const onTemplates = pathname.startsWith("/templates");
   const onReferrals = pathname.startsWith("/referrals");
   const onBilling = pathname.startsWith("/billing");
@@ -137,6 +139,19 @@ export function AppSidebar({
                   <Link href="/calendar" onClick={closeMobile}>
                     <CalendarDays />
                     <span>{t("calendar")}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={onNotifications}
+                  tooltip={t("notifications")}
+                  className={ACTIVE_CLASSES}
+                >
+                  <Link href="/notifications" onClick={closeMobile}>
+                    <Bell />
+                    <span>{t("notifications")}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

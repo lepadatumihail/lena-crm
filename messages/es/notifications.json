@@ -1,17 +1,31 @@
 {
+  "types": {
+    "appointment_reminder": "Recordatorio",
+    "appointment_today": "Hoy",
+    "follow_up": "Seguimiento",
+    "reservation_date": "Fecha clave",
+    "stalled_offer": "Oferta"
+  },
   "bell": {
     "aria": "Notificaciones",
     "ariaUnread": "Notificaciones ({count} sin leer)",
     "title": "Notificaciones",
     "markAllRead": "Marcar todo como leído",
     "empty": "Estás al día.",
-    "hasMore": "Mostrando tus notificaciones más recientes",
-    "types": {
-      "appointment_reminder": "Recordatorio",
-      "appointment_today": "Hoy",
-      "follow_up": "Seguimiento",
-      "reservation_date": "Fecha clave",
-      "stalled_offer": "Oferta"
+    "viewAll": "Ver todas"
+  },
+  "page": {
+    "title": "Notificaciones",
+    "subtitle": "Todos los recordatorios y avisos, del más reciente al más antiguo.",
+    "markAllRead": "Marcar todo como leído",
+    "yesterday": "Ayer",
+    "empty": "Aquí no hay nada todavía. Los recordatorios y seguimientos aparecerán cuando toque.",
+    "emptyUnread": "Estás al día.",
+    "loadMore": "Cargar más",
+    "filters": {
+      "label": "Filtrar notificaciones",
+      "all": "Todas",
+      "unread": "Sin leer ({count})"
     }
   }
 }

@@ -7,7 +7,9 @@ import { z } from "zod";
 import { createClient as createSupabase } from "@/lib/supabase/server";
 import {
   getNotificationFeed,
+  getNotificationHistory,
   type NotificationFeed,
+  type NotificationHistory,
 } from "@/lib/data/notifications";
 import { getAttentionSignals } from "@/lib/data/attention";
 import {
@@ -326,6 +328,14 @@ export async function loadNotifications(
   const { error } = await syncNotifications(ctx);
   if (error) throw new Error(error);
   return getNotificationFeed();
+}
+
+/** One page of the full feed, for the notifications page's "Load more". */
+export async function loadNotificationHistory(
+  offset: number,
+  unreadOnly: boolean
+): Promise<NotificationHistory> {
+  return getNotificationHistory({ offset, unreadOnly });
 }
 
 export async function markNotificationRead(id: string): Promise<ActionResult> {

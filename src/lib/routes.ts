@@ -18,6 +18,7 @@ export const PROTECTED_PREFIXES = [
   "/calendar",
   "/clients",
   "/home",
+  "/notifications",
   "/pricing",
   "/referrals",
   "/templates",
