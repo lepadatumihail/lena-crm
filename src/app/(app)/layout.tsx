@@ -8,6 +8,7 @@ import { intlTag } from "@/i18n/config";
 import { planState } from "@/lib/access";
 import { AppSidebar, type SidebarPlan } from "@/components/app-sidebar";
 import { NotificationsBell } from "@/components/notifications/notifications-bell";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   SidebarInset,
   SidebarProvider,
@@ -74,7 +75,8 @@ export default async function AppLayout({
       <SidebarInset>
         <header className="bg-background/80 sticky top-0 z-10 flex h-14 items-center gap-2 border-b px-4 backdrop-blur">
           <SidebarTrigger className="-ml-1" />
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-1">
+            <ThemeToggle />
             <NotificationsBell />
           </div>
         </header>

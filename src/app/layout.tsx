@@ -6,6 +6,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ServiceWorkerRegister } from "@/components/service-worker-register";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE_LOCALE, SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -89,6 +90,7 @@ export default async function RootLayout({
     <html
       lang={locale}
       data-scroll-behavior="smooth"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
@@ -100,10 +102,12 @@ export default async function RootLayout({
           shadow={false}
           zIndex={1600}
         />
-        <NextIntlClientProvider>
-          {children}
-          <Toaster />
-        </NextIntlClientProvider>
+        <ThemeProvider>
+          <NextIntlClientProvider>
+            {children}
+            <Toaster />
+          </NextIntlClientProvider>
+        </ThemeProvider>
         <ServiceWorkerRegister />
         <Analytics />
       </body>

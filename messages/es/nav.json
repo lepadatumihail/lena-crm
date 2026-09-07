@@ -11,6 +11,7 @@
   "admin": "Admin",
   "signOut": "Cerrar sesión",
   "language": "Idioma",
+  "theme": "Cambiar tema",
   "foundingAgent": "Agente fundador n.º {number}",
   "plan": {
     "pro": "Pro",
@@ -25,7 +26,7 @@
   "marketing": {
     "howItWorks": "Cómo funciona",
     "pricing": "Precios",
-    "signIn": "Iniciar sesión",
+    "startFree": "Empieza gratis",
     "backHome": "Volver al inicio"
   },
   "legal": {
