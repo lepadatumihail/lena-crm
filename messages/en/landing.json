@@ -1,8 +1,9 @@
 {
   "hero": {
-    "badge": "Built for independent agents",
+    "badge": "CRM for independent real‑estate agents",
     "title": "Your clients, properties, and offers. <accent>Made simple.</accent>",
-    "ctaPrimary": "Get started",
+    "subtitle": "Keep every buyer, seller, viewing, offer and document on one client card, and get a ready-to-send follow-up before a lead goes cold. Works across every agency you sell for.",
+    "ctaPrimary": "Start for free",
     "ctaSecondary": "See how it works",
     "note": "No password — sign in with Google or a one-time code."
   },
@@ -24,39 +25,49 @@
     "sent": "Sent",
     "quiet": "{days, plural, one {# day quiet} other {# days quiet}}"
   },
+  "onePlace": {
+    "badge": "The problem",
+    "heading": "Stop juggling five apps for one client.",
+    "body": "Details in Notes, follow-ups in Reminders, viewings in Calendar, documents in Drive, and the real conversation on WhatsApp. LeadWing pulls all of it onto one card per client, so “where did I put that?” stops being a question.",
+    "caption": "Everything about Sofia on one card. Nothing left to hunt for.",
+    "srSummary": "Notes, Reminders, Calendar, Google Drive, spreadsheets, email and WhatsApp all flow into LeadWing, and one complete client card comes out.",
+    "card": {
+      "language": "German",
+      "phone": "+49 171 234 5678 · WhatsApp",
+      "budget": "Apartment · €600–800k · sea view",
+      "viewing": "Viewing Thu 11:00 · Nueva Andalucía",
+      "followUp": "Follow up on Friday",
+      "docs": "Passport, NIE · 2 files",
+      "footer": "All in one place"
+    }
+  },
   "features": {
-    "heading": "Everything a deal needs, nothing it doesn't",
-    "body": "Spreadsheets and scattered chats don't scale. LeadWing gives every lead a place — and a next step.",
+    "badge": "What you get",
+    "heading": "Everything you track for a deal, on one client card",
+    "body": "Pipeline stage, properties viewed, offers made, documents signed, and which agency the lead came through.",
     "items": {
       "pipeline": {
-        "title": "A pipeline that moves",
-        "body": "Drag every buyer and seller through clear stages — new, contacted, qualified, viewing, reserved — so nothing stalls."
+        "title": "A pipeline for buyers and sellers",
+        "body": "Drag each client through new, contacted, qualified, viewing and reserved. Sellers get their own flow, pending to qualified."
       },
       "clients": {
-        "title": "Clients in focus",
-        "body": "Names, languages, nationalities, notes. Flag the hot ones, hide the cold, and always know who to call next."
+        "title": "The client, complete",
+        "body": "Name, phone, language, nationality, budget and notes. Star the hot ones, hide the cold, and see who to call next."
       },
-      "properties": {
-        "title": "Properties & viewings",
-        "body": "Log every property a buyer views, attach the window card and photos, and keep the details in one place."
-      },
-      "offers": {
-        "title": "Offers, tracked",
-        "body": "Record each offer against the asking price, so you always know exactly where a deal stands."
-      },
-      "documents": {
-        "title": "Documents, organised",
-        "body": "Contracts, IDs, reservation papers — upload anything and keep it filed against the right client."
+      "deal": {
+        "title": "Properties, viewings, offers and documents",
+        "body": "Log each property a buyer sees, book the viewing, record every offer against the asking price, and keep the contract and IDs on the same card."
       },
       "agencies": {
-        "title": "One CRM, every agency",
-        "body": "Work with more than one agency? Tag each lead by agency so your whole book finally lives in a single place."
+        "title": "One CRM for every agency you sell for",
+        "body": "Tag each lead with the agency it came through. Your whole book stays in one place, whoever's listing it is.",
+        "tags": "Norma Frank,Solvilla,Drumelia,Direct"
       }
     }
   },
   "howItWorks": {
     "badge": "How it works",
-    "heading": "Three steps from hello to keys in hand",
+    "heading": "How LeadWing works, in three steps",
     "body": "Add a client, move them through the pipeline, and let LeadWing handle the follow-up. The whole job, in the order you actually work it.",
     "steps": {
       "plan": {
@@ -93,8 +104,8 @@
     "note": "Sellers get their own flow too — pending to qualified, with every listing attached."
   },
   "deepDives": {
-    "heading": "Built for how independent agents actually work",
-    "body": "The things the big CRMs miss — WhatsApp, portals, languages — done simply.",
+    "heading": "WhatsApp, portals and languages, built in with auto follow-up",
+    "body": "The five things that fill an independent agent's day, handled inside LeadWing instead of around it.",
     "items": {
       "whatsapp": {
         "title": "AI-written WhatsApp messages",
@@ -162,8 +173,8 @@
     }
   },
   "simple": {
-    "badge": "Built to stay simple",
-    "heading": "Everything you need. Nothing you don't.",
+    "badge": "What we leave out",
+    "heading": "Only what a solo agent uses. Nothing else.",
     "body": "Most CRMs are built for big brokerages and bury solo agents in tools they'll never touch. LeadWing is the opposite — the essentials, done well, and we leave the rest out on purpose.",
     "leftOutTitle": "Left out — on purpose",
     "leftOut": {
@@ -183,7 +194,7 @@
       "installable": "Installable on your phone",
       "agencies": "One place for every agency you work with"
     },
-    "note": "Not yet another CRM — the only simple one you'll actually keep using."
+    "note": "Simple enough to keep using every day."
   },
   "ai": {
     "badge": "Built in · AI",
@@ -242,8 +253,8 @@
     "body": "LeadWing handles your sales pipeline now — long and short-term rentals are on the way, in the same simple flow you already know."
   },
   "finalCta": {
-    "heading": "Ready to simplify your day?",
-    "body": "Set up takes a minute. Bring your first client into LeadWing and feel the difference."
+    "heading": "Bring your first client in today.",
+    "body": "Sign-up takes a minute, and the Free plan needs no card."
   },
   "notFound": {
     "title": "Page not found",

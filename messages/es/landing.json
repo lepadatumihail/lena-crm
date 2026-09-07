@@ -1,8 +1,9 @@
 {
   "hero": {
-    "badge": "Hecho para agentes independientes",
+    "badge": "CRM para agentes inmobiliarios independientes",
     "title": "Tus clientes, propiedades y ofertas. <accent>Así de simple.</accent>",
-    "ctaPrimary": "Empieza ahora",
+    "subtitle": "Cada comprador, vendedor, visita, oferta y documento en una sola ficha de cliente, y un seguimiento listo para enviar antes de que un lead se enfríe. Funciona con todas las agencias para las que vendes.",
+    "ctaPrimary": "Empieza gratis",
     "ctaSecondary": "Mira cómo funciona",
     "note": "Sin contraseña: inicia sesión con Google o con un código de un solo uso."
   },
@@ -24,39 +25,49 @@
     "sent": "Enviado",
     "quiet": "{days, plural, one {# día sin contacto} other {# días sin contacto}}"
   },
+  "onePlace": {
+    "badge": "El problema",
+    "heading": "Deja de hacer malabares con cinco apps para un solo cliente.",
+    "body": "Los datos en Notas, los seguimientos en Recordatorios, las visitas en Calendario, los documentos en Drive y la conversación real en WhatsApp. LeadWing lo reúne todo en una sola ficha por cliente, y «¿dónde lo apunté?» deja de ser una pregunta.",
+    "caption": "Todo sobre Sofia en una sola ficha. Nada que buscar.",
+    "srSummary": "Notas, Recordatorios, Calendario, Google Drive, hojas de cálculo, correo y WhatsApp entran en LeadWing y sale una ficha de cliente completa.",
+    "card": {
+      "language": "Alemán",
+      "phone": "+49 171 234 5678 · WhatsApp",
+      "budget": "Apartamento · 600–800 k€ · vistas al mar",
+      "viewing": "Visita jue 11:00 · Nueva Andalucía",
+      "followUp": "Seguimiento el viernes",
+      "docs": "Pasaporte, NIE · 2 archivos",
+      "footer": "Todo en un solo sitio"
+    }
+  },
   "features": {
-    "heading": "Todo lo que necesita una operación, nada más",
-    "body": "Las hojas de cálculo y los chats sueltos no escalan. LeadWing le da a cada lead un sitio y un siguiente paso.",
+    "badge": "Lo que obtienes",
+    "heading": "Todo lo que sigues en una operación, en una sola ficha de cliente",
+    "body": "Etapa del embudo, propiedades vistas, ofertas hechas, documentos firmados y por qué agencia llegó el lead.",
     "items": {
       "pipeline": {
-        "title": "Un embudo que avanza",
-        "body": "Arrastra a cada comprador y vendedor por etapas claras —nuevo, contactado, cualificado, visitas, reservado— para que nada se atasque."
+        "title": "Un embudo para compradores y vendedores",
+        "body": "Arrastra a cada cliente por nuevo, contactado, cualificado, visitas y reservado. Los vendedores tienen su propio flujo, de pendiente a cualificado."
       },
       "clients": {
-        "title": "Clientes en foco",
-        "body": "Nombres, idiomas, nacionalidades, notas. Marca los calientes, oculta los fríos y sabe siempre a quién llamar después."
+        "title": "El cliente, completo",
+        "body": "Nombre, teléfono, idioma, nacionalidad, presupuesto y notas. Marca los calientes, oculta los fríos y sabe a quién llamar después."
       },
-      "properties": {
-        "title": "Propiedades y visitas",
-        "body": "Registra cada propiedad que ve un comprador, adjunta la ficha y las fotos, y ten los detalles en un solo lugar."
-      },
-      "offers": {
-        "title": "Ofertas, controladas",
-        "body": "Anota cada oferta frente al precio de salida y sabe siempre en qué punto exacto está la operación."
-      },
-      "documents": {
-        "title": "Documentos, ordenados",
-        "body": "Contratos, documentos de identidad, papeles de reserva: sube lo que sea y guárdalo archivado en el cliente correcto."
+      "deal": {
+        "title": "Propiedades, visitas, ofertas y documentos",
+        "body": "Registra cada propiedad que ve un comprador, agenda la visita, anota cada oferta frente al precio de salida y guarda el contrato y los DNI en la misma ficha."
       },
       "agencies": {
-        "title": "Un CRM, todas las agencias",
-        "body": "¿Trabajas con más de una agencia? Etiqueta cada lead por agencia y ten por fin toda tu cartera en un único sitio."
+        "title": "Un CRM para todas las agencias con las que vendes",
+        "body": "Etiqueta cada lead con la agencia por la que llegó. Toda tu cartera en un solo sitio, sea de quien sea el inmueble.",
+        "tags": "Norma Frank,Solvilla,Drumelia,Directo"
       }
     }
   },
   "howItWorks": {
     "badge": "Cómo funciona",
-    "heading": "Tres pasos del primer hola a la entrega de llaves",
+    "heading": "Cómo funciona LeadWing, en tres pasos",
     "body": "Añade un cliente, muévelo por el embudo y deja que LeadWing se encargue del seguimiento. Todo el trabajo, en el orden en que lo haces de verdad.",
     "steps": {
       "plan": {
@@ -93,8 +104,8 @@
     "note": "Los vendedores tienen su propio flujo: de pendiente a cualificado, con cada anuncio adjunto."
   },
   "deepDives": {
-    "heading": "Hecho para cómo trabajan de verdad los agentes independientes",
-    "body": "Lo que los grandes CRM se dejan —WhatsApp, portales, idiomas— hecho de forma sencilla.",
+    "heading": "WhatsApp, portales e idiomas, integrados con seguimiento automático",
+    "body": "Las cinco cosas que llenan el día de un agente independiente, resueltas dentro de LeadWing y no alrededor.",
     "items": {
       "whatsapp": {
         "title": "Mensajes de WhatsApp escritos por IA",
@@ -162,8 +173,8 @@
     }
   },
   "simple": {
-    "badge": "Hecho para seguir siendo simple",
-    "heading": "Todo lo que necesitas. Nada que no.",
+    "badge": "Lo que dejamos fuera",
+    "heading": "Solo lo que usa un agente independiente. Nada más.",
     "body": "La mayoría de los CRM están hechos para grandes agencias y entierran al agente independiente en herramientas que nunca va a tocar. LeadWing es lo contrario: lo esencial, bien hecho, y el resto lo dejamos fuera a propósito.",
     "leftOutTitle": "Fuera, a propósito",
     "leftOut": {
@@ -183,7 +194,7 @@
       "installable": "Instalable en tu móvil",
       "agencies": "Un solo lugar para todas las agencias con las que trabajas"
     },
-    "note": "No es un CRM más: es el único sencillo que de verdad vas a seguir usando."
+    "note": "Lo bastante sencillo para usarlo cada día."
   },
   "ai": {
     "badge": "Incluida · IA",
@@ -242,8 +253,8 @@
     "body": "LeadWing ya lleva tu embudo de ventas; los alquileres de larga y corta estancia están en camino, con el mismo flujo sencillo que ya conoces."
   },
   "finalCta": {
-    "heading": "¿Listo para simplificar tu día?",
-    "body": "Configurarlo lleva un minuto. Mete tu primer cliente en LeadWing y nota la diferencia."
+    "heading": "Trae hoy a tu primer cliente.",
+    "body": "Registrarse lleva un minuto y el plan Free no pide tarjeta."
   },
   "notFound": {
     "title": "Página no encontrada",

@@ -21,6 +21,7 @@ import { FeatureGrid } from "@/components/landing/feature-grid";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { FeatureDeepDives } from "@/components/landing/feature-deep-dives";
 import { AppPreview } from "@/components/landing/app-preview";
+import { OnePlace } from "@/components/landing/one-place";
 import { Faq } from "@/components/landing/faq";
 import { LandingFooter } from "@/components/landing/footer";
 import { BUYER_STAGES } from "@/lib/crm";
@@ -36,7 +37,6 @@ const BUYER_STEPS = BUYER_STAGES;
  */
 export function LandingPage() {
   const t = useTranslations("landing");
-  const tSite = useTranslations("site");
   const tCrm = useTranslations("crm");
   const tCommon = useTranslations("common");
 
@@ -74,7 +74,7 @@ export function LandingPage() {
             })}
           </h1>
           <p className="text-muted-foreground mt-5 max-w-xl text-lg text-pretty">
-            {tSite("description")}
+            {t("hero.subtitle")}
           </p>
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
             <Button asChild size="lg">
@@ -92,19 +92,21 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Features */}
-      <section
-        id="features"
-        className="mx-auto w-full max-w-6xl scroll-mt-20 px-4 py-16"
-      >
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-semibold tracking-tight">
-            {t("features.heading")}
+      {/* One place — the apps agents juggle today, folded into one card */}
+      <section className="mx-auto w-full max-w-6xl px-4 py-16">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <Badge variant="secondary" className="mb-4">
+            {t("onePlace.badge")}
+          </Badge>
+          <h2 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+            {t("onePlace.heading")}
           </h2>
-          <p className="text-muted-foreground mt-3">{t("features.body")}</p>
-        </div>
+          <p className="text-muted-foreground mt-3 text-pretty">
+            {t("onePlace.body")}
+          </p>
+        </Reveal>
 
-        <FeatureGrid />
+        <OnePlace />
       </section>
 
       {/* How it works */}
@@ -127,6 +129,26 @@ export function LandingPage() {
 
       {/* Feature deep-dives */}
       <FeatureDeepDives />
+
+      {/* What you get — four tiles, right before the pipeline */}
+      <section
+        id="features"
+        className="mx-auto w-full max-w-6xl scroll-mt-20 px-4 py-16"
+      >
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <Badge variant="secondary" className="mb-4">
+            {t("features.badge")}
+          </Badge>
+          <h2 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+            {t("features.heading")}
+          </h2>
+          <p className="text-muted-foreground mt-3 text-pretty">
+            {t("features.body")}
+          </p>
+        </Reveal>
+
+        <FeatureGrid />
+      </section>
 
       {/* Pipeline strip */}
       <section className="bg-muted/40 border-y">
@@ -447,7 +469,9 @@ export function LandingPage() {
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
               {t("rentals.heading")}
             </h2>
-            <p className="text-muted-foreground max-w-lg">{t("rentals.body")}</p>
+            <p className="text-muted-foreground max-w-lg">
+              {t("rentals.body")}
+            </p>
           </div>
         </Reveal>
       </section>
@@ -498,7 +522,6 @@ function TrustItem({
   );
 }
 
-
 function PlanCard({
   name,
   price,
@@ -529,7 +552,9 @@ function PlanCard({
         <span className="text-4xl font-semibold tracking-tight">{price}</span>
         <span className="text-muted-foreground text-sm">{period}</span>
       </div>
-      {note ? <p className="text-muted-foreground mt-1 text-sm">{note}</p> : null}
+      {note ? (
+        <p className="text-muted-foreground mt-1 text-sm">{note}</p>
+      ) : null}
       <ul className="mt-5 space-y-2 text-sm">
         {items.map((item) => (
           <li key={item} className="flex items-start gap-2">
@@ -538,7 +563,11 @@ function PlanCard({
           </li>
         ))}
       </ul>
-      <Button asChild className="mt-6 w-full" variant={highlighted ? "default" : "outline"}>
+      <Button
+        asChild
+        className="mt-6 w-full"
+        variant={highlighted ? "default" : "outline"}
+      >
         <Link href="/login">{cta}</Link>
       </Button>
     </div>

@@ -195,3 +195,10 @@
     transform: none;
   }
 }
+
+/* Dotted guides on the landing "one place" stage: dashes drift toward the wing. */
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -16;
+  }
+}
