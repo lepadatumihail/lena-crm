@@ -7,6 +7,8 @@
  *   npm run stripe:setup -- --live  # required when the key is a live key
  *
  * What it does, in order:
+ *   0. Stripe Tax: a default tax code and the Spain VAT registration, without
+ *      which Stripe collects nothing.
  *   1. Product "LeadWing Pro" (found or created).
  *   2. Four recurring prices with lookup keys = plan ids (the webhook reads
  *      them). Existing prices with the right amount and interval are adopted
@@ -40,6 +42,10 @@ const SITE =
 const PRODUCT_NAME = "LeadWing Pro";
 /** Stripe Tax code: software as a service, business use. An electronically supplied service for EU VAT. */
 const TAX_CODE = "txcd_10103001";
+/** Account-wide default for anything without its own code: General - Electronically Supplied Services. */
+const DEFAULT_TAX_CODE = "txcd_10000000";
+/** Where LeadWing is VAT-registered. Stripe Tax only collects where a registration exists. */
+const TAX_COUNTRY = "ES";
 const WEBHOOK_URL = `${SITE}/api/stripe/webhook`;
 const WEBHOOK_EVENTS: Stripe.WebhookEndpointCreateParams.EnabledEvent[] = [
   "checkout.session.completed",
@@ -304,8 +310,51 @@ async function ensurePortal(): Promise<void> {
   console.log(`Portal: created ${created.id}`);
 }
 
+// ---------- 0. tax settings + registration ----------
+async function ensureTax(): Promise<void> {
+  const settings = await stripe.tax.settings.retrieve();
+  if (!settings.defaults.tax_code) {
+    await stripe.tax.settings.update({
+      defaults: { tax_code: DEFAULT_TAX_CODE, tax_behavior: "exclusive" },
+    });
+    console.log(
+      `Tax settings: default tax code set (${DEFAULT_TAX_CODE}), prices exclusive of tax`,
+    );
+  }
+  if (settings.status !== "active") {
+    notes.push(
+      `Tax settings status is "${settings.status}": add the head-office address under Settings → Tax, or links cannot calculate tax.`,
+    );
+  }
+  const registrations = await stripe.tax.registrations.list({ limit: 100 });
+  const existing = registrations.data.find(
+    (r) => r.country === TAX_COUNTRY && r.status !== "expired",
+  );
+  if (existing) {
+    console.log(`Tax registration: ${TAX_COUNTRY} exists (${existing.status})`);
+    return;
+  }
+  const created = await stripe.tax.registrations.create({
+    country: TAX_COUNTRY,
+    country_options: { es: { type: "standard" } },
+    active_from: "now",
+  });
+  console.log(
+    `Tax registration: created ${TAX_COUNTRY} VAT, active now (${created.id})`,
+  );
+}
+
 // ---------- run ----------
 async function main() {
+  if (!args.has("--skip-tax")) {
+    try {
+      await ensureTax();
+    } catch (err) {
+      notes.push(
+        `Tax: could not configure automatically (${err instanceof Error ? err.message : err}). Add the Spain VAT registration under Tax → Registrations by hand.`,
+      );
+    }
+  }
   const product = await ensureProduct();
   await ensureTaxCode(product.id);
   const pool = (
