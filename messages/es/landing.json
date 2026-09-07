@@ -43,7 +43,7 @@
   },
   "features": {
     "badge": "Lo que obtienes",
-    "heading": "Todo lo que sigues en una operación, en una sola ficha de cliente",
+    "heading": "Toda la operación en una sola ficha",
     "body": "Etapa del embudo, propiedades vistas, ofertas hechas, documentos firmados y por qué agencia llegó el lead.",
     "items": {
       "pipeline": {
@@ -51,7 +51,7 @@
         "body": "Arrastra a cada cliente por nuevo, contactado, cualificado, visitas y reservado. Los vendedores tienen su propio flujo, de pendiente a cualificado."
       },
       "clients": {
-        "title": "El cliente, completo",
+        "title": "Todo sobre cada cliente",
         "body": "Nombre, teléfono, idioma, nacionalidad, presupuesto y notas. Marca los calientes, oculta los fríos y sabe a quién llamar después."
       },
       "deal": {
@@ -99,7 +99,7 @@
     }
   },
   "pipelineStrip": {
-    "heading": "De lead a reservado, de un vistazo",
+    "heading": "Cómo avanza un comprador por tu embudo",
     "body": "Cada comprador sigue un recorrido sencillo. Hazlo avanzar y en cada paso se desbloquean los detalles que tocan.",
     "note": "Los vendedores tienen su propio flujo: de pendiente a cualificado, con cada anuncio adjunto."
   },
@@ -171,30 +171,6 @@
         "whatsapp": "Un toque para enviar por WhatsApp"
       }
     }
-  },
-  "simple": {
-    "badge": "Lo que dejamos fuera",
-    "heading": "Solo lo que usa un agente independiente. Nada más.",
-    "body": "La mayoría de los CRM están hechos para grandes agencias y entierran al agente independiente en herramientas que nunca va a tocar. LeadWing es lo contrario: lo esencial, bien hecho, y el resto lo dejamos fuera a propósito.",
-    "leftOutTitle": "Fuera, a propósito",
-    "leftOut": {
-      "idx": "Creadores de webs IDX",
-      "dialers": "Marcadores automáticos y call centers",
-      "leaderboards": "Rankings de equipo y reglas de reparto de leads",
-      "marketplaces": "Mercados con 200 integraciones",
-      "dashboards": "Paneles de analítica que nadie abre",
-      "perSeat": "Precios enterprise por usuario"
-    },
-    "includedTitle": "Lo que sí tienes",
-    "included": {
-      "pipeline": "Cada cliente en un embudo claro",
-      "followUps": "Seguimientos que se escriben solos",
-      "properties": "Propiedades, visitas y ofertas juntas",
-      "documents": "Documentos archivados en cada cliente",
-      "installable": "Instalable en tu móvil",
-      "agencies": "Un solo lugar para todas las agencias con las que trabajas"
-    },
-    "note": "Lo bastante sencillo para usarlo cada día."
   },
   "ai": {
     "badge": "Incluida · IA",

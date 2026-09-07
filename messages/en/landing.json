@@ -43,7 +43,7 @@
   },
   "features": {
     "badge": "What you get",
-    "heading": "Everything you track for a deal, on one client card",
+    "heading": "The whole deal on one card",
     "body": "Pipeline stage, properties viewed, offers made, documents signed, and which agency the lead came through.",
     "items": {
       "pipeline": {
@@ -51,7 +51,7 @@
         "body": "Drag each client through new, contacted, qualified, viewing and reserved. Sellers get their own flow, pending to qualified."
       },
       "clients": {
-        "title": "The client, complete",
+        "title": "Everything about each client",
         "body": "Name, phone, language, nationality, budget and notes. Star the hot ones, hide the cold, and see who to call next."
       },
       "deal": {
@@ -99,7 +99,7 @@
     }
   },
   "pipelineStrip": {
-    "heading": "From lead to reserved, at a glance",
+    "heading": "How a buyer moves through your pipeline",
     "body": "Every buyer follows a simple journey. Move them forward and the right details unlock at each step.",
     "note": "Sellers get their own flow too — pending to qualified, with every listing attached."
   },
@@ -171,30 +171,6 @@
         "whatsapp": "One tap to send on WhatsApp"
       }
     }
-  },
-  "simple": {
-    "badge": "What we leave out",
-    "heading": "Only what a solo agent uses. Nothing else.",
-    "body": "Most CRMs are built for big brokerages and bury solo agents in tools they'll never touch. LeadWing is the opposite — the essentials, done well, and we leave the rest out on purpose.",
-    "leftOutTitle": "Left out — on purpose",
-    "leftOut": {
-      "idx": "IDX website builders",
-      "dialers": "Power dialers & call centres",
-      "leaderboards": "Team leaderboards & lead-routing rules",
-      "marketplaces": "200-app integration marketplaces",
-      "dashboards": "Analytics dashboards no one opens",
-      "perSeat": "Per-seat enterprise pricing"
-    },
-    "includedTitle": "What you actually get",
-    "included": {
-      "pipeline": "Every client in a clear pipeline",
-      "followUps": "Follow-ups that write themselves",
-      "properties": "Properties, viewings & offers together",
-      "documents": "Documents filed against each client",
-      "installable": "Installable on your phone",
-      "agencies": "One place for every agency you work with"
-    },
-    "note": "Simple enough to keep using every day."
   },
   "ai": {
     "badge": "Built in · AI",

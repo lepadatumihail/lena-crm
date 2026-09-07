@@ -9,7 +9,6 @@ import {
   ShieldCheck,
   Smartphone,
   Sparkles,
-  X,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -60,8 +59,11 @@ export function LandingPage() {
         </div>
 
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center px-4 pt-16 pb-12 text-center animate-[fade-up_0.7s_ease-out_both] motion-reduce:animate-none sm:pt-24">
-          <Badge variant="secondary" className="mb-5 gap-1.5 px-3 py-1">
-            <Sparkles className="size-3.5" />
+          <Badge
+            variant="secondary"
+            className="mb-5 gap-2 rounded-lg px-4 py-1.5 text-sm [&>svg]:size-4"
+          >
+            <Sparkles className="size-4" />
             {t("hero.badge")}
           </Badge>
           <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
@@ -179,85 +181,6 @@ export function LandingPage() {
             {t("pipelineStrip.note")}
           </p>
         </div>
-      </section>
-
-      {/* Anti-bloat / refreshingly simple */}
-      <section className="mx-auto w-full max-w-6xl px-4 py-16">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <Badge variant="secondary" className="mb-4">
-            {t("simple.badge")}
-          </Badge>
-          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            {t("simple.heading")}
-          </h2>
-          <p className="text-muted-foreground mt-3">{t("simple.body")}</p>
-        </Reveal>
-
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
-          <Reveal>
-            <div className="bg-card h-full rounded-2xl border p-6">
-              <h3 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-                {t("simple.leftOutTitle")}
-              </h3>
-              <ul className="mt-4 space-y-2.5">
-                {(
-                  [
-                    "idx",
-                    "dialers",
-                    "leaderboards",
-                    "marketplaces",
-                    "dashboards",
-                    "perSeat",
-                  ] as const
-                ).map((key) => (
-                  <li
-                    key={key}
-                    className="text-muted-foreground flex items-center gap-2.5 text-sm"
-                  >
-                    <X className="text-muted-foreground/50 size-4 shrink-0" />
-                    <span className="decoration-muted-foreground/40 line-through">
-                      {t(`simple.leftOut.${key}`)}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-
-          <Reveal delay={80}>
-            <div className="bg-card border-primary/30 h-full rounded-2xl border p-6 shadow-sm">
-              <h3 className="text-primary text-xs font-semibold tracking-wide uppercase">
-                {t("simple.includedTitle")}
-              </h3>
-              <ul className="mt-4 space-y-2.5">
-                {(
-                  [
-                    "pipeline",
-                    "followUps",
-                    "properties",
-                    "documents",
-                    "installable",
-                    "agencies",
-                  ] as const
-                ).map((key) => (
-                  <li
-                    key={key}
-                    className="flex items-center gap-2.5 text-sm font-medium"
-                  >
-                    <Check className="text-primary size-4 shrink-0" />
-                    {t(`simple.included.${key}`)}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-        </div>
-
-        <Reveal>
-          <p className="text-muted-foreground mt-8 text-center text-sm">
-            {t("simple.note")}
-          </p>
-        </Reveal>
       </section>
 
       {/* AI — built in */}
@@ -462,7 +385,7 @@ export function LandingPage() {
       </section>
 
       {/* Rentals coming soon */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-16">
+      <section className="mx-auto w-full max-w-6xl px-4 py-16">
         <Reveal>
           <div className="from-primary/10 to-accent/40 relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border bg-gradient-to-br p-8 text-center sm:p-12">
             <Badge className="gap-1.5">{t("rentals.badge")}</Badge>
