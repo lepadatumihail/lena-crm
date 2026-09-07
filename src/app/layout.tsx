@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
+import NextTopLoader from "nextjs-toploader";
 import { getLocale, getTranslations } from "next-intl/server";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
@@ -91,6 +92,14 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        {/* Thin progress bar at the top during route transitions. */}
+        <NextTopLoader
+          color="var(--primary)"
+          height={3}
+          showSpinner={false}
+          shadow={false}
+          zIndex={1600}
+        />
         <NextIntlClientProvider>
           {children}
           <Toaster />
