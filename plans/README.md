@@ -18,6 +18,7 @@ done.
 | 007 | (spike) Email follow-up automation design | P3 | M | — | DONE — [design](007-email-automation-design.md) · conditional-go |
 | 008 | (spike) Inverse matching — buyers for a listing | P3 | S | — | DONE — [design](008-inverse-matching-design.md) · conditional-go |
 | 009 | (spike) Outreach tracking — honest follow-up nudges | P3 | S | — (better after 002) | DONE — [design](009-outreach-tracking-design.md) · go |
+| 010 | Feature pages for search and AI answer engines | P3 | M | — | TODO — [plan](010-feature-pages.md) |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) | REJECTED (with one-line rationale)
 
