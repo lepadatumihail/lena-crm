@@ -15,16 +15,31 @@ export function MarketingNav({
   return (
     <header className="sticky top-0 z-20 border-b border-border/60 bg-background/70 backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2">
-          <Logo />
+        <Link href="/" className="flex shrink-0 items-center gap-2">
+          {/* Below 360px the Spanish "Iniciar sesión" / "Volver al inicio" plus
+              the language toggle leave no room for the wordmark; keep it for
+              screen readers so the link still has a name. */}
+          <Logo wordmarkClassName="max-[359px]:sr-only" />
         </Link>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           {variant === "landing" ? (
             <>
-              <Button asChild variant="ghost" size="sm">
+              {/* Section links only scroll the page; on phones the sections
+                  are one swipe away and the row would overflow the viewport. */}
+              <Button
+                asChild
+                variant="ghost"
+                size="sm"
+                className="hidden sm:inline-flex"
+              >
                 <Link href="#how-it-works">{t("howItWorks")}</Link>
               </Button>
-              <Button asChild variant="ghost" size="sm">
+              <Button
+                asChild
+                variant="ghost"
+                size="sm"
+                className="hidden sm:inline-flex"
+              >
                 <Link href="#pricing">{t("pricing")}</Link>
               </Button>
               <Button asChild size="sm">
