@@ -8,11 +8,10 @@ import { Plus } from "lucide-react";
 import { dateFnsLocale } from "@/i18n/dates";
 import { formatTimeRange } from "@/lib/calendar";
 import {
-  GRID_START_HOUR,
   MIN_EVENT_MINUTES,
+  WORKDAY_START_HOUR,
   dayKey,
   eventEndMs,
-  gridHours,
   layoutOverlaps,
   minutesLabel,
   minutesOfDay,
@@ -21,9 +20,10 @@ import { cn } from "@/lib/utils";
 import type { CalendarEvent } from "@/lib/data/calendar";
 
 const HOUR_PX = 48;
+const HOURS = Array.from({ length: 24 }, (_, i) => i);
 /** Clicking a slot rounds down to this many minutes. */
 const SNAP_MINUTES = 30;
-const COLUMNS = "grid-cols-[3.5rem_repeat(7,minmax(0,1fr))]";
+const GUTTER = "3.25rem";
 
 type Block = {
   event: CalendarEvent;
@@ -44,16 +44,20 @@ function snapWithinHour(event: React.MouseEvent<HTMLElement>): number {
 }
 
 /**
- * The week hour by hour: seven columns, events sized by duration, a line for
- * the current time. Clicking an empty slot starts a new event at that time.
+ * A full day, midnight to midnight, one column per day given: seven on a
+ * desktop, one on a phone under the week strip. Events are sized by
+ * duration, a line marks the current time, and clicking an empty slot starts
+ * a new event at that time. Scrolls itself to now, or to the working day.
  */
-export function WeekGrid({
+export function TimeGrid({
   days,
   byDay,
   todayKey,
   now,
   onPickSlot,
   onOpenEvent,
+  showHeader = true,
+  scrollKey,
   className,
 }: {
   days: Date[];
@@ -62,13 +66,20 @@ export function WeekGrid({
   now: Date;
   onPickSlot: (dateKey: string, minutes: number) => void;
   onOpenEvent: (event: CalendarEvent) => void;
+  /** Day names across the top; off when something else names the day. */
+  showHeader?: boolean;
+  /** The grid scrolls back to now (or the morning) whenever this changes. */
+  scrollKey: string;
   className?: string;
 }) {
   const t = useTranslations("calendar");
   const dateLocale = dateFnsLocale(useLocale());
   const nowMs = now.getTime();
   const nowMin = minutesOfDay(now);
-  const weekKey = dayKey(days[0]);
+  const single = days.length === 1;
+  const columns = {
+    gridTemplateColumns: `${GUTTER} repeat(${days.length}, minmax(0, 1fr))`,
+  };
 
   const blocksByDay = useMemo(() => {
     const map = new Map<string, Block[]>();
@@ -92,95 +103,83 @@ export function WeekGrid({
     return map;
   }, [days, byDay, nowMs]);
 
-  const { startHour, endHour } = useMemo(
-    () =>
-      gridHours(
-        [...blocksByDay.values()]
-          .flat()
-          .map((b) => ({ startMin: b.startMin, endMin: b.drawnEnd }))
-      ),
-    [blocksByDay]
-  );
-  const hours = Array.from(
-    { length: endHour - startHour },
-    (_, i) => startHour + i
-  );
-  const top = (minutes: number) => ((minutes - startHour * 60) / 60) * HOUR_PX;
-
-  const showNow =
-    todayKey != null &&
-    days.some((d) => dayKey(d) === todayKey) &&
-    nowMin >= startHour * 60 &&
-    nowMin <= endHour * 60;
+  const top = (minutes: number) => (minutes / 60) * HOUR_PX;
+  const todayShown =
+    todayKey != null && days.some((day) => dayKey(day) === todayKey);
 
   const [hover, setHover] = useState<{ key: string; minutes: number } | null>(
     null
   );
 
-  // Open on the current time, or on the start of the working day.
+  // Once per week: to now if today is on screen, otherwise to the morning.
+  // Waits for hydration, when today becomes known, and then leaves the
+  // scroll alone so switching days on a phone doesn't jump.
   const scroller = useRef<HTMLDivElement>(null);
+  const scrolledFor = useRef<string | null>(null);
   useEffect(() => {
     const el = scroller.current;
-    if (!el) return;
-    const target = showNow
+    if (!el || todayKey == null || scrolledFor.current === scrollKey) return;
+    scrolledFor.current = scrollKey;
+    const target = todayShown
       ? top(nowMin) - el.clientHeight / 3
-      : top(GRID_START_HOUR * 60);
+      : top(WORKDAY_START_HOUR * 60);
     el.scrollTop = Math.max(0, target);
-    // Only when the week changes, not on every tick of the clock.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [weekKey]);
+  }, [scrollKey, todayKey, todayShown]);
 
   return (
     <div className={cn("bg-card overflow-hidden rounded-lg border", className)}>
       <div
         ref={scroller}
-        className="max-h-[calc(100dvh-11rem)] min-h-96 overflow-y-auto"
+        className="max-h-[calc(100dvh-19rem)] min-h-80 overflow-y-auto overscroll-contain md:max-h-[calc(100dvh-11rem)]"
       >
-        <div
-          className={cn(
-            "bg-card/95 sticky top-0 z-20 grid border-b backdrop-blur",
-            COLUMNS
-          )}
-        >
-          <div />
-          {days.map((day) => {
-            const key = dayKey(day);
-            const today = key === todayKey;
-            return (
-              <div
-                key={key}
-                className={cn(
-                  "flex flex-col items-center gap-0.5 py-2 text-xs",
-                  today ? "text-foreground" : "text-muted-foreground"
-                )}
-              >
-                <span className="first-letter:uppercase">
-                  {format(day, "EEE", { locale: dateLocale })}
-                </span>
-                <span
+        {showHeader && (
+          <div
+            className="bg-card/95 sticky top-0 z-20 grid border-b backdrop-blur"
+            style={columns}
+          >
+            <div />
+            {days.map((day) => {
+              const key = dayKey(day);
+              const today = key === todayKey;
+              return (
+                <div
+                  key={key}
                   className={cn(
-                    "flex size-7 items-center justify-center rounded-full text-sm font-medium",
-                    today && "bg-primary text-primary-foreground"
+                    "flex flex-col items-center gap-0.5 py-2 text-xs",
+                    today ? "text-foreground" : "text-muted-foreground"
                   )}
                 >
-                  {format(day, "d")}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+                  <span className="first-letter:uppercase">
+                    {format(day, "EEE", { locale: dateLocale })}
+                  </span>
+                  <span
+                    className={cn(
+                      "flex size-7 items-center justify-center rounded-full text-sm font-medium",
+                      today && "bg-primary text-primary-foreground"
+                    )}
+                  >
+                    {format(day, "d")}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
-        <div className="relative">
-          <div className={cn("grid", COLUMNS)}>
-            {hours.map((hour) => (
+        <div className="relative" onPointerLeave={() => setHover(null)}>
+          <div className="grid" style={columns}>
+            {HOURS.map((hour) => (
               <Fragment key={hour}>
                 <div
                   className="text-muted-foreground relative border-t text-[11px] tabular-nums"
                   style={{ height: HOUR_PX }}
                 >
-                  <span className="bg-card absolute -top-2 right-2 px-0.5">
-                    {minutesLabel(hour * 60)}
-                  </span>
+                  {hour > 0 && !(todayShown && Math.abs(hour * 60 - nowMin) < 20) && (
+                    <span className="bg-card absolute -top-2 right-2 px-0.5">
+                      {minutesLabel(hour * 60)}
+                    </span>
+                  )}
                 </div>
                 {days.map((day) => {
                   const key = dayKey(day);
@@ -196,19 +195,21 @@ export function WeekGrid({
                         date: format(day, "EEE d MMM", { locale: dateLocale }),
                         time: minutesLabel(hour * 60),
                       })}
-                      onClick={(event) =>
-                        onPickSlot(key, hour * 60 + snapWithinHour(event))
-                      }
-                      onMouseMove={(event) => {
+                      onClick={(event) => {
+                        setHover(null);
+                        onPickSlot(key, hour * 60 + snapWithinHour(event));
+                      }}
+                      onPointerMove={(event) => {
+                        if (event.pointerType !== "mouse") return;
                         const minutes = hour * 60 + snapWithinHour(event);
                         if (hover?.key !== key || hover.minutes !== minutes) {
                           setHover({ key, minutes });
                         }
                       }}
-                      onMouseLeave={() => setHover(null)}
+                      onPointerLeave={() => setHover(null)}
                       className={cn(
                         "hover:bg-accent/40 focus-visible:bg-accent/40 border-t border-l outline-none transition-colors",
-                        today && "bg-primary/[0.04]",
+                        today && !single && "bg-primary/[0.04]",
                         pastHour && "bg-muted/40"
                       )}
                       style={{ height: HOUR_PX }}
@@ -220,12 +221,20 @@ export function WeekGrid({
           </div>
 
           <div
-            className={cn(
-              "pointer-events-none absolute inset-0 grid",
-              COLUMNS
-            )}
+            className="pointer-events-none absolute inset-0 grid"
+            style={columns}
           >
-            <div />
+            <div className="relative">
+              {todayShown && (
+                <span
+                  className="bg-destructive text-destructive-foreground absolute right-1 z-30 -translate-y-1/2 rounded-full px-1.5 py-px text-[10px] font-semibold tabular-nums"
+                  style={{ top: top(nowMin) }}
+                  aria-hidden="true"
+                >
+                  {minutesLabel(nowMin)}
+                </span>
+              )}
+            </div>
             {days.map((day) => {
               const key = dayKey(day);
               const blocks = blocksByDay.get(key) ?? [];
@@ -262,7 +271,8 @@ export function WeekGrid({
                           b.event.ends_at
                         )}`}
                         className={cn(
-                          "pointer-events-auto absolute z-10 flex flex-col overflow-hidden rounded-md border-l-2 px-1.5 py-0.5 text-left text-[11px] leading-tight transition-colors",
+                          "pointer-events-auto absolute z-10 flex flex-col overflow-hidden rounded-md border-l-2 py-0.5 text-left leading-tight transition-colors",
+                          single ? "px-2 text-xs" : "px-1.5 text-[11px]",
                           b.event.kind === "viewing"
                             ? "bg-primary/10 text-primary border-primary hover:bg-primary/20"
                             : "bg-secondary text-secondary-foreground border-muted-foreground hover:bg-secondary/70",
@@ -300,7 +310,7 @@ export function WeekGrid({
                     </div>
                   )}
 
-                  {showNow && key === todayKey && (
+                  {todayShown && key === todayKey && (
                     <div
                       className="bg-destructive absolute inset-x-0 z-20 h-0.5"
                       style={{ top: top(nowMin) }}

@@ -5,7 +5,6 @@ import {
   calendarHref,
   dayKey,
   eventEndMs,
-  gridHours,
   layoutOverlaps,
   minutesLabel,
   rangeLabel,
@@ -195,31 +194,5 @@ describe("layoutOverlaps", () => {
 
   it("handles an empty day", () => {
     expect(layoutOverlaps([]).size).toBe(0);
-  });
-});
-
-describe("gridHours", () => {
-  it("shows the working day when nothing falls outside it", () => {
-    expect(gridHours([])).toEqual({ startHour: 8, endHour: 21 });
-    expect(gridHours([{ startMin: 10 * 60, endMin: 11 * 60 }])).toEqual({
-      startHour: 8,
-      endHour: 21,
-    });
-  });
-
-  it("stretches to fit early and late events", () => {
-    expect(
-      gridHours([
-        { startMin: 7 * 60 + 15, endMin: 8 * 60 },
-        { startMin: 21 * 60 + 30, endMin: 22 * 60 + 15 },
-      ])
-    ).toEqual({ startHour: 7, endHour: 23 });
-  });
-
-  it("never leaves the day", () => {
-    expect(gridHours([{ startMin: 23 * 60 + 30, endMin: 24 * 60 + 30 }])).toEqual({
-      startHour: 8,
-      endHour: 24,
-    });
   });
 });

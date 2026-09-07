@@ -10,7 +10,6 @@
   },
   "grid": {
     "more": "+{count} more",
-    "addOn": "Add on {date}",
     "addAt": "Add on {date} at {time}"
   },
   "day": {
@@ -91,8 +90,7 @@
     "month": "Month"
   },
   "week": {
-    "free": "Free",
-    "earlier": "Earlier this week ({count})",
-    "newAt": "New at {time}"
+    "newAt": "New at {time}",
+    "pickDay": "Pick a day"
   }
 }

@@ -26,8 +26,8 @@ import { AppointmentDialog } from "@/components/calendar/appointment-dialog";
 import { CalendarSyncDialog } from "@/components/calendar/calendar-sync-dialog";
 import { EventRow } from "@/components/calendar/event-row";
 import { MonthGrid } from "@/components/calendar/month-grid";
-import { WeekAgenda } from "@/components/calendar/week-agenda";
-import { WeekGrid } from "@/components/calendar/week-grid";
+import { TimeGrid } from "@/components/calendar/time-grid";
+import { WeekStrip } from "@/components/calendar/week-strip";
 import { ViewingDialog } from "@/components/clients/viewing-dialog";
 import { useHydrated } from "@/hooks/use-hydrated";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -100,6 +100,8 @@ export function CalendarView({
   }, [view, anchor]);
   const firstKey = dayKey(days[0]);
   const lastKey = dayKey(days[days.length - 1]);
+  const inView = (key: string | null): key is string =>
+    key != null && key >= firstKey && key <= lastKey;
 
   // Which day an event lands on depends on the browser's time zone, so the
   // server renders the empty grid and the events fill in on hydration.
@@ -132,7 +134,29 @@ export function CalendarView({
     [clients]
   );
 
+  // Phone week view: the strip picks a day, the grid below shows its hours.
+  // The pick lives in the URL too, so a reload or a saved event keeps it.
+  const [pickedDay, setPickedDay] = useState<string | null>(null);
+  const focusDay = inView(pickedDay) ? pickedDay : anchorISO;
+  const focusDays = useMemo(() => [parseISO(focusDay)], [focusDay]);
+  function pickDay(key: string) {
+    setPickedDay(key);
+    window.history.replaceState(null, "", calendarHref("week", key));
+  }
+
+  // Month view: the chosen day opens a dialog on a desktop and a list under
+  // the grid on a phone, where it starts on today so the page opens on
+  // something useful.
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  const todayInView = inView(todayKey);
+  const activeDay = inView(selectedDay)
+    ? selectedDay
+    : view === "month" && isMobile && todayInView
+      ? todayKey
+      : null;
+  const dayDialogOpen = view === "month" && inView(selectedDay) && !isMobile;
+  const dayList = activeDay ? (byDay.get(activeDay) ?? []) : [];
+
   const [choosing, setChoosing] = useState<{
     dateKey: string;
     time?: string;
@@ -149,19 +173,13 @@ export function CalendarView({
     time?: string;
   } | null>(null);
 
-  // On a phone the month view keeps a day's list under the grid. Until the
-  // agent picks a day it shows today, so the page opens on something useful.
-  const todayInView =
-    todayKey != null && todayKey >= firstKey && todayKey <= lastKey;
-  const activeDay =
-    selectedDay ?? (view === "month" && isMobile && todayInView ? todayKey : null);
-
-  const dayDialogOpen = view === "month" && selectedDay != null && !isMobile;
-  const dayList = activeDay ? (byDay.get(activeDay) ?? []) : [];
-
   function startChoosing(dateKey: string, time?: string) {
     if (!isMobile) setSelectedDay(null);
     setChoosing({ dateKey, time });
+  }
+  function startNew() {
+    if (view === "week" && isMobile) startChoosing(focusDay);
+    else startChoosing(activeDay ?? (todayInView ? todayKey : firstKey));
   }
   function chooseMeeting() {
     const picked = choosing;
@@ -191,13 +209,21 @@ export function CalendarView({
           ? "actions.previousMonth"
           : "actions.nextMonth"
     );
+  const newButton = (className?: string) => (
+    <Button size="sm" className={className} onClick={startNew}>
+      <Plus /> {t("actions.new")}
+    </Button>
+  );
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight first-letter:uppercase">
-          {rangeLabel(view, anchor, dateLocale)}
-        </h1>
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="text-xl font-semibold tracking-tight first-letter:uppercase md:text-2xl">
+            {rangeLabel(view, anchor, dateLocale)}
+          </h1>
+          {newButton("md:hidden")}
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-1">
             <Button
@@ -246,35 +272,43 @@ export function CalendarView({
             ))}
           </nav>
           <CalendarSyncDialog />
-          <Button
-            size="sm"
-            onClick={() => startChoosing(todayInView ? todayKey! : firstKey)}
-          >
-            <Plus /> {t("actions.new")}
-          </Button>
+          {newButton("hidden md:inline-flex")}
         </div>
       </div>
 
       {view === "week" ? (
         <>
-          <WeekGrid
+          <TimeGrid
             className="hidden md:block"
             days={days}
             byDay={byDay}
             todayKey={todayKey}
             now={now}
+            scrollKey={firstKey}
             onPickSlot={(key, minutes) => startChoosing(key, minutesLabel(minutes))}
             onOpenEvent={openEvent}
           />
-          <WeekAgenda
-            className="md:hidden"
-            days={days}
-            byDay={byDay}
-            todayKey={todayKey}
-            now={now}
-            onAddDay={(key) => startChoosing(key)}
-            onOpenEvent={openEvent}
-          />
+          <div className="space-y-2 md:hidden">
+            <WeekStrip
+              days={days}
+              byDay={byDay}
+              todayKey={todayKey}
+              selectedKey={focusDay}
+              onSelect={pickDay}
+            />
+            <TimeGrid
+              days={focusDays}
+              byDay={byDay}
+              todayKey={todayKey}
+              now={now}
+              showHeader={false}
+              scrollKey={firstKey}
+              onPickSlot={(key, minutes) =>
+                startChoosing(key, minutesLabel(minutes))
+              }
+              onOpenEvent={openEvent}
+            />
+          </div>
         </>
       ) : (
         <>
@@ -335,8 +369,8 @@ export function CalendarView({
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="first-letter:uppercase">
-              {selectedDay
-                ? format(parseISO(selectedDay), "EEEE d MMMM", {
+              {activeDay
+                ? format(parseISO(activeDay), "EEEE d MMMM", {
                     locale: dateLocale,
                   })
                 : ""}
@@ -358,7 +392,7 @@ export function CalendarView({
             )}
           </div>
           <Button
-            onClick={() => selectedDay && startChoosing(selectedDay)}
+            onClick={() => activeDay && startChoosing(activeDay)}
             variant="outline"
             className="w-full"
           >

@@ -41,9 +41,8 @@ export const WEEK_STARTS_ON = 1;
 export const DEFAULT_EVENT_MINUTES = 60;
 /** Anything shorter is drawn this tall so its title stays readable. */
 export const MIN_EVENT_MINUTES = 30;
-/** The week grid always shows at least these hours; events outside stretch it. */
-export const GRID_START_HOUR = 8;
-export const GRID_END_HOUR = 21;
+/** Where the 24-hour grid opens when today isn't on screen. */
+export const WORKDAY_START_HOUR = 8;
 
 export function isCalendarView(value: unknown): value is CalendarViewKind {
   return (
@@ -203,20 +202,4 @@ export function layoutOverlaps(items: TimedItem[]): Map<string, Placement> {
   }
   closeRun();
   return out;
-}
-
-/** Hours the grid spans: the working day, stretched to fit any outliers. */
-export function gridHours(
-  items: { startMin: number; endMin: number }[]
-): { startHour: number; endHour: number } {
-  let startHour = GRID_START_HOUR;
-  let endHour = GRID_END_HOUR;
-  for (const item of items) {
-    startHour = Math.min(startHour, Math.floor(item.startMin / 60));
-    endHour = Math.max(endHour, Math.ceil(item.endMin / 60));
-  }
-  return {
-    startHour: Math.max(0, startHour),
-    endHour: Math.min(24, endHour),
-  };
 }

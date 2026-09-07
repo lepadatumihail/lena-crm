@@ -80,8 +80,14 @@ export function CalendarSyncDialog() {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <Button variant="outline" size="sm" onClick={() => handleOpenChange(true)}>
-        <GoogleIcon /> {t("button")}
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => handleOpenChange(true)}
+        aria-label={t("button")}
+      >
+        <GoogleIcon />
+        <span className="hidden sm:inline">{t("button")}</span>
       </Button>
       <DialogContent>
         <DialogHeader>
