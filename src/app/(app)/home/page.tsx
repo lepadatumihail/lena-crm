@@ -1,6 +1,14 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ArrowRight, CalendarPlus, ClipboardPaste, Plus } from "lucide-react";
+import {
+  ArrowRight,
+  BellRing,
+  CalendarDays,
+  CalendarPlus,
+  ClipboardPaste,
+  Kanban,
+  Plus,
+} from "lucide-react";
 
 import { getCalendarEvents } from "@/lib/data/calendar";
 import { getCommissionSummary } from "@/lib/data/buyer";
@@ -78,7 +86,10 @@ export default async function HomePage() {
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-base">{t("upcoming.title")}</CardTitle>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <CalendarDays className="text-primary size-4" />
+              {t("upcoming.title")}
+            </CardTitle>
             <Button asChild variant="ghost" size="sm" className="-mr-2">
               <Link href="/calendar">
                 {t("upcoming.calendar")} <ArrowRight />
@@ -93,6 +104,7 @@ export default async function HomePage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
+              <BellRing className="text-primary size-4" />
               {t("attention.title")}
               {attention.length > 0 && (
                 <Badge variant="secondary">{attention.length}</Badge>
@@ -139,7 +151,10 @@ export default async function HomePage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t("pipeline.title")}</CardTitle>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Kanban className="text-primary size-4" />
+            {t("pipeline.title")}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <PipelineRow

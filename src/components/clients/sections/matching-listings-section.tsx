@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { ArrowRight, BedDouble } from "lucide-react";
+import { ArrowRight, BedDouble, Target } from "lucide-react";
 
 import {
   Card,
@@ -25,7 +25,8 @@ export function MatchingListingsSection({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">
+        <CardTitle className="flex items-center gap-2 text-base">
+          <Target className="text-primary size-4" />
           {t("title", { count: matches.length })}
         </CardTitle>
       </CardHeader>

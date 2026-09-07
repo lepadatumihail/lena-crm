@@ -10,6 +10,7 @@ import { format, parseISO } from "date-fns";
 import {
   CalendarCheck,
   HandCoins,
+  Handshake,
   Loader2,
   Pencil,
   Plus,
@@ -99,7 +100,10 @@ export function ReservationSection({
     <Card className="overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
-          <CardTitle className="text-base">{t("title")}</CardTitle>
+          <CardTitle className="flex items-center gap-2 text-base">
+          <Handshake className="text-primary size-4" />
+          {t("title")}
+        </CardTitle>
           {r?.closed_at && <Badge variant="success">{t("closedBadge")}</Badge>}
         </div>
         <Button variant="outline" size="sm" onClick={() => setOpen(true)}>

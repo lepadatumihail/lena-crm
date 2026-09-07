@@ -6,7 +6,15 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { BedDouble, Loader2, MapPin, Pencil, Plus, Trash2 } from "lucide-react";
+import {
+  BedDouble,
+  Building2,
+  Loader2,
+  MapPin,
+  Pencil,
+  Plus,
+  Trash2,
+} from "lucide-react";
 
 import {
   Card,
@@ -67,7 +75,10 @@ export function PropertiesSection({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle className="text-base">{t("title")}</CardTitle>
+          <CardTitle className="flex items-center gap-2 text-base">
+          <Building2 className="text-primary size-4" />
+          {t("title")}
+        </CardTitle>
           {properties.length > 0 && (
             <p className="text-muted-foreground mt-0.5 text-xs">
               {t("listed", { count: properties.length })}

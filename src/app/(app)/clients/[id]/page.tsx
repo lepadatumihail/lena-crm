@@ -4,9 +4,11 @@ import { getTranslations } from "next-intl/server";
 import {
   ArrowLeft,
   Building2,
+  Contact,
   Globe2,
   Mail,
   MapPin,
+  NotebookPen,
   Phone,
   Tag,
 } from "lucide-react";
@@ -191,7 +193,10 @@ export default async function ClientDetailPage({
           )}
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">{t("notes")}</CardTitle>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <NotebookPen className="text-primary size-4" />
+                {t("notes")}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {client.notes ? (
@@ -215,7 +220,10 @@ export default async function ClientDetailPage({
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">{t("contact")}</CardTitle>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Contact className="text-primary size-4" />
+                {t("contact")}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <WhatsAppButton

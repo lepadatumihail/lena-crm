@@ -14,6 +14,7 @@ import {
   MapPin,
   Pencil,
   Plus,
+  SlidersHorizontal,
   Wallet,
 } from "lucide-react";
 
@@ -95,7 +96,10 @@ export function PreferencesSection({
   return (
     <Card className="overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-base">{t("title")}</CardTitle>
+        <CardTitle className="flex items-center gap-2 text-base">
+          <SlidersHorizontal className="text-primary size-4" />
+          {t("title")}
+        </CardTitle>
         <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
           {prefs ? <Pencil /> : <Plus />}
           {prefs ? tCommon("edit") : tCommon("add")}

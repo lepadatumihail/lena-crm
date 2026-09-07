@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { File as FileIcon, Trash2 } from "lucide-react";
+import { File as FileIcon, FolderOpen, Trash2 } from "lucide-react";
 
 import {
   Card,
@@ -44,7 +44,10 @@ export function DocumentsSection({
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-base">{t("title")}</CardTitle>
+        <CardTitle className="flex items-center gap-2 text-base">
+          <FolderOpen className="text-primary size-4" />
+          {t("title")}
+        </CardTitle>
         <UploadButton
           agentId={agentId}
           clientId={clientId}

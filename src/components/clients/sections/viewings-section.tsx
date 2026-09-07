@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import {
   CalendarClock,
   Euro,
+  Eye,
   FileText,
   Home,
   ImageIcon,
@@ -56,7 +57,10 @@ export function ViewingsSection({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle className="text-base">{t("title")}</CardTitle>
+          <CardTitle className="flex items-center gap-2 text-base">
+          <Eye className="text-primary size-4" />
+          {t("title")}
+        </CardTitle>
           {viewings.length > 0 && (
             <p className="text-muted-foreground mt-0.5 text-xs">
               {t("summary", { count: viewings.length, offers: offerCount })}
