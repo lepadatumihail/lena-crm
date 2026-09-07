@@ -1,0 +1,16 @@
+{
+  "draftNotice": "Borrador: los datos de la empresa responsable de LeadWing están pendientes de completar. Esta página aún no está en vigor.",
+  "updated": "Última actualización: {date}",
+  "privacy": {
+    "title": "Política de privacidad",
+    "description": "Qué hace LeadWing con tus datos y con los de tus clientes, explicado en lenguaje claro."
+  },
+  "terms": {
+    "title": "Términos del servicio",
+    "description": "El acuerdo para usar LeadWing: planes, pago, cancelación, tus datos y el contrato de encargo del tratamiento."
+  },
+  "legalNotice": {
+    "title": "Aviso legal",
+    "description": "Quién está detrás de leadwing.app, según exige la LSSI-CE."
+  }
+}

@@ -17,6 +17,7 @@ import enCommon from "../../messages/en/common.json";
 import enCrm from "../../messages/en/crm.json";
 import enHome from "../../messages/en/home.json";
 import enLanding from "../../messages/en/landing.json";
+import enLegal from "../../messages/en/legal.json";
 import enNav from "../../messages/en/nav.json";
 import enNotifications from "../../messages/en/notifications.json";
 import enReferrals from "../../messages/en/referrals.json";
@@ -36,6 +37,7 @@ import esCommon from "../../messages/es/common.json";
 import esCrm from "../../messages/es/crm.json";
 import esHome from "../../messages/es/home.json";
 import esLanding from "../../messages/es/landing.json";
+import esLegal from "../../messages/es/legal.json";
 import esNav from "../../messages/es/nav.json";
 import esNotifications from "../../messages/es/notifications.json";
 import esReferrals from "../../messages/es/referrals.json";
@@ -56,6 +58,7 @@ export const en = {
   crm: enCrm,
   home: enHome,
   landing: enLanding,
+  legal: enLegal,
   nav: enNav,
   notifications: enNotifications,
   referrals: enReferrals,
@@ -79,6 +82,7 @@ const es = {
   crm: esCrm,
   home: esHome,
   landing: esLanding,
+  legal: esLegal,
   nav: esNav,
   notifications: esNotifications,
   referrals: esReferrals,

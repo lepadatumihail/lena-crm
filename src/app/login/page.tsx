@@ -1,13 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { ArrowLeft, Loader2, Mail } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/client";
 import { syncLocaleFromProfile } from "@/i18n/actions";
+import { asLocale } from "@/i18n/config";
+import { marketingPath } from "@/lib/routes";
 import { AuthErrorListener } from "@/components/auth-error-listener";
 import { MarketingNav } from "@/components/marketing-nav";
 import { Button } from "@/components/ui/button";
@@ -59,6 +62,7 @@ function safeNext(): string {
 
 export default function LoginPage() {
   const t = useTranslations("auth.login");
+  const locale = asLocale(useLocale());
   const router = useRouter();
   const [step, setStep] = useState<"email" | "code">("email");
   const [email, setEmail] = useState("");
@@ -208,6 +212,27 @@ export default function LoginPage() {
                   {t("sendCode")}
                 </Button>
               </form>
+
+              <p className="text-muted-foreground text-center text-xs text-balance">
+                {t.rich("legal", {
+                  terms: (chunks) => (
+                    <Link
+                      href={marketingPath("terms", locale)}
+                      className="underline underline-offset-4"
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                  privacy: (chunks) => (
+                    <Link
+                      href={marketingPath("privacy", locale)}
+                      className="underline underline-offset-4"
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                })}
+              </p>
             </>
           ) : (
             <div className="space-y-4">

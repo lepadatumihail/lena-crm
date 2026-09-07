@@ -26,5 +26,11 @@
     "pricing": "Precios",
     "signIn": "Iniciar sesión",
     "backHome": "Volver al inicio"
+  },
+  "legal": {
+    "label": "Legal",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "legalNotice": "Aviso legal"
   }
 }

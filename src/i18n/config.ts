@@ -56,3 +56,15 @@ export function negotiateLocale(header: string | null | undefined): AppLocale | 
   }
   return null;
 }
+
+/** The UI language for any value: a supported locale as-is, anything else English. */
+export function asLocale(value: unknown): AppLocale {
+  return isLocale(value) ? value : DEFAULT_LOCALE;
+}
+
+/**
+ * Request header the proxy sets when the URL itself names the language
+ * (/es and everything under it). i18n/request.ts honours it over the cookie;
+ * the proxy strips any copy a client sent, so it is never spoofable.
+ */
+export const LOCALE_HEADER = "x-ui-locale";

@@ -1,0 +1,16 @@
+{
+  "draftNotice": "Draft: the details of the business behind LeadWing are still being completed. This page is not yet in force.",
+  "updated": "Last updated {date}",
+  "privacy": {
+    "title": "Privacy Policy",
+    "description": "What LeadWing does with your data and with your clients' data, in plain language."
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "description": "The agreement for using LeadWing: plans, payment, cancellation, your data, and the data processing agreement."
+  },
+  "legalNotice": {
+    "title": "Legal Notice",
+    "description": "Who is behind leadwing.app, as Spanish law (LSSI-CE) requires."
+  }
+}

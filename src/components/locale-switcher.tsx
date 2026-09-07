@@ -1,12 +1,13 @@
 "use client";
 
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { Languages } from "lucide-react";
 
 import { setLocale } from "@/i18n/actions";
 import { LOCALES, LOCALE_LABELS, isLocale, type AppLocale } from "@/i18n/config";
+import { marketingCounterpart } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import {
   Select,
@@ -18,11 +19,16 @@ import {
 
 function useSwitchLocale() {
   const router = useRouter();
+  const pathname = usePathname();
   const [pending, startTransition] = useTransition();
   const switchTo = (locale: AppLocale) =>
     startTransition(async () => {
       await setLocale(locale);
-      router.refresh();
+      // Marketing pages have one URL per language: go there, so the address
+      // bar, hreflang and the cookie agree. The app simply re-renders.
+      const twin = marketingCounterpart(pathname, locale);
+      if (twin && twin !== pathname) router.push(twin);
+      else router.refresh();
     });
   return { pending, switchTo };
 }

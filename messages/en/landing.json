@@ -248,6 +248,57 @@
   "notFound": {
     "title": "Page not found",
     "body": "The page you're looking for doesn't exist or was moved.",
-    "cta": "Go to clients"
+    "cta": "Go to clients",
+    "links": "Try one of these instead:",
+    "home": "Home",
+    "sitemap": "Sitemap — every page on this site",
+    "llms": "llms.txt — a plain-text brief for AI agents"
+  },
+  "faq": {
+    "heading": "Questions agents ask before they start",
+    "body": "Short answers to what we hear most. Anything else, just ask.",
+    "privacyLink": "Read the privacy policy.",
+    "items": {
+      "free": {
+        "q": "Is there a free plan?",
+        "a": "Yes. Free is free forever and includes every feature. It holds up to {limit} clients, buyers and sellers together, with no card and no time limit."
+      },
+      "price": {
+        "q": "What does Pro cost?",
+        "a": "Pro is €{monthly} a month or €{yearly} a year, plus VAT, for unlimited clients. Everything else is identical to Free."
+      },
+      "card": {
+        "q": "Do I need a card to start?",
+        "a": "No. Sign in with Google or a one-time email code and start adding clients. You only enter a card if you upgrade to Pro."
+      },
+      "agencies": {
+        "q": "I work with several agencies. Does that work?",
+        "a": "That is exactly what LeadWing is built for. Tag each lead with the agency it belongs to and keep your whole book in one place, whoever the deal is with."
+      },
+      "mobile": {
+        "q": "Is there a mobile app?",
+        "a": "LeadWing is a web app that installs on your phone from the browser, so it opens from your home screen like any other app. No app store, nothing to update."
+      },
+      "whatsapp": {
+        "q": "Can I send WhatsApp messages from LeadWing?",
+        "a": "Yes. LeadWing drafts a warm, personal message in your client's language, you read it and tweak it, and one tap opens it in WhatsApp on your phone. Nothing is ever sent without you."
+      },
+      "portals": {
+        "q": "Which portals does it work with?",
+        "a": "Paste an enquiry from Idealista, Fotocasa, Kyero, an email or a WhatsApp, and LeadWing fills in the lead for you: name, phone, language, budget. No retyping."
+      },
+      "privacy": {
+        "q": "Who can see my clients?",
+        "a": "Only you. Every agent's clients are fully isolated; nobody sees your book but you, not even other agents at the same agency."
+      },
+      "cancel": {
+        "q": "Can I cancel Pro?",
+        "a": "Any time, from the billing page. You go back to Free at the end of the period you have paid for, and nothing is deleted: everything stays visible and editable, you just can't add clients above the Free limit."
+      },
+      "calendar": {
+        "q": "Does it sync with Google Calendar?",
+        "a": "Yes. Viewings and meetings you book in LeadWing appear in Google Calendar through a calendar feed you subscribe to once, and LeadWing reminds you before each one."
+      }
+    }
   }
 }

@@ -26,5 +26,11 @@
     "pricing": "Pricing",
     "signIn": "Sign in",
     "backHome": "Back to home"
+  },
+  "legal": {
+    "label": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "legalNotice": "Legal notice"
   }
 }

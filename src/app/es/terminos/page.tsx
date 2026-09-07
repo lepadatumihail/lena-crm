@@ -1,0 +1,11 @@
+import type { Metadata } from "next";
+
+import { LegalPage, legalMetadata } from "@/components/legal/legal-page";
+
+export function generateMetadata(): Promise<Metadata> {
+  return legalMetadata("terms", "es");
+}
+
+export default function Page() {
+  return <LegalPage doc="terms" locale="es" />;
+}
