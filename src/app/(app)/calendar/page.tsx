@@ -1,41 +1,41 @@
-import {
-  addDays,
-  endOfMonth,
-  endOfWeek,
-  format,
-  parseISO,
-  startOfMonth,
-  startOfWeek,
-} from "date-fns";
+import { cookies } from "next/headers";
+import { addDays } from "date-fns";
 
 import { getCalendarEvents, getCalendarFormData } from "@/lib/data/calendar";
 import { CalendarView } from "@/components/calendar/calendar-view";
+import {
+  CALENDAR_VIEW_COOKIE,
+  dayKey,
+  resolveCalendarRequest,
+  visibleRange,
+} from "@/lib/calendar-view";
 
 export default async function CalendarPage({
   searchParams,
 }: {
-  searchParams: Promise<{ month?: string }>;
+  searchParams: Promise<{ view?: string; date?: string; month?: string }>;
 }) {
-  const sp = await searchParams;
-  const monthParam =
-    sp.month && /^\d{4}-\d{2}$/.test(sp.month) ? sp.month : null;
-  const base = monthParam ? parseISO(`${monthParam}-01`) : new Date();
-
-  const gridStart = startOfWeek(startOfMonth(base), { weekStartsOn: 1 });
-  const gridEnd = endOfWeek(endOfMonth(base), { weekStartsOn: 1 });
+  const [query, cookieStore] = await Promise.all([searchParams, cookies()]);
+  const { view, anchor } = resolveCalendarRequest(
+    query,
+    cookieStore.get(CALENDAR_VIEW_COOKIE)?.value,
+    new Date()
+  );
+  const { start, end } = visibleRange(view, anchor);
 
   const [events, formData] = await Promise.all([
-    // pad ±1 day so events near midnight at the grid edges aren't missed
+    // pad ±1 day so events near midnight at the edges aren't missed
     getCalendarEvents(
-      addDays(gridStart, -1).toISOString(),
-      addDays(gridEnd, 1).toISOString()
+      addDays(start, -1).toISOString(),
+      addDays(end, 1).toISOString()
     ),
     getCalendarFormData(),
   ]);
 
   return (
     <CalendarView
-      monthISO={format(base, "yyyy-MM")}
+      view={view}
+      anchorISO={dayKey(anchor)}
       events={events}
       clients={formData.clients}
     />

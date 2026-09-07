@@ -58,7 +58,8 @@ function reminderValue(minutes: number | null): string {
 function toFormValues(
   viewing?: Viewing,
   clientId?: string,
-  defaultDateKey?: string
+  defaultDateKey?: string,
+  defaultTime?: string
 ): ViewingFormValues {
   const scheduled = viewing?.scheduled_at ? new Date(viewing.scheduled_at) : null;
   return {
@@ -71,7 +72,7 @@ function toFormValues(
       viewing?.offer_price != null ? String(viewing.offer_price) : "",
     client_id: clientId ?? viewing?.client_id ?? "",
     date: scheduled ? format(scheduled, "yyyy-MM-dd") : defaultDateKey ?? "",
-    time: scheduled ? format(scheduled, "HH:mm") : "10:00",
+    time: scheduled ? format(scheduled, "HH:mm") : (defaultTime ?? "10:00"),
     reminder: viewing
       ? reminderValue(viewing.reminder_minutes)
       : defaultDateKey
@@ -87,6 +88,7 @@ export function ViewingDialog({
   clientId,
   buyers,
   defaultDateKey,
+  defaultTime,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -96,6 +98,8 @@ export function ViewingDialog({
   /** Buyer options for the selector (calendar use). */
   buyers?: ViewingBuyerOption[];
   defaultDateKey?: string;
+  /** "HH:mm" to start from, e.g. the slot clicked on the week grid. */
+  defaultTime?: string;
 }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
@@ -108,13 +112,15 @@ export function ViewingDialog({
   const schema = useMemo(() => viewingFormSchema(tv), [tv]);
   const form = useForm<ViewingFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: toFormValues(viewing, clientId, defaultDateKey),
+    defaultValues: toFormValues(viewing, clientId, defaultDateKey, defaultTime),
   });
 
   useEffect(() => {
-    if (open) form.reset(toFormValues(viewing, clientId, defaultDateKey));
+    if (open) {
+      form.reset(toFormValues(viewing, clientId, defaultDateKey, defaultTime));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, viewing?.id, clientId, defaultDateKey]);
+  }, [open, viewing?.id, clientId, defaultDateKey, defaultTime]);
 
   const hadOffer = form.watch("had_offer");
 

@@ -4,10 +4,14 @@
     "new": "Nuevo",
     "create": "Crear",
     "previousMonth": "Mes anterior",
-    "nextMonth": "Mes siguiente"
+    "nextMonth": "Mes siguiente",
+    "previousWeek": "Semana anterior",
+    "nextWeek": "Semana siguiente"
   },
   "grid": {
-    "more": "+{count} más"
+    "more": "+{count} más",
+    "addOn": "Añadir el {date}",
+    "addAt": "Añadir el {date} a las {time}"
   },
   "day": {
     "description": "Reuniones y visitas programadas para este día.",
@@ -19,7 +23,8 @@
   },
   "add": {
     "title": "Añadir al {date}",
-    "description": "Elige si quieres añadir una reunión o una visita."
+    "description": "Elige si quieres añadir una reunión o una visita.",
+    "titleAt": "Añadir al {date} a las {time}"
   },
   "form": {
     "newTitle": "Nueva reunión",
@@ -79,5 +84,15 @@
   "errors": {
     "notSignedIn": "No has iniciado sesión",
     "checkForm": "Revisa el formulario."
+  },
+  "views": {
+    "label": "Vista del calendario",
+    "week": "Semana",
+    "month": "Mes"
+  },
+  "week": {
+    "free": "Libre",
+    "earlier": "Anteriores esta semana ({count})",
+    "newAt": "Nuevo a las {time}"
   }
 }

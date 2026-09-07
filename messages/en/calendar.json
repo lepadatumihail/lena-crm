@@ -4,10 +4,14 @@
     "new": "New",
     "create": "Create",
     "previousMonth": "Previous month",
-    "nextMonth": "Next month"
+    "nextMonth": "Next month",
+    "previousWeek": "Previous week",
+    "nextWeek": "Next week"
   },
   "grid": {
-    "more": "+{count} more"
+    "more": "+{count} more",
+    "addOn": "Add on {date}",
+    "addAt": "Add on {date} at {time}"
   },
   "day": {
     "description": "Meetings and viewings scheduled for this day.",
@@ -19,7 +23,8 @@
   },
   "add": {
     "title": "Add to {date}",
-    "description": "Choose whether to add a meeting or a viewing."
+    "description": "Choose whether to add a meeting or a viewing.",
+    "titleAt": "Add to {date} at {time}"
   },
   "form": {
     "newTitle": "New meeting",
@@ -79,5 +84,15 @@
   "errors": {
     "notSignedIn": "Not signed in",
     "checkForm": "Please check the form."
+  },
+  "views": {
+    "label": "Calendar view",
+    "week": "Week",
+    "month": "Month"
+  },
+  "week": {
+    "free": "Free",
+    "earlier": "Earlier this week ({count})",
+    "newAt": "New at {time}"
   }
 }

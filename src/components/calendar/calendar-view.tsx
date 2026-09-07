@@ -1,34 +1,20 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import {
-  addMonths,
-  eachDayOfInterval,
-  endOfMonth,
-  endOfWeek,
-  format,
-  isSameMonth,
-  isToday,
-  parseISO,
-  startOfMonth,
-  startOfWeek,
-  subMonths,
-} from "date-fns";
+import { eachDayOfInterval, format, parseISO } from "date-fns";
 import {
   CalendarClock,
   ChevronLeft,
   ChevronRight,
-  MessageCircle,
   Plus,
   Users,
 } from "lucide-react";
 
-import { intlTag } from "@/i18n/config";
 import { dateFnsLocale } from "@/i18n/dates";
 import { appointmentTypeLabel } from "@/i18n/labels";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -37,11 +23,27 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { AppointmentDialog } from "@/components/calendar/appointment-dialog";
-import { ViewingDialog } from "@/components/clients/viewing-dialog";
 import { CalendarSyncDialog } from "@/components/calendar/calendar-sync-dialog";
-import { formatTimeRange } from "@/lib/calendar";
-import { formatCurrency } from "@/lib/crm";
-import { eventReminderHref } from "@/lib/event-reminder";
+import { EventRow } from "@/components/calendar/event-row";
+import { MonthGrid } from "@/components/calendar/month-grid";
+import { WeekAgenda } from "@/components/calendar/week-agenda";
+import { WeekGrid } from "@/components/calendar/week-grid";
+import { ViewingDialog } from "@/components/clients/viewing-dialog";
+import { useHydrated } from "@/hooks/use-hydrated";
+import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  CALENDAR_VIEWS,
+  CALENDAR_VIEW_COOKIE,
+  CALENDAR_VIEW_COOKIE_MAX_AGE,
+  calendarHref,
+  dayKey,
+  eventEndMs,
+  minutesLabel,
+  rangeLabel,
+  shiftAnchor,
+  visibleRange,
+  type CalendarViewKind,
+} from "@/lib/calendar-view";
 import { cn } from "@/lib/utils";
 import type {
   AppointmentWithRefs,
@@ -50,57 +52,68 @@ import type {
 } from "@/lib/data/calendar";
 import type { Viewing } from "@/lib/supabase/types";
 
-const DAY_KEY = "yyyy-MM-dd";
+/** Kept as a plain cookie, like the sidebar's state: a preference, not data. */
+function rememberView(view: CalendarViewKind) {
+  document.cookie = `${CALENDAR_VIEW_COOKIE}=${view}; path=/; max-age=${CALENDAR_VIEW_COOKIE_MAX_AGE}; samesite=lax`;
+}
 
-function eventDescription(e: CalendarEvent): string | null {
-  if (e.kind === "viewing") return e.viewing.description?.trim() || null;
-  return e.appointment.notes?.trim() || null;
+/** The current minute, kept fresh while the page is open. */
+function useNow(): Date {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const tick = () => setNow(new Date());
+    tick();
+    const id = setInterval(tick, 60_000);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") tick();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, []);
+  return now;
 }
 
 export function CalendarView({
-  monthISO,
+  view,
+  anchorISO,
   events,
   clients,
 }: {
-  monthISO: string;
+  view: CalendarViewKind;
+  /** A day ("2026-09-07") inside the week or month on screen. */
+  anchorISO: string;
   events: CalendarEvent[];
   clients: CalendarClientOption[];
 }) {
   const t = useTranslations("calendar");
   const tCommon = useTranslations("common");
   const tCrm = useTranslations("crm");
-  const locale = useLocale();
-  const dateLocale = dateFnsLocale(locale);
-  const tag = intlTag(locale);
+  const dateLocale = dateFnsLocale(useLocale());
 
-  // `e.title` is derived and translated server-side (lib/data/calendar via
-  // i18n/appointments), so it already follows the agent's language here.
-  function eventMeta(e: CalendarEvent): string {
-    const parts = [
-      appointmentTypeLabel(tCrm, e.kind === "viewing" ? "viewing" : "meeting"),
-      formatTimeRange(e.starts_at, e.ends_at),
-    ];
-    if (e.kind === "viewing" && e.buyerName) parts.push(e.buyerName);
-    if (e.location) parts.push(e.location);
-    return parts.join(" · ");
-  }
+  const anchor = useMemo(() => parseISO(anchorISO), [anchorISO]);
+  const days = useMemo(() => {
+    const { start, end } = visibleRange(view, anchor);
+    return eachDayOfInterval({ start, end });
+  }, [view, anchor]);
+  const firstKey = dayKey(days[0]);
+  const lastKey = dayKey(days[days.length - 1]);
 
-  const base = parseISO(`${monthISO}-01`);
-  const gridStart = startOfWeek(startOfMonth(base), { weekStartsOn: 1 });
-  const gridEnd = endOfWeek(endOfMonth(base), { weekStartsOn: 1 });
-  const days = eachDayOfInterval({ start: gridStart, end: gridEnd });
-  const buyers = useMemo(
-    () =>
-      clients
-        .filter((c) => c.side === "buyer")
-        .map((c) => ({ id: c.id, name: c.name })),
-    [clients]
-  );
+  // Which day an event lands on depends on the browser's time zone, so the
+  // server renders the empty grid and the events fill in on hydration.
+  const hydrated = useHydrated();
+  const isMobile = useIsMobile();
+  const now = useNow();
+  const todayKey = hydrated ? dayKey(now) : null;
+  const nowMs = now.getTime();
 
   const byDay = useMemo(() => {
     const map = new Map<string, CalendarEvent[]>();
+    if (!hydrated) return map;
     for (const e of events) {
-      const key = format(new Date(e.starts_at), DAY_KEY);
+      const key = dayKey(new Date(e.starts_at));
       const arr = map.get(key);
       if (arr) arr.push(e);
       else map.set(key, [e]);
@@ -109,151 +122,221 @@ export function CalendarView({
       arr.sort((x, y) => x.starts_at.localeCompare(y.starts_at));
     }
     return map;
-  }, [events]);
+  }, [events, hydrated]);
 
-  const [dayOpen, setDayOpen] = useState<string | null>(null);
-  const [choosing, setChoosing] = useState<string | null>(null);
+  const buyers = useMemo(
+    () =>
+      clients
+        .filter((c) => c.side === "buyer")
+        .map((c) => ({ id: c.id, name: c.name })),
+    [clients]
+  );
+
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  const [choosing, setChoosing] = useState<{
+    dateKey: string;
+    time?: string;
+  } | null>(null);
   const [editingMeeting, setEditingMeeting] = useState<{
     appointment?: AppointmentWithRefs;
     dateKey?: string;
+    time?: string;
   } | null>(null);
   const [editingViewing, setEditingViewing] = useState<{
     viewing?: Viewing;
     clientId?: string;
     dateKey?: string;
+    time?: string;
   } | null>(null);
 
-  const prevMonth = format(subMonths(base, 1), "yyyy-MM");
-  const nextMonth = format(addMonths(base, 1), "yyyy-MM");
-  const todayKey = format(new Date(), DAY_KEY);
-  const dayList = dayOpen ? byDay.get(dayOpen) ?? [] : [];
+  // On a phone the month view keeps a day's list under the grid. Until the
+  // agent picks a day it shows today, so the page opens on something useful.
+  const todayInView =
+    todayKey != null && todayKey >= firstKey && todayKey <= lastKey;
+  const activeDay =
+    selectedDay ?? (view === "month" && isMobile && todayInView ? todayKey : null);
 
-  function startChoosing(dateKey: string) {
-    setDayOpen(null);
-    setChoosing(dateKey);
+  const dayDialogOpen = view === "month" && selectedDay != null && !isMobile;
+  const dayList = activeDay ? (byDay.get(activeDay) ?? []) : [];
+
+  function startChoosing(dateKey: string, time?: string) {
+    if (!isMobile) setSelectedDay(null);
+    setChoosing({ dateKey, time });
   }
   function chooseMeeting() {
-    const dateKey = choosing ?? undefined;
+    const picked = choosing;
     setChoosing(null);
-    setEditingMeeting({ dateKey });
+    setEditingMeeting({ dateKey: picked?.dateKey, time: picked?.time });
   }
   function chooseViewing() {
-    const dateKey = choosing ?? undefined;
+    const picked = choosing;
     setChoosing(null);
-    setEditingViewing({ dateKey });
+    setEditingViewing({ dateKey: picked?.dateKey, time: picked?.time });
   }
   function openEvent(e: CalendarEvent) {
-    setDayOpen(null);
+    if (!isMobile) setSelectedDay(null);
     if (e.kind === "meeting") setEditingMeeting({ appointment: e.appointment });
     else setEditingViewing({ viewing: e.viewing, clientId: e.buyerId });
   }
+
+  const stepHref = (direction: -1 | 1) =>
+    calendarHref(view, shiftAnchor(view, anchor, direction));
+  const stepLabel = (direction: -1 | 1) =>
+    t(
+      view === "week"
+        ? direction < 0
+          ? "actions.previousWeek"
+          : "actions.nextWeek"
+        : direction < 0
+          ? "actions.previousMonth"
+          : "actions.nextMonth"
+    );
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-semibold tracking-tight first-letter:uppercase">
-          {format(base, "MMMM yyyy", { locale: dateLocale })}
+          {rangeLabel(view, anchor, dateLocale)}
         </h1>
-        <div className="flex items-center gap-2">
-          <Button
-            asChild
-            variant="outline"
-            size="icon"
-            aria-label={t("actions.previousMonth")}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-1">
+            <Button
+              asChild
+              variant="outline"
+              size="icon"
+              aria-label={stepLabel(-1)}
+            >
+              <Link href={stepHref(-1)}>
+                <ChevronLeft />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="sm">
+              <Link href={calendarHref(view)}>{tCommon("today")}</Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              size="icon"
+              aria-label={stepLabel(1)}
+            >
+              <Link href={stepHref(1)}>
+                <ChevronRight />
+              </Link>
+            </Button>
+          </div>
+          <nav
+            aria-label={t("views.label")}
+            className="bg-muted flex items-center rounded-md p-0.5 text-xs font-medium"
           >
-            <Link href={`/calendar?month=${prevMonth}`}>
-              <ChevronLeft />
-            </Link>
-          </Button>
-          <Button asChild variant="outline" size="sm">
-            <Link href="/calendar">{tCommon("today")}</Link>
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            size="icon"
-            aria-label={t("actions.nextMonth")}
-          >
-            <Link href={`/calendar?month=${nextMonth}`}>
-              <ChevronRight />
-            </Link>
-          </Button>
+            {CALENDAR_VIEWS.map((kind) => (
+              <Link
+                key={kind}
+                href={calendarHref(kind, anchor)}
+                onClick={() => rememberView(kind)}
+                aria-current={kind === view ? "page" : undefined}
+                className={cn(
+                  "rounded-sm px-2.5 py-1 transition-colors",
+                  kind === view
+                    ? "bg-card text-foreground shadow-xs"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {t(`views.${kind}`)}
+              </Link>
+            ))}
+          </nav>
           <CalendarSyncDialog />
-          <Button size="sm" onClick={() => startChoosing(todayKey)}>
+          <Button
+            size="sm"
+            onClick={() => startChoosing(todayInView ? todayKey! : firstKey)}
+          >
             <Plus /> {t("actions.new")}
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 text-center">
-        {/* The grid always starts on a Monday, so its first row names the week. */}
-        {days.slice(0, 7).map((day) => (
-          <div
-            key={format(day, DAY_KEY)}
-            className="text-muted-foreground py-1 text-xs font-medium first-letter:uppercase"
-          >
-            {format(day, "EEE", { locale: dateLocale })}
-          </div>
-        ))}
-      </div>
-
-      <div className="bg-border grid grid-cols-7 gap-px overflow-hidden rounded-lg border">
-        {days.map((day) => {
-          const key = format(day, DAY_KEY);
-          const items = byDay.get(key) ?? [];
-          const inMonth = isSameMonth(day, base);
-          const today = isToday(day);
-          return (
-            <button
-              type="button"
-              key={key}
-              onClick={() => setDayOpen(key)}
-              className={cn(
-                "bg-card hover:bg-accent/50 flex min-h-24 flex-col gap-1 p-1.5 text-left transition-colors",
-                !inMonth && "bg-muted/30"
-              )}
+      {view === "week" ? (
+        <>
+          <WeekGrid
+            className="hidden md:block"
+            days={days}
+            byDay={byDay}
+            todayKey={todayKey}
+            now={now}
+            onPickSlot={(key, minutes) => startChoosing(key, minutesLabel(minutes))}
+            onOpenEvent={openEvent}
+          />
+          <WeekAgenda
+            className="md:hidden"
+            days={days}
+            byDay={byDay}
+            todayKey={todayKey}
+            now={now}
+            onAddDay={(key) => startChoosing(key)}
+            onOpenEvent={openEvent}
+          />
+        </>
+      ) : (
+        <>
+          <MonthGrid
+            days={days}
+            anchor={anchor}
+            byDay={byDay}
+            todayKey={todayKey}
+            selectedKey={activeDay}
+            onSelectDay={setSelectedDay}
+            onOpenEvent={openEvent}
+          />
+          {activeDay && (
+            <section
+              className="space-y-3 rounded-lg border p-3 md:hidden"
+              aria-label={format(parseISO(activeDay), "EEEE d MMMM", {
+                locale: dateLocale,
+              })}
             >
-              <span
-                className={cn(
-                  "flex size-6 items-center justify-center rounded-full text-xs font-medium",
-                  !inMonth && "text-muted-foreground",
-                  today && "bg-primary text-primary-foreground"
-                )}
-              >
-                {format(day, "d")}
-              </span>
-              <div className="flex flex-col gap-0.5">
-                {items.slice(0, 3).map((e) => (
-                  <span
-                    key={e.id}
-                    className={cn(
-                      "truncate rounded px-1 py-0.5 text-[11px] leading-tight",
-                      e.kind === "viewing"
-                        ? "bg-primary/10 text-primary"
-                        : "bg-secondary text-secondary-foreground"
-                    )}
-                  >
-                    {format(new Date(e.starts_at), "HH:mm")} {e.title}
-                  </span>
-                ))}
-                {items.length > 3 && (
-                  <span className="text-muted-foreground px-1 text-[11px]">
-                    {t("grid.more", { count: items.length - 3 })}
-                  </span>
-                )}
+              <div className="flex items-center justify-between gap-2">
+                <h2 className="text-sm font-semibold first-letter:uppercase">
+                  {format(parseISO(activeDay), "EEEE d MMMM", {
+                    locale: dateLocale,
+                  })}
+                </h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => startChoosing(activeDay)}
+                >
+                  <Plus /> {tCommon("add")}
+                </Button>
               </div>
-            </button>
-          );
-        })}
-      </div>
+              {dayList.length === 0 ? (
+                <p className="text-muted-foreground text-sm">{t("day.empty")}</p>
+              ) : (
+                <div className="space-y-2">
+                  {dayList.map((e) => (
+                    <EventRow
+                      key={e.id}
+                      event={e}
+                      past={eventEndMs(e.starts_at, e.ends_at) < nowMs}
+                      onOpen={() => openEvent(e)}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+        </>
+      )}
 
-      {/* Day list */}
-      <Dialog open={dayOpen != null} onOpenChange={(o) => !o && setDayOpen(null)}>
+      {/* Day list (month view on a desktop) */}
+      <Dialog
+        open={dayDialogOpen}
+        onOpenChange={(open) => !open && setSelectedDay(null)}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="first-letter:uppercase">
-              {dayOpen
-                ? format(parseISO(dayOpen), "EEEE d MMMM", {
+              {selectedDay
+                ? format(parseISO(selectedDay), "EEEE d MMMM", {
                     locale: dateLocale,
                   })
                 : ""}
@@ -264,83 +347,18 @@ export function CalendarView({
             {dayList.length === 0 ? (
               <p className="text-muted-foreground text-sm">{t("day.empty")}</p>
             ) : (
-              dayList.map((e) => {
-                const remind = eventReminderHref(e);
-                const desc = eventDescription(e);
-                return (
-                  <div
-                    key={e.id}
-                    className="hover:bg-accent flex items-center gap-2 rounded-lg border p-3 transition-colors"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => openEvent(e)}
-                      className="flex min-w-0 flex-1 items-start gap-3 text-left"
-                    >
-                      <span
-                        className={cn(
-                          "mt-1.5 size-2 shrink-0 rounded-full",
-                          e.kind === "viewing"
-                            ? "bg-primary"
-                            : "bg-muted-foreground"
-                        )}
-                      />
-                      <div className="min-w-0">
-                        <p className="font-medium">{e.title}</p>
-                        <p className="text-muted-foreground text-sm">
-                          {eventMeta(e)}
-                        </p>
-                        {desc && (
-                          <p className="text-muted-foreground mt-1 line-clamp-2 text-sm whitespace-pre-wrap">
-                            {desc}
-                          </p>
-                        )}
-                        {e.kind === "viewing" &&
-                          (e.viewing.property_price != null ||
-                            e.viewing.had_offer) && (
-                            <p className="text-muted-foreground mt-1 text-xs">
-                              {e.viewing.property_price != null &&
-                                t("day.asking", {
-                                  price: formatCurrency(
-                                    e.viewing.property_price,
-                                    tag
-                                  ),
-                                })}
-                              {e.viewing.had_offer &&
-                                `${
-                                  e.viewing.property_price != null ? " · " : ""
-                                }${t("day.offer", {
-                                  price: formatCurrency(
-                                    e.viewing.offer_price,
-                                    tag
-                                  ),
-                                })}`}
-                            </p>
-                          )}
-                      </div>
-                    </button>
-                    {remind && (
-                      <a
-                        href={remind}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={cn(
-                          buttonVariants({ variant: "outline", size: "icon" }),
-                          "shrink-0"
-                        )}
-                        title={t("day.remind")}
-                        aria-label={t("day.remindAria")}
-                      >
-                        <MessageCircle className="size-4 text-[#25D366]" />
-                      </a>
-                    )}
-                  </div>
-                );
-              })
+              dayList.map((e) => (
+                <EventRow
+                  key={e.id}
+                  event={e}
+                  past={eventEndMs(e.starts_at, e.ends_at) < nowMs}
+                  onOpen={() => openEvent(e)}
+                />
+              ))
             )}
           </div>
           <Button
-            onClick={() => dayOpen && startChoosing(dayOpen)}
+            onClick={() => selectedDay && startChoosing(selectedDay)}
             variant="outline"
             className="w-full"
           >
@@ -350,17 +368,18 @@ export function CalendarView({
       </Dialog>
 
       {/* Meeting vs viewing chooser */}
-      <Dialog open={choosing != null} onOpenChange={(o) => !o && setChoosing(null)}>
+      <Dialog open={choosing != null} onOpenChange={(open) => !open && setChoosing(null)}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
             <DialogTitle>
-              {t("add.title", {
-                date: choosing
-                  ? format(parseISO(choosing), "EEE d MMM", {
+              {choosing
+                ? t(choosing.time ? "add.titleAt" : "add.title", {
+                    date: format(parseISO(choosing.dateKey), "EEE d MMM", {
                       locale: dateLocale,
-                    })
-                  : "",
-              })}
+                    }),
+                    time: choosing.time ?? "",
+                  })
+                : ""}
             </DialogTitle>
             <DialogDescription className="sr-only">
               {t("add.description")}
@@ -388,19 +407,21 @@ export function CalendarView({
 
       <AppointmentDialog
         open={editingMeeting != null}
-        onOpenChange={(o) => !o && setEditingMeeting(null)}
+        onOpenChange={(open) => !open && setEditingMeeting(null)}
         appointment={editingMeeting?.appointment}
         defaultDateKey={editingMeeting?.dateKey}
+        defaultTime={editingMeeting?.time}
         clients={clients}
       />
 
       <ViewingDialog
         open={editingViewing != null}
-        onOpenChange={(o) => !o && setEditingViewing(null)}
+        onOpenChange={(open) => !open && setEditingViewing(null)}
         viewing={editingViewing?.viewing}
         clientId={editingViewing?.clientId}
         buyers={buyers}
         defaultDateKey={editingViewing?.dateKey}
+        defaultTime={editingViewing?.time}
       />
     </div>
   );

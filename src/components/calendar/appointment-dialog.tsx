@@ -58,7 +58,8 @@ function reminderValue(minutes: number | null): string {
 
 function toFormValues(
   appointment?: AppointmentWithRefs,
-  defaultDateKey?: string
+  defaultDateKey?: string,
+  defaultTime?: string
 ): AppointmentFormValues {
   if (appointment) {
     const start = new Date(appointment.starts_at);
@@ -91,7 +92,7 @@ function toFormValues(
     property_id: "",
     property_label: "",
     date: defaultDateKey ?? format(new Date(), "yyyy-MM-dd"),
-    time: "10:00",
+    time: defaultTime ?? "10:00",
     duration_minutes: "60",
     location: "",
     notes: "",
@@ -104,12 +105,15 @@ export function AppointmentDialog({
   onOpenChange,
   appointment,
   defaultDateKey,
+  defaultTime,
   clients,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   appointment?: AppointmentWithRefs;
   defaultDateKey?: string;
+  /** "HH:mm" to start from, e.g. the slot clicked on the week grid. */
+  defaultTime?: string;
   clients: CalendarClientOption[];
 }) {
   const router = useRouter();
@@ -122,13 +126,13 @@ export function AppointmentDialog({
   const schema = useMemo(() => appointmentFormSchema(tv), [tv]);
   const form = useForm<AppointmentFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: toFormValues(appointment, defaultDateKey),
+    defaultValues: toFormValues(appointment, defaultDateKey, defaultTime),
   });
 
   useEffect(() => {
-    if (open) form.reset(toFormValues(appointment, defaultDateKey));
+    if (open) form.reset(toFormValues(appointment, defaultDateKey, defaultTime));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, appointment?.id, defaultDateKey]);
+  }, [open, appointment?.id, defaultDateKey, defaultTime]);
 
   async function onSubmit(values: AppointmentFormValues) {
     const start = new Date(`${values.date}T${values.time}`);
