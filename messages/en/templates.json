@@ -23,7 +23,8 @@
     "title": "Use this template",
     "description": "Pick a client — the composer opens with this template loaded, ready to personalise and send.",
     "placeholder": "Select a client…",
-    "noClients": "No clients yet",
+    "noClients": "No clients yet. <link>Add a new client</link> to send this template.",
+    "notInList": "Not in your list yet? <link>Add a new client</link>",
     "open": "Open composer"
   },
   "dialog": {

@@ -23,7 +23,8 @@
     "title": "Usar esta plantilla",
     "description": "Elige un cliente: el compositor se abre con esta plantilla cargada, lista para personalizar y enviar.",
     "placeholder": "Selecciona un cliente…",
-    "noClients": "Aún no tienes clientes",
+    "noClients": "Aún no tienes clientes. <link>Añade un cliente nuevo</link> para enviar esta plantilla.",
+    "notInList": "¿Aún no está en tu lista? <link>Añade un cliente nuevo</link>",
     "open": "Abrir el compositor"
   },
   "dialog": {

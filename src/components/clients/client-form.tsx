@@ -44,18 +44,24 @@ import { clientsPath, type ClientSide } from "@/lib/crm";
 import type { Enums } from "@/lib/supabase/types";
 
 const DEAL_TYPES: readonly Enums<"deal_type">[] = ["direct", "collab"];
-const SELLER_ROLES: readonly Enums<"seller_role">[] = ["owner", "representative"];
+const SELLER_ROLES: readonly Enums<"seller_role">[] = [
+  "owner",
+  "representative",
+];
 
 export function ClientForm({
   side,
   mode,
   clientId,
   defaultValues,
+  compose = null,
 }: {
   side: ClientSide;
   mode: "create" | "edit";
   clientId?: string;
   defaultValues?: Partial<ClientFormValues>;
+  /** Template id to open in the composer right after the client is created. */
+  compose?: string | null;
 }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
@@ -107,7 +113,11 @@ export function ClientForm({
         return;
       }
       toast.success(t("toasts.created"));
-      router.push(`/clients/${res.id}`);
+      router.push(
+        compose
+          ? `/clients/${res.id}?compose=${encodeURIComponent(compose)}`
+          : `/clients/${res.id}`,
+      );
     } else {
       const res = await updateClient(clientId!, values);
       setSubmitting(false);
@@ -125,11 +135,14 @@ export function ClientForm({
     mode === "edit" && clientId ? `/clients/${clientId}` : clientsPath(side);
 
   function applyLead(data: ExtractedLead) {
-    if (data.first_name) form.setValue("first_name", data.first_name, { shouldDirty: true });
-    if (data.last_name) form.setValue("last_name", data.last_name, { shouldDirty: true });
+    if (data.first_name)
+      form.setValue("first_name", data.first_name, { shouldDirty: true });
+    if (data.last_name)
+      form.setValue("last_name", data.last_name, { shouldDirty: true });
     if (data.email) form.setValue("email", data.email, { shouldDirty: true });
     if (data.phone) form.setValue("phone", data.phone, { shouldDirty: true });
-    if (data.language) form.setValue("language", data.language, { shouldDirty: true });
+    if (data.language)
+      form.setValue("language", data.language, { shouldDirty: true });
     if (data.nationality)
       form.setValue("nationality", data.nationality, { shouldDirty: true });
     if (data.notes) form.setValue("notes", data.notes, { shouldDirty: true });
@@ -234,10 +247,7 @@ export function ClientForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("dealType")}</FormLabel>
-                  <Select
-                    value={field.value}
-                    onValueChange={field.onChange}
-                  >
+                  <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder={t("selectPlaceholder")} />
@@ -262,10 +272,7 @@ export function ClientForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("role")}</FormLabel>
-                  <Select
-                    value={field.value}
-                    onValueChange={field.onChange}
-                  >
+                  <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder={t("selectPlaceholder")} />

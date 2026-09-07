@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -79,10 +80,14 @@ export function TemplatesView({
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {t("title")}
+          </h1>
           <p className="text-muted-foreground text-sm">{t("subtitle")}</p>
         </div>
-        <Button onClick={() => setCreateInit({ name: "", subject: "", body: "" })}>
+        <Button
+          onClick={() => setCreateInit({ name: "", subject: "", body: "" })}
+        >
           <Plus /> {t("new")}
         </Button>
       </div>
@@ -219,7 +224,11 @@ function TemplateCard({
         {template.body}
       </p>
       <div className="mt-3">
-        <UseTemplateButton templateId={template.id} clients={clients} size="sm" />
+        <UseTemplateButton
+          templateId={template.id}
+          clients={clients}
+          size="sm"
+        />
       </div>
 
       <TemplateDialog
@@ -251,6 +260,16 @@ function UseTemplateButton({
     router.push(`/clients/${clientId}?compose=${templateId}`);
   }
 
+  // Templates are buyer-facing, and the new-client form has no side switch,
+  // so the shortcut always creates a buyer. `compose` rides along so the
+  // composer opens with this template once the client is saved.
+  const newClientHref = `/clients/new?side=buyer&compose=${templateId}`;
+  const addLink = (chunks: React.ReactNode) => (
+    <Link href={newClientHref} className="text-primary hover:underline">
+      {chunks}
+    </Link>
+  );
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Button variant="outline" size={size} onClick={() => setOpen(true)}>
@@ -261,24 +280,29 @@ function UseTemplateButton({
           <DialogTitle>{t("use.title")}</DialogTitle>
           <DialogDescription>{t("use.description")}</DialogDescription>
         </DialogHeader>
-        <Select value={clientId} onValueChange={setClientId}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder={t("use.placeholder")} />
-          </SelectTrigger>
-          <SelectContent>
-            {clients.length === 0 ? (
-              <div className="text-muted-foreground px-2 py-1.5 text-sm">
-                {t("use.noClients")}
-              </div>
-            ) : (
-              clients.map((c) => (
-                <SelectItem key={c.id} value={c.id}>
-                  {c.name}
-                </SelectItem>
-              ))
-            )}
-          </SelectContent>
-        </Select>
+        {clients.length === 0 ? (
+          <p className="text-muted-foreground rounded-lg border border-dashed px-3 py-6 text-center text-sm">
+            {t.rich("use.noClients", { link: addLink })}
+          </p>
+        ) : (
+          <div className="space-y-2">
+            <Select value={clientId} onValueChange={setClientId}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={t("use.placeholder")} />
+              </SelectTrigger>
+              <SelectContent>
+                {clients.map((c) => (
+                  <SelectItem key={c.id} value={c.id}>
+                    {c.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-muted-foreground text-xs">
+              {t.rich("use.notInList", { link: addLink })}
+            </p>
+          </div>
+        )}
         <DialogFooter>
           <Button variant="ghost" onClick={() => setOpen(false)}>
             {tCommon("cancel")}
@@ -380,7 +404,10 @@ function TemplateDialog({
                 <FormItem>
                   <FormLabel>{t("dialog.name")}</FormLabel>
                   <FormControl>
-                    <Input placeholder={t("dialog.namePlaceholder")} {...field} />
+                    <Input
+                      placeholder={t("dialog.namePlaceholder")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
