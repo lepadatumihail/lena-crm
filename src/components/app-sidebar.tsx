@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -8,6 +9,7 @@ import {
   Building2,
   Calculator,
   CalendarDays,
+  CircleQuestionMark,
   CreditCard,
   FileText,
   Gift,
@@ -22,6 +24,7 @@ import { clientsPath, type ClientSide } from "@/lib/crm";
 import { cn } from "@/lib/utils";
 import { LogoMark, Wordmark } from "@/components/brand/logo";
 import { LocaleSelect } from "@/components/locale-switcher";
+import { SupportDialog } from "@/components/support-dialog";
 import {
   Sidebar,
   SidebarContent,
@@ -65,8 +68,10 @@ export function AppSidebar({
   plan?: SidebarPlan | null;
 }) {
   const t = useTranslations("nav");
+  const tSupport = useTranslations("support");
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
+  const [supportOpen, setSupportOpen] = useState(false);
   // Close the mobile drawer (a Sheet) whenever a nav item is tapped — including
   // re-tapping the current page, which wouldn't trigger a route change.
   const closeMobile = () => setOpenMobile(false);
@@ -242,6 +247,20 @@ export function AppSidebar({
         </div>
         <SidebarMenu>
           <SidebarMenuItem>
+            <SidebarMenuButton
+              type="button"
+              tooltip={tSupport("trigger")}
+              aria-label={tSupport("trigger")}
+              onClick={() => {
+                closeMobile();
+                setSupportOpen(true);
+              }}
+            >
+              <CircleQuestionMark />
+              <span>{tSupport("trigger")}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
             <form action={signOut}>
               <SidebarMenuButton type="submit" tooltip={t("signOut")}>
                 <LogOut />
@@ -253,6 +272,12 @@ export function AppSidebar({
       </SidebarFooter>
 
       <SidebarRail />
+
+      <SupportDialog
+        open={supportOpen}
+        onOpenChange={setSupportOpen}
+        email={email}
+      />
     </Sidebar>
   );
 }

@@ -25,6 +25,13 @@ export const SITE_URL = (
 export const SITE_LOCALE = "en_GB";
 
 /**
+ * The one address behind support, contact and the legal pages. It is both the
+ * mailbox the in-app help dialog delivers to and the address the legal
+ * documents publish, so there is never a second inbox to keep an eye on.
+ */
+export const SUPPORT_EMAIL = "info@leadwing.app";
+
+/**
  * Public profiles owned by the brand, for the Organization's `sameAs`. This is
  * what ties the domain to the listings carrying the same name, so it only
  * belongs here once a profile really exists and says the same name and URL.

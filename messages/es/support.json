@@ -1,0 +1,38 @@
+{
+  "trigger": "Ayuda y sugerencias",
+  "title": "Ayuda y sugerencias",
+  "description": "Cuéntanos qué ha pasado o qué te gustaría ver. Nos llega directamente y te respondemos por email.",
+  "kind": {
+    "label": "¿De qué se trata?",
+    "bug": "Algo no funciona",
+    "feedback": "Sugerencia",
+    "feature": "Petición de función",
+    "billing": "Facturación o cuenta",
+    "question": "Pregunta general"
+  },
+  "replyTo": {
+    "label": "Responder a",
+    "placeholder": "tu@ejemplo.com",
+    "hint": "Te contestaremos aquí. Cámbialo si lees otro buzón."
+  },
+  "subject": {
+    "label": "Asunto",
+    "placeholder": "Unas palabras, si ayuda"
+  },
+  "message": {
+    "label": "Mensaje",
+    "placeholder": "¿Qué estabas haciendo y qué esperabas que pasara?"
+  },
+  "send": "Enviar",
+  "sending": "Enviando…",
+  "sent": "Gracias, mensaje enviado",
+  "sentDescription": "Te responderemos a {email}.",
+  "failed": "No se ha podido enviar",
+  "mailto": "Escríbenos por email",
+  "errors": {
+    "notAuthenticated": "No has iniciado sesión",
+    "checkForm": "Revisa el formulario e inténtalo de nuevo",
+    "notConfigured": "El email aún no está configurado. Escribe a {email}.",
+    "sendFailed": "No se ha podido enviar el mensaje. Escribe a {email}."
+  }
+}

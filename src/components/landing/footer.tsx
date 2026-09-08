@@ -3,7 +3,7 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { asLocale } from "@/i18n/config";
 import { marketingPath } from "@/lib/routes";
-import { SITE_NAME } from "@/lib/site";
+import { SITE_NAME, SUPPORT_EMAIL } from "@/lib/site";
 import { Logo } from "@/components/brand/logo";
 
 const LEGAL_LINKS = ["privacy", "terms", "legalNotice"] as const;
@@ -34,6 +34,12 @@ export function LandingFooter() {
               {tLegal(route)}
             </Link>
           ))}
+          <a
+            href={`mailto:${SUPPORT_EMAIL}`}
+            className="hover:text-foreground transition-colors"
+          >
+            {SUPPORT_EMAIL}
+          </a>
         </nav>
         <span>
           © {new Date().getFullYear()} {SITE_NAME}

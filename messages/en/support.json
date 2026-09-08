@@ -1,0 +1,38 @@
+{
+  "trigger": "Help & feedback",
+  "title": "Help & feedback",
+  "description": "Tell us what happened or what you'd like to see. It goes straight to us and we reply by email.",
+  "kind": {
+    "label": "What's this about?",
+    "bug": "Something's broken",
+    "feedback": "Feedback",
+    "feature": "Feature request",
+    "billing": "Billing or account",
+    "question": "General question"
+  },
+  "replyTo": {
+    "label": "Reply to",
+    "placeholder": "you@example.com",
+    "hint": "We'll answer here. Change it if you read another mailbox."
+  },
+  "subject": {
+    "label": "Subject",
+    "placeholder": "A few words, if it helps"
+  },
+  "message": {
+    "label": "Message",
+    "placeholder": "What were you doing, and what did you expect to happen?"
+  },
+  "send": "Send",
+  "sending": "Sending…",
+  "sent": "Thanks — message sent",
+  "sentDescription": "We'll reply to {email}.",
+  "failed": "Couldn't send that",
+  "mailto": "Email us instead",
+  "errors": {
+    "notAuthenticated": "Not authenticated",
+    "checkForm": "Check the form and try again",
+    "notConfigured": "Email isn't set up yet. Please write to {email}.",
+    "sendFailed": "The message couldn't be sent. Please write to {email} instead."
+  }
+}

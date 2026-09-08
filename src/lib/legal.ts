@@ -1,3 +1,5 @@
+import { SUPPORT_EMAIL } from "@/lib/site";
+
 /**
  * Who is behind LeadWing, as the legal pages state it. Spanish law (LSSI-CE
  * art. 10) and the GDPR require these to be real and current: fill in every
@@ -13,7 +15,7 @@ export const LEGAL_ENTITY = {
   /** Full postal address with postcode, city and country. */
   address: "[Street, postcode, city, Spain]",
   /** Mailbox for legal, privacy and support requests; must be monitored. */
-  email: "[contact email]",
+  email: SUPPORT_EMAIL,
   /** Companies only: Registro Mercantil details. Leave empty as an autónomo. */
   registry: "",
   /** Where the database and files live, as shown in the Supabase dashboard. */

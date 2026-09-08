@@ -23,6 +23,7 @@ import enNotifications from "../../messages/en/notifications.json";
 import enReferrals from "../../messages/en/referrals.json";
 import enServer from "../../messages/en/server.json";
 import enSite from "../../messages/en/site.json";
+import enSupport from "../../messages/en/support.json";
 import enTemplates from "../../messages/en/templates.json";
 import enValidation from "../../messages/en/validation.json";
 
@@ -43,6 +44,7 @@ import esNotifications from "../../messages/es/notifications.json";
 import esReferrals from "../../messages/es/referrals.json";
 import esServer from "../../messages/es/server.json";
 import esSite from "../../messages/es/site.json";
+import esSupport from "../../messages/es/support.json";
 import esTemplates from "../../messages/es/templates.json";
 import esValidation from "../../messages/es/validation.json";
 
@@ -64,6 +66,7 @@ export const en = {
   referrals: enReferrals,
   server: enServer,
   site: enSite,
+  support: enSupport,
   templates: enTemplates,
   validation: enValidation,
 };
@@ -88,6 +91,7 @@ const es = {
   referrals: esReferrals,
   server: esServer,
   site: esSite,
+  support: esSupport,
   templates: esTemplates,
   validation: esValidation,
 };
