@@ -32,7 +32,6 @@
   "errors": {
     "notAuthenticated": "No has iniciado sesión",
     "checkForm": "Revisa el formulario e inténtalo de nuevo",
-    "notConfigured": "El email aún no está configurado. Escribe a {email}.",
     "sendFailed": "No se ha podido enviar el mensaje. Escribe a {email}."
   }
 }

@@ -32,7 +32,6 @@
   "errors": {
     "notAuthenticated": "Not authenticated",
     "checkForm": "Check the form and try again",
-    "notConfigured": "Email isn't set up yet. Please write to {email}.",
     "sendFailed": "The message couldn't be sent. Please write to {email} instead."
   }
 }

@@ -715,6 +715,57 @@ export type Database = {
         Update: { id?: string; type?: string; received_at?: string };
         Relationships: [];
       };
+      support_messages: {
+        Row: {
+          id: string;
+          agent_id: string;
+          kind: Database["public"]["Enums"]["support_kind"];
+          reply_to: string;
+          account_email: string | null;
+          subject: string | null;
+          message: string;
+          page: string | null;
+          locale: string | null;
+          plan: string | null;
+          user_agent: string | null;
+          delivered_at: string | null;
+          delivery_error: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          agent_id: string;
+          kind: Database["public"]["Enums"]["support_kind"];
+          reply_to: string;
+          account_email?: string | null;
+          subject?: string | null;
+          message: string;
+          page?: string | null;
+          locale?: string | null;
+          plan?: string | null;
+          user_agent?: string | null;
+          delivered_at?: string | null;
+          delivery_error?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          agent_id?: string;
+          kind?: Database["public"]["Enums"]["support_kind"];
+          reply_to?: string;
+          account_email?: string | null;
+          subject?: string | null;
+          message?: string;
+          page?: string | null;
+          locale?: string | null;
+          plan?: string | null;
+          user_agent?: string | null;
+          delivered_at?: string | null;
+          delivery_error?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: {
@@ -772,6 +823,7 @@ export type Database = {
       sub_status: "none" | "active" | "past_due" | "canceled";
       billing_plan: "founding_monthly" | "founding_yearly" | "standard_monthly" | "standard_yearly";
       credit_kind: "stripe_balance" | "pro_time";
+      support_kind: "bug" | "feedback" | "feature" | "billing" | "question";
     };
     CompositeTypes: Record<never, never>;
   };
@@ -805,3 +857,4 @@ export type DealAnalysis = Tables<"deal_analyses">;
 export type Profile = Tables<"profiles">;
 export type Referral = Tables<"referrals">;
 export type ReferralCredit = Tables<"referral_credits">;
+export type SupportMessage = Tables<"support_messages">;
