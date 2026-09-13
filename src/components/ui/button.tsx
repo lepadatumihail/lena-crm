@@ -19,11 +19,17 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        // For the always-dark marketing surfaces: a frosted outline.
+        glass:
+          "border-inverted-foreground/20 bg-inverted-foreground/5 text-inverted-foreground border shadow-none backdrop-blur-sm hover:bg-inverted-foreground/10 hover:text-inverted-foreground",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        // Marketing calls to action: fully rounded and a touch taller.
+        pill: "h-11 rounded-full px-6 text-[15px] has-[>svg]:px-5",
+        "pill-sm": "h-9 rounded-full px-4 has-[>svg]:px-3.5",
         icon: "size-9",
       },
     },

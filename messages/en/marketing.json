@@ -1,0 +1,52 @@
+{
+  "article": {
+    "updated": "Updated {date}"
+  },
+  "faq": {
+    "heading": "Questions people ask"
+  },
+  "related": {
+    "heading": "Keep reading"
+  },
+  "cta": {
+    "heading": "Try it with your next lead",
+    "body": "Free for up to {limit} clients, no card and no time limit. Add a buyer, let it draft the first message, and see whether it fits the way you work.",
+    "primary": "Start for free",
+    "secondary": "See pricing"
+  },
+  "template": {
+    "language": "Template language",
+    "copy": "Copy",
+    "copied": "Copied"
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "guides": "Guides"
+  },
+  "footer": {
+    "product": "Product",
+    "guides": "Guides"
+  },
+  "routes": {
+    "pricing": {
+      "label": "Pricing",
+      "blurb": "Both plans side by side, the founding price and what happens if you cancel."
+    },
+    "crmSpain": {
+      "label": "CRM for Spain",
+      "blurb": "What a CRM has to handle in the Spanish market, and how this one handles it."
+    },
+    "crmMarbella": {
+      "label": "CRM for Marbella",
+      "blurb": "How agents on the Costa del Sol work, and what that asks of a CRM."
+    },
+    "guideIdealista": {
+      "label": "Idealista leads",
+      "blurb": "Answer, qualify and file portal enquiries before they go cold."
+    },
+    "guideFollowUp": {
+      "label": "Lead follow-up",
+      "blurb": "A follow-up cadence for buyers, with messages you can send as they are."
+    }
+  }
+}

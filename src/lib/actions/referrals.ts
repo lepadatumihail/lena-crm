@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { marketingPath } from "@/lib/routes";
 import {
   grantProTime,
   promoteToFounder,
@@ -46,7 +47,9 @@ function userIdFrom(formData: FormData): string {
 function revalidateAll() {
   revalidatePath("/admin");
   revalidatePath("/referrals");
-  revalidatePath("/pricing");
+  // The pricing page shows the founding spots left, in both languages.
+  revalidatePath(marketingPath("pricing", "en"));
+  revalidatePath(marketingPath("pricing", "es"));
 }
 
 // ---------------- admin ----------------

@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 function VisualWhatsApp() {
   const t = useTranslations("landing.deepDives.visuals");
   return (
-    <div className="bg-card mx-auto max-w-sm rounded-2xl border p-4 shadow-sm">
+    <div className="bg-card mock-lift mx-auto max-w-sm rounded-2xl p-4">
       <div className="flex items-center gap-2 border-b pb-3">
         <div className="flex size-8 items-center justify-center rounded-full bg-[#25D366]/15 text-[#25D366]">
           <MessageCircle className="size-4" />
@@ -44,7 +44,7 @@ function VisualWhatsApp() {
 function VisualMatch() {
   const t = useTranslations("landing.deepDives.visuals");
   return (
-    <div className="bg-card mx-auto max-w-sm space-y-2 rounded-2xl border p-4 shadow-sm">
+    <div className="bg-card mock-lift mx-auto max-w-sm space-y-2 rounded-2xl p-4">
       <div className="bg-muted/50 rounded-lg border p-2.5 text-xs">
         {t.rich("match.query", {
           name: "James Carter",
@@ -76,7 +76,7 @@ function VisualMatch() {
 function VisualPortal() {
   const t = useTranslations("landing.deepDives.visuals");
   return (
-    <div className="bg-card mx-auto max-w-sm rounded-2xl border p-4 shadow-sm">
+    <div className="bg-card mock-lift mx-auto max-w-sm rounded-2xl p-4">
       <div className="flex flex-wrap justify-center gap-1.5">
         {["Idealista", "Fotocasa", "Kyero"].map((p) => (
           <span
@@ -110,7 +110,7 @@ function VisualPortal() {
 function VisualSpeed() {
   const t = useTranslations("landing.deepDives.visuals");
   return (
-    <div className="bg-card mx-auto max-w-sm rounded-2xl border p-4 shadow-sm">
+    <div className="bg-card mock-lift mx-auto max-w-sm rounded-2xl p-4">
       <div className="flex items-center justify-between border-b pb-2 text-xs">
         <span className="font-medium">
           {t("newLead", { name: "Lars Nielsen" })}
@@ -134,7 +134,7 @@ function VisualSpeed() {
 function VisualScheduler() {
   const t = useTranslations("landing.deepDives.visuals");
   return (
-    <div className="bg-card mx-auto max-w-sm space-y-3 rounded-2xl border p-4 shadow-sm">
+    <div className="bg-card mock-lift mx-auto max-w-sm space-y-3 rounded-2xl p-4">
       <div className="flex items-center gap-3 rounded-lg border p-3">
         <div className="bg-primary/10 text-primary flex size-10 flex-col items-center justify-center rounded-lg">
           <span className="text-[9px] font-semibold uppercase">
@@ -239,12 +239,12 @@ export function FeatureDeepDives() {
   const t = useTranslations("landing");
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 py-16">
+    <section className="section-y mx-auto w-full max-w-6xl px-4">
       <Reveal className="mx-auto max-w-2xl text-center">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          {t("deepDives.heading")}
-        </h2>
-        <p className="text-muted-foreground mt-3">{t("deepDives.body")}</p>
+        <h2 className="display-2 text-balance">{t("deepDives.heading")}</h2>
+        <p className="text-muted-foreground mt-4 text-lg text-pretty">
+          {t("deepDives.body")}
+        </p>
       </Reveal>
 
       <div className="mt-12 space-y-6 sm:space-y-8">
@@ -273,7 +273,7 @@ export function FeatureDeepDives() {
                       </div>
                       <span
                         className={cn(
-                          "text-4xl font-bold tabular-nums",
+                          "font-display text-5xl tabular-nums",
                           accent.num
                         )}
                       >

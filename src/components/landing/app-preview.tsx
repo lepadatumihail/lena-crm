@@ -182,10 +182,10 @@ export function AppPreview() {
   }
 
   return (
-    <div aria-hidden className="relative mt-16 w-full max-w-4xl">
+    <div aria-hidden className="relative mx-auto w-full max-w-4xl">
       <div className="from-primary/12 absolute -inset-x-8 -top-8 -bottom-8 -z-10 rounded-[2.5rem] bg-gradient-to-tr to-transparent blur-2xl" />
 
-      <div className="bg-card overflow-hidden rounded-2xl border shadow-lg ring-1 ring-black/5">
+      <div className="bg-card mock-lift overflow-hidden rounded-2xl">
         {/* Toolbar */}
         <div className="flex items-center justify-between gap-3 border-b px-3 py-2.5 sm:px-4">
           <div className="bg-muted inline-flex rounded-lg p-0.5 text-xs">

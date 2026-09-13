@@ -19,7 +19,6 @@ export const PROTECTED_PREFIXES = [
   "/clients",
   "/home",
   "/notifications",
-  "/pricing",
   "/referrals",
   "/templates",
 ] as const;
@@ -40,12 +39,66 @@ export function isProtectedPath(pathname: string): boolean {
  */
 export const MARKETING_ROUTES = {
   home: { en: "/", es: "/es" },
+  pricing: { en: "/pricing", es: "/es/precios" },
+  crmSpain: { en: "/real-estate-crm-spain", es: "/es/crm-inmobiliario-espana" },
+  crmMarbella: { en: "/crm-for-marbella-agents", es: "/es/crm-inmobiliario-marbella" },
+  guideIdealista: {
+    en: "/guides/idealista-lead-management",
+    es: "/es/guias/gestionar-leads-idealista",
+  },
+  guideFollowUp: {
+    en: "/guides/real-estate-lead-follow-up",
+    es: "/es/guias/seguimiento-leads-inmobiliarios",
+  },
   privacy: { en: "/privacy", es: "/es/privacidad" },
   terms: { en: "/terms", es: "/es/terminos" },
   legalNotice: { en: "/legal", es: "/es/aviso-legal" },
 } as const satisfies Record<string, Record<AppLocale, string>>;
 
 export type MarketingRoute = keyof typeof MARKETING_ROUTES;
+
+/**
+ * The written pages: one shared shell, one content module per language
+ * (src/content/pages). They carry a publication date and their own JSON-LD,
+ * which is what separates them from the home, pricing and legal pages.
+ */
+export const CONTENT_ROUTES = [
+  "crmSpain",
+  "crmMarbella",
+  "guideIdealista",
+  "guideFollowUp",
+] as const satisfies readonly MarketingRoute[];
+
+export type ContentRoute = (typeof CONTENT_ROUTES)[number];
+
+export function isContentRoute(route: MarketingRoute): route is ContentRoute {
+  return (CONTENT_ROUTES as readonly MarketingRoute[]).includes(route);
+}
+
+/** Guides live under /guides (…/guias); they get a Guides breadcrumb level. */
+export function isGuideRoute(route: MarketingRoute): boolean {
+  return route === "guideIdealista" || route === "guideFollowUp";
+}
+
+/**
+ * The routes that carry a label and a blurb in the `marketing` catalogs, and
+ * so can be shown as a footer link or a "keep reading" card. The home page is
+ * named in nav.json and the legal pages in nav.legal, which is why neither is
+ * here.
+ */
+export const LINKED_ROUTES = [
+  "pricing",
+  "crmSpain",
+  "crmMarbella",
+  "guideIdealista",
+  "guideFollowUp",
+] as const satisfies readonly MarketingRoute[];
+
+export type LinkedRoute = (typeof LINKED_ROUTES)[number];
+
+export function isLinkedRoute(route: MarketingRoute): route is LinkedRoute {
+  return (LINKED_ROUTES as readonly MarketingRoute[]).includes(route);
+}
 
 export function marketingPath(route: MarketingRoute, locale: AppLocale): string {
   return MARKETING_ROUTES[route][locale];

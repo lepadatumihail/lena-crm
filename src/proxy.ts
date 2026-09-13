@@ -8,8 +8,17 @@ import {
   negotiateLocale,
   type AppLocale,
 } from "@/i18n/config";
+import { markdownRoute, prefersMarkdown } from "@/lib/markdown";
 import { marketingPath, marketingRouteAt, pathLocale } from "@/lib/routes";
 import { updateSession } from "@/lib/supabase/middleware";
+
+/**
+ * RFC 8288 Link header for the home page, so an agent that reads only the
+ * response headers still finds the plain-text brief. `describedby` is the
+ * relation that fits: there is no public API, so api-catalog or service-desc
+ * would advertise something that doesn't exist. `type` is what llms.txt serves.
+ */
+const AGENT_LINK = '</llms.txt>; rel="describedby"; type="text/plain"';
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -41,7 +50,18 @@ export async function proxy(request: NextRequest) {
     if (pinned) request.headers.set(LOCALE_HEADER, pinned);
   }
 
-  return await updateSession(request);
+  // An agent asking for a marketing page as markdown gets the markdown route,
+  // which converts that page's own HTML (src/app/markdown).
+  const response =
+    page && prefersMarkdown(request.headers.get("accept"))
+      ? NextResponse.rewrite(
+          new URL(markdownRoute(marketingPath(page.route, page.locale)), request.url)
+        )
+      : await updateSession(request);
+  // React's font preloads are appended to this same header during render
+  // (vercel/next.js#73431), so both reach the client.
+  if (page?.route === "home") response.headers.append("Link", AGENT_LINK);
+  return response;
 }
 
 export const config = {

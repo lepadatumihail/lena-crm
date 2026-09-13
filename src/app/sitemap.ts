@@ -4,22 +4,47 @@ import { LOCALES, type AppLocale } from "@/i18n/config";
 import { LEGAL_UPDATED } from "@/lib/legal";
 import {
   MARKETING_ROUTES,
+  isContentRoute,
   marketingAlternates,
   marketingPath,
   type MarketingRoute,
 } from "@/lib/routes";
+import { PUBLISHED } from "@/lib/seo";
 import { absoluteUrl } from "@/lib/site";
 
 const PRIORITY: Record<MarketingRoute, number> = {
   home: 1,
+  pricing: 0.8,
+  crmSpain: 0.7,
+  crmMarbella: 0.6,
+  guideIdealista: 0.6,
+  guideFollowUp: 0.6,
   privacy: 0.3,
   terms: 0.3,
   legalNotice: 0.3,
 };
 
-/** Legal pages date from their last revision; the home page from the deploy. */
+const CHANGE_FREQUENCY: Record<MarketingRoute, "weekly" | "monthly" | "yearly"> = {
+  home: "weekly",
+  pricing: "monthly",
+  crmSpain: "monthly",
+  crmMarbella: "monthly",
+  guideIdealista: "monthly",
+  guideFollowUp: "monthly",
+  privacy: "yearly",
+  terms: "yearly",
+  legalNotice: "yearly",
+};
+
+/**
+ * Written pages date from their last revision, legal pages from their
+ * effective date; the home and pricing pages change with the product, so
+ * they date from the deploy.
+ */
 function lastModified(route: MarketingRoute): Date {
-  return route === "home" ? new Date() : new Date(LEGAL_UPDATED[route]);
+  if (isContentRoute(route)) return new Date(PUBLISHED[route]);
+  if (route === "home" || route === "pricing") return new Date();
+  return new Date(LEGAL_UPDATED[route]);
 }
 
 /** Every marketing page in every language, each carrying its hreflang twins. */
@@ -33,7 +58,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     return LOCALES.map((locale) => ({
       url: absoluteUrl(marketingPath(route, locale)),
       lastModified: lastModified(route),
-      changeFrequency: route === "home" ? ("weekly" as const) : ("yearly" as const),
+      changeFrequency: CHANGE_FREQUENCY[route],
       priority: PRIORITY[route],
       alternates: { languages },
     }));

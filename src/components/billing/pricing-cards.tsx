@@ -8,8 +8,9 @@ import { ArrowRight, Check, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { intlTag } from "@/i18n/config";
+import { asLocale, intlTag } from "@/i18n/config";
 import { formatCurrency } from "@/lib/crm";
+import { marketingPath } from "@/lib/routes";
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import {
   FOUNDING_CAP,
@@ -33,27 +34,33 @@ export function PricingCards({
   tier,
   spotsLeft,
   links,
-  clientCount,
+  clientCount = 0,
   current,
-  unappliedCreditEur,
+  unappliedCreditEur = 0,
 }: {
   /** The tier a new subscriber gets right now: founding while spots remain. */
   tier: BillingTier;
   spotsLeft: number;
-  links: Record<BillingInterval, string | undefined>;
-  clientCount: number;
-  current: CurrentPlan;
-  unappliedCreditEur: number;
+  /** Checkout links, one per interval. Absent for a visitor who has to sign in first. */
+  links?: Partial<Record<BillingInterval, string | undefined>>;
+  clientCount?: number;
+  /** The signed-in agent's plan, or null on the public pricing page. */
+  current: CurrentPlan | null;
+  unappliedCreditEur?: number;
 }) {
   const t = useTranslations("billing");
-  const tag = intlTag(useLocale());
+  const locale = asLocale(useLocale());
+  const tag = intlTag(locale);
   const [interval, setInterval] = useState<BillingInterval>("monthly");
   const founding = tier === "founding";
   const price = PRICES[tier][interval];
   const standardPrice = PRICES.standard[interval];
-  const link = links[interval];
-  const subscribed = current.source === "subscription";
-  const comped = current.source === "comp";
+  const link = links?.[interval];
+  const subscribed = current?.source === "subscription";
+  const comped = current?.source === "comp";
+  // Anonymous: everything starts with signing in. Coming back to this page
+  // after it keeps the visitor where they were reading, in their language.
+  const signInToUpgrade = `/login?next=${encodeURIComponent(marketingPath("pricing", locale))}`;
   const bold = (chunks: React.ReactNode) => <span className="font-medium">{chunks}</span>;
 
   const freeFeatures = [
@@ -94,22 +101,26 @@ export function PricingCards({
 
       <div className="mx-auto mt-8 grid max-w-3xl gap-5 sm:grid-cols-2">
         {/* Free */}
-        <Card className={cn(current.tier === "free" && "border-primary/40")}>
+        <Card className={cn(current?.tier === "free" && "border-primary/40")}>
           <CardHeader>
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">{t("pricing.freeTitle")}</h2>
-              {current.tier === "free" ? (
+              {current?.tier === "free" ? (
                 <Badge variant="secondary">{t("pricing.yourPlan")}</Badge>
               ) : null}
             </div>
             <div className="mt-2 flex items-baseline gap-1">
-              <span className="text-4xl font-semibold tracking-tight">{formatCurrency(0, tag)}</span>
+              <span className="font-display text-5xl leading-none tracking-tight">{formatCurrency(0, tag)}</span>
               <span className="text-muted-foreground text-sm">{t("pricing.forever")}</span>
             </div>
           </CardHeader>
           <CardContent className="space-y-5">
             <FeatureList items={freeFeatures} />
-            {current.tier === "free" ? (
+            {current === null ? (
+              <Button asChild size="pill" variant="outline" className="w-full">
+                <Link href="/login">{t("pricing.ctaFree")}</Link>
+              </Button>
+            ) : current.tier === "free" ? (
               <p className="text-muted-foreground text-sm">
                 {t("pricing.clientsUsed", { count: clientCount, limit: FREE_CLIENT_LIMIT })}
               </p>
@@ -122,7 +133,7 @@ export function PricingCards({
           <CardHeader>
             <div className="flex items-center justify-between gap-2">
               <h2 className="text-lg font-semibold">{t("pricing.proTitle")}</h2>
-              {current.tier === "pro" ? (
+              {current?.tier === "pro" ? (
                 <Badge>{t("pricing.yourPlan")}</Badge>
               ) : founding ? (
                 <Badge variant="warning" className="gap-1">
@@ -132,7 +143,7 @@ export function PricingCards({
               ) : null}
             </div>
             <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-4xl font-semibold tracking-tight">{formatCurrency(price, tag)}</span>
+              <span className="font-display text-5xl leading-none tracking-tight">{formatCurrency(price, tag)}</span>
               {founding ? (
                 <span className="text-muted-foreground text-sm line-through">{formatCurrency(standardPrice, tag)}</span>
               ) : null}
@@ -151,7 +162,13 @@ export function PricingCards({
           <CardContent className="space-y-5">
             <FeatureList items={proFeatures} />
 
-            {subscribed ? (
+            {current === null ? (
+              <Button asChild size="pill" className="w-full">
+                <Link href={signInToUpgrade}>
+                  {t("pricing.ctaPro")} <ArrowRight />
+                </Link>
+              </Button>
+            ) : subscribed ? (
               <div className="space-y-3">
                 <p className="text-sm">
                   {current.foundingNumber != null
@@ -185,13 +202,13 @@ export function PricingCards({
                   <p className="text-sm">{t("pricing.adminNote")}</p>
                 ) : null}
                 {link ? (
-                  <Button asChild size="lg" className="w-full">
+                  <Button asChild size="pill" className="w-full">
                     <a href={link}>
                       {comped ? t("pricing.subscribe") : t("actions.upgradeToPro")} <ArrowRight />
                     </a>
                   </Button>
                 ) : (
-                  <Button size="lg" className="w-full" disabled>
+                  <Button size="pill" className="w-full" disabled>
                     {t("pricing.checkoutSoon")}
                   </Button>
                 )}

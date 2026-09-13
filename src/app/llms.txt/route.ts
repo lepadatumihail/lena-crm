@@ -1,11 +1,15 @@
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { PRICES } from "@/lib/billing";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+import { marketingPath, type MarketingRoute } from "@/lib/routes";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from "@/lib/site";
 
 // llms.txt (https://llmstxt.org): a plain-text brief for AI crawlers and
 // answer engines. Prerendered at build time. The copy mirrors the landing
 // page and its JSON-LD, so keep the three in step.
 export const dynamic = "force-static";
+
+/** The English URL of a marketing page; this file is English only. */
+const en = (route: MarketingRoute) => absoluteUrl(marketingPath(route, "en"));
 
 export function GET() {
   const pro = PRICES.standard;
@@ -39,6 +43,11 @@ ${SITE_NAME} is a web app for solo and independent real-estate agents, including
 ## Links
 
 - [Home](${SITE_URL}): product overview, features and pricing
+- [Pricing](${en("pricing")}): both plans side by side, the founding price and what happens if you cancel
+- [Real estate CRM for Spain](${en("crmSpain")}): what a CRM has to handle in the Spanish market, and how ${SITE_NAME} handles it
+- [CRM for Marbella and Costa del Sol agents](${en("crmMarbella")}): international buyers, multi-agency listings and viewing days
+- [Guide: managing Idealista leads](${en("guideIdealista")}): how to answer and qualify portal enquiries from Idealista, Fotocasa and Kyero
+- [Guide: real estate lead follow-up](${en("guideFollowUp")}): a follow-up cadence and message templates in English, Spanish and German
 - [Sign in](${SITE_URL}/login): Google or a one-time email code, no password
 - [Sitemap](${SITE_URL}/sitemap.xml)
 `;

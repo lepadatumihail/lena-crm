@@ -185,13 +185,92 @@
     "compedUntil": "You're on Pro until <b>{date}</b>, earned from a referral. Subscribe to keep it going.",
     "adminNote": "You're on Pro as the admin. Subscribing here is only for testing checkout.",
     "subscribe": "Subscribe",
+    "ctaFree": "Start free",
+    "ctaPro": "Start free, upgrade any time",
     "checkoutSoon": "Checkout coming soon",
     "creditWaiting": "€{amount} in free months is waiting and will come off your invoices once you subscribe.",
     "footer": "Prices exclude IVA. Yearly plans are billed once a year. Cancel any time from the billing portal; your data stays exactly where it is."
   },
   "pricingPage": {
     "back": "Back to the app",
+    "meta": {
+      "title": "Pricing — free for {limit} clients, Pro from €{price}/mo",
+      "description": "Two plans for independent estate agents in Spain: Free for up to {limit} clients with every feature, and Pro for unlimited clients from €{price} a month plus IVA."
+    },
+    "eyebrow": "Pricing",
     "heading": "Free to start. One plan when you grow.",
-    "subheading": "Every feature on both plans. The only difference is how many clients you can hold. Nothing you've added is ever deleted."
+    "subheading": "Every feature on both plans. The only difference is how many clients you can hold. Nothing you've added is ever deleted.",
+    "features": {
+      "heading": "Every feature, on both plans",
+      "body": "Nothing is held back for Pro. The plan only changes how many clients you can hold at once.",
+      "pipeline": {
+        "title": "Pipeline",
+        "body": "Move every buyer and seller through clear stages, from new to reserved."
+      },
+      "clients": {
+        "title": "Client cards",
+        "body": "Language, nationality, budget and notes, with hot and cold flags."
+      },
+      "viewings": {
+        "title": "Viewings and offers",
+        "body": "Log every property a client sees, with photos, and record each offer against the asking price."
+      },
+      "documents": {
+        "title": "Documents",
+        "body": "Contracts, IDs and reservation papers filed against the right client."
+      },
+      "agencies": {
+        "title": "Multi-agency",
+        "body": "Tag each lead by agency, so one book covers every agency you sell for."
+      },
+      "ai": {
+        "title": "AI follow-ups",
+        "body": "Warm WhatsApp and email drafts in the client's language. You read and approve before anything is sent."
+      },
+      "autoEngage": {
+        "title": "Auto-engage",
+        "body": "Spots the clients going quiet and hands you a nudge that is ready to send."
+      },
+      "matching": {
+        "title": "Buyer to listing matching",
+        "body": "Shows which of your listings fit a buyer's budget, property type and bedrooms."
+      },
+      "portals": {
+        "title": "Portal lead capture",
+        "body": "Paste an enquiry from Idealista, Fotocasa or Kyero and it becomes a filled-in lead."
+      },
+      "calendar": {
+        "title": "Calendar and confirmations",
+        "body": "Month view with reminders, a Google Calendar feed and one-tap WhatsApp confirmations."
+      },
+      "tools": {
+        "title": "Templates and calculator",
+        "body": "Your own message templates, plus the profit calculator for sellers."
+      },
+      "app": {
+        "title": "English, Spanish, installable",
+        "body": "Switch the interface language whenever you like, and install it on your phone's home screen."
+      }
+    },
+    "explainers": {
+      "founding": {
+        "title": "How the founding price works",
+        "body": "The first {cap} agents who subscribe pay €{price} a month for as long as they stay on Pro. Once those spots are gone the price is €{standard} a month."
+      },
+      "referrals": {
+        "title": "Free months for referrals",
+        "body": "Share your referral link with the agents you co-broke with. Once you are both on Pro, you each get a free month."
+      },
+      "cancel": {
+        "title": "Cancel any time, keep your data",
+        "body": "Cancel in the billing portal in a couple of clicks. Nothing is deleted: the Free limit of {limit} clients simply applies again."
+      }
+    },
+    "faqHeading": "Questions about plans and payment",
+    "cta": {
+      "heading": "Start with your next lead",
+      "body": "Add a client, take one deal through the pipeline and decide later. No card to start, and no time limit.",
+      "primary": "Start for free"
+    }
   }
 }

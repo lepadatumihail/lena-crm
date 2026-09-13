@@ -29,7 +29,6 @@ describe("isProtectedPath", () => {
     "/clients/abc/edit",
     "/calendar",
     "/billing",
-    "/pricing",
     "/admin",
   ])("guards %s", (pathname) => {
     expect(isProtectedPath(pathname)).toBe(true);
@@ -39,6 +38,10 @@ describe("isProtectedPath", () => {
     "/",
     "/es",
     "/es/privacidad",
+    "/pricing",
+    "/es/precios",
+    "/real-estate-crm-spain",
+    "/guides/idealista-lead-management",
     "/login",
     "/auth/callback",
     "/join/abc",
@@ -101,6 +104,12 @@ describe("marketing routes", () => {
       route: "legalNotice",
       locale: "es",
     });
+    expect(marketingRouteAt("/pricing")).toEqual({ route: "pricing", locale: "en" });
+    expect(marketingRouteAt("/es/precios")).toEqual({ route: "pricing", locale: "es" });
+    expect(marketingRouteAt("/guides/idealista-lead-management")).toEqual({
+      route: "guideIdealista",
+      locale: "en",
+    });
   });
 
   it.each(["/login", "/es/nope", "/clients", "/privacy/x", "/join/abc"])(
@@ -116,6 +125,8 @@ describe("marketing routes", () => {
     expect(marketingCounterpart("/es", "en")).toBe("/");
     expect(marketingCounterpart("/es/terminos", "en")).toBe("/terms");
     expect(marketingCounterpart("/legal", "es")).toBe("/es/aviso-legal");
+    expect(marketingCounterpart("/pricing", "es")).toBe("/es/precios");
+    expect(marketingCounterpart("/es/precios", "en")).toBe("/pricing");
   });
 
   it("lists hreflang alternates with English as x-default", () => {

@@ -219,7 +219,8 @@
       "everythingFree": "Todo lo del plan Gratis",
       "referral": "Un mes gratis por cada agente que refieras"
     },
-    "founding": "Los primeros {cap} agentes de pago fijan Pro en {price} € al mes de por vida. Inicia sesión para ver cuántas plazas fundadoras quedan.",
+    "founding": "Los primeros {cap} agentes de pago fijan Pro en {price} € al mes de por vida.",
+    "fullPage": "Ver la página de precios completa",
     "ctaFree": "Empieza gratis",
     "ctaPro": "Empieza gratis, mejora cuando quieras"
   },
@@ -286,6 +287,10 @@
         "q": "¿Se sincroniza con Google Calendar?",
         "a": "Sí. Las visitas y reuniones que agendas en LeadWing aparecen en Google Calendar mediante un calendario al que te suscribes una sola vez, y LeadWing te avisa antes de cada una."
       }
-    }
+    },
+    "ask": "¿Sigues con dudas? Escribe a"
+  },
+  "footer": {
+    "contactLead": "¿Dudas? Escríbenos —"
   }
 }

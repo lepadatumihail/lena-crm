@@ -2,9 +2,17 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
 import { LOCALES, type AppLocale } from "@/i18n/config";
+import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { PRICES } from "@/lib/billing";
 import { faqEntries } from "@/lib/faq";
-import { marketingAlternates, marketingPath, type MarketingRoute } from "@/lib/routes";
+import type { MarketingPageContent } from "@/lib/marketing";
+import {
+  isGuideRoute,
+  marketingAlternates,
+  marketingPath,
+  type ContentRoute,
+  type MarketingRoute,
+} from "@/lib/routes";
 import { SITE_LOCALE, SITE_NAME, SITE_PROFILES, SITE_URL, absoluteUrl } from "@/lib/site";
 
 const OG_LOCALES: Record<AppLocale, string> = { en: SITE_LOCALE, es: "es_ES" };
@@ -45,20 +53,55 @@ export async function marketingMetadata(
   };
 }
 
+/**
+ * Publication date of each written page (ISO). One date per route, shared by
+ * both languages: the two modules say the same thing, so they are revised
+ * together. Shown on the page as "Updated …", emitted as datePublished /
+ * dateModified, and used as the sitemap's lastmod — bump it when the copy
+ * really changes, not on every deploy.
+ */
+export const PUBLISHED: Record<ContentRoute, string> = {
+  crmSpain: "2026-09-13",
+  crmMarbella: "2026-09-13",
+  guideIdealista: "2026-09-13",
+  guideFollowUp: "2026-09-13",
+};
+
+/**
+ * The numbers the pricing page's title and description interpolate: the free
+ * cap and the lowest price anyone can pay today. Shared by the head tags and
+ * the structured data so the two can never disagree — and a reminder that
+ * "from €{price}" is the founding price, which needs revisiting once the
+ * founding cohort is full.
+ */
+export const PRICING_META = {
+  limit: FREE_CLIENT_LIMIT,
+  price: PRICES.founding.monthly,
+} as const;
+
 type JsonLd = Record<string, unknown>;
 
 /**
- * Structured data for the landing page in one language: who we are, what the
- * product is and costs, and the FAQ (FAQPage), built from the same copy the
- * page renders.
+ * Stable node ids, so every page can point at the same three entities instead
+ * of describing them again. Only the home page defines the Organization and
+ * WebSite nodes; the other pages reference them by @id, which is how a
+ * consumer stitches the site together.
  */
-export async function landingJsonLd(locale: AppLocale): Promise<JsonLd> {
-  const [site, faq] = await Promise.all([
-    getTranslations({ locale, namespace: "site" }),
-    getTranslations({ locale, namespace: "landing.faq" }),
-  ]);
-  const organization = `${SITE_URL}/#organization`;
-  const pageUrl = absoluteUrl(marketingPath("home", locale));
+const ORGANIZATION_ID = `${SITE_URL}/#organization`;
+const WEBSITE_ID = `${SITE_URL}/#website`;
+const APP_ID = `${SITE_URL}/#app`;
+
+/**
+ * The product itself, with its offers. Shared by the landing page and the
+ * pricing page: one node, one @id, so the two can never describe two
+ * different products. `pageUrl` is the page in this language that the node
+ * is being served from.
+ */
+export async function softwareApplicationJsonLd(
+  locale: AppLocale,
+  pageUrl: string
+): Promise<JsonLd> {
+  const site = await getTranslations({ locale, namespace: "site" });
   const offer = (name: string, price: number) => ({
     "@type": "Offer",
     name,
@@ -68,11 +111,43 @@ export async function landingJsonLd(locale: AppLocale): Promise<JsonLd> {
   });
 
   return {
+    "@type": "SoftwareApplication",
+    "@id": APP_ID,
+    name: SITE_NAME,
+    url: pageUrl,
+    inLanguage: locale,
+    description: site("description"),
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    slogan: site("tagline"),
+    offers: [
+      offer("Free", 0),
+      offer("Pro monthly", PRICES.standard.monthly),
+      offer("Pro yearly", PRICES.standard.yearly),
+    ],
+    publisher: { "@id": ORGANIZATION_ID },
+  };
+}
+
+/**
+ * Structured data for the landing page in one language: who we are, what the
+ * product is and costs, and the FAQ (FAQPage), built from the same copy the
+ * page renders.
+ */
+export async function landingJsonLd(locale: AppLocale): Promise<JsonLd> {
+  const pageUrl = absoluteUrl(marketingPath("home", locale));
+  const [site, faq, app] = await Promise.all([
+    getTranslations({ locale, namespace: "site" }),
+    getTranslations({ locale, namespace: "landing.faq" }),
+    softwareApplicationJsonLd(locale, pageUrl),
+  ]);
+
+  return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Organization",
-        "@id": organization,
+        "@id": ORGANIZATION_ID,
         name: SITE_NAME,
         url: SITE_URL,
         description: site("description"),
@@ -81,28 +156,13 @@ export async function landingJsonLd(locale: AppLocale): Promise<JsonLd> {
       },
       {
         "@type": "WebSite",
-        "@id": `${SITE_URL}/#website`,
+        "@id": WEBSITE_ID,
         url: SITE_URL,
         name: SITE_NAME,
         inLanguage: [...LOCALES],
-        publisher: { "@id": organization },
+        publisher: { "@id": ORGANIZATION_ID },
       },
-      {
-        "@type": "SoftwareApplication",
-        name: SITE_NAME,
-        url: pageUrl,
-        inLanguage: locale,
-        description: site("description"),
-        applicationCategory: "BusinessApplication",
-        operatingSystem: "Web",
-        slogan: site("tagline"),
-        offers: [
-          offer("Free", 0),
-          offer("Pro monthly", PRICES.standard.monthly),
-          offer("Pro yearly", PRICES.standard.yearly),
-        ],
-        publisher: { "@id": organization },
-      },
+      app,
       {
         "@type": "FAQPage",
         "@id": `${pageUrl}#faq`,
@@ -113,6 +173,106 @@ export async function landingJsonLd(locale: AppLocale): Promise<JsonLd> {
           acceptedAnswer: { "@type": "Answer", text: answer },
         })),
       },
+    ],
+  };
+}
+
+/**
+ * The pricing page: the page itself, and the product whose prices it lists.
+ * The Organization and WebSite nodes are only referenced — they are defined
+ * once, on the home page.
+ */
+export async function pricingJsonLd(locale: AppLocale): Promise<JsonLd> {
+  const pageUrl = absoluteUrl(marketingPath("pricing", locale));
+  const [t, app] = await Promise.all([
+    getTranslations({ locale, namespace: "billing.pricingPage" }),
+    softwareApplicationJsonLd(locale, pageUrl),
+  ]);
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": pageUrl,
+        url: pageUrl,
+        name: t("meta.title", PRICING_META),
+        description: t("meta.description", PRICING_META),
+        inLanguage: locale,
+        isPartOf: { "@id": WEBSITE_ID },
+        about: { "@id": APP_ID },
+      },
+      app,
+    ],
+  };
+}
+
+/**
+ * Structured data for a written page: the page (an Article for guides, a
+ * WebPage for the product pages), where it sits in the site, and its FAQ.
+ * Built from the same content module the page renders, so the two agree.
+ */
+export async function pageJsonLd(
+  route: MarketingRoute,
+  locale: AppLocale,
+  content: MarketingPageContent
+): Promise<JsonLd> {
+  const t = await getTranslations({ locale, namespace: "marketing" });
+  const pageUrl = absoluteUrl(marketingPath(route, locale));
+  const home = absoluteUrl(marketingPath("home", locale));
+  const article = content.kind === "article";
+
+  const crumbs: JsonLd[] = [
+    { "@type": "ListItem", position: 1, name: t("breadcrumb.home"), item: home },
+  ];
+  // The guides index is a label, not a page: a ListItem may carry a name with
+  // no `item`, which is exactly the case here. Nothing links to a URL that 404s.
+  if (isGuideRoute(route)) {
+    crumbs.push({ "@type": "ListItem", position: 2, name: t("breadcrumb.guides") });
+  }
+  crumbs.push({
+    "@type": "ListItem",
+    position: crumbs.length + 1,
+    name: content.heading,
+    item: pageUrl,
+  });
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": article ? "Article" : "WebPage",
+        "@id": pageUrl,
+        url: pageUrl,
+        ...(article ? { headline: content.heading } : { name: content.heading }),
+        description: content.description,
+        inLanguage: locale,
+        datePublished: content.published,
+        dateModified: content.published,
+        author: { "@id": ORGANIZATION_ID },
+        publisher: { "@id": ORGANIZATION_ID },
+        isPartOf: { "@id": WEBSITE_ID },
+        about: { "@id": APP_ID },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${pageUrl}#breadcrumb`,
+        itemListElement: crumbs,
+      },
+      ...(content.faq.length > 0
+        ? [
+            {
+              "@type": "FAQPage",
+              "@id": `${pageUrl}#faq`,
+              inLanguage: locale,
+              mainEntity: content.faq.map(({ q, a }) => ({
+                "@type": "Question",
+                name: q,
+                acceptedAnswer: { "@type": "Answer", text: a },
+              })),
+            },
+          ]
+        : []),
     ],
   };
 }

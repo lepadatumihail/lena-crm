@@ -185,13 +185,92 @@
     "compedUntil": "Estás en Pro hasta el <b>{date}</b>, conseguido por un referido. Suscríbete para mantenerlo.",
     "adminNote": "Estás en Pro como admin. Suscribirte aquí solo sirve para probar el checkout.",
     "subscribe": "Suscribirse",
+    "ctaFree": "Empieza gratis",
+    "ctaPro": "Empieza gratis, mejora cuando quieras",
     "checkoutSoon": "Checkout disponible pronto",
     "creditWaiting": "{amount} € en meses gratis están esperando y se descontarán de tus facturas cuando te suscribas.",
     "footer": "Los precios no incluyen IVA. Los planes anuales se cobran una vez al año. Cancela cuando quieras desde el portal de facturación; tus datos se quedan exactamente donde están."
   },
   "pricingPage": {
     "back": "Volver a la app",
+    "meta": {
+      "title": "Precios — gratis hasta {limit} clientes, Pro desde {price} €",
+      "description": "Dos planes para agentes inmobiliarios en España: Gratis hasta {limit} clientes con todas las funciones y Pro con clientes ilimitados desde {price} € al mes más IVA."
+    },
+    "eyebrow": "Precios",
     "heading": "Empieza gratis. Un plan cuando crezcas.",
-    "subheading": "Todas las funciones en los dos planes. La única diferencia es cuántos clientes puedes tener. Nada de lo que has añadido se borra nunca."
+    "subheading": "Todas las funciones en los dos planes. La única diferencia es cuántos clientes puedes tener. Nada de lo que has añadido se borra nunca.",
+    "features": {
+      "heading": "Todas las funciones, en los dos planes",
+      "body": "No guardamos nada para el plan Pro. Lo único que cambia es cuántos clientes puedes llevar a la vez.",
+      "pipeline": {
+        "title": "Embudo",
+        "body": "Mueve a cada comprador y vendedor por etapas claras, de nuevo a reservado."
+      },
+      "clients": {
+        "title": "Fichas de cliente",
+        "body": "Idioma, nacionalidad, presupuesto y notas, con marcas de caliente y frío."
+      },
+      "viewings": {
+        "title": "Visitas y ofertas",
+        "body": "Registra cada propiedad que ve un cliente, con fotos, y cada oferta frente al precio de salida."
+      },
+      "documents": {
+        "title": "Documentos",
+        "body": "Contratos, DNI y papeles de reserva archivados en el cliente que toca."
+      },
+      "agencies": {
+        "title": "Varias agencias",
+        "body": "Etiqueta cada lead por agencia y lleva en una sola cartera todas las agencias para las que vendes."
+      },
+      "ai": {
+        "title": "Seguimientos con IA",
+        "body": "Borradores cercanos de WhatsApp y email en el idioma del cliente. Tú los lees y los apruebas antes de enviar."
+      },
+      "autoEngage": {
+        "title": "Auto-engage",
+        "body": "Detecta a los clientes que se están enfriando y te deja el mensaje listo para enviar."
+      },
+      "matching": {
+        "title": "Cruce comprador-propiedad",
+        "body": "Te enseña cuáles de tus propiedades encajan con el presupuesto, el tipo y las habitaciones de cada comprador."
+      },
+      "portals": {
+        "title": "Leads de portales",
+        "body": "Pega un contacto de Idealista, Fotocasa o Kyero y se convierte en un lead ya rellenado."
+      },
+      "calendar": {
+        "title": "Calendario y confirmaciones",
+        "body": "Vista de mes con recordatorios, feed para Google Calendar y confirmaciones por WhatsApp en un toque."
+      },
+      "tools": {
+        "title": "Plantillas y calculadora",
+        "body": "Tus propias plantillas de mensajes y la calculadora de beneficio para vendedores."
+      },
+      "app": {
+        "title": "Español, inglés e instalable",
+        "body": "Cambia el idioma de la interfaz cuando quieras e instálala en la pantalla de inicio del móvil."
+      }
+    },
+    "explainers": {
+      "founding": {
+        "title": "Cómo funciona el precio fundador",
+        "body": "Los primeros {cap} agentes que se suscriben pagan {price} € al mes mientras sigan en Pro. Cuando se acaben esas plazas, el precio es de {standard} € al mes."
+      },
+      "referrals": {
+        "title": "Meses gratis por referidos",
+        "body": "Comparte tu enlace de referido con los agentes con los que compartes operaciones. Cuando los dos estéis en Pro, cada uno se lleva un mes gratis."
+      },
+      "cancel": {
+        "title": "Cancela cuando quieras y conserva tus datos",
+        "body": "Cancela desde el portal de facturación en dos clics. No se borra nada: simplemente vuelve a aplicarse el límite de {limit} clientes del plan Gratis."
+      }
+    },
+    "faqHeading": "Preguntas sobre planes y pagos",
+    "cta": {
+      "heading": "Empieza con tu próximo lead",
+      "body": "Añade un cliente, lleva una operación de punta a punta y decide después. Sin tarjeta para empezar y sin límite de tiempo.",
+      "primary": "Empieza gratis"
+    }
   }
 }

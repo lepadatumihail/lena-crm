@@ -219,7 +219,8 @@
       "everythingFree": "Everything in Free",
       "referral": "A free month for every agent you refer"
     },
-    "founding": "The first {cap} paying agents lock Pro at €{price} a month for life. Sign in to see how many founding spots are left.",
+    "founding": "The first {cap} paying agents lock Pro at €{price} a month for life.",
+    "fullPage": "See the full pricing page",
     "ctaFree": "Start free",
     "ctaPro": "Start free, upgrade any time"
   },
@@ -286,6 +287,10 @@
         "q": "Does it sync with Google Calendar?",
         "a": "Yes. Viewings and meetings you book in LeadWing appear in Google Calendar through a calendar feed you subscribe to once, and LeadWing reminds you before each one."
       }
-    }
+    },
+    "ask": "Still not sure? Write to"
+  },
+  "footer": {
+    "contactLead": "Questions? Write to us —"
   }
 }

@@ -1,0 +1,52 @@
+{
+  "article": {
+    "updated": "Actualizado el {date}"
+  },
+  "faq": {
+    "heading": "Lo que suele preguntarse la gente"
+  },
+  "related": {
+    "heading": "Sigue leyendo"
+  },
+  "cta": {
+    "heading": "Pruébalo con tu próximo lead",
+    "body": "Gratis hasta {limit} clientes, sin tarjeta y sin límite de tiempo. Añade un comprador, deja que te redacte el primer mensaje y mira si encaja con tu forma de trabajar.",
+    "primary": "Empieza gratis",
+    "secondary": "Ver precios"
+  },
+  "template": {
+    "language": "Idioma de la plantilla",
+    "copy": "Copiar",
+    "copied": "Copiado"
+  },
+  "breadcrumb": {
+    "home": "Inicio",
+    "guides": "Guías"
+  },
+  "footer": {
+    "product": "Producto",
+    "guides": "Guías"
+  },
+  "routes": {
+    "pricing": {
+      "label": "Precios",
+      "blurb": "Los dos planes uno al lado del otro, el precio fundador y qué pasa si cancelas."
+    },
+    "crmSpain": {
+      "label": "CRM para España",
+      "blurb": "Qué tiene que resolver un CRM en el mercado español y cómo lo resuelve este."
+    },
+    "crmMarbella": {
+      "label": "CRM para Marbella",
+      "blurb": "Cómo trabajan los agentes de la Costa del Sol y qué le pide eso a un CRM."
+    },
+    "guideIdealista": {
+      "label": "Leads de Idealista",
+      "blurb": "Responde, cualifica y guarda los contactos de los portales antes de que se enfríen."
+    },
+    "guideFollowUp": {
+      "label": "Seguimiento de leads",
+      "blurb": "Una cadencia de seguimiento para compradores, con mensajes listos para enviar."
+    }
+  }
+}

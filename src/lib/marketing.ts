@@ -1,0 +1,45 @@
+import type { ComponentType } from "react";
+
+import type { MarketingRoute } from "@/lib/routes";
+
+/**
+ * The shape of a written marketing page: everything the shared shell
+ * (components/marketing/marketing-page.tsx) needs to render the page, its
+ * head tags and its structured data. One module per language lives at
+ * src/content/pages/<file>.<lang>.tsx and default-exports nothing — it
+ * exports `content` typed as MarketingPageContent.
+ *
+ * The type lives here rather than next to the component so lib/seo.ts can
+ * read it without importing the component (and pulling the whole React tree
+ * into the metadata path); marketing-page.tsx re-exports it, which is the
+ * import content modules should use.
+ */
+export type MarketingFaq = {
+  /** The question, exactly as a person would ask it. */
+  q: string;
+  /** One to three sentences. Plain text: it is also emitted as JSON-LD. */
+  a: string;
+};
+
+export type MarketingPageContent = {
+  /** <title>, ≤ 60 chars, primary keyword first, no brand (the template appends " · LeadWing"). */
+  title: string;
+  /** Meta description, 140–160 characters. */
+  description: string;
+  /** "article" → Article structured data (guides); "page" → WebPage (product pages). */
+  kind: "article" | "page";
+  /** ISO date; shown as "Updated …", and used for datePublished/dateModified and sitemap lastmod. */
+  published: string;
+  /** Short badge above the H1 ("Guide", "Real estate CRM · Spain", …). */
+  eyebrow: string;
+  /** The H1. */
+  heading: string;
+  /** One paragraph under the H1, plain text. */
+  lead: string;
+  /** The article itself: plain HTML elements, optionally <Callout> and <TemplateBlock>. */
+  Body: ComponentType;
+  /** 3–6 page-specific entries, rendered as <details> and emitted as FAQPage JSON-LD. */
+  faq: MarketingFaq[];
+  /** 2–4 sibling routes shown as cards at the end; labels and blurbs come from marketing.json. */
+  related: MarketingRoute[];
+};

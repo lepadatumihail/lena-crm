@@ -1,57 +1,64 @@
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { ChevronDown } from "lucide-react";
 
 import { asLocale } from "@/i18n/config";
 import { faqEntries } from "@/lib/faq";
 import { marketingPath } from "@/lib/routes";
+import { SUPPORT_EMAIL } from "@/lib/site";
+import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/reveal";
+import { FAQ_CARD, FaqList } from "@/components/marketing/faq-list";
 
 /**
- * Plain <details> so every answer is in the HTML for crawlers and works with
- * no JavaScript; the same entries feed the FAQPage structured data.
+ * The landing FAQ. The list markup is shared with the pricing and written
+ * pages (FaqList); the same entries feed the FAQPage structured data.
  */
 export function Faq() {
   const t = useTranslations("landing.faq");
   const locale = asLocale(useLocale());
-  const entries = faqEntries(t);
+  const entries = faqEntries(t).map(({ key, question, answer }) => ({
+    key,
+    question,
+    answer:
+      key === "privacy" ? (
+        <>
+          {answer}{" "}
+          <Link
+            href={marketingPath("privacy", locale)}
+            className="text-foreground underline underline-offset-4"
+          >
+            {t("privacyLink")}
+          </Link>
+        </>
+      ) : (
+        answer
+      ),
+  }));
 
   return (
-    <section
-      id="faq"
-      className="mx-auto w-full max-w-6xl scroll-mt-20 px-4 py-16"
-    >
-      <Reveal className="mx-auto max-w-2xl text-center">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          {t("heading")}
-        </h2>
-        <p className="text-muted-foreground mt-3">{t("body")}</p>
-      </Reveal>
+    <section id="faq" className="section-y bg-muted/50 scroll-mt-20">
+      <div className="mx-auto w-full max-w-6xl px-4">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <h2 className="display-2 text-balance">{t("heading")}</h2>
+          <p className="text-muted-foreground mt-4 text-lg text-pretty">
+            {t("body")}
+          </p>
+        </Reveal>
 
-      <Reveal className="bg-card mx-auto mt-10 max-w-3xl divide-y rounded-2xl border shadow-sm">
-        {entries.map(({ key, question, answer }) => (
-          <details key={key} className="group px-5 py-4">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left [&::-webkit-details-marker]:hidden">
-              <h3 className="font-medium">{question}</h3>
-              <ChevronDown className="text-muted-foreground size-4 shrink-0 transition-transform group-open:rotate-180" />
-            </summary>
-            <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
-              {answer}
-              {key === "privacy" ? (
-                <>
-                  {" "}
-                  <Link
-                    href={marketingPath("privacy", locale)}
-                    className="text-foreground underline underline-offset-4"
-                  >
-                    {t("privacyLink")}
-                  </Link>
-                </>
-              ) : null}
-            </p>
-          </details>
-        ))}
-      </Reveal>
+        <Reveal className={cn("mx-auto mt-12 max-w-3xl", FAQ_CARD)}>
+          <FaqList entries={entries} />
+        </Reveal>
+
+        <Reveal className="text-muted-foreground mx-auto mt-6 max-w-3xl text-center text-sm">
+          {t("ask")}{" "}
+          <a
+            href={`mailto:${SUPPORT_EMAIL}`}
+            className="text-foreground hover:text-primary font-medium underline underline-offset-4 transition-colors"
+          >
+            {SUPPORT_EMAIL}
+          </a>
+        </Reveal>
+      </div>
     </section>
   );
 }
