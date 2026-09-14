@@ -76,15 +76,6 @@ const ROWS: Record<string, Row> = {
     viewings: 0,
     quietHours: 26,
   },
-  olivia: {
-    id: "olivia",
-    name: "Olivia Brown",
-    stage: "viewing",
-    budgetMin: null,
-    budgetMax: 720_000,
-    viewings: 5,
-    quietHours: 72,
-  },
   anya: {
     id: "anya",
     name: "Anya Petrova",
@@ -93,24 +84,6 @@ const ROWS: Record<string, Row> = {
     budgetMax: null,
     viewings: 0,
     quietHours: 120,
-  },
-  lars: {
-    id: "lars",
-    name: "Lars Nielsen",
-    stage: "viewing",
-    budgetMin: 450_000,
-    budgetMax: 520_000,
-    viewings: 2,
-    quietHours: 168,
-  },
-  marie: {
-    id: "marie",
-    name: "Marie Dubois",
-    stage: "reserved",
-    budgetMin: null,
-    budgetMax: 890_000,
-    viewings: 4,
-    quietHours: 336,
   },
   tom: {
     id: "tom",
@@ -123,7 +96,9 @@ const ROWS: Record<string, Row> = {
   },
 };
 
-const START = ["sofia", "james", "olivia", "anya", "lars", "marie"];
+// Three at rest, most recent first. Every beat of the loop lands on a row that
+// stays in view once Tom pushes Anya under the bottom edge.
+const START = ["sofia", "james", "anya"];
 const initialRows = (): Row[] => START.map((id) => ROWS[id]);
 
 const STEP_MS = 3200;
@@ -217,11 +192,11 @@ export function AppPreview() {
         patch("james", { stage: "viewing" });
         pushToast("moved", "brand", ArrowRight);
       } else if (step === 2) {
-        patch("olivia", { stage: "reserved" });
+        patch("sofia", { stage: "reserved" });
         setUnread((n) => n + 1);
         pushToast("offerAccepted", "green", Check);
       } else if (step === 3) {
-        patch("lars", { quietHours: 0 });
+        patch("james", { quietHours: 0 });
         pushToast("reminderSent", "whatsapp", MessageCircle);
       } else {
         setRows(initialRows());
@@ -245,9 +220,9 @@ export function AppPreview() {
           stage: stageLabel(tCrm, "viewing"),
         });
       case "offerAccepted":
-        return t("preview.toasts.offerAccepted", { name: ROWS.olivia.name });
+        return t("preview.toasts.offerAccepted", { name: ROWS.sofia.name });
       case "reminderSent":
-        return t("preview.toasts.reminderSent", { name: "Lars" });
+        return t("preview.toasts.reminderSent", { name: "James" });
     }
   }
 
@@ -357,10 +332,13 @@ export function AppPreview() {
             </div>
           </div>
 
-          {/* Room under the table for the toasts, so none of them covers a row. */}
-          <div className="relative flex-1 space-y-3 p-3 pb-14 sm:p-4 sm:pb-14">
+          {/* Room under the table for the toasts, so none of them covers a row.
+              On a phone there is no side padding: the tabs, toolbar and list
+              run edge to edge, so the window reads as one screen rather than
+              a card inside a card. */}
+          <div className="relative flex-1 space-y-3 pt-3 pb-14 sm:p-4 sm:pb-14">
             {/* Stage tabs: every stage with its live count. */}
-            <div className="scrollbar-none -mx-1 flex items-end overflow-x-auto border-b px-1 max-md:[mask-image:linear-gradient(to_right,#000_calc(100%-2.5rem),transparent)]">
+            <div className="scrollbar-none flex items-end overflow-x-auto border-b max-md:[mask-image:linear-gradient(to_right,#000_calc(100%-2.5rem),transparent)] sm:-mx-1 sm:px-1">
               <StageTab label={tClients("list.all")} count={rows.length} active />
               {BUYER_STAGES.map((s) => (
                 <StageTab
@@ -373,7 +351,7 @@ export function AppPreview() {
             </div>
 
             {/* Toolbar */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 px-3 sm:px-0">
               <span className="bg-background text-muted-foreground flex h-8 min-w-0 flex-1 items-center gap-2 rounded-md border px-2.5 text-[13px] shadow-xs sm:max-w-64">
                 <Search className="size-4 shrink-0" strokeWidth={1.75} />
                 <span className="truncate">{tClients("list.searchPlaceholder")}</span>
@@ -398,8 +376,8 @@ export function AppPreview() {
               </span>
             </div>
 
-            {/* The table */}
-            <div className="bg-card overflow-hidden rounded-xl border shadow-xs">
+            {/* The table: a flat list between two hairlines on a phone, a card from sm. */}
+            <div className="bg-card overflow-hidden border-y sm:rounded-xl sm:border sm:shadow-xs">
               <div
                 className={cn(
                   GRID,
@@ -419,7 +397,12 @@ export function AppPreview() {
                 <span className="hidden md:block" />
               </div>
 
-              <div className="relative">
+              {/* A fixed window of three rows, so the board keeps its height
+                  when the fourth arrives: the list scrolls the way a real one
+                  would, and the last row slides out under the bottom edge.
+                  125px is three 42px rows less the third row's bottom border,
+                  which would otherwise double the card's own. */}
+              <div className="relative h-[125px] overflow-hidden">
                 <AnimatePresence initial={false} mode="popLayout">
                   {rows.map((r) => (
                     <motion.div
