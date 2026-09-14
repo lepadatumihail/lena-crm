@@ -6,14 +6,15 @@ import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { intlTag } from "@/i18n/config";
 import { planState } from "@/lib/access";
-import { AppSidebar, type SidebarPlan } from "@/components/app-sidebar";
-import { NotificationsBell } from "@/components/notifications/notifications-bell";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { BUYER_STAGES } from "@/lib/crm";
+import { AGENT_TIME_ZONE, dayRangeInTimeZone } from "@/lib/home";
+import { AppBar } from "@/components/shell/app-bar";
 import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+  AppSidebar,
+  type SidebarPlan,
+  type StageCount,
+} from "@/components/shell/app-sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -40,14 +41,35 @@ export default async function AppLayout({
 
   // The app is always open. The only gate is the Free plan's client cap,
   // enforced where a client is added; the sidebar just shows where they stand.
-  const [{ data: profile }, { count }] = await Promise.all([
+  // One light scan of the book feeds the cap, the nav badges and the pipeline
+  // group; today's appointments are a head count.
+  const now = new Date();
+  const today = dayRangeInTimeZone(now.toISOString(), AGENT_TIME_ZONE);
+  const [{ data: profile }, clientsRes, todayRes] = await Promise.all([
     supabase
       .from("profiles")
-      .select("is_admin, founding_number, subscription_status, pro_until")
+      .select("full_name, is_admin, founding_number, subscription_status, pro_until")
       .eq("id", user.id)
       .maybeSingle(),
-    supabase.from("clients").select("id", { count: "exact", head: true }),
+    supabase.from("clients").select("side, stage, is_active"),
+    supabase
+      .from("appointments")
+      .select("id", { count: "exact", head: true })
+      .gte("starts_at", today.start)
+      .lt("starts_at", today.end),
   ]);
+
+  const rows = clientsRes.data ?? [];
+  const active = rows.filter((r) => r.is_active);
+  const counts = {
+    buyers: active.filter((r) => r.side === "buyer").length,
+    sellers: active.filter((r) => r.side === "seller").length,
+    today: todayRes.count ?? 0,
+  };
+  const stages: StageCount[] = BUYER_STAGES.map((stage) => ({
+    stage,
+    count: active.filter((r) => r.side === "buyer" && r.stage === stage).length,
+  }));
 
   let plan: SidebarPlan | null = null;
   if (profile) {
@@ -57,9 +79,17 @@ export default async function AppLayout({
       source: state.source,
       proUntilLabel: state.proUntil ? shortDate(state.proUntil, locale) : null,
       limit: state.limit,
-      clientCount: count ?? 0,
+      // Every row counts against the cap, inactive ones too.
+      clientCount: rows.length,
     };
   }
+
+  const todayLabel = new Intl.DateTimeFormat(intlTag(locale), {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    timeZone: AGENT_TIME_ZONE,
+  }).format(now);
 
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
@@ -71,16 +101,17 @@ export default async function AppLayout({
         isAdmin={profile?.is_admin ?? false}
         foundingNumber={profile?.founding_number ?? null}
         plan={plan}
+        counts={counts}
+        stages={stages}
       />
-      <SidebarInset>
-        <header className="bg-background/80 sticky top-0 z-10 flex h-14 items-center gap-2 border-b px-4 backdrop-blur">
-          <SidebarTrigger className="-ml-1" />
-          <div className="ml-auto flex items-center gap-1">
-            <ThemeToggle />
-            <NotificationsBell />
-          </div>
-        </header>
-        <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
+      <SidebarInset className="min-w-0">
+        <AppBar
+          email={user.email ?? ""}
+          name={profile?.full_name ?? null}
+          counts={counts}
+          todayLabel={todayLabel}
+        />
+        <div className="mx-auto w-full max-w-[1600px] flex-1 px-4 py-5 md:px-6">
           {children}
         </div>
       </SidebarInset>

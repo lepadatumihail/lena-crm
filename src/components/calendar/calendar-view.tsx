@@ -219,9 +219,9 @@ export function CalendarView({
     <div className="space-y-4">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center justify-between gap-3">
-          <h1 className="text-xl font-semibold tracking-tight first-letter:uppercase md:text-2xl">
+          <h2 className="text-lg font-semibold tracking-tight first-letter:uppercase md:text-xl">
             {rangeLabel(view, anchor, dateLocale)}
-          </h1>
+          </h2>
           {newButton("md:hidden")}
         </div>
         <div className="flex flex-wrap items-center gap-2">

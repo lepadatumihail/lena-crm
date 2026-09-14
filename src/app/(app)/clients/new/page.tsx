@@ -52,9 +52,9 @@ export default async function NewClientPage({
             <ArrowLeft /> {t("back", { side })}
           </Link>
         </Button>
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <h2 className="text-xl font-semibold tracking-tight">
           {t("title", { side })}
-        </h1>
+        </h2>
         <p className="text-muted-foreground text-sm">
           {t("description", { side })}
         </p>

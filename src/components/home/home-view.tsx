@@ -1,13 +1,11 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import {
-  ArrowRight,
   BellRing,
   Building2,
   CalendarDays,
   CalendarPlus,
   Euro,
-  Kanban,
   Plus,
   Users,
 } from "lucide-react";
@@ -16,20 +14,20 @@ import type { CalendarEvent } from "@/lib/data/calendar";
 import type { AttentionItem, HomeOverview } from "@/lib/data/dashboard";
 import { intlTag } from "@/i18n/config";
 import { sideLabel, stageLabel } from "@/i18n/labels";
-import { UpcomingPanel } from "@/components/home/upcoming-panel";
-import { StatTiles, type StatTile } from "@/components/home/stat-tiles";
-import { PipelineBar } from "@/components/home/pipeline-bar";
-import { RecentClients } from "@/components/home/recent-clients";
+import { AttentionList } from "@/components/home/attention-list";
 import { OnboardingCard } from "@/components/home/onboarding-card";
+import { RecentClients } from "@/components/home/recent-clients";
+import { StatTiles, type StatSegment, type StatTile } from "@/components/home/stat-tiles";
+import { UpcomingPanel } from "@/components/home/upcoming-panel";
+import { Panel, PanelAction } from "@/components/shell/panel";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Money } from "@/components/ui/money";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { clientsPath, formatCurrency, type ClientSide } from "@/lib/crm";
+  clientsPath,
+  formatCurrency,
+  STAGE_TONES,
+  type ClientSide,
+} from "@/lib/crm";
 import {
   AGENT_TIME_ZONE,
   buyersBeforeViewing,
@@ -37,16 +35,11 @@ import {
   greetingPeriod,
   hourInTimeZone,
   onboardingSteps,
+  pipelineSegments,
   showOnboarding,
 } from "@/lib/home";
-import { cn } from "@/lib/utils";
 
-const ATTENTION_DOT: Record<string, string> = {
-  new_lead: "bg-primary",
-  stalled_offer: "bg-primary",
-  follow_up: "bg-warning",
-  reservation: "bg-success",
-};
+const ATTENTION_LIMIT = 8;
 
 export type HomeViewProps = {
   events: CalendarEvent[];
@@ -57,7 +50,12 @@ export type HomeViewProps = {
   now?: Date;
 };
 
-/** The Home cockpit, given its data. `home/page.tsx` does the fetching. */
+/**
+ * The Home cockpit, given its data. `home/page.tsx` does the fetching.
+ * Headline figures first, then what needs doing and what is coming up, then
+ * the clients most recently touched. The stage breakdown lives in the
+ * sidebar's pipeline group and under the buyer/seller tiles.
+ */
 export async function HomeView({
   events,
   commission,
@@ -82,6 +80,13 @@ export async function HomeView({
     timeZone: AGENT_TIME_ZONE,
   }).format(now);
 
+  const bar = (side: ClientSide): StatSegment[] =>
+    pipelineSegments(side === "buyer" ? counts.buyer : counts.seller).map((s) => ({
+      tone: STAGE_TONES[s.stage],
+      percent: s.percent,
+      label: `${stageLabel(tCrm, s.stage)} ${s.count}`,
+    }));
+
   const viewingsThisWeek = countViewingsWithin(events, nowISO, 7);
   const tiles: StatTile[] = [
     {
@@ -89,12 +94,14 @@ export async function HomeView({
       value: String(counts.buyerTotal),
       href: clientsPath("buyer"),
       icon: Users,
+      bar: bar("buyer"),
     },
     {
       label: t("stats.sellers"),
       value: String(counts.sellerTotal),
       href: clientsPath("seller"),
       icon: Building2,
+      bar: bar("seller"),
     },
     {
       label: t("stats.viewings"),
@@ -104,7 +111,7 @@ export async function HomeView({
     },
     {
       label: t("stats.commission"),
-      value: formatCurrency(commission.pipeline, tag),
+      value: <Money value={commission.pipeline} locale={tag} />,
       hint:
         commission.closed > 0
           ? t("stats.commissionClosed", {
@@ -124,24 +131,17 @@ export async function HomeView({
     detail: t(`onboarding.steps.${s.step}.detail`),
   }));
 
-  const pipelineStages = (side: ClientSide) =>
-    (side === "buyer" ? counts.buyer : counts.seller).map((s) => ({
-      stage: s.stage,
-      label: stageLabel(tCrm, s.stage),
-      count: s.count,
-      title: t("pipeline.viewStage", {
-        stage: stageLabel(tCrm, s.stage).toLowerCase(),
-        side: sideLabel(tCrm, side, true).toLowerCase(),
-      }),
-    }));
-
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">{greeting}</h1>
-          <p className="text-muted-foreground text-sm first-letter:uppercase">
-            {dateLabel}
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div className="min-w-0">
+          <h2 className="truncate text-xl font-semibold tracking-tight">
+            {greeting}
+          </h2>
+          <p className="text-muted-foreground text-sm">
+            <span className="inline-block first-letter:uppercase">{dateLabel}</span>
+            <span className="mx-1.5">·</span>
+            {t("subtitle")}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -163,7 +163,7 @@ export async function HomeView({
         </div>
       </div>
 
-      {showOnboarding(onboarding) && (
+      {showOnboarding(onboarding) ? (
         <OnboardingCard
           title={t("onboarding.title")}
           subtitle={t("onboarding.subtitle", {
@@ -172,133 +172,59 @@ export async function HomeView({
           })}
           steps={steps}
         />
-      )}
+      ) : null}
 
       <StatTiles tiles={tiles} />
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <CalendarDays className="text-primary size-4" />
-              {t("upcoming.title")}
-            </CardTitle>
-            <Button asChild variant="ghost" size="sm" className="-mr-2">
-              <Link href="/calendar">
-                {t("upcoming.calendar")} <ArrowRight />
-              </Link>
-            </Button>
-          </CardHeader>
-          <CardContent>
-            <UpcomingPanel
-              events={events}
-              waitingBuyers={buyersBeforeViewing(counts.buyer)}
-            />
-          </CardContent>
-        </Card>
+      <div className="grid gap-5 lg:grid-cols-5">
+        <Panel
+          className="lg:col-span-3"
+          title={t("attention.title")}
+          icon={<BellRing className="size-3.5" />}
+          count={attention.length}
+        >
+          <AttentionList
+            items={attention.slice(0, ATTENTION_LIMIT)}
+            emptyLabel={t("attention.empty")}
+            openLabel={t("attention.open")}
+            draftLabel={t("attention.draft")}
+          />
+        </Panel>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <BellRing className="text-primary size-4" />
-              {t("attention.title")}
-              {attention.length > 0 && (
-                <Badge variant="secondary">{attention.length}</Badge>
-              )}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {attention.length === 0 ? (
-              <p className="text-muted-foreground rounded-lg border border-dashed py-8 text-center text-sm">
-                {t("attention.empty")}
-              </p>
-            ) : (
-              <div className="space-y-2">
-                {attention.slice(0, 8).map((a) => (
-                  <Link
-                    key={a.id}
-                    href={a.href}
-                    className="hover:bg-accent flex items-center gap-3 rounded-lg border p-3 transition-colors"
-                  >
-                    <span
-                      className={cn(
-                        "size-2 shrink-0 rounded-full",
-                        ATTENTION_DOT[a.kind] ?? "bg-muted-foreground"
-                      )}
-                    />
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">{a.title}</p>
-                      <p className="text-muted-foreground text-xs">
-                        {a.detail}
-                      </p>
-                    </div>
-                    <span className="text-primary shrink-0 text-xs font-medium">
-                      {a.href.includes("compose=")
-                        ? t("attention.draft")
-                        : t("attention.open")}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card className="md:col-span-2 xl:col-span-1">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Users className="text-primary size-4" />
-              {t("recent.title")}
-            </CardTitle>
-            <Button asChild variant="ghost" size="sm" className="-mr-2">
-              <Link href={clientsPath("buyer")}>
-                {t("recent.all")} <ArrowRight />
-              </Link>
-            </Button>
-          </CardHeader>
-          <CardContent>
-            <RecentClients
-              clients={recent}
-              intlTag={tag}
-              nowISO={nowISO}
-              emptyLabel={t("recent.empty")}
-              priorityLabel={t("recent.priority")}
-              nowLabel={t("recent.now")}
-              sideLabel={(side) => sideLabel(tCrm, side)}
-              stageLabel={(stage) => stageLabel(tCrm, stage)}
-            />
-          </CardContent>
-        </Card>
+        <Panel
+          className="lg:col-span-2"
+          title={t("upcoming.title")}
+          icon={<CalendarDays className="size-3.5" />}
+          action={<PanelAction href="/calendar">{t("upcoming.calendar")}</PanelAction>}
+        >
+          <UpcomingPanel
+            events={events}
+            waitingBuyers={buyersBeforeViewing(counts.buyer)}
+          />
+        </Panel>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Kanban className="text-primary size-4" />
-            {t("pipeline.title")}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-6 md:grid-cols-2">
-          <PipelineBar
-            side="buyer"
-            label={sideLabel(tCrm, "buyer", true)}
-            total={counts.buyerTotal}
-            emptyLabel={t("pipeline.empty", {
-              side: sideLabel(tCrm, "buyer", true).toLowerCase(),
-            })}
-            stages={pipelineStages("buyer")}
-          />
-          <PipelineBar
-            side="seller"
-            label={sideLabel(tCrm, "seller", true)}
-            total={counts.sellerTotal}
-            emptyLabel={t("pipeline.empty", {
-              side: sideLabel(tCrm, "seller", true).toLowerCase(),
-            })}
-            stages={pipelineStages("seller")}
-          />
-        </CardContent>
-      </Card>
+      <Panel
+        title={t("recent.title")}
+        icon={<Users className="size-3.5" />}
+        action={<PanelAction href={clientsPath("buyer")}>{t("recent.all")}</PanelAction>}
+      >
+        <RecentClients
+          clients={recent}
+          intlTag={tag}
+          nowISO={nowISO}
+          columns={{
+            client: t("recent.columns.client"),
+            stage: t("recent.columns.stage"),
+            amount: t("recent.columns.amount"),
+            updated: t("recent.columns.updated"),
+          }}
+          emptyLabel={t("recent.empty")}
+          priorityLabel={t("recent.priority")}
+          nowLabel={t("recent.now")}
+          sideLabel={(side) => sideLabel(tCrm, side)}
+        />
+      </Panel>
     </div>
   );
 }

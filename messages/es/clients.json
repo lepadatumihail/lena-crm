@@ -20,7 +20,33 @@
     "toasts": {
       "moveFailed": "No se ha podido mover el cliente",
       "moved": "Movido a {stage}",
-      "priorityFailed": "No se ha podido actualizar la prioridad"
+      "priorityFailed": "No se ha podido actualizar la prioridad",
+      "updateFailed": "No se ha podido actualizar"
+    },
+    "all": "Todos",
+    "typeAll": "Todos los tipos",
+    "selected": "{count, plural, one {# seleccionado} other {# seleccionados}}",
+    "inView": "{count, plural, one {# a la vista} other {# a la vista}}",
+    "clearSelection": "Quitar la selección",
+    "bulk": {
+      "moveTo": "Mover a…",
+      "flag": "Marcar prioridad",
+      "hide": "Ocultar",
+      "toasts": {
+        "moved": "{count, plural, one {# cliente movido} other {# clientes movidos}} a {stage}",
+        "flagged": "{count, plural, one {# cliente marcado} other {# clientes marcados}}",
+        "hidden": "{count, plural, one {# cliente ocultado} other {# clientes ocultados}}",
+        "failed": "{count, plural, one {# cambio ha fallado} other {# cambios han fallado}}"
+      }
+    },
+    "summary": {
+      "budgetTotal": "Presupuesto total",
+      "askingTotal": "Total pedido",
+      "viewings": "Visitas",
+      "properties": "Inmuebles",
+      "priority": "Prioritarios",
+      "commission": "Comisión en el embudo",
+      "closed": "Cerrado"
     }
   },
   "priority": {
@@ -33,7 +59,19 @@
     "type": "Tipo",
     "agency": "Agencia",
     "contact": "Contacto",
-    "updated": "Actualizado"
+    "updated": "Actualizado",
+    "budget": "Presupuesto",
+    "askingPrice": "Precio pedido",
+    "viewings": "Visitas",
+    "properties": "Inmuebles",
+    "role": "Rol",
+    "lastActivity": "Última actividad",
+    "actions": "Acciones",
+    "upTo": "hasta <amount></amount>",
+    "from": "desde <amount></amount>",
+    "selectAll": "Seleccionar todo",
+    "selectRow": "Seleccionar a {name}",
+    "inactive": "Inactivo"
   },
   "kanban": {
     "dropHere": "Suelta aquí"
@@ -118,5 +156,26 @@
     "invalidForm": "Revisa el formulario e inténtalo de nuevo.",
     "limitReached": "Has usado tus {limit} clientes gratis. Pro es ilimitado.",
     "invalidStage": "Etapa no válida"
+  },
+  "rowMenu": {
+    "open": "Abrir",
+    "edit": "Editar",
+    "moveTo": "Mover a",
+    "hide": "Ocultar",
+    "reactivate": "Reactivar"
+  },
+  "sheet": {
+    "title": "Cliente",
+    "contact": "Contacto",
+    "pipeline": "Embudo",
+    "details": "Datos",
+    "open": "Abrir cliente",
+    "stage": "Etapa",
+    "budget": "Presupuesto",
+    "askingPrice": "Precio pedido",
+    "viewings": "Visitas",
+    "properties": "Inmuebles",
+    "lastActivity": "Última actividad",
+    "priority": "Prioritario"
   }
 }

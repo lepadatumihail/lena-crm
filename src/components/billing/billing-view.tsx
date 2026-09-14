@@ -104,10 +104,7 @@ export function BillingView({
     <div className="space-y-6">
       {pending ? <RefreshWhilePending /> : null}
 
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground text-sm">{t("subtitle")}</p>
-      </div>
+      <p className="text-muted-foreground max-w-2xl text-sm">{t("subtitle")}</p>
 
       {notice ? (
         <div className={cn("rounded-lg border px-4 py-3 text-sm", TONE_CLASSES[notice.tone])}>

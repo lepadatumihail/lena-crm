@@ -1,19 +1,51 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
+import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import {
+  type Column,
   type ColumnDef,
+  type RowSelectionState,
   type SortingState,
+  type Updater,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { formatDistanceToNow } from "date-fns";
-import { ArrowUpDown, ChevronRight, Star } from "lucide-react";
+import { formatDistanceToNowStrict } from "date-fns";
+import {
+  ArrowDown,
+  ArrowUp,
+  CalendarDays,
+  ChevronsUpDown,
+  EyeOff,
+  MoreHorizontal,
+  Pencil,
+  RotateCcw,
+  SquareArrowOutUpRight,
+  Star,
+} from "lucide-react";
 
+import { ClientAvatar } from "@/components/clients/client-avatar";
+import { StageBadge } from "@/components/clients/stage-badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Money } from "@/components/ui/money";
 import {
   Table,
   TableBody,
@@ -22,119 +54,266 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { StageBadge } from "@/components/clients/stage-badge";
+import { Tag } from "@/components/ui/tag";
+import { intlTag } from "@/i18n/config";
 import { dateFnsLocale } from "@/i18n/dates";
-import { dealTypeLabel, sellerRoleLabel } from "@/i18n/labels";
-import { clientFullName, stageIndex, type ClientSide } from "@/lib/crm";
+import { dealTypeLabel, sellerRoleLabel, stageLabel } from "@/i18n/labels";
+import {
+  clientFullName,
+  stageIndex,
+  stagesForSide,
+  type ClientSide,
+} from "@/lib/crm";
+import type { ClientRow } from "@/lib/data/clients";
 import { cn } from "@/lib/utils";
-import type { Client } from "@/lib/supabase/types";
 
-function SortHeader({
-  label,
+type Align = "left" | "right";
+
+function SortHead({
   column,
+  align = "left",
+  children,
 }: {
-  label: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  column: any;
+  column: Column<ClientRow>;
+  align?: Align;
+  children: ReactNode;
 }) {
+  const sorted = column.getIsSorted();
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      className="-ml-2 h-7 px-2"
-      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    <button
+      type="button"
+      onClick={() => column.toggleSorting(sorted === "asc")}
+      className={cn(
+        "group/sort hover:text-foreground inline-flex items-center gap-1 transition-colors duration-150",
+        align === "right" && "flex-row-reverse"
+      )}
     >
-      {label}
-      <ArrowUpDown className="text-muted-foreground/60" />
-    </Button>
+      {children}
+      {sorted === "asc" ? (
+        <ArrowUp className="size-3" />
+      ) : sorted === "desc" ? (
+        <ArrowDown className="size-3" />
+      ) : (
+        <ChevronsUpDown className="size-3 opacity-0 transition-opacity duration-150 group-hover/sort:opacity-60" />
+      )}
+    </button>
   );
+}
+
+/** A buyer's budget as one figure: a range, "up to X" or "from X". */
+function Budget({
+  min,
+  max,
+  locale,
+  upTo,
+  from,
+}: {
+  min: number | null;
+  max: number | null;
+  locale: string;
+  upTo: (amount: ReactNode) => ReactNode;
+  from: (amount: ReactNode) => ReactNode;
+}) {
+  if (min != null && max != null) {
+    return (
+      <span className="inline-flex items-center gap-1 tabular-nums">
+        <Money value={min} locale={locale} />
+        <span className="text-muted-foreground">–</span>
+        <Money value={max} locale={locale} />
+      </span>
+    );
+  }
+  if (max != null) return <>{upTo(<Money value={max} locale={locale} />)}</>;
+  if (min != null) return <>{from(<Money value={min} locale={locale} />)}</>;
+  return <span className="text-muted-foreground">—</span>;
 }
 
 export function ClientsTable({
   data,
   side,
+  selection,
+  onSelectionChange,
+  onOpen,
   onTogglePriority,
+  onStageChange,
+  onSetActive,
+  footer,
 }: {
-  data: Client[];
+  data: ClientRow[];
   side: ClientSide;
+  selection: RowSelectionState;
+  onSelectionChange: (selection: RowSelectionState) => void;
+  onOpen: (id: string) => void;
   onTogglePriority: (id: string, next: boolean) => void;
+  onStageChange: (id: string, stage: string) => void;
+  onSetActive: (id: string, active: boolean) => void;
+  /** Summary cells under the rows. */
+  footer?: ReactNode;
 }) {
-  const router = useRouter();
   const t = useTranslations("clients");
   const tCrm = useTranslations("crm");
   const locale = useLocale();
+  const tag = intlTag(locale);
   const [sorting, setSorting] = useState<SortingState>([]);
+  const isBuyer = side === "buyer";
 
-  const columns = useMemo<ColumnDef<Client>[]>(
-    () => [
-      {
-        id: "priority",
-        header: "",
-        enableSorting: false,
-        cell: ({ row }) => {
-          const c = row.original;
-          return (
-            <button
-              type="button"
-              aria-label={c.priority ? t("priority.unflag") : t("priority.flag")}
-              className="flex items-center justify-center p-1"
-              onClick={(e) => {
-                e.stopPropagation();
-                onTogglePriority(c.id, !c.priority);
-              }}
-            >
-              <Star
-                className={cn(
-                  "size-4 transition-colors",
-                  c.priority
-                    ? "fill-warning text-warning"
-                    : "text-muted-foreground/40 hover:text-muted-foreground"
-                )}
+  const columns = useMemo<ColumnDef<ClientRow>[]>(() => {
+    const when = (iso: string) =>
+      formatDistanceToNowStrict(new Date(iso), {
+        addSuffix: true,
+        locale: dateFnsLocale(locale),
+      });
+
+    const amount: ColumnDef<ClientRow> = isBuyer
+      ? {
+          id: "budget",
+          accessorFn: (c) => c.budget_max ?? c.budget_min ?? 0,
+          header: ({ column }) => (
+            <SortHead column={column} align="right">
+              {t("table.budget")}
+            </SortHead>
+          ),
+          cell: ({ row }) => (
+            <div className="text-right">
+              <Budget
+                min={row.original.budget_min}
+                max={row.original.budget_max}
+                locale={tag}
+                upTo={(a) => t.rich("table.upTo", { amount: () => a })}
+                from={(a) => t.rich("table.from", { amount: () => a })}
               />
-            </button>
-          );
-        },
+            </div>
+          ),
+        }
+      : {
+          id: "asking_price",
+          accessorFn: (c) => c.asking_price ?? 0,
+          header: ({ column }) => (
+            <SortHead column={column} align="right">
+              {t("table.askingPrice")}
+            </SortHead>
+          ),
+          cell: ({ row }) => (
+            <div className="text-right">
+              <Money value={row.original.asking_price} locale={tag} />
+            </div>
+          ),
+        };
+
+    const tally: ColumnDef<ClientRow> = isBuyer
+      ? {
+          id: "viewings",
+          accessorKey: "viewing_count",
+          header: ({ column }) => (
+            <SortHead column={column} align="right">
+              {t("table.viewings")}
+            </SortHead>
+          ),
+          cell: ({ row }) => (
+            <div className="text-right tabular-nums">
+              {row.original.viewing_count || (
+                <span className="text-muted-foreground">0</span>
+              )}
+            </div>
+          ),
+        }
+      : {
+          id: "properties",
+          accessorKey: "property_count",
+          header: ({ column }) => (
+            <SortHead column={column} align="right">
+              {t("table.properties")}
+            </SortHead>
+          ),
+          cell: ({ row }) => (
+            <div className="text-right tabular-nums">
+              {row.original.property_count || (
+                <span className="text-muted-foreground">0</span>
+              )}
+            </div>
+          ),
+        };
+
+    return [
+      {
+        id: "select",
+        enableSorting: false,
+        size: 40,
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllRowsSelected() ||
+              (table.getIsSomeRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) => table.toggleAllRowsSelected(!!value)}
+            aria-label={t("table.selectAll")}
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            onClick={(event) => event.stopPropagation()}
+            aria-label={t("table.selectRow", { name: clientFullName(row.original) })}
+          />
+        ),
       },
       {
         id: "name",
         accessorFn: (c) => clientFullName(c),
         header: ({ column }) => (
-          <SortHeader label={t("table.name")} column={column} />
+          <SortHead column={column}>{t("table.name")}</SortHead>
         ),
-        cell: ({ row }) => (
-          <span className="font-medium">{clientFullName(row.original)}</span>
-        ),
+        cell: ({ row }) => {
+          const c = row.original;
+          return (
+            <div className="flex min-w-0 items-center gap-2.5">
+              <ClientAvatar name={clientFullName(c)} side={c.side} />
+              <Link
+                href={`/clients/${c.id}`}
+                onClick={(event) => event.stopPropagation()}
+                className="truncate font-medium hover:underline"
+              >
+                {clientFullName(c)}
+              </Link>
+              {c.priority ? (
+                <Star
+                  className="fill-warning text-warning size-3.5 shrink-0"
+                  aria-label={t("priority.unflag")}
+                />
+              ) : null}
+              {!c.is_active ? <Tag>{t("table.inactive")}</Tag> : null}
+            </div>
+          );
+        },
       },
       {
         id: "stage",
         accessorKey: "stage",
         header: ({ column }) => (
-          <SortHeader label={t("table.stage")} column={column} />
+          <SortHead column={column}>{t("table.stage")}</SortHead>
         ),
         sortingFn: (a, b) =>
-          stageIndex(side, a.original.stage) -
-          stageIndex(side, b.original.stage),
-        cell: ({ row }) => <StageBadge stage={row.original.stage} />,
+          stageIndex(side, a.original.stage) - stageIndex(side, b.original.stage),
+        cell: ({ row }) => <StageBadge stage={row.original.stage} dot />,
       },
+      amount,
+      tally,
       {
         id: "type",
-        header: t("table.type"),
         enableSorting: false,
+        header: () => (isBuyer ? t("table.type") : t("table.role")),
         cell: ({ row }) => {
           const c = row.original;
-          const label =
-            c.side === "buyer"
-              ? c.deal_type
-                ? dealTypeLabel(tCrm, c.deal_type)
-                : null
-              : c.seller_role
-                ? sellerRoleLabel(tCrm, c.seller_role)
-                : null;
+          const label = isBuyer
+            ? c.deal_type
+              ? dealTypeLabel(tCrm, c.deal_type)
+              : null
+            : c.seller_role
+              ? sellerRoleLabel(tCrm, c.seller_role)
+              : null;
           return (
-            <span className="text-muted-foreground text-sm">
-              {label ?? "—"}
-            </span>
+            <span className="text-muted-foreground text-[13px]">{label ?? "—"}</span>
           );
         },
       },
@@ -142,77 +321,130 @@ export function ClientsTable({
         id: "agency",
         accessorKey: "agency",
         header: ({ column }) => (
-          <SortHeader label={t("table.agency")} column={column} />
+          <SortHead column={column}>{t("table.agency")}</SortHead>
         ),
         cell: ({ row }) => (
-          <span className="text-muted-foreground text-sm">
+          <span className="text-muted-foreground text-[13px]">
             {row.original.agency || "—"}
           </span>
         ),
       },
       {
-        id: "contact",
-        header: t("table.contact"),
-        enableSorting: false,
-        cell: ({ row }) => {
-          const c = row.original;
-          return (
-            <span className="text-muted-foreground text-sm">
-              {c.email || c.phone || "—"}
-            </span>
-          );
-        },
-      },
-      {
         id: "updated_at",
         accessorKey: "updated_at",
         header: ({ column }) => (
-          <SortHeader label={t("table.updated")} column={column} />
+          <SortHead column={column}>{t("table.lastActivity")}</SortHead>
         ),
         cell: ({ row }) => (
-          <span className="text-muted-foreground text-sm">
-            {formatDistanceToNow(new Date(row.original.updated_at), {
-              addSuffix: true,
-              locale: dateFnsLocale(locale),
-            })}
+          <span className="text-muted-foreground inline-flex items-center gap-1.5 text-[13px]">
+            <CalendarDays className="size-3.5 shrink-0" strokeWidth={1.75} />
+            {when(row.original.updated_at)}
           </span>
         ),
       },
       {
-        id: "open",
-        header: "",
+        id: "actions",
         enableSorting: false,
-        cell: () => (
-          <ChevronRight className="text-muted-foreground/50 size-4" />
-        ),
+        size: 48,
+        header: () => <span className="sr-only">{t("table.actions")}</span>,
+        cell: ({ row }) => {
+          const c = row.original;
+          return (
+            <div className="flex justify-end">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon-xs"
+                    className="text-muted-foreground hover:text-foreground data-[state=open]:bg-accent"
+                    aria-label={t("table.actions")}
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <MoreHorizontal />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="w-48"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  <DropdownMenuItem asChild>
+                    <Link href={`/clients/${c.id}`}>
+                      <SquareArrowOutUpRight />
+                      {t("rowMenu.open")}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href={`/clients/${c.id}/edit`}>
+                      <Pencil />
+                      {t("rowMenu.edit")}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger>{t("rowMenu.moveTo")}</DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent>
+                        <DropdownMenuRadioGroup
+                          value={c.stage}
+                          onValueChange={(stage) => onStageChange(c.id, stage)}
+                        >
+                          {stagesForSide(side).map((s) => (
+                            <DropdownMenuRadioItem key={s} value={s}>
+                              {stageLabel(tCrm, s)}
+                            </DropdownMenuRadioItem>
+                          ))}
+                        </DropdownMenuRadioGroup>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
+                  <DropdownMenuItem onSelect={() => onTogglePriority(c.id, !c.priority)}>
+                    <Star className={cn(c.priority && "fill-warning text-warning")} />
+                    {c.priority ? t("priority.unflag") : t("priority.flag")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => onSetActive(c.id, !c.is_active)}>
+                    {c.is_active ? <EyeOff /> : <RotateCcw />}
+                    {c.is_active ? t("rowMenu.hide") : t("rowMenu.reactivate")}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          );
+        },
       },
-    ],
-    [side, onTogglePriority, t, tCrm, locale]
-  );
+    ];
+  }, [isBuyer, side, t, tCrm, tag, locale, onStageChange, onTogglePriority, onSetActive]);
 
   const table = useReactTable({
     data,
     columns,
-    state: { sorting },
+    state: { sorting, rowSelection: selection },
+    getRowId: (row) => row.id,
+    enableRowSelection: true,
     onSortingChange: setSorting,
+    onRowSelectionChange: (updater: Updater<RowSelectionState>) =>
+      onSelectionChange(typeof updater === "function" ? updater(selection) : updater),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
 
   return (
-    <div className="bg-card overflow-hidden rounded-xl border">
+    <div className="bg-card overflow-hidden rounded-xl border shadow-xs">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((hg) => (
-            <TableRow key={hg.id} className="hover:bg-transparent">
+            <TableRow key={hg.id}>
               {hg.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableHead
+                  key={header.id}
+                  className={cn(
+                    header.column.id === "select" && "w-10 pl-4",
+                    header.column.id === "actions" && "w-12 pr-3"
+                  )}
+                >
                   {header.isPlaceholder
                     ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                    : flexRender(header.column.columnDef.header, header.getContext())}
                 </TableHead>
               ))}
             </TableRow>
@@ -222,11 +454,19 @@ export function ClientsTable({
           {table.getRowModel().rows.map((row) => (
             <TableRow
               key={row.id}
+              data-state={row.getIsSelected() ? "selected" : undefined}
               className="cursor-pointer"
-              onClick={() => router.push(`/clients/${row.original.id}`)}
+              onClick={() => onOpen(row.original.id)}
             >
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
+                <TableCell
+                  key={cell.id}
+                  className={cn(
+                    cell.column.id === "select" && "w-10 pl-4",
+                    cell.column.id === "actions" && "w-12 pr-3",
+                    cell.column.id === "name" && "max-w-[18rem]"
+                  )}
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
@@ -234,6 +474,9 @@ export function ClientsTable({
           ))}
         </TableBody>
       </Table>
+      {footer ? (
+        <div className="flex flex-wrap items-center border-t">{footer}</div>
+      ) : null}
     </div>
   );
 }

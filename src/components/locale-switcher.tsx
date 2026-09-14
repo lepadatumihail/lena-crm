@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-function useSwitchLocale() {
+export function useSwitchLocale() {
   const router = useRouter();
   const pathname = usePathname();
   const [pending, startTransition] = useTransition();

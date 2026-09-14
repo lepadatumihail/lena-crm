@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import {
   DndContext,
   DragOverlay,
@@ -16,33 +15,58 @@ import {
 } from "@dnd-kit/core";
 import { Star } from "lucide-react";
 
+import { ClientAvatar } from "@/components/clients/client-avatar";
+import { Money } from "@/components/ui/money";
+import { intlTag } from "@/i18n/config";
 import { stageLabel } from "@/i18n/labels";
 import {
   clientFullName,
   stagesForSide,
+  STAGE_TONES,
   type ClientSide,
   type Stage,
 } from "@/lib/crm";
+import type { ClientRow } from "@/lib/data/clients";
+import { TONE_SOLID } from "@/lib/tones";
 import { cn } from "@/lib/utils";
-import type { Client } from "@/lib/supabase/types";
 
 function CardBody({
   client,
   onTogglePriority,
 }: {
-  client: Client;
+  client: ClientRow;
   onTogglePriority?: (id: string, next: boolean) => void;
 }) {
   const t = useTranslations("clients.priority");
+  const locale = useLocale();
+  const amount =
+    client.side === "buyer"
+      ? (client.budget_max ?? client.budget_min)
+      : client.asking_price;
   return (
-    <div className="bg-card rounded-lg border p-3 shadow-sm">
-      <div className="flex items-start justify-between gap-2">
-        <span className="text-sm font-medium">{clientFullName(client)}</span>
-        {onTogglePriority && (
+    <div className="bg-card rounded-lg border p-3 shadow-xs">
+      <div className="flex items-start gap-2.5">
+        <ClientAvatar name={clientFullName(client)} side={client.side} />
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm leading-6 font-medium">{clientFullName(client)}</p>
+          {amount != null ? (
+            <p className="text-[13px]">
+              <Money value={amount} locale={intlTag(locale)} />
+            </p>
+          ) : client.email || client.phone ? (
+            <p className="text-muted-foreground truncate text-xs">
+              {client.email || client.phone}
+            </p>
+          ) : null}
+          {client.agency ? (
+            <p className="text-muted-foreground mt-0.5 truncate text-xs">{client.agency}</p>
+          ) : null}
+        </div>
+        {onTogglePriority ? (
           <button
             type="button"
             aria-label={client.priority ? t("unflag") : t("flag")}
-            className="-mt-0.5 -mr-0.5 p-0.5"
+            className="-mt-0.5 -mr-1 rounded-md p-1"
             onPointerDown={(e) => e.stopPropagation()}
             onClick={(e) => {
               e.stopPropagation();
@@ -51,25 +75,15 @@ function CardBody({
           >
             <Star
               className={cn(
-                "size-4",
+                "size-4 transition-colors duration-150",
                 client.priority
                   ? "fill-warning text-warning"
                   : "text-muted-foreground/40 hover:text-muted-foreground"
               )}
             />
           </button>
-        )}
+        ) : null}
       </div>
-      {(client.email || client.phone) && (
-        <p className="text-muted-foreground mt-1 truncate text-xs">
-          {client.email || client.phone}
-        </p>
-      )}
-      {client.agency && (
-        <p className="text-muted-foreground/80 mt-1 truncate text-xs">
-          {client.agency}
-        </p>
-      )}
     </div>
   );
 }
@@ -77,11 +91,12 @@ function CardBody({
 function KanbanCard({
   client,
   onTogglePriority,
+  onOpen,
 }: {
-  client: Client;
+  client: ClientRow;
   onTogglePriority: (id: string, next: boolean) => void;
+  onOpen: (id: string) => void;
 }) {
-  const router = useRouter();
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({ id: client.id });
 
@@ -99,7 +114,7 @@ function KanbanCard({
         "cursor-grab touch-none active:cursor-grabbing",
         isDragging && "opacity-40"
       )}
-      onClick={() => router.push(`/clients/${client.id}`)}
+      onClick={() => onOpen(client.id)}
     >
       <CardBody client={client} onTogglePriority={onTogglePriority} />
     </div>
@@ -110,10 +125,12 @@ function KanbanColumn({
   stage,
   clients,
   onTogglePriority,
+  onOpen,
 }: {
   stage: Stage;
-  clients: Client[];
+  clients: ClientRow[];
   onTogglePriority: (id: string, next: boolean) => void;
+  onOpen: (id: string) => void;
 }) {
   const t = useTranslations("clients.kanban");
   const tCrm = useTranslations("crm");
@@ -121,25 +138,36 @@ function KanbanColumn({
 
   return (
     <div className="flex w-72 shrink-0 flex-col">
-      <div className="flex items-center justify-between px-1 pb-2">
+      <div className="flex h-9 items-center gap-2 px-1">
+        <span
+          aria-hidden
+          className={cn("size-2 rounded-full", TONE_SOLID[STAGE_TONES[stage]])}
+        />
         <span className="text-sm font-medium">{stageLabel(tCrm, stage)}</span>
-        <span className="text-muted-foreground text-xs">{clients.length}</span>
+        <span className="bg-muted text-muted-foreground inline-flex h-[18px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] font-medium tabular-nums">
+          {clients.length}
+        </span>
       </div>
       <div
         ref={setNodeRef}
         className={cn(
-          "bg-muted/40 flex-1 space-y-2 rounded-xl p-2 transition-colors",
+          "bg-muted/40 flex-1 space-y-2 rounded-xl p-2 transition-[background-color,box-shadow] duration-150",
           isOver && "bg-accent ring-primary/40 ring-2"
         )}
       >
         {clients.map((c) => (
-          <KanbanCard key={c.id} client={c} onTogglePriority={onTogglePriority} />
+          <KanbanCard
+            key={c.id}
+            client={c}
+            onTogglePriority={onTogglePriority}
+            onOpen={onOpen}
+          />
         ))}
-        {clients.length === 0 && (
+        {clients.length === 0 ? (
           <p className="text-muted-foreground/60 px-2 py-6 text-center text-xs">
             {t("dropHere")}
           </p>
-        )}
+        ) : null}
       </div>
     </div>
   );
@@ -150,11 +178,13 @@ export function ClientsKanban({
   side,
   onStageChange,
   onTogglePriority,
+  onOpen,
 }: {
-  data: Client[];
+  data: ClientRow[];
   side: ClientSide;
   onStageChange: (id: string, stage: string) => void;
   onTogglePriority: (id: string, next: boolean) => void;
+  onOpen: (id: string) => void;
 }) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const sensors = useSensors(
@@ -191,6 +221,7 @@ export function ClientsKanban({
             stage={stage}
             clients={data.filter((c) => c.stage === stage)}
             onTogglePriority={onTogglePriority}
+            onOpen={onOpen}
           />
         ))}
       </div>

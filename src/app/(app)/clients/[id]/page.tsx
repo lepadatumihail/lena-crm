@@ -153,10 +153,10 @@ export default async function ClientDetailPage({
           </Link>
         </Button>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-semibold tracking-tight">
+          <h2 className="text-xl font-semibold tracking-tight">
             {clientFullName(client)}
-          </h1>
-          <StageBadge stage={client.stage} />
+          </h2>
+          <StageBadge stage={client.stage} dot />
           {!client.is_active && (
             <Badge variant="outline">{t("inactive")}</Badge>
           )}

@@ -59,7 +59,13 @@
     "all": "All clients",
     "empty": "Your clients will show up here as you add them.",
     "now": "just now",
-    "priority": "Priority"
+    "priority": "Priority",
+    "columns": {
+      "client": "Client",
+      "stage": "Stage",
+      "amount": "Amount",
+      "updated": "Updated"
+    }
   },
   "onboarding": {
     "title": "Getting started",

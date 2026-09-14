@@ -3,7 +3,8 @@
  * bar and the onboarding checklist. No I/O, so the data module and the page
  * stay thin and this file is unit-tested.
  */
-import { BUYER_STAGES, SELLER_STAGES, type Stage } from "@/lib/crm";
+import { BUYER_STAGES, SELLER_STAGES, STAGE_TONES, type Stage } from "@/lib/crm";
+import { TONE_SOLID } from "@/lib/tones";
 
 export type GreetingPeriod = "morning" | "afternoon" | "evening";
 
@@ -44,6 +45,60 @@ export function firstNameFrom(
   return word ? word.charAt(0).toUpperCase() + word.slice(1) : null;
 }
 
+/** "MG" from "Maria García"; a single word gives its first two letters. */
+export function initialsOf(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "";
+  const first = parts[0][0] ?? "";
+  const second =
+    parts.length > 1 ? (parts[parts.length - 1][0] ?? "") : (parts[0][1] ?? "");
+  return (first + second).toUpperCase();
+}
+
+/**
+ * The UTC instants where a calendar day starts and ends in a time zone, for
+ * the day that contains `nowISO` there. Good to the minute; a DST switch at
+ * midnight itself would be off by the hour, which no Spanish zone does.
+ */
+export function dayRangeInTimeZone(
+  nowISO: string,
+  timeZone: string
+): { start: string; end: string } {
+  const now = new Date(nowISO);
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    })
+      .formatToParts(now)
+      .map((p) => [p.type, p.value])
+  );
+  const year = Number(parts.year);
+  const month = Number(parts.month) - 1;
+  const day = Number(parts.day);
+  // The wall clock read as if it were UTC, minus the true instant, is the offset.
+  const wall = Date.UTC(
+    year,
+    month,
+    day,
+    Number(parts.hour) % 24,
+    Number(parts.minute),
+    Number(parts.second)
+  );
+  const offset = wall - now.getTime();
+  const start = Date.UTC(year, month, day) - offset;
+  return {
+    start: new Date(start).toISOString(),
+    end: new Date(start + 86_400_000).toISOString(),
+  };
+}
+
 export type RelativeUnit = "now" | "minute" | "hour" | "day" | "week" | "month";
 
 /**
@@ -68,15 +123,10 @@ export function relativeAgo(
   return { unit: "month", value: Math.floor(days / 30) };
 }
 
-/** Stacked-bar colours per stage (Tailwind classes). */
-export const STAGE_BAR_COLORS: Record<Stage, string> = {
-  new: "bg-muted-foreground/35",
-  contacted: "bg-muted-foreground/60",
-  qualified: "bg-primary",
-  viewing: "bg-warning",
-  reserved: "bg-success",
-  pending: "bg-muted-foreground/60",
-};
+/** Solid fill for a stage's bar segment or dot, from its shared tone. */
+export function stageBarColor(stage: Stage): string {
+  return TONE_SOLID[STAGE_TONES[stage]];
+}
 
 export type BarSegment = { stage: Stage; count: number; percent: number };
 

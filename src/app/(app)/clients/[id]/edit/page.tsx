@@ -46,9 +46,9 @@ export default async function EditClientPage({
             <ArrowLeft /> {tCommon("back")}
           </Link>
         </Button>
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <h2 className="text-xl font-semibold tracking-tight">
           {t("title", { name: clientFullName(client) })}
-        </h1>
+        </h2>
       </div>
       <ClientForm
         side={side}

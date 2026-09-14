@@ -5,11 +5,14 @@ import { useLocale, useTranslations } from "next-intl";
 import { format, isToday, isTomorrow } from "date-fns";
 import { MessageCircle } from "lucide-react";
 
+import { PanelEmpty } from "@/components/shell/panel";
 import { buttonVariants } from "@/components/ui/button";
 import { dateFnsLocale } from "@/i18n/dates";
 import { eventReminderHref } from "@/lib/event-reminder";
 import { cn } from "@/lib/utils";
 import type { CalendarEvent } from "@/lib/data/calendar";
+
+const LIMIT = 6;
 
 export function UpcomingPanel({
   events,
@@ -32,11 +35,11 @@ export function UpcomingPanel({
 
   const sorted = [...events]
     .sort((a, b) => a.starts_at.localeCompare(b.starts_at))
-    .slice(0, 6);
+    .slice(0, LIMIT);
 
   if (sorted.length === 0) {
     return (
-      <p className="text-muted-foreground rounded-lg border border-dashed py-8 text-center text-sm">
+      <PanelEmpty>
         {t.rich(waitingBuyers > 0 ? "emptyWaiting" : "empty", {
           count: waitingBuyers,
           link: (chunks) => (
@@ -45,50 +48,57 @@ export function UpcomingPanel({
             </Link>
           ),
         })}
-      </p>
+      </PanelEmpty>
     );
   }
 
   return (
-    <div className="space-y-2">
+    <ul className="divide-y">
       {sorted.map((e) => {
         const remind = eventReminderHref(e);
         return (
-          <div
-            key={e.id}
-            className="flex items-center gap-3 rounded-lg border p-3"
-          >
+          <li key={e.id} className="flex items-center gap-3 px-4 py-2.5">
+            <div className="w-14 shrink-0 leading-tight">
+              <p className="truncate text-xs font-medium first-letter:uppercase">
+                {dayLabel(e.starts_at)}
+              </p>
+              <p className="text-muted-foreground text-xs tabular-nums">
+                {format(new Date(e.starts_at), "HH:mm")}
+              </p>
+            </div>
             <span
+              aria-hidden
               className={cn(
                 "size-2 shrink-0 rounded-full",
-                e.kind === "viewing" ? "bg-primary" : "bg-muted-foreground"
+                e.kind === "viewing" ? "bg-amber-500" : "bg-blue-500"
               )}
             />
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium">{e.title}</p>
-              <p className="text-muted-foreground text-xs">
-                {dayLabel(e.starts_at)} · {format(new Date(e.starts_at), "HH:mm")}
-                {e.location ? ` · ${e.location}` : ""}
-              </p>
+              {e.location ? (
+                <p className="text-muted-foreground truncate text-xs">
+                  {e.location}
+                </p>
+              ) : null}
             </div>
-            {remind && (
+            {remind ? (
               <a
                 href={remind}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(
-                  buttonVariants({ variant: "outline", size: "icon" }),
-                  "size-8 shrink-0"
+                  buttonVariants({ variant: "outline", size: "icon-xs" }),
+                  "shrink-0 rounded-full"
                 )}
                 title={t("remindTitle")}
                 aria-label={t("remindAria")}
               >
-                <MessageCircle className="size-4 text-[#25D366]" />
+                <MessageCircle className="size-3.5 text-[#25D366]" />
               </a>
-            )}
-          </div>
+            ) : null}
+          </li>
         );
       })}
-    </div>
+    </ul>
   );
 }

@@ -59,7 +59,13 @@
     "all": "Ver todos",
     "empty": "Tus clientes aparecerán aquí a medida que los añadas.",
     "now": "ahora mismo",
-    "priority": "Prioritario"
+    "priority": "Prioritario",
+    "columns": {
+      "client": "Cliente",
+      "stage": "Etapa",
+      "amount": "Importe",
+      "updated": "Actualizado"
+    }
   },
   "onboarding": {
     "title": "Primeros pasos",

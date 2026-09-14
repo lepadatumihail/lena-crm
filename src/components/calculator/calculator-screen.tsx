@@ -260,7 +260,7 @@ export function CalculatorScreen({
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">{t("heading")}</h1>
+          <h2 className="text-lg font-semibold tracking-tight">{t("heading")}</h2>
           <p className="text-muted-foreground text-sm">{t("subheading")}</p>
         </div>
         <div className="flex items-center gap-2">

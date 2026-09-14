@@ -1,4 +1,5 @@
 import type { Enums } from "@/lib/supabase/types";
+import type { Tone } from "@/lib/tones";
 
 export type ClientSide = Enums<"client_side">;
 
@@ -15,20 +16,14 @@ export type BuyerStage = (typeof BUYER_STAGES)[number];
 export type SellerStage = (typeof SELLER_STAGES)[number];
 export type Stage = BuyerStage | SellerStage;
 
-export type BadgeTone =
-  | "default"
-  | "secondary"
-  | "outline"
-  | "success"
-  | "warning";
-
-export const STAGE_TONES: Record<Stage, BadgeTone> = {
-  new: "outline",
-  contacted: "secondary",
-  qualified: "default",
-  viewing: "warning",
-  reserved: "success",
-  pending: "outline",
+/** One tone per stage, shared by pills, dots and stacked bars. */
+export const STAGE_TONES: Record<Stage, Tone> = {
+  new: "blue",
+  contacted: "purple",
+  qualified: "teal",
+  viewing: "amber",
+  reserved: "green",
+  pending: "orange",
 };
 
 export function stagesForSide(side: ClientSide): readonly Stage[] {

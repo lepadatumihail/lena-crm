@@ -21,7 +21,9 @@
     "unlimited": "Unlimited clients",
     "free": "Free",
     "usage": "{used} of {limit} clients",
-    "upgrade": "Upgrade to add more"
+    "upgrade": "Upgrade to add more",
+    "upgradeCta": "Upgrade",
+    "manage": "Manage"
   },
   "marketing": {
     "howItWorks": "How it works",
@@ -35,5 +37,35 @@
     "privacy": "Privacy",
     "terms": "Terms",
     "legalNotice": "Legal notice"
+  },
+  "clients": "Clients",
+  "tagline": "Real estate CRM",
+  "pipeline": "Pipeline",
+  "workspace": "Workspace",
+  "account": "Account",
+  "inviteTeammates": "Invite teammates",
+  "help": "Help",
+  "search": "Search",
+  "active": "{count, plural, one {# active} other {# active}}",
+  "today": "{count, plural, =0 {Nothing today} one {# today} other {# today}}",
+  "menu": {
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "language": "Language"
+  },
+  "quickSearch": {
+    "placeholder": "Search clients or jump to a page…",
+    "shortcut": "Search (⌘K)",
+    "clients": "Clients",
+    "recent": "Recent clients",
+    "pages": "Pages",
+    "actions": "Actions",
+    "empty": "Nothing found",
+    "loading": "Loading clients…",
+    "newBuyer": "New buyer",
+    "newSeller": "New seller",
+    "newAppointment": "New appointment"
   }
 }

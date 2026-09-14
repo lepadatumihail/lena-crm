@@ -21,7 +21,9 @@
     "unlimited": "Clientes ilimitados",
     "free": "Gratis",
     "usage": "{used} de {limit} clientes",
-    "upgrade": "Mejora tu plan para añadir más"
+    "upgrade": "Mejora tu plan para añadir más",
+    "upgradeCta": "Mejorar",
+    "manage": "Gestionar"
   },
   "marketing": {
     "howItWorks": "Cómo funciona",
@@ -35,5 +37,35 @@
     "privacy": "Privacidad",
     "terms": "Términos",
     "legalNotice": "Aviso legal"
+  },
+  "clients": "Clientes",
+  "tagline": "CRM inmobiliario",
+  "pipeline": "Embudo",
+  "workspace": "Espacio de trabajo",
+  "account": "Cuenta",
+  "inviteTeammates": "Invitar compañeros",
+  "help": "Ayuda",
+  "search": "Buscar",
+  "active": "{count, plural, one {# activo} other {# activos}}",
+  "today": "{count, plural, =0 {Nada hoy} one {# hoy} other {# hoy}}",
+  "menu": {
+    "theme": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema",
+    "language": "Idioma"
+  },
+  "quickSearch": {
+    "placeholder": "Busca clientes o salta a una página…",
+    "shortcut": "Buscar (⌘K)",
+    "clients": "Clientes",
+    "recent": "Clientes recientes",
+    "pages": "Páginas",
+    "actions": "Acciones",
+    "empty": "No hay resultados",
+    "loading": "Cargando clientes…",
+    "newBuyer": "Nuevo comprador",
+    "newSeller": "Nuevo vendedor",
+    "newAppointment": "Nueva cita"
   }
 }

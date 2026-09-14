@@ -1,4 +1,4 @@
-import { getClients } from "@/lib/data/clients";
+import { getClientRows } from "@/lib/data/clients";
 import { getCommissionSummary } from "@/lib/data/buyer";
 import { ClientsView } from "@/components/clients/clients-view";
 import { stagesForSide, type ClientSide } from "@/lib/crm";
@@ -21,7 +21,7 @@ export async function ClientsScreen({
       ? stage
       : "all";
   const [clients, commission] = await Promise.all([
-    getClients(side, { includeInactive }),
+    getClientRows(side, { includeInactive }),
     side === "buyer" ? getCommissionSummary() : Promise.resolve(null),
   ]);
 

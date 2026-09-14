@@ -20,7 +20,33 @@
     "toasts": {
       "moveFailed": "Couldn't move client",
       "moved": "Moved to {stage}",
-      "priorityFailed": "Couldn't update priority"
+      "priorityFailed": "Couldn't update priority",
+      "updateFailed": "Couldn't update"
+    },
+    "all": "All",
+    "typeAll": "All types",
+    "selected": "{count, plural, one {# selected} other {# selected}}",
+    "inView": "{count, plural, one {# in view} other {# in view}}",
+    "clearSelection": "Clear selection",
+    "bulk": {
+      "moveTo": "Move to…",
+      "flag": "Flag priority",
+      "hide": "Hide",
+      "toasts": {
+        "moved": "{count, plural, one {# client moved} other {# clients moved}} to {stage}",
+        "flagged": "{count, plural, one {# client flagged} other {# clients flagged}}",
+        "hidden": "{count, plural, one {# client hidden} other {# clients hidden}}",
+        "failed": "{count, plural, one {# update failed} other {# updates failed}}"
+      }
+    },
+    "summary": {
+      "budgetTotal": "Budget total",
+      "askingTotal": "Asking total",
+      "viewings": "Viewings",
+      "properties": "Properties",
+      "priority": "Priority",
+      "commission": "Commission in pipeline",
+      "closed": "Closed"
     }
   },
   "priority": {
@@ -33,7 +59,19 @@
     "type": "Type",
     "agency": "Agency",
     "contact": "Contact",
-    "updated": "Updated"
+    "updated": "Updated",
+    "budget": "Budget",
+    "askingPrice": "Asking price",
+    "viewings": "Viewings",
+    "properties": "Properties",
+    "role": "Role",
+    "lastActivity": "Last activity",
+    "actions": "Actions",
+    "upTo": "up to <amount></amount>",
+    "from": "from <amount></amount>",
+    "selectAll": "Select all",
+    "selectRow": "Select {name}",
+    "inactive": "Inactive"
   },
   "kanban": {
     "dropHere": "Drop here"
@@ -118,5 +156,26 @@
     "invalidForm": "Please check the form and try again.",
     "limitReached": "You've used your {limit} free clients. Pro is unlimited.",
     "invalidStage": "Invalid stage"
+  },
+  "rowMenu": {
+    "open": "Open",
+    "edit": "Edit",
+    "moveTo": "Move to",
+    "hide": "Hide",
+    "reactivate": "Reactivate"
+  },
+  "sheet": {
+    "title": "Client",
+    "contact": "Contact",
+    "pipeline": "Pipeline",
+    "details": "Details",
+    "open": "Open client",
+    "stage": "Stage",
+    "budget": "Budget",
+    "askingPrice": "Asking price",
+    "viewings": "Viewings",
+    "properties": "Properties",
+    "lastActivity": "Last activity",
+    "priority": "Priority"
   }
 }

@@ -3,9 +3,11 @@ import { describe, it, expect } from "vitest";
 import {
   buyersBeforeViewing,
   countViewingsWithin,
+  dayRangeInTimeZone,
   firstNameFrom,
   greetingPeriod,
   hourInTimeZone,
+  initialsOf,
   onboardingSteps,
   pipelineSegments,
   relativeAgo,
@@ -135,5 +137,35 @@ describe("countViewingsWithin", () => {
         7
       )
     ).toBe(2);
+  });
+});
+
+describe("initialsOf", () => {
+  it("takes the first and last name's initials", () => {
+    expect(initialsOf("Maria García")).toBe("MG");
+    expect(initialsOf("Jean Paul de la Cruz")).toBe("JC");
+  });
+  it("falls back to the first two letters of a single word", () => {
+    expect(initialsOf("Madonna")).toBe("MA");
+    expect(initialsOf("")).toBe("");
+  });
+});
+
+describe("dayRangeInTimeZone", () => {
+  it("brackets the Madrid calendar day around a summer instant", () => {
+    const { start, end } = dayRangeInTimeZone(
+      "2026-09-14T10:00:00.000Z",
+      "Europe/Madrid"
+    );
+    expect(start).toBe("2026-09-13T22:00:00.000Z");
+    expect(end).toBe("2026-09-14T22:00:00.000Z");
+  });
+  it("moves to the next local day just after Madrid midnight", () => {
+    const { start } = dayRangeInTimeZone("2026-09-14T22:30:00.000Z", "Europe/Madrid");
+    expect(start).toBe("2026-09-14T22:00:00.000Z");
+  });
+  it("uses the winter offset in January", () => {
+    const { start } = dayRangeInTimeZone("2026-01-10T12:00:00.000Z", "Europe/Madrid");
+    expect(start).toBe("2026-01-09T23:00:00.000Z");
   });
 });

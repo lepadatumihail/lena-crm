@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 aria-invalid:border-destructive",
+  "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap outline-none transition-[color,background-color,border-color,box-shadow,scale,opacity] duration-150 ease-(--ease-standard) active:scale-[0.96] disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -18,19 +18,23 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: "text-primary underline-offset-4 hover:underline active:scale-100",
         // For the always-dark marketing surfaces: a frosted outline.
         glass:
           "border-inverted-foreground/20 bg-inverted-foreground/5 text-inverted-foreground border shadow-none backdrop-blur-sm hover:bg-inverted-foreground/10 hover:text-inverted-foreground",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
+        sm: "h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5",
+        // Toolbar and footer controls: one step under `sm`.
+        xs: "h-7 gap-1.5 rounded-md px-2.5 text-xs has-[>svg]:px-2 [&_svg:not([class*='size-'])]:size-3.5",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
         // Marketing calls to action: fully rounded and a touch taller.
         pill: "h-11 rounded-full px-6 text-[15px] has-[>svg]:px-5",
         "pill-sm": "h-9 rounded-full px-4 has-[>svg]:px-3.5",
         icon: "size-9",
+        "icon-sm": "size-8",
+        "icon-xs": "size-7 [&_svg:not([class*='size-'])]:size-3.5",
       },
     },
     defaultVariants: {

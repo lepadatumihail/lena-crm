@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CircleCheck, ListChecks } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Panel } from "@/components/shell/panel";
 import type { OnboardingStep } from "@/lib/home";
 import { cn } from "@/lib/utils";
 
@@ -26,15 +26,16 @@ export function OnboardingCard({
   const percent = Math.round((done / steps.length) * 100);
 
   return (
-    <Card className="gap-4">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-base">
-          <ListChecks className="text-primary size-4" />
-          {title}
-          <span className="text-muted-foreground ml-auto text-xs font-normal">
-            {subtitle}
-          </span>
-        </CardTitle>
+    <Panel
+      title={title}
+      icon={<ListChecks className="size-3.5" />}
+      action={
+        <span className="text-muted-foreground text-xs tabular-nums">
+          {subtitle}
+        </span>
+      }
+    >
+      <div className="px-4 pt-3">
         <div
           className="bg-muted h-1.5 w-full overflow-hidden rounded-full"
           role="progressbar"
@@ -43,61 +44,60 @@ export function OnboardingCard({
           aria-valuenow={percent}
         >
           <div
-            className="bg-primary h-full rounded-full transition-[width]"
+            className="bg-primary h-full rounded-full transition-[width] duration-300 ease-(--ease-standard)"
             style={{ width: `${percent}%` }}
           />
         </div>
-      </CardHeader>
-      <CardContent>
-        <ul className="grid gap-2 sm:grid-cols-2">
-          {steps.map((s) => {
-            const inner = (
-              <>
-                <CircleCheck
+      </div>
+      <ul className="grid gap-1 p-2 sm:grid-cols-2">
+        {steps.map((s) => {
+          const inner = (
+            <>
+              <CircleCheck
+                className={cn(
+                  "mt-0.5 size-4 shrink-0",
+                  s.done ? "text-success" : "text-muted-foreground/40"
+                )}
+                strokeWidth={1.75}
+              />
+              <span className="min-w-0 flex-1">
+                <span
                   className={cn(
-                    "mt-0.5 size-4 shrink-0",
-                    s.done ? "text-success" : "text-muted-foreground/40"
+                    "block text-sm font-medium",
+                    s.done && "text-muted-foreground line-through"
                   )}
-                />
-                <span className="min-w-0 flex-1">
-                  <span
-                    className={cn(
-                      "block text-sm font-medium",
-                      s.done && "text-muted-foreground line-through"
-                    )}
-                  >
-                    {s.title}
-                  </span>
-                  {!s.done && (
-                    <span className="text-muted-foreground block text-xs">
-                      {s.detail}
-                    </span>
-                  )}
+                >
+                  {s.title}
                 </span>
-                {!s.done && (
-                  <ArrowRight className="text-muted-foreground size-4 shrink-0 self-center" />
-                )}
-              </>
-            );
-            return (
-              <li key={s.step}>
-                {s.done ? (
-                  <div className="flex items-start gap-3 rounded-lg border border-dashed p-3">
-                    {inner}
-                  </div>
-                ) : (
-                  <Link
-                    href={STEP_HREF[s.step]}
-                    className="hover:bg-accent flex items-start gap-3 rounded-lg border p-3 transition-colors"
-                  >
-                    {inner}
-                  </Link>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </CardContent>
-    </Card>
+                {!s.done ? (
+                  <span className="text-muted-foreground block text-xs">
+                    {s.detail}
+                  </span>
+                ) : null}
+              </span>
+              {!s.done ? (
+                <ArrowRight className="text-muted-foreground size-4 shrink-0 self-center" />
+              ) : null}
+            </>
+          );
+          return (
+            <li key={s.step}>
+              {s.done ? (
+                <div className="flex items-start gap-3 rounded-lg px-3 py-2.5">
+                  {inner}
+                </div>
+              ) : (
+                <Link
+                  href={STEP_HREF[s.step]}
+                  className="hover:bg-muted/50 flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors duration-150"
+                >
+                  {inner}
+                </Link>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </Panel>
   );
 }
