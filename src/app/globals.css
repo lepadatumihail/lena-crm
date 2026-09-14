@@ -54,9 +54,13 @@
   --sidebar-border: oklch(0.9 0.01 72);
   --sidebar-ring: oklch(0.585 0.13 38);
 
-  /* The inverted chapter (hero stage, pricing): always dark, in both themes. */
+  /* The inverted chapter (pricing): always dark, in both themes. */
   --inverted: oklch(0.215 0.008 56);
   --inverted-foreground: oklch(0.97 0.008 84);
+
+  /* The hero stage: warm sand by day; at night it drops to the inverted dark. */
+  --stage: oklch(0.952 0.02 74);
+  --stage-foreground: var(--foreground);
 
   /* Motion. Strong curves so an entrance reads as deliberate, not default. */
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -110,6 +114,9 @@
 
   --inverted: oklch(0.145 0.006 56);
   --inverted-foreground: oklch(0.97 0.008 84);
+
+  --stage: var(--inverted);
+  --stage-foreground: var(--inverted-foreground);
 }
 
 @theme inline {
@@ -146,6 +153,8 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-inverted: var(--inverted);
   --color-inverted-foreground: var(--inverted-foreground);
+  --color-stage: var(--stage);
+  --color-stage-foreground: var(--stage-foreground);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -196,24 +205,36 @@
   );
 }
 
-/* The hero stage's glow: two soft radial gradients, painted once. */
+/*
+  The hero stage's glow: three soft radial gradients, painted once. By day the
+  stage itself is light, so the mixes stay faint; at night they carry the
+  dark stage's original strength.
+*/
 .hero-glow {
+  --glow-top: 18%;
+  --glow-side: 16%;
+  --glow-foot: 12%;
   background:
     radial-gradient(
       60% 55% at 50% -5%,
-      color-mix(in oklab, var(--primary) 42%, transparent),
+      color-mix(in oklab, var(--primary) var(--glow-top), transparent),
       transparent 70%
     ),
     radial-gradient(
       38% 40% at 12% 8%,
-      color-mix(in oklab, var(--warning) 22%, transparent),
+      color-mix(in oklab, var(--warning) var(--glow-side), transparent),
       transparent 70%
     ),
     radial-gradient(
       42% 45% at 92% 96%,
-      color-mix(in oklab, var(--primary) 24%, transparent),
+      color-mix(in oklab, var(--primary) var(--glow-foot), transparent),
       transparent 70%
     );
+}
+.dark .hero-glow {
+  --glow-top: 42%;
+  --glow-side: 22%;
+  --glow-foot: 24%;
 }
 
 @keyframes fade-up {
@@ -302,6 +323,32 @@
     box-shadow:
       0 0 0 1px color-mix(in oklab, white 10%, transparent),
       0 24px 60px -24px rgb(0 0 0 / 0.6);
+  }
+
+  /*
+    The hero's opening beat: each direct child rises in turn, 90ms apart, so
+    the label, headline, copy and buttons arrive in reading order. A one-shot
+    keyframe is right here; nothing interrupts a page's first paint.
+  */
+  .stagger-enter > * {
+    animation: fade-up 0.7s var(--ease-out-quint) both;
+  }
+  .stagger-enter > :nth-child(2) {
+    animation-delay: 90ms;
+  }
+  .stagger-enter > :nth-child(3) {
+    animation-delay: 180ms;
+  }
+  .stagger-enter > :nth-child(4) {
+    animation-delay: 270ms;
+  }
+  .stagger-enter > :nth-child(5) {
+    animation-delay: 360ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stagger-enter > * {
+      animation: none;
+    }
   }
 }
 

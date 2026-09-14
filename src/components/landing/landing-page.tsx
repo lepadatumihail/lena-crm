@@ -38,9 +38,9 @@ const BUYER_STEPS = BUYER_STAGES;
  * The marketing home page. Rendered at / (English) and /es (Spanish); the
  * proxy pins the language per URL and the page files add metadata + JSON-LD.
  *
- * It reads as chapters: a framed dark stage for the hero, sections that
- * alternate between the page background and a faint tint, one inverted
- * chapter for pricing, then the footer. Headlines sit in the display face and
+ * It reads as chapters: a framed stage for the hero (warm sand by day, dark
+ * at night), sections that alternate between the page background and a
+ * faint tint, one inverted chapter for pricing, then the footer. Headlines sit in the display face and
  * every chapter opens with a small tracked label rather than a pill.
  */
 export function LandingPage() {
@@ -57,39 +57,39 @@ export function LandingPage() {
       {/* Nav */}
       <MarketingNav />
 
-      {/* Hero — a dark stage inset from the page edges. The live board below
+      {/* Hero — a stage inset from the page edges. The live board below
           straddles its bottom edge, so the stage's bottom padding and the
           board's negative margin are tuned as a pair. No horizontal clip here:
           the board's glow stays inside the gutter on its own. */}
       <section className="px-3 pt-2 sm:px-4 sm:pt-3">
-        <div className="bg-inverted text-inverted-foreground relative mx-auto max-w-[88rem] overflow-hidden rounded-[1.75rem] sm:rounded-[2.25rem] sm:shadow-[0_30px_80px_-40px_rgb(0_0_0/0.5)]">
-          {/* Backdrop: a faint grid and two warm glows, painted once. Animated
+        <div className="bg-stage text-stage-foreground ring-foreground/[0.06] relative mx-auto max-w-[88rem] overflow-hidden rounded-[1.75rem] ring-1 sm:rounded-[2.25rem] sm:shadow-[0_24px_60px_-32px_rgb(0_0_0/0.22)] dark:ring-white/10 dark:sm:shadow-[0_30px_80px_-40px_rgb(0_0_0/0.5)]">
+          {/* Backdrop: a faint grid and three warm glows, painted once. Animated
               blur layers here cost iOS Safari so much that the page could
               stall on a slow load and stop receiving scroll updates. */}
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 overflow-hidden"
           >
-            <div className="hero-grid absolute inset-0 [--grid-line:rgb(255_255_255/0.06)]" />
+            <div className="hero-grid absolute inset-0 [--grid-line:rgb(0_0_0/0.05)] dark:[--grid-line:rgb(255_255_255/0.06)]" />
             <div className="hero-glow absolute inset-0" />
           </div>
 
-          <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center px-4 pt-14 pb-40 text-center animate-[fade-up_0.7s_ease-out_both] motion-reduce:animate-none sm:pt-24 sm:pb-56">
-            <Eyebrow className="text-inverted-foreground/60 mb-6 text-[11px] sm:text-xs">
+          <div className="stagger-enter relative mx-auto flex w-full max-w-6xl flex-col items-center px-4 pt-14 pb-40 text-center sm:pt-24 sm:pb-56">
+            <Eyebrow className="dark:text-stage-foreground/60 mb-6 text-[11px] sm:text-xs">
               {t("hero.badge")}
             </Eyebrow>
             <h1 className="display-1 max-w-4xl text-balance">
               {t.rich("hero.title", {
                 accent: (chunks) => (
-                  <em className="bg-gradient-to-r from-[oklch(0.74_0.13_42)] to-[oklch(0.84_0.1_62)] bg-clip-text text-transparent">
+                  <em className="bg-gradient-to-r from-[oklch(0.56_0.14_36)] to-[oklch(0.68_0.15_52)] bg-clip-text text-transparent dark:from-[oklch(0.74_0.13_42)] dark:to-[oklch(0.84_0.1_62)]">
                     {chunks}
                   </em>
                 ),
               })}
             </h1>
-            {/* Light weight: cream on a dark ground reads a step heavier than the
-                same face on the page, and the regular looked bold on a phone. */}
-            <p className="text-inverted-foreground/65 mt-5 max-w-xl text-base font-light text-pretty sm:mt-6 sm:text-lg lg:text-xl">
+            {/* Light weight at night only: cream on a dark ground reads a step
+                heavier than the same face on sand. */}
+            <p className="text-stage-foreground/70 mt-5 max-w-xl text-base text-pretty sm:mt-6 sm:text-lg lg:text-xl dark:font-light dark:text-stage-foreground/65">
               {t("hero.subtitle")}
             </p>
             {/* Stacked and equal-width on phones, side by side from sm. */}
@@ -99,18 +99,19 @@ export function LandingPage() {
                   {t("hero.ctaPrimary")} <ArrowRight />
                 </Link>
               </Button>
-              <Button asChild size="pill" variant="glass">
+              <Button asChild size="pill" variant="stage">
                 <Link href="#how-it-works">{t("hero.ctaSecondary")}</Link>
               </Button>
             </div>
-            <p className="text-inverted-foreground/50 mt-5 text-sm">
+            <p className="text-stage-foreground/55 mt-5 text-sm">
               {t("hero.note")}
             </p>
           </div>
         </div>
 
-        {/* The live board breaks over the stage's bottom edge */}
-        <div className="relative z-10 mx-auto -mt-32 w-full max-w-6xl px-4 sm:-mt-44 sm:px-6">
+        {/* The live board breaks over the stage's bottom edge, arriving a beat
+            after the headline. */}
+        <div className="relative z-10 mx-auto -mt-32 w-full max-w-6xl px-4 [animation-delay:320ms] animate-[fade-up_0.7s_var(--ease-out-quint)_both] motion-reduce:animate-none sm:-mt-44 sm:px-6">
           <AppPreview />
         </div>
       </section>

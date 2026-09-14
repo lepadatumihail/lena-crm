@@ -22,6 +22,10 @@ const buttonVariants = cva(
         // For the always-dark marketing surfaces: a frosted outline.
         glass:
           "border-inverted-foreground/20 bg-inverted-foreground/5 text-inverted-foreground border shadow-none backdrop-blur-sm hover:bg-inverted-foreground/10 hover:text-inverted-foreground",
+        // The same outline on the hero stage, in whichever ink the stage
+        // is using: dark on sand by day, frosted on the dark stage at night.
+        stage:
+          "border-stage-foreground/15 bg-stage-foreground/[0.04] text-stage-foreground border shadow-none backdrop-blur-sm hover:bg-stage-foreground/10 hover:text-stage-foreground dark:border-stage-foreground/20 dark:bg-stage-foreground/5",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

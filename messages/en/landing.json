@@ -8,8 +8,6 @@
     "note": "No password — sign in with Google or a one-time code."
   },
   "preview": {
-    "search": "Search…",
-    "new": "+ New",
     "toasts": {
       "moved": "{name} → {stage}",
       "newLead": "New lead from Idealista",

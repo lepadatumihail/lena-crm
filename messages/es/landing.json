@@ -8,8 +8,6 @@
     "note": "Sin contraseña: inicia sesión con Google o con un código de un solo uso."
   },
   "preview": {
-    "search": "Buscar…",
-    "new": "+ Nuevo",
     "toasts": {
       "moved": "{name} → {stage}",
       "newLead": "Nuevo lead de Idealista",
