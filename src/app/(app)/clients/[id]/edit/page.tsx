@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { getClientById } from "@/lib/data/clients";
 import { ClientForm } from "@/components/clients/client-form";
+import { ShellCrumb } from "@/components/shell/shell-context";
 import { Button } from "@/components/ui/button";
 import { clientFullName, type ClientSide } from "@/lib/crm";
 import type { ClientFormValues } from "@/lib/validation/client";
@@ -40,6 +41,7 @@ export default async function EditClientPage({
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
+      <ShellCrumb side={side} label={clientFullName(client)} />
       <div>
         <Button asChild variant="ghost" size="sm" className="-ml-2 mb-1">
           <Link href={`/clients/${id}`}>

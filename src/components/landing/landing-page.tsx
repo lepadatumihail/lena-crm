@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Tag } from "@/components/ui/tag";
 import { AuthErrorListener } from "@/components/auth-error-listener";
 import { MarketingNav } from "@/components/marketing-nav";
 import { Reveal } from "@/components/reveal";
@@ -409,7 +409,7 @@ export function LandingPage() {
         <div className="mx-auto w-full max-w-6xl px-4">
           <Reveal>
             <div className="from-primary/10 to-accent/40 relative flex flex-col items-center gap-3 overflow-hidden rounded-3xl border bg-gradient-to-br p-8 text-center sm:p-12">
-              <Badge className="gap-1.5">{t("rentals.badge")}</Badge>
+              <Tag tone="brand">{t("rentals.badge")}</Tag>
               <h2 className="display-3 text-balance">{t("rentals.heading")}</h2>
               <p className="text-muted-foreground max-w-lg text-pretty">
                 {t("rentals.body")}

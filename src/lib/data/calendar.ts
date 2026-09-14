@@ -208,3 +208,26 @@ export async function getCalendarFormData(): Promise<{
   }));
   return { clients };
 }
+
+export type ClientAppointment = Pick<
+  Appointment,
+  "id" | "type" | "title" | "starts_at" | "location" | "property_label"
+>;
+
+/** The client's next appointment starting at or after `fromISO`, or null. */
+export async function getNextClientAppointment(
+  clientId: string,
+  fromISO: string
+): Promise<ClientAppointment | null> {
+  const supabase = await createSupabase();
+  const { data, error } = await supabase
+    .from("appointments")
+    .select("id, type, title, starts_at, location, property_label")
+    .eq("client_id", clientId)
+    .gte("starts_at", fromISO)
+    .order("starts_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  return data;
+}

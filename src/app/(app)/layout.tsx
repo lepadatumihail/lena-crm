@@ -4,16 +4,18 @@ import { cookies } from "next/headers";
 import { getLocale } from "next-intl/server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/data/session";
 import { intlTag } from "@/i18n/config";
 import { planState } from "@/lib/access";
 import { BUYER_STAGES } from "@/lib/crm";
-import { AGENT_TIME_ZONE, dayRangeInTimeZone } from "@/lib/home";
+import { AGENT_TIME_ZONE, dayRangeInTimeZone, firstNameFrom } from "@/lib/home";
 import { AppBar } from "@/components/shell/app-bar";
 import {
   AppSidebar,
   type SidebarPlan,
   type StageCount,
 } from "@/components/shell/app-sidebar";
+import { ShellProvider } from "@/components/shell/shell-context";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
@@ -32,10 +34,11 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [supabase, locale] = await Promise.all([createClient(), getLocale()]);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const [supabase, locale, user] = await Promise.all([
+    createClient(),
+    getLocale(),
+    getSessionUser(),
+  ]);
 
   if (!user) redirect("/login");
 
@@ -95,6 +98,7 @@ export default async function AppLayout({
   const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
 
   return (
+    <ShellProvider agentFirstName={firstNameFrom(profile?.full_name, user.email)}>
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar
         email={user.email ?? ""}
@@ -116,5 +120,6 @@ export default async function AppLayout({
         </div>
       </SidebarInset>
     </SidebarProvider>
+    </ShellProvider>
   );
 }

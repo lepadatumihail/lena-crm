@@ -60,6 +60,9 @@ export function MessageComposer({
   customTemplates = [],
   propertyOptions = [],
   autoOpenTemplate,
+  triggerVariant = "outline",
+  triggerSize = "default",
+  triggerClassName,
 }: {
   client: {
     id: string;
@@ -72,6 +75,9 @@ export function MessageComposer({
   customTemplates?: ComposerTemplate[];
   propertyOptions?: string[];
   autoOpenTemplate?: string | null;
+  triggerVariant?: "default" | "outline" | "secondary" | "ghost";
+  triggerSize?: "default" | "sm" | "xs";
+  triggerClassName?: string;
 }) {
   const t = useTranslations("clientDetail.composer");
   const tCrm = useTranslations("crm");
@@ -202,8 +208,9 @@ export function MessageComposer({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Button
-        variant="outline"
-        className="w-full"
+        variant={triggerVariant}
+        size={triggerSize}
+        className={triggerClassName}
         onClick={() => setOpen(true)}
       >
         <Sparkles /> {t("trigger")}

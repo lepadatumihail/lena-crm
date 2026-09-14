@@ -16,14 +16,11 @@ import {
   Trash2,
 } from "lucide-react";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { RowIcon } from "@/components/clients/detail-row";
+import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Money } from "@/components/ui/money";
+import { Tag } from "@/components/ui/tag";
 import { Input } from "@/components/ui/input";
 import { PriceInput } from "@/components/price-input";
 import { Textarea } from "@/components/ui/textarea";
@@ -58,7 +55,7 @@ import {
 } from "@/lib/validation/seller";
 import { intlTag } from "@/i18n/config";
 import { propertyTypeLabel } from "@/i18n/labels";
-import { formatCurrency, PROPERTY_TYPES } from "@/lib/crm";
+import { PROPERTY_TYPES } from "@/lib/crm";
 import type { Property } from "@/lib/supabase/types";
 
 export function PropertiesSection({
@@ -72,39 +69,32 @@ export function PropertiesSection({
   const [adding, setAdding] = useState(false);
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <div>
-          <CardTitle className="flex items-center gap-2 text-base">
-          <Building2 className="text-primary size-4" />
-          {t("title")}
-        </CardTitle>
-          {properties.length > 0 && (
-            <p className="text-muted-foreground mt-0.5 text-xs">
-              {t("listed", { count: properties.length })}
-            </p>
-          )}
-        </div>
-        <Button variant="outline" size="sm" onClick={() => setAdding(true)}>
+    <Panel
+      title={t("title")}
+      icon={<Building2 className="size-3.5" />}
+      count={properties.length}
+      action={
+        <Button variant="outline" size="xs" onClick={() => setAdding(true)}>
           <Plus /> {t("add")}
         </Button>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        {properties.length === 0 ? (
-          <p className="text-muted-foreground text-sm">{t("empty")}</p>
-        ) : (
-          properties.map((p) => (
+      }
+    >
+      {properties.length === 0 ? (
+        <PanelEmpty>{t("empty")}</PanelEmpty>
+      ) : (
+        <ul className="divide-y">
+          {properties.map((p) => (
             <PropertyCard key={p.id} clientId={clientId} property={p} />
-          ))
-        )}
-      </CardContent>
+          ))}
+        </ul>
+      )}
 
       <PropertyDialog
         clientId={clientId}
         open={adding}
         onOpenChange={setAdding}
       />
-    </Card>
+    </Panel>
   );
 }
 
@@ -139,25 +129,44 @@ function PropertyCard({
       : t("fallbackTitle"));
 
   return (
-    <div className="rounded-lg border p-3">
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <p className="font-medium">{title}</p>
-          {property.city && (
-            <p className="text-muted-foreground mt-0.5 flex items-center gap-1 text-sm">
-              <MapPin className="size-3.5" /> {property.city}
-            </p>
-          )}
+    <li className="px-4 py-3">
+      <div className="flex items-start gap-3">
+        <RowIcon icon={Building2} />
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <p className="text-sm leading-6 font-medium">{title}</p>
+            {property.property_type ? (
+              <Tag>{propertyTypeLabel(tCrm, property.property_type)}</Tag>
+            ) : null}
+          </div>
+          <p className="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+            {property.city ? (
+              <span className="inline-flex items-center gap-1">
+                <MapPin className="size-3.5" strokeWidth={1.75} /> {property.city}
+              </span>
+            ) : null}
+            {property.bedrooms != null ? (
+              <span className="inline-flex items-center gap-1">
+                <BedDouble className="size-3.5" strokeWidth={1.75} /> {property.bedrooms}
+              </span>
+            ) : null}
+          </p>
+          {property.notes ? (
+            <p className="text-muted-foreground mt-1 text-[13px]">{property.notes}</p>
+          ) : null}
         </div>
-        <div className="flex shrink-0 items-center gap-1">
+        <span className="shrink-0 text-sm font-medium">
+          <Money value={property.price} locale={tag} />
+        </span>
+        <div className="flex shrink-0 items-center gap-0.5">
           <Button
             variant="ghost"
-            size="icon"
-            className="size-8"
+            size="icon-xs"
+            className="text-muted-foreground hover:text-foreground"
             onClick={() => setEditing(true)}
             aria-label={t("editAria")}
           >
-            <Pencil className="size-4" />
+            <Pencil />
           </Button>
           <ConfirmDialog
             title={t("confirmTitle")}
@@ -166,38 +175,16 @@ function PropertyCard({
             trigger={
               <Button
                 variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-destructive size-8"
+                size="icon-xs"
+                className="text-muted-foreground hover:text-destructive"
                 aria-label={t("deleteAria")}
               >
-                <Trash2 className="size-4" />
+                <Trash2 />
               </Button>
             }
           />
         </div>
       </div>
-
-      <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
-        {property.property_type && (
-          <Badge variant="secondary">
-            {propertyTypeLabel(tCrm, property.property_type)}
-          </Badge>
-        )}
-        {property.price != null && (
-          <span className="font-medium">
-            {formatCurrency(property.price, tag)}
-          </span>
-        )}
-        {property.bedrooms != null && (
-          <span className="text-muted-foreground flex items-center gap-1">
-            <BedDouble className="size-3.5" /> {property.bedrooms}
-          </span>
-        )}
-      </div>
-
-      {property.notes && (
-        <p className="text-muted-foreground mt-2 text-sm">{property.notes}</p>
-      )}
 
       <PropertyDialog
         clientId={clientId}
@@ -205,7 +192,7 @@ function PropertyCard({
         open={editing}
         onOpenChange={setEditing}
       />
-    </div>
+    </li>
   );
 }
 

@@ -8,11 +8,9 @@ import {
   Gift,
   Receipt,
   Sparkles,
-  TriangleAlert,
   Users,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -29,6 +27,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Notice } from "@/components/ui/notice";
+import { Tag } from "@/components/ui/tag";
 import { RefreshWhilePending } from "@/components/billing/refresh-while-pending";
 import { intlTag } from "@/i18n/config";
 import { openBillingPortal } from "@/lib/actions/billing";
@@ -49,24 +49,16 @@ import {
   formatBillingDate,
   formatMoney,
   formatPeriod,
-  invoiceStatusBadge,
+  invoiceStatusTag,
   paymentMethodLabel,
-  phaseBadge,
+  phaseTag,
   subscriptionEndsOn,
   subscriptionPhase,
-  type BadgeTone,
   type SubscriptionPhase,
 } from "@/lib/subscription";
 import type { ReferralCredit } from "@/lib/supabase/types";
+import { TONE_SOLID, type Tone } from "@/lib/tones";
 import { cn } from "@/lib/utils";
-
-const TONE_CLASSES = {
-  success: "border-success/40 bg-success/10",
-  info: "border-border bg-muted",
-  warning: "border-warning/50 bg-warning/10",
-} as const;
-
-type Tone = keyof typeof TONE_CLASSES;
 
 /** The ledger stores a machine reason; this is the key the agent reads. */
 const CREDIT_REASON = {
@@ -93,11 +85,11 @@ export function BillingView({
   const showPaymentCard = subscribed || stripe !== null;
 
   const notice: { tone: Tone; text: string } | null = pending
-    ? { tone: "info", text: t("notices.pending") }
+    ? { tone: "neutral", text: t("notices.pending") }
     : upgraded
-      ? { tone: "success", text: t("notices.upgraded") }
+      ? { tone: "green", text: t("notices.upgraded") }
       : portalUnavailable
-        ? { tone: "info", text: t("notices.portalUnavailable") }
+        ? { tone: "neutral", text: t("notices.portalUnavailable") }
         : null;
 
   return (
@@ -106,22 +98,10 @@ export function BillingView({
 
       <p className="text-muted-foreground max-w-2xl text-sm">{t("subtitle")}</p>
 
-      {notice ? (
-        <div className={cn("rounded-lg border px-4 py-3 text-sm", TONE_CLASSES[notice.tone])}>
-          {notice.text}
-        </div>
-      ) : null}
+      {notice ? <Notice tone={notice.tone}>{notice.text}</Notice> : null}
 
       {stripeUnavailable ? (
-        <div
-          className={cn(
-            "flex items-start gap-2 rounded-lg border px-4 py-3 text-sm",
-            TONE_CLASSES.warning,
-          )}
-        >
-          <TriangleAlert className="mt-0.5 size-4 shrink-0" />
-          <span>{t("notices.stripeUnavailable")}</span>
-        </div>
+        <Notice tone="amber">{t("notices.stripeUnavailable")}</Notice>
       ) : null}
 
       <div className="grid gap-5 lg:grid-cols-3">
@@ -187,7 +167,7 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
 
   let title: string;
   let description: string;
-  let badge: { label: string; tone: BadgeTone };
+  let badge: { label: string; tone: Tone };
   let priceMain: string;
   let priceNote: string | null;
 
@@ -196,11 +176,11 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
     description = founding ? t("plan.descFounding") : t("plan.descPro");
     badge = phase
       ? phase === "ending" && endsOn
-        ? { label: t("plan.badgeEnds", { date: endsOn }), tone: "warning" }
-        : phaseBadge(t, phase)
+        ? { label: t("plan.badgeEnds", { date: endsOn }), tone: "amber" }
+        : phaseTag(t, phase)
       : profile?.subscription_status === "past_due"
-        ? phaseBadge(t, "past_due")
-        : phaseBadge(t, "active");
+        ? phaseTag(t, "past_due")
+        : phaseTag(t, "active");
     if (sub?.amountCents != null) {
       priceMain = formatMoney(sub.amountCents, sub.currency, tag);
       priceNote =
@@ -222,20 +202,20 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
     description = t("plan.descComp");
     badge = {
       label: t("plan.badgeUntil", { date: formatBillingDate(plan.proUntil, tag) ?? "" }),
-      tone: "default",
+      tone: "brand",
     };
     priceMain = formatCurrency(0, tag);
     priceNote = t("plan.priceForNow");
   } else if (plan.source === "admin") {
     title = t("plan.titlePro");
     description = t("plan.descAdmin");
-    badge = { label: t("plan.badgeAdmin"), tone: "secondary" };
+    badge = { label: t("plan.badgeAdmin"), tone: "neutral" };
     priceMain = formatCurrency(0, tag);
     priceNote = t("plan.priceAdmin");
   } else {
     title = t("plan.titleFree");
     description = t("plan.descFree", { limit: FREE_CLIENT_LIMIT });
-    badge = { label: t("plan.badgeFree"), tone: "secondary" };
+    badge = { label: t("plan.badgeFree"), tone: "neutral" };
     priceMain = formatCurrency(0, tag);
     priceNote = t("plan.priceForever");
   }
@@ -272,11 +252,11 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
 
   const message: { tone: Tone; text: string } | null =
     phase === "past_due"
-      ? { tone: "warning", text: t("messages.pastDue") }
+      ? { tone: "amber", text: t("messages.pastDue") }
       : phase === "ending"
-        ? { tone: "info", text: t("messages.ending", { date: endsOn ?? "" }) }
+        ? { tone: "neutral", text: t("messages.ending", { date: endsOn ?? "" }) }
         : phase === "canceled" && plan.source === "subscription"
-          ? { tone: "info", text: t("messages.canceled", { date: endsOn ?? "" }) }
+          ? { tone: "neutral", text: t("messages.canceled", { date: endsOn ?? "" }) }
           : null;
 
   return (
@@ -287,9 +267,9 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
             <CardTitle className="text-lg">{title}</CardTitle>
             <CardDescription className="mt-1">{description}</CardDescription>
           </div>
-          <Badge variant={badge.tone} className="shrink-0">
+          <Tag tone={badge.tone} className="shrink-0">
             {badge.label}
-          </Badge>
+          </Tag>
         </div>
       </CardHeader>
       <CardContent className="space-y-5">
@@ -382,11 +362,7 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
           )}
         </dl>
 
-        {message ? (
-          <div className={cn("rounded-lg border px-4 py-3 text-sm", TONE_CLASSES[message.tone])}>
-            {message.text}
-          </div>
-        ) : null}
+        {message ? <Notice tone={message.tone}>{message.text}</Notice> : null}
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           {plan.source === "subscription" ? (
@@ -459,7 +435,7 @@ function ClientsCard({ clientCount, limit }: { clientCount: number; limit: numbe
         {!unlimited ? (
           <div className="bg-muted h-1.5 overflow-hidden rounded-full">
             <div
-              className={cn("h-full rounded-full", atCap ? "bg-warning" : "bg-primary")}
+              className={cn("h-full rounded-full", TONE_SOLID[atCap ? "amber" : "brand"])}
               style={{ width: `${(used / limit) * 100}%` }}
             />
           </div>
@@ -663,7 +639,7 @@ function InvoicesCard({ overview, canManage }: { overview: BillingOverview; canM
               </TableHeader>
               <TableBody>
                 {invoices.map((inv) => {
-                  const status = invoiceStatusBadge(t, inv.status);
+                  const status = invoiceStatusTag(t, inv.status);
                   return (
                     <TableRow key={inv.id}>
                       <TableCell className="whitespace-nowrap">
@@ -679,7 +655,7 @@ function InvoicesCard({ overview, canManage }: { overview: BillingOverview; canM
                         {formatMoney(inv.totalCents, inv.currency, tag)}
                       </TableCell>
                       <TableCell>
-                        <Badge variant={status.tone}>{status.label}</Badge>
+                        <Tag tone={status.tone}>{status.label}</Tag>
                       </TableCell>
                       <TableCell className="text-right whitespace-nowrap">
                         <div className="flex justify-end gap-1">

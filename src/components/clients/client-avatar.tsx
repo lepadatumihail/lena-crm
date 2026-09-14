@@ -1,5 +1,6 @@
 import { initialsOf } from "@/lib/home";
-import type { ClientSide } from "@/lib/crm";
+import { SIDE_TONES, type ClientSide } from "@/lib/crm";
+import { TONE_BG, TONE_INK } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 
 const SIZES = {
@@ -9,8 +10,8 @@ const SIZES = {
 } as const;
 
 /**
- * Initials on a tinted disc: brand tint for buyers, teal for sellers, so a
- * mixed list tells the two apart before a word is read. Decorative; the name
+ * Initials on a disc tinted in the side's tone (brand for buyers, teal for
+ * sellers), so a mixed list tells the two apart before a word is read. Decorative; the name
  * next to it carries the accessible label.
  */
 export function ClientAvatar({
@@ -24,15 +25,15 @@ export function ClientAvatar({
   size?: keyof typeof SIZES;
   className?: string;
 }) {
+  const tone = SIDE_TONES[side as ClientSide] ?? SIDE_TONES.buyer;
   return (
     <span
       aria-hidden
       className={cn(
         "inline-flex shrink-0 items-center justify-center rounded-full font-semibold uppercase ring-1 ring-black/[0.06] select-none ring-inset dark:ring-white/10",
         SIZES[size],
-        side === "seller"
-          ? "bg-teal-500/12 text-teal-800 dark:bg-teal-400/15 dark:text-teal-200"
-          : "bg-primary/12 text-primary",
+        TONE_BG[tone],
+        TONE_INK[tone],
         className
       )}
     >

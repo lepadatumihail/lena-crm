@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Plus } from "lucide-react";
 
 import { dateFnsLocale } from "@/i18n/dates";
-import { formatTimeRange } from "@/lib/calendar";
+import { formatTimeRange, EVENT_TONES } from "@/lib/calendar";
 import {
   MIN_EVENT_MINUTES,
   WORKDAY_START_HOUR,
@@ -18,6 +18,7 @@ import {
 } from "@/lib/calendar-view";
 import { cn } from "@/lib/utils";
 import type { CalendarEvent } from "@/lib/data/calendar";
+import { TONE_BG, TONE_BG_HOVER, TONE_EDGE, TONE_INK } from "@/lib/tones";
 
 const HOUR_PX = 48;
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
@@ -273,9 +274,10 @@ export function TimeGrid({
                         className={cn(
                           "pointer-events-auto absolute z-10 flex flex-col overflow-hidden rounded-md border-l-2 py-0.5 text-left leading-tight transition-colors",
                           single ? "px-2 text-xs" : "px-1.5 text-[11px]",
-                          b.event.kind === "viewing"
-                            ? "bg-primary/10 text-primary border-primary hover:bg-primary/20"
-                            : "bg-secondary text-secondary-foreground border-muted-foreground hover:bg-secondary/70",
+                          TONE_BG[EVENT_TONES[b.event.kind]],
+                          TONE_INK[EVENT_TONES[b.event.kind]],
+                          TONE_EDGE[EVENT_TONES[b.event.kind]],
+                          TONE_BG_HOVER[EVENT_TONES[b.event.kind]],
                           b.past && "opacity-55"
                         )}
                         style={{

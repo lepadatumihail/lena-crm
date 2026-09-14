@@ -26,6 +26,12 @@ export const STAGE_TONES: Record<Stage, Tone> = {
   pending: "orange",
 };
 
+/** The tone that marks a buyer or a seller, e.g. on their avatar. */
+export const SIDE_TONES: Record<ClientSide, Tone> = {
+  buyer: "brand",
+  seller: "teal",
+};
+
 export function stagesForSide(side: ClientSide): readonly Stage[] {
   return side === "buyer" ? BUYER_STAGES : SELLER_STAGES;
 }
@@ -33,6 +39,13 @@ export function stagesForSide(side: ClientSide): readonly Stage[] {
 /** Path for a side's client list, e.g. "buyer" → "/clients/buyers". */
 export function clientsPath(side: ClientSide): string {
   return `/clients/${side}s`;
+}
+
+const CLIENT_RECORD = /^\/clients\/(?!(?:buyers|sellers|new)(?:\/|$))([^/]+)/;
+
+/** The id in a client record path ("/clients/<id>" or ".../edit"), else null. */
+export function clientRecordId(pathname: string): string | null {
+  return CLIENT_RECORD.exec(pathname)?.[1] ?? null;
 }
 
 export function defaultStageForSide(side: ClientSide): Stage {

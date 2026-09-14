@@ -11,6 +11,8 @@ import { dateFnsLocale } from "@/i18n/dates";
 import { eventReminderHref } from "@/lib/event-reminder";
 import { cn } from "@/lib/utils";
 import type { CalendarEvent } from "@/lib/data/calendar";
+import { TONE_SOLID } from "@/lib/tones";
+import { EVENT_TONES } from "@/lib/calendar";
 
 const LIMIT = 6;
 
@@ -70,7 +72,7 @@ export function UpcomingPanel({
               aria-hidden
               className={cn(
                 "size-2 shrink-0 rounded-full",
-                e.kind === "viewing" ? "bg-amber-500" : "bg-blue-500"
+                TONE_SOLID[EVENT_TONES[e.kind]]
               )}
             />
             <div className="min-w-0 flex-1">

@@ -1,17 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { format, parseISO } from "date-fns";
 import { File as FileIcon, FolderOpen, Trash2 } from "lucide-react";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { RowIcon } from "@/components/clients/detail-row";
+import { Panel, PanelEmpty } from "@/components/shell/panel";
+import { Button } from "@/components/ui/button";
+import { dateFnsLocale } from "@/i18n/dates";
 import { UploadButton } from "@/components/file-upload";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { addDocument, deleteDocument } from "@/lib/actions/documents";
@@ -42,16 +41,16 @@ export function DocumentsSection({
   const t = useTranslations("clientDetail.documents");
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="flex items-center gap-2 text-base">
-          <FolderOpen className="text-primary size-4" />
-          {t("title")}
-        </CardTitle>
+    <Panel
+      title={t("title")}
+      icon={<FolderOpen className="size-3.5" />}
+      count={documents.length}
+      action={
         <UploadButton
           agentId={agentId}
           clientId={clientId}
           folder="documents"
+          size="xs"
           successLabel={t("uploadLabel")}
           onUploaded={async (meta) => {
             const { error } = await addDocument(clientId, meta);
@@ -64,17 +63,18 @@ export function DocumentsSection({
         >
           {t("upload")}
         </UploadButton>
-      </CardHeader>
-      <CardContent className="space-y-1.5">
-        {documents.length === 0 ? (
-          <p className="text-muted-foreground text-sm">{t("empty")}</p>
-        ) : (
-          documents.map((d) => (
+      }
+    >
+      {documents.length === 0 ? (
+        <PanelEmpty>{t("empty")}</PanelEmpty>
+      ) : (
+        <ul className="divide-y">
+          {documents.map((d) => (
             <DocumentRowItem key={d.id} clientId={clientId} doc={d} />
-          ))
-        )}
-      </CardContent>
-    </Card>
+          ))}
+        </ul>
+      )}
+    </Panel>
   );
 }
 
@@ -86,6 +86,7 @@ function DocumentRowItem({
   doc: DocumentRow;
 }) {
   const t = useTranslations("clientDetail.documents");
+  const locale = useLocale();
   const router = useRouter();
   const [busy, setBusy] = useState(false);
 
@@ -115,35 +116,41 @@ function DocumentRowItem({
   }
 
   return (
-    <div className="bg-muted/40 flex items-center gap-2 rounded-md px-2 py-1.5 text-sm">
-      <FileIcon className="text-muted-foreground size-4 shrink-0" />
-      <button
-        type="button"
-        onClick={open}
-        disabled={busy}
-        className="min-w-0 flex-1 truncate text-left hover:underline"
-      >
-        {doc.file_name}
-      </button>
-      {doc.size != null && (
-        <span className="text-muted-foreground shrink-0 text-xs">
-          {formatBytes(doc.size)}
-        </span>
-      )}
+    <li className="flex items-center gap-3 px-4 py-2">
+      <RowIcon icon={FileIcon} className="mt-0" />
+      <div className="min-w-0 flex-1">
+        <button
+          type="button"
+          onClick={open}
+          disabled={busy}
+          className="block max-w-full truncate text-left text-sm font-medium hover:underline"
+        >
+          {doc.file_name}
+        </button>
+        <p className="text-muted-foreground text-xs tabular-nums">
+          {[
+            doc.size != null ? formatBytes(doc.size) : null,
+            format(parseISO(doc.created_at), "d MMM yyyy", { locale: dateFnsLocale(locale) }),
+          ]
+            .filter(Boolean)
+            .join(" · ")}
+        </p>
+      </div>
       <ConfirmDialog
         title={t("confirmTitle")}
         description={t("confirmDescription", { name: doc.file_name })}
         onConfirm={remove}
         trigger={
-          <button
-            type="button"
+          <Button
+            variant="ghost"
+            size="icon-xs"
             className="text-muted-foreground hover:text-destructive shrink-0"
             aria-label={t("deleteAria")}
           >
-            <Trash2 className="size-3.5" />
-          </button>
+            <Trash2 />
+          </Button>
         }
       />
-    </div>
+    </li>
   );
 }

@@ -99,6 +99,22 @@ export function dayRangeInTimeZone(
   };
 }
 
+/** The calendar day ("yyyy-MM-dd") an instant falls on in an IANA time zone. */
+export function dateKeyInTimeZone(isoInstant: string, timeZone: string): string {
+  const format = (zone: string) =>
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: zone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date(isoInstant));
+  try {
+    return format(timeZone);
+  } catch {
+    return format("UTC");
+  }
+}
+
 export type RelativeUnit = "now" | "minute" | "hour" | "day" | "week" | "month";
 
 /**

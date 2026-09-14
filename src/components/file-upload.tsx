@@ -80,28 +80,22 @@ export function useFileUpload({
   return { upload, uploading };
 }
 
-export function UploadButton({
+/**
+ * Upload a batch of picked files one by one, persist each through
+ * `onUploaded`, then toast once and refresh the page.
+ */
+export function useUploadFiles({
   agentId,
   clientId,
   folder,
-  accept,
-  multiple = true,
-  variant = "outline",
-  size = "sm",
   successLabel,
-  children,
   onUploaded,
 }: {
   agentId: string;
   clientId: string;
   folder: string;
-  accept?: string;
-  multiple?: boolean;
-  variant?: "outline" | "secondary" | "default" | "ghost";
-  size?: "sm" | "default";
   /** Singular noun for the success toast, e.g. "Window card", "Image". */
   successLabel?: string;
-  children: React.ReactNode;
   /** Persist the uploaded file. Return `false` to mark it failed (no success toast). */
   onUploaded: (
     meta: UploadedFileMeta,
@@ -109,7 +103,6 @@ export function UploadButton({
   ) => Promise<boolean | void> | boolean | void;
 }) {
   const t = useTranslations("common");
-  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { upload, uploading } = useFileUpload({ agentId, clientId, folder });
 
@@ -131,6 +124,46 @@ export function UploadButton({
       router.refresh();
     }
   }
+
+  return { handleFiles, uploading };
+}
+
+export function UploadButton({
+  agentId,
+  clientId,
+  folder,
+  accept,
+  multiple = true,
+  variant = "outline",
+  size = "sm",
+  successLabel,
+  children,
+  onUploaded,
+}: {
+  agentId: string;
+  clientId: string;
+  folder: string;
+  accept?: string;
+  multiple?: boolean;
+  variant?: "outline" | "secondary" | "default" | "ghost";
+  size?: "xs" | "sm" | "default";
+  /** Singular noun for the success toast, e.g. "Window card", "Image". */
+  successLabel?: string;
+  children: React.ReactNode;
+  /** Persist the uploaded file. Return `false` to mark it failed (no success toast). */
+  onUploaded: (
+    meta: UploadedFileMeta,
+    file: File
+  ) => Promise<boolean | void> | boolean | void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { handleFiles, uploading } = useUploadFiles({
+    agentId,
+    clientId,
+    folder,
+    successLabel,
+    onUploaded,
+  });
 
   return (
     <>

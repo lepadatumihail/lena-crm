@@ -1,11 +1,18 @@
 import { format } from "date-fns";
 
 import type { Enums } from "@/lib/supabase/types";
+import type { Tone } from "@/lib/tones";
 
 export type AppointmentType = Enums<"appointment_type">;
 export type NotificationType = Enums<"notification_type">;
 
 export const APPOINTMENT_TYPES = ["meeting", "viewing"] as const;
+
+/** One tone per kind of event, shared by the calendar and Home. */
+export const EVENT_TONES: Record<AppointmentType, Tone> = {
+  viewing: "amber",
+  meeting: "blue",
+};
 
 export type ReminderPreset = { value: number | null; label: string };
 

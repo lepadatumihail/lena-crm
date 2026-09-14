@@ -29,10 +29,11 @@ import {
 } from "lucide-react";
 
 import { LogoMark } from "@/components/brand/logo";
-import { Badge } from "@/components/ui/badge";
+import { Tag } from "@/components/ui/tag";
 import { sideLabel, stageLabel } from "@/i18n/labels";
 import { cn } from "@/lib/utils";
 import { useRevealFloor } from "@/hooks/use-reveal-floor";
+import { STAGE_TONES } from "@/lib/crm";
 
 /*
  * "One place" — the consolidation pitch as a loop:
@@ -262,9 +263,9 @@ function ClientCard({
             🇩🇪 {t("language")} · {sideLabel(tCrm, "buyer")}
           </p>
         </div>
-        <Badge variant="warning" className="shrink-0">
+        <Tag tone={STAGE_TONES.viewing} dot className="shrink-0">
           {stageLabel(tCrm, "viewing")}
-        </Badge>
+        </Tag>
       </div>
 
       <motion.ul

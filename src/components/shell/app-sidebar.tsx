@@ -20,10 +20,11 @@ import {
 } from "lucide-react";
 
 import { stageLabel } from "@/i18n/labels";
-import { clientsPath, STAGE_TONES, type Stage } from "@/lib/crm";
+import { clientRecordId, clientsPath, STAGE_TONES, type Stage } from "@/lib/crm";
 import { TONE_SOLID } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 import { LogoMark, Wordmark } from "@/components/brand/logo";
+import { useShellCrumb } from "@/components/shell/shell-context";
 import { SupportDialog } from "@/components/support-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -137,9 +138,23 @@ export function AppSidebar({
 
   const within = (prefix: string) =>
     pathname === prefix || pathname.startsWith(`${prefix}/`);
-  const onBuyers = pathname.startsWith("/clients/buyers");
-  const onSellers = pathname.startsWith("/clients/sellers");
-  const activeStage = onBuyers ? searchParams.get("stage") : null;
+  // A client record (and the new-client form) belongs to its side's list.
+  const crumb = useShellCrumb();
+  const recordSide =
+    clientRecordId(pathname) != null
+      ? (crumb?.side ?? null)
+      : pathname === "/clients/new"
+        ? searchParams.get("side") === "seller"
+          ? "seller"
+          : "buyer"
+        : null;
+  const onBuyers =
+    pathname.startsWith("/clients/buyers") || recordSide === "buyer";
+  const onSellers =
+    pathname.startsWith("/clients/sellers") || recordSide === "seller";
+  const activeStage = pathname.startsWith("/clients/buyers")
+    ? searchParams.get("stage")
+    : null;
   const buyersHref = clientsPath("buyer");
 
   return (
@@ -406,7 +421,7 @@ function PlanCard({
           <div
             className={cn(
               "h-full rounded-full transition-[width] duration-300 ease-(--ease-standard)",
-              atCap ? "bg-warning" : "bg-primary"
+              TONE_SOLID[atCap ? "amber" : "brand"]
             )}
             style={{ width: `${limit ? (used / limit) * 100 : 0}%` }}
           />

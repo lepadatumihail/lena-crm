@@ -7,6 +7,8 @@ import { dateFnsLocale } from "@/i18n/dates";
 import { dayKey } from "@/lib/calendar-view";
 import { cn } from "@/lib/utils";
 import type { CalendarEvent } from "@/lib/data/calendar";
+import { TONE_SOLID } from "@/lib/tones";
+import { EVENT_TONES } from "@/lib/calendar";
 
 const MAX_DOTS = 3;
 
@@ -80,7 +82,7 @@ export function WeekStrip({
                   key={e.id}
                   className={cn(
                     "size-1 rounded-full",
-                    e.kind === "viewing" ? "bg-primary" : "bg-muted-foreground"
+                    TONE_SOLID[EVENT_TONES[e.kind]]
                   )}
                 />
               ))}

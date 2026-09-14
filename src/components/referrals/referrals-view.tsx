@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { ArrowRight, Gift, Link2, Sparkles, Users } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,6 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Notice } from "@/components/ui/notice";
+import { Tag } from "@/components/ui/tag";
 import { CopyButton } from "@/components/referrals/copy-button";
 import { intlTag } from "@/i18n/config";
 import { planState } from "@/lib/access";
@@ -22,23 +23,21 @@ import {
   claimMessage,
   formatReferralCode,
 } from "@/lib/referrals/links";
-import { cn } from "@/lib/utils";
+import type { Tone } from "@/lib/tones";
 
-const STATE_VARIANT: Record<
-  ReferralState,
-  "default" | "secondary" | "outline" | "success" | "warning" | "destructive"
-> = {
-  signed_up: "secondary",
-  subscribed: "default",
-  rewarded: "success",
-  left: "outline",
+/** A referral moves through the same hues as a lead: new, in progress, won. */
+const STATE_TONE: Record<ReferralState, Tone> = {
+  signed_up: "blue",
+  subscribed: "teal",
+  rewarded: "green",
+  left: "neutral",
 };
 
-const TONE_CLASSES = {
-  success: "border-success/40 bg-success/10",
-  info: "border-border bg-muted",
-  error: "border-destructive/40 bg-destructive/10",
-} as const;
+const MESSAGE_TONE: Record<"success" | "info" | "error", Tone> = {
+  success: "green",
+  info: "neutral",
+  error: "red",
+};
 
 export function ReferralsView({
   overview,
@@ -63,9 +62,7 @@ export function ReferralsView({
       <p className="text-muted-foreground max-w-2xl text-sm">{t("subtitle")}</p>
 
       {message ? (
-        <div className={cn("rounded-lg border px-4 py-3 text-sm", TONE_CLASSES[message.tone])}>
-          {t(message.key)}
-        </div>
+        <Notice tone={MESSAGE_TONE[message.tone]}>{t(message.key)}</Notice>
       ) : null}
 
       {/* Founding */}
@@ -162,9 +159,9 @@ export function ReferralsView({
                         : t("agents.joined", { date: formatDate(agent.joinedAt) })}
                     </div>
                   </div>
-                  <Badge variant={STATE_VARIANT[agent.state]}>
+                  <Tag tone={STATE_TONE[agent.state]} dot>
                     {t(REFERRAL_STATE_KEY[agent.state])}
-                  </Badge>
+                  </Tag>
                 </li>
               ))}
             </ul>

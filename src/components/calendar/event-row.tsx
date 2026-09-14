@@ -11,6 +11,8 @@ import { formatCurrency } from "@/lib/crm";
 import { eventReminderHref } from "@/lib/event-reminder";
 import { cn } from "@/lib/utils";
 import type { CalendarEvent } from "@/lib/data/calendar";
+import { TONE_SOLID } from "@/lib/tones";
+import { EVENT_TONES } from "@/lib/calendar";
 
 function eventDescription(e: CalendarEvent): string | null {
   if (e.kind === "viewing") return e.viewing.description?.trim() || null;
@@ -71,7 +73,7 @@ export function EventRow({
         <span
           className={cn(
             "mt-1.5 size-2 shrink-0 rounded-full",
-            e.kind === "viewing" ? "bg-primary" : "bg-muted-foreground"
+            TONE_SOLID[EVENT_TONES[e.kind]]
           )}
         />
         <span className="min-w-0">

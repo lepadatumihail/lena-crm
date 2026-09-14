@@ -38,7 +38,8 @@ import { PRICING_META, marketingMetadata } from "@/lib/seo";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import { Tag } from "@/components/ui/tag";
+import type { Tone } from "@/lib/tones";
 import { Button } from "@/components/ui/button";
 import { MarketingNav } from "@/components/marketing-nav";
 import { Reveal } from "@/components/reveal";
@@ -228,7 +229,7 @@ export async function PricingPage({ locale }: { locale: AppLocale }) {
                   ? tBilling("founding.spots", { count: spotsLeft })
                   : tBilling("pricing.cohortFull")
               }
-              badgeVariant={founding ? "warning" : "secondary"}
+              badgeTone={founding ? "amber" : "neutral"}
             />
           </Reveal>
           <Reveal delay={80}>
@@ -289,13 +290,13 @@ function Explainer({
   title,
   body,
   badge,
-  badgeVariant = "secondary",
+  badgeTone = "neutral",
 }: {
   icon: React.ComponentType<{ className?: string }>;
   title: string;
   body: string;
   badge?: string;
-  badgeVariant?: "warning" | "secondary";
+  badgeTone?: Tone;
 }) {
   return (
     <div className="bg-card flex h-full flex-col rounded-2xl border p-6 shadow-sm">
@@ -305,9 +306,9 @@ function Explainer({
       <h3 className="mt-4 text-lg font-semibold">{title}</h3>
       <p className="text-muted-foreground mt-2 text-sm leading-relaxed">{body}</p>
       {badge ? (
-        <Badge variant={badgeVariant} className="mt-4 w-fit">
+        <Tag tone={badgeTone} className="mt-4 w-fit">
           {badge}
-        </Badge>
+        </Tag>
       ) : null}
     </div>
   );

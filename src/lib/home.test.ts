@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   buyersBeforeViewing,
   countViewingsWithin,
+  dateKeyInTimeZone,
   dayRangeInTimeZone,
   firstNameFrom,
   greetingPeriod,
@@ -167,5 +168,15 @@ describe("dayRangeInTimeZone", () => {
   it("uses the winter offset in January", () => {
     const { start } = dayRangeInTimeZone("2026-01-10T12:00:00.000Z", "Europe/Madrid");
     expect(start).toBe("2026-01-09T23:00:00.000Z");
+  });
+});
+
+describe("dateKeyInTimeZone", () => {
+  it("names the Madrid calendar day, not the UTC one", () => {
+    expect(dateKeyInTimeZone("2026-09-14T10:00:00.000Z", "Europe/Madrid")).toBe("2026-09-14");
+    expect(dateKeyInTimeZone("2026-09-14T22:30:00.000Z", "Europe/Madrid")).toBe("2026-09-15");
+  });
+  it("falls back to UTC on an unknown zone", () => {
+    expect(dateKeyInTimeZone("2026-09-14T22:30:00.000Z", "Mars/Olympus")).toBe("2026-09-14");
   });
 });

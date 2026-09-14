@@ -5,6 +5,7 @@ import {
   buyerStageAtLeast,
   defaultStageForSide,
   stageIndex,
+  clientRecordId,
 } from "./crm";
 
 describe("formatCurrency", () => {
@@ -62,5 +63,19 @@ describe("buyerStageAtLeast", () => {
 
   it("is false for an unknown stage (indexOf -1)", () => {
     expect(buyerStageAtLeast("bogus", "qualified")).toBe(false);
+  });
+});
+
+describe("clientRecordId", () => {
+  it("reads the id from a record or edit path", () => {
+    expect(clientRecordId("/clients/54b43552-1994")).toBe("54b43552-1994");
+    expect(clientRecordId("/clients/abc/edit")).toBe("abc");
+  });
+  it("ignores the list and new-client paths", () => {
+    expect(clientRecordId("/clients/buyers")).toBeNull();
+    expect(clientRecordId("/clients/sellers")).toBeNull();
+    expect(clientRecordId("/clients/new")).toBeNull();
+    expect(clientRecordId("/clients")).toBeNull();
+    expect(clientRecordId("/home")).toBeNull();
   });
 });

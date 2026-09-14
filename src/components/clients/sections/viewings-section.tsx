@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -12,20 +12,25 @@ import {
   FileText,
   Home,
   ImageIcon,
+  Loader2,
+  Paperclip,
   Pencil,
   Plus,
   Trash2,
+  X,
 } from "lucide-react";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { RowIcon } from "@/components/clients/detail-row";
+import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { UploadButton } from "@/components/file-upload";
+import { Tag } from "@/components/ui/tag";
+import { useUploadFiles } from "@/components/file-upload";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { ViewingDialog } from "@/components/clients/viewing-dialog";
 import {
@@ -51,47 +56,39 @@ export function ViewingsSection({
 }) {
   const t = useTranslations("clientDetail.viewings");
   const [adding, setAdding] = useState(false);
-  const offerCount = viewings.filter((v) => v.had_offer).length;
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <div>
-          <CardTitle className="flex items-center gap-2 text-base">
-          <Eye className="text-primary size-4" />
-          {t("title")}
-        </CardTitle>
-          {viewings.length > 0 && (
-            <p className="text-muted-foreground mt-0.5 text-xs">
-              {t("summary", { count: viewings.length, offers: offerCount })}
-            </p>
-          )}
-        </div>
-        <Button variant="outline" size="sm" onClick={() => setAdding(true)}>
+    <Panel
+      title={t("title")}
+      icon={<Eye className="size-3.5" />}
+      count={viewings.length}
+      action={
+        <Button variant="outline" size="xs" onClick={() => setAdding(true)}>
           <Plus /> {t("add")}
         </Button>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        {viewings.length === 0 ? (
-          <p className="text-muted-foreground text-sm">{t("empty")}</p>
-        ) : (
-          viewings.map((v) => (
+      }
+    >
+      {viewings.length === 0 ? (
+        <PanelEmpty>{t("empty")}</PanelEmpty>
+      ) : (
+        <ul className="divide-y">
+          {viewings.map((v) => (
             <ViewingCard
               key={v.id}
               clientId={clientId}
               agentId={agentId}
               viewing={v}
             />
-          ))
-        )}
-      </CardContent>
+          ))}
+        </ul>
+      )}
 
       <ViewingDialog
         clientId={clientId}
         open={adding}
         onOpenChange={setAdding}
       />
-    </Card>
+    </Panel>
   );
 }
 
@@ -131,130 +128,93 @@ function ViewingCard({
     return true;
   }
 
-  const hasMeta =
-    viewing.scheduled_at ||
-    viewing.property_price != null ||
-    viewing.had_offer;
+  const hasMeta = viewing.scheduled_at || viewing.property_price != null;
 
   return (
-    <div className="bg-card overflow-hidden rounded-xl border">
-      <div className="p-3 sm:p-4">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex min-w-0 items-start gap-3">
-            <span className="bg-primary/10 text-primary mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg">
-              <Home className="size-4" />
-            </span>
-            <div className="min-w-0">
-              <p className="leading-tight font-medium">
-                {viewing.title || t("untitled")}
-              </p>
-              {viewing.description && (
-                <p className="text-muted-foreground mt-1 text-sm">
-                  {viewing.description}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="flex shrink-0 items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-8"
-              onClick={() => setEditing(true)}
-              aria-label={t("editAria")}
-            >
-              <Pencil className="size-4" />
-            </Button>
-            <ConfirmDialog
-              title={t("confirmTitle")}
-              description={t("confirmDescription", {
-                title: viewing.title || t("untitled"),
-              })}
-              onConfirm={onDelete}
-              trigger={
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-muted-foreground hover:text-destructive size-8"
-                  aria-label={t("deleteAria")}
-                >
-                  <Trash2 className="size-4" />
-                </Button>
-              }
-            />
-          </div>
-        </div>
-
-        {hasMeta && (
-          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 pl-11 text-sm">
-            {viewing.scheduled_at && (
-              <span className="text-muted-foreground flex items-center gap-1.5">
-                <CalendarClock className="size-4 opacity-70" />
-                {format(new Date(viewing.scheduled_at), "EEE d MMM, HH:mm", {
-                  locale: dateFnsLocale(locale),
-                })}
-              </span>
-            )}
-            {viewing.property_price != null && (
-              <span className="text-muted-foreground flex items-center gap-1.5">
-                <Euro className="size-4 opacity-70" />
-                {t.rich("asking", {
-                  amount: formatCurrency(
-                    viewing.property_price,
-                    intlTag(locale)
-                  ),
-                  price: (chunks) => (
-                    <span className="text-foreground font-medium tabular-nums">
-                      {chunks}
-                    </span>
-                  ),
-                })}
-              </span>
-            )}
-            {viewing.had_offer && (
-              <Badge variant="success" className="tabular-nums">
+    <li className="px-4 py-3">
+      <div className="flex items-start gap-3">
+        <RowIcon icon={Home} />
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <p className="text-sm leading-6 font-medium">
+              {viewing.title || t("untitled")}
+            </p>
+            {viewing.had_offer ? (
+              <Tag tone="green" dot className="tabular-nums">
                 {t("offer", {
                   price: formatCurrency(viewing.offer_price, intlTag(locale)),
                 })}
-              </Badge>
-            )}
+              </Tag>
+            ) : null}
           </div>
-        )}
-      </div>
-
-      {/* Files & actions — visually delimited footer */}
-      <div className="bg-muted/30 border-t px-3 py-3 sm:px-4">
-        {viewing.attachments.length > 0 && (
-          <div className="mb-2.5 space-y-1.5">
-            {viewing.attachments.map((a) => (
-              <AttachmentRow key={a.id} clientId={clientId} attachment={a} />
-            ))}
-          </div>
-        )}
-        <div className="flex flex-wrap gap-2">
-          <UploadButton
+          {viewing.description ? (
+            <p className="text-muted-foreground text-[13px]">{viewing.description}</p>
+          ) : null}
+          {hasMeta ? (
+            <p className="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+              {viewing.scheduled_at ? (
+                <span className="inline-flex items-center gap-1.5">
+                  <CalendarClock className="size-3.5" strokeWidth={1.75} />
+                  {format(new Date(viewing.scheduled_at), "EEE d MMM, HH:mm", {
+                    locale: dateFnsLocale(locale),
+                  })}
+                </span>
+              ) : null}
+              {viewing.property_price != null ? (
+                <span className="inline-flex items-center gap-1.5">
+                  <Euro className="size-3.5" strokeWidth={1.75} />
+                  {t.rich("asking", {
+                    amount: formatCurrency(viewing.property_price, intlTag(locale)),
+                    price: (chunks) => (
+                      <span className="text-foreground font-medium tabular-nums">
+                        {chunks}
+                      </span>
+                    ),
+                  })}
+                </span>
+              ) : null}
+            </p>
+          ) : null}
+          {viewing.attachments.length > 0 ? (
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
+              {viewing.attachments.map((a) => (
+                <AttachmentRow key={a.id} clientId={clientId} attachment={a} />
+              ))}
+            </div>
+          ) : null}
+        </div>
+        <div className="flex shrink-0 items-center gap-0.5">
+          <AttachMenu
             agentId={agentId}
             clientId={clientId}
-            folder="viewings"
-            accept="application/pdf"
-            multiple={false}
-            successLabel={t("windowCard")}
-            onUploaded={(meta) =>
-              recordAttachment({ ...meta, kind: "window_card" })
+            onRecord={recordAttachment}
+          />
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            className="text-muted-foreground hover:text-foreground"
+            onClick={() => setEditing(true)}
+            aria-label={t("editAria")}
+          >
+            <Pencil />
+          </Button>
+          <ConfirmDialog
+            title={t("confirmTitle")}
+            description={t("confirmDescription", {
+              title: viewing.title || t("untitled"),
+            })}
+            onConfirm={onDelete}
+            trigger={
+              <Button
+                variant="ghost"
+                size="icon-xs"
+                className="text-muted-foreground hover:text-destructive"
+                aria-label={t("deleteAria")}
+              >
+                <Trash2 />
+              </Button>
             }
-          >
-            {t("windowCard")}
-          </UploadButton>
-          <UploadButton
-            agentId={agentId}
-            clientId={clientId}
-            folder="viewings"
-            accept="image/*"
-            successLabel={t("imageLabel")}
-            onUploaded={(meta) => recordAttachment({ ...meta, kind: "image" })}
-          >
-            {t("images")}
-          </UploadButton>
+          />
         </div>
       </div>
 
@@ -264,7 +224,89 @@ function ViewingCard({
         open={editing}
         onOpenChange={setEditing}
       />
-    </div>
+    </li>
+  );
+}
+
+/** A paperclip menu for a viewing's files: the window card or photos. */
+function AttachMenu({
+  agentId,
+  clientId,
+  onRecord,
+}: {
+  agentId: string;
+  clientId: string;
+  onRecord: (
+    meta: Parameters<typeof addViewingAttachment>[2]
+  ) => Promise<boolean>;
+}) {
+  const t = useTranslations("clientDetail.viewings");
+  const cardInput = useRef<HTMLInputElement>(null);
+  const imageInput = useRef<HTMLInputElement>(null);
+  const card = useUploadFiles({
+    agentId,
+    clientId,
+    folder: "viewings",
+    successLabel: t("windowCard"),
+    onUploaded: (meta) => onRecord({ ...meta, kind: "window_card" }),
+  });
+  const images = useUploadFiles({
+    agentId,
+    clientId,
+    folder: "viewings",
+    successLabel: t("imageLabel"),
+    onUploaded: (meta) => onRecord({ ...meta, kind: "image" }),
+  });
+  const busy = card.uploading || images.uploading;
+
+  return (
+    <>
+      <input
+        ref={cardInput}
+        type="file"
+        accept="application/pdf"
+        className="hidden"
+        onChange={(e) => {
+          if (e.target.files?.length) void card.handleFiles(e.target.files);
+          e.target.value = "";
+        }}
+      />
+      <input
+        ref={imageInput}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={(e) => {
+          if (e.target.files?.length) void images.handleFiles(e.target.files);
+          e.target.value = "";
+        }}
+      />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            disabled={busy}
+            aria-label={t("attach")}
+            title={t("attach")}
+            className="text-muted-foreground hover:text-foreground data-[state=open]:bg-accent"
+          >
+            {busy ? <Loader2 className="animate-spin" /> : <Paperclip />}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-52">
+          <DropdownMenuItem onSelect={() => cardInput.current?.click()}>
+            <FileText />
+            {t("attachWindowCard")}
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => imageInput.current?.click()}>
+            <ImageIcon />
+            {t("attachImages")}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 }
 
@@ -306,17 +348,17 @@ function AttachmentRow({
   }
 
   return (
-    <div className="bg-background flex items-center gap-2 rounded-md border px-2 py-1.5 text-sm">
+    <span className="bg-muted inline-flex h-7 max-w-64 items-center gap-1.5 rounded-md pr-1 pl-2 text-xs">
       {attachment.kind === "window_card" ? (
-        <FileText className="text-muted-foreground size-4 shrink-0" />
+        <FileText className="text-muted-foreground size-3.5 shrink-0" strokeWidth={1.75} />
       ) : (
-        <ImageIcon className="text-muted-foreground size-4 shrink-0" />
+        <ImageIcon className="text-muted-foreground size-3.5 shrink-0" strokeWidth={1.75} />
       )}
       <button
         type="button"
         onClick={open}
         disabled={busy}
-        className="min-w-0 flex-1 truncate text-left hover:underline"
+        className="min-w-0 flex-1 truncate text-left font-medium hover:underline"
       >
         {attachment.file_name}
       </button>
@@ -330,13 +372,13 @@ function AttachmentRow({
         trigger={
           <button
             type="button"
-            className="text-muted-foreground hover:text-destructive shrink-0"
+            className="text-muted-foreground hover:bg-background hover:text-destructive flex size-5 shrink-0 items-center justify-center rounded transition-colors duration-150"
             aria-label={t("removeAttachmentAria")}
           >
-            <Trash2 className="size-3.5" />
+            <X className="size-3" />
           </button>
         }
       />
-    </div>
+    </span>
   );
 }

@@ -1,29 +1,50 @@
-import { getCalendarEvents } from "@/lib/data/calendar";
-import { getCommissionSummary } from "@/lib/data/buyer";
-import { getHomeOverview, getNeedsAttention } from "@/lib/data/dashboard";
-import { HomeView } from "@/components/home/home-view";
+import { Suspense } from "react";
 
-const DAY = 24 * 60 * 60 * 1000;
+import { HomeHeader } from "@/components/home/home-header";
+import { HomeLayout } from "@/components/home/home-layout";
+import {
+  AttentionSection,
+  RecentSection,
+  SummarySection,
+  UpcomingSection,
+} from "@/components/home/home-sections";
+import {
+  AttentionSkeleton,
+  RecentSkeleton,
+  StatTilesSkeleton,
+  UpcomingSkeleton,
+} from "@/components/home/home-skeletons";
 
+/**
+ * Home streams. The header paints with the first byte; each section fills in
+ * as its own data arrives, behind a skeleton of its own shape. loading.tsx
+ * shows the same skeletons the instant Home is navigated to.
+ */
 export default async function HomePage() {
   const now = new Date();
-  const [events, commission, attention, overview] = await Promise.all([
-    getCalendarEvents(
-      new Date(now.getTime() - 60 * 60 * 1000).toISOString(),
-      new Date(now.getTime() + 30 * DAY).toISOString()
-    ),
-    getCommissionSummary(),
-    getNeedsAttention(),
-    getHomeOverview(),
-  ]);
-
   return (
-    <HomeView
-      events={events}
-      commission={commission}
-      attention={attention}
-      overview={overview}
-      now={now}
+    <HomeLayout
+      header={<HomeHeader now={now} />}
+      summary={
+        <Suspense fallback={<StatTilesSkeleton />}>
+          <SummarySection now={now} />
+        </Suspense>
+      }
+      attention={
+        <Suspense fallback={<AttentionSkeleton />}>
+          <AttentionSection />
+        </Suspense>
+      }
+      upcoming={
+        <Suspense fallback={<UpcomingSkeleton />}>
+          <UpcomingSection now={now} />
+        </Suspense>
+      }
+      recent={
+        <Suspense fallback={<RecentSkeleton />}>
+          <RecentSection now={now} />
+        </Suspense>
+      }
     />
   );
 }

@@ -1,6 +1,5 @@
 import { useLocale, useTranslations } from "next-intl";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Tag } from "@/components/ui/tag";
 import {
   adminAllocateFounding,
   adminCompMonth,
@@ -28,6 +28,8 @@ import type { AdminOverview } from "@/lib/data/referrals";
 import { intlTag } from "@/i18n/config";
 import { FREE_CLIENT_LIMIT, planState } from "@/lib/access";
 import { FOUNDING_CAP, planName } from "@/lib/billing";
+import { TONE_INK } from "@/lib/tones";
+import { cn } from "@/lib/utils";
 
 const STATUSES = ["none", "active", "past_due", "canceled"] as const;
 
@@ -90,16 +92,16 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
                     <TableCell>
                       <div className="flex flex-wrap items-center gap-1">
                         {plan.tier === "pro" ? (
-                          <Badge>
+                          <Tag tone="brand">
                             {plan.source === "comp" ? t("agents.proComped") : t("agents.pro")}
-                          </Badge>
+                          </Tag>
                         ) : (
-                          <Badge variant="outline">{t("agents.free")}</Badge>
+                          <Tag>{t("agents.free")}</Tag>
                         )}
                         {p.founding_number != null ? (
-                          <Badge variant="warning">
+                          <Tag tone="amber">
                             {t("agents.founding", { number: p.founding_number })}
-                          </Badge>
+                          </Tag>
                         ) : null}
                         {p.is_admin ? (
                           <span className="text-muted-foreground text-xs">{t("agents.admin")}</span>
@@ -119,7 +121,7 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
                     <TableCell className="text-xs tabular-nums">
                       {p.clientCount}
                       {atCap ? (
-                        <span className="text-warning ml-1">{t("agents.atCap")}</span>
+                        <span className={cn("ml-1", TONE_INK.amber)}>{t("agents.atCap")}</span>
                       ) : null}
                     </TableCell>
                     <TableCell className="text-muted-foreground font-mono text-xs">
@@ -262,9 +264,9 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
                     <TableCell className="font-mono text-xs">{c.reason}</TableCell>
                     <TableCell className="text-xs">
                       {c.applied_to_stripe ? (
-                        <Badge variant="success">{t("credits.applied")}</Badge>
+                        <Tag tone="green">{t("credits.applied")}</Tag>
                       ) : (
-                        <Badge variant="outline">{t("credits.pending")}</Badge>
+                        <Tag>{t("credits.pending")}</Tag>
                       )}
                     </TableCell>
                   </TableRow>

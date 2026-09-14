@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
+import { Tag } from "@/components/ui/tag";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { asLocale, intlTag } from "@/i18n/config";
@@ -106,7 +106,7 @@ export function PricingCards({
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">{t("pricing.freeTitle")}</h2>
               {current?.tier === "free" ? (
-                <Badge variant="secondary">{t("pricing.yourPlan")}</Badge>
+                <Tag>{t("pricing.yourPlan")}</Tag>
               ) : null}
             </div>
             <div className="mt-2 flex items-baseline gap-1">
@@ -134,12 +134,12 @@ export function PricingCards({
             <div className="flex items-center justify-between gap-2">
               <h2 className="text-lg font-semibold">{t("pricing.proTitle")}</h2>
               {current?.tier === "pro" ? (
-                <Badge>{t("pricing.yourPlan")}</Badge>
+                <Tag tone="brand">{t("pricing.yourPlan")}</Tag>
               ) : founding ? (
-                <Badge variant="warning" className="gap-1">
-                  <Sparkles className="size-3" />
+                <Tag tone="amber">
+                  <Sparkles />
                   {t("founding.spots", { count: spotsLeft })}
-                </Badge>
+                </Tag>
               ) : null}
             </div>
             <div className="mt-2 flex items-baseline gap-2">

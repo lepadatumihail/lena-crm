@@ -67,5 +67,6 @@
     "newBuyer": "Nuevo comprador",
     "newSeller": "Nuevo vendedor",
     "newAppointment": "Nueva cita"
-  }
+  },
+  "breadcrumb": "Ruta de navegación"
 }

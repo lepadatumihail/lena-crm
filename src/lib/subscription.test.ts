@@ -7,7 +7,7 @@ import {
   creditApplied,
   formatMoney,
   formatPeriod,
-  invoiceStatusBadge,
+  invoiceStatusTag,
   paymentMethodLabel,
   subscriptionEndsOn,
   subscriptionPhase,
@@ -135,12 +135,12 @@ describe("paymentMethodLabel", () => {
   });
 });
 
-describe("invoiceStatusBadge", () => {
-  it("maps Stripe statuses to badges", () => {
-    expect(invoiceStatusBadge(t, "paid")).toEqual({ label: "Paid", tone: "success" });
-    expect(invoiceStatusBadge(t, "open").tone).toBe("warning");
-    expect(invoiceStatusBadge(t, "uncollectible").tone).toBe("destructive");
-    expect(invoiceStatusBadge(t, null).label).toBe("—");
+describe("invoiceStatusTag", () => {
+  it("maps Stripe statuses to tags", () => {
+    expect(invoiceStatusTag(t, "paid")).toEqual({ label: "Paid", tone: "green" });
+    expect(invoiceStatusTag(t, "open").tone).toBe("amber");
+    expect(invoiceStatusTag(t, "uncollectible").tone).toBe("red");
+    expect(invoiceStatusTag(t, null).label).toBe("—");
   });
 });
 

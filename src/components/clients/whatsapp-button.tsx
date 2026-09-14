@@ -16,11 +16,13 @@ export function WhatsAppButton({
   phone,
   firstName,
   language,
+  size = "default",
   className,
 }: {
   phone: string | null | undefined;
   firstName: string;
   language: string | null | undefined;
+  size?: "default" | "sm";
   className?: string;
 }) {
   const t = useTranslations("clientDetail.whatsapp");
@@ -32,7 +34,7 @@ export function WhatsAppButton({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={cn(buttonVariants({ variant: "outline" }), className)}
+      className={cn(buttonVariants({ variant: "outline", size }), className)}
     >
       <span className="text-[#25D366]">
         <WhatsAppIcon />

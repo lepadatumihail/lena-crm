@@ -1,6 +1,5 @@
 {
   "page": {
-    "back": "{side, select, buyer {Volver a compradores} other {Volver a vendedores}}",
     "inactive": "Inactivo",
     "notes": "Notas",
     "notesEmpty": "Aún no hay notas.",
@@ -12,7 +11,30 @@
     "dealType": "Tipo de operación",
     "role": "Rol",
     "agency": "Agencia",
-    "contactEmpty": "Aún no hay datos de contacto."
+    "contactEmpty": "Aún no hay datos de contacto.",
+    "details": "Datos",
+    "addedLabel": "Añadido",
+    "updated": "Actualizado {when}",
+    "copy": "Copiar {label}",
+    "stats": {
+      "budget": "Presupuesto",
+      "fromHint": "Presupuesto mínimo",
+      "upToHint": "Presupuesto máximo",
+      "typesMore": "{count} tipos de propiedad",
+      "viewings": "Visitas",
+      "offers": "{count, plural, =0 {Sin ofertas aún} one {# con oferta} other {# con oferta}}",
+      "reservation": "Reserva",
+      "none": "Sin empezar",
+      "closedOn": "Cerrada el {date}",
+      "askingPrice": "Precio pedido",
+      "acrossProperties": "El más alto de {count} inmuebles",
+      "propertiesLabel": "Inmuebles",
+      "onMarket": "En el mercado",
+      "days": "{count, plural, one {# día} other {# días}}",
+      "since": "Desde el {date}",
+      "nextUp": "Próximo",
+      "nothingScheduled": "Nada reservado"
+    }
   },
   "documents": {
     "title": "Documentos",
@@ -28,7 +50,7 @@
     "deleteAria": "Eliminar documento"
   },
   "matches": {
-    "title": "{count, plural, =0 {Anuncios que encajan} other {Anuncios que encajan (#)}}",
+    "title": "Anuncios que encajan",
     "empty": "Ninguno de tus anuncios de vendedores encaja aún con las preferencias de este comprador.",
     "propertyFallback": "Propiedad"
   },
@@ -103,7 +125,6 @@
   },
   "viewings": {
     "title": "Visitas",
-    "summary": "{count} visitadas · {offers} con oferta",
     "add": "Añadir visita",
     "empty": "Aún no hay visitas. Añade las propiedades que ha visitado este comprador.",
     "untitled": "Propiedad sin título",
@@ -116,7 +137,6 @@
     "asking": "Precio <price>{amount}</price>",
     "offer": "Oferta {price}",
     "windowCard": "Ficha del inmueble",
-    "images": "Imágenes",
     "imageLabel": "Imagen",
     "attachmentError": "No se ha podido guardar el adjunto",
     "openError": "No se ha podido abrir el archivo",
@@ -124,7 +144,10 @@
     "attachmentRemoved": "Adjunto quitado",
     "removeAttachmentTitle": "¿Quitar el adjunto?",
     "removeAttachmentDescription": "«{name}» se quitará de esta visita.",
-    "removeAttachmentAria": "Quitar adjunto"
+    "removeAttachmentAria": "Quitar adjunto",
+    "attach": "Adjuntar un archivo",
+    "attachWindowCard": "Ficha del inmueble (PDF)",
+    "attachImages": "Fotos"
   },
   "viewingDialog": {
     "edit": "Editar visita",

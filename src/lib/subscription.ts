@@ -1,4 +1,5 @@
 import type { BillingPlan, BillingT } from "@/lib/billing";
+import type { Tone } from "@/lib/tones";
 
 /**
  * Pure helpers for the billing page: what Stripe and the profile know,
@@ -62,8 +63,6 @@ export type UpcomingInvoice = {
   currency: string;
 };
 
-export type BadgeTone = "default" | "secondary" | "outline" | "success" | "warning" | "destructive";
-
 export type SubscriptionPhase = "active" | "past_due" | "ending" | "canceled" | "incomplete";
 
 /**
@@ -99,38 +98,40 @@ export function subscriptionEndsOn(
   );
 }
 
-const PHASE_TONE: Record<SubscriptionPhase, BadgeTone> = {
-  active: "success",
-  past_due: "warning",
-  ending: "warning",
-  canceled: "outline",
-  incomplete: "secondary",
+const PHASE_TONE: Record<SubscriptionPhase, Tone> = {
+  active: "green",
+  past_due: "amber",
+  ending: "amber",
+  canceled: "neutral",
+  incomplete: "neutral",
 };
 
-export function phaseBadge(
+/** The subscription's phase as a tag: its label and tone. */
+export function phaseTag(
   t: BillingT,
   phase: SubscriptionPhase,
-): { label: string; tone: BadgeTone } {
+): { label: string; tone: Tone } {
   return { label: t(`phase.${phase}`), tone: PHASE_TONE[phase] };
 }
 
-export function invoiceStatusBadge(
+/** A Stripe invoice status as a tag: its label and tone. */
+export function invoiceStatusTag(
   t: BillingT,
   status: string | null,
-): { label: string; tone: BadgeTone } {
+): { label: string; tone: Tone } {
   switch (status) {
     case "paid":
-      return { label: t("invoiceStatus.paid"), tone: "success" };
+      return { label: t("invoiceStatus.paid"), tone: "green" };
     case "open":
-      return { label: t("invoiceStatus.open"), tone: "warning" };
+      return { label: t("invoiceStatus.open"), tone: "amber" };
     case "void":
-      return { label: t("invoiceStatus.void"), tone: "outline" };
+      return { label: t("invoiceStatus.void"), tone: "neutral" };
     case "uncollectible":
-      return { label: t("invoiceStatus.uncollectible"), tone: "destructive" };
+      return { label: t("invoiceStatus.uncollectible"), tone: "red" };
     case "draft":
-      return { label: t("invoiceStatus.draft"), tone: "secondary" };
+      return { label: t("invoiceStatus.draft"), tone: "neutral" };
     default:
-      return { label: t("invoiceStatus.unknown"), tone: "outline" };
+      return { label: t("invoiceStatus.unknown"), tone: "neutral" };
   }
 }
 

@@ -7,6 +7,8 @@ import { dateFnsLocale } from "@/i18n/dates";
 import { dayKey } from "@/lib/calendar-view";
 import { cn } from "@/lib/utils";
 import type { CalendarEvent } from "@/lib/data/calendar";
+import { TONE_BG, TONE_BG_HOVER, TONE_INK, TONE_SOLID } from "@/lib/tones";
+import { EVENT_TONES } from "@/lib/calendar";
 
 /** Chips per day on a desktop cell before "+N more". */
 const MAX_CHIPS = 3;
@@ -94,7 +96,7 @@ export function MonthGrid({
                       key={e.id}
                       className={cn(
                         "size-1.5 rounded-full",
-                        e.kind === "viewing" ? "bg-primary" : "bg-muted-foreground"
+                        TONE_SOLID[EVENT_TONES[e.kind]]
                       )}
                     />
                   ))}
@@ -118,9 +120,9 @@ export function MonthGrid({
                     title={e.title}
                     className={cn(
                       "truncate rounded px-1 py-0.5 text-left text-[11px] leading-tight transition-colors",
-                      e.kind === "viewing"
-                        ? "bg-primary/10 text-primary hover:bg-primary/20"
-                        : "bg-secondary text-secondary-foreground hover:bg-secondary/70",
+                      TONE_BG[EVENT_TONES[e.kind]],
+                      TONE_INK[EVENT_TONES[e.kind]],
+                      TONE_BG_HOVER[EVENT_TONES[e.kind]],
                       past && "opacity-60"
                     )}
                   >

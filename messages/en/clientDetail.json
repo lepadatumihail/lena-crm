@@ -1,6 +1,5 @@
 {
   "page": {
-    "back": "{side, select, buyer {Back to buyers} other {Back to sellers}}",
     "inactive": "Inactive",
     "notes": "Notes",
     "notesEmpty": "No notes yet.",
@@ -12,7 +11,30 @@
     "dealType": "Deal type",
     "role": "Role",
     "agency": "Agency",
-    "contactEmpty": "No contact details yet."
+    "contactEmpty": "No contact details yet.",
+    "details": "Details",
+    "addedLabel": "Added",
+    "updated": "Updated {when}",
+    "copy": "Copy {label}",
+    "stats": {
+      "budget": "Budget",
+      "fromHint": "Minimum budget",
+      "upToHint": "Maximum budget",
+      "typesMore": "{count} property types",
+      "viewings": "Viewings",
+      "offers": "{count, plural, =0 {No offers yet} one {# with an offer} other {# with an offer}}",
+      "reservation": "Reservation",
+      "none": "Not started",
+      "closedOn": "Closed {date}",
+      "askingPrice": "Asking price",
+      "acrossProperties": "Highest of {count} properties",
+      "propertiesLabel": "Properties",
+      "onMarket": "On the market",
+      "days": "{count, plural, one {# day} other {# days}}",
+      "since": "Since {date}",
+      "nextUp": "Next up",
+      "nothingScheduled": "Nothing booked"
+    }
   },
   "documents": {
     "title": "Documents",
@@ -28,7 +50,7 @@
     "deleteAria": "Delete document"
   },
   "matches": {
-    "title": "{count, plural, =0 {Matching listings} other {Matching listings (#)}}",
+    "title": "Matching listings",
     "empty": "None of your seller listings match this buyer's preferences yet.",
     "propertyFallback": "Property"
   },
@@ -103,7 +125,6 @@
   },
   "viewings": {
     "title": "Viewings",
-    "summary": "{count} viewed · {offers} with an offer",
     "add": "Add viewing",
     "empty": "No viewings yet. Add properties this buyer has viewed.",
     "untitled": "Untitled property",
@@ -116,7 +137,6 @@
     "asking": "Asking <price>{amount}</price>",
     "offer": "Offer {price}",
     "windowCard": "Window card",
-    "images": "Images",
     "imageLabel": "Image",
     "attachmentError": "Couldn't save attachment",
     "openError": "Couldn't open file",
@@ -124,7 +144,10 @@
     "attachmentRemoved": "Attachment removed",
     "removeAttachmentTitle": "Remove attachment?",
     "removeAttachmentDescription": "“{name}” will be removed from this viewing.",
-    "removeAttachmentAria": "Remove attachment"
+    "removeAttachmentAria": "Remove attachment",
+    "attach": "Attach a file",
+    "attachWindowCard": "Window card (PDF)",
+    "attachImages": "Photos"
   },
   "viewingDialog": {
     "edit": "Edit viewing",

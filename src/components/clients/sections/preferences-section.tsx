@@ -18,14 +18,9 @@ import {
   Wallet,
 } from "lucide-react";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Tag } from "@/components/ui/tag";
 import { Input } from "@/components/ui/input";
 import { PriceInput } from "@/components/price-input";
 import { Textarea } from "@/components/ui/textarea";
@@ -58,11 +53,7 @@ import {
   type PropertyType,
 } from "@/lib/crm";
 import { cn } from "@/lib/utils";
-import {
-  DETAIL_LIST,
-  DetailBlock,
-  DetailRow,
-} from "@/components/clients/detail-row";
+import { KeyValueList, KeyValueRow } from "@/components/clients/detail-row";
 import type { BuyerPreferences } from "@/lib/supabase/types";
 
 export function PreferencesSection({
@@ -94,66 +85,50 @@ export function PreferencesSection({
   const budget = prefs ? budgetText(prefs.budget_min, prefs.budget_max) : null;
 
   return (
-    <Card className="overflow-hidden">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="flex items-center gap-2 text-base">
-          <SlidersHorizontal className="text-primary size-4" />
-          {t("title")}
-        </CardTitle>
-        <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
+    <Panel
+      title={t("title")}
+      icon={<SlidersHorizontal className="size-3.5" />}
+      action={
+        <Button variant="outline" size="xs" onClick={() => setOpen(true)}>
           {prefs ? <Pencil /> : <Plus />}
           {prefs ? tCommon("edit") : tCommon("add")}
         </Button>
-      </CardHeader>
-      <CardContent className="@container">
-        {prefs ? (
-          <dl className={DETAIL_LIST}>
-            <DetailBlock icon={Home} label={t("propertyTypes")}>
-              {prefs.property_types.length ? (
-                <div className="flex flex-wrap gap-1.5">
-                  {prefs.property_types.map((type) => (
-                    <Badge key={type} variant="secondary">
-                      {propertyTypeLabel(tCrm, type)}
-                    </Badge>
-                  ))}
-                </div>
-              ) : (
-                "—"
-              )}
-            </DetailBlock>
-            <DetailRow
-              icon={Wallet}
-              label={t("budget")}
-              value={budget ?? "—"}
-              className="@sm:col-span-2"
-            />
-            <DetailRow
-              icon={BedDouble}
-              label={t("bedrooms")}
-              value={prefs.bedrooms ?? "—"}
-            />
-            <DetailRow
-              icon={Bath}
-              label={t("bathrooms")}
-              value={prefs.bathrooms ?? "—"}
-            />
-          </dl>
-        ) : (
-          <p className="text-muted-foreground text-sm">{t("empty")}</p>
-        )}
-      </CardContent>
+      }
+    >
+      {prefs ? (
+        <KeyValueList>
+          <KeyValueRow icon={Home} label={t("propertyTypes")} wrap>
+            {prefs.property_types.length ? (
+              prefs.property_types.map((type) => (
+                <Tag key={type}>{propertyTypeLabel(tCrm, type)}</Tag>
+              ))
+            ) : (
+              <span className="text-muted-foreground">—</span>
+            )}
+          </KeyValueRow>
+          <KeyValueRow icon={Wallet} label={t("budget")}>
+            {budget ?? "—"}
+          </KeyValueRow>
+          <KeyValueRow icon={BedDouble} label={t("bedrooms")}>
+            {prefs.bedrooms ?? "—"}
+          </KeyValueRow>
+          <KeyValueRow icon={Bath} label={t("bathrooms")}>
+            {prefs.bathrooms ?? "—"}
+          </KeyValueRow>
+        </KeyValueList>
+      ) : (
+        <PanelEmpty>{t("empty")}</PanelEmpty>
+      )}
 
-      {prefs?.area_notes && (
-        <div className="bg-muted/30 -mb-6 border-t px-6 py-4">
-          <p className="text-muted-foreground flex items-center gap-2 text-xs">
-            <MapPin className="size-3.5 shrink-0 opacity-70" />
+      {prefs?.area_notes ? (
+        <div className="bg-muted/30 border-t px-4 py-3">
+          <p className="text-muted-foreground flex items-center gap-1.5 text-xs">
+            <MapPin className="size-3.5 shrink-0" strokeWidth={1.75} />
             {t("areaNotes")}
           </p>
-          <p className="mt-1.5 text-sm whitespace-pre-wrap">
-            {prefs.area_notes}
-          </p>
+          <p className="mt-1 text-sm whitespace-pre-wrap">{prefs.area_notes}</p>
         </div>
-      )}
+      ) : null}
 
       <PreferencesDialog
         clientId={clientId}
@@ -161,7 +136,7 @@ export function PreferencesSection({
         open={open}
         onOpenChange={setOpen}
       />
-    </Card>
+    </Panel>
   );
 }
 

@@ -3,12 +3,13 @@ import Link from "next/link";
 import type { AttentionItem } from "@/lib/data/dashboard";
 import { PanelEmpty } from "@/components/shell/panel";
 import { cn } from "@/lib/utils";
+import { TONE_SOLID, type Tone } from "@/lib/tones";
 
-const DOT: Record<AttentionItem["kind"], string> = {
-  new_lead: "bg-blue-500",
-  stalled_offer: "bg-primary",
-  follow_up: "bg-amber-500",
-  reservation: "bg-emerald-500",
+const KIND_TONE: Record<AttentionItem["kind"], Tone> = {
+  new_lead: "blue",
+  stalled_offer: "brand",
+  follow_up: "amber",
+  reservation: "green",
 };
 
 /**
@@ -39,7 +40,7 @@ export function AttentionList({
           >
             <span
               aria-hidden
-              className={cn("size-2 shrink-0 rounded-full", DOT[a.kind])}
+              className={cn("size-2 shrink-0 rounded-full", TONE_SOLID[KIND_TONE[a.kind]])}
             />
             <span className="min-w-0 flex-1 sm:flex sm:items-baseline sm:gap-2">
               <span className="block truncate text-sm font-medium">

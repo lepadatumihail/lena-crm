@@ -1,12 +1,22 @@
+import { cache } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
 import { BUYER_STAGES, SELLER_STAGES, type ClientSide, type Stage } from "@/lib/crm";
 import { getAttentionSignals } from "@/lib/data/attention";
+import { getCalendarEvents, type CalendarEvent } from "@/lib/data/calendar";
+import { getSessionUser } from "@/lib/data/session";
 import { formatDateKey } from "@/lib/attention";
-import { firstNameFrom, type OnboardingInput } from "@/lib/home";
+import type { OnboardingInput } from "@/lib/home";
 import { intlTag } from "@/i18n/config";
 import { stageLabel } from "@/i18n/labels";
+
+/*
+  Home's data, one loader per section so each section streams on its own.
+  Every loader is wrapped in React's `cache`: sections that need the same
+  thing (the client scan, the next month of events) share one query within a
+  request instead of asking again.
+*/
 
 export type StageCount = { stage: Stage; count: number };
 
@@ -42,15 +52,22 @@ function tallyPipeline(rows: ClientRow[]): PipelineCounts {
   };
 }
 
-export async function getPipelineCounts(): Promise<PipelineCounts> {
+/** The agent's active clients, most recently touched first. */
+const getActiveClients = cache(async (): Promise<ClientRow[]> => {
   const supabase = await createSupabase();
   const { data, error } = await supabase
     .from("clients")
-    .select("side, stage")
-    .eq("is_active", true);
+    .select("id, side, stage, first_name, last_name, priority, created_at, updated_at")
+    .eq("is_active", true)
+    .order("updated_at", { ascending: false });
   if (error) throw new Error(error.message);
-  return tallyPipeline((data ?? []) as ClientRow[]);
-}
+  return (data ?? []) as ClientRow[];
+});
+
+/** Active clients per stage: the stat tiles and the upcoming panel's empty state. */
+export const getPipelineCounts = cache(
+  async (): Promise<PipelineCounts> => tallyPipeline(await getActiveClients())
+);
 
 /** A row in the Home "Recent clients" list. */
 export type RecentClient = {
@@ -64,64 +81,16 @@ export type RecentClient = {
   updated_at: string;
 };
 
-export type HomeOverview = {
-  /** The agent's first name for the greeting, when we know it. */
-  firstName: string | null;
-  counts: PipelineCounts;
-  recent: RecentClient[];
-  onboarding: OnboardingInput;
-};
-
 const RECENT_LIMIT = 6;
 
-/**
- * Everything on Home that comes from the agent's own book: pipeline counts,
- * the recently touched clients, and the "getting started" checklist inputs.
- * One client scan feeds all three so the page does a single round of queries.
- */
-export async function getHomeOverview(): Promise<HomeOverview> {
-  const supabase = await createSupabase();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const [clientsRes, profileRes, appointmentsRes, templatesRes, referralsRes] =
-    await Promise.all([
-      supabase
-        .from("clients")
-        .select(
-          "id, side, stage, first_name, last_name, priority, created_at, updated_at"
-        )
-        .eq("is_active", true)
-        .order("updated_at", { ascending: false }),
-      user
-        ? supabase
-            .from("profiles")
-            .select("full_name")
-            .eq("id", user.id)
-            .maybeSingle()
-        : Promise.resolve({ data: null, error: null }),
-      supabase.from("appointments").select("id", { count: "exact", head: true }),
-      supabase.from("email_templates").select("id", { count: "exact", head: true }),
-      user
-        ? supabase
-            .from("referrals")
-            .select("id", { count: "exact", head: true })
-            .eq("inviter_id", user.id)
-        : Promise.resolve({ count: 0, error: null }),
-    ]);
-
-  if (clientsRes.error) throw new Error(clientsRes.error.message);
-  if (profileRes.error) throw new Error(profileRes.error.message);
-  if (appointmentsRes.error) throw new Error(appointmentsRes.error.message);
-  if (templatesRes.error) throw new Error(templatesRes.error.message);
-  if (referralsRes.error) throw new Error(referralsRes.error.message);
-
-  const rows = (clientsRes.data ?? []) as ClientRow[];
-  const recentRows = rows.slice(0, RECENT_LIMIT);
+/** The clients touched most recently, each with a budget or an asking price. */
+export const getRecentClients = cache(async (): Promise<RecentClient[]> => {
+  const recentRows = (await getActiveClients()).slice(0, RECENT_LIMIT);
+  if (recentRows.length === 0) return [];
   const buyerIds = recentRows.filter((c) => c.side === "buyer").map((c) => c.id);
   const sellerIds = recentRows.filter((c) => c.side === "seller").map((c) => c.id);
 
+  const supabase = await createSupabase();
   const [prefsRes, propsRes] = await Promise.all([
     buyerIds.length
       ? supabase
@@ -147,7 +116,7 @@ export async function getHomeOverview(): Promise<HomeOverview> {
     if (!amountByClient.has(p.client_id)) amountByClient.set(p.client_id, p.price);
   }
 
-  const recent: RecentClient[] = recentRows.map((c) => ({
+  return recentRows.map((c) => ({
     id: c.id,
     name: `${c.first_name} ${c.last_name}`.trim(),
     side: c.side,
@@ -156,19 +125,53 @@ export async function getHomeOverview(): Promise<HomeOverview> {
     amount: amountByClient.get(c.id) ?? null,
     updated_at: c.updated_at,
   }));
+});
+
+/** How far the account is set up, for the getting-started checklist. */
+export const getOnboardingInput = cache(async (): Promise<OnboardingInput> => {
+  const supabase = await createSupabase();
+  const [clients, appointmentsRes, templatesRes, referralCount] = await Promise.all([
+    getActiveClients(),
+    supabase.from("appointments").select("id", { count: "exact", head: true }),
+    supabase.from("email_templates").select("id", { count: "exact", head: true }),
+    getSessionUser().then(async (user) => {
+      if (!user) return 0;
+      const { count, error } = await supabase
+        .from("referrals")
+        .select("id", { count: "exact", head: true })
+        .eq("inviter_id", user.id);
+      if (error) throw new Error(error.message);
+      return count ?? 0;
+    }),
+  ]);
+  if (appointmentsRes.error) throw new Error(appointmentsRes.error.message);
+  if (templatesRes.error) throw new Error(templatesRes.error.message);
 
   return {
-    firstName: firstNameFrom(profileRes.data?.full_name, user?.email),
-    counts: tallyPipeline(rows),
-    recent,
-    onboarding: {
-      clientCount: rows.length,
-      appointmentCount: appointmentsRes.count ?? 0,
-      templateCount: templatesRes.count ?? 0,
-      referralCount: referralsRes.count ?? 0,
-    },
+    clientCount: clients.length,
+    appointmentCount: appointmentsRes.count ?? 0,
+    templateCount: templatesRes.count ?? 0,
+    referralCount,
   };
-}
+});
+
+const HOUR_MS = 3_600_000;
+const DAY_MS = 86_400_000;
+
+/**
+ * Calendar events from an hour before `nowISO` to 30 days after it. Keyed on
+ * the instant, so the stat tiles and the upcoming panel of one render share
+ * a single fetch.
+ */
+export const getHomeEvents = cache(
+  async (nowISO: string): Promise<CalendarEvent[]> => {
+    const now = Date.parse(nowISO);
+    return getCalendarEvents(
+      new Date(now - HOUR_MS).toISOString(),
+      new Date(now + 30 * DAY_MS).toISOString()
+    );
+  }
+);
 
 export type AttentionItem = {
   id: string;
@@ -186,7 +189,7 @@ export type AttentionItem = {
  * Titles are client names; the details are rendered in the agent's UI
  * language (this always runs inside a request).
  */
-export async function getNeedsAttention(): Promise<AttentionItem[]> {
+export const getNeedsAttention = cache(async (): Promise<AttentionItem[]> => {
   const [t, tCrm, locale] = await Promise.all([
     getTranslations("home"),
     getTranslations("crm"),
@@ -277,4 +280,4 @@ export async function getNeedsAttention(): Promise<AttentionItem[]> {
   }
 
   return items;
-}
+});
