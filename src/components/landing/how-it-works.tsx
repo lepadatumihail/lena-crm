@@ -31,6 +31,7 @@ import {
 import { stageLabel } from "@/i18n/labels";
 import { BUYER_STAGES } from "@/lib/crm";
 import { cn } from "@/lib/utils";
+import { useRevealFloor } from "@/hooks/use-reveal-floor";
 
 // Springs lifted from app-preview.tsx so the whole landing speaks one language.
 const CARD_SPRING = { type: "spring", stiffness: 380, damping: 30 } as const;
@@ -487,6 +488,7 @@ const STEPS = [
 export function HowItWorks() {
   const t = useTranslations("landing");
   const reduced = useReducedMotion();
+  const floor = useRevealFloor();
   const item = makeItem(reduced);
 
   return (
@@ -494,6 +496,7 @@ export function HowItWorks() {
       className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
       variants={container}
       initial="hidden"
+      animate={floor ? "show" : undefined}
       whileInView="show"
       viewport={{ once: true, margin: "0px 0px -10% 0px" }}
     >

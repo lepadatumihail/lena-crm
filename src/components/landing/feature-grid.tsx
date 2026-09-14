@@ -8,6 +8,7 @@ import { Building2, Layers, Tag, Users, type LucideIcon } from "lucide-react";
 import { stageLabel } from "@/i18n/labels";
 import { BUYER_STAGES } from "@/lib/crm";
 import { cn } from "@/lib/utils";
+import { useRevealFloor } from "@/hooks/use-reveal-floor";
 
 /**
  * Four tiles in a 2-1 / 1-2 bento. Copy lives in `landing.features.items.<key>`;
@@ -85,6 +86,7 @@ const DETAILS: Partial<
 export function FeatureGrid() {
   const t = useTranslations("landing");
   const reduced = useReducedMotion();
+  const floor = useRevealFloor();
 
   const container: Variants = {
     hidden: {},
@@ -108,6 +110,7 @@ export function FeatureGrid() {
       className="mt-10 grid gap-5 md:grid-cols-3"
       variants={container}
       initial="hidden"
+      animate={floor ? "show" : undefined}
       whileInView="show"
       viewport={{ once: true, margin: "0px 0px -10% 0px" }}
     >

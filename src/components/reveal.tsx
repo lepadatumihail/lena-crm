@@ -1,48 +1,23 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
-
 import { cn } from "@/lib/utils";
 
+/**
+ * Fade-and-rise as a block scrolls into view, done in CSS with a view
+ * timeline (`.reveal` in globals.css). Nothing here depends on JavaScript,
+ * scroll events or IntersectionObserver: the content is visible in the
+ * server HTML, browsers without scroll-driven animations show it plainly,
+ * and iOS Safari, which can stop delivering scroll updates to the page after
+ * a slow load, still animates it on the compositor.
+ *
+ * `delay` is accepted for call-site compatibility and has no effect: a view
+ * timeline is driven by position, not time.
+ */
 export function Reveal({
   children,
   className,
-  delay = 0,
 }: {
   children: React.ReactNode;
   className?: string;
   delay?: number;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div
-      ref={ref}
-      style={{ transitionDelay: `${delay}ms` }}
-      className={cn(
-        "transition-all duration-700 ease-out will-change-transform motion-reduce:transition-none motion-reduce:translate-y-0 motion-reduce:opacity-100",
-        visible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
+  return <div className={cn("reveal", className)}>{children}</div>;
 }

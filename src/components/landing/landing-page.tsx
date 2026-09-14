@@ -59,18 +59,19 @@ export function LandingPage() {
 
       {/* Hero — a dark stage inset from the page edges. The live board below
           straddles its bottom edge, so the stage's bottom padding and the
-          board's negative margin are tuned as a pair. */}
-      <section className="overflow-x-clip px-3 pt-2 sm:px-4 sm:pt-3">
-        <div className="bg-inverted text-inverted-foreground relative mx-auto max-w-[88rem] overflow-hidden rounded-[1.75rem] shadow-[0_40px_100px_-40px_rgb(0_0_0/0.5)] sm:rounded-[2.25rem]">
-          {/* Backdrop: faint grid + slowly drifting aurora glows */}
+          board's negative margin are tuned as a pair. No horizontal clip here:
+          the board's glow stays inside the gutter on its own. */}
+      <section className="px-3 pt-2 sm:px-4 sm:pt-3">
+        <div className="bg-inverted text-inverted-foreground relative mx-auto max-w-[88rem] overflow-hidden rounded-[1.75rem] sm:rounded-[2.25rem] sm:shadow-[0_30px_80px_-40px_rgb(0_0_0/0.5)]">
+          {/* Backdrop: a faint grid and two warm glows, painted once. Animated
+              blur layers here cost iOS Safari so much that the page could
+              stall on a slow load and stop receiving scroll updates. */}
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 overflow-hidden"
           >
             <div className="hero-grid absolute inset-0 [--grid-line:rgb(255_255_255/0.06)]" />
-            <div className="bg-primary/35 absolute -top-40 left-1/2 size-[36rem] max-w-full -translate-x-1/2 animate-[aurora_18s_ease-in-out_infinite] rounded-full blur-[140px]" />
-            <div className="bg-warning/25 absolute -top-16 left-[10%] size-72 animate-[aurora_24s_ease-in-out_infinite] rounded-full blur-[120px] [animation-delay:-8s]" />
-            <div className="bg-primary/20 absolute right-[6%] bottom-10 size-80 animate-[aurora_30s_ease-in-out_infinite] rounded-full blur-[140px] [animation-delay:-14s]" />
+            <div className="hero-glow absolute inset-0" />
           </div>
 
           <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center px-4 pt-14 pb-40 text-center animate-[fade-up_0.7s_ease-out_both] motion-reduce:animate-none sm:pt-24 sm:pb-56">

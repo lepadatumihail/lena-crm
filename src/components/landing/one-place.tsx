@@ -32,6 +32,7 @@ import { LogoMark } from "@/components/brand/logo";
 import { Badge } from "@/components/ui/badge";
 import { sideLabel, stageLabel } from "@/i18n/labels";
 import { cn } from "@/lib/utils";
+import { useRevealFloor } from "@/hooks/use-reveal-floor";
 
 /*
  * "One place" — the consolidation pitch as a loop:
@@ -396,7 +397,9 @@ export function OnePlace() {
   const [geom, setGeom] = useState<Geometry | null>(null);
 
   const inView = useInView(stageRef, { margin: "0px 0px -15% 0px" });
-  const active = inView && !reduced;
+  // The floor starts the loop even where the observer never fires (see the hook).
+  const floor = useRevealFloor();
+  const active = (inView || floor) && !reduced;
 
   const [step, setStep] = useState(0);
   useEffect(() => {

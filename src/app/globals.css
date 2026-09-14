@@ -187,14 +187,24 @@
   );
 }
 
-@keyframes aurora {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(0, -24px, 0) scale(1.12);
-  }
+/* The hero stage's glow: two soft radial gradients, painted once. */
+.hero-glow {
+  background:
+    radial-gradient(
+      60% 55% at 50% -5%,
+      color-mix(in oklab, var(--primary) 42%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      38% 40% at 12% 8%,
+      color-mix(in oklab, var(--warning) 22%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      42% 45% at 92% 96%,
+      color-mix(in oklab, var(--primary) 24%, transparent),
+      transparent 70%
+    );
 }
 
 @keyframes fade-up {
@@ -263,5 +273,59 @@
     box-shadow:
       0 0 0 1px color-mix(in oklab, white 10%, transparent),
       0 24px 60px -24px rgb(0 0 0 / 0.6);
+  }
+}
+
+/* --- Scroll-driven marketing motion --- */
+
+/*
+  Reveal on scroll without JavaScript. The element is visible in the server
+  HTML and in every browser; where view timelines exist the compositor fades
+  and lifts it as it enters. iOS Safari can stop delivering scroll updates to
+  the page after a slow load, which silently breaks IntersectionObserver-based
+  reveals; a view timeline keeps working because the compositor drives it.
+*/
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+/*
+  The public nav's pill surface, driven by the document scroll position for
+  the same reason: it condenses whether or not scroll events reach the page.
+  The JS in NavFrame covers browsers without scroll timelines.
+*/
+@keyframes nav-condense {
+  from {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: 0 0 0 0 transparent;
+  }
+  to {
+    background-color: color-mix(in oklab, var(--background) 85%, transparent);
+    border-color: color-mix(in oklab, var(--border) 60%, transparent);
+    box-shadow: 0 8px 24px -12px rgb(0 0 0 / 0.3);
+  }
+}
+@supports (animation-timeline: scroll()) {
+  .nav-frame {
+    animation: nav-condense linear both;
+    animation-timeline: scroll(root);
+    animation-range: 8px 40px;
   }
 }
