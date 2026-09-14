@@ -241,7 +241,13 @@ export function FeatureDeepDives() {
   return (
     <section className="section-y mx-auto w-full max-w-6xl px-4">
       <Reveal className="mx-auto max-w-2xl text-center">
-        <h2 className="display-2 text-balance">{t("deepDives.heading")}</h2>
+        <h2 className="display-2 text-balance">
+          {t.rich("deepDives.heading", {
+            nowrap: (chunks) => (
+              <span className="whitespace-nowrap">{chunks}</span>
+            ),
+          })}
+        </h2>
         <p className="text-muted-foreground mt-4 text-lg text-pretty">
           {t("deepDives.body")}
         </p>

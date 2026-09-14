@@ -102,7 +102,7 @@
     "note": "Los vendedores tienen su propio flujo: de pendiente a cualificado, con cada anuncio adjunto."
   },
   "deepDives": {
-    "heading": "WhatsApp, portales e idiomas, integrados con seguimiento automático",
+    "heading": "Deja de perseguir. Que LeadWing haga los <nowrap>seguimientos.</nowrap>",
     "body": "Las cinco cosas que llenan el día de un agente independiente, resueltas dentro de LeadWing y no alrededor.",
     "items": {
       "whatsapp": {
@@ -168,19 +168,6 @@
         "reminder": "Recordatorio: tu visita es mañana a las 12:00.",
         "whatsapp": "Un toque para enviar por WhatsApp"
       }
-    }
-  },
-  "ai": {
-    "badge": "Incluida · IA",
-    "heading": "Deja de perseguir. Que LeadWing haga los <nowrap>seguimientos.</nowrap>",
-    "body": "La parte que todo agente teme —acordarse de a quién escribir y qué decirle— resuelta por ti. Tú mandas: LeadWing redacta, tú apruebas. Se acabó hacerlo a mano.",
-    "email": {
-      "title": "Emails escritos por IA para cada cliente",
-      "body": "LeadWing escribe un email cercano y personal para cada cliente: en su idioma, con su presupuesto, las propiedades que ha visto y el punto del recorrido en el que está. Sin página en blanco y sin copiar y pegar. Tú revisas y envías."
-    },
-    "nudge": {
-      "title": "Recupera solo a los clientes olvidados",
-      "body": "Los leads se enfrían cuando se te olvidan. LeadWing vigila a los clientes que se quedan en silencio y te los saca antes de que los pierdas, con un empujón listo para enviar. Sin hojas de cálculo, sin recordatorios y sin que se escape nada."
     }
   },
   "trust": {

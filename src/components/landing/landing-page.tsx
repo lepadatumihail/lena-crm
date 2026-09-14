@@ -3,12 +3,8 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowRight,
   Check,
-  Clock,
-  Mail,
-  Send,
   ShieldCheck,
   Smartphone,
-  Sparkles,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -46,7 +42,6 @@ const BUYER_STEPS = BUYER_STAGES;
 export function LandingPage() {
   const t = useTranslations("landing");
   const tCrm = useTranslations("crm");
-  const tCommon = useTranslations("common");
   const tNav = useTranslations("nav.marketing");
   const locale = asLocale(useLocale());
 
@@ -194,129 +189,8 @@ export function LandingPage() {
         </section>
       </div>
 
-      {/* AI — built in */}
-      <section className="section-y">
-        <div className="mx-auto w-full max-w-6xl px-4">
-          <Reveal className="mx-auto max-w-4xl text-center">
-            <Eyebrow className="mb-4">{t("ai.badge")}</Eyebrow>
-            <h2 className="display-2 text-balance">
-              {t.rich("ai.heading", {
-                nowrap: (chunks) => (
-                  <span className="whitespace-nowrap">{chunks}</span>
-                ),
-              })}
-            </h2>
-            <p className="text-muted-foreground mx-auto mt-4 max-w-xl text-lg text-pretty">
-              {t("ai.body")}
-            </p>
-          </Reveal>
-
-          <div className="mt-12 grid gap-5 lg:grid-cols-2">
-            <Reveal>
-              <div className="bg-card flex h-full flex-col rounded-2xl border p-6 shadow-sm">
-                <div className="flex items-center gap-3">
-                  <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-lg">
-                    <Mail className="size-5" />
-                  </div>
-                  <h3 className="text-lg font-semibold">{t("ai.email.title")}</h3>
-                </div>
-                <p className="text-muted-foreground mt-3 text-sm">
-                  {t("ai.email.body")}
-                </p>
-
-                <div
-                  aria-hidden
-                  className="bg-muted/40 mt-5 rounded-xl border p-3"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium">
-                      {t("mock.to", { name: "Sofia Müller" })}
-                    </span>
-                    <span className="bg-primary/10 text-primary inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium">
-                      <Sparkles className="size-3" /> {t("mock.aiDraft")}
-                    </span>
-                  </div>
-                  {/* Sample client-facing message: written in the client's own
-                      language, so it stays German in every UI language. */}
-                  <div className="bg-background text-muted-foreground mt-2 rounded-lg border p-3 text-xs leading-relaxed">
-                    <p className="text-foreground">Hallo Sofia,</p>
-                    <p className="mt-1">
-                      zwei neue Apartments in Nueva Andalucía sind in Ihrem Budget
-                      aufgetaucht — beide mit Meerblick. Sollen wir diese Woche
-                      eine Besichtigung einplanen?
-                    </p>
-                    <p className="mt-1">Beste Grüße, María</p>
-                  </div>
-                  <div className="mt-2 flex justify-end gap-1.5">
-                    <span className="rounded-md border px-2 py-1 text-[10px] font-medium">
-                      {tCommon("edit")}
-                    </span>
-                    <span className="bg-primary text-primary-foreground inline-flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium">
-                      <Send className="size-3" /> {tCommon("send")}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={80}>
-              <div className="bg-card flex h-full flex-col rounded-2xl border p-6 shadow-sm">
-                <div className="flex items-center gap-3">
-                  <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-lg">
-                    <Clock className="size-5" />
-                  </div>
-                  <h3 className="text-lg font-semibold">{t("ai.nudge.title")}</h3>
-                </div>
-                <p className="text-muted-foreground mt-3 text-sm">
-                  {t("ai.nudge.body")}
-                </p>
-
-                <div
-                  aria-hidden
-                  className="bg-muted/40 mt-5 rounded-xl border p-3"
-                >
-                  <div className="mb-2 flex items-center justify-between px-1">
-                    <span className="text-xs font-semibold">
-                      {t("mock.needsNudge")}
-                    </span>
-                    <span className="bg-warning/20 text-warning rounded-full px-1.5 text-[10px] font-medium">
-                      3
-                    </span>
-                  </div>
-                  <div className="space-y-1.5">
-                    {(
-                      [
-                        { n: "James Carter", s: "qualified", d: 21 },
-                        { n: "Lars Nielsen", s: "viewing", d: 16 },
-                        { n: "Anya Petrova", s: "qualified", d: 12 },
-                      ] as const
-                    ).map((r) => (
-                      <div
-                        key={r.n}
-                        className="bg-background flex items-center justify-between gap-2 rounded-lg border p-2"
-                      >
-                        <div className="min-w-0">
-                          <p className="truncate text-xs font-medium">{r.n}</p>
-                          <p className="text-muted-foreground text-[10px]">
-                            {stageLabel(tCrm, r.s)} ·{" "}
-                            {t("mock.quiet", { days: r.d })}
-                          </p>
-                        </div>
-                        <span className="bg-primary/10 text-primary inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium">
-                          <Sparkles className="size-3" /> {t("mock.draft")}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust strip — closes the AI chapter, right before the inverted one */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-20 lg:pb-28">
+      {/* Trust strip — a short chapter of its own, right before the inverted one */}
+      <section className="section-y mx-auto w-full max-w-6xl px-4">
         <div className="grid gap-5 sm:grid-cols-3">
           <TrustItem
             icon={Smartphone}

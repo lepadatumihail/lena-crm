@@ -102,7 +102,7 @@
     "note": "Sellers get their own flow too — pending to qualified, with every listing attached."
   },
   "deepDives": {
-    "heading": "WhatsApp, portals and languages, built in with auto follow-up",
+    "heading": "Stop chasing. Let LeadWing do the <nowrap>follow-ups.</nowrap>",
     "body": "The five things that fill an independent agent's day, handled inside LeadWing instead of around it.",
     "items": {
       "whatsapp": {
@@ -168,19 +168,6 @@
         "reminder": "Reminder: your viewing is tomorrow at 12:00.",
         "whatsapp": "One tap to send on WhatsApp"
       }
-    }
-  },
-  "ai": {
-    "badge": "Built in · AI",
-    "heading": "Stop chasing. Let LeadWing do the <nowrap>follow-ups.</nowrap>",
-    "body": "The part every agent dreads — remembering who to email and what to say — handled for you. You stay in control: LeadWing drafts, you approve. No more doing it by hand.",
-    "email": {
-      "title": "AI-written, per-client emails",
-      "body": "LeadWing writes a warm, personal email for each client — in their language, referencing their budget, the properties they've seen, and where they are in the journey. No blank page, no copy-paste. You review and send."
-    },
-    "nudge": {
-      "title": "Auto-engage forgotten clients",
-      "body": "Leads go cold when they slip your mind. LeadWing watches for clients going quiet and surfaces them before you lose them — with a ready-to-send nudge. No spreadsheets, no reminders, nothing falling through the cracks."
     }
   },
   "trust": {
