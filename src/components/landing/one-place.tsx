@@ -675,10 +675,13 @@ export function OnePlace() {
             </div>
           </div>
 
-          {/* The card that comes out — pushed to the far side */}
+          {/* The card that comes out — pushed to the far side. The slot is as
+              tall as the card (240px at every width; its lines truncate), so
+              the stacked phone layout keeps its height while the card comes
+              and goes instead of nudging the page by 24px each loop. */}
           <div
             ref={cardSlotRef}
-            className="relative flex min-h-[13.5rem] items-center justify-center md:mr-10 md:justify-end"
+            className="relative flex min-h-60 items-center justify-center md:mr-10 md:justify-end"
           >
             <AnimatePresence>
               {showCard && (
