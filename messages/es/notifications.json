@@ -16,7 +16,6 @@
   },
   "page": {
     "title": "Notificaciones",
-    "subtitle": "Todos los recordatorios y avisos, del más reciente al más antiguo.",
     "markAllRead": "Marcar todo como leído",
     "yesterday": "Ayer",
     "empty": "Aquí no hay nada todavía. Los recordatorios y seguimientos aparecerán cuando toque.",
@@ -25,7 +24,7 @@
     "filters": {
       "label": "Filtrar notificaciones",
       "all": "Todas",
-      "unread": "Sin leer ({count})"
+      "unread": "Sin leer"
     }
   }
 }

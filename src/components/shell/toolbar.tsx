@@ -1,6 +1,7 @@
 "use client";
 
 import type { ComponentProps, ReactNode } from "react";
+import Link from "next/link";
 import { LayoutGrid, List } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -118,6 +119,157 @@ export function ViewToggle({
     <div role="group" className="bg-muted inline-flex h-8 items-center rounded-lg p-0.5">
       {item("table", tableLabel, <List strokeWidth={1.75} />)}
       {item("kanban", boardLabel, <LayoutGrid strokeWidth={1.75} />)}
+    </div>
+  );
+}
+
+/** A tab in a list's filter strip: a label, a live count, an optional tone dot. */
+export type ToolbarTab = {
+  value: string;
+  label: ReactNode;
+  count?: number;
+  /** A TONE_SOLID class for the dot before the label. */
+  dot?: string;
+};
+
+/**
+ * Underlined filter tabs across the top of a list, each with its count. The
+ * strip scrolls sideways on a phone rather than wrapping; children sit at its
+ * right end, on the same hairline.
+ */
+export function ToolbarTabs({
+  tabs,
+  value,
+  onChange,
+  label,
+  className,
+  children,
+}: {
+  tabs: ToolbarTab[];
+  value: string;
+  onChange: (value: string) => void;
+  /** Accessible name for the strip. */
+  label?: string;
+  className?: string;
+  children?: ReactNode;
+}) {
+  return (
+    <div className={cn("flex items-end gap-3 border-b", className)}>
+      <div
+        role="tablist"
+        aria-label={label}
+        className="scrollbar-none -mx-1 flex min-w-0 flex-1 items-end overflow-x-auto px-1"
+      >
+        {tabs.map((tab) => {
+          const active = tab.value === value;
+          return (
+            <button
+              key={tab.value}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              onClick={() => onChange(tab.value)}
+              className={cn(
+                "-mb-px flex h-9 shrink-0 items-center gap-1.5 border-b-2 px-3 text-xs font-medium whitespace-nowrap transition-colors duration-150 outline-none focus-visible:bg-muted/60",
+                active
+                  ? "border-foreground text-foreground"
+                  : "text-muted-foreground hover:text-foreground border-transparent"
+              )}
+            >
+              {tab.dot ? (
+                <span aria-hidden className={cn("size-1.5 rounded-full", tab.dot)} />
+              ) : null}
+              {tab.label}
+              {tab.count != null ? (
+                <span
+                  className={cn(
+                    "inline-flex h-[18px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] tabular-nums",
+                    active ? "bg-foreground/10 text-foreground" : "bg-muted text-muted-foreground"
+                  )}
+                >
+                  {tab.count}
+                </span>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
+      {children ? (
+        <div className="flex shrink-0 items-center gap-2 pb-1">{children}</div>
+      ) : null}
+    </div>
+  );
+}
+
+export type SegmentedItem = {
+  value: string;
+  label: ReactNode;
+  icon?: ReactNode;
+  /** Makes the item a link: a view that lives in the URL. */
+  href?: string;
+  /** Runs before navigating or changing, e.g. to remember the choice. */
+  onSelect?: () => void;
+};
+
+/**
+ * Two or three exclusive choices in one muted track, the chosen one raised:
+ * week or month, a language, a theme. Items with an href are links, the rest
+ * are buttons.
+ */
+export function Segmented({
+  items,
+  value,
+  onChange,
+  label,
+  className,
+}: {
+  items: SegmentedItem[];
+  value: string;
+  onChange?: (value: string) => void;
+  label: string;
+  className?: string;
+}) {
+  return (
+    <div
+      role="group"
+      aria-label={label}
+      className={cn("bg-muted inline-flex h-8 items-center rounded-lg p-0.5", className)}
+    >
+      {items.map((item) => {
+        const active = item.value === value;
+        const itemClass = cn(
+          "flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium whitespace-nowrap transition-[color,background-color,box-shadow] duration-150 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 [&_svg]:size-3.5 [&_svg]:shrink-0",
+          active
+            ? "bg-background text-foreground shadow-xs"
+            : "text-muted-foreground hover:text-foreground"
+        );
+        return item.href ? (
+          <Link
+            key={item.value}
+            href={item.href}
+            onClick={item.onSelect}
+            aria-current={active ? "page" : undefined}
+            className={itemClass}
+          >
+            {item.icon}
+            {item.label}
+          </Link>
+        ) : (
+          <button
+            key={item.value}
+            type="button"
+            aria-pressed={active}
+            onClick={() => {
+              item.onSelect?.();
+              onChange?.(item.value);
+            }}
+            className={itemClass}
+          >
+            {item.icon}
+            {item.label}
+          </button>
+        );
+      })}
     </div>
   );
 }

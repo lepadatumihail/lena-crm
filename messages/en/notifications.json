@@ -16,7 +16,6 @@
   },
   "page": {
     "title": "Notifications",
-    "subtitle": "Every reminder and nudge, newest first.",
     "markAllRead": "Mark all read",
     "yesterday": "Yesterday",
     "empty": "Nothing here yet. Reminders and follow-ups will show up as they come due.",
@@ -25,7 +24,7 @@
     "filters": {
       "label": "Filter notifications",
       "all": "All",
-      "unread": "Unread ({count})"
+      "unread": "Unread"
     }
   }
 }

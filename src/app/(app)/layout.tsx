@@ -4,11 +4,12 @@ import { cookies } from "next/headers";
 import { getLocale } from "next-intl/server";
 
 import { createClient } from "@/lib/supabase/server";
-import { getSessionUser } from "@/lib/data/session";
+import { getSessionProfile, getSessionUser } from "@/lib/data/session";
 import { intlTag } from "@/i18n/config";
 import { planState } from "@/lib/access";
 import { BUYER_STAGES } from "@/lib/crm";
-import { AGENT_TIME_ZONE, dayRangeInTimeZone, firstNameFrom } from "@/lib/home";
+import { dayRangeInTimeZone, firstNameFrom } from "@/lib/home";
+import { resolveTimeZone } from "@/lib/time-zones";
 import { AppBar } from "@/components/shell/app-bar";
 import {
   AppSidebar,
@@ -45,22 +46,26 @@ export default async function AppLayout({
   // The app is always open. The only gate is the Free plan's client cap,
   // enforced where a client is added; the sidebar just shows where they stand.
   // One light scan of the book feeds the cap, the nav badges and the pipeline
-  // group; today's appointments are a head count.
+  // group; today's appointments are a head count. "Today" starts at the
+  // agent's own midnight, so that count waits for the profile; the scan
+  // does not.
   const now = new Date();
-  const today = dayRangeInTimeZone(now.toISOString(), AGENT_TIME_ZONE);
-  const [{ data: profile }, clientsRes, todayRes] = await Promise.all([
-    supabase
-      .from("profiles")
-      .select("full_name, is_admin, founding_number, subscription_status, pro_until")
-      .eq("id", user.id)
-      .maybeSingle(),
+  const [profile, clientsRes, todayRes] = await Promise.all([
+    getSessionProfile(),
     supabase.from("clients").select("side, stage, is_active"),
-    supabase
-      .from("appointments")
-      .select("id", { count: "exact", head: true })
-      .gte("starts_at", today.start)
-      .lt("starts_at", today.end),
+    getSessionProfile().then((p) => {
+      const today = dayRangeInTimeZone(
+        now.toISOString(),
+        resolveTimeZone(p?.time_zone)
+      );
+      return supabase
+        .from("appointments")
+        .select("id", { count: "exact", head: true })
+        .gte("starts_at", today.start)
+        .lt("starts_at", today.end);
+    }),
   ]);
+  const timeZone = resolveTimeZone(profile?.time_zone);
 
   const rows = clientsRes.data ?? [];
   const active = rows.filter((r) => r.is_active);
@@ -91,14 +96,17 @@ export default async function AppLayout({
     weekday: "short",
     day: "numeric",
     month: "short",
-    timeZone: AGENT_TIME_ZONE,
+    timeZone,
   }).format(now);
 
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
 
   return (
-    <ShellProvider agentFirstName={firstNameFrom(profile?.full_name, user.email)}>
+    <ShellProvider
+      agentFirstName={firstNameFrom(profile?.full_name, user.email)}
+      timeZone={timeZone}
+    >
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar
         email={user.email ?? ""}

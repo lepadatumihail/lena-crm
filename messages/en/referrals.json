@@ -42,7 +42,7 @@
   "rewards": {
     "title": "Your free months",
     "description": "On Pro, a free month comes off your next invoice. Not subscribed yet? You get a month of Pro straight away, no card needed.",
-    "earned": "{count, plural, one {# free month earned} other {# free months earned}}",
+    "earnedLabel": "{count, plural, one {free month earned} other {free months earned}}",
     "none": "Nothing earned yet.",
     "proUntil": "You're on Pro until {date}.",
     "credit": "€{amount} will come off your invoices once you subscribe.",

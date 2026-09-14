@@ -25,7 +25,7 @@ import {
   StageMenu,
 } from "@/components/clients/client-header-actions";
 import { CopyIconButton } from "@/components/clients/copy-icon-button";
-import { KeyValueList, KeyValueRow } from "@/components/clients/detail-row";
+import { KeyValueList, KeyValueRow } from "@/components/shell/key-value";
 import { MessageComposer } from "@/components/clients/message-composer";
 import { WhatsAppButton } from "@/components/clients/whatsapp-button";
 import { DocumentsSection } from "@/components/clients/sections/documents-section";
@@ -36,6 +36,7 @@ import { ReservationSection } from "@/components/clients/sections/reservation-se
 import { ViewingsSection } from "@/components/clients/sections/viewings-section";
 import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { ShellCrumb } from "@/components/shell/shell-context";
+import { StatStrip } from "@/components/shell/stat-strip";
 import { Button } from "@/components/ui/button";
 import { Money } from "@/components/ui/money";
 import { Tag } from "@/components/ui/tag";
@@ -54,7 +55,8 @@ import { clientFullName, formatCurrency, type ClientSide } from "@/lib/crm";
 import type { ViewingWithAttachments } from "@/lib/data/buyer";
 import type { ClientAppointment } from "@/lib/data/calendar";
 import type { ListingMatch } from "@/lib/data/seller";
-import { AGENT_TIME_ZONE, dateKeyInTimeZone } from "@/lib/home";
+import { dateKeyInTimeZone } from "@/lib/home";
+import { DEFAULT_TIME_ZONE } from "@/lib/time-zones";
 import type {
   BuyerPreferences,
   Client,
@@ -63,7 +65,6 @@ import type {
   Property,
   Reservation,
 } from "@/lib/supabase/types";
-import { cn } from "@/lib/utils";
 import { whatsappLink } from "@/lib/whatsapp";
 
 export type ClientDetailData = {
@@ -81,6 +82,8 @@ export type ClientDetailData = {
   compose: string | null;
   /** The instant the page is rendered for; injectable for previews. */
   now?: Date;
+  /** The agent's IANA time zone: days and times on the page are read in it. */
+  timeZone?: string;
 };
 
 type Stat = { label: string; value: ReactNode; hint?: ReactNode };
@@ -126,6 +129,7 @@ export async function ClientDetailView({
   nextAppointment,
   compose,
   now = new Date(),
+  timeZone = DEFAULT_TIME_ZONE,
 }: ClientDetailData) {
   const [t, tCrm, tClients, tCommon, tRes, tViewings, tAppt, locale] =
     await Promise.all([
@@ -141,10 +145,10 @@ export async function ClientDetailView({
   const tag = intlTag(locale);
   const dfl = dateFnsLocale(locale);
   const nowMs = now.getTime();
-  const todayKey = dateKeyInTimeZone(now.toISOString(), AGENT_TIME_ZONE);
+  const todayKey = dateKeyInTimeZone(now.toISOString(), timeZone);
   const tomorrowKey = dateKeyInTimeZone(
     new Date(nowMs + DAY_MS).toISOString(),
-    AGENT_TIME_ZONE
+    timeZone
   );
 
   const side = client.side as ClientSide;
@@ -161,19 +165,19 @@ export async function ClientDetailView({
 
   /** "14 Jul 2026" for an instant, on the agent's calendar. */
   const calendarDate = (iso: string) =>
-    format(parseISO(dateKeyInTimeZone(iso, AGENT_TIME_ZONE)), "d MMM yyyy", {
+    format(parseISO(dateKeyInTimeZone(iso, timeZone)), "d MMM yyyy", {
       locale: dfl,
     });
   /** "Today, 14:00" / "Tomorrow, 09:30" / "Wed 16 Sep, 17:30". */
   const whenLabel = (iso: string) => {
-    const key = dateKeyInTimeZone(iso, AGENT_TIME_ZONE);
+    const key = dateKeyInTimeZone(iso, timeZone);
     const day =
       key === todayKey
         ? tCommon("today")
         : key === tomorrowKey
           ? tCommon("tomorrow")
           : format(parseISO(key), "EEE d MMM", { locale: dfl });
-    return `${day}, ${formatTimeInTimeZone(iso, AGENT_TIME_ZONE, tag)}`;
+    return `${day}, ${formatTimeInTimeZone(iso, timeZone, tag)}`;
   };
   const updatedLabel = formatDistanceStrict(parseISO(client.updated_at), now, {
     addSuffix: true,
@@ -397,27 +401,7 @@ export async function ClientDetailView({
       </div>
 
       {/* Headline figures */}
-      <dl className="bg-card grid grid-cols-2 overflow-hidden rounded-xl border shadow-xs lg:grid-cols-4">
-        {stats.map((stat, i) => (
-          <div
-            key={stat.label}
-            className={cn(
-              "min-w-0 px-4 py-3.5",
-              i === 0 && "border-r border-b lg:border-b-0",
-              i === 1 && "border-b lg:border-r lg:border-b-0",
-              i === 2 && "border-r"
-            )}
-          >
-            <dt className="text-muted-foreground truncate text-xs">{stat.label}</dt>
-            <dd className="mt-1.5 text-lg leading-6 font-semibold tracking-tight break-words tabular-nums">
-              {stat.value}
-            </dd>
-            <dd className="text-muted-foreground mt-0.5 truncate text-xs">
-              {stat.hint ?? " "}
-            </dd>
-          </div>
-        ))}
-      </dl>
+      <StatStrip items={stats} />
 
       <div className="grid items-start gap-5 lg:grid-cols-3">
         {/* Contact first in the DOM: on a phone it is what you reach for. */}

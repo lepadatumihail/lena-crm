@@ -53,7 +53,7 @@ import {
   type PropertyType,
 } from "@/lib/crm";
 import { cn } from "@/lib/utils";
-import { KeyValueList, KeyValueRow } from "@/components/clients/detail-row";
+import { KeyValueList, KeyValueRow } from "@/components/shell/key-value";
 import type { BuyerPreferences } from "@/lib/supabase/types";
 
 export function PreferencesSection({

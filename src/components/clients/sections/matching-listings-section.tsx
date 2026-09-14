@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { ArrowRight, BedDouble, Building2, Target } from "lucide-react";
 
-import { RowIcon } from "@/components/clients/detail-row";
+import { RowIcon } from "@/components/shell/key-value";
 import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { Money } from "@/components/ui/money";
 import { intlTag } from "@/i18n/config";

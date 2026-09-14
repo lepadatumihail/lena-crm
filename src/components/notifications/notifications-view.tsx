@@ -3,13 +3,16 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { format, isToday, isYesterday } from "date-fns";
+import { format, parseISO, subDays } from "date-fns";
 import { CheckCheck, Loader2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { NotificationItem } from "@/components/notifications/notification-item";
-import { cn } from "@/lib/utils";
+import { Panel, PanelEmpty } from "@/components/shell/panel";
+import { useAgentTimeZone } from "@/components/shell/shell-context";
+import { ToolbarTabs } from "@/components/shell/toolbar";
+import { Button } from "@/components/ui/button";
 import { dateFnsLocale } from "@/i18n/dates";
+import { dateKeyInTimeZone } from "@/lib/home";
 import {
   announceNotificationsChanged,
   NOTIFICATIONS_CHANGED,
@@ -23,34 +26,41 @@ import {
 import type { NotificationHistory } from "@/lib/data/notifications";
 import type { Notification } from "@/lib/supabase/types";
 
-const FILTERS = ["all", "unread"] as const;
-type Filter = (typeof FILTERS)[number];
+type Filter = "all" | "unread";
 
-type DayGroup = { key: string; date: Date; items: Notification[] };
+type DayGroup = { key: string; items: Notification[] };
 
-/** The list arrives newest-first, so consecutive rows share a day heading. */
-function groupByDay(items: Notification[]): DayGroup[] {
+/** The list arrives newest-first, so consecutive rows share a day: the agent's day. */
+function groupByDay(items: Notification[], timeZone: string): DayGroup[] {
   const groups: DayGroup[] = [];
   for (const n of items) {
-    const date = new Date(n.due_at);
-    const key = format(date, "yyyy-MM-dd");
+    const key = dateKeyInTimeZone(n.due_at, timeZone);
     const last = groups.at(-1);
     if (last?.key === key) last.items.push(n);
-    else groups.push({ key, date, items: [n] });
+    else groups.push({ key, items: [n] });
   }
   return groups;
 }
 
+/**
+ * Every reminder and nudge, newest first: filter tabs over one panel per
+ * day, the same rows as the bell.
+ */
 export function NotificationsView({ initial }: { initial: NotificationHistory }) {
   const t = useTranslations("notifications.page");
   const tCommon = useTranslations("common");
   const locale = useLocale();
   const router = useRouter();
+  const timeZone = useAgentTimeZone();
   const [filter, setFilter] = useState<Filter>("all");
   const [items, setItems] = useState(initial.items);
   const [unread, setUnread] = useState(initial.unread);
   const [hasMore, setHasMore] = useState(initial.hasMore);
   const [busy, setBusy] = useState(false);
+  const [openedAt] = useState(() => new Date());
+
+  const todayKey = dateKeyInTimeZone(openedAt.toISOString(), timeZone);
+  const yesterdayKey = format(subDays(parseISO(todayKey), 1), "yyyy-MM-dd");
 
   const reload = useCallback(async (next: Filter) => {
     setBusy(true);
@@ -118,80 +128,60 @@ export function NotificationsView({ initial }: { initial: NotificationHistory })
     void markAllNotificationsRead().then(announceNotificationsChanged);
   }
 
-  function dayLabel(date: Date) {
-    if (isToday(date)) return tCommon("today");
-    if (isYesterday(date)) return t("yesterday");
-    return format(date, "EEEE d MMMM", { locale: dateFnsLocale(locale) });
+  function dayLabel(key: string) {
+    if (key === todayKey) return tCommon("today");
+    if (key === yesterdayKey) return t("yesterday");
+    return format(parseISO(key), "EEEE d MMMM", { locale: dateFnsLocale(locale) });
   }
 
-  const groups = groupByDay(items);
+  const groups = groupByDay(items, timeZone);
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-muted-foreground max-w-2xl text-sm">{t("subtitle")}</p>
-        {unread > 0 && (
-          <Button variant="outline" size="sm" onClick={handleMarkAll}>
+    <div className="mx-auto w-full max-w-4xl space-y-4">
+      <ToolbarTabs
+        label={t("filters.label")}
+        value={filter}
+        onChange={(next) => handleFilter(next === "unread" ? "unread" : "all")}
+        tabs={[
+          { value: "all", label: t("filters.all") },
+          { value: "unread", label: t("filters.unread"), count: unread },
+        ]}
+      >
+        {busy ? <Loader2 className="text-muted-foreground size-4 animate-spin" /> : null}
+        {unread > 0 ? (
+          <Button variant="outline" size="xs" className="rounded-lg" onClick={handleMarkAll}>
             <CheckCheck /> {t("markAllRead")}
           </Button>
-        )}
-      </div>
-
-      <div className="flex items-center gap-3">
-        <nav
-          aria-label={t("filters.label")}
-          className="bg-muted flex items-center rounded-md p-0.5 text-xs font-medium"
-        >
-          {FILTERS.map((kind) => (
-            <button
-              key={kind}
-              type="button"
-              onClick={() => handleFilter(kind)}
-              aria-current={kind === filter ? "true" : undefined}
-              className={cn(
-                "rounded-sm px-2.5 py-1 transition-colors",
-                kind === filter
-                  ? "bg-card text-foreground shadow-xs"
-                  : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              {kind === "unread"
-                ? t("filters.unread", { count: unread })
-                : t("filters.all")}
-            </button>
-          ))}
-        </nav>
-        {busy && <Loader2 className="text-muted-foreground size-4 animate-spin" />}
-      </div>
+        ) : null}
+      </ToolbarTabs>
 
       {groups.length === 0 ? (
-        <p className="text-muted-foreground rounded-xl border border-dashed py-16 text-center text-sm">
-          {filter === "unread" ? t("emptyUnread") : t("empty")}
-        </p>
+        <Panel>
+          <PanelEmpty className="py-16">
+            {filter === "unread" ? t("emptyUnread") : t("empty")}
+          </PanelEmpty>
+        </Panel>
       ) : (
-        <div className="space-y-5">
-          {groups.map((group) => (
-            <section key={group.key}>
-              <h2 className="text-muted-foreground px-1 text-xs font-semibold tracking-wide uppercase first-letter:uppercase">
-                {dayLabel(group.date)}
-              </h2>
-              <div className="bg-card mt-2 divide-y overflow-hidden rounded-xl border">
-                {group.items.map((n) => (
-                  <NotificationItem
-                    key={n.id}
-                    notification={n}
-                    onSelect={handleSelect}
-                  />
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
+        groups.map((group) => (
+          <Panel key={group.key} title={dayLabel(group.key)} count={group.items.length}>
+            <div className="divide-y">
+              {group.items.map((n) => (
+                <NotificationItem key={n.id} notification={n} onSelect={handleSelect} />
+              ))}
+            </div>
+          </Panel>
+        ))
       )}
 
       {hasMore && (
         <div className="flex justify-center">
-          <Button variant="outline" onClick={handleLoadMore} disabled={busy}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-lg"
+            onClick={handleLoadMore}
+            disabled={busy}
+          >
             {busy ? <Loader2 className="animate-spin" /> : null}
             {t("loadMore")}
           </Button>

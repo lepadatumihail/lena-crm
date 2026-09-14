@@ -20,7 +20,7 @@ import {
   X,
 } from "lucide-react";
 
-import { RowIcon } from "@/components/clients/detail-row";
+import { RowIcon } from "@/components/shell/key-value";
 import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { Button } from "@/components/ui/button";
 import { Tag } from "@/components/ui/tag";

@@ -28,7 +28,12 @@ import {
 import { ClientSheet } from "@/components/clients/client-sheet";
 import { ClientsKanban } from "@/components/clients/clients-kanban";
 import { ClientsTable } from "@/components/clients/clients-table";
-import { FilterSelect, ToolbarChip, ViewToggle } from "@/components/shell/toolbar";
+import {
+  FilterSelect,
+  ToolbarChip,
+  ToolbarTabs,
+  ViewToggle,
+} from "@/components/shell/toolbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Money } from "@/components/ui/money";
@@ -375,42 +380,20 @@ function StageTabs({
   allLabel: string;
   labelFor: (stage: Stage) => string;
 }) {
-  const tab = (key: string, label: ReactNode, count: number, dot?: string) => {
-    const active = value === key;
-    return (
-      <button
-        key={key}
-        type="button"
-        role="tab"
-        aria-selected={active}
-        onClick={() => onChange(key)}
-        className={cn(
-          "-mb-px flex h-9 shrink-0 items-center gap-1.5 border-b-2 px-3 text-xs font-medium whitespace-nowrap transition-colors duration-150 outline-none focus-visible:bg-muted/60",
-          active
-            ? "border-foreground text-foreground"
-            : "text-muted-foreground hover:text-foreground border-transparent"
-        )}
-      >
-        {dot ? <span aria-hidden className={cn("size-1.5 rounded-full", dot)} /> : null}
-        {label}
-        <span
-          className={cn(
-            "inline-flex h-[18px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] tabular-nums",
-            active ? "bg-foreground/10 text-foreground" : "bg-muted text-muted-foreground"
-          )}
-        >
-          {count}
-        </span>
-      </button>
-    );
-  };
   return (
-    <div role="tablist" className="scrollbar-none -mx-1 flex items-end overflow-x-auto border-b px-1">
-      {tab("all", allLabel, total)}
-      {stages.map((s) =>
-        tab(s, labelFor(s), counts.get(s) ?? 0, TONE_SOLID[STAGE_TONES[s]])
-      )}
-    </div>
+    <ToolbarTabs
+      value={value}
+      onChange={onChange}
+      tabs={[
+        { value: "all", label: allLabel, count: total },
+        ...stages.map((s) => ({
+          value: s,
+          label: labelFor(s),
+          count: counts.get(s) ?? 0,
+          dot: TONE_SOLID[STAGE_TONES[s]],
+        })),
+      ]}
+    />
   );
 }
 

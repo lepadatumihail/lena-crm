@@ -586,6 +586,7 @@ export type Database = {
           email: string | null;
           full_name: string | null;
           locale: string;
+          time_zone: string | null;
           is_admin: boolean;
           cohort: Database["public"]["Enums"]["cohort"];
           founding_number: number | null;
@@ -604,6 +605,7 @@ export type Database = {
           email?: string | null;
           full_name?: string | null;
           locale?: string;
+          time_zone?: string | null;
           is_admin?: boolean;
           cohort?: Database["public"]["Enums"]["cohort"];
           founding_number?: number | null;
@@ -622,6 +624,7 @@ export type Database = {
           email?: string | null;
           full_name?: string | null;
           locale?: string;
+          time_zone?: string | null;
           is_admin?: boolean;
           cohort?: Database["public"]["Enums"]["cohort"];
           founding_number?: number | null;
@@ -799,6 +802,10 @@ export type Database = {
       };
       set_locale: {
         Args: { p_locale: string };
+        Returns: undefined;
+      };
+      update_my_settings: {
+        Args: { p_full_name: string | null; p_time_zone: string | null };
         Returns: undefined;
       };
     };

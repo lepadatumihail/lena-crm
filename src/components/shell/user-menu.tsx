@@ -12,6 +12,7 @@ import {
   LogOut,
   Monitor,
   Moon,
+  Settings,
   Sun,
 } from "lucide-react";
 
@@ -45,8 +46,8 @@ const THEMES = [
 
 /**
  * The signed-in agent as a chip at the top right: avatar and first name,
- * opening a menu with theme, language, account pages and sign out. This is
- * the one place those settings live, so the sidebar stays about navigation.
+ * opening a menu with theme, language, settings, account pages and sign out.
+ * Account things live here, so the sidebar stays about navigation.
  */
 export function UserMenu({
   email,
@@ -144,6 +145,12 @@ export function UserMenu({
           </DropdownMenuSub>
 
           <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link href="/settings">
+              <Settings />
+              {t("settings")}
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/billing">
               <CreditCard />

@@ -24,6 +24,7 @@ const founder: Profile = {
   email: "agent@example.com",
   full_name: "Agent",
   locale: "en",
+  time_zone: null,
   is_admin: false,
   cohort: "founding",
   founding_number: 1,

@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import { dateFnsLocale } from "@/i18n/dates";
 import type { Enums, Notification } from "@/lib/supabase/types";
+import { TONE_BG, TONE_INK, type Tone } from "@/lib/tones";
 
 type NotificationType = Enums<"notification_type">;
 
@@ -23,6 +24,15 @@ const ICONS: Record<NotificationType, ComponentType<{ className?: string }>> = {
   follow_up: UserPlus,
   reservation_date: CalendarClock,
   stalled_offer: Coins,
+};
+
+/* The hues Home's "Needs attention" uses: quiet leads amber, key dates green, offers brand; appointments blue. */
+const TONES: Record<NotificationType, Tone> = {
+  appointment_reminder: "blue",
+  appointment_today: "blue",
+  follow_up: "amber",
+  reservation_date: "green",
+  stalled_offer: "brand",
 };
 
 /**
@@ -44,6 +54,7 @@ export function NotificationItem({
   const t = useTranslations("notifications.types");
   const locale = useLocale();
   const Icon = ICONS[n.type];
+  const tone = TONES[n.type];
   const isUnread = !n.read_at;
 
   return (
@@ -51,16 +62,17 @@ export function NotificationItem({
       type="button"
       onClick={() => onSelect(n)}
       className={cn(
-        "hover:bg-accent flex w-full items-start gap-3 text-left transition-colors",
-        compact ? "px-3 py-2.5" : "px-3 py-3 sm:px-4",
-        isUnread && "bg-primary/5",
+        "hover:bg-muted/50 focus-visible:bg-muted/50 flex w-full items-start gap-3 text-left outline-none transition-colors duration-150",
+        compact ? "px-3 py-2.5" : "px-4 py-3",
+        isUnread && "bg-primary/[0.04]",
         className
       )}
     >
       <span
         className={cn(
           "mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full",
-          isUnread ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
+          TONE_BG[tone],
+          TONE_INK[tone]
         )}
       >
         <Icon className="size-3.5" />
@@ -80,7 +92,7 @@ export function NotificationItem({
             {n.body}
           </p>
         )}
-        <p className="text-muted-foreground/70 mt-1 text-[11px]">
+        <p className="text-muted-foreground/80 mt-1 text-[11px]">
           {t(n.type)} ·{" "}
           {formatDistanceToNow(new Date(n.due_at), {
             addSuffix: true,
@@ -89,7 +101,7 @@ export function NotificationItem({
         </p>
       </div>
       {isUnread && (
-        <span className="bg-primary mt-1.5 size-2 shrink-0 rounded-full" />
+        <span aria-hidden className="bg-primary mt-2 size-2 shrink-0 rounded-full" />
       )}
     </button>
   );

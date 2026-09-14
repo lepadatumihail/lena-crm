@@ -4,8 +4,8 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /*
-  Labelled values on the client page: one value per row, label left and value
-  right, hairlines between. The same rhythm as the list table, so a panel of
+  Labelled values inside a panel (the client page, billing): one value per
+  row, label left and value right, hairlines between. The same rhythm as the list table, so a panel of
   details reads like a small table.
 */
 
@@ -25,6 +25,7 @@ export function KeyValueRow({
   href,
   wrap = false,
   actions,
+  hint,
   className,
   children,
 }: {
@@ -36,6 +37,8 @@ export function KeyValueRow({
   wrap?: boolean;
   /** Small icon buttons after the value, e.g. copy. */
   actions?: ReactNode;
+  /** A quieter line under the value, e.g. what a figure includes. */
+  hint?: ReactNode;
   className?: string;
   children: ReactNode;
 }) {
@@ -62,7 +65,19 @@ export function KeyValueRow({
         {label}
       </dt>
       <dd className="flex min-w-0 items-center gap-1 text-right text-sm font-medium tabular-nums">
-        <div className="min-w-0">{value}</div>
+        <div className="min-w-0">
+          {value}
+          {hint ? (
+            <span
+              className={cn(
+                "text-muted-foreground block text-xs font-normal",
+                wrap ? "text-pretty" : "truncate"
+              )}
+            >
+              {hint}
+            </span>
+          ) : null}
+        </div>
         {actions ? <div className="flex shrink-0 items-center">{actions}</div> : null}
       </dd>
     </div>

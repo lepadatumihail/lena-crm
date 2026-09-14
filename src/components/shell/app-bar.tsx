@@ -81,6 +81,8 @@ export function AppBar({
     title = t("referrals");
   } else if (pathname.startsWith("/billing")) {
     title = t("billing");
+  } else if (pathname.startsWith("/settings")) {
+    title = t("settings");
   } else if (pathname.startsWith("/admin")) {
     title = t("admin");
   }

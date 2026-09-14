@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "title": "Settings"
+  },
+  "profile": {
+    "title": "Profile",
+    "name": "Name",
+    "nameHint": "How LeadWing greets you. Leave it empty to use your email.",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailHint": "You sign in with this address.",
+    "timeZone": "Time zone",
+    "timeZoneHint": "Your greeting, today's agenda and key dates follow this zone.",
+    "useDevice": "Use this device's zone ({zone})",
+    "localTime": "Local time {time}",
+    "save": "Save changes",
+    "unsaved": "Unsaved changes",
+    "saved": "Settings saved",
+    "saveFailed": "Couldn't save your settings"
+  },
+  "timeZonePicker": {
+    "search": "Search a city or region…",
+    "empty": "No time zone matches.",
+    "regions": {
+      "Africa": "Africa",
+      "America": "Americas",
+      "Antarctica": "Antarctica",
+      "Arctic": "Arctic",
+      "Asia": "Asia",
+      "Atlantic": "Atlantic",
+      "Australia": "Australia",
+      "Europe": "Europe",
+      "Indian": "Indian Ocean",
+      "Pacific": "Pacific",
+      "UTC": "UTC",
+      "Other": "Other"
+    }
+  },
+  "preferences": {
+    "title": "Preferences",
+    "language": "Language",
+    "languageHint": "The app and your calendar feed use it.",
+    "theme": "Theme",
+    "themeHint": "System follows your device's setting."
+  },
+  "errors": {
+    "checkForm": "Please check the form.",
+    "notReady": "Settings can't be saved just yet. Please try again in a few minutes."
+  }
+}

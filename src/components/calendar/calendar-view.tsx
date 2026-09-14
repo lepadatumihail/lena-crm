@@ -5,9 +5,9 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { eachDayOfInterval, format, parseISO } from "date-fns";
 import {
-  CalendarClock,
   ChevronLeft,
   ChevronRight,
+  KeyRound,
   Plus,
   Users,
 } from "lucide-react";
@@ -29,6 +29,8 @@ import { MonthGrid } from "@/components/calendar/month-grid";
 import { TimeGrid } from "@/components/calendar/time-grid";
 import { WeekStrip } from "@/components/calendar/week-strip";
 import { ViewingDialog } from "@/components/clients/viewing-dialog";
+import { Panel } from "@/components/shell/panel";
+import { Segmented } from "@/components/shell/toolbar";
 import { useHydrated } from "@/hooks/use-hydrated";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
@@ -44,6 +46,8 @@ import {
   visibleRange,
   type CalendarViewKind,
 } from "@/lib/calendar-view";
+import { EVENT_TONES } from "@/lib/calendar";
+import { TONE_BG, TONE_INK, TONE_SOLID } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 import type {
   AppointmentWithRefs,
@@ -209,70 +213,57 @@ export function CalendarView({
           ? "actions.previousMonth"
           : "actions.nextMonth"
     );
-  const newButton = (className?: string) => (
-    <Button size="sm" className={className} onClick={startNew}>
-      <Plus /> {t("actions.new")}
-    </Button>
-  );
-
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold tracking-tight first-letter:uppercase md:text-xl">
-            {rangeLabel(view, anchor, dateLocale)}
-          </h2>
-          {newButton("md:hidden")}
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-1">
-            <Button
-              asChild
-              variant="outline"
-              size="icon"
-              aria-label={stepLabel(-1)}
-            >
-              <Link href={stepHref(-1)}>
-                <ChevronLeft />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="sm">
-              <Link href={calendarHref(view)}>{tCommon("today")}</Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="icon"
-              aria-label={stepLabel(1)}
-            >
-              <Link href={stepHref(1)}>
-                <ChevronRight />
-              </Link>
-            </Button>
-          </div>
-          <nav
-            aria-label={t("views.label")}
-            className="bg-muted flex items-center rounded-md p-0.5 text-xs font-medium"
+      {/* Toolbar: today and the step arrows, the range, then the view,
+          sync and the one "new" action. Folds to two rows on a phone. */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2.5">
+        <div className="flex items-center gap-1">
+          <Button asChild variant="outline" size="sm" className="rounded-lg">
+            <Link href={calendarHref(view)}>{tCommon("today")}</Link>
+          </Button>
+          <Button
+            asChild
+            variant="ghost"
+            size="icon-sm"
+            aria-label={stepLabel(-1)}
+            className="text-muted-foreground hover:text-foreground"
           >
-            {CALENDAR_VIEWS.map((kind) => (
-              <Link
-                key={kind}
-                href={calendarHref(kind, anchor)}
-                onClick={() => rememberView(kind)}
-                aria-current={kind === view ? "page" : undefined}
-                className={cn(
-                  "rounded-sm px-2.5 py-1 transition-colors",
-                  kind === view
-                    ? "bg-card text-foreground shadow-xs"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {t(`views.${kind}`)}
-              </Link>
-            ))}
-          </nav>
+            <Link href={stepHref(-1)}>
+              <ChevronLeft />
+            </Link>
+          </Button>
+          <Button
+            asChild
+            variant="ghost"
+            size="icon-sm"
+            aria-label={stepLabel(1)}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <Link href={stepHref(1)}>
+              <ChevronRight />
+            </Link>
+          </Button>
+        </div>
+        <h2 className="min-w-0 flex-1 truncate text-lg font-semibold tracking-tight first-letter:uppercase">
+          {rangeLabel(view, anchor, dateLocale)}
+        </h2>
+        <div className="flex items-center gap-2">
+          <EventLegend className="hidden xl:flex" />
+          <Segmented
+            label={t("views.label")}
+            value={view}
+            items={CALENDAR_VIEWS.map((kind) => ({
+              value: kind,
+              label: t(`views.${kind}`),
+              href: calendarHref(kind, anchor),
+              onSelect: () => rememberView(kind),
+            }))}
+          />
           <CalendarSyncDialog />
-          {newButton("hidden md:inline-flex")}
+          <Button size="sm" className="rounded-full" onClick={startNew}>
+            <Plus /> {t("actions.new")}
+          </Button>
         </div>
       </div>
 
@@ -322,41 +313,38 @@ export function CalendarView({
             onOpenEvent={openEvent}
           />
           {activeDay && (
-            <section
-              className="space-y-3 rounded-lg border p-3 md:hidden"
-              aria-label={format(parseISO(activeDay), "EEEE d MMMM", {
+            <Panel
+              className="md:hidden"
+              title={format(parseISO(activeDay), "EEEE d MMMM", {
                 locale: dateLocale,
               })}
-            >
-              <div className="flex items-center justify-between gap-2">
-                <h2 className="text-sm font-semibold first-letter:uppercase">
-                  {format(parseISO(activeDay), "EEEE d MMMM", {
-                    locale: dateLocale,
-                  })}
-                </h2>
+              count={dayList.length}
+              action={
                 <Button
                   variant="outline"
-                  size="sm"
+                  size="xs"
                   onClick={() => startChoosing(activeDay)}
                 >
                   <Plus /> {tCommon("add")}
                 </Button>
-              </div>
+              }
+              bodyClassName="space-y-2 p-3"
+            >
               {dayList.length === 0 ? (
-                <p className="text-muted-foreground text-sm">{t("day.empty")}</p>
+                <p className="text-muted-foreground px-1 py-1.5 text-sm">
+                  {t("day.empty")}
+                </p>
               ) : (
-                <div className="space-y-2">
-                  {dayList.map((e) => (
-                    <EventRow
-                      key={e.id}
-                      event={e}
-                      past={eventEndMs(e.starts_at, e.ends_at) < nowMs}
-                      onOpen={() => openEvent(e)}
-                    />
-                  ))}
-                </div>
+                dayList.map((e) => (
+                  <EventRow
+                    key={e.id}
+                    event={e}
+                    past={eventEndMs(e.starts_at, e.ends_at) < nowMs}
+                    onOpen={() => openEvent(e)}
+                  />
+                ))
               )}
-            </section>
+            </Panel>
           )}
         </>
       )}
@@ -420,21 +408,30 @@ export function CalendarView({
             </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={chooseMeeting}
-              className="hover:border-primary hover:bg-accent flex flex-col items-center gap-2 rounded-lg border p-4 text-sm font-medium transition-colors"
-            >
-              <Users className="size-5" /> {appointmentTypeLabel(tCrm, "meeting")}
-            </button>
-            <button
-              type="button"
-              onClick={chooseViewing}
-              className="hover:border-primary hover:bg-accent flex flex-col items-center gap-2 rounded-lg border p-4 text-sm font-medium transition-colors"
-            >
-              <CalendarClock className="size-5" />{" "}
-              {appointmentTypeLabel(tCrm, "viewing")}
-            </button>
+            {(
+              [
+                { kind: "viewing", icon: KeyRound, onClick: chooseViewing },
+                { kind: "meeting", icon: Users, onClick: chooseMeeting },
+              ] as const
+            ).map(({ kind, icon: Icon, onClick }) => (
+              <button
+                key={kind}
+                type="button"
+                onClick={onClick}
+                className="hover:bg-muted/60 focus-visible:ring-ring/50 flex flex-col items-center gap-2.5 rounded-xl border p-4 text-sm font-medium transition-[background-color,scale] duration-150 outline-none focus-visible:ring-[3px] active:scale-[0.96]"
+              >
+                <span
+                  className={cn(
+                    "flex size-10 items-center justify-center rounded-full",
+                    TONE_BG[EVENT_TONES[kind]],
+                    TONE_INK[EVENT_TONES[kind]]
+                  )}
+                >
+                  <Icon className="size-5" strokeWidth={1.75} />
+                </span>
+                {appointmentTypeLabel(tCrm, kind)}
+              </button>
+            ))}
           </div>
         </DialogContent>
       </Dialog>
@@ -457,6 +454,24 @@ export function CalendarView({
         defaultDateKey={editingViewing?.dateKey}
         defaultTime={editingViewing?.time}
       />
+    </div>
+  );
+}
+
+/** What the two event colours mean, beside the view switch. */
+function EventLegend({ className }: { className?: string }) {
+  const tCrm = useTranslations("crm");
+  return (
+    <div className={cn("text-muted-foreground mr-1 items-center gap-3 text-xs", className)}>
+      {(["viewing", "meeting"] as const).map((kind) => (
+        <span key={kind} className="inline-flex items-center gap-1.5">
+          <span
+            aria-hidden
+            className={cn("size-2 rounded-full", TONE_SOLID[EVENT_TONES[kind]])}
+          />
+          {appointmentTypeLabel(tCrm, kind)}
+        </span>
+      ))}
     </div>
   );
 }

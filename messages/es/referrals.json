@@ -42,7 +42,7 @@
   "rewards": {
     "title": "Tus meses gratis",
     "description": "En Pro, un mes gratis se descuenta de tu próxima factura. ¿Todavía no te has suscrito? Consigues un mes de Pro al momento, sin tarjeta.",
-    "earned": "{count, plural, one {# mes gratis conseguido} other {# meses gratis conseguidos}}",
+    "earnedLabel": "{count, plural, one {mes gratis conseguido} other {meses gratis conseguidos}}",
     "none": "Todavía no has conseguido nada.",
     "proUntil": "Estás en Pro hasta el {date}.",
     "credit": "{amount} € se descontarán de tus facturas cuando te suscribas.",

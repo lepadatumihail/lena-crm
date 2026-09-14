@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "title": "Ajustes"
+  },
+  "profile": {
+    "title": "Perfil",
+    "name": "Nombre",
+    "nameHint": "Cómo te saluda LeadWing. Déjalo vacío para usar tu correo.",
+    "namePlaceholder": "Tu nombre",
+    "email": "Correo electrónico",
+    "emailHint": "Inicias sesión con esta dirección.",
+    "timeZone": "Zona horaria",
+    "timeZoneHint": "Tu saludo, la agenda de hoy y las fechas clave siguen esta zona.",
+    "useDevice": "Usar la zona de este dispositivo ({zone})",
+    "localTime": "Hora local {time}",
+    "save": "Guardar cambios",
+    "unsaved": "Cambios sin guardar",
+    "saved": "Ajustes guardados",
+    "saveFailed": "No se han podido guardar los ajustes"
+  },
+  "timeZonePicker": {
+    "search": "Busca una ciudad o región…",
+    "empty": "Ninguna zona horaria coincide.",
+    "regions": {
+      "Africa": "África",
+      "America": "América",
+      "Antarctica": "Antártida",
+      "Arctic": "Ártico",
+      "Asia": "Asia",
+      "Atlantic": "Atlántico",
+      "Australia": "Australia",
+      "Europe": "Europa",
+      "Indian": "Océano Índico",
+      "Pacific": "Pacífico",
+      "UTC": "UTC",
+      "Other": "Otras"
+    }
+  },
+  "preferences": {
+    "title": "Preferencias",
+    "language": "Idioma",
+    "languageHint": "Lo usan la app y tu calendario sincronizado.",
+    "theme": "Tema",
+    "themeHint": "Sistema sigue el ajuste de tu dispositivo."
+  },
+  "errors": {
+    "checkForm": "Revisa el formulario.",
+    "notReady": "Todavía no se pueden guardar los ajustes. Inténtalo de nuevo en unos minutos."
+  }
+}

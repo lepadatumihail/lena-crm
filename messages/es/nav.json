@@ -68,5 +68,6 @@
     "newSeller": "Nuevo vendedor",
     "newAppointment": "Nueva cita"
   },
-  "breadcrumb": "Ruta de navegación"
+  "breadcrumb": "Ruta de navegación",
+  "settings": "Ajustes"
 }

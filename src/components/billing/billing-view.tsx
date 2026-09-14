@@ -1,3 +1,4 @@
+import type { ComponentProps, ReactNode } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import {
@@ -11,14 +12,11 @@ import {
   Users,
 } from "lucide-react";
 
+import { RefreshWhilePending } from "@/components/billing/refresh-while-pending";
+import { KeyValueList, KeyValueRow, RowIcon } from "@/components/shell/key-value";
+import { Panel, PanelAction, PanelEmpty } from "@/components/shell/panel";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Notice } from "@/components/ui/notice";
 import {
   Table,
   TableBody,
@@ -27,9 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Notice } from "@/components/ui/notice";
 import { Tag } from "@/components/ui/tag";
-import { RefreshWhilePending } from "@/components/billing/refresh-while-pending";
 import { intlTag } from "@/i18n/config";
 import { openBillingPortal } from "@/lib/actions/billing";
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
@@ -67,6 +63,10 @@ const CREDIT_REASON = {
   manual_comp: "credits.reason.manual_comp",
 } as const satisfies Record<string, BillingKey>;
 
+/**
+ * The agent's billing page on the shell's panels: the plan and what it costs
+ * beside the client count and the card, then invoices beside free months.
+ */
 export function BillingView({
   overview,
   upgraded,
@@ -82,7 +82,7 @@ export function BillingView({
   const canManage = Boolean(profile?.stripe_customer_id);
   // Landed from checkout before the webhook flipped the profile: keep refreshing.
   const pending = upgraded && !subscribed;
-  const showPaymentCard = subscribed || stripe !== null;
+  const showPaymentPanel = subscribed || stripe !== null;
 
   const notice: { tone: Tone; text: string } | null = pending
     ? { tone: "neutral", text: t("notices.pending") }
@@ -93,10 +93,8 @@ export function BillingView({
         : null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {pending ? <RefreshWhilePending /> : null}
-
-      <p className="text-muted-foreground max-w-2xl text-sm">{t("subtitle")}</p>
 
       {notice ? <Notice tone={notice.tone}>{notice.text}</Notice> : null}
 
@@ -104,19 +102,24 @@ export function BillingView({
         <Notice tone="amber">{t("notices.stripeUnavailable")}</Notice>
       ) : null}
 
-      <div className="grid gap-5 lg:grid-cols-3">
-        <PlanCard overview={overview} canManage={canManage} />
-        <ClientsCard clientCount={overview.clientCount} limit={plan.limit} />
+      <div className="grid items-start gap-4 lg:grid-cols-3">
+        <PlanPanel overview={overview} canManage={canManage} className="lg:col-span-2" />
+        <div className="grid gap-4">
+          <ClientsPanel clientCount={overview.clientCount} limit={plan.limit} />
+          {showPaymentPanel ? (
+            <PaymentMethodPanel overview={overview} canManage={canManage} />
+          ) : null}
+        </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        {showPaymentCard ? <PaymentMethodCard overview={overview} canManage={canManage} /> : null}
-        <CreditsCard overview={overview} wide={!showPaymentCard} />
+      <div className="grid items-start gap-4 lg:grid-cols-3">
+        <InvoicesPanel overview={overview} canManage={canManage} className="lg:col-span-2" />
+        <CreditsPanel overview={overview} />
       </div>
 
-      <InvoicesCard overview={overview} canManage={canManage} />
-
-      <p className="text-muted-foreground text-center text-xs">{t("footer.note")}</p>
+      <p className="text-muted-foreground text-center text-xs text-pretty">
+        {t("footer.note")}
+      </p>
     </div>
   );
 }
@@ -126,32 +129,34 @@ export function BillingView({
 function PortalButton({
   children,
   variant = "outline",
+  size = "sm",
+  className,
 }: {
-  children: React.ReactNode;
-  variant?: React.ComponentProps<typeof Button>["variant"];
+  children: ReactNode;
+  variant?: ComponentProps<typeof Button>["variant"];
+  size?: ComponentProps<typeof Button>["size"];
+  className?: string;
 }) {
   return (
-    <form action={openBillingPortal}>
-      <Button type="submit" variant={variant} className="w-full sm:w-auto">
+    <form action={openBillingPortal} className={className}>
+      <Button type="submit" variant={variant} size={size} className="w-full sm:w-auto">
         {children}
       </Button>
     </form>
   );
 }
 
-function Fact({ label, value, hint }: { label: string; value: string; hint?: string | null }) {
-  return (
-    <div>
-      <dt className="text-muted-foreground text-xs uppercase tracking-wide">{label}</dt>
-      <dd className="mt-0.5 font-medium">{value}</dd>
-      {hint ? <dd className="text-muted-foreground text-xs">{hint}</dd> : null}
-    </div>
-  );
-}
-
 /* ------------------------------------------------------------------------ */
 
-function PlanCard({ overview, canManage }: { overview: BillingOverview; canManage: boolean }) {
+function PlanPanel({
+  overview,
+  canManage,
+  className,
+}: {
+  overview: BillingOverview;
+  canManage: boolean;
+  className?: string;
+}) {
   const t = useTranslations("billing");
   const tag = intlTag(useLocale());
   const { profile, plan, founderCount, clientCount, stripe } = overview;
@@ -259,112 +264,121 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
           ? { tone: "neutral", text: t("messages.canceled", { date: endsOn ?? "" }) }
           : null;
 
+  // The facts under the price, one row each.
+  const facts: ReactNode[] = [];
+  if (plan.source === "subscription") {
+    facts.push(
+      <KeyValueRow key="plan" label={t("facts.plan")}>
+        {knownPlan ? planName(t, knownPlan) : t("plan.titlePro")}
+      </KeyValueRow>
+    );
+    if (nextInvoice) {
+      facts.push(
+        <KeyValueRow key="next" label={t("facts.nextInvoice")} hint={nextInvoice.hint} wrap>
+          {nextInvoice.value}
+        </KeyValueRow>
+      );
+    }
+    if (phase === "ending" && endsOn) {
+      facts.push(
+        <KeyValueRow key="ends" label={t("facts.ends")}>
+          {endsOn}
+        </KeyValueRow>
+      );
+    }
+    if (phase === "canceled" && endsOn) {
+      facts.push(
+        <KeyValueRow key="ended" label={t("facts.ended")}>
+          {endsOn}
+        </KeyValueRow>
+      );
+    }
+    if (sub) {
+      facts.push(
+        <KeyValueRow key="since" label={t("facts.subscribedSince")}>
+          {formatBillingDate(sub.startedAt, tag) ?? "—"}
+        </KeyValueRow>
+      );
+    }
+    if (sub && phase !== "canceled") {
+      facts.push(
+        <KeyValueRow key="period" label={t("facts.currentPeriod")}>
+          {formatPeriod(sub.currentPeriodStart, sub.currentPeriodEnd, tag) ?? "—"}
+        </KeyValueRow>
+      );
+    }
+  } else if (plan.source === "comp") {
+    facts.push(
+      <KeyValueRow key="until" label={t("facts.proUntil")}>
+        {formatBillingDate(plan.proUntil, tag) ?? "—"}
+      </KeyValueRow>,
+      <KeyValueRow key="after" label={t("facts.afterThat")} hint={t("facts.nothingDeleted")}>
+        {t("facts.backToFree")}
+      </KeyValueRow>
+    );
+  } else if (plan.source !== "admin") {
+    facts.push(
+      <KeyValueRow key="clients" label={t("facts.clients")}>
+        {t("facts.clientsValue", { count: clientCount, limit: FREE_CLIENT_LIMIT })}
+      </KeyValueRow>,
+      <KeyValueRow
+        key="founding"
+        label={t("facts.foundingPrice")}
+        wrap
+        hint={
+          spotsLeft > 0
+            ? t("facts.foundingHint", {
+                price: PRICES.founding.monthly,
+                standard: PRICES.standard.monthly,
+              })
+            : null
+        }
+      >
+        {spotsLeft > 0 ? t("founding.spotsBare", { count: spotsLeft }) : t("facts.cohortFull")}
+      </KeyValueRow>
+    );
+    if (sub && phase === "canceled" && endsOn) {
+      facts.push(
+        <KeyValueRow key="previous" label={t("facts.previousSubscription")}>
+          {t("facts.endedOn", { date: endsOn })}
+        </KeyValueRow>
+      );
+    }
+  }
+
   return (
-    <Card className="lg:col-span-2">
-      <CardHeader>
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <CardTitle className="text-lg">{title}</CardTitle>
-            <CardDescription className="mt-1">{description}</CardDescription>
-          </div>
-          <Tag tone={badge.tone} className="shrink-0">
-            {badge.label}
-          </Tag>
+    <Panel
+      className={className}
+      title={t("pricing.yourPlan")}
+      icon={<Sparkles className="size-3.5" />}
+      action={<Tag tone={badge.tone}>{badge.label}</Tag>}
+    >
+      <div className="space-y-4 px-4 py-5">
+        <div className="space-y-1">
+          <p className="text-lg leading-6 font-semibold tracking-tight">{title}</p>
+          <p className="text-muted-foreground text-sm text-pretty">{description}</p>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-5">
-        <div className="flex items-baseline gap-2">
-          <span className="text-4xl font-semibold tracking-tight">{priceMain}</span>
-          {priceNote ? <span className="text-muted-foreground text-sm">{priceNote}</span> : null}
-        </div>
-
-        {foundingNumber != null ? (
-          <p className="text-primary flex items-center gap-1.5 text-sm font-medium">
-            <Sparkles className="size-4" />
-            {t("plan.foundingAgent", { number: foundingNumber })}
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <p className="flex items-baseline gap-2">
+            <span className="text-4xl leading-none font-semibold tracking-tight tabular-nums">
+              {priceMain}
+            </span>
+            {priceNote ? <span className="text-muted-foreground text-sm">{priceNote}</span> : null}
           </p>
-        ) : null}
+          {foundingNumber != null ? (
+            <Tag tone="amber">
+              <Sparkles />
+              {t("plan.foundingAgent", { number: foundingNumber })}
+            </Tag>
+          ) : null}
+        </div>
+      </div>
 
-        <dl className="grid gap-4 text-sm sm:grid-cols-2">
-          {plan.source === "subscription" ? (
-            <>
-              <Fact
-                label={t("facts.plan")}
-                value={knownPlan ? planName(t, knownPlan) : t("plan.titlePro")}
-              />
-              {nextInvoice ? (
-                <Fact
-                  label={t("facts.nextInvoice")}
-                  value={nextInvoice.value}
-                  hint={nextInvoice.hint}
-                />
-              ) : null}
-              {phase === "ending" && endsOn ? (
-                <Fact label={t("facts.ends")} value={endsOn} />
-              ) : null}
-              {phase === "canceled" && endsOn ? (
-                <Fact label={t("facts.ended")} value={endsOn} />
-              ) : null}
-              {sub ? (
-                <Fact
-                  label={t("facts.subscribedSince")}
-                  value={formatBillingDate(sub.startedAt, tag) ?? "—"}
-                />
-              ) : null}
-              {sub && phase !== "canceled" ? (
-                <Fact
-                  label={t("facts.currentPeriod")}
-                  value={formatPeriod(sub.currentPeriodStart, sub.currentPeriodEnd, tag) ?? "—"}
-                />
-              ) : null}
-            </>
-          ) : plan.source === "comp" ? (
-            <>
-              <Fact
-                label={t("facts.proUntil")}
-                value={formatBillingDate(plan.proUntil, tag) ?? "—"}
-              />
-              <Fact
-                label={t("facts.afterThat")}
-                value={t("facts.backToFree")}
-                hint={t("facts.nothingDeleted")}
-              />
-            </>
-          ) : plan.source === "admin" ? null : (
-            <>
-              <Fact
-                label={t("facts.clients")}
-                value={t("facts.clientsValue", { count: clientCount, limit: FREE_CLIENT_LIMIT })}
-              />
-              <Fact
-                label={t("facts.foundingPrice")}
-                value={
-                  spotsLeft > 0
-                    ? t("founding.spotsBare", { count: spotsLeft })
-                    : t("facts.cohortFull")
-                }
-                hint={
-                  spotsLeft > 0
-                    ? t("facts.foundingHint", {
-                        price: PRICES.founding.monthly,
-                        standard: PRICES.standard.monthly,
-                      })
-                    : null
-                }
-              />
-              {sub && phase === "canceled" && endsOn ? (
-                <Fact
-                  label={t("facts.previousSubscription")}
-                  value={t("facts.endedOn", { date: endsOn })}
-                />
-              ) : null}
-            </>
-          )}
-        </dl>
+      {facts.length > 0 ? <KeyValueList className="border-t">{facts}</KeyValueList> : null}
 
+      <div className="space-y-3 border-t px-4 py-4">
         {message ? <Notice tone={message.tone}>{message.text}</Notice> : null}
-
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
           {plan.source === "subscription" ? (
             canManage ? (
               <>
@@ -375,85 +389,91 @@ function PlanCard({ overview, canManage }: { overview: BillingOverview; canManag
                       ? t("actions.resumeOrManage")
                       : t("actions.manageSubscription")}
                 </PortalButton>
-                <span className="text-muted-foreground text-xs">{t("actions.portalHint")}</span>
+                <span className="text-muted-foreground text-xs text-pretty">
+                  {t("actions.portalHint")}
+                </span>
               </>
             ) : (
               <span className="text-muted-foreground text-xs">{t("actions.manualHint")}</span>
             )
           ) : plan.source === "comp" ? (
-            <Button asChild>
+            <Button asChild size="sm" className="rounded-full">
               <Link href="/pricing">
                 {t("actions.subscribeToKeepPro")} <ArrowRight />
               </Link>
             </Button>
           ) : plan.source === "admin" ? (
-            <Button asChild variant="ghost">
+            <Button asChild variant="ghost" size="sm" className="self-start">
               <Link href="/pricing">
                 {t("actions.seePlans")} <ArrowRight />
               </Link>
             </Button>
           ) : (
-            <Button asChild>
+            <Button asChild size="sm" className="rounded-full">
               <Link href="/pricing">
                 {t("actions.upgradeToPro")} <ArrowRight />
               </Link>
             </Button>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </Panel>
   );
 }
 
 /* ------------------------------------------------------------------------ */
 
-function ClientsCard({ clientCount, limit }: { clientCount: number; limit: number | null }) {
+function ClientsPanel({ clientCount, limit }: { clientCount: number; limit: number | null }) {
   const t = useTranslations("billing");
   const unlimited = limit === null;
   const used = unlimited ? clientCount : Math.min(clientCount, limit);
   const atCap = !unlimited && clientCount >= limit;
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Users className="text-primary size-4" />
-          {t("clients.title")}
-        </CardTitle>
-        <CardDescription>
-          {unlimited ? t("clients.unlimited") : t("clients.limited", { limit })}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <div className="flex items-baseline gap-2">
-          <span className="text-4xl font-semibold tracking-tight tabular-nums">{clientCount}</span>
+    <Panel
+      title={t("clients.title")}
+      icon={<Users className="size-3.5" />}
+      action={<PanelAction href={clientsPath("buyer")}>{t("clients.openPipelines")}</PanelAction>}
+    >
+      <div className="space-y-3 px-4 py-4">
+        <p className="flex items-baseline gap-2">
+          <span className="text-3xl leading-none font-semibold tracking-tight tabular-nums">
+            {clientCount}
+          </span>
           <span className="text-muted-foreground text-sm">
             {unlimited
               ? t("clients.count", { count: clientCount })
               : t("clients.ofLimit", { limit })}
           </span>
-        </div>
+        </p>
         {!unlimited ? (
-          <div className="bg-muted h-1.5 overflow-hidden rounded-full">
+          <div
+            className="bg-muted h-1.5 overflow-hidden rounded-full"
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={limit}
+            aria-valuenow={used}
+          >
             <div
               className={cn("h-full rounded-full", TONE_SOLID[atCap ? "amber" : "brand"])}
               style={{ width: `${(used / limit) * 100}%` }}
             />
           </div>
         ) : null}
-        {atCap ? <p className="text-muted-foreground text-sm">{t("clients.atCap")}</p> : null}
-        <Button asChild variant="ghost" size="sm" className="-ml-2">
-          <Link href={clientsPath("buyer")}>
-            {t("clients.openPipelines")} <ArrowRight />
-          </Link>
-        </Button>
-      </CardContent>
-    </Card>
+        <p className="text-muted-foreground text-[13px] text-pretty">
+          {atCap
+            ? t("clients.atCap")
+            : unlimited
+              ? t("clients.unlimited")
+              : t("clients.limited", { limit })}
+        </p>
+      </div>
+    </Panel>
   );
 }
 
 /* ------------------------------------------------------------------------ */
 
-function PaymentMethodCard({
+function PaymentMethodPanel({
   overview,
   canManage,
 }: {
@@ -464,30 +484,29 @@ function PaymentMethodCard({
   const pm = overview.stripe?.paymentMethod ?? null;
   const label = pm ? paymentMethodLabel(t, pm) : null;
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CreditCard className="text-primary size-4" />
-          {t("payment.title")}
-        </CardTitle>
-        <CardDescription>{t("payment.description")}</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {label ? (
-          <div>
-            <div className="font-medium">{label.title}</div>
-            {label.detail ? (
-              <div className="text-muted-foreground text-sm">{label.detail}</div>
-            ) : null}
-          </div>
-        ) : (
-          <p className="text-muted-foreground text-sm">
-            {overview.stripeUnavailable ? t("payment.loadFailed") : t("payment.none")}
-          </p>
-        )}
-        {canManage ? <PortalButton>{t("payment.change")}</PortalButton> : null}
-      </CardContent>
-    </Card>
+    <Panel title={t("payment.title")} icon={<CreditCard className="size-3.5" />}>
+      <div className="flex items-center gap-3 px-4 py-4">
+        <RowIcon icon={CreditCard} className="mt-0" />
+        <div className="min-w-0 flex-1">
+          {label ? (
+            <>
+              <p className="truncate text-sm font-medium">{label.title}</p>
+              {label.detail ? (
+                <p className="text-muted-foreground truncate text-xs">{label.detail}</p>
+              ) : null}
+            </>
+          ) : (
+            <p className="text-muted-foreground text-sm">
+              {overview.stripeUnavailable ? t("payment.loadFailed") : t("payment.none")}
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t px-4 py-3">
+        <p className="text-muted-foreground text-xs text-pretty">{t("payment.description")}</p>
+        {canManage ? <PortalButton size="xs">{t("payment.change")}</PortalButton> : null}
+      </div>
+    </Panel>
   );
 }
 
@@ -505,32 +524,31 @@ function creditLine(t: BillingT, credit: ReferralCredit): { title: string; detai
   return { title, detail };
 }
 
-function CreditsCard({ overview, wide }: { overview: BillingOverview; wide: boolean }) {
+function CreditsPanel({ overview }: { overview: BillingOverview }) {
   const t = useTranslations("billing");
   const tag = intlTag(useLocale());
   const { credits, monthsEarned, unappliedCreditEur, stripe, plan } = overview;
   // Stripe keeps the balance negative while the customer is in credit.
   const balanceCents = stripe?.balanceCents ?? 0;
-  const bold = (chunks: React.ReactNode) => <span className="font-medium">{chunks}</span>;
+  const bold = (chunks: ReactNode) => (
+    <span className="text-foreground font-medium">{chunks}</span>
+  );
   return (
-    <Card className={cn(wide && "lg:col-span-2")}>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Gift className="text-primary size-4" />
-          {t("credits.title")}
-        </CardTitle>
-        <CardDescription>{t("credits.description")}</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-baseline gap-2">
-          <span className="text-4xl font-semibold tracking-tight tabular-nums">
+    <Panel
+      title={t("credits.title")}
+      icon={<Gift className="size-3.5" />}
+      action={<PanelAction href="/referrals">{t("credits.referAnAgent")}</PanelAction>}
+      footer={t("credits.description")}
+    >
+      <div className="space-y-2 px-4 py-4">
+        <p className="flex items-baseline gap-2">
+          <span className="text-3xl leading-none font-semibold tracking-tight tabular-nums">
             {monthsEarned}
           </span>
           <span className="text-muted-foreground text-sm">{t("credits.earnedSoFar")}</span>
-        </div>
-
+        </p>
         {balanceCents < 0 ? (
-          <p className="text-sm">
+          <p className="text-muted-foreground text-[13px] text-pretty">
             {t.rich("credits.onStripe", {
               amount: formatMoney(-balanceCents, "eur", tag),
               b: bold,
@@ -538,57 +556,61 @@ function CreditsCard({ overview, wide }: { overview: BillingOverview; wide: bool
           </p>
         ) : null}
         {unappliedCreditEur > 0 ? (
-          <p className="text-sm">
+          <p className="text-muted-foreground text-[13px] text-pretty">
             {t.rich("credits.waiting", { amount: unappliedCreditEur, b: bold })}
           </p>
         ) : null}
         {plan.source === "comp" && plan.proUntil ? (
-          <p className="text-sm">
+          <p className="text-muted-foreground text-[13px] text-pretty">
             {t.rich("credits.compedUntil", {
               date: formatBillingDate(plan.proUntil, tag) ?? "",
               b: bold,
             })}
           </p>
         ) : null}
+      </div>
 
-        {credits.length ? (
-          <ul className="divide-y text-sm">
-            {credits.slice(0, 5).map((credit) => {
-              const line = creditLine(t, credit);
-              return (
-                <li key={credit.id} className="flex items-center justify-between gap-3 py-2">
-                  <div className="min-w-0">
-                    <div className="truncate">{line.title}</div>
-                    <div className="text-muted-foreground text-xs">
-                      {formatBillingDate(credit.created_at, tag)} · {line.detail}
-                    </div>
-                  </div>
-                  <span className="shrink-0 font-medium tabular-nums">
-                    {credit.kind === "pro_time"
-                      ? t("credits.monthsShort", { count: credit.months })
-                      : formatCurrency(Number(credit.amount_eur), tag)}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <p className="text-muted-foreground text-sm">{t("credits.empty")}</p>
-        )}
-
-        <Button asChild variant="ghost" size="sm" className="-ml-2">
-          <Link href="/referrals">
-            {t("credits.referAnAgent")} <ArrowRight />
-          </Link>
-        </Button>
-      </CardContent>
-    </Card>
+      {credits.length ? (
+        <ul className="divide-y border-t">
+          {credits.slice(0, 5).map((credit) => {
+            const line = creditLine(t, credit);
+            return (
+              <li key={credit.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
+                <div className="min-w-0">
+                  <p className="truncate text-sm">{line.title}</p>
+                  <p className="text-muted-foreground truncate text-xs">
+                    {formatBillingDate(credit.created_at, tag)} · {line.detail}
+                  </p>
+                </div>
+                <span className="shrink-0 text-sm font-medium tabular-nums">
+                  {credit.kind === "pro_time"
+                    ? t("credits.monthsShort", { count: credit.months })
+                    : formatCurrency(Number(credit.amount_eur), tag)}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p className="text-muted-foreground border-t px-4 py-3 text-[13px] text-pretty">
+          {t("credits.empty")}
+        </p>
+      )}
+    </Panel>
   );
 }
 
 /* ------------------------------------------------------------------------ */
 
-function InvoicesCard({ overview, canManage }: { overview: BillingOverview; canManage: boolean }) {
+function InvoicesPanel({
+  overview,
+  canManage,
+  className,
+}: {
+  overview: BillingOverview;
+  canManage: boolean;
+  className?: string;
+}) {
   const t = useTranslations("billing");
   const common = useTranslations("common");
   const tag = intlTag(useLocale());
@@ -605,84 +627,79 @@ function InvoicesCard({ overview, canManage }: { overview: BillingOverview; canM
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <Receipt className="text-primary size-4" />
-              {t("invoices.title")}
-            </CardTitle>
-            <CardDescription className="mt-1">{t("invoices.description")}</CardDescription>
-          </div>
-          {canManage && invoices.length ? (
-            <PortalButton>{t("invoices.all")}</PortalButton>
-          ) : null}
-        </div>
-      </CardHeader>
-      <CardContent>
-        {empty ? (
-          <p className="text-muted-foreground text-sm">{empty}</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t("invoices.date")}</TableHead>
-                  <TableHead>{t("invoices.period")}</TableHead>
-                  <TableHead className="text-right">{t("invoices.amount")}</TableHead>
-                  <TableHead>{t("invoices.status")}</TableHead>
-                  <TableHead className="text-right">
-                    <span className="sr-only">{t("invoices.open")}</span>
-                  </TableHead>
+    <Panel
+      className={className}
+      title={t("invoices.title")}
+      icon={<Receipt className="size-3.5" />}
+      count={invoices.length}
+      action={
+        canManage && invoices.length ? (
+          <PortalButton variant="ghost" size="xs">
+            {t("invoices.all")} <ExternalLink />
+          </PortalButton>
+        ) : null
+      }
+      footer={t("invoices.description")}
+    >
+      {empty ? (
+        <PanelEmpty>{empty}</PanelEmpty>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="pl-4">{t("invoices.date")}</TableHead>
+              <TableHead>{t("invoices.period")}</TableHead>
+              <TableHead className="text-right">{t("invoices.amount")}</TableHead>
+              <TableHead>{t("invoices.status")}</TableHead>
+              <TableHead className="pr-4 text-right">
+                <span className="sr-only">{t("invoices.open")}</span>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {invoices.map((inv) => {
+              const status = invoiceStatusTag(t, inv.status);
+              return (
+                <TableRow key={inv.id}>
+                  <TableCell className="pl-4">
+                    <span className="tabular-nums">{formatBillingDate(inv.createdAt, tag)}</span>
+                    {inv.number ? (
+                      <span className="text-muted-foreground ml-2 text-xs">{inv.number}</span>
+                    ) : null}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground text-[13px]">
+                    {formatPeriod(inv.periodStart, inv.periodEnd, tag) ?? "—"}
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {formatMoney(inv.totalCents, inv.currency, tag)}
+                  </TableCell>
+                  <TableCell>
+                    <Tag tone={status.tone}>{status.label}</Tag>
+                  </TableCell>
+                  <TableCell className="pr-4 text-right">
+                    <div className="flex justify-end gap-1">
+                      {inv.hostedUrl ? (
+                        <Button asChild variant="ghost" size="xs">
+                          <a href={inv.hostedUrl} target="_blank" rel="noreferrer">
+                            {common("view")} <ExternalLink />
+                          </a>
+                        </Button>
+                      ) : null}
+                      {inv.pdfUrl ? (
+                        <Button asChild variant="ghost" size="xs">
+                          <a href={inv.pdfUrl} target="_blank" rel="noreferrer">
+                            PDF <Download />
+                          </a>
+                        </Button>
+                      ) : null}
+                    </div>
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {invoices.map((inv) => {
-                  const status = invoiceStatusTag(t, inv.status);
-                  return (
-                    <TableRow key={inv.id}>
-                      <TableCell className="whitespace-nowrap">
-                        <div>{formatBillingDate(inv.createdAt, tag)}</div>
-                        {inv.number ? (
-                          <div className="text-muted-foreground text-xs">{inv.number}</div>
-                        ) : null}
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap">
-                        {formatPeriod(inv.periodStart, inv.periodEnd, tag) ?? "—"}
-                      </TableCell>
-                      <TableCell className="text-right whitespace-nowrap tabular-nums">
-                        {formatMoney(inv.totalCents, inv.currency, tag)}
-                      </TableCell>
-                      <TableCell>
-                        <Tag tone={status.tone}>{status.label}</Tag>
-                      </TableCell>
-                      <TableCell className="text-right whitespace-nowrap">
-                        <div className="flex justify-end gap-1">
-                          {inv.hostedUrl ? (
-                            <Button asChild variant="ghost" size="sm">
-                              <a href={inv.hostedUrl} target="_blank" rel="noreferrer">
-                                {common("view")} <ExternalLink />
-                              </a>
-                            </Button>
-                          ) : null}
-                          {inv.pdfUrl ? (
-                            <Button asChild variant="ghost" size="sm">
-                              <a href={inv.pdfUrl} target="_blank" rel="noreferrer">
-                                PDF <Download />
-                              </a>
-                            </Button>
-                          ) : null}
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+              );
+            })}
+          </TableBody>
+        </Table>
+      )}
+    </Panel>
   );
 }

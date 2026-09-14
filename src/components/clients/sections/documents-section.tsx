@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 import { File as FileIcon, FolderOpen, Trash2 } from "lucide-react";
 
-import { RowIcon } from "@/components/clients/detail-row";
+import { RowIcon } from "@/components/shell/key-value";
 import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { Button } from "@/components/ui/button";
 import { dateFnsLocale } from "@/i18n/dates";

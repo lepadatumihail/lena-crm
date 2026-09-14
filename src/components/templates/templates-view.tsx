@@ -1,14 +1,26 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ComponentProps } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Copy, Loader2, Pencil, Plus, Send, Trash2 } from "lucide-react";
+import {
+  Copy,
+  FileText,
+  Loader2,
+  MessageSquareText,
+  Pencil,
+  Plus,
+  Send,
+  Sparkles,
+  Trash2,
+} from "lucide-react";
 
+import { RowIcon } from "@/components/shell/key-value";
+import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -52,6 +64,8 @@ import {
   type MessageVars,
 } from "@/lib/message-templates";
 import type { EmailTemplate } from "@/lib/supabase/types";
+import { TONE_BG, TONE_INK } from "@/lib/tones";
+import { cn } from "@/lib/utils";
 
 type ClientOption = { id: string; name: string };
 
@@ -63,6 +77,10 @@ const SAMPLE_VARS: MessageVars = {
   agency: "Costa Homes",
 };
 
+/**
+ * Message templates on two panels: the agent's own, and the built-in
+ * starters, which can be sent as they are or copied and made their own.
+ */
 export function TemplatesView({
   templates,
   clients,
@@ -77,76 +95,83 @@ export function TemplatesView({
   const starterLanguage = locale === "es" ? "Spanish" : "English";
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-muted-foreground max-w-2xl text-sm">{t("subtitle")}</p>
+        <p className="text-muted-foreground max-w-2xl text-sm text-pretty">
+          {t("subtitle")}
+        </p>
         <Button
+          size="sm"
+          className="rounded-full"
           onClick={() => setCreateInit({ name: "", subject: "", body: "" })}
         >
           <Plus /> {t("new")}
         </Button>
       </div>
 
-      <section>
-        <h2 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-          {t("mine.title")}
-        </h2>
-        {templates.length === 0 ? (
-          <p className="text-muted-foreground mt-3 rounded-xl border border-dashed py-10 text-center text-sm">
-            {t("mine.empty")}
-          </p>
-        ) : (
-          <div className="mt-3 grid gap-3 sm:grid-cols-2">
-            {templates.map((tpl) => (
-              <TemplateCard key={tpl.id} template={tpl} clients={clients} />
-            ))}
-          </div>
-        )}
-      </section>
+      <div className="grid items-start gap-4 xl:grid-cols-2">
+        <Panel
+          title={t("mine.title")}
+          icon={<FileText className="size-3.5" />}
+          count={templates.length}
+        >
+          {templates.length === 0 ? (
+            <PanelEmpty>{t("mine.empty")}</PanelEmpty>
+          ) : (
+            <ul className="divide-y">
+              {templates.map((tpl) => (
+                <TemplateRow key={tpl.id} template={tpl} clients={clients} />
+              ))}
+            </ul>
+          )}
+        </Panel>
 
-      <section>
-        <h2 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-          {t("starters.title")}
-        </h2>
-        <p className="text-muted-foreground mt-1 text-xs">
-          {t("starters.subtitle")}
-        </p>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {MESSAGE_TEMPLATES.map((tpl) => (
-            <div
-              key={tpl.id}
-              className="bg-card flex flex-col rounded-lg border p-3"
-            >
-              <p className="text-sm font-medium">{templateLabel(t, tpl.id)}</p>
-              <p className="text-muted-foreground mt-0.5 text-xs">
-                {templateDescription(t, tpl.id)}
-              </p>
-              <div className="mt-3 flex gap-2">
-                <UseTemplateButton
-                  templateId={tpl.id}
-                  clients={clients}
-                  size="sm"
+        <Panel
+          title={t("starters.title")}
+          icon={<Sparkles className="size-3.5" />}
+          count={MESSAGE_TEMPLATES.length}
+          footer={t("starters.subtitle")}
+        >
+          <ul className="divide-y">
+            {MESSAGE_TEMPLATES.map((tpl) => (
+              <li key={tpl.id} className="flex items-center gap-3 px-4 py-3">
+                <RowIcon
+                  icon={Sparkles}
+                  className={cn("mt-0", TONE_BG.brand, TONE_INK.brand)}
                 />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() =>
-                    setCreateInit({
-                      name: templateLabel(t, tpl.id),
-                      ...(templateCopy(tpl.id, starterLanguage) ?? {
-                        subject: tpl.subject,
-                        body: tpl.body,
-                      }),
-                    })
-                  }
-                >
-                  <Copy /> {t("starters.customise")}
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">
+                    {templateLabel(t, tpl.id)}
+                  </p>
+                  <p className="text-muted-foreground truncate text-xs">
+                    {templateDescription(t, tpl.id)}
+                  </p>
+                </div>
+                <div className="flex shrink-0 items-center gap-1">
+                  <UseTemplateButton templateId={tpl.id} clients={clients} />
+                  <Button
+                    variant="ghost"
+                    size="xs"
+                    aria-label={t("starters.customise")}
+                    onClick={() =>
+                      setCreateInit({
+                        name: templateLabel(t, tpl.id),
+                        ...(templateCopy(tpl.id, starterLanguage) ?? {
+                          subject: tpl.subject,
+                          body: tpl.body,
+                        }),
+                      })
+                    }
+                  >
+                    <Copy />
+                    <span className="hidden sm:inline">{t("starters.customise")}</span>
+                  </Button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Panel>
+      </div>
 
       <TemplateDialog
         open={createInit != null}
@@ -157,7 +182,8 @@ export function TemplatesView({
   );
 }
 
-function TemplateCard({
+/** One of the agent's templates: its name, the subject or the opening line, and its actions. */
+function TemplateRow({
   template,
   clients,
 }: {
@@ -179,70 +205,60 @@ function TemplateCard({
     return true;
   }
 
+  const preview = template.subject?.trim()
+    ? t("card.subject", { subject: template.subject })
+    : template.body;
+
   return (
-    <div className="bg-card flex flex-col rounded-lg border p-4">
-      <div className="flex items-start justify-between gap-2">
-        <p className="min-w-0 truncate font-medium">{template.name}</p>
-        <div className="flex shrink-0 items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-8"
-            onClick={() => setEditing(true)}
-            aria-label={t("card.editAria")}
-          >
-            <Pencil className="size-4" />
-          </Button>
-          <ConfirmDialog
-            title={t("card.deleteTitle")}
-            description={t("card.deleteDescription", { name: template.name })}
-            onConfirm={onDelete}
-            trigger={
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-destructive size-8"
-                aria-label={t("card.deleteAria")}
-              >
-                <Trash2 className="size-4" />
-              </Button>
-            }
-          />
-        </div>
+    <li className="flex items-center gap-3 px-4 py-3">
+      <RowIcon icon={MessageSquareText} className="mt-0" />
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium">{template.name}</p>
+        <p className="text-muted-foreground truncate text-xs">{preview}</p>
       </div>
-      {template.subject && (
-        <p className="text-muted-foreground mt-1 text-xs">
-          {t("card.subject", { subject: template.subject })}
-        </p>
-      )}
-      <p className="text-muted-foreground mt-2 line-clamp-3 flex-1 text-sm whitespace-pre-wrap">
-        {template.body}
-      </p>
-      <div className="mt-3">
-        <UseTemplateButton
-          templateId={template.id}
-          clients={clients}
-          size="sm"
+      <div className="flex shrink-0 items-center gap-1">
+        <UseTemplateButton templateId={template.id} clients={clients} />
+        <Button
+          variant="ghost"
+          size="icon-xs"
+          className="text-muted-foreground hover:text-foreground"
+          onClick={() => setEditing(true)}
+          aria-label={t("card.editAria")}
+          title={t("card.editAria")}
+        >
+          <Pencil />
+        </Button>
+        <ConfirmDialog
+          title={t("card.deleteTitle")}
+          description={t("card.deleteDescription", { name: template.name })}
+          onConfirm={onDelete}
+          trigger={
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              className="text-muted-foreground hover:text-destructive"
+              aria-label={t("card.deleteAria")}
+              title={t("card.deleteAria")}
+            >
+              <Trash2 />
+            </Button>
+          }
         />
       </div>
 
-      <TemplateDialog
-        open={editing}
-        onOpenChange={setEditing}
-        template={template}
-      />
-    </div>
+      <TemplateDialog open={editing} onOpenChange={setEditing} template={template} />
+    </li>
   );
 }
 
 function UseTemplateButton({
   templateId,
   clients,
-  size = "default",
+  size = "xs",
 }: {
   templateId: string;
   clients: ClientOption[];
-  size?: "default" | "sm";
+  size?: ComponentProps<typeof Button>["size"];
 }) {
   const t = useTranslations("templates");
   const tCommon = useTranslations("common");

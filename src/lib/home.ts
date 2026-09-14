@@ -213,9 +213,6 @@ export function showOnboarding(input: OnboardingInput): boolean {
 
 export { BUYER_STAGES, SELLER_STAGES };
 
-/** Where the agent works. Profiles carry no time zone yet; the product is Spain-first. */
-export const AGENT_TIME_ZONE = "Europe/Madrid";
-
 /** Viewings (dated viewings and viewing-type appointments) starting within `days` of now. */
 export function countViewingsWithin(
   events: {

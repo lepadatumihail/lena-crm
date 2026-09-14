@@ -148,10 +148,12 @@ export function AttentionPanel({ items }: { items: AttentionItem[] }) {
 export function UpcomingEventsPanel({
   events,
   waitingBuyers,
+  now,
 }: {
   events: CalendarEvent[];
   /** Buyers who haven't reached the viewing stage; shapes the empty state. */
   waitingBuyers: number;
+  now: Date;
 }) {
   const t = useTranslations("home.upcoming");
   return (
@@ -161,7 +163,11 @@ export function UpcomingEventsPanel({
       icon={<CalendarDays className="size-3.5" />}
       action={<PanelAction href="/calendar">{t("calendar")}</PanelAction>}
     >
-      <UpcomingPanel events={events} waitingBuyers={waitingBuyers} />
+      <UpcomingPanel
+        events={events}
+        waitingBuyers={waitingBuyers}
+        nowISO={now.toISOString()}
+      />
     </Panel>
   );
 }

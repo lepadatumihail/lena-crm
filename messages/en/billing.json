@@ -4,7 +4,6 @@
     "pricingTitle": "Plans & pricing"
   },
   "title": "Billing",
-  "subtitle": "Your plan, next invoice, payment method and receipts.",
   "notices": {
     "pending": "Thanks! Stripe is confirming your payment. This page refreshes on its own for a few seconds; if nothing changes, give it a minute and reload.",
     "upgraded": "Thank you — you're on Pro. Everything about your subscription lives here.",

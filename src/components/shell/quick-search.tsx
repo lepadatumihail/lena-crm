@@ -23,6 +23,7 @@ import {
   Home,
   Plus,
   Search,
+  Settings,
   Users,
 } from "lucide-react";
 
@@ -108,6 +109,7 @@ export function QuickSearch() {
       { id: "notifications", href: "/notifications", label: tNav("notifications"), icon: Bell },
       { id: "referrals", href: "/referrals", label: tNav("referrals"), icon: Gift },
       { id: "billing", href: "/billing", label: tNav("billing"), icon: CreditCard },
+      { id: "settings", href: "/settings", label: tNav("settings"), icon: Settings },
     ],
     [tNav]
   );

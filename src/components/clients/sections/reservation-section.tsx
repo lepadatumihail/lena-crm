@@ -50,7 +50,7 @@ import { dateFnsLocale } from "@/i18n/dates";
 import { formatCurrency } from "@/lib/crm";
 import { calendarDaysFromToday } from "@/lib/attention";
 import { cn } from "@/lib/utils";
-import { KeyValueList, KeyValueRow } from "@/components/clients/detail-row";
+import { KeyValueList, KeyValueRow } from "@/components/shell/key-value";
 import type { Reservation } from "@/lib/supabase/types";
 import { TONE_SOLID } from "@/lib/tones";
 

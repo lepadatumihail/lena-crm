@@ -40,20 +40,20 @@ export function MonthGrid({
   const dateLocale = dateFnsLocale(useLocale());
 
   return (
-    <div className="space-y-1">
-      <div className="grid grid-cols-7 text-center">
+    <div className="bg-card overflow-hidden rounded-xl border shadow-xs">
+      <div className="grid grid-cols-7 border-b text-center">
         {/* The grid always starts on a Monday, so its first row names the week. */}
         {days.slice(0, 7).map((day) => (
           <div
             key={dayKey(day)}
-            className="text-muted-foreground py-1 text-xs font-medium first-letter:uppercase"
+            className="text-muted-foreground h-[38px] text-xs leading-[38px] first-letter:uppercase"
           >
             {format(day, "EEE", { locale: dateLocale })}
           </div>
         ))}
       </div>
 
-      <div className="bg-border grid grid-cols-7 gap-px overflow-hidden rounded-lg border">
+      <div className="bg-border grid grid-cols-7 gap-px">
         {days.map((day) => {
           const key = dayKey(day);
           const items = byDay.get(key) ?? [];

@@ -48,7 +48,9 @@ export async function UpcomingSection({ now }: { now: Date }) {
   const waitingBuyers = events.length
     ? 0
     : buyersBeforeViewing((await getPipelineCounts()).buyer);
-  return <UpcomingEventsPanel events={events} waitingBuyers={waitingBuyers} />;
+  return (
+    <UpcomingEventsPanel events={events} waitingBuyers={waitingBuyers} now={now} />
+  );
 }
 
 export async function RecentSection({ now }: { now: Date }) {

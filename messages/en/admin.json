@@ -2,8 +2,14 @@
   "title": "Admin",
   "subtitle": "Founding cohort, plans and referrals. Until Stripe webhooks are live, payments are recorded here by hand.",
   "stats": {
-    "founders": "Founding Agents allocated. Numbers go to the first {cap} paying agents, in order of payment.",
-    "agents": "Agents signed up. Free holds {limit} clients; Pro is unlimited."
+    "founders": "Founding agents",
+    "foundersHint": "The first {cap} paying agents, in order",
+    "agents": "Agents",
+    "agentsHint": "Free holds {limit} clients",
+    "pro": "On Pro",
+    "proHint": "{count, plural, =0 {None comped} other {# comped}}",
+    "referrals": "Referrals",
+    "referralsHint": "{count, plural, =0 {None rewarded yet} other {# rewarded}}"
   },
   "agents": {
     "title": "Agents",

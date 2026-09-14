@@ -5,9 +5,9 @@ import { createClient as createSupabase } from "@/lib/supabase/server";
 import { BUYER_STAGES, SELLER_STAGES, type ClientSide, type Stage } from "@/lib/crm";
 import { getAttentionSignals } from "@/lib/data/attention";
 import { getCalendarEvents, type CalendarEvent } from "@/lib/data/calendar";
-import { getSessionUser } from "@/lib/data/session";
+import { getAgentTimeZone, getSessionUser } from "@/lib/data/session";
 import { formatDateKey } from "@/lib/attention";
-import type { OnboardingInput } from "@/lib/home";
+import { dateKeyInTimeZone, type OnboardingInput } from "@/lib/home";
 import { intlTag } from "@/i18n/config";
 import { stageLabel } from "@/i18n/labels";
 
@@ -190,16 +190,19 @@ export type AttentionItem = {
  * language (this always runs inside a request).
  */
 export const getNeedsAttention = cache(async (): Promise<AttentionItem[]> => {
-  const [t, tCrm, locale] = await Promise.all([
+  const [t, tCrm, locale, timeZone] = await Promise.all([
     getTranslations("home"),
     getTranslations("crm"),
     getLocale(),
+    getAgentTimeZone(),
   ]);
   const supabase = await createSupabase();
-  // Server-clock day boundary (UTC in prod). The bell uses the browser's;
-  // near-midnight drift here is accepted.
+  // Days turn over at the agent's own midnight, so "tomorrow" means theirs.
   const now = new Date();
-  const ctx = { nowISO: now.toISOString(), todayKey: now.toISOString().slice(0, 10) };
+  const ctx = {
+    nowISO: now.toISOString(),
+    todayKey: dateKeyInTimeZone(now.toISOString(), timeZone),
+  };
   const [signals, newLeadsRes] = await Promise.all([
     getAttentionSignals(supabase, ctx),
     supabase

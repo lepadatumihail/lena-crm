@@ -129,7 +129,7 @@ export function TimeGrid({
   }, [scrollKey, todayKey, todayShown]);
 
   return (
-    <div className={cn("bg-card overflow-hidden rounded-lg border", className)}>
+    <div className={cn("bg-card overflow-hidden rounded-xl border shadow-xs", className)}>
       <div
         ref={scroller}
         className="max-h-[calc(100dvh-19rem)] min-h-80 overflow-y-auto overscroll-contain md:max-h-[calc(100dvh-11rem)]"

@@ -4,7 +4,6 @@
     "pricingTitle": "Planes y precios"
   },
   "title": "Facturación",
-  "subtitle": "Tu plan, la próxima factura, el método de pago y los recibos.",
   "notices": {
     "pending": "¡Gracias! Stripe está confirmando tu pago. Esta página se actualiza sola durante unos segundos; si no cambia nada, espera un minuto y recárgala.",
     "upgraded": "Gracias: ya estás en Pro. Todo lo de tu suscripción vive aquí.",

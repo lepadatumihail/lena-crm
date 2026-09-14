@@ -11,5 +11,7 @@
   "dateRequired": "Date is required",
   "nameRequired": "Give it a name",
   "messageRequired": "Write the message",
-  "numberBetween": "Enter a number between 0 and {max}"
+  "numberBetween": "Enter a number between 0 and {max}",
+  "nameTooLong": "Keep it under {max} characters",
+  "pickTimeZone": "Pick a time zone"
 }

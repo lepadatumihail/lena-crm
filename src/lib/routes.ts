@@ -20,6 +20,7 @@ export const PROTECTED_PREFIXES = [
   "/home",
   "/notifications",
   "/referrals",
+  "/settings",
   "/templates",
 ] as const;
 
