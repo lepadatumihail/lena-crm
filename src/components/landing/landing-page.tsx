@@ -60,7 +60,7 @@ export function LandingPage() {
       {/* Hero — a dark stage inset from the page edges. The live board below
           straddles its bottom edge, so the stage's bottom padding and the
           board's negative margin are tuned as a pair. */}
-      <section className="px-3 pt-2 sm:px-4 sm:pt-3">
+      <section className="overflow-x-clip px-3 pt-2 sm:px-4 sm:pt-3">
         <div className="bg-inverted text-inverted-foreground relative mx-auto max-w-[88rem] overflow-hidden rounded-[1.75rem] shadow-[0_40px_100px_-40px_rgb(0_0_0/0.5)] sm:rounded-[2.25rem]">
           {/* Backdrop: faint grid + slowly drifting aurora glows */}
           <div
@@ -73,8 +73,8 @@ export function LandingPage() {
             <div className="bg-primary/20 absolute right-[6%] bottom-10 size-80 animate-[aurora_30s_ease-in-out_infinite] rounded-full blur-[140px] [animation-delay:-14s]" />
           </div>
 
-          <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center px-4 pt-16 pb-44 text-center animate-[fade-up_0.7s_ease-out_both] motion-reduce:animate-none sm:pt-24 sm:pb-56">
-            <Eyebrow className="text-inverted-foreground/60 mb-6">
+          <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center px-4 pt-14 pb-40 text-center animate-[fade-up_0.7s_ease-out_both] motion-reduce:animate-none sm:pt-24 sm:pb-56">
+            <Eyebrow className="text-inverted-foreground/60 mb-6 text-[11px] sm:text-xs">
               {t("hero.badge")}
             </Eyebrow>
             <h1 className="display-1 max-w-4xl text-balance">
@@ -86,10 +86,13 @@ export function LandingPage() {
                 ),
               })}
             </h1>
-            <p className="text-inverted-foreground/70 mt-6 max-w-xl text-lg text-pretty sm:text-xl">
+            {/* Light weight: cream on a dark ground reads a step heavier than the
+                same face on the page, and the regular looked bold on a phone. */}
+            <p className="text-inverted-foreground/65 mt-5 max-w-xl text-base font-light text-pretty sm:mt-6 sm:text-lg lg:text-xl">
               {t("hero.subtitle")}
             </p>
-            <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row">
+            {/* Stacked and equal-width on phones, side by side from sm. */}
+            <div className="mt-8 flex w-full max-w-xs flex-col items-stretch gap-3 sm:mt-9 sm:w-auto sm:max-w-none sm:flex-row sm:items-center">
               <Button asChild size="pill">
                 <Link href="/login">
                   {t("hero.ctaPrimary")} <ArrowRight />
@@ -106,7 +109,7 @@ export function LandingPage() {
         </div>
 
         {/* The live board breaks over the stage's bottom edge */}
-        <div className="relative z-10 mx-auto -mt-36 w-full max-w-6xl px-4 sm:-mt-44 sm:px-6">
+        <div className="relative z-10 mx-auto -mt-32 w-full max-w-6xl px-4 sm:-mt-44 sm:px-6">
           <AppPreview />
         </div>
       </section>

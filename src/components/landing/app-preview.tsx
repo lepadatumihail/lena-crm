@@ -183,7 +183,9 @@ export function AppPreview() {
 
   return (
     <div aria-hidden className="relative mx-auto w-full max-w-4xl">
-      <div className="from-primary/12 absolute -inset-x-8 -top-8 -bottom-8 -z-10 rounded-[2.5rem] bg-gradient-to-tr to-transparent blur-2xl" />
+      {/* The glow stays inside the page gutter on phones: anything wider
+          than the viewport gives the whole page a horizontal scroll. */}
+      <div className="from-primary/12 absolute -inset-x-3 -top-8 -bottom-8 -z-10 rounded-[2.5rem] bg-gradient-to-tr to-transparent blur-2xl sm:-inset-x-8" />
 
       <div className="bg-card mock-lift overflow-hidden rounded-2xl">
         {/* Toolbar */}
@@ -208,9 +210,17 @@ export function AppPreview() {
 
         {/* Board */}
         <div className="relative">
-          <div className="grid grid-cols-3 gap-2 p-3 text-left sm:gap-3 sm:p-4">
+          {/* Two columns on a phone, three from sm: three squeezed into 340px
+              truncates every name. Reserved is the one that can go. */}
+          <div className="grid grid-cols-2 gap-2 p-3 text-left sm:grid-cols-3 sm:gap-3 sm:p-4">
             {COLUMNS.map((col) => (
-              <div key={col.id} className="flex flex-col gap-2">
+              <div
+                key={col.id}
+                className={cn(
+                  "flex flex-col gap-2",
+                  col.id === "reserved" && "max-sm:hidden"
+                )}
+              >
                 <div className="flex items-center justify-between px-0.5">
                   <span className="flex items-center gap-1.5 text-xs font-semibold">
                     <span className={cn("size-2 rounded-full", col.dot)} />
