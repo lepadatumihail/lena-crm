@@ -129,10 +129,12 @@ export function AppBar({
           ) : null}
         </div>
       )}
-      <div className="ml-auto flex items-center gap-1">
+      <div className="ml-auto flex items-center gap-2">
         <QuickSearch />
         <NotificationsBell />
-        <UserMenu email={email} name={name} />
+        <div className="ml-1.5">
+          <UserMenu email={email} name={name} />
+        </div>
       </div>
     </header>
   );
