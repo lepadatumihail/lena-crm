@@ -56,15 +56,17 @@ export function useTaskActions({ rows, apply }: { rows: TaskRow[]; apply: (chang
     });
   }
 
-  function changeStatus(id: string, to: TaskStatus) {
-    const row = rows.find((r) => r.id === id);
-    if (!row || row.status === to) return;
-    commitStatus(id, row.status, to);
+  // `current` is the caller's own copy of the value, for a task no longer in
+  // `rows` (the task drawer goes on showing a task the client panel dropped).
+  function changeStatus(id: string, to: TaskStatus, current?: TaskStatus) {
+    const from = rows.find((r) => r.id === id)?.status ?? current;
+    if (from === undefined || from === to) return;
+    commitStatus(id, from, to);
   }
 
-  function changePriority(id: string, priority: TaskPriority) {
-    const row = rows.find((r) => r.id === id);
-    if (!row || row.priority === priority) return;
+  function changePriority(id: string, priority: TaskPriority, current?: TaskPriority) {
+    const from = rows.find((r) => r.id === id)?.priority ?? current;
+    if (from === undefined || from === priority) return;
     startTransition(async () => {
       apply({ type: "update", id, changes: { priority } });
       const { error } = await setTaskPriority(id, priority);

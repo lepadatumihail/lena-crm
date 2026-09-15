@@ -86,5 +86,37 @@
     "title": "Tareas",
     "empty": "Este cliente no tiene tareas abiertas.",
     "doneLink": "Tareas completadas"
+  },
+  "card": { "created": "Creada el {date}" },
+  "sheet": {
+    "title": "Tarea",
+    "details": "Detalles",
+    "status": "Estado",
+    "priority": "Prioridad",
+    "client": "Cliente",
+    "dueDate": "Fecha límite",
+    "created": "Creada",
+    "completed": "Completada",
+    "markDone": "Completar",
+    "reopen": "Reabrir"
+  },
+  "notes": {
+    "title": "Notas",
+    "label": "Nueva nota",
+    "placeholder": "Añade una nota: una llamada, una respuesta, el siguiente paso…",
+    "add": "Añadir nota",
+    "empty": "Aún no hay notas.",
+    "loading": "Cargando las notas…",
+    "notReady": "Las notas aún no están disponibles.",
+    "loadFailed": "No se han podido cargar las notas.",
+    "time": "{day}, {time}",
+    "delete": "Eliminar nota",
+    "deleteTitle": "¿Eliminar la nota?",
+    "deleteDescription": "La nota se eliminará de forma permanente.",
+    "toasts": {
+      "addFailed": "No se ha podido añadir la nota",
+      "deleted": "Nota eliminada",
+      "deleteFailed": "No se ha podido eliminar la nota"
+    }
   }
 }

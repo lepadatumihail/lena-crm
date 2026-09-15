@@ -1,17 +1,23 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
+
+import { useAgentTimeZone } from "@/components/shell/shell-context";
 import { ClientChip } from "@/components/tasks/client-chip";
+import { dayLabel } from "@/components/tasks/day-label";
 import { DueChip } from "@/components/tasks/due-chip";
 import { PriorityIcon } from "@/components/tasks/priority-icon";
 import { PriorityMenu } from "@/components/tasks/priority-menu";
 import type { TaskRow } from "@/lib/data/tasks";
+import { dateKeyInTimeZone } from "@/lib/home";
 import type { TaskPriority } from "@/lib/tasks";
 import { cn } from "@/lib/utils";
 
 /**
  * A board card's face. No dnd-kit hooks here, so it also renders inside the
  * DragOverlay and outside any DndContext (unit tests). Done cards never show
- * a due chip.
+ * a due chip. The last row, quiet like Linear's, says when the task was
+ * created, as the agent's day.
  */
 export function CardBody({
   task,
@@ -25,8 +31,12 @@ export function CardBody({
   overlay?: boolean;
   onPriorityChange?: (id: string, priority: TaskPriority) => void;
 }) {
+  const t = useTranslations("tasks.card");
+  const locale = useLocale();
+  const timeZone = useAgentTimeZone();
   const done = task.status === "done";
   const showDue = !done && task.due_on != null;
+  const created = dayLabel(dateKeyInTimeZone(task.created_at, timeZone), todayKey, locale);
 
   return (
     <div className="bg-card rounded-lg border p-3 shadow-xs">
@@ -54,10 +64,11 @@ export function CardBody({
       </div>
       {task.client || showDue ? (
         <div className="mt-2 flex items-center gap-2">
-          {task.client ? <ClientChip client={task.client} className="max-w-40" /> : null}
+          {task.client ? <ClientChip client={task.client} /> : null}
           {showDue ? <DueChip dueOn={task.due_on} todayKey={todayKey} className="ml-auto" /> : null}
         </div>
       ) : null}
+      <p className="text-muted-foreground mt-2.5 text-xs">{t("created", { date: created })}</p>
     </div>
   );
 }

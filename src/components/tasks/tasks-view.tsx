@@ -8,9 +8,11 @@ import { ListChecks, Plus, Search } from "lucide-react";
 import { FilterSelect, ToolbarTabs, ViewToggle } from "@/components/shell/toolbar";
 import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { TaskBoard } from "@/components/tasks/task-board";
-import { TaskDialog, type TaskDialogPayload } from "@/components/tasks/task-dialog";
+import { TaskDialog } from "@/components/tasks/task-dialog";
 import { DoneList, TaskList } from "@/components/tasks/task-list";
+import { TaskSheet } from "@/components/tasks/task-sheet";
 import { reduceTasks, useTaskActions } from "@/components/tasks/use-task-actions";
+import { useTaskSheet } from "@/components/tasks/use-task-sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { taskPriorityLabel } from "@/i18n/labels";
@@ -100,6 +102,8 @@ export function TasksView(props: {
     rows,
     apply: applyOptimistic,
   });
+  // The drawer a task opens in, from a row, a card or ?task=.
+  const sheet = useTaskSheet({ rows, changeStatus, changePriority });
 
   function changeTab(next: TasksTab) {
     if (navigating || loadingMore) {
@@ -147,28 +151,21 @@ export function TasksView(props: {
     rememberView(next);
   }
 
-  // Dialog: the payload stays put while the dialog animates closed.
+  // New task dialog: the client preset stays put while it animates closed.
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [payload, setPayload] = useState<TaskDialogPayload>({ mode: "create" });
+  const [createClientId, setCreateClientId] = useState<string | undefined>(undefined);
   const presetClient = clientFilter && clientFilter !== "none" ? clientFilter : undefined;
   const findTask = (id: string) =>
     rows.find((r) => r.id === id) ?? (props.focusTask?.id === id ? props.focusTask : null);
 
   function openCreate() {
-    setPayload({ mode: "create", clientId: presetClient });
+    setCreateClientId(presetClient);
     setDialogOpen(true);
   }
-  function openEdit(id: string) {
+  function openTask(id: string) {
     const task = findTask(id);
-    if (!task) return;
-    setPayload({ mode: "edit", task });
-    setDialogOpen(true);
+    if (task) sheet.show(task);
   }
-  // While editing, show the freshest copy of the task (after a priority change, say).
-  const dialogPayload: TaskDialogPayload =
-    payload.mode === "edit"
-      ? { mode: "edit", task: rows.find((r) => r.id === payload.task.id) ?? payload.task }
-      : payload;
 
   // URL intents (?new=1 from ⌘K, ?task=<id> from the bell or Home), adopted
   // when the raw values change. React's derived-state pattern, no effect.
@@ -181,14 +178,11 @@ export function TasksView(props: {
   if (intentNew !== seenIntent.isNew || intentTask !== seenIntent.taskId) {
     setSeenIntent({ isNew: intentNew, taskId: intentTask });
     if (intentNew) {
-      setPayload({ mode: "create", clientId: presetClient });
+      setCreateClientId(presetClient);
       setDialogOpen(true);
     } else if (intentTask) {
       const task = findTask(intentTask);
-      if (task) {
-        setPayload({ mode: "edit", task });
-        setDialogOpen(true);
-      }
+      if (task) sheet.show(task);
     }
   }
 
@@ -252,7 +246,7 @@ export function TasksView(props: {
   }));
 
   const itemHandlers = {
-    onOpen: openEdit,
+    onOpen: openTask,
     onStatusChange: changeStatus,
     onPriorityChange: changePriority,
   };
@@ -390,8 +384,18 @@ export function TasksView(props: {
       <TaskDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
-        payload={dialogPayload}
+        payload={{ mode: "create", clientId: createClientId }}
         clients={clientOptions}
+      />
+
+      <TaskSheet
+        task={sheet.task}
+        open={sheet.open}
+        onOpenChange={sheet.setOpen}
+        todayKey={props.todayKey}
+        clients={clientOptions}
+        onStatusChange={sheet.changeStatus}
+        onPriorityChange={sheet.changePriority}
         onDeleted={removeLocally}
       />
     </div>

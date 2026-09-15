@@ -28,11 +28,14 @@ export function StatusMenu({
   status,
   taskTitle,
   onChange,
+  showLabel = false,
   className,
 }: {
   status: TaskStatus;
   taskTitle: string;
   onChange: (status: TaskStatus) => void;
+  /** Print the status next to the glyph (the task drawer). */
+  showLabel?: boolean;
   className?: string;
 }) {
   const t = useTranslations("tasks");
@@ -43,17 +46,19 @@ export function StatusMenu({
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label={t("controls.changeStatus", { title: taskTitle, status: label })}
-        title={label}
+        title={showLabel ? undefined : label}
         onClick={stop}
         onPointerDown={stop}
         onMouseDown={stop}
         onTouchStart={stop}
         className={cn(
-          "hover:bg-muted data-[state=open]:bg-accent focus-visible:ring-ring/50 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md outline-none transition-colors duration-150 focus-visible:ring-[3px]",
+          "hover:bg-muted data-[state=open]:bg-accent focus-visible:ring-ring/50 inline-flex shrink-0 cursor-pointer items-center rounded-md outline-none transition-colors duration-150 focus-visible:ring-[3px]",
+          showLabel ? "h-8 gap-2 px-2 text-sm font-medium" : "size-7 justify-center",
           className
         )}
       >
         <StatusIcon status={status} />
+        {showLabel ? label : null}
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"

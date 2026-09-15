@@ -82,5 +82,37 @@
     "title": "Tasks",
     "empty": "No open tasks for this client.",
     "doneLink": "Done tasks"
+  },
+  "card": { "created": "Created {date}" },
+  "sheet": {
+    "title": "Task",
+    "details": "Details",
+    "status": "Status",
+    "priority": "Priority",
+    "client": "Client",
+    "dueDate": "Due date",
+    "created": "Created",
+    "completed": "Completed",
+    "markDone": "Mark as done",
+    "reopen": "Reopen"
+  },
+  "notes": {
+    "title": "Notes",
+    "label": "New note",
+    "placeholder": "Add a note: a call, an answer, the next step…",
+    "add": "Add note",
+    "empty": "No notes yet.",
+    "loading": "Loading notes…",
+    "notReady": "Notes aren't available yet.",
+    "loadFailed": "Couldn't load the notes.",
+    "time": "{day}, {time}",
+    "delete": "Delete note",
+    "deleteTitle": "Delete note?",
+    "deleteDescription": "This note will be permanently deleted.",
+    "toasts": {
+      "addFailed": "Couldn't add the note",
+      "deleted": "Note deleted",
+      "deleteFailed": "Couldn't delete the note"
+    }
   }
 }

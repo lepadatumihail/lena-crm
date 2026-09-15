@@ -6,9 +6,11 @@ import { useTranslations } from "next-intl";
 import { ArrowRight, ListChecks, Plus } from "lucide-react";
 
 import { Panel, PanelEmpty } from "@/components/shell/panel";
-import { TaskDialog, type TaskDialogPayload } from "@/components/tasks/task-dialog";
+import { TaskDialog } from "@/components/tasks/task-dialog";
 import { TaskItem } from "@/components/tasks/task-item";
+import { TaskSheet } from "@/components/tasks/task-sheet";
 import { reduceTasks, useTaskActions } from "@/components/tasks/use-task-actions";
+import { useTaskSheet } from "@/components/tasks/use-task-sheet";
 import { Button } from "@/components/ui/button";
 import type { ClientSide } from "@/lib/crm";
 import type { TaskRow } from "@/lib/data/tasks";
@@ -17,7 +19,8 @@ import { tasksHref } from "@/lib/tasks-view";
 
 /**
  * The client's open tasks, first in the client page's main column. New tasks
- * are created for this client only; finished ones live on /tasks.
+ * are created for this client only; finished ones live on /tasks. A task
+ * opens in the task drawer, which keeps showing it after it is done.
  */
 export function TasksSection({
   clientId,
@@ -38,27 +41,16 @@ export function TasksSection({
     rows,
     apply: applyOptimistic,
   });
+  const sheet = useTaskSheet({ rows, changeStatus, changePriority });
   const open = [...rows.filter((row) => isOpenStatus(row.status))].sort(compareTasks);
+  const clients = [{ id: clientId, name: clientName, side }];
 
-  // The payload stays put while the dialog animates closed.
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [payload, setPayload] = useState<TaskDialogPayload>({ mode: "create", clientId });
 
-  function openCreate() {
-    setPayload({ mode: "create", clientId });
-    setDialogOpen(true);
-  }
-  function openEdit(id: string) {
+  function openTask(id: string) {
     const task = rows.find((row) => row.id === id);
-    if (!task) return;
-    setPayload({ mode: "edit", task });
-    setDialogOpen(true);
+    if (task) sheet.show(task);
   }
-  // While editing, show the freshest copy of the task (after a priority change, say).
-  const dialogPayload: TaskDialogPayload =
-    payload.mode === "edit"
-      ? { mode: "edit", task: rows.find((row) => row.id === payload.task.id) ?? payload.task }
-      : payload;
 
   return (
     <>
@@ -67,7 +59,7 @@ export function TasksSection({
         icon={<ListChecks className="size-3.5" />}
         count={open.length}
         action={
-          <Button variant="outline" size="xs" onClick={openCreate}>
+          <Button variant="outline" size="xs" onClick={() => setDialogOpen(true)}>
             <Plus /> {t("new")}
           </Button>
         }
@@ -91,7 +83,7 @@ export function TasksSection({
                 task={task}
                 todayKey={todayKey}
                 showClient={false}
-                onOpen={openEdit}
+                onOpen={openTask}
                 onStatusChange={changeStatus}
                 onPriorityChange={changePriority}
               />
@@ -103,9 +95,20 @@ export function TasksSection({
       <TaskDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
-        payload={dialogPayload}
-        clients={[{ id: clientId, name: clientName, side }]}
+        payload={{ mode: "create", clientId }}
+        clients={clients}
         fixedClient
+      />
+
+      <TaskSheet
+        task={sheet.task}
+        open={sheet.open}
+        onOpenChange={sheet.setOpen}
+        todayKey={todayKey}
+        clients={clients}
+        fixedClient
+        onStatusChange={sheet.changeStatus}
+        onPriorityChange={sheet.changePriority}
         onDeleted={removeLocally}
       />
     </>

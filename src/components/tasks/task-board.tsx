@@ -108,8 +108,10 @@ function BoardColumn({
   const tCrm = useTranslations("crm");
   const { setNodeRef, isOver } = useDroppable({ id: status });
 
+  // The columns share the board's width but never narrow past 18rem: below
+  // that (phones) the board scrolls sideways instead.
   return (
-    <div className="flex w-72 shrink-0 flex-col">
+    <div className="flex min-w-72 flex-1 flex-col">
       <div className="flex h-9 items-center gap-2 px-1">
         <span
           aria-hidden
@@ -258,7 +260,9 @@ export function TaskBoard({
       onDragEnd={handleDragEnd}
       onDragCancel={() => setActiveId(null)}
     >
-      <div className="flex gap-3 overflow-x-auto pb-4">
+      {/* relative, so the cards' absolutely positioned sr-only text stays
+          inside this scroll box instead of widening the page on phones */}
+      <div className="relative flex gap-3 overflow-x-auto pb-4">
         {TASK_STATUSES.map((status) =>
           status === "done" ? (
             <BoardColumn

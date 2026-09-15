@@ -73,4 +73,21 @@ describe("CardBody", () => {
     );
     expect(screen.getByText(/Overdue since 10 Sep/)).toBeTruthy();
   });
+
+  it("closes with the day the task was created", () => {
+    render(<CardBody task={doneTask} todayKey={TODAY} onPriorityChange={vi.fn()} />, { wrapper });
+    expect(screen.getByText("Created 1 Sep")).toBeTruthy();
+  });
+
+  it("adds the year to a creation day from another year", () => {
+    render(
+      <CardBody
+        task={{ ...doneTask, created_at: "2025-12-12T08:00:00.000Z" }}
+        todayKey={TODAY}
+        onPriorityChange={vi.fn()}
+      />,
+      { wrapper }
+    );
+    expect(screen.getByText("Created 12 Dec 2025")).toBeTruthy();
+  });
 });

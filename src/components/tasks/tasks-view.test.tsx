@@ -21,9 +21,11 @@ import {
 import { ShellProvider } from "@/components/shell/shell-context";
 import { TasksView } from "@/components/tasks/tasks-view";
 import { messagesFor } from "@/i18n/messages";
+import { addTaskNote, listTaskNotes } from "@/lib/actions/task-notes";
 import { setTaskPriority, setTaskStatus } from "@/lib/actions/tasks";
 import type { CalendarClientOption } from "@/lib/data/calendar";
 import type { DoneTasksPage, TaskRow } from "@/lib/data/tasks";
+import type { TaskNote } from "@/lib/supabase/types";
 import type { TasksClientScope } from "@/lib/tasks-view";
 
 const nav = vi.hoisted(() => ({
@@ -52,6 +54,11 @@ vi.mock("@/lib/actions/tasks", () => ({
   deleteTask: vi.fn().mockResolvedValue({ error: null }),
   setTaskStatus: vi.fn().mockResolvedValue({ error: null }),
   setTaskPriority: vi.fn().mockResolvedValue({ error: null }),
+}));
+vi.mock("@/lib/actions/task-notes", () => ({
+  listTaskNotes: vi.fn().mockResolvedValue({ notes: [], error: null }),
+  addTaskNote: vi.fn().mockResolvedValue({ error: "Not mocked" }),
+  deleteTaskNote: vi.fn().mockResolvedValue({ error: null }),
 }));
 
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -291,4 +298,111 @@ describe("TasksView", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
     await waitFor(() => expect(nav.refresh).toHaveBeenCalled());
   });
+
+  it("opens a task in the drawer with its details and notes", async () => {
+    const row = task({
+      title: "Confirm the notary",
+      description: "Ask for Thursday morning",
+      created_at: "2026-09-11T08:00:00.000Z",
+    });
+    vi.mocked(listTaskNotes).mockResolvedValueOnce({
+      notes: [
+        note({
+          task_id: row.id,
+          body: "Bank wants the nota simple first",
+          created_at: "2026-09-14T16:30:00.000Z",
+        }),
+      ],
+      error: null,
+    });
+    show({ open: [row] });
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Open “Confirm the notary”" }),
+    );
+
+    const sheet = await screen.findByRole("dialog", { name: "Task" });
+    expect(
+      within(sheet).getByRole("heading", { name: "Confirm the notary" }),
+    ).toBeTruthy();
+    expect(within(sheet).getByText("Ask for Thursday morning")).toBeTruthy();
+    expect(
+      within(sheet).getByRole("button", {
+        name: "Change status of “Confirm the notary” (To do)",
+      }),
+    ).toBeTruthy();
+    expect(within(sheet).getByText("11 Sep")).toBeTruthy();
+    expect(
+      await within(sheet).findByText("Bank wants the nota simple first"),
+    ).toBeTruthy();
+    expect(within(sheet).getByText("Yesterday, 16:30")).toBeTruthy();
+    expect(listTaskNotes).toHaveBeenCalledWith(row.id);
+  });
+
+  it("opens the task from ?task= in the drawer", async () => {
+    const row = task({ title: "Send the floor plans" });
+    nav.search = `task=${row.id}`;
+    show({ open: [row] });
+
+    const sheet = await screen.findByRole("dialog", { name: "Task" });
+    expect(
+      within(sheet).getByRole("heading", { name: "Send the floor plans" }),
+    ).toBeTruthy();
+  });
+
+  it("adds a note from the drawer", async () => {
+    const row = task({ title: "Chase the bank" });
+    vi.mocked(addTaskNote).mockResolvedValueOnce({
+      error: null,
+      note: note({ task_id: row.id, body: "Called, they answer Monday" }),
+    });
+    show({ open: [row] });
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Open “Chase the bank”" }),
+    );
+    const sheet = await screen.findByRole("dialog", { name: "Task" });
+    expect(await within(sheet).findByText("No notes yet.")).toBeTruthy();
+
+    const composer = within(sheet).getByLabelText("New note");
+    fireEvent.change(composer, {
+      target: { value: "  Called, they answer Monday  " },
+    });
+    fireEvent.click(within(sheet).getByRole("button", { name: "Add note" }));
+
+    expect(addTaskNote).toHaveBeenCalledWith(
+      row.id,
+      "Called, they answer Monday",
+    );
+    expect(
+      await within(sheet).findByText("Called, they answer Monday"),
+    ).toBeTruthy();
+    expect((composer as HTMLTextAreaElement).value).toBe("");
+  });
+
+  it("completes a task from the drawer's footer", async () => {
+    const row = task({ title: "Book the valuation" });
+    show({ open: [row] });
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Open “Book the valuation”" }),
+    );
+    const sheet = await screen.findByRole("dialog", { name: "Task" });
+    fireEvent.click(within(sheet).getByRole("button", { name: "Mark as done" }));
+
+    expect(setTaskStatus).toHaveBeenCalledWith(row.id, "done");
+    await waitFor(() => expect(nav.refresh).toHaveBeenCalled());
+  });
 });
+
+function note(overrides: Partial<TaskNote> = {}): TaskNote {
+  seq += 1;
+  return {
+    id: `9c8b${seq.toString(16).padStart(4, "0")}-1d2e-4f3a-8b4c-5d6e7f8a9b0c`,
+    agent_id: "5d6e7f80-9a1b-4c2d-8e3f-4a5b6c7d8e9f",
+    task_id: "e1f20001-a3b4-4c5d-9e6f-7a8b9c0d1e2f",
+    body: "A note",
+    created_at: "2026-09-15T08:00:00.000Z",
+    ...overrides,
+  };
+}
