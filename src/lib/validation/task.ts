@@ -6,6 +6,11 @@ import type { ValidationT } from "./i18n";
 /** The migration mirrors both caps as check constraints (tasks_title_len, tasks_description_len). */
 export const TASK_TITLE_MAX = 160;
 export const TASK_DESCRIPTION_MAX = 2000;
+/** Mirrored by task_notes_body_len in the task_notes migration. */
+export const TASK_NOTE_MAX = 2000;
+
+/** A note's text as the note actions take it: trimmed, never blank. */
+export const taskNoteBodySchema = z.string().trim().min(1).max(TASK_NOTE_MAX);
 
 /**
  * react-hook-form values for the task dialog. The client and due-date

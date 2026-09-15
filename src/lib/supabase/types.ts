@@ -562,6 +562,30 @@ export type Database = {
         };
         Relationships: [];
       };
+      task_notes: {
+        Row: {
+          id: string;
+          agent_id: string;
+          task_id: string;
+          body: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          agent_id?: string;
+          task_id: string;
+          body: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          agent_id?: string;
+          task_id?: string;
+          body?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       deal_analyses: {
         Row: {
           id: string;
@@ -916,3 +940,4 @@ export type SupportMessage = Tables<"support_messages">;
 export type Task = Tables<"tasks">;
 export type TaskStatus = Enums<"task_status">;
 export type TaskPriority = Enums<"task_priority">;
+export type TaskNote = Tables<"task_notes">;

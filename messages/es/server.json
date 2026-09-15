@@ -38,7 +38,9 @@
       "checkForm": "Revisa el formulario.",
       "notFound": "Tarea no encontrada",
       "clientNotFound": "Ese cliente ya no existe.",
-      "notReady": "Las tareas aún no están disponibles."
+      "notReady": "Las tareas aún no están disponibles.",
+      "notesNotReady": "Las notas aún no están disponibles.",
+      "noteNotFound": "Nota no encontrada"
     }
   }
 }

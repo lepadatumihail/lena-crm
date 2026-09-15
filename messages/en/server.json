@@ -38,7 +38,9 @@
       "checkForm": "Please check the form.",
       "notFound": "Task not found",
       "clientNotFound": "That client no longer exists.",
-      "notReady": "Tasks aren't available yet."
+      "notReady": "Tasks aren't available yet.",
+      "notesNotReady": "Notes aren't available yet.",
+      "noteNotFound": "Note not found"
     }
   }
 }
