@@ -4,17 +4,22 @@ import { createClient as createSupabase } from "@/lib/supabase/server";
 import type { Profile } from "@/lib/supabase/types";
 import { resolveTimeZone } from "@/lib/time-zones";
 
+/** Who is signed in, as their verified session token states it. */
+type SessionUser = { id: string; email: string | undefined };
+
 /**
- * The signed-in user for this request. Asking Supabase Auth is a network
- * round-trip and the layout and several page sections all need the answer,
- * so it is asked once per request and shared.
+ * The signed-in user for this request, read from the session token.
+ * getClaims() verifies the token's signature locally instead of asking
+ * Supabase Auth, so page renders make no Auth round-trip; the layout and
+ * several page sections still share one check per request. A session ended on
+ * another device reads as signed in until its token expires (an hour by
+ * default), so the actions behind the agent's own edits keep calling getUser().
  */
-export const getSessionUser = cache(async () => {
+export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
   const supabase = await createSupabase();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  return user;
+  const { data } = await supabase.auth.getClaims();
+  if (!data) return null;
+  return { id: data.claims.sub, email: data.claims.email };
 });
 
 /**

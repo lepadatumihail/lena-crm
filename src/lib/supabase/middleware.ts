@@ -26,12 +26,15 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // IMPORTANT: Do not run code between createServerClient and getUser().
+  // IMPORTANT: Do not run code between createServerClient and getClaims().
   // A simple mistake could make it very hard to debug issues with users
   // being randomly logged out.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // getClaims() refreshes an expired session and verifies the token's
+  // signature locally, so it costs no Supabase Auth round-trip. The price: a
+  // session ended on another device still passes until its token expires
+  // (an hour by default).
+  const { data } = await supabase.auth.getClaims();
+  const claims = data?.claims;
 
   const { pathname } = request.nextUrl;
   const isAuthRoute =
@@ -42,14 +45,14 @@ export async function updateSession(request: NextRequest) {
   // URL that doesn't exist all pass through, so crawlers and dead links get a
   // real 404 instead of a bounce to /login. The protected pages check the
   // session again themselves; this layer's job is to preserve `next`.
-  if (!user && isProtectedPath(pathname)) {
+  if (!claims && isProtectedPath(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("next", pathname);
     return NextResponse.redirect(url);
   }
 
-  if (user && isAuthRoute) {
+  if (claims && isAuthRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/home";
     return NextResponse.redirect(url);

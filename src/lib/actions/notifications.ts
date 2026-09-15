@@ -91,7 +91,7 @@ export async function syncNotifications(
   ctx: SyncContext
 ): Promise<ActionResult> {
   // getSessionUser is the same cached lookup getAgentTimeZone uses, so the
-  // auth check and the zone read share one Supabase Auth call.
+  // auth check and the zone read share one session token check.
   const [supabase, t, ta, tc, locale, agentZone, user] = await Promise.all([
     createSupabase(),
     getTranslations("server.notifications"),
