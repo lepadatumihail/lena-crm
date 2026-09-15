@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { BellRing, CalendarDays, Users } from "lucide-react";
+import { BellRing, CalendarDays, ListChecks, Users } from "lucide-react";
 
 import { Panel, PanelAction } from "@/components/shell/panel";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -55,7 +55,7 @@ const ATTENTION_ROWS = [
 export function AttentionSkeleton() {
   const t = useTranslations("home.attention");
   return (
-    <Panel className="h-full" title={t("title")} icon={<BellRing className="size-3.5" />}>
+    <Panel className="flex-1" title={t("title")} icon={<BellRing className="size-3.5" />}>
       <Loading />
       <ul aria-hidden className="divide-y">
         {ATTENTION_ROWS.map(([name, detail]) => (
@@ -64,6 +64,30 @@ export function AttentionSkeleton() {
             <Skeleton className={cn("h-3", name)} />
             <Skeleton className={cn("hidden h-2.5 sm:block", detail)} />
             <Skeleton className="ml-auto h-2.5 w-8" />
+          </li>
+        ))}
+      </ul>
+    </Panel>
+  );
+}
+
+const DUE_TASK_ROWS = ["w-40", "w-32", "w-48"];
+
+export function DueTasksSkeleton() {
+  const t = useTranslations("home.dueTasks");
+  return (
+    <Panel
+      title={t("title")}
+      icon={<ListChecks className="size-3.5" />}
+      action={<PanelAction href="/tasks">{t("all")}</PanelAction>}
+    >
+      <Loading />
+      <ul aria-hidden className="divide-y">
+        {DUE_TASK_ROWS.map((width) => (
+          <li key={width} className="flex h-11 items-center gap-3 px-4">
+            <Skeleton className="size-4 shrink-0 rounded-full" />
+            <Skeleton className={cn("h-3", width)} />
+            <Skeleton className="ml-auto h-[22px] w-16 rounded-full" />
           </li>
         ))}
       </ul>

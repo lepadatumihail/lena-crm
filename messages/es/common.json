@@ -31,6 +31,7 @@
   "areYouSure": "¿Estás seguro?",
   "noMatch": "Sin resultados",
   "searchCountry": "Buscar país…",
+  "undo": "Deshacer",
   "sidebar": {
     "label": "Barra lateral",
     "description": "Muestra la barra lateral en móvil.",

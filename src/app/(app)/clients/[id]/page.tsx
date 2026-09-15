@@ -9,6 +9,7 @@ import {
 import { getDocuments } from "@/lib/data/documents";
 import { getNextClientAppointment } from "@/lib/data/calendar";
 import { getAgentTimeZone } from "@/lib/data/session";
+import { getClientTasks } from "@/lib/data/tasks";
 import { getTemplates } from "@/lib/data/templates";
 import { getMatchingListings, getProperties } from "@/lib/data/seller";
 import { ClientDetailView } from "@/components/clients/client-detail-view";
@@ -36,6 +37,7 @@ export default async function ClientDetailPage({
     customTemplates,
     nextAppointment,
     timeZone,
+    tasks,
   ] = await Promise.all([
     isBuyer ? getBuyerPreferences(client.id) : Promise.resolve(null),
     isBuyer ? getViewings(client.id) : Promise.resolve([]),
@@ -45,6 +47,7 @@ export default async function ClientDetailPage({
     getTemplates(),
     getNextClientAppointment(client.id, now.toISOString()),
     getAgentTimeZone(),
+    getClientTasks(client.id),
   ]);
 
   const matches =
@@ -68,6 +71,7 @@ export default async function ClientDetailPage({
       matches={matches}
       customTemplates={customTemplates}
       nextAppointment={nextAppointment}
+      tasks={tasks}
       compose={compose ?? null}
       now={now}
       timeZone={timeZone}

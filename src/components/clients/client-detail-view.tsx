@@ -33,6 +33,7 @@ import { MatchingListingsSection } from "@/components/clients/sections/matching-
 import { PreferencesSection } from "@/components/clients/sections/preferences-section";
 import { PropertiesSection } from "@/components/clients/sections/properties-section";
 import { ReservationSection } from "@/components/clients/sections/reservation-section";
+import { TasksSection } from "@/components/clients/sections/tasks-section";
 import { ViewingsSection } from "@/components/clients/sections/viewings-section";
 import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { ShellCrumb } from "@/components/shell/shell-context";
@@ -55,6 +56,7 @@ import { clientFullName, formatCurrency, type ClientSide } from "@/lib/crm";
 import type { ViewingWithAttachments } from "@/lib/data/buyer";
 import type { ClientAppointment } from "@/lib/data/calendar";
 import type { ListingMatch } from "@/lib/data/seller";
+import type { TaskRow } from "@/lib/data/tasks";
 import { dateKeyInTimeZone } from "@/lib/home";
 import { DEFAULT_TIME_ZONE } from "@/lib/time-zones";
 import type {
@@ -78,6 +80,8 @@ export type ClientDetailData = {
   customTemplates: EmailTemplate[];
   /** The client's next calendar appointment, if one is booked. */
   nextAppointment: ClientAppointment | null;
+  /** The client's open tasks; null until the tasks table exists. */
+  tasks: TaskRow[] | null;
   /** `?compose=` from the URL: a template to open the composer on. */
   compose: string | null;
   /** The instant the page is rendered for; injectable for previews. */
@@ -127,6 +131,7 @@ export async function ClientDetailView({
   matches,
   customTemplates,
   nextAppointment,
+  tasks,
   compose,
   now = new Date(),
   timeZone = DEFAULT_TIME_ZONE,
@@ -488,6 +493,15 @@ export async function ClientDetailView({
         </aside>
 
         <div className="min-w-0 space-y-5 lg:col-span-2 lg:col-start-1 lg:row-start-1">
+          {tasks ? (
+            <TasksSection
+              clientId={client.id}
+              clientName={name}
+              side={side}
+              tasks={tasks}
+              todayKey={todayKey}
+            />
+          ) : null}
           {isBuyer ? (
             <>
               <PreferencesSection clientId={client.id} prefs={prefs} />

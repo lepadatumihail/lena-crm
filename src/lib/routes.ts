@@ -21,6 +21,7 @@ export const PROTECTED_PREFIXES = [
   "/notifications",
   "/referrals",
   "/settings",
+  "/tasks",
   "/templates",
 ] as const;
 

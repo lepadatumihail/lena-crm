@@ -130,7 +130,7 @@ export function AttentionPanel({ items }: { items: AttentionItem[] }) {
   const t = useTranslations("home.attention");
   return (
     <Panel
-      className="h-full"
+      className="flex-1"
       title={t("title")}
       icon={<BellRing className="size-3.5" />}
       count={items.length}

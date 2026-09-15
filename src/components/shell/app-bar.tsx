@@ -71,6 +71,11 @@ export function AppBar({
       text: t("today", { count: counts.today }),
       tone: counts.today > 0 ? "brand" : "neutral",
     };
+  } else if (pathname.startsWith("/tasks")) {
+    title = t("tasks");
+    if (counts.tasks != null) {
+      pill = { text: t("due", { count: counts.tasks }), tone: counts.tasks > 0 ? "amber" : "neutral" };
+    }
   } else if (pathname.startsWith("/notifications")) {
     title = t("notifications");
   } else if (pathname.startsWith("/templates")) {

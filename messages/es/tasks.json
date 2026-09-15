@@ -1,0 +1,90 @@
+{
+  "meta": { "title": "Tareas" },
+  "notReady": "Las tareas aún no están disponibles.",
+  "tabs": {
+    "label": "Listas de tareas",
+    "open": "Abiertas",
+    "done": "Completadas"
+  },
+  "new": "Nueva tarea",
+  "searchLabel": "Buscar tareas",
+  "searchPlaceholder": "Busca tareas…",
+  "views": { "list": "Lista", "board": "Tablero" },
+  "filters": {
+    "client": "Cliente",
+    "allClients": "Todos los clientes",
+    "noClient": "Sin cliente",
+    "priority": "Prioridad",
+    "allPriorities": "Todas las prioridades"
+  },
+  "empty": {
+    "title": "Aún no hay tareas",
+    "body": "Apunta las pequeñas cosas junto a tus clientes: una llamada que devolver, un documento que reclamar, una visita que confirmar.",
+    "allDone": "No queda nada abierto. Todo está hecho.",
+    "noMatches": "Ninguna tarea coincide con tus filtros.",
+    "done": "Aún no has completado ninguna. Las tareas completadas aparecen aquí."
+  },
+  "board": {
+    "dropHere": "Suelta aquí",
+    "viewAllDone": "Ver todas",
+    "viewAllDoneLabel": "Ver todas las tareas completadas",
+    "dragHint": "Para mover una tarea, arrástrala a otra columna o ábrela y cambia su estado.",
+    "cardRole": "tarea movible",
+    "announce": {
+      "pickedUp": "Has cogido «{title}».",
+      "over": "«{title}» está sobre {status}.",
+      "dropped": "«{title}» se ha movido a {status}.",
+      "cancelled": "Se ha cancelado el movimiento de «{title}»."
+    }
+  },
+  "done": { "yesterday": "Ayer", "loadMore": "Cargar más" },
+  "due": {
+    "today": "Hoy",
+    "tomorrow": "Mañana",
+    "dueOn": "Vence el {date}",
+    "overdueOn": "Vencida desde el {date}"
+  },
+  "controls": {
+    "status": "Estado",
+    "changeStatus": "Cambiar el estado de «{title}» ({status})",
+    "priority": "Prioridad",
+    "changePriority": "Cambiar la prioridad de «{title}» ({priority})",
+    "open": "Abrir «{title}»"
+  },
+  "dialog": {
+    "newTitle": "Nueva tarea",
+    "editTitle": "Editar tarea",
+    "description": "Qué hay que hacer, para quién y para cuándo.",
+    "title": "Título",
+    "titlePlaceholder": "Devolver la llamada sobre la visita…",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "Detalles, enlaces, lo que haga falta recordar…",
+    "status": "Estado",
+    "priority": "Prioridad",
+    "client": "Cliente",
+    "noClient": "Sin cliente",
+    "dueDate": "Fecha límite",
+    "noDueDate": "Sin fecha límite",
+    "clearDate": "Quitar la fecha límite",
+    "create": "Crear tarea",
+    "deleteTitle": "¿Eliminar la tarea?",
+    "deleteDescription": "«{title}» se eliminará de forma permanente."
+  },
+  "toasts": {
+    "created": "Tarea creada",
+    "updated": "Tarea actualizada",
+    "saveFailed": "No se ha podido guardar la tarea",
+    "deleted": "Tarea eliminada",
+    "deleteFailed": "No se ha podido eliminar la tarea",
+    "completed": "Tarea completada",
+    "reopened": "Tarea reabierta",
+    "statusChanged": "Estado: {status}",
+    "statusFailed": "No se ha podido actualizar el estado",
+    "priorityFailed": "No se ha podido actualizar la prioridad"
+  },
+  "clientPanel": {
+    "title": "Tareas",
+    "empty": "Este cliente no tiene tareas abiertas.",
+    "doneLink": "Tareas completadas"
+  }
+}

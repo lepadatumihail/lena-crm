@@ -1,0 +1,86 @@
+{
+  "meta": { "title": "Tasks" },
+  "notReady": "Tasks aren't available yet.",
+  "tabs": { "label": "Task lists", "open": "Open", "done": "Done" },
+  "new": "New task",
+  "searchLabel": "Search tasks",
+  "searchPlaceholder": "Search tasks…",
+  "views": { "list": "List", "board": "Board" },
+  "filters": {
+    "client": "Client",
+    "allClients": "All clients",
+    "noClient": "No client",
+    "priority": "Priority",
+    "allPriorities": "All priorities"
+  },
+  "empty": {
+    "title": "No tasks yet",
+    "body": "Keep the small things next to your clients: a call to return, a document to chase, a viewing to confirm.",
+    "allDone": "Nothing open. Everything is done.",
+    "noMatches": "No tasks match your filters.",
+    "done": "Nothing finished yet. Completed tasks land here."
+  },
+  "board": {
+    "dropHere": "Drop here",
+    "viewAllDone": "View all",
+    "viewAllDoneLabel": "View all done tasks",
+    "dragHint": "To move a task, drag it to another column, or open it and change its status.",
+    "cardRole": "movable task",
+    "announce": {
+      "pickedUp": "Picked up “{title}”.",
+      "over": "“{title}” is over {status}.",
+      "dropped": "“{title}” moved to {status}.",
+      "cancelled": "Moving “{title}” was cancelled."
+    }
+  },
+  "done": { "yesterday": "Yesterday", "loadMore": "Load more" },
+  "due": {
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "dueOn": "Due {date}",
+    "overdueOn": "Overdue since {date}"
+  },
+  "controls": {
+    "status": "Status",
+    "changeStatus": "Change status of “{title}” ({status})",
+    "priority": "Priority",
+    "changePriority": "Change priority of “{title}” ({priority})",
+    "open": "Open “{title}”"
+  },
+  "dialog": {
+    "newTitle": "New task",
+    "editTitle": "Edit task",
+    "description": "What needs doing, for whom, and by when.",
+    "title": "Title",
+    "titlePlaceholder": "Call back about the viewing…",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Details, links, anything to remember…",
+    "status": "Status",
+    "priority": "Priority",
+    "client": "Client",
+    "noClient": "No client",
+    "dueDate": "Due date",
+    "noDueDate": "No due date",
+    "clearDate": "Clear due date",
+    "create": "Create task",
+    "deleteTitle": "Delete task?",
+    "deleteDescription": "“{title}” will be permanently deleted."
+  },
+  "toasts": {
+    "created": "Task created",
+    "updated": "Task updated",
+    "saveFailed": "Couldn't save task",
+    "deleted": "Task deleted",
+    "deleteFailed": "Couldn't delete task",
+    "completed": "Task completed",
+    "reopened": "Task reopened",
+    "statusChanged": "Status: {status}",
+    "statusFailed": "Couldn't update status",
+    "priorityFailed": "Couldn't update priority"
+  },
+  "clientPanel": {
+    "title": "Tasks",
+    "empty": "No open tasks for this client.",
+    "doneLink": "Done tasks"
+  }
+}

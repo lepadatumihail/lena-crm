@@ -28,6 +28,8 @@ describe("isProtectedPath", () => {
     "/clients",
     "/clients/abc/edit",
     "/calendar",
+    "/tasks",
+    "/tasks/anything",
     "/billing",
     "/admin",
   ])("guards %s", (pathname) => {

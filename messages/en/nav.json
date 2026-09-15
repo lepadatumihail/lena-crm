@@ -3,6 +3,7 @@
   "buyers": "Buyers",
   "sellers": "Sellers",
   "calendar": "Calendar",
+  "tasks": "Tasks",
   "notifications": "Notifications",
   "templates": "Templates",
   "calculator": "Calculator",
@@ -48,6 +49,7 @@
   "search": "Search",
   "active": "{count, plural, one {# active} other {# active}}",
   "today": "{count, plural, =0 {Nothing today} one {# today} other {# today}}",
+  "due": "{count, plural, =0 {Nothing due} one {# due} other {# due}}",
   "menu": {
     "theme": "Theme",
     "light": "Light",
@@ -66,7 +68,8 @@
     "loading": "Loading clients…",
     "newBuyer": "New buyer",
     "newSeller": "New seller",
-    "newAppointment": "New appointment"
+    "newAppointment": "New appointment",
+    "newTask": "New task"
   },
   "breadcrumb": "Breadcrumb",
   "settings": "Settings"

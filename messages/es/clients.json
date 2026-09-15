@@ -80,7 +80,7 @@
     "active": "Activo",
     "deleteClient": "Eliminar cliente",
     "deleteTitle": "¿Eliminar cliente?",
-    "deleteDescription": "Esto elimina permanentemente a {name} y todos sus datos: preferencias, visitas, ofertas y documentos. No se puede deshacer.",
+    "deleteDescription": "Esto elimina permanentemente a {name} y todos sus datos: preferencias, visitas, ofertas, documentos y tareas. No se puede deshacer.",
     "toasts": {
       "stageFailed": "No se ha podido cambiar la etapa",
       "stageUpdated": "Etapa actualizada",

@@ -21,6 +21,7 @@ import {
   FileText,
   Gift,
   Home,
+  ListChecks,
   Plus,
   Search,
   Settings,
@@ -30,6 +31,7 @@ import {
 import { searchIndex, type SearchClient } from "@/lib/actions/search";
 import { sideLabel, stageLabel } from "@/i18n/labels";
 import { clientsPath } from "@/lib/crm";
+import { tasksHref } from "@/lib/tasks-view";
 import { cn } from "@/lib/utils";
 import { ClientAvatar } from "@/components/clients/client-avatar";
 import { Button } from "@/components/ui/button";
@@ -104,6 +106,7 @@ export function QuickSearch() {
       { id: "buyers", href: clientsPath("buyer"), label: tNav("buyers"), icon: Users },
       { id: "sellers", href: clientsPath("seller"), label: tNav("sellers"), icon: Building2 },
       { id: "calendar", href: "/calendar", label: tNav("calendar"), icon: CalendarDays },
+      { id: "tasks", href: "/tasks", label: tNav("tasks"), icon: ListChecks },
       { id: "templates", href: "/templates", label: tNav("templates"), icon: FileText },
       { id: "calculator", href: "/calculator", label: tNav("calculator"), icon: Calculator },
       { id: "notifications", href: "/notifications", label: tNav("notifications"), icon: Bell },
@@ -118,6 +121,7 @@ export function QuickSearch() {
       { id: "new-buyer", href: "/clients/new?side=buyer", label: t("newBuyer"), icon: Plus },
       { id: "new-seller", href: "/clients/new?side=seller", label: t("newSeller"), icon: Plus },
       { id: "new-appointment", href: "/calendar", label: t("newAppointment"), icon: CalendarPlus },
+      { id: "new-task", href: tasksHref({ openNew: true }), label: t("newTask"), icon: Plus },
     ],
     [t]
   );
@@ -170,6 +174,15 @@ export function QuickSearch() {
 
   function select(item: Item) {
     handleOpenChange(false);
+    if (item.id === "new-task" && window.location.pathname === "/tasks") {
+      // Already on /tasks: add the intent in place. No server round trip, so the tab,
+      // the client filter and the loaded Done range survive. Next syncs replaceState
+      // into useSearchParams; TasksView opens the dialog and strips the param again.
+      const url = new URL(window.location.href);
+      url.searchParams.set("new", "1");
+      window.history.replaceState(null, "", url.toString());
+      return;
+    }
     router.push(item.href);
   }
 

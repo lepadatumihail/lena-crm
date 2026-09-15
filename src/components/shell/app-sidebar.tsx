@@ -13,6 +13,7 @@ import {
   CreditCard,
   FileText,
   Home,
+  ListChecks,
   ShieldCheck,
   UserPlus,
   Users,
@@ -210,6 +211,14 @@ export function AppSidebar({
                 label={t("calendar")}
                 active={within("/calendar")}
                 badge={counts.today}
+                onNavigate={closeMobile}
+              />
+              <NavItem
+                href="/tasks"
+                icon={ListChecks}
+                label={t("tasks")}
+                active={within("/tasks")}
+                badge={counts.tasks}
                 onNavigate={closeMobile}
               />
             </SidebarMenu>

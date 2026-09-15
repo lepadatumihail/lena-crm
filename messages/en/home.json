@@ -14,6 +14,12 @@
     "remindAria": "Send a WhatsApp reminder",
     "emptyWaiting": "Nothing scheduled. {count, plural, one {# buyer is} other {# buyers are}} still waiting for a first viewing. <link>Open the calendar</link> to book one."
   },
+  "dueTasks": {
+    "title": "Due today",
+    "all": "All tasks",
+    "empty": "Nothing due today. <link>Add a task</link>",
+    "complete": "Mark “{title}” as done"
+  },
   "attention": {
     "title": "Needs attention",
     "empty": "You're all caught up. Nice.",

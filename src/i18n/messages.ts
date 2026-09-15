@@ -26,6 +26,7 @@ import enServer from "../../messages/en/server.json";
 import enSettings from "../../messages/en/settings.json";
 import enSite from "../../messages/en/site.json";
 import enSupport from "../../messages/en/support.json";
+import enTasks from "../../messages/en/tasks.json";
 import enTemplates from "../../messages/en/templates.json";
 import enValidation from "../../messages/en/validation.json";
 
@@ -49,6 +50,7 @@ import esServer from "../../messages/es/server.json";
 import esSettings from "../../messages/es/settings.json";
 import esSite from "../../messages/es/site.json";
 import esSupport from "../../messages/es/support.json";
+import esTasks from "../../messages/es/tasks.json";
 import esTemplates from "../../messages/es/templates.json";
 import esValidation from "../../messages/es/validation.json";
 
@@ -73,6 +75,7 @@ export const en = {
   settings: enSettings,
   site: enSite,
   support: enSupport,
+  tasks: enTasks,
   templates: enTemplates,
   validation: enValidation,
 };
@@ -100,6 +103,7 @@ const es = {
   settings: esSettings,
   site: esSite,
   support: esSupport,
+  tasks: esTasks,
   templates: esTemplates,
   validation: esValidation,
 };

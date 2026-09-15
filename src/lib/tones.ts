@@ -98,3 +98,16 @@ export const TONE_INK: Record<Tone, string> = {
   red: "text-red-800 dark:text-red-200",
   brand: "text-primary",
 };
+
+/** Glyphs drawn in the tone at full strength on the page: status icons, priority bars. */
+export const TONE_ICON: Record<Tone, string> = {
+  neutral: "text-muted-foreground/70",
+  blue: "text-blue-500 dark:text-blue-400",
+  purple: "text-violet-500 dark:text-violet-400",
+  teal: "text-teal-500 dark:text-teal-400",
+  green: "text-emerald-500 dark:text-emerald-400",
+  amber: "text-amber-500 dark:text-amber-400",
+  orange: "text-orange-500 dark:text-orange-400",
+  red: "text-red-500 dark:text-red-400",
+  brand: "text-primary",
+};

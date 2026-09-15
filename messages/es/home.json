@@ -14,6 +14,12 @@
     "remindAria": "Enviar un recordatorio por WhatsApp",
     "emptyWaiting": "No hay nada programado. {count, plural, one {# comprador sigue} other {# compradores siguen}} sin una primera visita. <link>Abre el calendario</link> para programarla."
   },
+  "dueTasks": {
+    "title": "Para hoy",
+    "all": "Todas las tareas",
+    "empty": "Nada para hoy. <link>Añade una tarea</link>",
+    "complete": "Marcar «{title}» como completada"
+  },
   "attention": {
     "title": "Necesita tu atención",
     "empty": "Estás al día. Bien hecho.",

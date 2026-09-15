@@ -2,6 +2,7 @@ import { HomeHeader } from "@/components/home/home-header";
 import { HomeLayout } from "@/components/home/home-layout";
 import {
   AttentionSkeleton,
+  DueTasksSkeleton,
   RecentSkeleton,
   StatTilesSkeleton,
   UpcomingSkeleton,
@@ -18,6 +19,7 @@ export default async function Loading() {
       header={<HomeHeader now={new Date()} />}
       summary={<StatTilesSkeleton />}
       attention={<AttentionSkeleton />}
+      tasks={<DueTasksSkeleton />}
       upcoming={<UpcomingSkeleton />}
       recent={<RecentSkeleton />}
     />

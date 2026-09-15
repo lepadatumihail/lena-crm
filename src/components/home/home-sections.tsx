@@ -1,3 +1,4 @@
+import { DueTasksPanel } from "@/components/home/due-tasks-panel";
 import {
   AttentionPanel,
   RecentClientsPanel,
@@ -12,7 +13,10 @@ import {
   getPipelineCounts,
   getRecentClients,
 } from "@/lib/data/dashboard";
-import { buyersBeforeViewing } from "@/lib/home";
+import { getAgentTimeZone } from "@/lib/data/session";
+import { countDueTasks, getDueTasks } from "@/lib/data/tasks";
+import { buyersBeforeViewing, dateKeyInTimeZone } from "@/lib/home";
+import { DUE_TASKS_LIMIT } from "@/lib/tasks";
 
 /*
   Home's sections with their data. home/page.tsx renders each inside its own
@@ -40,6 +44,16 @@ export async function SummarySection({ now }: { now: Date }) {
 
 export async function AttentionSection() {
   return <AttentionPanel items={await getNeedsAttention()} />;
+}
+
+export async function DueTasksSection({ now }: { now: Date }) {
+  const todayKey = dateKeyInTimeZone(now.toISOString(), await getAgentTimeZone());
+  const [tasks, total] = await Promise.all([
+    getDueTasks(todayKey, DUE_TASKS_LIMIT),
+    countDueTasks(todayKey),
+  ]);
+  if (tasks === null) return null; // no table yet: the slot stays empty
+  return <DueTasksPanel tasks={tasks} total={total ?? tasks.length} todayKey={todayKey} />;
 }
 
 export async function UpcomingSection({ now }: { now: Date }) {

@@ -80,7 +80,7 @@
     "active": "Active",
     "deleteClient": "Delete client",
     "deleteTitle": "Delete client?",
-    "deleteDescription": "This permanently deletes {name} and all their data — preferences, viewings, offers and documents. This can't be undone.",
+    "deleteDescription": "This permanently deletes {name} and all their data — preferences, viewings, offers, documents and tasks. This can't be undone.",
     "toasts": {
       "stageFailed": "Couldn't change stage",
       "stageUpdated": "Stage updated",

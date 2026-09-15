@@ -4,12 +4,14 @@ import { HomeHeader } from "@/components/home/home-header";
 import { HomeLayout } from "@/components/home/home-layout";
 import {
   AttentionSection,
+  DueTasksSection,
   RecentSection,
   SummarySection,
   UpcomingSection,
 } from "@/components/home/home-sections";
 import {
   AttentionSkeleton,
+  DueTasksSkeleton,
   RecentSkeleton,
   StatTilesSkeleton,
   UpcomingSkeleton,
@@ -33,6 +35,11 @@ export default async function HomePage() {
       attention={
         <Suspense fallback={<AttentionSkeleton />}>
           <AttentionSection />
+        </Suspense>
+      }
+      tasks={
+        <Suspense fallback={<DueTasksSkeleton />}>
+          <DueTasksSection now={now} />
         </Suspense>
       }
       upcoming={
