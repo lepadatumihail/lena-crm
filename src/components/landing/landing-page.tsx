@@ -388,10 +388,14 @@ function PlanCard({
           </li>
         ))}
       </ul>
+      {/* Buttons never wrap by default, and the Spanish Pro label is wider
+          than a phone's card: let it take a second line instead of widening
+          both plans past the screen. Sides of 20px keep the English label on
+          one line down to 320px. */}
       <Button
         asChild
         size="pill"
-        className="mt-7 w-full"
+        className="mt-7 h-auto min-h-11 w-full px-5 py-2.5 text-center leading-snug text-balance whitespace-normal"
         variant={highlighted ? "default" : "glass"}
       >
         <Link href="/login">{cta}</Link>

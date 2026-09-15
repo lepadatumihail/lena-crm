@@ -30,6 +30,14 @@ export type CurrentPlan = {
   foundingNumber: number | null;
 };
 
+// The full-width pill actions. A button keeps its label on one line, so the
+// Spanish Pro label widened both cards past a phone screen; these let a long
+// label take a second line instead, and one that fits renders as before.
+// Beside an arrow the sides drop to 16px, which keeps that label on one line
+// in the desktop card.
+const PILL_ACTION =
+  "h-auto min-h-11 w-full px-5 py-2.5 text-center leading-snug text-balance whitespace-normal has-[>svg]:px-4";
+
 export function PricingCards({
   tier,
   spotsLeft,
@@ -117,7 +125,7 @@ export function PricingCards({
           <CardContent className="space-y-5">
             <FeatureList items={freeFeatures} />
             {current === null ? (
-              <Button asChild size="pill" variant="outline" className="w-full">
+              <Button asChild size="pill" variant="outline" className={PILL_ACTION}>
                 <Link href="/login">{t("pricing.ctaFree")}</Link>
               </Button>
             ) : current.tier === "free" ? (
@@ -163,7 +171,7 @@ export function PricingCards({
             <FeatureList items={proFeatures} />
 
             {current === null ? (
-              <Button asChild size="pill" className="w-full">
+              <Button asChild size="pill" className={PILL_ACTION}>
                 <Link href={signInToUpgrade}>
                   {t("pricing.ctaPro")} <ArrowRight />
                 </Link>
@@ -202,13 +210,13 @@ export function PricingCards({
                   <p className="text-sm">{t("pricing.adminNote")}</p>
                 ) : null}
                 {link ? (
-                  <Button asChild size="pill" className="w-full">
+                  <Button asChild size="pill" className={PILL_ACTION}>
                     <a href={link}>
                       {comped ? t("pricing.subscribe") : t("actions.upgradeToPro")} <ArrowRight />
                     </a>
                   </Button>
                 ) : (
-                  <Button size="pill" className="w-full" disabled>
+                  <Button size="pill" className={PILL_ACTION} disabled>
                     {t("pricing.checkoutSoon")}
                   </Button>
                 )}

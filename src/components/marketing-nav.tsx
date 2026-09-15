@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { asLocale } from "@/i18n/config";
 import { marketingPath } from "@/lib/routes";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/brand/logo";
 import { LocaleToggle } from "@/components/locale-switcher";
@@ -31,6 +32,11 @@ export function MarketingNav({
   const t = useTranslations("nav.marketing");
   const locale = asLocale(useLocale());
   const home = marketingPath("home", locale);
+  // "Empieza gratis" runs wider than "Start for free": on a 375px phone the
+  // Spanish row only fits beside the wordmark with the controls and the call
+  // to action set a little closer. English keeps its spacing.
+  const snug = locale === "es";
+  const ctaClassName = snug ? "max-sm:px-3" : undefined;
 
   return (
     <NavFrame>
@@ -61,8 +67,8 @@ export function MarketingNav({
             >
               <Link href="#pricing">{t("pricing")}</Link>
             </Button>
-            <Controls />
-            <Button asChild size="pill-sm">
+            <Controls snug={snug} />
+            <Button asChild size="pill-sm" className={ctaClassName}>
               <Link href="/login">{t("startFree")}</Link>
             </Button>
           </>
@@ -84,8 +90,8 @@ export function MarketingNav({
             >
               <Link href={marketingPath("pricing", locale)}>{t("pricing")}</Link>
             </Button>
-            <Controls />
-            <Button asChild size="pill-sm">
+            <Controls snug={snug} />
+            <Button asChild size="pill-sm" className={ctaClassName}>
               <Link href={signedIn ? "/home" : "/login"}>
                 {signedIn ? t("backToApp") : t("startFree")}
               </Link>
@@ -93,7 +99,7 @@ export function MarketingNav({
           </>
         ) : (
           <>
-            <Controls />
+            <Controls snug={snug} />
             <Button asChild variant="ghost" size="sm" className="rounded-full">
               <Link href={home}>
                 <ArrowLeft /> {t("backHome")}
@@ -107,11 +113,13 @@ export function MarketingNav({
 }
 
 /** Theme and language, kept together and ahead of the page's main action. */
-function Controls() {
+function Controls({ snug }: { snug: boolean }) {
   return (
-    <div className="flex items-center gap-1 sm:mr-1">
+    <div
+      className={cn("flex items-center gap-1 sm:mr-1", snug && "max-sm:gap-0")}
+    >
       <ThemeToggle />
-      <LocaleToggle />
+      <LocaleToggle className={cn(snug && "max-sm:[&>button]:px-1.5")} />
     </div>
   );
 }
