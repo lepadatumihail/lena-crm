@@ -33,6 +33,7 @@ describe("time zones", () => {
     expect(utcOffsetLabel("Europe/Madrid", WINTER)).toBe("GMT+1");
     expect(utcOffsetLabel("Europe/Madrid", SUMMER)).toBe("GMT+2");
     expect(utcOffsetLabel("UTC", SUMMER)).toBe("GMT");
+    expect(utcOffsetLabel("Europe/London", WINTER)).toBe("GMT");
     expect(utcOffsetMinutes("Asia/Kolkata", SUMMER)).toBe(330);
     expect(utcOffsetMinutes("America/New_York", WINTER)).toBe(-300);
     expect(utcOffsetMinutes("UTC", WINTER)).toBe(0);

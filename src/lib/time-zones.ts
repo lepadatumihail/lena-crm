@@ -73,7 +73,10 @@ export function listTimeZones(): string[] {
   return [...all].sort();
 }
 
-/** "GMT+2" for a zone at an instant; plain "GMT" at UTC itself. */
+/**
+ * "GMT+2" for a zone at an instant; plain "GMT" at a zero offset, which ICU 78
+ * spells "GMT+0" and older ICU "GMT", so every runtime renders the same label.
+ */
 export function utcOffsetLabel(zone: string, at: Date = new Date()): string {
   try {
     const name = new Intl.DateTimeFormat("en-US", {
@@ -82,7 +85,7 @@ export function utcOffsetLabel(zone: string, at: Date = new Date()): string {
     })
       .formatToParts(at)
       .find((part) => part.type === "timeZoneName")?.value;
-    return name ?? "GMT";
+    return name && name !== "GMT+0" ? name : "GMT";
   } catch {
     return "GMT";
   }
