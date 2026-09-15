@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   type Column,
   type ColumnDef,
+  type RowData,
   type RowSelectionState,
   type SortingState,
   type Updater,
@@ -67,15 +68,19 @@ import {
 import type { ClientRow } from "@/lib/data/clients";
 import { cn } from "@/lib/utils";
 
-type Align = "left" | "right";
+declare module "@tanstack/react-table" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- must match TanStack's signature to merge
+  interface ColumnMeta<TData extends RowData, TValue> {
+    /** Figures sit flush right: the header cell and body cells read this one flag. */
+    align?: "right";
+  }
+}
 
 function SortHead({
   column,
-  align = "left",
   children,
 }: {
   column: Column<ClientRow>;
-  align?: Align;
   children: ReactNode;
 }) {
   const sorted = column.getIsSorted();
@@ -85,7 +90,7 @@ function SortHead({
       onClick={() => column.toggleSorting(sorted === "asc")}
       className={cn(
         "group/sort hover:text-foreground inline-flex items-center gap-1 transition-colors duration-150",
-        align === "right" && "flex-row-reverse"
+        column.columnDef.meta?.align === "right" && "flex-row-reverse"
       )}
     >
       {children}
@@ -168,35 +173,29 @@ export function ClientsTable({
       ? {
           id: "budget",
           accessorFn: (c) => c.budget_max ?? c.budget_min ?? 0,
+          meta: { align: "right" },
           header: ({ column }) => (
-            <SortHead column={column} align="right">
-              {t("table.budget")}
-            </SortHead>
+            <SortHead column={column}>{t("table.budget")}</SortHead>
           ),
           cell: ({ row }) => (
-            <div className="text-right">
-              <Budget
-                min={row.original.budget_min}
-                max={row.original.budget_max}
-                locale={tag}
-                upTo={(a) => t.rich("table.upTo", { amount: () => a })}
-                from={(a) => t.rich("table.from", { amount: () => a })}
-              />
-            </div>
+            <Budget
+              min={row.original.budget_min}
+              max={row.original.budget_max}
+              locale={tag}
+              upTo={(a) => t.rich("table.upTo", { amount: () => a })}
+              from={(a) => t.rich("table.from", { amount: () => a })}
+            />
           ),
         }
       : {
           id: "asking_price",
           accessorFn: (c) => c.asking_price ?? 0,
+          meta: { align: "right" },
           header: ({ column }) => (
-            <SortHead column={column} align="right">
-              {t("table.askingPrice")}
-            </SortHead>
+            <SortHead column={column}>{t("table.askingPrice")}</SortHead>
           ),
           cell: ({ row }) => (
-            <div className="text-right">
-              <Money value={row.original.asking_price} locale={tag} />
-            </div>
+            <Money value={row.original.asking_price} locale={tag} />
           ),
         };
 
@@ -204,34 +203,26 @@ export function ClientsTable({
       ? {
           id: "viewings",
           accessorKey: "viewing_count",
+          meta: { align: "right" },
           header: ({ column }) => (
-            <SortHead column={column} align="right">
-              {t("table.viewings")}
-            </SortHead>
+            <SortHead column={column}>{t("table.viewings")}</SortHead>
           ),
-          cell: ({ row }) => (
-            <div className="text-right tabular-nums">
-              {row.original.viewing_count || (
-                <span className="text-muted-foreground">0</span>
-              )}
-            </div>
-          ),
+          cell: ({ row }) =>
+            row.original.viewing_count || (
+              <span className="text-muted-foreground">0</span>
+            ),
         }
       : {
           id: "properties",
           accessorKey: "property_count",
+          meta: { align: "right" },
           header: ({ column }) => (
-            <SortHead column={column} align="right">
-              {t("table.properties")}
-            </SortHead>
+            <SortHead column={column}>{t("table.properties")}</SortHead>
           ),
-          cell: ({ row }) => (
-            <div className="text-right tabular-nums">
-              {row.original.property_count || (
-                <span className="text-muted-foreground">0</span>
-              )}
-            </div>
-          ),
+          cell: ({ row }) =>
+            row.original.property_count || (
+              <span className="text-muted-foreground">0</span>
+            ),
         };
 
     return [
@@ -439,7 +430,8 @@ export function ClientsTable({
                   key={header.id}
                   className={cn(
                     header.column.id === "select" && "w-10 pl-4",
-                    header.column.id === "actions" && "w-12 pr-3"
+                    header.column.id === "actions" && "w-12 pr-3",
+                    header.column.columnDef.meta?.align === "right" && "text-right"
                   )}
                 >
                   {header.isPlaceholder
@@ -464,7 +456,9 @@ export function ClientsTable({
                   className={cn(
                     cell.column.id === "select" && "w-10 pl-4",
                     cell.column.id === "actions" && "w-12 pr-3",
-                    cell.column.id === "name" && "max-w-[18rem]"
+                    cell.column.id === "name" && "max-w-[18rem]",
+                    cell.column.columnDef.meta?.align === "right" &&
+                      "text-right tabular-nums"
                   )}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
