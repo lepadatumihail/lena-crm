@@ -283,6 +283,42 @@ export type Database = {
         };
         Relationships: [];
       };
+      property_attachments: {
+        Row: {
+          id: string;
+          agent_id: string;
+          property_id: string;
+          storage_path: string;
+          file_name: string;
+          mime_type: string | null;
+          size: number | null;
+          kind: Database["public"]["Enums"]["property_attachment_kind"];
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          agent_id?: string;
+          property_id: string;
+          storage_path: string;
+          file_name: string;
+          mime_type?: string | null;
+          size?: number | null;
+          kind: Database["public"]["Enums"]["property_attachment_kind"];
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          agent_id?: string;
+          property_id?: string;
+          storage_path?: string;
+          file_name?: string;
+          mime_type?: string | null;
+          size?: number | null;
+          kind?: Database["public"]["Enums"]["property_attachment_kind"];
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       documents: {
         Row: {
           id: string;
@@ -884,6 +920,7 @@ export type Database = {
       deal_type: "direct" | "collab";
       seller_role: "owner" | "representative";
       viewing_attachment_kind: "window_card" | "image";
+      property_attachment_kind: "pdf" | "image";
       email_provider: "google" | "microsoft" | "resend";
       email_account_status: "connected" | "disconnected" | "error";
       scheduled_email_status: "pending" | "sent" | "failed" | "cancelled";
@@ -926,6 +963,8 @@ export type Viewing = Tables<"viewings">;
 export type ViewingAttachment = Tables<"viewing_attachments">;
 export type Reservation = Tables<"reservations">;
 export type Property = Tables<"properties">;
+export type PropertyAttachment = Tables<"property_attachments">;
+export type PropertyAttachmentKind = Enums<"property_attachment_kind">;
 export type DocumentRow = Tables<"documents">;
 export type EmailAccount = Tables<"email_accounts">;
 export type EmailTemplate = Tables<"email_templates">;

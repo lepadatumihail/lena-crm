@@ -36,6 +36,17 @@
       "nothingScheduled": "Nothing booked"
     }
   },
+  "attachments": {
+    "attach": "Attach a file",
+    "photos": "Photos",
+    "imageLabel": "Image",
+    "saveError": "Couldn't save attachment",
+    "openError": "Couldn't open file",
+    "removeError": "Couldn't remove",
+    "removed": "Attachment removed",
+    "removeTitle": "Remove attachment?",
+    "removeAria": "Remove attachment"
+  },
   "documents": {
     "title": "Documents",
     "upload": "Upload",
@@ -82,7 +93,7 @@
     "editAria": "Edit property",
     "deleteAria": "Delete property",
     "confirmTitle": "Delete property?",
-    "confirmDescription": "“{title}” will be permanently deleted. This can’t be undone.",
+    "confirmDescription": "This removes “{title}” and its attachments. This can’t be undone.",
     "deleteError": "Couldn't delete property",
     "deleted": "Property deleted",
     "saveError": "Couldn't save property",
@@ -98,7 +109,10 @@
     "address": "Address",
     "addressPlaceholder": "Street, urbanisation…",
     "notes": "Notes",
-    "notesPlaceholder": "Comments about the listing…"
+    "notesPlaceholder": "Comments about the listing…",
+    "attachPdf": "Document (PDF)",
+    "pdfLabel": "Document",
+    "removeAttachmentDescription": "“{name}” will be removed from this property."
   },
   "reservation": {
     "title": "Reservation",
@@ -137,17 +151,8 @@
     "asking": "Asking <price>{amount}</price>",
     "offer": "Offer {price}",
     "windowCard": "Window card",
-    "imageLabel": "Image",
-    "attachmentError": "Couldn't save attachment",
-    "openError": "Couldn't open file",
-    "removeError": "Couldn't remove",
-    "attachmentRemoved": "Attachment removed",
-    "removeAttachmentTitle": "Remove attachment?",
-    "removeAttachmentDescription": "“{name}” will be removed from this viewing.",
-    "removeAttachmentAria": "Remove attachment",
-    "attach": "Attach a file",
     "attachWindowCard": "Window card (PDF)",
-    "attachImages": "Photos"
+    "removeAttachmentDescription": "“{name}” will be removed from this viewing."
   },
   "viewingDialog": {
     "edit": "Edit viewing",
@@ -210,6 +215,7 @@
     "checkForm": "Please check the form.",
     "invalidFilePath": "Invalid file path",
     "viewingNotFound": "Viewing not found",
+    "propertyNotFound": "Property not found",
     "fileNameTooLong": "File name is too long",
     "fileTooLarge": "File is too large",
     "clientNotFound": "Client not found",

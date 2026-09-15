@@ -161,6 +161,19 @@ export async function deleteClient(id: string): Promise<ActionResult> {
     for (const a of atts ?? []) paths.push(a.storage_path);
   }
 
+  const { data: properties } = await supabase
+    .from("properties")
+    .select("id")
+    .eq("client_id", id);
+  const propertyIds = (properties ?? []).map((p) => p.id);
+  if (propertyIds.length) {
+    const { data: atts } = await supabase
+      .from("property_attachments")
+      .select("storage_path")
+      .in("property_id", propertyIds);
+    for (const a of atts ?? []) paths.push(a.storage_path);
+  }
+
   for (let i = 0; i < paths.length; i += REMOVE_CHUNK_SIZE) {
     await supabase.storage
       .from(STORAGE_BUCKET)

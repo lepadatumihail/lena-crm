@@ -36,6 +36,17 @@
       "nothingScheduled": "Nada reservado"
     }
   },
+  "attachments": {
+    "attach": "Adjuntar un archivo",
+    "photos": "Fotos",
+    "imageLabel": "Imagen",
+    "saveError": "No se ha podido guardar el adjunto",
+    "openError": "No se ha podido abrir el archivo",
+    "removeError": "No se ha podido quitar",
+    "removed": "Adjunto quitado",
+    "removeTitle": "¿Quitar el adjunto?",
+    "removeAria": "Quitar adjunto"
+  },
   "documents": {
     "title": "Documentos",
     "upload": "Subir",
@@ -82,7 +93,7 @@
     "editAria": "Editar propiedad",
     "deleteAria": "Eliminar propiedad",
     "confirmTitle": "¿Eliminar la propiedad?",
-    "confirmDescription": "«{title}» se eliminará de forma permanente. Esto no se puede deshacer.",
+    "confirmDescription": "Esto elimina «{title}» y sus archivos adjuntos. Esto no se puede deshacer.",
     "deleteError": "No se ha podido eliminar la propiedad",
     "deleted": "Propiedad eliminada",
     "saveError": "No se ha podido guardar la propiedad",
@@ -98,7 +109,10 @@
     "address": "Dirección",
     "addressPlaceholder": "Calle, urbanización…",
     "notes": "Notas",
-    "notesPlaceholder": "Comentarios sobre el anuncio…"
+    "notesPlaceholder": "Comentarios sobre el anuncio…",
+    "attachPdf": "Documento (PDF)",
+    "pdfLabel": "Documento",
+    "removeAttachmentDescription": "«{name}» se quitará de esta propiedad."
   },
   "reservation": {
     "title": "Reserva",
@@ -137,17 +151,8 @@
     "asking": "Precio <price>{amount}</price>",
     "offer": "Oferta {price}",
     "windowCard": "Ficha del inmueble",
-    "imageLabel": "Imagen",
-    "attachmentError": "No se ha podido guardar el adjunto",
-    "openError": "No se ha podido abrir el archivo",
-    "removeError": "No se ha podido quitar",
-    "attachmentRemoved": "Adjunto quitado",
-    "removeAttachmentTitle": "¿Quitar el adjunto?",
-    "removeAttachmentDescription": "«{name}» se quitará de esta visita.",
-    "removeAttachmentAria": "Quitar adjunto",
-    "attach": "Adjuntar un archivo",
     "attachWindowCard": "Ficha del inmueble (PDF)",
-    "attachImages": "Fotos"
+    "removeAttachmentDescription": "«{name}» se quitará de esta visita."
   },
   "viewingDialog": {
     "edit": "Editar visita",
@@ -210,6 +215,7 @@
     "checkForm": "Revisa el formulario.",
     "invalidFilePath": "Ruta de archivo no válida",
     "viewingNotFound": "Visita no encontrada",
+    "propertyNotFound": "Propiedad no encontrada",
     "fileNameTooLong": "El nombre del archivo es demasiado largo",
     "fileTooLarge": "El archivo es demasiado grande",
     "clientNotFound": "Cliente no encontrado",

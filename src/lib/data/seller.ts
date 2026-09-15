@@ -1,10 +1,16 @@
 import { createClient as createSupabase } from "@/lib/supabase/server";
-import type { Property } from "@/lib/supabase/types";
+import { isMissingTableError } from "@/lib/supabase/errors";
+import type { Property, PropertyAttachment } from "@/lib/supabase/types";
 
 export type ListingMatch = {
   property: Property;
   sellerId: string;
   sellerName: string;
+};
+
+export type PropertyWithAttachments = Property & {
+  /** Its PDFs and photos, oldest first; null until the property_attachments table exists. */
+  attachments: PropertyAttachment[] | null;
 };
 
 /** Find the agent's active seller listings that fit a buyer's preferences. */
@@ -55,13 +61,39 @@ export async function getMatchingListings(prefs: {
   return matches;
 }
 
-export async function getProperties(clientId: string): Promise<Property[]> {
+export async function getProperties(
+  clientId: string
+): Promise<PropertyWithAttachments[]> {
   const supabase = await createSupabase();
-  const { data, error } = await supabase
+  const { data: properties, error } = await supabase
     .from("properties")
     .select("*")
     .eq("client_id", clientId)
     .order("created_at", { ascending: false });
   if (error) throw new Error(error.message);
-  return data ?? [];
+
+  const ids = (properties ?? []).map((p) => p.id);
+  const byProperty = new Map<string, PropertyAttachment[]>();
+  // A deploy can land before its migration: without the table the page still
+  // renders, only without files and without the attach menu.
+  let attachmentsReady = true;
+  if (ids.length) {
+    const { data: atts, error: attError } = await supabase
+      .from("property_attachments")
+      .select("*")
+      .in("property_id", ids)
+      .order("created_at", { ascending: true });
+    if (isMissingTableError(attError)) attachmentsReady = false;
+    else if (attError) throw new Error(attError.message);
+    for (const a of atts ?? []) {
+      const list = byProperty.get(a.property_id) ?? [];
+      list.push(a);
+      byProperty.set(a.property_id, list);
+    }
+  }
+
+  return (properties ?? []).map((p) => ({
+    ...p,
+    attachments: attachmentsReady ? (byProperty.get(p.id) ?? []) : null,
+  }));
 }

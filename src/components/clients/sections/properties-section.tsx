@@ -48,7 +48,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { deleteProperty, saveProperty } from "@/lib/actions/seller";
+import { AttachMenu, AttachmentChip } from "@/components/clients/attachments";
+import {
+  addPropertyAttachment,
+  deleteProperty,
+  deletePropertyAttachment,
+  saveProperty,
+} from "@/lib/actions/seller";
 import {
   propertyFormSchema,
   type PropertyFormValues,
@@ -56,14 +62,17 @@ import {
 import { intlTag } from "@/i18n/config";
 import { propertyTypeLabel } from "@/i18n/labels";
 import { PROPERTY_TYPES } from "@/lib/crm";
+import type { PropertyWithAttachments } from "@/lib/data/seller";
 import type { Property } from "@/lib/supabase/types";
 
 export function PropertiesSection({
   clientId,
+  agentId,
   properties,
 }: {
   clientId: string;
-  properties: Property[];
+  agentId: string;
+  properties: PropertyWithAttachments[];
 }) {
   const t = useTranslations("clientDetail.properties");
   const [adding, setAdding] = useState(false);
@@ -84,7 +93,12 @@ export function PropertiesSection({
       ) : (
         <ul className="divide-y">
           {properties.map((p) => (
-            <PropertyCard key={p.id} clientId={clientId} property={p} />
+            <PropertyCard
+              key={p.id}
+              clientId={clientId}
+              agentId={agentId}
+              property={p}
+            />
           ))}
         </ul>
       )}
@@ -100,10 +114,12 @@ export function PropertiesSection({
 
 function PropertyCard({
   clientId,
+  agentId,
   property,
 }: {
   clientId: string;
-  property: Property;
+  agentId: string;
+  property: PropertyWithAttachments;
 }) {
   const t = useTranslations("clientDetail.properties");
   const tCrm = useTranslations("crm");
@@ -154,11 +170,41 @@ function PropertyCard({
           {property.notes ? (
             <p className="text-muted-foreground mt-1 text-[13px]">{property.notes}</p>
           ) : null}
+          {property.attachments?.length ? (
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
+              {property.attachments.map((a) => (
+                <AttachmentChip
+                  key={a.id}
+                  file={a}
+                  kind={a.kind}
+                  removeDescription={t("removeAttachmentDescription", {
+                    name: a.file_name,
+                  })}
+                  onRemove={() => deletePropertyAttachment(clientId, a.id)}
+                />
+              ))}
+            </div>
+          ) : null}
         </div>
         <span className="shrink-0 text-sm font-medium">
           <Money value={property.price} locale={tag} />
         </span>
         <div className="flex shrink-0 items-center gap-0.5">
+          {property.attachments ? (
+            <AttachMenu
+              agentId={agentId}
+              clientId={clientId}
+              folder="properties"
+              pdf={{
+                label: t("attachPdf"),
+                successLabel: t("pdfLabel"),
+                multiple: true,
+              }}
+              onRecord={(meta, kind) =>
+                addPropertyAttachment(clientId, property.id, { ...meta, kind })
+              }
+            />
+          ) : null}
           <Button
             variant="ghost"
             size="icon-xs"

@@ -55,7 +55,7 @@ import { formatTimeInTimeZone } from "@/lib/attention";
 import { clientFullName, formatCurrency, type ClientSide } from "@/lib/crm";
 import type { ViewingWithAttachments } from "@/lib/data/buyer";
 import type { ClientAppointment } from "@/lib/data/calendar";
-import type { ListingMatch } from "@/lib/data/seller";
+import type { ListingMatch, PropertyWithAttachments } from "@/lib/data/seller";
 import type { TaskRow } from "@/lib/data/tasks";
 import { dateKeyInTimeZone } from "@/lib/home";
 import { DEFAULT_TIME_ZONE } from "@/lib/time-zones";
@@ -64,7 +64,6 @@ import type {
   Client,
   DocumentRow,
   EmailTemplate,
-  Property,
   Reservation,
 } from "@/lib/supabase/types";
 import { whatsappLink } from "@/lib/whatsapp";
@@ -74,7 +73,7 @@ export type ClientDetailData = {
   prefs: BuyerPreferences | null;
   viewings: ViewingWithAttachments[];
   reservation: Reservation | null;
-  properties: Property[];
+  properties: PropertyWithAttachments[];
   documents: DocumentRow[];
   matches: ListingMatch[];
   customTemplates: EmailTemplate[];
@@ -518,7 +517,11 @@ export async function ClientDetailView({
               />
             </>
           ) : (
-            <PropertiesSection clientId={client.id} properties={properties} />
+            <PropertiesSection
+              clientId={client.id}
+              agentId={client.agent_id}
+              properties={properties}
+            />
           )}
           <Panel
             title={t("notes")}
