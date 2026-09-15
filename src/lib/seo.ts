@@ -164,7 +164,6 @@ export async function softwareApplicationJsonLd(
     applicationCategory: "BusinessApplication",
     applicationSubCategory: "CRM",
     operatingSystem: "Web",
-    slogan: site("tagline"),
     offers: [
       offer("Free", 0),
       offer("Pro monthly", PRICES.standard.monthly),
