@@ -47,6 +47,10 @@
     "guideFollowUp": {
       "label": "Lead follow-up",
       "blurb": "A follow-up cadence for buyers, with messages you can send as they are."
+    },
+    "about": {
+      "label": "About LeadWing",
+      "blurb": "What LeadWing is, who it is for, the key facts and how to reach us."
     }
   }
 }

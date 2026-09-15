@@ -1,11 +1,20 @@
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { PRICES } from "@/lib/billing";
 import { marketingPath, type MarketingRoute } from "@/lib/routes";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from "@/lib/site";
+import {
+  SITE_ALTERNATE_NAMES,
+  SITE_DESCRIPTION,
+  SITE_DISAMBIGUATION,
+  SITE_FOUNDED,
+  SITE_NAME,
+  SITE_URL,
+  SUPPORT_EMAIL,
+  absoluteUrl,
+} from "@/lib/site";
 
 // llms.txt (https://llmstxt.org): a plain-text brief for AI crawlers and
 // answer engines. Prerendered at build time. The copy mirrors the landing
-// page and its JSON-LD, so keep the three in step.
+// page, the About page and their JSON-LD, so keep them in step.
 export const dynamic = "force-static";
 
 /** The English URL of a marketing page; this file is English only. */
@@ -18,6 +27,15 @@ export function GET() {
 > ${SITE_DESCRIPTION}
 
 ${SITE_NAME} is a web app for solo and independent real-estate agents, including agents who work with several agencies at once. It is built around how these agents actually work: WhatsApp, property portals and clients who speak different languages. The interface is available in English and Spanish, and it installs on a phone's home screen. Sales pipelines are live today; long and short-term rentals are planned.
+
+## About ${SITE_NAME}
+
+- Name: ${SITE_NAME} (also known as ${SITE_ALTERNATE_NAMES.join(", ")})
+- Website: ${SITE_URL}
+- Launched: ${SITE_FOUNDED}
+- Languages: English and Spanish
+- Contact: ${SUPPORT_EMAIL}
+- ${SITE_DISAMBIGUATION}
 
 ## What it does
 
@@ -43,6 +61,7 @@ ${SITE_NAME} is a web app for solo and independent real-estate agents, including
 ## Links
 
 - [Home](${SITE_URL}): product overview, features and pricing
+- [About ${SITE_NAME}](${en("about")}): what ${SITE_NAME} is, who it is for, key facts, the name and how to get in touch
 - [Pricing](${en("pricing")}): both plans side by side, the founding price and what happens if you cancel
 - [Real estate CRM for Spain](${en("crmSpain")}): what a CRM has to handle in the Spanish market, and how ${SITE_NAME} handles it
 - [CRM for Marbella and Costa del Sol agents](${en("crmMarbella")}): international buyers, multi-agency listings and viewing days

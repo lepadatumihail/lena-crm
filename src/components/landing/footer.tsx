@@ -9,7 +9,7 @@ import { Logo } from "@/components/brand/logo";
 
 const LEGAL_LINKS = ["privacy", "terms", "legalNotice"] as const;
 
-const PRODUCT_LINKS = ["pricing", "crmSpain", "crmMarbella"] as const satisfies
+const PRODUCT_LINKS = ["pricing", "crmSpain", "crmMarbella", "about"] as const satisfies
   readonly LinkedRoute[];
 const GUIDE_LINKS = ["guideIdealista", "guideFollowUp"] as const satisfies
   readonly LinkedRoute[];

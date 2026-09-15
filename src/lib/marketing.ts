@@ -22,12 +22,19 @@ export type MarketingFaq = {
 };
 
 export type MarketingPageContent = {
-  /** <title>, ≤ 60 chars, primary keyword first, no brand (the template appends " · LeadWing"). */
+  /**
+   * <title>, ≤ 60 chars, primary keyword first. Leave the brand out (the
+   * template appends " · LeadWing") unless the page is about the brand itself:
+   * a title that names LeadWing is used as it is.
+   */
   title: string;
   /** Meta description, 140–160 characters. */
   description: string;
-  /** "article" → Article structured data (guides); "page" → WebPage (product pages). */
-  kind: "article" | "page";
+  /**
+   * "article" → Article structured data (guides); "page" → WebPage (product
+   * pages); "about" → AboutPage carrying the Organization node (the About page).
+   */
+  kind: "article" | "page" | "about";
   /** ISO date; shown as "Updated …", and used for datePublished/dateModified and sitemap lastmod. */
   published: string;
   /** Short badge above the H1 ("Guide", "Real estate CRM · Spain", …). */

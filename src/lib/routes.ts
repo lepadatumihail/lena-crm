@@ -52,6 +52,7 @@ export const MARKETING_ROUTES = {
     en: "/guides/real-estate-lead-follow-up",
     es: "/es/guias/seguimiento-leads-inmobiliarios",
   },
+  about: { en: "/about", es: "/es/sobre-nosotros" },
   privacy: { en: "/privacy", es: "/es/privacidad" },
   terms: { en: "/terms", es: "/es/terminos" },
   legalNotice: { en: "/legal", es: "/es/aviso-legal" },
@@ -69,6 +70,7 @@ export const CONTENT_ROUTES = [
   "crmMarbella",
   "guideIdealista",
   "guideFollowUp",
+  "about",
 ] as const satisfies readonly MarketingRoute[];
 
 export type ContentRoute = (typeof CONTENT_ROUTES)[number];
@@ -94,6 +96,7 @@ export const LINKED_ROUTES = [
   "crmMarbella",
   "guideIdealista",
   "guideFollowUp",
+  "about",
 ] as const satisfies readonly MarketingRoute[];
 
 export type LinkedRoute = (typeof LINKED_ROUTES)[number];

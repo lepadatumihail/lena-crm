@@ -13,7 +13,16 @@ import {
   type ContentRoute,
   type MarketingRoute,
 } from "@/lib/routes";
-import { SITE_LOCALE, SITE_NAME, SITE_PROFILES, SITE_URL, absoluteUrl } from "@/lib/site";
+import {
+  SITE_ALTERNATE_NAMES,
+  SITE_FOUNDED,
+  SITE_LOCALE,
+  SITE_NAME,
+  SITE_PROFILES,
+  SITE_URL,
+  SUPPORT_EMAIL,
+  absoluteUrl,
+} from "@/lib/site";
 
 const OG_LOCALES: Record<AppLocale, string> = { en: SITE_LOCALE, es: "es_ES" };
 
@@ -22,7 +31,9 @@ const OG_LOCALES: Record<AppLocale, string> = { en: SITE_LOCALE, es: "es_ES" };
  * description, canonical, hreflang alternates and a complete Open Graph block
  * (page metadata replaces the layout's openGraph wholesale, so it is rebuilt
  * here rather than patched). Without `title` the site's own name and tagline
- * are used verbatim, for the home page.
+ * are used verbatim, for the home page. A page title that already names the
+ * brand, like the About page's, is used as it is too: the layout's
+ * " · LeadWing" suffix would only repeat it.
  */
 export async function marketingMetadata(
   route: MarketingRoute,
@@ -37,7 +48,7 @@ export async function marketingMetadata(
   const ogLocale = OG_LOCALES[locale];
 
   return {
-    title: page ? page.title : { absolute: siteTitle },
+    title: page && !page.title.includes(SITE_NAME) ? page.title : { absolute: title },
     description,
     alternates: { canonical: path, languages: marketingAlternates(route) },
     openGraph: {
@@ -65,6 +76,7 @@ export const PUBLISHED: Record<ContentRoute, string> = {
   crmMarbella: "2026-09-13",
   guideIdealista: "2026-09-13",
   guideFollowUp: "2026-09-13",
+  about: "2026-09-15",
 };
 
 /**
@@ -83,13 +95,43 @@ type JsonLd = Record<string, unknown>;
 
 /**
  * Stable node ids, so every page can point at the same three entities instead
- * of describing them again. Only the home page defines the Organization and
- * WebSite nodes; the other pages reference them by @id, which is how a
- * consumer stitches the site together.
+ * of describing them again. The home page defines the Organization and
+ * WebSite nodes and the About page repeats the Organization; the other pages
+ * reference them by @id, which is how a consumer stitches the site together.
  */
 const ORGANIZATION_ID = `${SITE_URL}/#organization`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
 const APP_ID = `${SITE_URL}/#app`;
+
+/**
+ * Who is behind the site, built by this one function wherever it is defined
+ * in full (the home page and the About page), so an engine meets the same
+ * node on both. The alternate names, the disambiguating sentence and `sameAs`
+ * are what tell this LeadWing apart from everything else that shares the word.
+ */
+async function organizationJsonLd(locale: AppLocale): Promise<JsonLd> {
+  const site = await getTranslations({ locale, namespace: "site" });
+  return {
+    "@type": "Organization",
+    "@id": ORGANIZATION_ID,
+    name: SITE_NAME,
+    alternateName: [...SITE_ALTERNATE_NAMES],
+    url: SITE_URL,
+    description: site("description"),
+    disambiguatingDescription: site("disambiguation"),
+    slogan: site("tagline"),
+    foundingDate: SITE_FOUNDED,
+    logo: `${SITE_URL}/icon-512.png`,
+    email: SUPPORT_EMAIL,
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      email: SUPPORT_EMAIL,
+      availableLanguage: [...LOCALES],
+    },
+    ...(SITE_PROFILES.length > 0 ? { sameAs: [...SITE_PROFILES] } : {}),
+  };
+}
 
 /**
  * The product itself, with its offers. Shared by the landing page and the
@@ -114,10 +156,13 @@ export async function softwareApplicationJsonLd(
     "@type": "SoftwareApplication",
     "@id": APP_ID,
     name: SITE_NAME,
+    alternateName: [...SITE_ALTERNATE_NAMES],
     url: pageUrl,
     inLanguage: locale,
     description: site("description"),
+    disambiguatingDescription: site("disambiguation"),
     applicationCategory: "BusinessApplication",
+    applicationSubCategory: "CRM",
     operatingSystem: "Web",
     slogan: site("tagline"),
     offers: [
@@ -136,29 +181,22 @@ export async function softwareApplicationJsonLd(
  */
 export async function landingJsonLd(locale: AppLocale): Promise<JsonLd> {
   const pageUrl = absoluteUrl(marketingPath("home", locale));
-  const [site, faq, app] = await Promise.all([
-    getTranslations({ locale, namespace: "site" }),
+  const [faq, organization, app] = await Promise.all([
     getTranslations({ locale, namespace: "landing.faq" }),
+    organizationJsonLd(locale),
     softwareApplicationJsonLd(locale, pageUrl),
   ]);
 
   return {
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "Organization",
-        "@id": ORGANIZATION_ID,
-        name: SITE_NAME,
-        url: SITE_URL,
-        description: site("description"),
-        logo: `${SITE_URL}/icon-512.png`,
-        ...(SITE_PROFILES.length > 0 ? { sameAs: [...SITE_PROFILES] } : {}),
-      },
+      organization,
       {
         "@type": "WebSite",
         "@id": WEBSITE_ID,
         url: SITE_URL,
         name: SITE_NAME,
+        alternateName: [...SITE_ALTERNATE_NAMES],
         inLanguage: [...LOCALES],
         publisher: { "@id": ORGANIZATION_ID },
       },
@@ -207,20 +245,35 @@ export async function pricingJsonLd(locale: AppLocale): Promise<JsonLd> {
   };
 }
 
+/** How each kind of written page is typed in the structured data. */
+const PAGE_TYPES: Record<MarketingPageContent["kind"], string> = {
+  article: "Article",
+  page: "WebPage",
+  about: "AboutPage",
+};
+
 /**
  * Structured data for a written page: the page (an Article for guides, a
- * WebPage for the product pages), where it sits in the site, and its FAQ.
- * Built from the same content module the page renders, so the two agree.
+ * WebPage for the product pages, an AboutPage for the About page), where it
+ * sits in the site, and its FAQ. Built from the same content module the page
+ * renders, so the two agree.
  */
 export async function pageJsonLd(
   route: MarketingRoute,
   locale: AppLocale,
   content: MarketingPageContent
 ): Promise<JsonLd> {
-  const t = await getTranslations({ locale, namespace: "marketing" });
+  const article = content.kind === "article";
+  // The About page is about the company rather than the product, so it
+  // carries the Organization node itself, as the home page does.
+  const aboutPage = content.kind === "about";
+  const [t, organization] = await Promise.all([
+    getTranslations({ locale, namespace: "marketing" }),
+    aboutPage ? organizationJsonLd(locale) : null,
+  ]);
   const pageUrl = absoluteUrl(marketingPath(route, locale));
   const home = absoluteUrl(marketingPath("home", locale));
-  const article = content.kind === "article";
+  const subject = { "@id": aboutPage ? ORGANIZATION_ID : APP_ID };
 
   const crumbs: JsonLd[] = [
     { "@type": "ListItem", position: 1, name: t("breadcrumb.home"), item: home },
@@ -241,7 +294,7 @@ export async function pageJsonLd(
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": article ? "Article" : "WebPage",
+        "@type": PAGE_TYPES[content.kind],
         "@id": pageUrl,
         url: pageUrl,
         ...(article ? { headline: content.heading } : { name: content.heading }),
@@ -252,13 +305,15 @@ export async function pageJsonLd(
         author: { "@id": ORGANIZATION_ID },
         publisher: { "@id": ORGANIZATION_ID },
         isPartOf: { "@id": WEBSITE_ID },
-        about: { "@id": APP_ID },
+        about: subject,
+        ...(aboutPage ? { mainEntity: subject } : {}),
       },
       {
         "@type": "BreadcrumbList",
         "@id": `${pageUrl}#breadcrumb`,
         itemListElement: crumbs,
       },
+      ...(organization ? [organization] : []),
       ...(content.faq.length > 0
         ? [
             {

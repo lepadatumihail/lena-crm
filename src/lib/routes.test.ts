@@ -112,6 +112,8 @@ describe("marketing routes", () => {
       route: "guideIdealista",
       locale: "en",
     });
+    expect(marketingRouteAt("/about")).toEqual({ route: "about", locale: "en" });
+    expect(marketingRouteAt("/es/sobre-nosotros")).toEqual({ route: "about", locale: "es" });
   });
 
   it.each(["/login", "/es/nope", "/clients", "/privacy/x", "/join/abc"])(
@@ -129,6 +131,8 @@ describe("marketing routes", () => {
     expect(marketingCounterpart("/legal", "es")).toBe("/es/aviso-legal");
     expect(marketingCounterpart("/pricing", "es")).toBe("/es/precios");
     expect(marketingCounterpart("/es/precios", "en")).toBe("/pricing");
+    expect(marketingCounterpart("/about", "es")).toBe("/es/sobre-nosotros");
+    expect(marketingCounterpart("/es/sobre-nosotros", "en")).toBe("/about");
   });
 
   it("lists hreflang alternates with English as x-default", () => {

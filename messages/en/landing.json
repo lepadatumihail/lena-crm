@@ -2,7 +2,7 @@
   "hero": {
     "badge": "CRM for independent real‑estate agents",
     "title": "Your clients, properties, and offers. <accent>Made simple.</accent>",
-    "subtitle": "Keep every buyer, seller, viewing, offer and document on one client card, and get a ready-to-send follow-up before a lead goes cold.",
+    "subtitle": "LeadWing keeps every buyer, seller, viewing, offer and document on one client card, and hands you a ready-to-send follow-up before a lead goes cold.",
     "ctaPrimary": "Start for free",
     "ctaSecondary": "See how it works",
     "note": "No password — sign in with Google or a one-time code."
@@ -232,6 +232,10 @@
     "body": "Short answers to what we hear most. Anything else, just ask.",
     "privacyLink": "Read the privacy policy.",
     "items": {
+      "what": {
+        "q": "What is LeadWing?",
+        "a": "LeadWing is a CRM for independent real-estate agents. It keeps every buyer, seller, property, viewing, offer and document on one client card, across every agency you work with, and drafts follow-ups in your client's language. It runs in the browser on your computer and phone, in English and Spanish."
+      },
       "free": {
         "q": "Is there a free plan?",
         "a": "Yes. Free is free forever and includes every feature. It holds up to {limit} clients, buyers and sellers together, with no card and no time limit."

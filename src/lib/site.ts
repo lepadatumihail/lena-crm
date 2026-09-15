@@ -14,6 +14,20 @@ export const SITE_TAGLINE: string = site.tagline;
 export const SITE_DESCRIPTION: string = site.description;
 
 /**
+ * One sentence that tells this LeadWing apart from everything else sharing the
+ * word (a fishing fly, unrelated companies elsewhere). Emitted as
+ * `disambiguatingDescription` and in llms.txt, because answer engines
+ * otherwise blend every Leadwing they find into one entity.
+ */
+export const SITE_DISAMBIGUATION: string = site.disambiguation;
+
+/** Other names the brand goes by, for `alternateName` in the structured data. */
+export const SITE_ALTERNATE_NAMES: readonly string[] = ["LeadWing CRM"];
+
+/** The year LeadWing launched, for the Organization's `foundingDate` and the About page. */
+export const SITE_FOUNDED = "2026";
+
+/**
  * Public origin, no trailing slash. Falls back to the production domain, which
  * is the www host: the apex 308s to it, so canonicals, sitemap URLs and JSON-LD
  * @ids must name www or every one of them points at a redirect.

@@ -7,6 +7,7 @@ import { PRICES } from "@/lib/billing";
  * FAQPage structured data, so the two can never disagree.
  */
 export const FAQ_KEYS = [
+  "what",
   "free",
   "price",
   "card",
