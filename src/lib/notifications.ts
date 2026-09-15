@@ -1,13 +1,16 @@
 import type { Notification } from "@/lib/supabase/types";
 
-type Routable = Pick<Notification, "type" | "client_id">;
+type Routable = Pick<Notification, "type" | "client_id" | "task_id">;
 
 /**
- * Where a notification takes you when tapped. Appointment rows land on the
- * calendar; client-bound rows open the client, pre-opening the composer for
- * the two nudges that exist to make you write something.
+ * Where a notification takes you when tapped. Task rows open the task on the
+ * tasks page; appointment rows land on the calendar; client-bound rows open
+ * the client, pre-opening the composer for the two nudges that exist to make
+ * you write something.
  */
 export function notificationHref(n: Routable): string {
+  // Task rows carry client_id too, so they are routed first.
+  if (n.type === "task_due") return n.task_id ? `/tasks?task=${n.task_id}` : "/tasks";
   if (n.type.startsWith("appointment") || !n.client_id) return "/calendar";
   const compose =
     n.type === "follow_up"

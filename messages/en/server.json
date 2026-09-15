@@ -25,10 +25,20 @@
     "today": "today",
     "tomorrow": "tomorrow",
     "inDays": "in {count, plural, one {# day} other {# days}}",
+    "taskDue": "Task due today",
+    "taskOverdue": "Task overdue · {days, plural, one {# day} other {# days}}",
     "errors": {
       "notAuthenticated": "Not authenticated",
       "invalidContext": "Invalid sync context",
       "signals": "Failed to load signals"
+    }
+  },
+  "tasks": {
+    "errors": {
+      "checkForm": "Please check the form.",
+      "notFound": "Task not found",
+      "clientNotFound": "That client no longer exists.",
+      "notReady": "Tasks aren't available yet."
     }
   }
 }

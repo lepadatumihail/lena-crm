@@ -13,5 +13,7 @@
   "messageRequired": "Escribe el mensaje",
   "numberBetween": "Introduce un número entre 0 y {max}",
   "nameTooLong": "Como máximo {max} caracteres",
-  "pickTimeZone": "Elige una zona horaria"
+  "pickTimeZone": "Elige una zona horaria",
+  "titleTooLong": "El título admite como máximo {max} caracteres",
+  "descriptionTooLong": "La descripción admite como máximo {max} caracteres"
 }

@@ -13,5 +13,7 @@
   "messageRequired": "Write the message",
   "numberBetween": "Enter a number between 0 and {max}",
   "nameTooLong": "Keep it under {max} characters",
-  "pickTimeZone": "Pick a time zone"
+  "pickTimeZone": "Pick a time zone",
+  "titleTooLong": "Keep the title to {max} characters or fewer",
+  "descriptionTooLong": "Keep the description to {max} characters or fewer"
 }

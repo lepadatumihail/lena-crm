@@ -25,10 +25,20 @@
     "today": "hoy",
     "tomorrow": "mañana",
     "inDays": "en {count, plural, one {# día} other {# días}}",
+    "taskDue": "Tarea para hoy",
+    "taskOverdue": "Tarea atrasada · {days, plural, one {# día} other {# días}}",
     "errors": {
       "notAuthenticated": "No has iniciado sesión",
       "invalidContext": "Contexto de sincronización no válido",
       "signals": "No se pudieron cargar las señales"
+    }
+  },
+  "tasks": {
+    "errors": {
+      "checkForm": "Revisa el formulario.",
+      "notFound": "Tarea no encontrada",
+      "clientNotFound": "Ese cliente ya no existe.",
+      "notReady": "Las tareas aún no están disponibles."
     }
   }
 }

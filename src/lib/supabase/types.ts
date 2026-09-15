@@ -484,6 +484,7 @@ export type Database = {
           body: string | null;
           client_id: string | null;
           appointment_id: string | null;
+          task_id: string | null;
           dedupe_key: string;
           due_at: string;
           read_at: string | null;
@@ -497,6 +498,7 @@ export type Database = {
           body?: string | null;
           client_id?: string | null;
           appointment_id?: string | null;
+          task_id?: string | null;
           dedupe_key: string;
           due_at?: string;
           read_at?: string | null;
@@ -510,10 +512,53 @@ export type Database = {
           body?: string | null;
           client_id?: string | null;
           appointment_id?: string | null;
+          task_id?: string | null;
           dedupe_key?: string;
           due_at?: string;
           read_at?: string | null;
           created_at?: string;
+        };
+        Relationships: [];
+      };
+      tasks: {
+        Row: {
+          id: string;
+          agent_id: string;
+          client_id: string | null;
+          title: string;
+          description: string | null;
+          status: Database["public"]["Enums"]["task_status"];
+          priority: Database["public"]["Enums"]["task_priority"];
+          due_on: string | null;
+          completed_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          agent_id?: string;
+          client_id?: string | null;
+          title: string;
+          description?: string | null;
+          status?: Database["public"]["Enums"]["task_status"];
+          priority?: Database["public"]["Enums"]["task_priority"];
+          due_on?: string | null;
+          completed_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          agent_id?: string;
+          client_id?: string | null;
+          title?: string;
+          description?: string | null;
+          status?: Database["public"]["Enums"]["task_status"];
+          priority?: Database["public"]["Enums"]["task_priority"];
+          due_on?: string | null;
+          completed_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
         };
         Relationships: [];
       };
@@ -824,7 +869,10 @@ export type Database = {
         | "appointment_today"
         | "follow_up"
         | "reservation_date"
-        | "stalled_offer";
+        | "stalled_offer"
+        | "task_due";
+      task_status: "todo" | "in_progress" | "waiting" | "done";
+      task_priority: "none" | "low" | "medium" | "high" | "urgent";
       cohort: "founding" | "standard";
       referral_status: "pending" | "qualified" | "rewarded" | "void";
       sub_status: "none" | "active" | "past_due" | "canceled";
@@ -865,3 +913,6 @@ export type Profile = Tables<"profiles">;
 export type Referral = Tables<"referrals">;
 export type ReferralCredit = Tables<"referral_credits">;
 export type SupportMessage = Tables<"support_messages">;
+export type Task = Tables<"tasks">;
+export type TaskStatus = Enums<"task_status">;
+export type TaskPriority = Enums<"task_priority">;

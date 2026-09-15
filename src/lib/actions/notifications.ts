@@ -12,11 +12,15 @@ import {
   type NotificationHistory,
 } from "@/lib/data/notifications";
 import { getAttentionSignals } from "@/lib/data/attention";
+import { getAgentTimeZone, getSessionUser } from "@/lib/data/session";
 import {
+  calendarDaysFromToday,
   formatDateKey,
   formatInTimeZone,
   formatTimeInTimeZone,
 } from "@/lib/attention";
+import { dateKeyInTimeZone, dayRangeInTimeZone } from "@/lib/home";
+import { isMissingTableError } from "@/lib/supabase/errors";
 import type { AppointmentType } from "@/lib/calendar";
 import type { Enums } from "@/lib/supabase/types";
 import { appointmentTitleFor } from "@/i18n/appointments";
@@ -55,6 +59,11 @@ type NotificationInsert = {
   body: string | null;
   client_id: string | null;
   appointment_id: string | null;
+  // Optional on purpose: postgrest-js sends `?columns=` as the union of keys
+  // across the upsert batch, so a key present on every row would make the
+  // whole sync fail with PGRST204 on a database without the column. Only
+  // task_due rows set it, and they only exist once the table does.
+  task_id?: string | null;
   dedupe_key: string;
   due_at: string;
 };
@@ -81,17 +90,27 @@ function relativeDay(t: ServerT, diff: number): string {
 export async function syncNotifications(
   ctx: SyncContext
 ): Promise<ActionResult> {
-  const [supabase, t, ta, tc, locale] = await Promise.all([
+  // getSessionUser is the same cached lookup getAgentTimeZone uses, so the
+  // auth check and the zone read share one Supabase Auth call.
+  const [supabase, t, ta, tc, locale, agentZone, user] = await Promise.all([
     createSupabase(),
     getTranslations("server.notifications"),
     getTranslations("server.appointments"),
     getTranslations("crm"),
     getLocale(),
+    getAgentTimeZone(),
+    getSessionUser(),
   ]);
+  // Task pings use the agent's profile zone and the server's own clock, the
+  // same day as the sidebar badge, Home and /tasks, so every device produces
+  // the same live task keys and a skewed browser clock near midnight cannot
+  // change them. Appointment reminders and the digest keep the browser's day.
+  const serverNowISO = new Date().toISOString();
+  const taskTodayKey = dateKeyInTimeZone(serverNowISO, agentZone);
+  const taskDayStart = new Date(
+    dayRangeInTimeZone(serverNowISO, agentZone).start
+  );
   const tag = intlTag(locale);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
   if (!user) return { error: t("errors.notAuthenticated") };
   const agentId = user.id;
 
@@ -128,12 +147,19 @@ export async function syncNotifications(
     reminder_minutes: number | null;
     client: Embedded<{ first_name: string; last_name: string }>;
   };
+  type TaskDueRow = {
+    id: string;
+    title: string;
+    due_on: string;
+    client_id: string | null;
+    client: Embedded<{ first_name: string; last_name: string }>;
+  };
   // The largest reminder preset is 1 day, so nothing scheduled beyond
   // dayEnd + 2 days can ever produce a reminder or today-digest row.
   const upperISO = new Date(
     new Date(ctx.dayEndISO).getTime() + 2 * 86_400_000
   ).toISOString();
-  const [apptRes, viewRes] = await Promise.all([
+  const [apptRes, viewRes, taskRes] = await Promise.all([
     supabase
       .from("appointments")
       .select(
@@ -150,9 +176,18 @@ export async function syncNotifications(
       .not("scheduled_at", "is", null)
       .gte("scheduled_at", ctx.dayStartISO)
       .lte("scheduled_at", upperISO),
+    supabase
+      .from("tasks")
+      .select("id, title, due_on, client_id, client:clients(first_name, last_name)")
+      .neq("status", "done")
+      .lte("due_on", taskTodayKey)
+      .order("due_on", { ascending: false }),
   ]);
   if (apptRes.error) return { error: apptRes.error.message };
   if (viewRes.error) return { error: viewRes.error.message };
+  if (taskRes.error && !isMissingTableError(taskRes.error)) {
+    return { error: taskRes.error.message };
+  }
 
   type SchedEvent = {
     key: string; // dedupe namespace, e.g. "appt:<id>" / "viewing:<id>"
@@ -302,6 +337,41 @@ export async function syncNotifications(
     });
   }
 
+  // ---- 6: tasks due today or overdue. One row per task per due date, so a
+  // rescheduled task pings again; the title is rewritten on every sync, so
+  // "due today" turns into "overdue" by itself. Completing the task deletes
+  // its unread rows (actions/tasks.ts); deleting the task cascades them.
+  // The day is the agent's profile zone (see above). due_at: due-today rows
+  // sit at the agent's midnight, overdue rows near 06:00 on their due day (the
+  // margin absorbs a DST hour). Both are in the past, so the bell reads
+  // "N hours/days ago", never "in N hours", and the page files the row under
+  // its due day. ----
+  const DAY_MS = 86_400_000;
+  const taskRows = (taskRes.data ?? []) as unknown as TaskDueRow[];
+  const liveTaskKeys: string[] = [];
+  for (const task of taskRows) {
+    const late = -calendarDaysFromToday(task.due_on, taskTodayKey);
+    const client = one(task.client);
+    const dedupe_key = `task-due:${task.id}:${task.due_on}`;
+    liveTaskKeys.push(dedupe_key);
+    rows.push({
+      agent_id: agentId,
+      type: "task_due",
+      title: late > 0 ? t("taskOverdue", { days: late }) : t("taskDue"),
+      body: client ? `${task.title} · ${fullName(client, "")}` : task.title,
+      client_id: task.client_id,
+      appointment_id: null,
+      task_id: task.id,
+      dedupe_key,
+      due_at:
+        late > 0
+          ? new Date(
+              taskDayStart.getTime() - late * DAY_MS + 6 * 3_600_000
+            ).toISOString()
+          : taskDayStart.toISOString(),
+    });
+  }
+
   const toUpsert = rows;
 
   if (toUpsert.length > 0) {
@@ -317,7 +387,44 @@ export async function syncNotifications(
   const pruneBefore = new Date(
     now.getTime() - 30 * 24 * 60 * 60 * 1000
   ).toISOString();
-  await supabase.from("notifications").delete().lt("read_at", pruneBefore);
+
+  // Generic prune, minus task pings: their key repeats on every sync while the
+  // task stays open and overdue, so pruning a read one would re-ping it unread.
+  await supabase
+    .from("notifications")
+    .delete()
+    .lt("read_at", pruneBefore)
+    .not("dedupe_key", "like", "task-due:%");
+
+  // Task pings only live while their task is open and due. Remove the ones this
+  // sync did not produce: unread ones at once (the task was completed or
+  // rescheduled, or a sync raced a completion and put a cleared row back), read
+  // ones after the usual 30 days. Skipped when the tasks read failed (table
+  // missing) or may be truncated at PostgREST's 1000-row cap, because then a
+  // missing key is not proof that a ping is stale.
+  if (!taskRes.error && taskRows.length < 1000) {
+    const live = new Set(liveTaskKeys);
+    // Compare instants, not strings: Postgres returns "+00:00" offsets while
+    // pruneBefore ends in "Z".
+    const pruneBeforeMs = Date.parse(pruneBefore);
+    const { data: pings } = await supabase
+      .from("notifications")
+      .select("id, dedupe_key, read_at")
+      .like("dedupe_key", "task-due:%");
+    const staleIds = (pings ?? [])
+      .filter(
+        (p) =>
+          !live.has(p.dedupe_key) &&
+          (p.read_at == null || Date.parse(p.read_at) < pruneBeforeMs)
+      )
+      .map((p) => p.id);
+    for (let i = 0; i < staleIds.length; i += 100) {
+      await supabase
+        .from("notifications")
+        .delete()
+        .in("id", staleIds.slice(i, i + 100));
+    }
+  }
 
   return { error: null };
 }

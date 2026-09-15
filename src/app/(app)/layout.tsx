@@ -5,10 +5,11 @@ import { getLocale } from "next-intl/server";
 
 import { createClient } from "@/lib/supabase/server";
 import { getSessionProfile, getSessionUser } from "@/lib/data/session";
+import { countDueTasks } from "@/lib/data/tasks";
 import { intlTag } from "@/i18n/config";
 import { planState } from "@/lib/access";
 import { BUYER_STAGES } from "@/lib/crm";
-import { dayRangeInTimeZone, firstNameFrom } from "@/lib/home";
+import { dateKeyInTimeZone, dayRangeInTimeZone, firstNameFrom } from "@/lib/home";
 import { resolveTimeZone } from "@/lib/time-zones";
 import { AppBar } from "@/components/shell/app-bar";
 import {
@@ -46,11 +47,11 @@ export default async function AppLayout({
   // The app is always open. The only gate is the Free plan's client cap,
   // enforced where a client is added; the sidebar just shows where they stand.
   // One light scan of the book feeds the cap, the nav badges and the pipeline
-  // group; today's appointments are a head count. "Today" starts at the
-  // agent's own midnight, so that count waits for the profile; the scan
-  // does not.
+  // group; today's appointments and due tasks are head counts. "Today" starts
+  // at the agent's own midnight, so those counts wait for the profile; the
+  // scan does not.
   const now = new Date();
-  const [profile, clientsRes, todayRes] = await Promise.all([
+  const [profile, clientsRes, todayRes, dueTasks] = await Promise.all([
     getSessionProfile(),
     supabase.from("clients").select("side, stage, is_active"),
     getSessionProfile().then((p) => {
@@ -64,6 +65,10 @@ export default async function AppLayout({
         .gte("starts_at", today.start)
         .lt("starts_at", today.end);
     }),
+    // Due tasks turn over at the agent's own midnight too; null keeps the badge off.
+    getSessionProfile().then((p) =>
+      countDueTasks(dateKeyInTimeZone(now.toISOString(), resolveTimeZone(p?.time_zone)))
+    ),
   ]);
   const timeZone = resolveTimeZone(profile?.time_zone);
 
@@ -73,6 +78,7 @@ export default async function AppLayout({
     buyers: active.filter((r) => r.side === "buyer").length,
     sellers: active.filter((r) => r.side === "seller").length,
     today: todayRes.count ?? 0,
+    tasks: dueTasks,
   };
   const stages: StageCount[] = BUYER_STAGES.map((stage) => ({
     stage,

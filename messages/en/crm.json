@@ -34,6 +34,8 @@
     "meeting": "Meeting",
     "viewing": "Viewing"
   },
+  "taskStatuses": { "todo": "To do", "in_progress": "In progress", "waiting": "Waiting", "done": "Done" },
+  "taskPriorities": { "none": "No priority", "low": "Low", "medium": "Medium", "high": "High", "urgent": "Urgent" },
   "reminders": {
     "none": "No reminder",
     "atTime": "At time of event",

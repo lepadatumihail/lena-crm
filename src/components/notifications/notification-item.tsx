@@ -8,6 +8,7 @@ import {
   CalendarDays,
   Clock,
   Coins,
+  ListChecks,
   UserPlus,
 } from "lucide-react";
 
@@ -24,15 +25,17 @@ const ICONS: Record<NotificationType, ComponentType<{ className?: string }>> = {
   follow_up: UserPlus,
   reservation_date: CalendarClock,
   stalled_offer: Coins,
+  task_due: ListChecks,
 };
 
-/* The hues Home's "Needs attention" uses: quiet leads amber, key dates green, offers brand; appointments blue. */
+/* The hues Home's "Needs attention" uses: quiet leads amber, key dates green, offers brand; appointments blue; tasks purple. */
 const TONES: Record<NotificationType, Tone> = {
   appointment_reminder: "blue",
   appointment_today: "blue",
   follow_up: "amber",
   reservation_date: "green",
   stalled_offer: "brand",
+  task_due: "purple",
 };
 
 /**

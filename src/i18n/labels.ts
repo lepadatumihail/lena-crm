@@ -6,6 +6,7 @@
  */
 import type enCrm from "../../messages/en/crm.json";
 import { BUYER_STAGES, PROPERTY_TYPES, SELLER_STAGES, LANGUAGES } from "@/lib/crm";
+import type { TaskPriority, TaskStatus } from "@/lib/supabase/types";
 
 type Crm = typeof enCrm;
 type NestedKeys<T, Prefix extends string = ""> = {
@@ -62,4 +63,12 @@ export function reminderLabel(t: CrmT, minutes: number | null): string {
   if (minutes % 1440 === 0) return t("reminders.daysBefore", { count: minutes / 1440 });
   if (minutes % 60 === 0) return t("reminders.hoursBefore", { count: minutes / 60 });
   return t("reminders.minutesBefore", { count: minutes });
+}
+
+export function taskStatusLabel(t: CrmT, status: TaskStatus): string {
+  return t(`taskStatuses.${status}`);
+}
+
+export function taskPriorityLabel(t: CrmT, priority: TaskPriority): string {
+  return t(`taskPriorities.${priority}`);
 }

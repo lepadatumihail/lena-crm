@@ -58,6 +58,8 @@ export type SidebarCounts = {
   sellers: number;
   /** Appointments starting today. */
   today: number;
+  /** Open tasks due today or overdue; null while tasks aren't available. */
+  tasks: number | null;
 };
 
 export type StageCount = { stage: Stage; count: number };

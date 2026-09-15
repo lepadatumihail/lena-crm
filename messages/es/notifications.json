@@ -4,7 +4,8 @@
     "appointment_today": "Hoy",
     "follow_up": "Seguimiento",
     "reservation_date": "Fecha clave",
-    "stalled_offer": "Oferta"
+    "stalled_offer": "Oferta",
+    "task_due": "Tarea"
   },
   "bell": {
     "aria": "Notificaciones",
