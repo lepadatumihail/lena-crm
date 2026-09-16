@@ -4,11 +4,13 @@
 
 > **Status (2026-09-06): code complete, not yet live.** Everything in §3 is implemented and verified (typecheck, lint, unit tests, `next build`, and the migration executed against a throwaway Postgres with scenario assertions). Still to do, in order: `supabase db push` (this is the first time `profiles` exists on the live database), the Stripe dashboard setup in §2, the Vercel env vars, then a test-mode checkout. Until the migration runs, the deployed app keeps working as before: no profile row means no cap is applied in the UI.
 
+> **Update 2026-09-16: the Free cap is 10 clients, not 3.** Three was the smallest free plan in the market (Fincta allows 12, Witei 250 contacts, inmoGesco and PropertyList unlimited), and no real agent had reached it. `FREE_CLIENT_LIMIT` in `src/lib/access.ts` and the trigger (migration `20260916120000_free_client_limit_ten.sql`) both say 10. Wherever this record says 3 below, read 10.
+
 ## 1. Decisions
 
 | Question | Decision |
 |---|---|
-| Tiers | **Free** and **Pro**. One difference: Free is capped at **3 clients**. |
+| Tiers | **Free** and **Pro**. One difference: Free is capped at **10 clients** (3 until 2026-09-16). |
 | What counts | Every `clients` row for the agent — buyers and sellers together, **including inactive/archived**. Deleting a client frees a slot. |
 | Pro price | **€29 / month + IVA**, or **yearly at ≈20% off**. Exact 20% is €278.40; rounded to **€276 / year (€23 / month)** so the per-month figure is a round number. |
 | Founding | **Public.** The **first 20 paying agents**, whoever they are, lock the founding price for life: **€19 / month** or **€180 / year (€15 / month)**. The pricing page shows **"N of 20 founding spots left"**; at 0 it flips to the standard prices. Stripe guarantees the lock: a subscription bills at the price object it was created on, forever. |

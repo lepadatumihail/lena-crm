@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { BillingView } from "@/components/billing/billing-view";
 import { messagesFor } from "@/i18n/messages";
-import { planState } from "@/lib/access";
+import { FREE_CLIENT_LIMIT, planState } from "@/lib/access";
 import type { BillingOverview, StripeSnapshot } from "@/lib/data/billing";
 import type { SubscriptionSnapshot } from "@/lib/subscription";
 import type { Profile } from "@/lib/supabase/types";
@@ -198,7 +198,7 @@ describe("BillingView", () => {
     expect(screen.getByRole("link", { name: /Upgrade to Pro/ }).getAttribute("href")).toBe(
       "/pricing",
     );
-    expect(text).toContain("12 of 3");
+    expect(text).toContain(`12 of ${FREE_CLIENT_LIMIT}`);
     expect(text).toContain("19 spots left");
     expect(text).not.toContain("of 20");
     expect(screen.queryByText("Payment method")).toBeNull();

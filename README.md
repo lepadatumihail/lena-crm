@@ -78,8 +78,8 @@ Resend fallback) is designed into the schema (`email_accounts`,
 
 ## Plans, founding cohort and referrals
 
-Two plans, one difference. **Free** holds 3 clients (every row counts,
-inactive too; nothing is ever deleted, only adding a 4th is blocked). **Pro**
+Two plans, one difference. **Free** holds 10 clients (every row counts,
+inactive too; nothing is ever deleted, only adding an 11th is blocked). **Pro**
 is unlimited: €29/mo or €276/yr, and the first 20 paying agents lock
 €19/mo or €180/yr for life. There is no time trial. Decision record:
 `plans/free-pro-pricing.md`.

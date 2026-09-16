@@ -13,7 +13,7 @@ import type { Profile } from "@/lib/supabase/types";
  * is blocked. The trigger `clients_enforce_free_limit` mirrors this in the
  * database as the backstop. Pure and time-injectable for tests.
  */
-export const FREE_CLIENT_LIMIT = 3;
+export const FREE_CLIENT_LIMIT = 10;
 
 export type AccessProfile = Pick<Profile, "subscription_status" | "pro_until"> & {
   /** The founder is never capped in their own product. */

@@ -11,7 +11,7 @@
 | Question | Recommendation |
 |---|---|
 | **Positioning** | Lead with **multi-agency consolidation** — *"Every client, every agency you work with, one place."* Demote "simple" and "AI" to supporting acts. |
-| **Free vs paid** | **Free + Pro (decided 2026-09-06).** Free forever, capped at **3 clients**; Pro **€29/mo** unlocks unlimited. **No time trial** — Free *is* the trial. Founding cohort kept as the Pro discount. ~~Paid from day one, 14-day trial~~ |
+| **Free vs paid** | **Free + Pro (decided 2026-09-06).** Free forever, capped at **10 clients** (3 until 2026-09-16); Pro **€29/mo** unlocks unlimited. **No time trial** — Free *is* the trial. Founding cohort kept as the Pro discount. ~~Paid from day one, 14-day trial~~ |
 | **Price** | **Pro €29/mo or €276/yr + IVA**; the **first 20 paying agents lock €19/mo or €180/yr for life** (founding, public, spots-left counter). Inside Pro, nothing gated. |
 | **Invite-only?** | ~~**Hybrid.** "By invitation" framing + *immediate* access. Invitation = curation/bandwidth gate, never a public waitlist counter.~~ *(2026-09-06: open signup on Free; founding is public with a spots-left counter; invites are plain referral links.)* |
 | **Referrals** | **Two-sided 1 free month**, triggered on *sustained payment*. Status (Founding badge + locked price) is the real reward. Reframe referrals toward **co-brokerage partners**, not rivals. |
@@ -104,7 +104,7 @@ The current headline leads with "properties" → pulls toward the listing/agency
 - Two *human* touchpoints, not emails: day-7 check-in, day-12/13 personal WhatsApp ("trial ends Friday — switch you to Founding?").
 - Close at day 14 to €19 lifetime-locked; make the discount contingent on a light commitment (testimonial or monthly 30-min feedback call). Each founder gets a personal invite link.
 
-**Avoid:** per-seat pricing; a free tier without a hard cap (3 clients, decided 2026-09-06); card-up-front at this stage; discounting beyond the cohort (cap the lifetime lock hard at ~20); treating 5–20 agents as a quantitative A/B test (it's qualitative). **If rebranding, do it BEFORE the cohort locks in** so evangelists market the final name.
+**Avoid:** per-seat pricing; a free tier without a hard cap (3 clients, decided 2026-09-06; raised to 10 on 2026-09-16); card-up-front at this stage; discounting beyond the cohort (cap the lifetime lock hard at ~20); treating 5–20 agents as a quantitative A/B test (it's qualitative). **If rebranding, do it BEFORE the cohort locks in** so evangelists market the final name.
 
 **6–12 month price path:** Months 0–3 founding cohort open (€19, no card, concierge each) → Months 3–6 close founding publicly ("spots full"), new signups to standard €29 (the closed €19 makes €29 feel earned) → Months 6–12 introduce Pro €39–49 as rentals/email-sending land; founders never move (the whole point of the lock).
 
