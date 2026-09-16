@@ -79,11 +79,6 @@ export function isContentRoute(route: MarketingRoute): route is ContentRoute {
   return (CONTENT_ROUTES as readonly MarketingRoute[]).includes(route);
 }
 
-/** Guides live under /guides (…/guias); they get a Guides breadcrumb level. */
-export function isGuideRoute(route: MarketingRoute): boolean {
-  return route === "guideIdealista" || route === "guideFollowUp";
-}
-
 /**
  * The routes that carry a label and a blurb in the `marketing` catalogs, and
  * so can be shown as a footer link or a "keep reading" card. The home page is

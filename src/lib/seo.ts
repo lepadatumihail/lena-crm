@@ -7,7 +7,6 @@ import { PRICES } from "@/lib/billing";
 import { faqEntries } from "@/lib/faq";
 import type { MarketingPageContent } from "@/lib/marketing";
 import {
-  isGuideRoute,
   marketingAlternates,
   marketingPath,
   type ContentRoute,
@@ -274,20 +273,12 @@ export async function pageJsonLd(
   const home = absoluteUrl(marketingPath("home", locale));
   const subject = { "@id": aboutPage ? ORGANIZATION_ID : APP_ID };
 
+  // Google rejects a ListItem without `item` anywhere but the last position,
+  // so there is no "Guides" level until /guides is a real page.
   const crumbs: JsonLd[] = [
     { "@type": "ListItem", position: 1, name: t("breadcrumb.home"), item: home },
+    { "@type": "ListItem", position: 2, name: content.heading, item: pageUrl },
   ];
-  // The guides index is a label, not a page: a ListItem may carry a name with
-  // no `item`, which is exactly the case here. Nothing links to a URL that 404s.
-  if (isGuideRoute(route)) {
-    crumbs.push({ "@type": "ListItem", position: 2, name: t("breadcrumb.guides") });
-  }
-  crumbs.push({
-    "@type": "ListItem",
-    position: crumbs.length + 1,
-    name: content.heading,
-    item: pageUrl,
-  });
 
   return {
     "@context": "https://schema.org",
