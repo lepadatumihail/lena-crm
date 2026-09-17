@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { DatabaseBackup, Download, Loader2 } from "lucide-react";
+import { DatabaseBackup, Download, Loader2, Upload } from "lucide-react";
 
 import { Panel } from "@/components/shell/panel";
 import { Button } from "@/components/ui/button";
@@ -54,6 +55,19 @@ export function DataPanel({ rowClassName }: { rowClassName: string }) {
         </span>
       }
     >
+      <div className={rowClassName}>
+        <div className="space-y-1.5">
+          <p className="text-sm leading-none font-medium">{t("import")}</p>
+          <p className="text-muted-foreground text-[13px] text-pretty">{t("importHint")}</p>
+        </div>
+        <div>
+          <Button asChild variant="outline" size="sm">
+            <Link href="/clients/import">
+              <Upload /> {t("importButton")}
+            </Link>
+          </Button>
+        </div>
+      </div>
       <div className={rowClassName}>
         <div className="space-y-1.5">
           <p className="text-sm leading-none font-medium">{t("download")}</p>

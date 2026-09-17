@@ -16,6 +16,7 @@ import enClients from "../../messages/en/clients.json";
 import enCommon from "../../messages/en/common.json";
 import enCrm from "../../messages/en/crm.json";
 import enHome from "../../messages/en/home.json";
+import enImports from "../../messages/en/imports.json";
 import enLanding from "../../messages/en/landing.json";
 import enLegal from "../../messages/en/legal.json";
 import enMarketing from "../../messages/en/marketing.json";
@@ -41,6 +42,7 @@ import esClients from "../../messages/es/clients.json";
 import esCommon from "../../messages/es/common.json";
 import esCrm from "../../messages/es/crm.json";
 import esHome from "../../messages/es/home.json";
+import esImports from "../../messages/es/imports.json";
 import esLanding from "../../messages/es/landing.json";
 import esLegal from "../../messages/es/legal.json";
 import esMarketing from "../../messages/es/marketing.json";
@@ -67,6 +69,7 @@ export const en = {
   common: enCommon,
   crm: enCrm,
   home: enHome,
+  imports: enImports,
   landing: enLanding,
   legal: enLegal,
   marketing: enMarketing,
@@ -96,6 +99,7 @@ const es = {
   common: esCommon,
   crm: esCrm,
   home: esHome,
+  imports: esImports,
   landing: esLanding,
   legal: esLegal,
   marketing: esMarketing,

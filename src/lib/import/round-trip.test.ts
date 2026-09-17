@@ -14,6 +14,7 @@ import { autoMap } from "./auto-map";
 import { buildImport } from "./build";
 import { findHeaderRow } from "./header-row";
 import { readImportFile, type XlsxReader } from "./read";
+import { templateTable } from "./template";
 
 const readXlsx: XlsxReader = async (input, options) =>
   readExcelFile(Buffer.from(await input.arrayBuffer()), options) as ReturnType<XlsxReader>;
@@ -63,8 +64,14 @@ const sellers: ClientRecord[] = [
   seller({ property_type: "plot", price: 400000, city: "Benahavís" }),
 ];
 
-async function reimport(side: ClientSide, locale: AppLocale, format: "csv" | "xlsx", records: ClientRecord[]) {
-  const table = clientTable(side, records, contextFor(locale));
+async function reimport(
+  side: ClientSide,
+  locale: AppLocale,
+  format: "csv" | "xlsx",
+  records: ClientRecord[] | "template"
+) {
+  const ctx = contextFor(locale);
+  const table = records === "template" ? templateTable(side, ctx) : clientTable(side, records, ctx);
   const file =
     format === "csv"
       ? new File([buildCsv({ ...table, locale })], "export.csv")
@@ -142,5 +149,35 @@ describe("a LeadWing export imports back unchanged", () => {
         { property_type: "plot", price: 400000, bedrooms: null, address: null, city: "Benahavís", notes: null },
       ],
     });
+  });
+});
+
+describe("the import template imports back", () => {
+  it.each(cases)("buyers, $locale $format: two ready rows", async ({ locale, format }) => {
+    const outcomes = await reimport("buyer", locale, format, "template");
+    expect(outcomes.map((o) => o.status)).toEqual(["ready", "ready"]);
+    const [anna] = outcomes;
+    if (anna.status !== "ready") throw new Error(anna.reason);
+    expect(anna.warnings).toEqual([]);
+    expect(anna.row).toMatchObject({
+      first_name: "Anna",
+      email: "anna.karlsson@example.com",
+      phone: "+46 701234567",
+      nationality: "Swedish",
+      stage: "viewing",
+      deal_type: "direct",
+      preferences: { budget_min: 400000, budget_max: 650000, property_types: ["villa", "townhouse"], bedrooms: 3 },
+    });
+  });
+
+  it.each(cases)("sellers, $locale $format: one seller with two properties", async ({ locale, format }) => {
+    const outcomes = await reimport("seller", locale, format, "template");
+    expect(outcomes).toHaveLength(1);
+    const [sofia] = outcomes;
+    if (sofia.status !== "ready") throw new Error(sofia.reason);
+    expect(sofia.warnings).toEqual([]);
+    expect(sofia.row.first_name).toBe("Sofía");
+    expect(sofia.row.seller_role).toBe("owner");
+    expect(sofia.row.properties.map((p) => p.property_type)).toEqual(["villa", "plot"]);
   });
 });

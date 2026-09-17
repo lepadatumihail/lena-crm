@@ -20,7 +20,7 @@ done.
 | 009 | (spike) Outreach tracking — honest follow-up nudges | P3 | S | — (better after 002) | DONE — [design](009-outreach-tracking-design.md) · go |
 | 010 | Feature pages for search and AI answer engines | P3 | M | — | TODO — [plan](010-feature-pages.md) |
 | 011 | Data export — client lists as Excel/CSV, whole account as ZIP | P1 | M | — | DONE (built 2026-09-17; the founder's signed-in check in Excel, Sheets and Numbers is still open) — [plan](011-data-export.md) |
-| 012 | Client import — CSV and Excel files, preview, undo | P1 | L | 011 | TODO — [plan](012-client-import.md) |
+| 012 | Client import — CSV and Excel files, preview, undo | P1 | L | 011 | DONE (built 2026-09-18, migration applied live; Step 15 marketing copy waits for the live check; the founder's signed-in check with real Excel files is open) — [plan](012-client-import.md) |
 | 013 | Google Calendar two-way sync (honest copy now, build gated) | P2 | XL (copy 0.5–1 d; build 13–16 d + Google review) | 004, 016 Phase 2 (cron helper) | TODO (gated: score H on 9 Oct + Google verification) — [plan](013-google-calendar-sync.md) |
 | 014 | Portal lead inbox — forwarded enquiry emails become leads | P2 | XL (build 9–10 d) | 016 (Phase 0 hard); 012, 013, 015 soft | TODO (gated: score I on 9 Oct) — [plan](014-portal-lead-inbox.md) |
 | 015 | Agencies as a real list, buyer-registration log, then commissions | P1 (Phase A) / P2 | L (A 1.5 d; B ≈8 d; C 4–5 d) | 016 Phase 1 before B | TODO (A now; B gated by scores A + G; C by F) — [plan](015-agencies-and-registrations.md) |

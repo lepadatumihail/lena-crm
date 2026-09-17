@@ -19,6 +19,7 @@ import {
   Euro,
   EyeOff,
   Plus,
+  Upload,
   Search,
   Star,
   Users,
@@ -386,6 +387,18 @@ export function ClientsView({
         </label>
 
         <div className="ml-auto flex items-center gap-2">
+          <Button
+            asChild
+            variant="outline"
+            size="icon-sm"
+            className="text-muted-foreground hover:text-foreground rounded-lg"
+            aria-label={t("import")}
+            title={t("import")}
+          >
+            <Link href={`/clients/import?side=${side}`}>
+              <Upload strokeWidth={1.75} />
+            </Link>
+          </Button>
           <ExportMenu side={side} ids={filteredIds} />
           <ViewToggle
             view={view}
@@ -641,11 +654,18 @@ function EmptyState({ side }: { side: ClientSide }) {
       <p className="text-muted-foreground mt-1 max-w-xs text-sm">
         {t("empty.body", { side })}
       </p>
-      <Button asChild className="mt-4">
-        <Link href={`/clients/new?side=${side}`}>
-          <Plus /> {t("newClient", { side })}
-        </Link>
-      </Button>
+      <div className="mt-4 flex flex-wrap justify-center gap-2">
+        <Button asChild>
+          <Link href={`/clients/new?side=${side}`}>
+            <Plus /> {t("newClient", { side })}
+          </Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href={`/clients/import?side=${side}`}>
+            <Upload /> {t("empty.import")}
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 }

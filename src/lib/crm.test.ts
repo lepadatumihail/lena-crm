@@ -75,6 +75,9 @@ describe("clientRecordId", () => {
     expect(clientRecordId("/clients/buyers")).toBeNull();
     expect(clientRecordId("/clients/sellers")).toBeNull();
     expect(clientRecordId("/clients/new")).toBeNull();
+    expect(clientRecordId("/clients/import")).toBeNull();
+    expect(clientRecordId("/clients/import/template")).toBeNull();
+    expect(clientRecordId("/clients/export")).toBeNull();
     expect(clientRecordId("/clients")).toBeNull();
     expect(clientRecordId("/home")).toBeNull();
   });

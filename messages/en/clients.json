@@ -15,7 +15,8 @@
     "noMatches": "No clients match your filters.",
     "empty": {
       "title": "{side, select, buyer {No buyers yet} other {No sellers yet}}",
-      "body": "{side, select, buyer {Add your first buyer to start tracking them through your pipeline.} other {Add your first seller to start tracking them through your pipeline.}}"
+      "body": "{side, select, buyer {Add your first buyer to start tracking them through your pipeline.} other {Add your first seller to start tracking them through your pipeline.}}",
+      "import": "Import from a spreadsheet"
     },
     "toasts": {
       "moveFailed": "Couldn't move client",
@@ -50,7 +51,8 @@
       "commission": "Commission in pipeline",
       "closed": "Closed",
       "shownNote": "Totals cover the clients shown."
-    }
+    },
+    "import": "Import from a spreadsheet"
   },
   "priority": {
     "flag": "Flag priority",
@@ -154,7 +156,8 @@
   "new": {
     "back": "{side, select, buyer {Back to buyers} other {Back to sellers}}",
     "title": "{side, select, buyer {New buyer} other {New seller}}",
-    "description": "{side, select, buyer {Add a new buyer to your pipeline.} other {Add a new seller to your pipeline.}}"
+    "description": "{side, select, buyer {Add a new buyer to your pipeline.} other {Add a new seller to your pipeline.}}",
+    "importHint": "Adding many? <link>Import a spreadsheet</link>."
   },
   "edit": {
     "title": "Edit {name}"

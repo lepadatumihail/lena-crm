@@ -58,7 +58,14 @@ export default async function NewClientPage({
           {t("title", { side })}
         </h2>
         <p className="text-muted-foreground text-sm">
-          {t("description", { side })}
+          {t("description", { side })}{" "}
+          {t.rich("importHint", {
+            link: (chunks) => (
+              <Link href={`/clients/import?side=${side}`} className="text-foreground font-medium underline-offset-4 hover:underline">
+                {chunks}
+              </Link>
+            ),
+          })}
         </p>
       </div>
       <ClientForm

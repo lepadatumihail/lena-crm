@@ -15,7 +15,8 @@
     "noMatches": "Ningún cliente coincide con tus filtros.",
     "empty": {
       "title": "{side, select, buyer {Aún no hay compradores} other {Aún no hay vendedores}}",
-      "body": "{side, select, buyer {Añade tu primer comprador para empezar a seguirlo por tu embudo.} other {Añade tu primer vendedor para empezar a seguirlo por tu embudo.}}"
+      "body": "{side, select, buyer {Añade tu primer comprador para empezar a seguirlo por tu embudo.} other {Añade tu primer vendedor para empezar a seguirlo por tu embudo.}}",
+      "import": "Importar desde una hoja de cálculo"
     },
     "toasts": {
       "moveFailed": "No se ha podido mover el cliente",
@@ -50,7 +51,8 @@
       "commission": "Comisión en el embudo",
       "closed": "Cerrado",
       "shownNote": "Los totales cubren los clientes que ves."
-    }
+    },
+    "import": "Importar desde una hoja de cálculo"
   },
   "priority": {
     "flag": "Marcar como prioridad",
@@ -154,7 +156,8 @@
   "new": {
     "back": "{side, select, buyer {Volver a compradores} other {Volver a vendedores}}",
     "title": "{side, select, buyer {Nuevo comprador} other {Nuevo vendedor}}",
-    "description": "{side, select, buyer {Añade un nuevo comprador a tu embudo.} other {Añade un nuevo vendedor a tu embudo.}}"
+    "description": "{side, select, buyer {Añade un nuevo comprador a tu embudo.} other {Añade un nuevo vendedor a tu embudo.}}",
+    "importHint": "¿Son muchos? <link>Importa una hoja de cálculo</link>."
   },
   "edit": {
     "title": "Editar a {name}"

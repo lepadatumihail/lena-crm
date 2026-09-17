@@ -41,7 +41,7 @@ export function clientsPath(side: ClientSide): string {
   return `/clients/${side}s`;
 }
 
-const CLIENT_RECORD = /^\/clients\/(?!(?:buyers|sellers|new)(?:\/|$))([^/]+)/;
+const CLIENT_RECORD = /^\/clients\/(?!(?:buyers|sellers|new|import|export)(?:\/|$))([^/]+)/;
 
 /** The id in a client record path ("/clients/<id>" or ".../edit"), else null. */
 export function clientRecordId(pathname: string): string | null {

@@ -1,0 +1,201 @@
+{
+  "meta": {
+    "title": "Importar clientes"
+  },
+  "page": {
+    "back": "{side, select, buyer {Volver a compradores} other {Volver a vendedores}}",
+    "title": "{side, select, buyer {Importar compradores} other {Importar vendedores}}",
+    "description": "Trae una hoja de cálculo: revisa cómo encajan las columnas, previsualiza cada fila e importa. Después puedes deshacer toda la importación."
+  },
+  "steps": {
+    "file": "Archivo",
+    "columns": "Columnas",
+    "review": "Revisión",
+    "run": "Importar"
+  },
+  "file": {
+    "side": "Importando",
+    "drop": "Suelta un archivo aquí o",
+    "browse": "elige un archivo",
+    "types": "Excel (.xlsx), CSV, TSV o TXT · hasta 5 MB y 5.000 filas",
+    "reading": "Leyendo {name}…",
+    "template": "Descargar una plantilla",
+    "templateExcel": "Plantilla Excel",
+    "templateCsv": "Plantilla CSV",
+    "templateHint": "Rellénala y súbela: cada columna encaja sola.",
+    "howTo": "De dónde viene tu archivo",
+    "howToExcel": "Excel: sube el .xlsx tal cual.",
+    "howToSheets": "Google Sheets: Archivo → Descargar → Microsoft Excel (.xlsx) o CSV.",
+    "howToContacts": "Contactos de Google: Exportar → CSV de Google.",
+    "howToCrm": "Otro CRM: su exportación de contactos. Los nombres de columna en español o en inglés valen igual.",
+    "colours": "Los colores y el formato de las celdas no se importan; el texto sí.",
+    "lawful": "Importa personas con las que trabajas. Tú respondes de tener un motivo para guardar sus datos.",
+    "errors": {
+      "tooBig": "Ese archivo pasa de 5 MB. Divídelo o quita columnas que no necesites.",
+      "empty": "Ese archivo no tiene filas.",
+      "legacyOrProtected": "Ese libro no se puede leer. Ábrelo en Excel, quita la contraseña si la tiene y guárdalo como .xlsx.",
+      "unreadable": "Ese archivo no es una hoja de cálculo que LeadWing pueda leer. Guárdalo como .xlsx o CSV e inténtalo de nuevo.",
+      "tooManyRows": "Esa hoja tiene {count, plural, one {# fila} other {# filas}} bajo la cabecera; una importación admite como mucho {max}. Divide el archivo.",
+      "templateFailed": "No se pudo descargar la plantilla."
+    }
+  },
+  "recent": {
+    "title": "Importaciones recientes",
+    "row": "{count, plural, one {# importado} other {# importados}} · {skipped, plural, =0 {ninguno omitido} one {# omitido} other {# omitidos}}",
+    "unfinished": "Sin terminar",
+    "side": "{side, select, buyer {Compradores} other {Vendedores}}",
+    "undo": "Deshacer"
+  },
+  "columns": {
+    "sheet": "Hoja",
+    "headerRow": "Las cabeceras están en la fila",
+    "header": "Columna",
+    "examples": "Ejemplos",
+    "importAs": "Importar como",
+    "noExamples": "(vacío)",
+    "shared": "Varias columnas pueden ser esto: se usa la primera con valor.",
+    "needName": "Elige primero una columna para el nombre: nombre, apellidos o nombre completo.",
+    "settings": "Ajustes para todas las filas",
+    "agency": "Agencia para filas sin agencia",
+    "agencyPlaceholder": "Déjalo vacío para ninguna",
+    "country": "País para teléfonos sin prefijo",
+    "stage": "Etapa para filas sin etapa",
+    "filter": "Importar solo algunas filas",
+    "filterColumn": "Donde la columna",
+    "filterAny": "(sin filtro)",
+    "filterValues": "sea una de",
+    "filterEmpty": "(vacío)",
+    "filterMore": "{count, plural, one {# valor más} other {# valores más}} sin mostrar",
+    "groups": {
+      "contact": "Contacto",
+      "details": "{side, select, buyer {Búsqueda del comprador} other {Propiedad}}",
+      "other": "Otros"
+    },
+    "continue": "Continuar a la revisión"
+  },
+  "targets": {
+    "first_name": "Nombre",
+    "middle_name": "Segundo nombre",
+    "last_name": "Apellidos",
+    "second_last_name": "Segundo apellido",
+    "full_name": "Nombre completo",
+    "email": "Email",
+    "phone": "Teléfono",
+    "language": "Idioma",
+    "nationality": "Nacionalidad",
+    "agency": "Agencia",
+    "notes": "Notas",
+    "stage": "Etapa",
+    "priority": "Prioridad",
+    "is_active": "Activo",
+    "is_inactive": "Oculto / archivado",
+    "deal_type": "Tipo de operación",
+    "budget_min": "Presupuesto mín.",
+    "budget_max": "Presupuesto máx.",
+    "budget": "Presupuesto (valor o rango)",
+    "property_types": "Tipos de propiedad que busca",
+    "bedrooms": "Dormitorios que busca",
+    "bathrooms": "Baños que busca",
+    "area_notes": "Notas de zona",
+    "seller_role": "Rol",
+    "property_type": "Tipo de propiedad",
+    "price": "Precio",
+    "property_bedrooms": "Dormitorios",
+    "address": "Dirección",
+    "city": "Ciudad / zona",
+    "property_notes": "Notas de la propiedad",
+    "add_to_notes": "Añadir a las notas",
+    "ignore": "No importar"
+  },
+  "review": {
+    "counts": {
+      "ready": "Listos",
+      "withNotes": "Listos, con avisos",
+      "existing": "Ya en LeadWing",
+      "repeated": "Repetidos en el archivo",
+      "filteredOut": "Fuera del filtro",
+      "noName": "Sin nombre"
+    },
+    "skipExisting": "Omitir clientes que ya están en LeadWing",
+    "skipExistingHint": "Se reconocen por email o teléfono. Si lo desactivas, se importan de nuevo como clientes nuevos.",
+    "preview": "{count, plural, one {La primera fila} other {Las primeras # filas}}, tal como se guardarán",
+    "previewAll": "Todas las filas, tal como se guardarán",
+    "name": "Nombre",
+    "email": "Email",
+    "phone": "Teléfono",
+    "agency": "Agencia",
+    "stage": "Etapa",
+    "budget": "Presupuesto",
+    "properties": "Propiedades",
+    "city": "Ciudad",
+    "line": "Fila",
+    "needALook": "{count, plural, one {# fila necesita un vistazo} other {# filas necesitan un vistazo}}",
+    "reason": "Motivo",
+    "cells": "Celdas",
+    "nothingReady": "No hay filas listas para importar. Revisa las columnas elegidas y el filtro.",
+    "freeNotice": "Free admite {limit} clientes y tienes {count}: caben {capacity} de estos {ready}.",
+    "upgrade": "Pasa a Pro para importar los {count}",
+    "importSome": "Importar {count} ahora",
+    "import": "Importar {count, plural, one {# cliente} other {# clientes}}",
+    "back": "Volver a las columnas"
+  },
+  "warnings": {
+    "emailUnreadable": "Email no leído",
+    "phoneUnreadable": "Teléfono no leído",
+    "phoneNoCountry": "Teléfono sin prefijo de país",
+    "valueToNotes": "Algunos valores quedan en las notas",
+    "notesTruncated": "Notas cortadas a 5.000 caracteres",
+    "textTruncated": "Un valor se ha acortado",
+    "propertiesCapped": "Solo las 20 primeras propiedades",
+    "mayDuplicate": "Puede estar ya en LeadWing"
+  },
+  "skips": {
+    "noName": "Sin nombre",
+    "filteredOut": "Fuera del filtro",
+    "duplicateInFile": "Repetido en el archivo",
+    "duplicateExisting": "Ya en LeadWing",
+    "overCap": "Por encima del límite del plan Free",
+    "notImported": "No importado"
+  },
+  "notesLabels": {
+    "unreadable": "no reconocido",
+    "column": "Columna {n}"
+  },
+  "run": {
+    "progress": "Importados {done} de {total}…",
+    "stop": "Parar tras este lote",
+    "stopping": "Terminando este lote…",
+    "stopped": "Parado. {done} de {total} importados.",
+    "failed": "Parado tras {done} de {total}.",
+    "retry": "Reintentar con el resto",
+    "leave": "Hay una importación en marcha. ¿Salir igualmente?"
+  },
+  "done": {
+    "title": "{imported, plural, one {# cliente importado} other {# clientes importados}} · {skipped, plural, =0 {ninguno omitido} one {# omitido} other {# omitidos}}",
+    "digest": "Los compradores sin novedades se agrupan en un recordatorio a la semana, así la campana no se llena.",
+    "downloadSkipped": "Descargar las filas no importadas",
+    "skippedFile": "leadwing-importacion-no-importadas.csv",
+    "view": "{side, select, buyer {Ver compradores} other {Ver vendedores}}",
+    "another": "Importar otro archivo",
+    "undo": "Deshacer esta importación"
+  },
+  "undo": {
+    "title": "¿Deshacer esta importación?",
+    "description": "Se eliminarán {total, plural, one {# cliente} other {# clientes}} de {file}, con sus archivos.",
+    "worked": "{count, plural, one {# de ellos se ha editado o trabajado} other {# de ellos se han editado o trabajado}} desde entonces: visitas, tareas, documentos o reservas.",
+    "keepWorked": "Conservar los que he trabajado",
+    "confirm": "Deshacer importación",
+    "undoing": "Deshaciendo…",
+    "done": "Importación deshecha: {deleted, plural, one {# cliente eliminado} other {# clientes eliminados}}{kept, plural, =0 {} one {, # conservado} other {, # conservados}}.",
+    "failed": "No se pudo deshacer la importación"
+  },
+  "errors": {
+    "signedOut": "Tu sesión ha terminado. Vuelve a iniciar sesión.",
+    "invalid": "Algunas filas no eran válidas. Recarga la página e inténtalo de nuevo.",
+    "limitReached": "El plan Free admite {limit} clientes. Pasa a Pro para importar el resto.",
+    "importClosed": "Esta importación está cerrada.",
+    "timeout": "La base de datos tardó demasiado. Reintenta con el resto.",
+    "notFound": "No se encontró esa importación.",
+    "failed": "Algo ha fallado por nuestra parte. Inténtalo de nuevo."
+  }
+}

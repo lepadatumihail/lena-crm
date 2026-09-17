@@ -1,0 +1,201 @@
+{
+  "meta": {
+    "title": "Import clients"
+  },
+  "page": {
+    "back": "{side, select, buyer {Back to buyers} other {Back to sellers}}",
+    "title": "{side, select, buyer {Import buyers} other {Import sellers}}",
+    "description": "Bring a spreadsheet in: check how the columns match, preview every row, then import. You can undo the whole import afterwards."
+  },
+  "steps": {
+    "file": "File",
+    "columns": "Columns",
+    "review": "Review",
+    "run": "Import"
+  },
+  "file": {
+    "side": "Importing",
+    "drop": "Drop a file here, or",
+    "browse": "choose a file",
+    "types": "Excel (.xlsx), CSV, TSV or TXT · up to 5 MB and 5,000 rows",
+    "reading": "Reading {name}…",
+    "template": "Download a template",
+    "templateExcel": "Excel template",
+    "templateCsv": "CSV template",
+    "templateHint": "Fill it in and upload it: every column matches by itself.",
+    "howTo": "Where your file comes from",
+    "howToExcel": "Excel: upload the .xlsx as it is.",
+    "howToSheets": "Google Sheets: File → Download → Microsoft Excel (.xlsx) or CSV.",
+    "howToContacts": "Google Contacts: Export → Google CSV.",
+    "howToCrm": "Another CRM: its contacts export. Column names in Spanish or English both work.",
+    "colours": "Cell colours and formatting aren't imported; the text is.",
+    "lawful": "Import people you work with. You are responsible for having a reason to hold their details.",
+    "errors": {
+      "tooBig": "That file is over 5 MB. Split it, or remove columns you don't need.",
+      "empty": "That file has no rows.",
+      "legacyOrProtected": "That workbook can't be read. Open it in Excel, remove any password, and save it as .xlsx.",
+      "unreadable": "That file isn't a spreadsheet LeadWing can read. Save it as .xlsx or CSV and try again.",
+      "tooManyRows": "That sheet has {count, plural, one {# row} other {# rows}} under the header; the most one import takes is {max}. Split the file.",
+      "templateFailed": "The template couldn't be downloaded."
+    }
+  },
+  "recent": {
+    "title": "Recent imports",
+    "row": "{count, plural, one {# imported} other {# imported}} · {skipped, plural, =0 {none skipped} one {# skipped} other {# skipped}}",
+    "unfinished": "Not finished",
+    "side": "{side, select, buyer {Buyers} other {Sellers}}",
+    "undo": "Undo"
+  },
+  "columns": {
+    "sheet": "Sheet",
+    "headerRow": "Headers are on row",
+    "header": "Column",
+    "examples": "Examples",
+    "importAs": "Import as",
+    "noExamples": "(empty)",
+    "shared": "Several columns can be this: the first one with a value is used.",
+    "needName": "Pick a column for the name first: first name, last name or full name.",
+    "settings": "Settings for every row",
+    "agency": "Agency for rows without one",
+    "agencyPlaceholder": "Leave empty for none",
+    "country": "Country for phone numbers without a code",
+    "stage": "Stage for rows without one",
+    "filter": "Only import some rows",
+    "filterColumn": "Where the column",
+    "filterAny": "(no filter)",
+    "filterValues": "is one of",
+    "filterEmpty": "(empty)",
+    "filterMore": "{count, plural, one {# other value} other {# other values}} not shown",
+    "groups": {
+      "contact": "Contact",
+      "details": "{side, select, buyer {Buyer's search} other {Property}}",
+      "other": "Other"
+    },
+    "continue": "Continue to review"
+  },
+  "targets": {
+    "first_name": "First name",
+    "middle_name": "Middle name",
+    "last_name": "Last name",
+    "second_last_name": "Second last name",
+    "full_name": "Full name",
+    "email": "Email",
+    "phone": "Phone",
+    "language": "Language",
+    "nationality": "Nationality",
+    "agency": "Agency",
+    "notes": "Notes",
+    "stage": "Stage",
+    "priority": "Priority",
+    "is_active": "Active",
+    "is_inactive": "Hidden / archived",
+    "deal_type": "Deal type",
+    "budget_min": "Budget min",
+    "budget_max": "Budget max",
+    "budget": "Budget (value or range)",
+    "property_types": "Property types wanted",
+    "bedrooms": "Bedrooms wanted",
+    "bathrooms": "Bathrooms wanted",
+    "area_notes": "Area notes",
+    "seller_role": "Role",
+    "property_type": "Property type",
+    "price": "Price",
+    "property_bedrooms": "Bedrooms",
+    "address": "Address",
+    "city": "City / area",
+    "property_notes": "Property notes",
+    "add_to_notes": "Add to notes",
+    "ignore": "Don't import"
+  },
+  "review": {
+    "counts": {
+      "ready": "Ready",
+      "withNotes": "Ready, with notes",
+      "existing": "Already in LeadWing",
+      "repeated": "Repeated in the file",
+      "filteredOut": "Filtered out",
+      "noName": "No name"
+    },
+    "skipExisting": "Skip clients already in LeadWing",
+    "skipExistingHint": "Matched by email or phone. Turned off, they are imported again as new clients.",
+    "preview": "The first {count, plural, one {# row} other {# rows}}, as they will be saved",
+    "previewAll": "Every row, as it will be saved",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "agency": "Agency",
+    "stage": "Stage",
+    "budget": "Budget",
+    "properties": "Properties",
+    "city": "City",
+    "line": "Row",
+    "needALook": "{count, plural, one {# row needs a look} other {# rows need a look}}",
+    "reason": "Reason",
+    "cells": "Cells",
+    "nothingReady": "No rows are ready to import. Check the column choices and the filter.",
+    "freeNotice": "Free holds {limit} clients and you have {count}: {capacity} of these {ready} fit.",
+    "upgrade": "Upgrade to import all {count}",
+    "importSome": "Import {count} now",
+    "import": "Import {count, plural, one {# client} other {# clients}}",
+    "back": "Back to columns"
+  },
+  "warnings": {
+    "emailUnreadable": "Email not read",
+    "phoneUnreadable": "Phone not read",
+    "phoneNoCountry": "Phone has no country code",
+    "valueToNotes": "Some values kept as notes",
+    "notesTruncated": "Notes cut at 5,000 characters",
+    "textTruncated": "A value was shortened",
+    "propertiesCapped": "Only the first 20 properties",
+    "mayDuplicate": "May already be in LeadWing"
+  },
+  "skips": {
+    "noName": "No name",
+    "filteredOut": "Filtered out",
+    "duplicateInFile": "Repeated in the file",
+    "duplicateExisting": "Already in LeadWing",
+    "overCap": "Over the Free plan's cap",
+    "notImported": "Not imported"
+  },
+  "notesLabels": {
+    "unreadable": "not recognised",
+    "column": "Column {n}"
+  },
+  "run": {
+    "progress": "Imported {done} of {total}…",
+    "stop": "Stop after this batch",
+    "stopping": "Finishing this batch…",
+    "stopped": "Stopped. {done} of {total} imported.",
+    "failed": "Stopped after {done} of {total}.",
+    "retry": "Try the rest again",
+    "leave": "An import is running. Leave anyway?"
+  },
+  "done": {
+    "title": "Imported {imported, plural, one {# client} other {# clients}} · {skipped, plural, =0 {none skipped} one {# skipped} other {# skipped}}",
+    "digest": "Quiet buyers are grouped into one reminder a week, so the bell won't fill up.",
+    "downloadSkipped": "Download rows not imported",
+    "skippedFile": "leadwing-import-not-imported.csv",
+    "view": "{side, select, buyer {View buyers} other {View sellers}}",
+    "another": "Import another file",
+    "undo": "Undo this import"
+  },
+  "undo": {
+    "title": "Undo this import?",
+    "description": "{total, plural, one {# client} other {# clients}} from {file} will be deleted, with their files.",
+    "worked": "{count, plural, one {# of them has} other {# of them have}} been edited or worked on since: viewings, tasks, documents or reservations.",
+    "keepWorked": "Keep the ones I've worked on",
+    "confirm": "Undo import",
+    "undoing": "Undoing…",
+    "done": "Import undone: {deleted, plural, one {# client} other {# clients}} deleted{kept, plural, =0 {} one {, # kept} other {, # kept}}.",
+    "failed": "Couldn't undo the import"
+  },
+  "errors": {
+    "signedOut": "Your session has ended. Sign in again.",
+    "invalid": "Some rows weren't valid. Reload the page and try again.",
+    "limitReached": "The Free plan holds {limit} clients. Upgrade to Pro to import the rest.",
+    "importClosed": "This import is closed.",
+    "timeout": "The database took too long. Try the rest again.",
+    "notFound": "That import wasn't found.",
+    "failed": "Something went wrong on our side. Please try again."
+  }
+}

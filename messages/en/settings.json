@@ -56,6 +56,9 @@
     "done": "Your export is ready",
     "failed": "Couldn't build your export",
     "sessionEnded": "Your session has ended. Sign in again.",
-    "footnote": "Uploaded files and account deletion: email <email></email>"
+    "footnote": "Uploaded files and account deletion: email <email></email>",
+    "import": "Import clients",
+    "importHint": "Bring buyers or sellers in from an Excel or CSV file, with a preview and undo.",
+    "importButton": "Import"
   }
 }

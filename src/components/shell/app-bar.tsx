@@ -61,7 +61,7 @@ export function AppBar({
   } else if (pathname.startsWith("/clients/sellers")) {
     title = t("sellers");
     pill = { text: t("active", { count: counts.sellers }), tone: "green" };
-  } else if (pathname.startsWith("/clients/new")) {
+  } else if (pathname.startsWith("/clients/new") || pathname.startsWith("/clients/import")) {
     title = searchParams.get("side") === "seller" ? t("sellers") : t("buyers");
   } else if (onRecord) {
     title = t("clients");

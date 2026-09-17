@@ -1602,3 +1602,42 @@ downloaded files.
 - [21] https://support.resales-online.com/en/articles/4046677-can-i-import-my-properties-into-resales-online
 - Google Contacts import help: https://support.google.com/contacts/answer/15147365
 - Outlook CSV headings must be in Outlook's language: https://support.microsoft.com/en-us/outlook/create-or-edit-csv-files-to-import-into-outlook
+
+## As built (2026-09-18)
+
+Built on top of `06222f5` with the amendments above. Typecheck, lint, 688
+tests and the build pass under Node 24. The migration
+`20260918120000_client_imports.sql` was rehearsed in a rolled-back transaction
+(200 buyers in 204 ms, the undo delete in 80 ms) and applied on the live
+database with its history row. The wizard was checked on a preview page with
+stub actions: an `.xlsx` with a title row and two sheets, a Google Contacts
+CSV, a windows-1252 semicolon CSV and an OLE file; the Free-plan cap, the row
+filter, a failed batch with retry, undo, and 375 px. Step 15 (marketing
+claims) is not done: it waits for the live check.
+
+Where the code differs from the steps above:
+
+- **`readImportFile(file, { readXlsx })`**: the workbook reader is an option
+  (amendment 6). The `/browser` entry runs under Turbopack, so `/universal`
+  was never needed. `ImportSheet` carries `rowNumbers`, the file's own row
+  numbers, so `lines` stay right after empty rows are dropped.
+- **Several email or phone columns stay mapped** with a `rank`; in each row
+  the first usable value wins and the others go to the notes as
+  `Header: value`. Auto-map turns only the *other* single-value targets into
+  `add_to_notes`.
+- **Unusable values** are kept as `<Header> (not recognised): <raw>`, in the
+  file's own words, rather than per-field labels; `notesLabels` holds only
+  `unreadable` and `column`.
+- **`buildImport(sheet, mapping, settings, { agencies, labels })`** takes the
+  agent's agency spellings and the two labels; outcomes carry `source`
+  (the file's cells) as well as `lines`.
+- **`previewUndo` returns `{ total, worked }`**, where `worked` is the union of
+  edited clients and clients with any linked row; `undoClientImport(id,
+  { keepWorked })` keeps those.
+- **`src/lib/import/template.ts`** builds the template table; the route only
+  serves it, and `round-trip.test.ts` imports both templates back.
+- **Copy** is in `messages/{en,es}/imports.json` plus `clients.list.import`,
+  `clients.list.empty.import`, `clients.new.importHint` and
+  `settings.data.import*`.
+- The columns step also lets the agent pick the sheet; the review step shows
+  every ready row (not just 50) on request.

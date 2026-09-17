@@ -56,6 +56,9 @@
     "done": "Tu exportación está lista",
     "failed": "No se ha podido crear tu exportación",
     "sessionEnded": "Tu sesión ha terminado. Vuelve a iniciar sesión.",
-    "footnote": "Archivos subidos y eliminación de la cuenta: escribe a <email></email>"
+    "footnote": "Archivos subidos y eliminación de la cuenta: escribe a <email></email>",
+    "import": "Importar clientes",
+    "importHint": "Trae compradores o vendedores desde un archivo Excel o CSV, con previsualización y deshacer.",
+    "importButton": "Importar"
   }
 }
