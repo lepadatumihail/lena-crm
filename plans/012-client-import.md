@@ -15,6 +15,48 @@
 > the same time. Stage only the files this plan names (`git add <path>`), never
 > `git add -A`, and don't touch changes you didn't make.
 
+## Amendments (review at `06222f5`, 2026-09-17)
+
+These override the steps below wherever they disagree.
+
+1. **Languages** (Step 4): `LANGUAGES` holds 20 entries since `d196f65`.
+   The accepted-words table also covers Norwegian, Danish, Finnish,
+   Portuguese, Ukrainian, Chinese, Turkish, Romanian, Czech and Hebrew.
+2. **Nationality** (Steps 3–5): it is a vocabulary stored in English
+   (`src/lib/nationalities.ts`) and exported in the UI language. Add
+   `normalizeNationality(raw)`: `findNationality`, then the EN/ES labels in
+   `crm.json` (`nationalities.<ISO>`), then the aliases; otherwise keep the
+   text, trimmed to 50 characters.
+3. **Agency spelling** (Step 5, Step 9): saves snap to the spelling the agent
+   already uses (`pickSpelling`, `src/lib/agencies.ts`). `build.ts` runs every
+   agency, the cell's and the wizard's default, through `pickSpelling` against
+   `context.agencies` plus the agencies earlier rows of the same file used.
+   `getImportContext` sends every distinct agency spelling, not the top 50.
+4. **Undo** (Step 9):
+   - `previewUndo` returns `{ total, edited, withWork }`. `withWork` counts
+     clients that have a viewing, task, document, appointment, reservation or
+     scheduled email.
+   - `undoClientImport(importId, { keepWorked })`. With `keepWorked`, edited
+     clients and clients with work stay; they keep their `import_id`.
+   - Delete by `.in("id", chunk)` in chunks of 200, never one statement for
+     the whole import (8 s timeout).
+   - The migration also indexes `notifications (client_id)` and
+     `scheduled_emails (client_id)`; both cascade from clients and neither has
+     an index. The rehearsal times the delete as well as the insert.
+5. **Digest** (Step 10): with 5 or fewer quiet buyers, delete this week's
+   **unread** `followup-digest:${weekKey}` row, so the bell never shows the
+   digest beside per-client rows.
+6. **Reading Excel** (Step 2): `readImportFile(file, { readXlsx })` takes the
+   workbook reader as an option, defaulting to a dynamic import of
+   `read-excel-file/browser`. Tests pass `read-excel-file/node`. HTML cases go
+   in `read-html.test.ts` (jsdom); workbook cases stay in `read.test.ts`
+   (node). Real Excel files are the founder's manual check.
+7. **Names**: the header folder is `foldHeader` (it builds on `fold` in
+   `src/lib/utils.ts`). The template route reuses `src/lib/export/http.ts`.
+8. **Stale anchors**: `deleteClient` is at `src/lib/actions/clients.ts:166`,
+   the empty state at `clients-view.tsx:633`, the last-name field at
+   `client-form.tsx:218`.
+
 ## Status
 
 - **Priority**: P1
