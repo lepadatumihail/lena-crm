@@ -184,5 +184,15 @@
     "properties": "Inmuebles",
     "lastActivity": "Última actividad",
     "priority": "Prioritario"
+  },
+  "export": {
+    "label": "Exportar",
+    "count": "{side, select, buyer {{count, plural, one {Exportar # comprador} other {Exportar # compradores}}} other {{count, plural, one {Exportar # vendedor} other {Exportar # vendedores}}}}",
+    "excel": "Excel (.xlsx)",
+    "csv": "CSV",
+    "default": "Por defecto",
+    "selected": "Exportar",
+    "failed": "No se ha podido exportar",
+    "sessionEnded": "Tu sesión ha terminado. Vuelve a iniciar sesión."
   }
 }

@@ -29,6 +29,7 @@ import {
 import { ClientSheet } from "@/components/clients/client-sheet";
 import { ClientsKanban } from "@/components/clients/clients-kanban";
 import { ClientsTable } from "@/components/clients/clients-table";
+import { ExportMenu } from "@/components/clients/export-menu";
 import {
   FilterSelect,
   ToolbarChip,
@@ -206,12 +207,11 @@ export function ClientsView({
     });
   }, [scoped, search, priorityOnly, stageFilter, typeFilter, isBuyer]);
 
+  // Exports follow the rows in view, in the list's own order (a column sort isn't carried over).
+  const filteredIds = useMemo(() => filtered.map((c) => c.id), [filtered]);
   const selectedIds = useMemo(
-    () =>
-      Object.keys(selection).filter(
-        (id) => selection[id] && filtered.some((c) => c.id === id)
-      ),
-    [selection, filtered]
+    () => filteredIds.filter((id) => selection[id]),
+    [selection, filteredIds]
   );
   const openRow = openId ? (optimisticClients.find((c) => c.id === openId) ?? null) : null;
 
@@ -299,7 +299,7 @@ export function ClientsView({
       side={side}
       rows={filtered}
       locale={tag}
-      selectedCount={selectedIds.length}
+      selectedIds={selectedIds}
       stages={stages}
       stageLabelFor={(s) => stageLabel(tCrm, s)}
       onBulkStage={(stage) =>
@@ -386,6 +386,7 @@ export function ClientsView({
         </label>
 
         <div className="ml-auto flex items-center gap-2">
+          <ExportMenu side={side} ids={filteredIds} />
           <ViewToggle
             view={view}
             onChange={setView}
@@ -505,7 +506,7 @@ function Summary({
   side,
   rows,
   locale,
-  selectedCount,
+  selectedIds,
   stages,
   stageLabelFor,
   onBulkStage,
@@ -516,7 +517,8 @@ function Summary({
   side: ClientSide;
   rows: ClientRow[];
   locale: string;
-  selectedCount: number;
+  /** The ticked rows still in view. */
+  selectedIds: string[];
   stages: readonly Stage[];
   stageLabelFor: (stage: Stage) => string;
   onBulkStage: (stage: string) => void;
@@ -526,6 +528,7 @@ function Summary({
 }) {
   const t = useTranslations("clients.list");
   const isBuyer = side === "buyer";
+  const selectedCount = selectedIds.length;
 
   if (selectedCount > 0) {
     return (
@@ -554,6 +557,8 @@ function Summary({
         <Button variant="ghost" size="xs" onClick={onBulkHide}>
           <EyeOff /> {t("bulk.hide")}
         </Button>
+        {/* Exporting keeps the selection, so both formats can follow each other. */}
+        <ExportMenu side={side} ids={selectedIds} variant="bulk" />
         <Button
           variant="ghost"
           size="icon-xs"

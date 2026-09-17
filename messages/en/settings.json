@@ -46,5 +46,16 @@
   "errors": {
     "checkForm": "Please check the form.",
     "notReady": "Settings can't be saved just yet. Please try again in a few minutes."
+  },
+  "data": {
+    "title": "Your data",
+    "download": "Download all your data",
+    "downloadHint": "Clients, searches, viewings, reservations, properties, calendar, tasks, templates and analyses, as an Excel workbook and CSV files.",
+    "button": "Download",
+    "preparing": "Preparing…",
+    "done": "Your export is ready",
+    "failed": "Couldn't build your export",
+    "sessionEnded": "Your session has ended. Sign in again.",
+    "footnote": "Uploaded files and account deletion: email <email></email>"
   }
 }

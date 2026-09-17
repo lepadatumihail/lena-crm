@@ -46,5 +46,16 @@
   "errors": {
     "checkForm": "Revisa el formulario.",
     "notReady": "Todavía no se pueden guardar los ajustes. Inténtalo de nuevo en unos minutos."
+  },
+  "data": {
+    "title": "Tus datos",
+    "download": "Descarga todos tus datos",
+    "downloadHint": "Clientes, búsquedas, visitas, reservas, propiedades, calendario, tareas, plantillas y análisis, en un libro de Excel y en archivos CSV.",
+    "button": "Descargar",
+    "preparing": "Preparando…",
+    "done": "Tu exportación está lista",
+    "failed": "No se ha podido crear tu exportación",
+    "sessionEnded": "Tu sesión ha terminado. Vuelve a iniciar sesión.",
+    "footnote": "Archivos subidos y eliminación de la cuenta: escribe a <email></email>"
   }
 }

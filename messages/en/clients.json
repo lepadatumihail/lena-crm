@@ -184,5 +184,15 @@
     "properties": "Properties",
     "lastActivity": "Last activity",
     "priority": "Priority"
+  },
+  "export": {
+    "label": "Export",
+    "count": "{side, select, buyer {{count, plural, one {Export # buyer} other {Export # buyers}}} other {{count, plural, one {Export # seller} other {Export # sellers}}}}",
+    "excel": "Excel (.xlsx)",
+    "csv": "CSV",
+    "default": "Default",
+    "selected": "Export",
+    "failed": "Couldn't export",
+    "sessionEnded": "Your session has ended. Sign in again."
   }
 }

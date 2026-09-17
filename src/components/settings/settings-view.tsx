@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { useSwitchLocale } from "@/components/locale-switcher";
+import { DataPanel } from "@/components/settings/data-panel";
 import { TimeZonePicker } from "@/components/settings/time-zone-picker";
 import { Panel } from "@/components/shell/panel";
 import { Segmented } from "@/components/shell/toolbar";
@@ -46,8 +47,9 @@ const ROW =
   "grid gap-x-10 gap-y-3 px-4 py-4 md:grid-cols-[minmax(0,16rem)_minmax(0,1fr)]";
 
 /**
- * The agent's settings on two panels. Name and time zone are saved together;
- * language and theme apply the moment they change, as in the account menu.
+ * The agent's settings. Name and time zone are saved together; language and
+ * theme apply the moment they change, as in the account menu; "Your data"
+ * downloads the whole account.
  */
 export function SettingsView({
   email,
@@ -168,6 +170,7 @@ export function SettingsView({
       </Form>
 
       <PreferencesPanel />
+      <DataPanel rowClassName={ROW} />
     </div>
   );
 }
