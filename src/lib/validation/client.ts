@@ -9,7 +9,8 @@ export function clientFormSchema(t: ValidationT) {
   return z.object({
     side: z.enum(["buyer", "seller"]),
     first_name: z.string().trim().min(1, t("firstNameRequired")).max(100),
-    last_name: z.string().trim().min(1, t("lastNameRequired")).max(100),
+    // Optional: portal leads often arrive with a first name only.
+    last_name: z.string().trim().max(100),
     email: z.union([z.literal(""), z.email(t("invalidEmail"))]),
     phone: optionalText(50),
     language: optionalText(50),

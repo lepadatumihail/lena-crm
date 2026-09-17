@@ -1,6 +1,5 @@
 {
   "firstNameRequired": "El nombre es obligatorio",
-  "lastNameRequired": "Los apellidos son obligatorios",
   "invalidEmail": "Introduce un email válido",
   "invalidAmount": "Introduce un importe válido",
   "wholeNumber": "Introduce un número entero",
