@@ -114,9 +114,10 @@ export function TermsEs() {
         </li>
       </ul>
       <p>
-        Puedes borrar clientes, documentos y análisis en cualquier momento. Si quieres una
-        copia completa de tus datos, pídenosla y te entregaremos una exportación en un formato
-        habitual de lectura automática en un plazo de 30 días.
+        Puedes borrar clientes, documentos y análisis en cualquier momento y descargar una
+        copia de tus datos cuando quieras desde Ajustes → Tus datos, en un libro de Excel y en
+        archivos CSV. Si quieres una copia de los archivos que subiste, pídenosla y te la
+        enviaremos en un plazo de 30 días.
       </p>
 
       <h2>8. Uso aceptable</h2>
@@ -168,7 +169,8 @@ export function TermsEs() {
         cuenta. Nosotros podemos poner fin al acuerdo si incumples estos términos y no lo
         corriges en los 15 días siguientes a nuestro aviso, o de inmediato ante un
         incumplimiento grave. Al cerrarse la cuenta, tus datos se eliminan en 30 días
-        (apartado 10 de la Política de privacidad). Exporta antes lo que necesites.
+        (apartado 10 de la Política de privacidad). Exporta antes lo que necesites (Ajustes →
+        Tus datos).
       </p>
 
       <h2>14. Garantías y responsabilidad</h2>

@@ -334,9 +334,10 @@ export function PrivacyEs() {
       <h2>9. Tus derechos</h2>
       <p>
         Puedes pedirnos acceder a tus datos, corregirlos, suprimirlos o exportarlos, limitar u
-        oponerte a su uso y retirar cualquier consentimiento que hayas dado. Escribe a{" "}
-        {e.email}. Podemos pedirte que confirmes tu identidad, y respondemos en el plazo de
-        un mes.
+        oponerte a su uso y retirar cualquier consentimiento que hayas dado. Puedes descargar
+        tú mismo una copia de tus datos en cualquier momento desde Ajustes → Tus datos.
+        Escribe a {e.email}. Podemos pedirte que confirmes tu identidad, y respondemos en el
+        plazo de un mes.
       </p>
       <p>
         Puedes borrar clientes, documentos y análisis tú mismo en cualquier momento. Para

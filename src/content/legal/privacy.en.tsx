@@ -319,7 +319,8 @@ export function PrivacyEn() {
       <h2>9. Your rights</h2>
       <p>
         You can ask us to access, correct, delete or export your data, to restrict or object
-        to how we use it, and to withdraw any consent you have given. Write to {e.email}. We
+        to how we use it, and to withdraw any consent you have given. You can download a copy
+        of your data yourself at any time from Settings → Your data. Write to {e.email}. We
         may ask you to confirm your identity, and we answer within one month.
       </p>
       <p>

@@ -111,9 +111,10 @@ export function TermsEn() {
         </li>
       </ul>
       <p>
-        You can delete clients, documents and analyses at any time. If you want a full copy
-        of your data, ask us and we will provide an export in a common machine-readable
-        format within 30 days.
+        You can delete clients, documents and analyses at any time, and download a copy of
+        your data whenever you like from Settings → Your data, as an Excel workbook and CSV
+        files. For a copy of the files you uploaded, ask us and we will send it within 30
+        days.
       </p>
 
       <h2>8. Acceptable use</h2>
@@ -164,7 +165,7 @@ export function TermsEn() {
         We can end the agreement if you breach these terms and do not fix it within 15 days
         of our notice, or immediately for a serious breach. When the account closes, your
         data is deleted within 30 days (section 10 of the Privacy Policy). Export anything
-        you need first.
+        you need first (Settings → Your data).
       </p>
 
       <h2>14. Warranties and liability</h2>
