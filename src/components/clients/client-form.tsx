@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,10 +38,19 @@ import {
 } from "@/lib/validation/client";
 import { LeadPaste } from "@/components/clients/lead-paste";
 import { PhoneInput } from "@/components/phone-input";
+import { SearchSelect } from "@/components/search-select";
 import type { ExtractedLead } from "@/lib/actions/leads";
-import { dealTypeLabel, sellerRoleLabel } from "@/i18n/labels";
+import { intlTag } from "@/i18n/config";
+import {
+  dealTypeLabel,
+  languageLabel,
+  nationalityLabel,
+  sellerRoleLabel,
+} from "@/i18n/labels";
 import { agencyKey } from "@/lib/agencies";
-import { clientsPath, type ClientSide } from "@/lib/crm";
+import { countryName, flagEmoji } from "@/lib/countries";
+import { LANGUAGES, clientsPath, type ClientSide } from "@/lib/crm";
+import { NATIONALITIES } from "@/lib/nationalities";
 import type { Enums } from "@/lib/supabase/types";
 
 const DEAL_TYPES: readonly Enums<"deal_type">[] = ["direct", "collab"];
@@ -75,7 +84,32 @@ export function ClientForm({
   const tCommon = useTranslations("common");
   const tCrm = useTranslations("crm");
   const tv = useTranslations("validation");
+  const locale = useLocale();
   const schema = useMemo(() => clientFormSchema(tv), [tv]);
+  // Both lists store the English name and show it in the UI language.
+  const languageOptions = useMemo(
+    () => LANGUAGES.map((l) => ({ value: l, label: languageLabel(tCrm, l) })),
+    [tCrm]
+  );
+  const nationalityOptions = useMemo(() => {
+    const collator = new Intl.Collator(intlTag(locale));
+    return NATIONALITIES.map((n) => ({
+      value: n.name,
+      label: nationalityLabel(tCrm, n.name),
+      // The country finds it too: "Spain" or "España" for Spanish.
+      keywords: [
+        countryName(n.iso, locale),
+        countryName(n.iso, "en"),
+        ...(n.aliases ?? []),
+      ],
+      prefix: <span className="text-base leading-none">{flagEmoji(n.iso)}</span>,
+    })).sort((a, b) => collator.compare(a.label, b.label));
+  }, [tCrm, locale]);
+  const pickerLabels = {
+    placeholder: t("selectPlaceholder"),
+    none: t("noChoice"),
+    useTyped: (typed: string) => t("useTyped", { value: typed }),
+  };
   const agencyChoices = useMemo(
     () =>
       (agencyOptions ?? []).map((o) => ({
@@ -231,7 +265,14 @@ export function ClientForm({
               <FormItem>
                 <FormLabel>{t("language")}</FormLabel>
                 <FormControl>
-                  <Input placeholder={t("languagePlaceholder")} {...field} />
+                  <SearchSelect
+                    value={field.value ?? ""}
+                    onChange={(next) =>
+                      form.setValue("language", next, { shouldDirty: true })
+                    }
+                    options={languageOptions}
+                    labels={{ ...pickerLabels, search: t("languageSearch") }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -244,7 +285,14 @@ export function ClientForm({
               <FormItem>
                 <FormLabel>{t("nationality")}</FormLabel>
                 <FormControl>
-                  <Input placeholder={t("nationalityPlaceholder")} {...field} />
+                  <SearchSelect
+                    value={field.value ?? ""}
+                    onChange={(next) =>
+                      form.setValue("nationality", next, { shouldDirty: true })
+                    }
+                    options={nationalityOptions}
+                    labels={{ ...pickerLabels, search: t("nationalitySearch") }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

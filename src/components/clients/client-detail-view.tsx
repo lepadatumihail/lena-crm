@@ -47,6 +47,7 @@ import { dateFnsLocale } from "@/i18n/dates";
 import {
   dealTypeLabel,
   languageLabel,
+  nationalityLabel,
   propertyTypeLabel,
   sellerRoleLabel,
   sideLabel,
@@ -166,6 +167,7 @@ export async function ClientDetailView({
       ? sellerRoleLabel(tCrm, client.seller_role)
       : null;
   const language = languageLabel(tCrm, client.language);
+  const nationality = nationalityLabel(tCrm, client.nationality);
 
   /** "14 Jul 2026" for an instant, on the agent's calendar. */
   const calendarDate = (iso: string) =>
@@ -193,11 +195,13 @@ export async function ClientDetailView({
   const meta: { icon: LucideIcon; text: string }[] = [];
   if (client.agency) meta.push({ icon: Building2, text: client.agency });
   if (language) meta.push({ icon: Languages, text: language });
+  // Both are stored in English, so the stored words are the ones to compare.
   if (
-    client.nationality &&
-    client.nationality.trim().toLowerCase() !== language.toLowerCase()
+    nationality &&
+    client.nationality?.trim().toLowerCase() !==
+      client.language?.trim().toLowerCase()
   ) {
-    meta.push({ icon: MapPin, text: client.nationality });
+    meta.push({ icon: MapPin, text: nationality });
   }
   meta.push({ icon: RefreshCw, text: t("updated", { when: updatedLabel }) });
 
@@ -469,9 +473,9 @@ export async function ClientDetailView({
                   {language}
                 </KeyValueRow>
               ) : null}
-              {client.nationality ? (
+              {nationality ? (
                 <KeyValueRow icon={MapPin} label={t("nationality")}>
-                  {client.nationality}
+                  {nationality}
                 </KeyValueRow>
               ) : null}
               {typeLabel ? (

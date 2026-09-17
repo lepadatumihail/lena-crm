@@ -86,6 +86,16 @@ export const LANGUAGES = [
   "Arabic",
   "Italian",
   "Polish",
+  "Norwegian",
+  "Danish",
+  "Finnish",
+  "Portuguese",
+  "Ukrainian",
+  "Chinese",
+  "Turkish",
+  "Romanian",
+  "Czech",
+  "Hebrew",
 ] as const;
 
 export function clientFullName(c: {

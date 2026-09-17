@@ -44,6 +44,7 @@ import { dateFnsLocale } from "@/i18n/dates";
 import {
   dealTypeLabel,
   languageLabel,
+  nationalityLabel,
   sellerRoleLabel,
   sideLabel,
   stageLabel,
@@ -266,7 +267,7 @@ export function ClientSheet({
                     <InfoRow
                       icon={<MapPin />}
                       label={tDetail("nationality")}
-                      value={c.nationality}
+                      value={nationalityLabel(tCrm, c.nationality)}
                     />
                     <InfoRow
                       icon={<TagIcon />}

@@ -6,6 +6,7 @@
  */
 import type enCrm from "../../messages/en/crm.json";
 import { BUYER_STAGES, PROPERTY_TYPES, SELLER_STAGES, LANGUAGES } from "@/lib/crm";
+import { findNationality } from "@/lib/nationalities";
 import type { TaskPriority, TaskStatus } from "@/lib/supabase/types";
 
 type Crm = typeof enCrm;
@@ -55,6 +56,18 @@ export function languageLabel(t: CrmT, language: string | null | undefined): str
   return LANGS.includes(language)
     ? t(`languages.${language as keyof Crm["languages"]}`)
     : language;
+}
+
+/** Nationalities are stored as their English names ("British"). */
+export function nationalityLabel(
+  t: CrmT,
+  nationality: string | null | undefined
+): string {
+  if (!nationality) return "";
+  const listed = findNationality(nationality);
+  return listed
+    ? t(`nationalities.${listed.iso as keyof Crm["nationalities"]}`)
+    : nationality;
 }
 
 export function reminderLabel(t: CrmT, minutes: number | null): string {

@@ -48,7 +48,7 @@ export async function extractLead(
     "You extract a real-estate lead's details from a raw message — a portal inquiry (Idealista, Fotocasa, Kyero), a forwarded email, or a WhatsApp/SMS text.",
     'Respond ONLY with a JSON object with these string keys: first_name, last_name, email, phone, language, nationality, notes.',
     "language: the language the lead writes in or asks to be contacted in, as an English word (e.g. English, Spanish, German, French, Dutch, Italian, Swedish, Russian, Polish, Arabic).",
-    `nationality: their nationality if stated. notes: a short ${notesLanguage} summary of what they want — budget, area, property type, bedrooms, timing.`,
+    `nationality: their nationality if stated, as an English word (e.g. British, German, Swedish, Dutch). notes: a short ${notesLanguage} summary of what they want — budget, area, property type, bedrooms, timing.`,
     'Use an empty string "" for anything not present. Never invent names, emails, or phone numbers.',
   ].join(" ");
 
