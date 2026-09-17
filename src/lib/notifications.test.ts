@@ -28,8 +28,14 @@ describe("notificationHref", () => {
     expect(notificationHref({ type, client_id: "c1", task_id: null })).toBe(href);
   });
 
-  it("sends a client-less follow_up to the calendar", () => {
+  it("sends the client-less follow_up digest to the buyers list", () => {
     expect(notificationHref({ type: "follow_up", client_id: null, task_id: null })).toBe(
+      "/clients/buyers"
+    );
+  });
+
+  it("sends any other client-less row to the calendar", () => {
+    expect(notificationHref({ type: "stalled_offer", client_id: null, task_id: null })).toBe(
       "/calendar"
     );
   });

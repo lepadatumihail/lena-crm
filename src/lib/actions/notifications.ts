@@ -26,6 +26,7 @@ import type { Enums } from "@/lib/supabase/types";
 import { appointmentTitleFor } from "@/i18n/appointments";
 import { intlTag } from "@/i18n/config";
 import { propertyTypeLabel, stageLabel } from "@/i18n/labels";
+import { digestKey, followUpRows, perClientKeyPattern } from "@/lib/follow-ups";
 
 type ActionResult = { error: string | null };
 type NotificationType = Enums<"notification_type">;
@@ -306,21 +307,26 @@ export async function syncNotifications(
       due_at: ctx.nowISO,
     });
   }
-  for (const b of signals.staleBuyers) {
-    rows.push({
-      agent_id: agentId,
-      type: "follow_up",
-      title: t("followUp", { name: b.name }),
-      body: t("followUpBody", {
-        stage: stageLabel(tc, b.stage),
-        days: b.quietDays,
-      }),
-      client_id: b.clientId,
-      appointment_id: null,
-      dedupe_key: `followup:${b.clientId}:${weekKey}`,
-      due_at: ctx.nowISO,
-    });
-  }
+  // ---- 4b: quiet buyers. A few get a row each; a crowd (as after an
+  // import) becomes one digest row, and this week's unread rows of the other
+  // shape are removed so the bell never shows both.
+  const followUps = followUpRows(signals.staleBuyers, {
+    agentId,
+    weekKey,
+    nowISO: ctx.nowISO,
+    copy: {
+      followUp: (name) => t("followUp", { name }),
+      followUpBody: (stage, days) => t("followUpBody", { stage, days }),
+      followUpDigest: (count) => t("followUpDigest", { count }),
+      followUpDigestMore: (count) => t("followUpDigestMore", { count }),
+      stageName: (stage) => stageLabel(tc, stage),
+    },
+  });
+  rows.push(...followUps.rows);
+  const staleShape = supabase.from("notifications").delete().eq("type", "follow_up").is("read_at", null);
+  await (followUps.digest
+    ? staleShape.like("dedupe_key", perClientKeyPattern(weekKey))
+    : staleShape.eq("dedupe_key", digestKey(weekKey)));
   for (const r of signals.reservationDates) {
     rows.push({
       agent_id: agentId,

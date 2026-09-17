@@ -15,6 +15,8 @@
     "offerPendingBody": "Made an offer but isn't reserved yet — worth a nudge.",
     "followUp": "Follow up with {name}",
     "followUpBody": "{stage} · no update in {days, plural, one {# day} other {# days}}",
+    "followUpDigest": "{count, plural, one {# buyer has} other {# buyers have}} gone quiet",
+    "followUpDigestMore": "and {count, plural, one {# more} other {# more}}",
     "keyDate": "{label} · {name}",
     "keyDateBody": "{date} ({when})",
     "keyDates": {
