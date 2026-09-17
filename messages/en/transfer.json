@@ -1,0 +1,191 @@
+{
+  "columns": {
+    "first_name": "First name",
+    "last_name": "Last name",
+    "email": "Email",
+    "phone": "Phone",
+    "language": "Language",
+    "nationality": "Nationality",
+    "agency": "Agency",
+    "stage": "Stage",
+    "deal_type": "Deal type",
+    "seller_role": "Role",
+    "priority": "Priority",
+    "is_active": "Active",
+    "budget_min": "Budget min (€)",
+    "budget_max": "Budget max (€)",
+    "property_types": "Property types",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "area_notes": "Area notes",
+    "property_type": "Property type",
+    "price": "Price (€)",
+    "property_bedrooms": "Bedrooms",
+    "address": "Address",
+    "city": "City / area",
+    "property_notes": "Property notes",
+    "notes": "Notes",
+    "down_payment": "Down payment (€)",
+    "down_payment_date": "Down payment date",
+    "ppc": "PPC (€)",
+    "ppc_date": "PPC date",
+    "notary_date": "Notary date",
+    "notary_notes": "Notary notes",
+    "commission": "Commission (€)",
+    "closed_at": "Closed date",
+    "viewing_count": "Viewings",
+    "created_at": "Created",
+    "updated_at": "Updated",
+    "id": "LeadWing ID"
+  },
+  "values": {
+    "yes": "Yes",
+    "no": "No"
+  },
+  "sheets": {
+    "buyers": "Buyers",
+    "sellers": "Sellers",
+    "viewings": "Viewings",
+    "appointments": "Calendar",
+    "tasks": "Tasks",
+    "taskNotes": "Task notes",
+    "templates": "Templates",
+    "dealAnalyses": "Deal analyses",
+    "files": "Files",
+    "account": "Account"
+  },
+  "tables": {
+    "viewings": {
+      "client_name": "Client",
+      "client_id": "Client ID",
+      "title": "Property title",
+      "description": "Description",
+      "scheduled_at": "Scheduled at",
+      "had_offer": "Made an offer",
+      "offer_price": "Offer price (€)",
+      "property_price": "Asking price (€)",
+      "created_at": "Created",
+      "id": "ID"
+    },
+    "appointments": {
+      "type": "Type",
+      "title": "Title",
+      "client_name": "Client",
+      "client_id": "Client ID",
+      "property": "Property",
+      "starts_at": "Starts at",
+      "ends_at": "Ends at",
+      "location": "Location",
+      "notes": "Notes",
+      "reminder_minutes": "Reminder (minutes before)",
+      "created_at": "Created",
+      "id": "ID"
+    },
+    "tasks": {
+      "title": "Title",
+      "description": "Description",
+      "status": "Status",
+      "priority": "Priority",
+      "due_on": "Due date",
+      "completed_at": "Completed",
+      "client_name": "Client",
+      "client_id": "Client ID",
+      "created_at": "Created",
+      "id": "ID"
+    },
+    "taskNotes": {
+      "task_title": "Task",
+      "task_id": "Task ID",
+      "body": "Note",
+      "created_at": "Created",
+      "id": "ID"
+    },
+    "templates": {
+      "name": "Name",
+      "subject": "Subject",
+      "body": "Message",
+      "created_at": "Created",
+      "updated_at": "Updated",
+      "id": "ID"
+    },
+    "dealAnalyses": {
+      "title": "Title",
+      "analysis_date": "Date",
+      "property_type": "Property type",
+      "asking_price": "Asking price (€)",
+      "transfer_tax_pct": "Transfer (%)",
+      "lawyer_pct": "Lawyer (%)",
+      "notary_pct": "Notary (%)",
+      "renovation_price_per_sqm": "Reno (€/m²)",
+      "surface_sqm": "Surface (m²)",
+      "contingency_pct": "Contingency (%)",
+      "duration_months": "Duration (months)",
+      "expected_sale_price": "Expected sale price (€)",
+      "agency_fee_pct": "Agency fee (%)",
+      "notes": "Notes",
+      "created_at": "Created",
+      "id": "ID"
+    },
+    "files": {
+      "client_name": "Client",
+      "client_id": "Client ID",
+      "attached_to": "Attached to",
+      "parent_id": "Viewing or property ID",
+      "file_name": "File name",
+      "mime_type": "Type",
+      "size": "Size (bytes)",
+      "created_at": "Uploaded",
+      "id": "ID"
+    },
+    "account": {
+      "full_name": "Name",
+      "email": "Email",
+      "language": "Language",
+      "time_zone": "Time zone",
+      "plan": "Plan",
+      "pro_until": "Pro until",
+      "founding_number": "Founding number",
+      "created_at": "Member since"
+    }
+  },
+  "attachedTo": {
+    "document": "Document",
+    "viewing": "Viewing",
+    "property": "Property"
+  },
+  "dealPropertyTypes": {
+    "resale": "Resale",
+    "new_build": "New build"
+  },
+  "plans": {
+    "free": "Free",
+    "pro": "Pro"
+  },
+  "readme": {
+    "title": "LeadWing export",
+    "generated": "Made on {date} for {email}.",
+    "filesHeading": "What is in this folder",
+    "workbook": "Every table below as one Excel workbook, a sheet per table.",
+    "buyers": "Your buyers with their search and their reservation.",
+    "sellers": "Your sellers, one row per property.",
+    "viewings": "Every viewing, with the offer if one was made.",
+    "appointments": "Your calendar: meetings and viewings with a date.",
+    "tasks": "Your tasks.",
+    "taskNotes": "The notes written on tasks.",
+    "templates": "Your message templates.",
+    "dealAnalyses": "Your saved profit calculator analyses.",
+    "files": "A list of the files you uploaded. The files themselves are not in this folder.",
+    "account": "Your account details and plan.",
+    "formatHeading": "How to read the files",
+    "timeZone": "Times are shown in your time zone, {timeZone}. Dates are written year-month-day.",
+    "csv": "The CSV files are UTF-8 text. Columns are separated by \"{delimiter}\" and decimals use \"{decimal}\".",
+    "ids": "Rows point to each other through the ID columns: a viewing's Client ID is a buyer's LeadWing ID.",
+    "uploads": "For a copy of the files you uploaded, email {email} and we will send them."
+  },
+  "errors": {
+    "invalid": "The request wasn't valid. Reload the page and try again.",
+    "forbidden": "That request didn't come from LeadWing.",
+    "signedOut": "Your session has ended. Sign in again.",
+    "failed": "Something went wrong on our side. Please try again."
+  }
+}

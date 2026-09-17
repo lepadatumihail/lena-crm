@@ -1,0 +1,191 @@
+{
+  "columns": {
+    "first_name": "Nombre",
+    "last_name": "Apellidos",
+    "email": "Email",
+    "phone": "Teléfono",
+    "language": "Idioma",
+    "nationality": "Nacionalidad",
+    "agency": "Agencia",
+    "stage": "Etapa",
+    "deal_type": "Tipo de operación",
+    "seller_role": "Rol",
+    "priority": "Prioridad",
+    "is_active": "Activo",
+    "budget_min": "Presupuesto mín. (€)",
+    "budget_max": "Presupuesto máx. (€)",
+    "property_types": "Tipos de propiedad",
+    "bedrooms": "Dormitorios",
+    "bathrooms": "Baños",
+    "area_notes": "Notas de zona",
+    "property_type": "Tipo de propiedad",
+    "price": "Precio (€)",
+    "property_bedrooms": "Dormitorios",
+    "address": "Dirección",
+    "city": "Ciudad / zona",
+    "property_notes": "Notas de la propiedad",
+    "notes": "Notas",
+    "down_payment": "Señal (€)",
+    "down_payment_date": "Fecha de la señal",
+    "ppc": "Contrato de arras (€)",
+    "ppc_date": "Fecha de las arras (PPC)",
+    "notary_date": "Fecha de notaría",
+    "notary_notes": "Notas de notaría",
+    "commission": "Comisión (€)",
+    "closed_at": "Fecha de cierre",
+    "viewing_count": "Visitas",
+    "created_at": "Creado",
+    "updated_at": "Actualizado",
+    "id": "ID de LeadWing"
+  },
+  "values": {
+    "yes": "Sí",
+    "no": "No"
+  },
+  "sheets": {
+    "buyers": "Compradores",
+    "sellers": "Vendedores",
+    "viewings": "Visitas",
+    "appointments": "Calendario",
+    "tasks": "Tareas",
+    "taskNotes": "Notas de tareas",
+    "templates": "Plantillas",
+    "dealAnalyses": "Análisis de operaciones",
+    "files": "Archivos",
+    "account": "Cuenta"
+  },
+  "tables": {
+    "viewings": {
+      "client_name": "Cliente",
+      "client_id": "ID del cliente",
+      "title": "Título de la propiedad",
+      "description": "Descripción",
+      "scheduled_at": "Fecha y hora",
+      "had_offer": "Hizo una oferta",
+      "offer_price": "Precio de la oferta (€)",
+      "property_price": "Precio de salida (€)",
+      "created_at": "Creada",
+      "id": "ID"
+    },
+    "appointments": {
+      "type": "Tipo",
+      "title": "Título",
+      "client_name": "Cliente",
+      "client_id": "ID del cliente",
+      "property": "Propiedad",
+      "starts_at": "Inicio",
+      "ends_at": "Fin",
+      "location": "Ubicación",
+      "notes": "Notas",
+      "reminder_minutes": "Recordatorio (minutos antes)",
+      "created_at": "Creada",
+      "id": "ID"
+    },
+    "tasks": {
+      "title": "Título",
+      "description": "Descripción",
+      "status": "Estado",
+      "priority": "Prioridad",
+      "due_on": "Fecha límite",
+      "completed_at": "Completada",
+      "client_name": "Cliente",
+      "client_id": "ID del cliente",
+      "created_at": "Creada",
+      "id": "ID"
+    },
+    "taskNotes": {
+      "task_title": "Tarea",
+      "task_id": "ID de la tarea",
+      "body": "Nota",
+      "created_at": "Creada",
+      "id": "ID"
+    },
+    "templates": {
+      "name": "Nombre",
+      "subject": "Asunto",
+      "body": "Mensaje",
+      "created_at": "Creada",
+      "updated_at": "Actualizada",
+      "id": "ID"
+    },
+    "dealAnalyses": {
+      "title": "Título",
+      "analysis_date": "Fecha",
+      "property_type": "Tipo de propiedad",
+      "asking_price": "Precio pedido (€)",
+      "transfer_tax_pct": "Transmisión (%)",
+      "lawyer_pct": "Abogado (%)",
+      "notary_pct": "Notaría (%)",
+      "renovation_price_per_sqm": "Reforma (€/m²)",
+      "surface_sqm": "Superficie (m²)",
+      "contingency_pct": "Imprevistos (%)",
+      "duration_months": "Duración (meses)",
+      "expected_sale_price": "Precio de venta previsto (€)",
+      "agency_fee_pct": "Comisión de agencia (%)",
+      "notes": "Notas",
+      "created_at": "Creado",
+      "id": "ID"
+    },
+    "files": {
+      "client_name": "Cliente",
+      "client_id": "ID del cliente",
+      "attached_to": "Adjunto a",
+      "parent_id": "ID de la visita o la propiedad",
+      "file_name": "Nombre del archivo",
+      "mime_type": "Tipo",
+      "size": "Tamaño (bytes)",
+      "created_at": "Subido",
+      "id": "ID"
+    },
+    "account": {
+      "full_name": "Nombre",
+      "email": "Correo electrónico",
+      "language": "Idioma",
+      "time_zone": "Zona horaria",
+      "plan": "Plan",
+      "pro_until": "Pro hasta",
+      "founding_number": "Número de fundador",
+      "created_at": "Miembro desde"
+    }
+  },
+  "attachedTo": {
+    "document": "Documento",
+    "viewing": "Visita",
+    "property": "Propiedad"
+  },
+  "dealPropertyTypes": {
+    "resale": "Segunda mano",
+    "new_build": "Obra nueva"
+  },
+  "plans": {
+    "free": "Gratis",
+    "pro": "Pro"
+  },
+  "readme": {
+    "title": "Exportación de LeadWing",
+    "generated": "Creada el {date} para {email}.",
+    "filesHeading": "Qué hay en esta carpeta",
+    "workbook": "Todas las tablas de abajo en un libro de Excel, con una hoja por tabla.",
+    "buyers": "Tus compradores, con su búsqueda y su reserva.",
+    "sellers": "Tus vendedores, con una fila por propiedad.",
+    "viewings": "Todas las visitas, con la oferta si la hubo.",
+    "appointments": "Tu calendario: reuniones y visitas con fecha.",
+    "tasks": "Tus tareas.",
+    "taskNotes": "Las notas escritas en las tareas.",
+    "templates": "Tus plantillas de mensajes.",
+    "dealAnalyses": "Los análisis que guardaste en la calculadora de rentabilidad.",
+    "files": "Una lista de los archivos que subiste. Los archivos en sí no están en esta carpeta.",
+    "account": "Los datos de tu cuenta y tu plan.",
+    "formatHeading": "Cómo leer los archivos",
+    "timeZone": "Las horas se muestran en tu zona horaria, {timeZone}. Las fechas se escriben año-mes-día.",
+    "csv": "Los archivos CSV son texto UTF-8. Las columnas se separan con «{delimiter}» y los decimales usan «{decimal}».",
+    "ids": "Las filas se enlazan entre sí con las columnas de ID: el ID del cliente de una visita es el ID de LeadWing de un comprador.",
+    "uploads": "Si quieres una copia de los archivos que subiste, escribe a {email} y te los enviaremos."
+  },
+  "errors": {
+    "invalid": "La solicitud no era válida. Recarga la página e inténtalo de nuevo.",
+    "forbidden": "Esa solicitud no venía de LeadWing.",
+    "signedOut": "Tu sesión ha terminado. Vuelve a iniciar sesión.",
+    "failed": "Algo ha fallado por nuestra parte. Inténtalo de nuevo."
+  }
+}
