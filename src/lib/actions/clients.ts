@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 
 import { createClient as createSupabase } from "@/lib/supabase/server";
 import { FREE_CLIENT_LIMIT, canAddClient } from "@/lib/access";
+import { pickSpelling } from "@/lib/agencies";
 import { BUYER_STAGES, SELLER_STAGES, defaultStageForSide } from "@/lib/crm";
 import {
   clientFormSchema,
@@ -51,6 +52,32 @@ async function freeLimitReached(
   return !canAddClient(profile, count ?? 0);
 }
 
+/**
+ * One spelling per agency: a new value snaps to the spelling the agent's
+ * other clients already use. The edited row is left out, so a name only that
+ * client uses can still be corrected ("solvilla" → "Solvilla").
+ */
+async function canonicalAgency(
+  supabase: Awaited<ReturnType<typeof createSupabase>>,
+  raw: string | undefined,
+  selfId?: string
+): Promise<string | null> {
+  if (!raw?.trim()) return null;
+  let query = supabase
+    .from("clients")
+    .select("agency")
+    .not("agency", "is", null)
+    .order("updated_at", { ascending: false })
+    .limit(1000);
+  if (selfId) query = query.neq("id", selfId);
+  // A failed read must not block the save: keep the cleaned input.
+  const { data } = await query;
+  return pickSpelling(
+    (data ?? []).map((c) => c.agency),
+    raw
+  );
+}
+
 export async function createClient(
   values: ClientFormValues
 ): Promise<CreateClientResult> {
@@ -71,6 +98,7 @@ export async function createClient(
     return { error: await limitMessage(), limitReached: true };
   }
 
+  const agency = await canonicalAgency(supabase, v.agency);
   const { data, error } = await supabase
     .from("clients")
     .insert({
@@ -81,7 +109,7 @@ export async function createClient(
       phone: v.phone || null,
       language: v.language || null,
       nationality: v.nationality || null,
-      agency: v.agency || null,
+      agency,
       notes: v.notes || null,
       priority: v.priority,
       stage: defaultStageForSide(v.side),
@@ -111,6 +139,7 @@ export async function updateClient(
   const v = parsed.data;
 
   const supabase = await createSupabase();
+  const agency = await canonicalAgency(supabase, v.agency, id);
   const { error } = await supabase
     .from("clients")
     .update({
@@ -120,7 +149,7 @@ export async function updateClient(
       phone: v.phone || null,
       language: v.language || null,
       nationality: v.nationality || null,
-      agency: v.agency || null,
+      agency,
       notes: v.notes || null,
       priority: v.priority,
       deal_type: v.side === "buyer" ? (v.deal_type ?? null) : null,

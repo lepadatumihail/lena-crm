@@ -3,7 +3,12 @@ import { ClientsScreen } from "@/components/clients/clients-screen";
 export default async function BuyersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ view?: string; inactive?: string; stage?: string }>;
+  searchParams: Promise<{
+    view?: string;
+    inactive?: string;
+    stage?: string;
+    agency?: string;
+  }>;
 }) {
   const sp = await searchParams;
   return (
@@ -12,6 +17,7 @@ export default async function BuyersPage({
       view={sp.view === "kanban" ? "kanban" : "table"}
       includeInactive={sp.inactive === "1"}
       stage={sp.stage}
+      agency={sp.agency}
     />
   );
 }

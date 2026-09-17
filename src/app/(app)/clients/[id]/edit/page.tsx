@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeft } from "lucide-react";
 
-import { getClientById } from "@/lib/data/clients";
+import { getAgencyNames, getClientById } from "@/lib/data/clients";
 import { ClientForm } from "@/components/clients/client-form";
 import { ShellCrumb } from "@/components/shell/shell-context";
 import { Button } from "@/components/ui/button";
@@ -19,9 +19,10 @@ export default async function EditClientPage({
   const client = await getClientById(id);
   if (!client) notFound();
 
-  const [t, tCommon] = await Promise.all([
+  const [t, tCommon, agencyOptions] = await Promise.all([
     getTranslations("clients.edit"),
     getTranslations("common"),
+    getAgencyNames(),
   ]);
   const side = client.side as ClientSide;
   const defaultValues: Partial<ClientFormValues> = {
@@ -57,6 +58,7 @@ export default async function EditClientPage({
         mode="edit"
         clientId={id}
         defaultValues={defaultValues}
+        agencyOptions={agencyOptions}
       />
     </div>
   );

@@ -25,6 +25,8 @@
     },
     "all": "All",
     "typeAll": "All types",
+    "agencyAll": "All",
+    "agencyNone": "No agency",
     "selected": "{count, plural, one {# selected} other {# selected}}",
     "inView": "{count, plural, one {# in view} other {# in view}}",
     "clearSelection": "Clear selection",
@@ -46,7 +48,8 @@
       "properties": "Properties",
       "priority": "Priority",
       "commission": "Commission in pipeline",
-      "closed": "Closed"
+      "closed": "Closed",
+      "shownNote": "Totals cover the clients shown."
     }
   },
   "priority": {
@@ -109,7 +112,9 @@
     "selectPlaceholder": "Select…",
     "agency": "Agency",
     "agencyPlaceholder": "e.g. Marbella Homes",
-    "agencyDescription": "Which agency is this client for?",
+    "agencyDescription": "The agency you're working with on this client, if any.",
+    "agencySuggestions": "Agencies you've used",
+    "useAgency": "Use {name}",
     "notes": "Notes",
     "notesPlaceholder": "Anything worth remembering…",
     "priority": "Priority",

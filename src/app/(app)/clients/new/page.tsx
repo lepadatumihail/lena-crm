@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/server";
 import { canAddClient } from "@/lib/access";
+import { getAgencyNames } from "@/lib/data/clients";
 import { ClientForm } from "@/components/clients/client-form";
 import { UpgradePrompt } from "@/components/billing/upgrade-prompt";
 import { Button } from "@/components/ui/button";
@@ -25,13 +26,14 @@ export default async function NewClientPage({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const [{ data: profile }, { count }] = await Promise.all([
+  const [{ data: profile }, { count }, agencyOptions] = await Promise.all([
     supabase
       .from("profiles")
       .select("subscription_status, pro_until, is_admin")
       .eq("id", user?.id ?? "")
       .maybeSingle(),
     supabase.from("clients").select("id", { count: "exact", head: true }),
+    getAgencyNames(),
   ]);
   const blocked = profile ? !canAddClient(profile, count ?? 0) : false;
 
@@ -59,7 +61,12 @@ export default async function NewClientPage({
           {t("description", { side })}
         </p>
       </div>
-      <ClientForm side={side} mode="create" compose={sp.compose ?? null} />
+      <ClientForm
+        side={side}
+        mode="create"
+        agencyOptions={agencyOptions}
+        compose={sp.compose ?? null}
+      />
     </div>
   );
 }

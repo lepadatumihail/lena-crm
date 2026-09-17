@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useEffect,
   useMemo,
   useOptimistic,
   useState,
@@ -53,6 +54,14 @@ import {
   updateClientStage,
 } from "@/lib/actions/clients";
 import {
+  ALL_AGENCIES,
+  NO_AGENCY,
+  agencyKey,
+  agencyOptionValue,
+  agencyOptions,
+  parseAgencyParam,
+} from "@/lib/agencies";
+import {
   clientsPath,
   stagesForSide,
   STAGE_TONES,
@@ -75,7 +84,7 @@ export function ClientsView({
   view: initialView,
   includeInactive,
   initialStage = "all",
-  commission,
+  initialAgency = ALL_AGENCIES,
 }: {
   clients: ClientRow[];
   side: ClientSide;
@@ -83,7 +92,8 @@ export function ClientsView({
   includeInactive: boolean;
   /** Stage the filter starts on ("all" or a stage of this side). */
   initialStage?: string;
-  commission?: { pipeline: number; closed: number } | null;
+  /** The `?agency=` value the filter starts on; unknown values mean "all". */
+  initialAgency?: string;
 }) {
   const router = useRouter();
   const t = useTranslations("clients.list");
@@ -107,6 +117,12 @@ export function ClientsView({
     setSeenInitialStage(initialStage);
     setStageFilter(initialStage);
   }
+  const [agencyFilter, setAgencyFilter] = useState(initialAgency);
+  const [seenInitialAgency, setSeenInitialAgency] = useState(initialAgency);
+  if (initialAgency !== seenInitialAgency) {
+    setSeenInitialAgency(initialAgency);
+    setAgencyFilter(initialAgency);
+  }
   const [priorityOnly, setPriorityOnly] = useState(false);
   const [typeFilter, setTypeFilter] = useState("all");
   const [selection, setSelection] = useState<Record<string, boolean>>({});
@@ -124,15 +140,57 @@ export function ClientsView({
     [optimisticClients, includeInactive]
   );
 
+  const agencyChoices = useMemo(
+    () => [
+      { value: ALL_AGENCIES, label: t("agencyAll") },
+      ...agencyOptions(visible.map((c) => c.agency)).map((o) => ({
+        value: agencyOptionValue(o.key),
+        label: o.name,
+      })),
+      { value: NO_AGENCY, label: t("agencyNone") },
+    ],
+    [visible, t]
+  );
+  // An agency with no rows here (a stale link, or its last client was hidden)
+  // falls back to "all".
+  const agencyValue = agencyChoices.some((o) => o.value === agencyFilter)
+    ? agencyFilter
+    : ALL_AGENCIES;
+  if (agencyFilter !== agencyValue) setAgencyFilter(agencyValue);
+
+  // Keep `?agency=` in step with the filter, like `?stage=`: no server
+  // round-trip, and a reload keeps the choice.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const wanted = agencyValue === ALL_AGENCIES ? null : agencyValue;
+    if (url.searchParams.get("agency") === wanted) return;
+    if (wanted == null) url.searchParams.delete("agency");
+    else url.searchParams.set("agency", wanted);
+    window.history.replaceState(null, "", url.toString());
+  }, [agencyValue]);
+
+  // The agency scopes everything below it: the stage tabs count only that
+  // agency's clients.
+  const scoped = useMemo(() => {
+    const agency = parseAgencyParam(agencyValue);
+    if (agency.kind === "key") {
+      return visible.filter((c) => agencyKey(c.agency) === agency.key);
+    }
+    if (agency.kind === "none") {
+      return visible.filter((c) => agencyKey(c.agency) === "");
+    }
+    return visible;
+  }, [visible, agencyValue]);
+
   const stageCounts = useMemo(() => {
     const counts = new Map<string, number>();
-    for (const c of visible) counts.set(c.stage, (counts.get(c.stage) ?? 0) + 1);
+    for (const c of scoped) counts.set(c.stage, (counts.get(c.stage) ?? 0) + 1);
     return counts;
-  }, [visible]);
+  }, [scoped]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return visible.filter((c) => {
+    return scoped.filter((c) => {
       if (priorityOnly && !c.priority) return false;
       if (stageFilter !== "all" && c.stage !== stageFilter) return false;
       if (typeFilter !== "all") {
@@ -146,7 +204,7 @@ export function ClientsView({
         .toLowerCase()
         .includes(q);
     });
-  }, [visible, search, priorityOnly, stageFilter, typeFilter, isBuyer]);
+  }, [scoped, search, priorityOnly, stageFilter, typeFilter, isBuyer]);
 
   const selectedIds = useMemo(
     () =>
@@ -214,8 +272,20 @@ export function ClientsView({
   }
 
   function toggleInactive(checked: boolean) {
-    router.push(`${clientsPath(side)}${checked ? "?inactive=1" : ""}`);
+    // The stage and agency filters carry over; they live in the URL.
+    const current = new URLSearchParams(window.location.search);
+    const next = new URLSearchParams();
+    if (checked) next.set("inactive", "1");
+    for (const key of ["stage", "agency"]) {
+      const value = current.get(key);
+      if (value) next.set(key, value);
+    }
+    const query = next.toString();
+    router.push(`${clientsPath(side)}${query ? `?${query}` : ""}`);
   }
+
+  const showAgencyFilter =
+    agencyChoices.length > 2 || agencyValue !== ALL_AGENCIES;
 
   const typeOptions = [
     { value: "all", label: t("typeAll") },
@@ -228,7 +298,6 @@ export function ClientsView({
     <Summary
       side={side}
       rows={filtered}
-      commission={commission ?? null}
       locale={tag}
       selectedCount={selectedIds.length}
       stages={stages}
@@ -263,7 +332,7 @@ export function ClientsView({
       <StageTabs
         value={stageFilter}
         onChange={changeStageFilter}
-        total={visible.length}
+        total={scoped.length}
         stages={stages}
         counts={stageCounts}
         allLabel={t("all")}
@@ -295,6 +364,17 @@ export function ClientsView({
           onValueChange={setTypeFilter}
           options={typeOptions}
         />
+
+        {showAgencyFilter ? (
+          <FilterSelect
+            label={tTable("agency")}
+            value={agencyValue}
+            onValueChange={setAgencyFilter}
+            options={agencyChoices}
+            // Agency names run long: the chip shrinks and the name truncates.
+            className="max-w-full sm:max-w-72 [&_[data-slot=select-trigger]]:min-w-0 [&_[data-slot=select-value]]:block [&_[data-slot=select-value]]:truncate"
+          />
+        ) : null}
 
         <label className="text-muted-foreground bg-background inline-flex h-8 cursor-pointer items-center gap-2 rounded-lg border px-2.5 text-xs font-medium shadow-xs">
           <Switch
@@ -424,7 +504,6 @@ function SummaryCell({
 function Summary({
   side,
   rows,
-  commission,
   locale,
   selectedCount,
   stages,
@@ -436,7 +515,6 @@ function Summary({
 }: {
   side: ClientSide;
   rows: ClientRow[];
-  commission: { pipeline: number; closed: number } | null;
   locale: string;
   selectedCount: number;
   stages: readonly Stage[];
@@ -498,6 +576,13 @@ function Summary({
     0
   );
   const priority = rows.filter((c) => c.priority).length;
+  // Commission follows the rows on screen, like every other figure here.
+  let pipeline = 0;
+  let closed = 0;
+  for (const c of rows) {
+    if (c.closed_at) closed += c.commission ?? 0;
+    else pipeline += c.commission ?? 0;
+  }
 
   return (
     <>
@@ -518,18 +603,23 @@ function Summary({
       {priority > 0 ? (
         <SummaryCell icon={Star} label={t("summary.priority")} value={priority} />
       ) : null}
-      {commission && commission.pipeline > 0 ? (
+      {pipeline > 0 ? (
         <SummaryCell
           icon={Euro}
           label={t("summary.commission")}
-          value={<Money value={commission.pipeline} locale={locale} />}
+          value={<Money value={pipeline} locale={locale} />}
         />
       ) : null}
-      {commission && commission.closed > 0 ? (
+      {closed > 0 ? (
         <SummaryCell
           label={t("summary.closed")}
-          value={<Money value={commission.closed} locale={locale} />}
+          value={<Money value={closed} locale={locale} />}
         />
+      ) : null}
+      {pipeline > 0 || closed > 0 ? (
+        <p className="text-muted-foreground ml-auto px-4 py-2 text-[11px]">
+          {t("summary.shownNote")}
+        </p>
       ) : null}
     </>
   );

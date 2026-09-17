@@ -25,6 +25,8 @@
     },
     "all": "Todos",
     "typeAll": "Todos los tipos",
+    "agencyAll": "Todas",
+    "agencyNone": "Sin agencia",
     "selected": "{count, plural, one {# seleccionado} other {# seleccionados}}",
     "inView": "{count, plural, one {# a la vista} other {# a la vista}}",
     "clearSelection": "Quitar la selección",
@@ -46,7 +48,8 @@
       "properties": "Inmuebles",
       "priority": "Prioritarios",
       "commission": "Comisión en el embudo",
-      "closed": "Cerrado"
+      "closed": "Cerrado",
+      "shownNote": "Los totales cubren los clientes que ves."
     }
   },
   "priority": {
@@ -109,7 +112,9 @@
     "selectPlaceholder": "Selecciona…",
     "agency": "Agencia",
     "agencyPlaceholder": "p. ej. Marbella Homes",
-    "agencyDescription": "¿Para qué agencia es este cliente?",
+    "agencyDescription": "La agencia con la que llevas este cliente, si la hay.",
+    "agencySuggestions": "Agencias que ya usas",
+    "useAgency": "Usar {name}",
     "notes": "Notas",
     "notesPlaceholder": "Cualquier cosa que merezca la pena recordar…",
     "priority": "Prioridad",

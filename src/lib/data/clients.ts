@@ -1,4 +1,5 @@
 import { createClient as createSupabase } from "@/lib/supabase/server";
+import { agencyOptions } from "@/lib/agencies";
 import type { ClientSide } from "@/lib/crm";
 import type { Client } from "@/lib/supabase/types";
 
@@ -11,6 +12,9 @@ export type ClientRow = Client & {
   asking_price: number | null;
   property_count: number;
   viewing_count: number;
+  /** The buyer's reservation commission, and when the deal closed. */
+  commission: number | null;
+  closed_at: string | null;
 };
 
 type Embedded<T> = T | T[] | null;
@@ -23,6 +27,10 @@ type RawClientRow = Client & {
   }>;
   properties: { price: number | null }[] | null;
   viewings: { count: number }[] | null;
+  reservations: Embedded<{
+    commission: number | null;
+    closed_at: string | null;
+  }>;
 };
 
 function one<T>(value: Embedded<T>): T | null {
@@ -31,8 +39,10 @@ function one<T>(value: Embedded<T>): T | null {
 }
 
 function toRow(raw: RawClientRow): ClientRow {
-  const { buyer_preferences, properties, viewings, ...client } = raw;
+  const { buyer_preferences, properties, viewings, reservations, ...client } =
+    raw;
   const prefs = one(buyer_preferences);
+  const reservation = one(reservations);
   const prices = (properties ?? [])
     .map((p) => p.price)
     .filter((p): p is number => p != null);
@@ -44,6 +54,8 @@ function toRow(raw: RawClientRow): ClientRow {
     asking_price: prices.length ? Math.max(...prices) : null,
     property_count: properties?.length ?? 0,
     viewing_count: viewings?.[0]?.count ?? 0,
+    commission: reservation?.commission ?? null,
+    closed_at: reservation?.closed_at ?? null,
   };
 }
 
@@ -60,7 +72,7 @@ export async function getClientRows(
   let query = supabase
     .from("clients")
     .select(
-      "*, buyer_preferences(budget_min, budget_max, property_types), properties(price), viewings(count)"
+      "*, buyer_preferences(budget_min, budget_max, property_types), properties(price), viewings(count), reservations(commission, closed_at)"
     )
     .eq("side", side)
     .order("priority", { ascending: false })
@@ -111,6 +123,26 @@ export async function getActiveClientOptions(): Promise<
     id: c.id,
     name: `${c.first_name} ${c.last_name}`.trim(),
   }));
+}
+
+/**
+ * The agency names the agent already uses, most used first, across buyers and
+ * sellers. The client form offers them so one agency keeps one spelling.
+ */
+export async function getAgencyNames(): Promise<
+  { name: string; count: number }[]
+> {
+  const supabase = await createSupabase();
+  const { data, error } = await supabase
+    .from("clients")
+    .select("agency")
+    .not("agency", "is", null)
+    .order("updated_at", { ascending: false })
+    .limit(1000);
+  if (error) throw new Error(error.message);
+  return agencyOptions((data ?? []).map((c) => c.agency))
+    .slice(0, 50)
+    .map(({ name, count }) => ({ name, count }));
 }
 
 export async function getClientById(id: string): Promise<Client | null> {

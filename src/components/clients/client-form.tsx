@@ -40,6 +40,7 @@ import { LeadPaste } from "@/components/clients/lead-paste";
 import { PhoneInput } from "@/components/phone-input";
 import type { ExtractedLead } from "@/lib/actions/leads";
 import { dealTypeLabel, sellerRoleLabel } from "@/i18n/labels";
+import { agencyKey } from "@/lib/agencies";
 import { clientsPath, type ClientSide } from "@/lib/crm";
 import type { Enums } from "@/lib/supabase/types";
 
@@ -48,18 +49,22 @@ const SELLER_ROLES: readonly Enums<"seller_role">[] = [
   "owner",
   "representative",
 ];
+const MAX_AGENCY_SUGGESTIONS = 8;
 
 export function ClientForm({
   side,
   mode,
   clientId,
   defaultValues,
+  agencyOptions,
   compose = null,
 }: {
   side: ClientSide;
   mode: "create" | "edit";
   clientId?: string;
   defaultValues?: Partial<ClientFormValues>;
+  /** Agency names the agent already uses, most used first. */
+  agencyOptions?: { name: string; count: number }[];
   /** Template id to open in the composer right after the client is created. */
   compose?: string | null;
 }) {
@@ -71,6 +76,14 @@ export function ClientForm({
   const tCrm = useTranslations("crm");
   const tv = useTranslations("validation");
   const schema = useMemo(() => clientFormSchema(tv), [tv]);
+  const agencyChoices = useMemo(
+    () =>
+      (agencyOptions ?? []).map((o) => ({
+        name: o.name,
+        key: agencyKey(o.name),
+      })),
+    [agencyOptions]
+  );
   const form = useForm<ClientFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -239,7 +252,7 @@ export function ClientForm({
           />
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid items-start gap-4 sm:grid-cols-2">
           {side === "buyer" ? (
             <FormField
               control={form.control}
@@ -294,16 +307,48 @@ export function ClientForm({
           <FormField
             control={form.control}
             name="agency"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("agency")}</FormLabel>
-                <FormControl>
-                  <Input placeholder={t("agencyPlaceholder")} {...field} />
-                </FormControl>
-                <FormDescription>{t("agencyDescription")}</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              // Names already in use, narrowed by what is typed; the one
+              // already in the field is not offered again.
+              const typed = agencyKey(field.value);
+              const suggestions = agencyChoices
+                .filter((o) => o.key.includes(typed) && o.key !== typed)
+                .slice(0, MAX_AGENCY_SUGGESTIONS);
+              return (
+                <FormItem>
+                  <FormLabel>{t("agency")}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t("agencyPlaceholder")} {...field} />
+                  </FormControl>
+                  {suggestions.length > 0 ? (
+                    <div
+                      role="group"
+                      aria-label={t("agencySuggestions")}
+                      className="flex flex-wrap gap-1.5"
+                    >
+                      {suggestions.map((o) => (
+                        <button
+                          key={o.key}
+                          type="button"
+                          aria-label={t("useAgency", { name: o.name })}
+                          onClick={() =>
+                            form.setValue("agency", o.name, {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            })
+                          }
+                          className="bg-primary/10 text-primary hover:bg-primary/15 focus-visible:ring-ring/50 inline-flex min-h-8 max-w-full items-center rounded-full px-2.5 text-xs font-medium outline-none focus-visible:ring-[3px]"
+                        >
+                          <span className="truncate">{o.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                  <FormDescription>{t("agencyDescription")}</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
         </div>
 
