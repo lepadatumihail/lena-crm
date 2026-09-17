@@ -32,6 +32,7 @@ function client(id: string, overrides: Partial<Client>): Client {
     stage: "viewing",
     deal_type: "collab",
     seller_role: null,
+    import_id: null,
     created_at: "2026-09-01T08:00:00Z",
     updated_at: "2026-09-10T16:45:00Z",
     ...overrides,

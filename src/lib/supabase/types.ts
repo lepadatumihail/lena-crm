@@ -13,6 +13,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      client_imports: {
+        Row: {
+          id: string;
+          agent_id: string;
+          side: Database["public"]["Enums"]["client_side"];
+          file_name: string;
+          row_count: number;
+          imported_count: number;
+          skipped_count: number;
+          created_at: string;
+          finished_at: string | null;
+          undone_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          agent_id?: string;
+          side: Database["public"]["Enums"]["client_side"];
+          file_name: string;
+          row_count?: number;
+          imported_count?: number;
+          skipped_count?: number;
+          created_at?: string;
+          finished_at?: string | null;
+          undone_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          agent_id?: string;
+          side?: Database["public"]["Enums"]["client_side"];
+          file_name?: string;
+          row_count?: number;
+          imported_count?: number;
+          skipped_count?: number;
+          created_at?: string;
+          finished_at?: string | null;
+          undone_at?: string | null;
+        };
+        Relationships: [];
+      };
       clients: {
         Row: {
           id: string;
@@ -31,6 +70,7 @@ export type Database = {
           stage: string;
           deal_type: Database["public"]["Enums"]["deal_type"] | null;
           seller_role: Database["public"]["Enums"]["seller_role"] | null;
+          import_id: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -51,6 +91,7 @@ export type Database = {
           stage: string;
           deal_type?: Database["public"]["Enums"]["deal_type"] | null;
           seller_role?: Database["public"]["Enums"]["seller_role"] | null;
+          import_id?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -71,6 +112,7 @@ export type Database = {
           stage?: string;
           deal_type?: Database["public"]["Enums"]["deal_type"] | null;
           seller_role?: Database["public"]["Enums"]["seller_role"] | null;
+          import_id?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -905,6 +947,10 @@ export type Database = {
         Args: { p_user_id: string };
         Returns: boolean;
       };
+      import_clients: {
+        Args: { p_import_id: string; p_rows: Json };
+        Returns: number;
+      };
       set_locale: {
         Args: { p_locale: string };
         Returns: undefined;
@@ -958,6 +1004,7 @@ export type Enums<T extends keyof PublicSchema["Enums"]> =
 
 // Convenience row aliases
 export type Client = Tables<"clients">;
+export type ClientImport = Tables<"client_imports">;
 export type BuyerPreferences = Tables<"buyer_preferences">;
 export type Viewing = Tables<"viewings">;
 export type ViewingAttachment = Tables<"viewing_attachments">;
