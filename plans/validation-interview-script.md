@@ -65,6 +65,16 @@ This is *The Mom Test*. Break these and you'll get flattering, useless data.
 - "Have you ever tried a proper CRM? What happened?" *[why they churned — validates anti-bloat positioning]*
 - "What do you **pay for each month** for your work — portals, MLS, leads, anything?" *[Resales €150? Idealista? This is your willingness-to-pay read. Never ask 'would you pay for mine.']*
 
+### 5b. Listing details and paperwork (4 min, added 16 Sep 2026)
+These questions decide two feature bets: a Resales import and a compliance kit. Don't name either feature, and keep every question in the past tense.
+
+- "The **last viewing** you did on another agency's property: where did the details come from, and where did they end up?" *[LISTEN: Resales ref, window-card PDF, WhatsApp photos, retyped into a sheet or notes. Retyping = pain. "I just forward the PDF" = no pain.]*
+- "Whose **Resales Online login** do you use? Who's the admin on it?" *[Their own subscription, a seat on an agency's account, or none. Only an account admin can hand over an API key.]*
+- "Your **last sale that reached the notary**: who asked the buyer for their passport and where the money came from? Where are those copies now?" *[LISTEN: "me", with copies in the phone, WhatsApp or email = pain. "The lawyer, notary or agency does it" = not their job today.]*
+- "In the last year, has anyone **asked you for those records**? A notary, a bank, an agency, an inspector?" *[Any yes = a real trigger.]*
+- "What have you **spent on compliance**? A consultant, a course, an association fee?" *[Price anchor. Never ask what they'd pay.]*
+- "Have you done anything about the **new Andalusian agent register** yet?" *[Awareness only. Don't explain it.]*
+
 ### 6. Wrap (2 min)
 - "If you had a magic wand for the **admin side** of your job, what's the first thing you'd fix?" *[unprompted #1 priority — does consolidation come up on its own?]*
 - "Who else do you know who works **across agencies** like you, that I should talk to?" *[next interview]*
@@ -85,10 +95,18 @@ After each call, score the **primary assumption** plus the two pivot candidates.
 **B. Follow-up / cold-lead pain** — 🟢 if they have a forgotten-follow-up story they regret.
 **C. Multilingual pain** — 🟢 if they admit delaying/dreading client messages across languages.
 
+**D. Listing-details pain (§5b)** — 🟢 if they retyped listing details by hand for their last viewing. Note separately whether they administer a Resales Online account.
+**E. Paperwork pain (§5b)** — 🟢 if they collected the buyer's ID or proof of funds themselves for their last notary sale, keep it somewhere improvised, *and* in the last year were asked for those records or paid for compliance help.
+
+D and E are scored on solo agents only. The evidence behind them is in the validation brief: https://claude.ai/artifact/DCWLFxm8aaHzgZJMTL6Ddg
+
 ### Decision rule
 - **≥ 3 of 5 GREEN on A** → **commit** the consolidation headline + name. Build the founding cohort around it.
 - **≤ 2 GREEN on A** → **pivot the spear** to whichever of B / C scored highest; demote consolidation to a supporting feature. (B → lead on "never drop a follow-up"; C → lead on "AI writes every client in their language.")
 - **Either way:** the money question (§5) tells you if €19–29 is in range vs what they already pay.
+- **Feature bets, at the week-3 checkpoint (Fri 9 Oct 2026), first 8 solo agents:**
+  - **D green in ≥ 3** → build the key-free listing card (reference + link fields, fill from the window-card PDF, facts only). Build the Resales WebAPI connection only if Resales grants partner status in writing: its terms limit feeds to other software to the account's own listings.
+  - **E green in ≥ 3** → have a lawyer review the checklist wording, update the privacy page and DPA, then build the client file. **≤ 2** → publish the compliance explainer instead and ask again in spring 2027, before the EU AML Regulation applies (10 Jul 2027).
 
 > Be honest in scoring — the whole point is to let real agents *kill* a wrong assumption cheaply, before you spend weeks building a landing page and brand around it.
 
@@ -115,5 +133,7 @@ If yes → that's a warm lead into the **Founding Agent** cohort (see `plans/inv
 8. What do you pay monthly now?
 9. Magic wand for admin — first fix?
 10. Who else should I talk to?
+11. *(solo agents)* Last viewing on another agency's property — where did the details end up? Whose Resales login?
+12. *(solo agents)* Last notary sale — who collected ID and proof of funds, where are the copies? Asked for them? Spent on compliance? Register?
 
 *Rules: past not future · stories not opinions · don't pitch · shut up and listen.*
