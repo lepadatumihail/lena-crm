@@ -1,10 +1,14 @@
 import { cn } from "@/lib/utils";
-import { WING_PATHS, WING_VIEWBOX } from "@/lib/brand-mark";
+import {
+  WING_PATHS,
+  WING_VIEWBOX,
+  WORDMARK_PATHS,
+  WORDMARK_VIEWBOX,
+} from "@/lib/brand-mark";
 
 /**
- * The wing mark on its rounded terracotta tile. Colours come from the theme
- * tokens so it holds up in light and dark mode. Decorative by default: the
- * wordmark (or adjacent text) carries the accessible name.
+ * The freestanding 1A wing inherits the theme's foreground in either mode.
+ * Decorative by default: the wordmark (or adjacent text) carries the name.
  */
 export function LogoMark({ className }: { className?: string }) {
   return (
@@ -12,23 +16,30 @@ export function LogoMark({ className }: { className?: string }) {
       viewBox={WING_VIEWBOX}
       aria-hidden="true"
       focusable="false"
-      className={cn("size-7 shrink-0", className)}
+      className={cn("text-foreground size-7 shrink-0 fill-current", className)}
     >
-      <rect width="512" height="512" rx="112" className="fill-primary" />
-      <g className="fill-primary-foreground">
-        {WING_PATHS.map((d, i) => (
-          <path key={i} d={d} />
-        ))}
-      </g>
+      {WING_PATHS.map((d, i) => (
+        <path key={i} d={d} />
+      ))}
     </svg>
   );
 }
 
-/** "LeadWing" with the second half in the brand colour. */
+/** Outlined lettering keeps the approved wordmark identical in every context. */
 export function Wordmark({ className }: { className?: string }) {
   return (
-    <span className={cn("font-semibold tracking-tight", className)}>
-      Lead<span className="text-primary">Wing</span>
+    <span className={cn("text-foreground inline-flex shrink-0", className)}>
+      <svg
+        viewBox={WORDMARK_VIEWBOX}
+        role="img"
+        aria-label="LeadWing"
+        focusable="false"
+        className="h-[1.25em] w-auto fill-current"
+      >
+        {WORDMARK_PATHS.map((d, i) => (
+          <path key={i} d={d} />
+        ))}
+      </svg>
     </span>
   );
 }
@@ -43,7 +54,7 @@ export function Logo({
   wordmarkClassName?: string;
 }) {
   return (
-    <span className={cn("inline-flex items-center gap-2", className)}>
+    <span className={cn("inline-flex items-center gap-1.5", className)}>
       <LogoMark className={markClassName} />
       <Wordmark className={wordmarkClassName} />
     </span>

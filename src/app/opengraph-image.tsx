@@ -2,7 +2,12 @@ import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-import { WING_PATHS } from "@/lib/brand-mark";
+import {
+  WING_PATHS,
+  WING_VIEWBOX,
+  WORDMARK_PATHS,
+  WORDMARK_VIEWBOX,
+} from "@/lib/brand-mark";
 import {
   BRAND,
   SITE_DESCRIPTION,
@@ -86,25 +91,22 @@ export default async function Image() {
             padding: "64px 0 56px 72px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-            <svg width="84" height="84" viewBox="0 0 512 512">
-              <rect width="512" height="512" rx="112" fill={BRAND.primary} />
-              <g fill={BRAND.background}>
-                {WING_PATHS.map((d, i) => (
-                  <path key={i} d={d} />
-                ))}
-              </g>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <svg width="96" height="84" viewBox={WING_VIEWBOX} fill={BRAND.foreground}>
+              {WING_PATHS.map((d, i) => (
+                <path key={i} d={d} />
+              ))}
             </svg>
-            <div
-              style={{
-                fontSize: 60,
-                fontWeight: 700,
-                letterSpacing: -2,
-                display: "flex",
-              }}
+            <svg
+              width="350"
+              height="80"
+              viewBox={WORDMARK_VIEWBOX}
+              fill={BRAND.foreground}
             >
-              {SITE_NAME}
-            </div>
+              {WORDMARK_PATHS.map((d, i) => (
+                <path key={i} d={d} />
+              ))}
+            </svg>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>

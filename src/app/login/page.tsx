@@ -21,7 +21,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { LogoMark } from "@/components/brand/logo";
+import { Logo } from "@/components/brand/logo";
 import {
   Card,
   CardContent,
@@ -149,10 +149,7 @@ export default function LoginPage() {
         <AuthErrorListener />
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <LogoMark className="mx-auto mb-3 size-10" />
-          <p className="text-primary text-sm font-semibold tracking-wide uppercase">
-            LeadWing
-          </p>
+          <Logo className="mx-auto mb-3 text-lg" markClassName="size-8" />
           <CardTitle className="text-2xl">
             {step === "email" ? t("title") : t("codeTitle")}
           </CardTitle>

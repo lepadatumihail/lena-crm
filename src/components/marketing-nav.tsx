@@ -44,7 +44,11 @@ export function MarketingNav({
         {/* Below 375px the Spanish "Empieza gratis" plus the theme and
             language controls leave no room for the wordmark; keep it for
             screen readers so the link still has a name. */}
-        <Logo wordmarkClassName="max-[374px]:sr-only" />
+        <Logo
+          className="max-sm:text-sm"
+          markClassName="max-sm:size-6"
+          wordmarkClassName="max-[374px]:sr-only"
+        />
       </Link>
       <div className="flex items-center gap-1 sm:gap-2">
         {variant === "landing" ? (
@@ -100,9 +104,15 @@ export function MarketingNav({
         ) : (
           <>
             <Controls snug={snug} />
-            <Button asChild variant="ghost" size="sm" className="rounded-full">
+            <Button
+              asChild
+              variant="ghost"
+              size="sm"
+              className="rounded-full max-sm:size-9 max-sm:p-0"
+            >
               <Link href={home}>
-                <ArrowLeft /> {t("backHome")}
+                <ArrowLeft />
+                <span className="max-sm:sr-only">{t("backHome")}</span>
               </Link>
             </Button>
           </>

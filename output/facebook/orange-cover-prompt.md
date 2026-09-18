@@ -1,0 +1,15 @@
+# Orange Facebook cover
+
+Created with the built-in Imagegen tool from the existing LeadWing cover as a brand reference. Final file: `leadwing-cover-orange.png`, 2059 × 764 pixels, PNG. The earlier ivory cover is preserved separately.
+
+## Exact prompt
+
+Use case: ads-marketing / compositing.
+Asset type: final Facebook cover PNG for LeadWing. Very wide landscape banner, target 2720 x 1008 pixels (approximately 2.7:1). OPAQUE full-bleed image.
+Input image: the existing cream LeadWing cover is a BRAND REFERENCE AND EDIT TARGET. Preserve the exact two-feather freestanding wing symbol and bold "LeadWing" wordmark design from this reference, but completely redesign the cover around it. This is not a new logo.
+Primary request: The client rejected the plain cover and wants something beautiful, bold and a little crazy using the brand's orange. Create a premium, art-directed campaign visual with a powerful sense of lift and motion.
+Scene: an immersive sculptural world entirely in rich terracotta and burnt orange, anchored to brand orange #c0603f. Enormous curved aerodynamic ribbons and wing-like sculpted fins sweep diagonally upward from the lower-left and curl in from the upper-right, moving through layered depth, like a dramatic close-up of the logo's two curved feather shapes translated into physical sculpture. Confident sweeping surfaces, elegant knife-edge folds, broad satin faces, some subtle glossy edges; deep warm rust shadows and luminous tangerine rim light. Dramatic and expressive, but controlled. Foreground forms deliberately extend beyond the canvas, making the composition feel much bigger than the frame.
+Composition: Keep an uninterrupted rich orange pocket in the center where the brand reads clearly. Put the reference's exact full horizontal logo in warm ivory #faf8f3, flat and crisp, prominently across the central safe area, around 45% of canvas width. The wing is to the LEFT of the wordmark, with the same balanced proportions as in the reference. The logo is a graphic overlay, never extruded, bent, embossed, fragmented or warped by the scene. Sculptural forms frame it without touching or covering the letters. Keep all essential brand content inside the central 60% horizontally and middle 55% vertically to allow cover cropping. Small exact text "leadwing.app" beneath the logo, in ivory, with generous breathing room.
+Remove the reference's long CRM description. No new tagline. The ONLY visible text is "LeadWing" and "leadwing.app".
+Mood: exhilarating, warm, high-end design-studio visual identity, tactile three-dimensional abstract art; feels in flight. It should have an immediately arresting silhouette and gorgeous directional lighting, not resemble a conventional software template.
+Avoid: cream blank background, orange square behind the logo, generic rainbow gradients, blue or purple, neon cyberpunk, liquid blobs, balls, confetti, stock buildings, literal airplanes, birds, additional logos, UI cards, fake buttons, excessive small details. No transparency, no checkerboard. Keep the orange saturated and rich, not pale peach or pink. One finished cover, no mockup frame or comparison panels.

@@ -670,7 +670,7 @@ export function OnePlace() {
                 animate={{ scale: showCard ? 1 : 1 + absorbed * 0.012 }}
                 transition={POP_SPRING}
               >
-                <LogoMark className="size-16 rounded-[22%] shadow-[0_16px_40px_-12px_color-mix(in_oklch,var(--primary)_60%,transparent)] sm:size-20" />
+                <LogoMark className="size-16 sm:size-20" />
               </motion.div>
             </div>
           </div>

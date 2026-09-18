@@ -165,6 +165,7 @@ export function AppSidebar({
       <SidebarHeader className="h-14 justify-center border-b px-3 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:px-0">
         <Link
           href="/home"
+          aria-label="LeadWing"
           onClick={closeMobile}
           className="focus-visible:ring-ring/50 flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-[3px]"
         >
