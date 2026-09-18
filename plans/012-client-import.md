@@ -1613,7 +1613,9 @@ database with its history row. The wizard was checked on a preview page with
 stub actions: an `.xlsx` with a title row and two sheets, a Google Contacts
 CSV, a windows-1252 semicolon CSV and an OLE file; the Free-plan cap, the row
 filter, a failed batch with retry, undo, and 375 px. Step 15 (marketing
-claims) is not done: it waits for the live check.
+claims) shipped after the founder's signed-in check the same day; no
+`PUBLISHED` bump was needed, since the home and pricing pages date from the
+deploy.
 
 Where the code differs from the steps above:
 

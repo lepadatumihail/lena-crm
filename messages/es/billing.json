@@ -246,6 +246,10 @@
         "title": "Plantillas y calculadora",
         "body": "Tus propias plantillas de mensajes y la calculadora de beneficio para vendedores."
       },
+      "transfer": {
+        "title": "Importa y exporta",
+        "body": "Trae tu cartera desde Excel o CSV y llévatelo todo cuando quieras."
+      },
       "app": {
         "title": "Español, inglés e instalable",
         "body": "Cambia el idioma de la interfaz cuando quieras e instálala en la pantalla de inicio del móvil."

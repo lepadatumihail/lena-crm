@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import {
+  ArrowLeftRight,
   ArrowRight,
   BellRing,
   CalendarDays,
@@ -70,6 +71,7 @@ const FEATURES = [
   { key: "portals", icon: ClipboardPaste },
   { key: "calendar", icon: Repeat },
   { key: "tools", icon: LayoutTemplate },
+  { key: "transfer", icon: ArrowLeftRight },
   { key: "app", icon: Languages },
 ] as const;
 

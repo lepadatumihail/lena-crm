@@ -15,7 +15,9 @@ export const FAQ_KEYS = [
   "mobile",
   "whatsapp",
   "portals",
+  "import",
   "privacy",
+  "export",
   "cancel",
   "calendar",
 ] as const;

@@ -264,9 +264,17 @@
         "q": "¿Con qué portales funciona?",
         "a": "Pega una solicitud de Idealista, Fotocasa, Kyero, un email o un WhatsApp y LeadWing rellena el lead por ti: nombre, teléfono, idioma y presupuesto. Sin volver a teclear nada."
       },
+      "import": {
+        "q": "¿Puedo traer mis clientes desde Excel u otro CRM?",
+        "a": "Sí. Sube un archivo de Excel o CSV (Google Contactos, Outlook y la mayoría de CRM lo exportan), revisa cómo encajan las columnas, previsualiza cada fila e impórtalo. ¿Te has equivocado? Deshaz toda la importación con un clic."
+      },
       "privacy": {
         "q": "¿Quién puede ver mis clientes?",
         "a": "Solo tú. Los clientes de cada agente están totalmente aislados; nadie más ve tu cartera, ni siquiera otros agentes de la misma agencia."
+      },
+      "export": {
+        "q": "¿Puedo llevarme mis datos?",
+        "a": "Siempre, en todos los planes. Exporta cualquier lista a Excel o CSV, o descarga toda tu cuenta desde Ajustes, al instante."
       },
       "cancel": {
         "q": "¿Puedo cancelar Pro?",

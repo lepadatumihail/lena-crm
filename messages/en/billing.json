@@ -246,6 +246,10 @@
         "title": "Templates and calculator",
         "body": "Your own message templates, plus the profit calculator for sellers."
       },
+      "transfer": {
+        "title": "Import and export",
+        "body": "Bring your book in from Excel or CSV, and take everything with you whenever you like."
+      },
       "app": {
         "title": "English, Spanish, installable",
         "body": "Switch the interface language whenever you like, and install it on your phone's home screen."
