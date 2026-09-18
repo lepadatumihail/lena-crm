@@ -29,12 +29,14 @@ export function LogoMark({ className }: { className?: string }) {
 export function Wordmark({ className }: { className?: string }) {
   return (
     <span className={cn("text-foreground inline-flex shrink-0", className)}>
+      {/* Center the main letterforms optically; the g's descender adds
+          space below them that otherwise makes the wordmark sit too high. */}
       <svg
         viewBox={WORDMARK_VIEWBOX}
         role="img"
         aria-label="LeadWing"
         focusable="false"
-        className="h-[1.25em] w-auto fill-current"
+        className="h-[1.25em] w-auto translate-y-[0.1em] fill-current"
       >
         {WORDMARK_PATHS.map((d, i) => (
           <path key={i} d={d} />

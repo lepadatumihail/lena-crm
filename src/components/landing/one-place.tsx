@@ -667,6 +667,7 @@ export function OnePlace() {
             )}
             <div ref={wingRef}>
               <motion.div
+                className="bg-muted relative flex size-24 items-center justify-center rounded-3xl shadow-sm ring-1 ring-black/5 sm:size-28 dark:ring-white/10"
                 animate={{ scale: showCard ? 1 : 1 + absorbed * 0.012 }}
                 transition={POP_SPRING}
               >
