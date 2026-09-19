@@ -6,7 +6,6 @@ import { CopyButton } from "@/components/referrals/copy-button";
 import { RowIcon } from "@/components/shell/key-value";
 import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { Button } from "@/components/ui/button";
-import { Notice } from "@/components/ui/notice";
 import { Tag } from "@/components/ui/tag";
 import { intlTag } from "@/i18n/config";
 import { planState } from "@/lib/access";
@@ -16,7 +15,6 @@ import { initialsOf } from "@/lib/home";
 import {
   REFERRAL_STATE_KEY,
   type ReferralState,
-  claimMessage,
   formatReferralCode,
 } from "@/lib/referrals/links";
 import { TONE_BG, TONE_INK, type Tone } from "@/lib/tones";
@@ -30,30 +28,17 @@ const STATE_TONE: Record<ReferralState, Tone> = {
   left: "neutral",
 };
 
-const MESSAGE_TONE: Record<"success" | "info" | "error", Tone> = {
-  success: "green",
-  info: "neutral",
-  error: "red",
-};
-
 /**
  * Referrals on the shell's panels: the link to share beside the free months
  * it has earned, the agents who used it, and the founding offer underneath.
  */
-export function ReferralsView({
-  overview,
-  claimed,
-}: {
-  overview: ReferralOverview;
-  claimed?: string;
-}) {
+export function ReferralsView({ overview }: { overview: ReferralOverview }) {
   const t = useTranslations("referrals");
   const tag = intlTag(useLocale());
   const formatDate = (iso: string) =>
     new Date(iso).toLocaleDateString(tag, { day: "numeric", month: "short" });
   const { profile, referralUrl, referred, monthsEarned, unappliedCreditEur, referredBy, founderCount } =
     overview;
-  const message = claimMessage(claimed);
   const isFounder = profile?.founding_number != null;
   const spotsLeft = foundingSpotsLeft(founderCount);
   const plan = planState(profile);
@@ -77,7 +62,6 @@ export function ReferralsView({
 
   return (
     <div className="space-y-4">
-      {message ? <Notice tone={MESSAGE_TONE[message.tone]}>{t(message.key)}</Notice> : null}
 
       <div className="grid items-start gap-4 lg:grid-cols-3">
         <Panel

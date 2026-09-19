@@ -73,25 +73,54 @@
       "updated": "Updated"
     }
   },
+  "firstSession": {
+    "subtitle": "No clients yet. Bring them in and Home fills itself.",
+    "entries": {
+      "import": {
+        "kicker": "Fastest",
+        "title": "Import a spreadsheet",
+        "detail": "Excel or CSV from your old CRM or your notes. Map the columns once.",
+        "action": "Choose a file"
+      },
+      "paste": {
+        "kicker": "From a portal",
+        "title": "Paste a lead",
+        "detail": "Drop in an Idealista email or a WhatsApp message and AI fills in the card.",
+        "action": "Paste a lead"
+      },
+      "manual": {
+        "kicker": "By hand",
+        "title": "Add one client",
+        "detail": "A first name is enough. Everything else can wait.",
+        "action": "New buyer"
+      }
+    },
+    "sellers": "Starting with sellers? <add>Add a seller</add> or <import>import a seller list</import>."
+  },
   "onboarding": {
     "title": "Getting started",
     "subtitle": "{done} of {total} done",
     "steps": {
+      "addName": {
+        "title": "Add your name",
+        "detail": "Home greets you by it instead of by your email."
+      },
       "addClient": {
-        "title": "Add your first client",
-        "detail": "A buyer or a seller — takes a minute."
+        "title": "Bring in your clients",
+        "detail": "Import a spreadsheet, or add them one at a time."
       },
       "scheduleAppointment": {
         "title": "Schedule a viewing or meeting",
-        "detail": "It lands on your calendar with a WhatsApp reminder."
+        "detail": "It lands on your calendar, with a WhatsApp reminder ready to send."
       },
       "createTemplate": {
         "title": "Set up a message template",
-        "detail": "Reuse your best intro or follow-up in one tap."
+        "detail": "Start from a ready-made starter, or write your own."
       },
       "inviteColleague": {
         "title": "Invite a colleague",
-        "detail": "Share your link and earn a free month of Pro."
+        "detail": "Share your link and earn a free month of Pro.",
+        "locked": "Unlocks after {count, plural, one {# client} other {# clients}}."
       }
     }
   }

@@ -5,7 +5,7 @@ import { createClient as createSupabase } from "@/lib/supabase/server";
 import { BUYER_STAGES, SELLER_STAGES, type ClientSide, type Stage } from "@/lib/crm";
 import { getAttentionSignals } from "@/lib/data/attention";
 import { getCalendarEvents, type CalendarEvent } from "@/lib/data/calendar";
-import { getAgentTimeZone, getSessionUser } from "@/lib/data/session";
+import { getAgentTimeZone, getSessionProfile, getSessionUser } from "@/lib/data/session";
 import { formatDateKey } from "@/lib/attention";
 import { dateKeyInTimeZone, type OnboardingInput } from "@/lib/home";
 import { intlTag } from "@/i18n/config";
@@ -130,7 +130,8 @@ export const getRecentClients = cache(async (): Promise<RecentClient[]> => {
 /** How far the account is set up, for the getting-started checklist. */
 export const getOnboardingInput = cache(async (): Promise<OnboardingInput> => {
   const supabase = await createSupabase();
-  const [clients, appointmentsRes, templatesRes, referralCount] = await Promise.all([
+  const [profile, clients, appointmentsRes, templatesRes, referralCount] = await Promise.all([
+    getSessionProfile(),
     getActiveClients(),
     supabase.from("appointments").select("id", { count: "exact", head: true }),
     supabase.from("email_templates").select("id", { count: "exact", head: true }),
@@ -148,6 +149,7 @@ export const getOnboardingInput = cache(async (): Promise<OnboardingInput> => {
   if (templatesRes.error) throw new Error(templatesRes.error.message);
 
   return {
+    hasName: Boolean(profile?.full_name?.trim()),
     clientCount: clients.length,
     appointmentCount: appointmentsRes.count ?? 0,
     templateCount: templatesRes.count ?? 0,

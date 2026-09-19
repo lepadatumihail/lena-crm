@@ -13,7 +13,7 @@ import { clientsPath, type ClientSide } from "@/lib/crm";
 export default async function NewClientPage({
   searchParams,
 }: {
-  searchParams: Promise<{ side?: string; compose?: string }>;
+  searchParams: Promise<{ side?: string; compose?: string; paste?: string }>;
 }) {
   const sp = await searchParams;
   const side: ClientSide = sp.side === "seller" ? "seller" : "buyer";
@@ -73,6 +73,7 @@ export default async function NewClientPage({
         mode="create"
         agencyOptions={agencyOptions}
         compose={sp.compose ?? null}
+        paste={sp.paste === "1"}
       />
     </div>
   );

@@ -73,25 +73,54 @@
       "updated": "Actualizado"
     }
   },
+  "firstSession": {
+    "subtitle": "Aún no hay clientes. Tráelos y el inicio se llena solo.",
+    "entries": {
+      "import": {
+        "kicker": "Lo más rápido",
+        "title": "Importa una hoja de cálculo",
+        "detail": "Excel o CSV de tu antiguo CRM o de tus notas. Asigna las columnas una sola vez.",
+        "action": "Elegir un archivo"
+      },
+      "paste": {
+        "kicker": "Desde un portal",
+        "title": "Pega un lead",
+        "detail": "Pega un correo de Idealista o un mensaje de WhatsApp y la IA rellena la ficha.",
+        "action": "Pegar un lead"
+      },
+      "manual": {
+        "kicker": "A mano",
+        "title": "Añade un cliente",
+        "detail": "Con el nombre basta. Lo demás puede esperar.",
+        "action": "Nuevo comprador"
+      }
+    },
+    "sellers": "¿Empiezas con vendedores? <add>Añade un vendedor</add> o <import>importa una lista de vendedores</import>."
+  },
   "onboarding": {
     "title": "Primeros pasos",
     "subtitle": "{done} de {total} completados",
     "steps": {
+      "addName": {
+        "title": "Añade tu nombre",
+        "detail": "El inicio te saluda por tu nombre y no por tu correo."
+      },
       "addClient": {
-        "title": "Añade tu primer cliente",
-        "detail": "Un comprador o un vendedor: lleva un minuto."
+        "title": "Trae a tus clientes",
+        "detail": "Importa una hoja de cálculo o añádelos uno a uno."
       },
       "scheduleAppointment": {
         "title": "Programa una visita o una reunión",
-        "detail": "Va a tu calendario con un recordatorio por WhatsApp."
+        "detail": "Va a tu calendario, con un recordatorio de WhatsApp listo para enviar."
       },
       "createTemplate": {
         "title": "Crea una plantilla de mensaje",
-        "detail": "Reutiliza tu mejor presentación o seguimiento con un toque."
+        "detail": "Parte de una plantilla de ejemplo o escribe la tuya."
       },
       "inviteColleague": {
         "title": "Invita a un compañero",
-        "detail": "Comparte tu enlace y gana un mes gratis de Pro."
+        "detail": "Comparte tu enlace y gana un mes gratis de Pro.",
+        "locked": "Se desbloquea con {count, plural, one {# cliente} other {# clientes}}."
       }
     }
   }

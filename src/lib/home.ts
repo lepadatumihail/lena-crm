@@ -173,6 +173,7 @@ export function buyersBeforeViewing(
 }
 
 export const ONBOARDING_STEPS = [
+  "addName",
   "addClient",
   "scheduleAppointment",
   "createTemplate",
@@ -181,21 +182,37 @@ export const ONBOARDING_STEPS = [
 export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
 
 export type OnboardingInput = {
+  /** The profile carries a name: Google fills it in, an email code does not. */
+  hasName: boolean;
   clientCount: number;
   appointmentCount: number;
   templateCount: number;
   referralCount: number;
 };
 
+export type OnboardingStepState = {
+  step: OnboardingStep;
+  done: boolean;
+  /** Not worth doing yet: listed, but not offered. */
+  locked: boolean;
+};
+
+/** Referrals wait until the book has this many clients: the ask comes after the value. */
+export const INVITE_UNLOCK_CLIENTS = 3;
+
 /** Which getting-started steps are done, in display order. */
-export function onboardingSteps(
-  input: OnboardingInput
-): { step: OnboardingStep; done: boolean }[] {
+export function onboardingSteps(input: OnboardingInput): OnboardingStepState[] {
+  const invited = input.referralCount > 0;
   return [
-    { step: "addClient", done: input.clientCount > 0 },
-    { step: "scheduleAppointment", done: input.appointmentCount > 0 },
-    { step: "createTemplate", done: input.templateCount > 0 },
-    { step: "inviteColleague", done: input.referralCount > 0 },
+    { step: "addName", done: input.hasName, locked: false },
+    { step: "addClient", done: input.clientCount > 0, locked: false },
+    { step: "scheduleAppointment", done: input.appointmentCount > 0, locked: false },
+    { step: "createTemplate", done: input.templateCount > 0, locked: false },
+    {
+      step: "inviteColleague",
+      done: invited,
+      locked: !invited && input.clientCount < INVITE_UNLOCK_CLIENTS,
+    },
   ];
 }
 
@@ -209,6 +226,14 @@ export const ONBOARDING_CLIENT_CAP = 10;
 export function showOnboarding(input: OnboardingInput): boolean {
   if (input.clientCount >= ONBOARDING_CLIENT_CAP) return false;
   return onboardingSteps(input).some((s) => !s.done);
+}
+
+/**
+ * An account with no clients yet is in its first session: Home shows the
+ * ways to bring clients in instead of figures that would all read zero.
+ */
+export function isFirstSession(clientCount: number): boolean {
+  return clientCount === 0;
 }
 
 export { BUYER_STAGES, SELLER_STAGES };

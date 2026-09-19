@@ -2,7 +2,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { BellRing, Building2, CalendarDays, Euro, Users } from "lucide-react";
 
 import { AttentionList } from "@/components/home/attention-list";
-import { OnboardingCard } from "@/components/home/onboarding-card";
+import { GettingStarted } from "@/components/home/onboarding-card";
 import { RecentClients } from "@/components/home/recent-clients";
 import {
   StatTiles,
@@ -28,7 +28,6 @@ import type {
 } from "@/lib/data/dashboard";
 import {
   countViewingsWithin,
-  onboardingSteps,
   pipelineSegments,
   showOnboarding,
   type OnboardingInput,
@@ -103,24 +102,9 @@ export function SummaryPanel({
     },
   ];
 
-  const steps = onboardingSteps(onboarding).map((s) => ({
-    ...s,
-    title: t(`onboarding.steps.${s.step}.title`),
-    detail: t(`onboarding.steps.${s.step}.detail`),
-  }));
-
   return (
     <>
-      {showOnboarding(onboarding) ? (
-        <OnboardingCard
-          title={t("onboarding.title")}
-          subtitle={t("onboarding.subtitle", {
-            done: steps.filter((s) => s.done).length,
-            total: steps.length,
-          })}
-          steps={steps}
-        />
-      ) : null}
+      {showOnboarding(onboarding) ? <GettingStarted onboarding={onboarding} /> : null}
       <StatTiles tiles={tiles} />
     </>
   );

@@ -67,6 +67,7 @@ export function ClientForm({
   defaultValues,
   agencyOptions,
   compose = null,
+  paste = false,
 }: {
   side: ClientSide;
   mode: "create" | "edit";
@@ -76,6 +77,8 @@ export function ClientForm({
   agencyOptions?: { name: string; count: number }[];
   /** Template id to open in the composer right after the client is created. */
   compose?: string | null;
+  /** Open the paste-a-lead dialog straight away; Home's "Paste a lead" links here. */
+  paste?: boolean;
 }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
@@ -198,7 +201,7 @@ export function ClientForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {mode === "create" && <LeadPaste onApply={applyLead} />}
+        {mode === "create" && <LeadPaste onApply={applyLead} defaultOpen={paste} />}
         <div className="grid gap-4 sm:grid-cols-2">
           <FormField
             control={form.control}

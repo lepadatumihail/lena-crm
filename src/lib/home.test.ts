@@ -9,6 +9,8 @@ import {
   greetingPeriod,
   hourInTimeZone,
   initialsOf,
+  INVITE_UNLOCK_CLIENTS,
+  isFirstSession,
   onboardingSteps,
   pipelineSegments,
   relativeAgo,
@@ -103,22 +105,54 @@ describe("buyersBeforeViewing", () => {
 });
 
 describe("onboarding", () => {
-  const fresh = { clientCount: 0, appointmentCount: 0, templateCount: 0, referralCount: 0 };
+  const fresh = {
+    hasName: false,
+    clientCount: 0,
+    appointmentCount: 0,
+    templateCount: 0,
+    referralCount: 0,
+  };
   it("marks each step from its count", () => {
-    expect(onboardingSteps({ ...fresh, clientCount: 2, templateCount: 1 }).map((s) => s.done)).toEqual([
-      true,
-      false,
-      true,
-      false,
+    expect(
+      onboardingSteps({ ...fresh, hasName: true, clientCount: 2, templateCount: 1 }).map(
+        (s) => s.done
+      )
+    ).toEqual([true, true, false, true, false]);
+  });
+  it("keeps the invite step locked until the book has a few clients", () => {
+    const invite = (input: typeof fresh) =>
+      onboardingSteps(input).find((s) => s.step === "inviteColleague")!;
+    expect(invite(fresh).locked).toBe(true);
+    expect(invite({ ...fresh, clientCount: INVITE_UNLOCK_CLIENTS - 1 }).locked).toBe(true);
+    expect(invite({ ...fresh, clientCount: INVITE_UNLOCK_CLIENTS }).locked).toBe(false);
+    // An agent who already invited someone is simply done, however few clients they hold.
+    expect(invite({ ...fresh, referralCount: 1 })).toEqual({
+      step: "inviteColleague",
+      done: true,
+      locked: false,
+    });
+    // Nothing else ever locks.
+    expect(onboardingSteps(fresh).filter((s) => s.locked).map((s) => s.step)).toEqual([
+      "inviteColleague",
     ]);
   });
   it("shows while young and incomplete, hides once done or once the book is full", () => {
     expect(showOnboarding(fresh)).toBe(true);
     expect(showOnboarding({ ...fresh, clientCount: 3 })).toBe(true);
     expect(
-      showOnboarding({ clientCount: 3, appointmentCount: 1, templateCount: 1, referralCount: 1 })
+      showOnboarding({
+        hasName: true,
+        clientCount: 3,
+        appointmentCount: 1,
+        templateCount: 1,
+        referralCount: 1,
+      })
     ).toBe(false);
     expect(showOnboarding({ ...fresh, clientCount: 10 })).toBe(false);
+  });
+  it("calls an account without clients a first session", () => {
+    expect(isFirstSession(0)).toBe(true);
+    expect(isFirstSession(1)).toBe(false);
   });
 });
 

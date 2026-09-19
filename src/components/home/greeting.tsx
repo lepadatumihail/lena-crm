@@ -15,7 +15,14 @@ import { dateKeyInTimeZone, greetingPeriod, hourInTimeZone } from "@/lib/home";
  * server, the name and time zone from the shell, so the server and the
  * browser render the same words and nothing here waits on a query.
  */
-export function Greeting({ nowISO }: { nowISO: string }) {
+export function Greeting({
+  nowISO,
+  subtitle,
+}: {
+  nowISO: string;
+  /** Replaces the everyday line under the greeting. */
+  subtitle?: string;
+}) {
   const t = useTranslations("home");
   const tGreeting = useTranslations("home.greeting");
   const locale = useLocale();
@@ -40,7 +47,7 @@ export function Greeting({ nowISO }: { nowISO: string }) {
       <p className="text-muted-foreground text-sm">
         <span className="inline-block first-letter:uppercase">{dateLabel}</span>
         <span className="mx-1.5">·</span>
-        {t("subtitle")}
+        {subtitle ?? t("subtitle")}
       </p>
     </div>
   );

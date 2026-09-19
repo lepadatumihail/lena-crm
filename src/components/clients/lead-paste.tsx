@@ -19,12 +19,15 @@ import { extractLead, type ExtractedLead } from "@/lib/actions/leads";
 
 export function LeadPaste({
   onApply,
+  defaultOpen = false,
 }: {
   onApply: (data: ExtractedLead) => void;
+  /** Open the dialog on arrival, for a link that came here to paste. */
+  defaultOpen?: boolean;
 }) {
   const t = useTranslations("clients.leadPaste");
   const tCommon = useTranslations("common");
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
 

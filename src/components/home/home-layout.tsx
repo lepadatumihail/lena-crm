@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
  * and loading.tsx fills them with skeletons, so the two cannot drift apart.
  */
 export function HomeLayout({
+  notice,
   header,
   summary,
   attention,
@@ -12,6 +13,8 @@ export function HomeLayout({
   upcoming,
   recent,
 }: {
+  /** A one-off line above everything, such as how a referral link went. */
+  notice?: ReactNode;
   header: ReactNode;
   summary: ReactNode;
   attention: ReactNode;
@@ -22,6 +25,7 @@ export function HomeLayout({
 }) {
   return (
     <div className="space-y-5">
+      {notice}
       {header}
       {summary}
       <div className="grid gap-5 lg:grid-cols-5">

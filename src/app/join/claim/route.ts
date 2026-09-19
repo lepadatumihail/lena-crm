@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { claimReferral } from "@/lib/referrals/engine";
 import { REFERRAL_COOKIE, type ClaimResult, normalizeReferralCode } from "@/lib/referrals/links";
 
-/** Records the referral cookie for the signed-in user, once, then clears it. */
+/** Records the referral cookie for the signed-in user, once, then clears it; Home says how it went. */
 export async function GET(request: NextRequest) {
   const supabase = await createClient();
   const {
@@ -28,5 +28,5 @@ export async function GET(request: NextRequest) {
   } catch {
     result = "invalid";
   }
-  return clear(NextResponse.redirect(new URL(`/referrals?claimed=${result}`, request.url)));
+  return clear(NextResponse.redirect(new URL(`/home?claimed=${result}`, request.url)));
 }
