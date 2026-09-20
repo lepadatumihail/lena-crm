@@ -1,0 +1,17 @@
+{
+ "background": "output/facebook/posts/bg-orange-1024x1536.png",
+ "screenshot": "output/facebook/screenshots/home-dark-1440x900@2x.png",
+ "out": "output/facebook/posts/06-wed-followup.png",
+ "pill": "Follow-ups, handled",
+ "headline": "Most leads don’t say no.\nThey go quiet.",
+ "headlineSize": 82,
+ "sub": "Every buyer card shows what comes next, with the follow-up already written.",
+ "audience": "Built for independent real estate agents on the Costa del Sol.",
+ "chip": {
+  "title": "Follow-up drafted",
+  "sub": "Daniel Brown · quiet for 6 days"
+ },
+ "button": "Try it free, no card",
+ "url": "leadwing.app",
+ "cropRatio": 0.86
+}

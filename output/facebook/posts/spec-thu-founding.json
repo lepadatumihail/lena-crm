@@ -1,0 +1,17 @@
+{
+ "background": "output/facebook/posts/bg-orange-1024x1536.png",
+ "screenshot": "output/facebook/screenshots/home-dark-1440x900@2x.png",
+ "out": "output/facebook/posts/07-thu-founding.png",
+ "pill": "Founding Agents · first 20",
+ "headline": "€19 a month.\nLocked for life.",
+ "headlineSize": 92,
+ "sub": "Unlimited clients, every feature, cancel any time. Free still covers 10 clients.",
+ "audience": "The CRM for independent real estate agents on the Costa del Sol.",
+ "chip": {
+  "title": "Founding Agent #3",
+  "sub": "€19/month instead of €29, for life"
+ },
+ "button": "Become a Founding Agent",
+ "url": "leadwing.app/pricing",
+ "cropRatio": 0.86
+}
