@@ -27,5 +27,13 @@
   "post_id": "1279663088571991_122105662023476753",
   "published_at": "2026-09-19T20:34:13.685667+02:00",
   "permalink": "https://www.facebook.com/122105574255476753/posts/122105662023476753"
+ },
+ {
+  "image": "output/facebook/posts/05-digest-2026-09-21.png",
+  "kind": "news digest",
+  "photo_id": "122107041819476753",
+  "post_id": "1279663088571991_122107041849476753",
+  "scheduled_for": "2026-09-21T09:30:00+02:00",
+  "sources_comment": "pending: add the links from news-digest-2026-09-21.md as the first comment after it publishes"
  }
 ]

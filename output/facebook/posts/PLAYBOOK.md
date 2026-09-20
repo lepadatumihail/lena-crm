@@ -37,13 +37,11 @@ Read this first on every run. It is the operator's memory: update it when a deci
 - Security: a burst of API edits triggered Meta's "authenticate your account" check on 20 Sep; keep edits few and spaced.
 
 ## Pending (keep current)
-- Monday 21 Sep 09:30 digest: text in `news-digest-2026-09-21.md`, card built (`05-digest-2026-09-21.png`). Re-checked against the week's news on 20 Sep, still current. **Waiting on the founder's edit + yes; not scheduled.**
-- Wednesday 23 Sep product post ("Most leads don't say no", scheduled, id in scheduled.json) still carries a typographic card; propose a real-screenshot image before it publishes.
-- Thursday 24 Sep founding-offer post scheduled (moved from Friday). Same image concern.
-- No app screenshots exist yet: `output/facebook/screenshots/` is absent and the repo has no screenshot tooling, so the creative rule cannot be met without the founder sending one. Blocks both posts above.
-- Friday 25 Sep digest: nothing queued yet, to be drafted on the Thursday run. Candidate item held over: foreign renters take ~24% of Málaga rental demand (Idealista/La Opinión, 15 Sep) — headline only, verify with WebFetch before use.
-- Click ad (ids in ads.json): €25 lifetime, ends 24 Sep 23:59 Madrid, feed-only since 20 Sep 13:11, ACTIVE again since 19:23. **Delivery has all but stopped: 10 impressions and €0.00 in the 4.5 h since it went active.** Not yet a full day, so no fix applied; decide at the next run.
-- Page has 0 followers, no comments or messages yet (20 Sep).
+- Monday 21 Sep 09:30 digest: SCHEDULED (post 1279663088571991_122107041849476753, card 05-digest-2026-09-21.png). After it publishes, post the source links from `news-digest-2026-09-21.md` as the first comment.
+- Wednesday 23 Sep product post ("Most leads don't say no") and Thursday 24 Sep founding post: founder decided on 21 Sep to REPLACE both typographic cards with real-screenshot images before Wednesday 09:30. The founder's desktop session is producing the screenshots and new images (needs the signed-in app, which the cloud cannot reach); the swap = delete the scheduled post, re-create it with the new image and the same caption and time, update scheduled.json. Do not re-time or touch these two posts from the cloud until scheduled.json shows the new image files.
+- Click ad (ids in ads.json): founder approved the pacing fix on 21 Sep; ad set end_time is now Tue 22 Sep 23:59 Madrid, budget unchanged (€25 lifetime, €19.36 left). Watch feed impressions; if still near zero by the 22 Sep evening check, say so and propose the next fix (daily budget, or pause and wait for the pixel).
+- Next digest: Friday 25 Sep 09:30, drafted by the Thursday noon run.
+- Page has 0 followers, no comments or messages yet (21 Sep).
 
 ## Learnings (append, dated)
 - 20 Sep 2026: Audience Network delivered 42k impressions and 165 "clicks" for €5 with 0 sign-ups; never leave placements automatic on a link-click ad set without a pixel. A Meta pixel on the site would let ads optimise for landing page views.
