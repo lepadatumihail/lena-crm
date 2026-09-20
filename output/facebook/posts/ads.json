@@ -7,19 +7,29 @@
   "image_hash": "2c66ea9b404867530f0ce140fc8c0e14",
   "campaign_id": "6995417076094",
   "adset_id": "6995417079494",
-  "status": "founder authenticated + republished 20 Sep 19:20; ad IN_PROCESS, feed-only placements",
-  "creative_id": "4655037744778453",
+  "status": "ACTIVE (ad + ad set) since 20 Sep 19:23 Madrid, feed-only placements, no review issues - but barely delivering",
+  "creative_id": "1083235867424577",
+  "creative_id_previous": "4655037744778453",
   "ad_id": "6995418317094",
-  "observed_2026_09_20": {
+  "end_time": "2026-09-24T23:59:00+02:00",
+  "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
+  "pacing_type": "standard",
+  "optimization_goal": "LINK_CLICKS",
+  "observed_2026_09_20T2345": {
    "spend_eur": 5.64,
    "budget_remaining_eur": 19.36,
-   "reach": 6668,
-   "impressions": 42381,
+   "reach": 6674,
+   "impressions": 42391,
    "link_clicks_reported": 170,
+   "link_clicks_real_feed": 3,
    "landing_page_views": 37,
-   "audience_network_share": "89% of spend, 97% of impressions (an_classic) - junk clicks",
-   "ad_effective_status": "PENDING_REVIEW (ad edited 2026-09-20T19:20 Madrid; adset edited 13:11; delivery stopped after 13:00)",
-   "live_creative_id": "1083235867424577"
+   "facebook_feed": "EUR 0.32 / 342 imp / 3 clicks / 1 LPV",
+   "instagram_feed": "36 imp / 0 clicks",
+   "audience_network_share": "EUR 5.05, 41875 imp, 165 clicks - junk, all before the 13:11 placement fix",
+   "since_reactivation_1923": "10 impressions, EUR 0.00 in 4.5 hours - delivery has effectively stopped",
+   "ad_effective_status": "ACTIVE",
+   "diagnosis": "pacing: EUR 19.36 over 4 remaining days on lowest-cost bidding will not win a narrow feed auction",
+   "proposed_fix_not_applied": "bring adset end_time forward to 2026-09-22T23:59 so the same EUR 19.36 is paced over ~2 days instead of 4"
   }
  },
  "rejected_boost": {

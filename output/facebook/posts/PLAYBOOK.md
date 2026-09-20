@@ -5,7 +5,7 @@ Read this first on every run. It is the operator's memory: update it when a deci
 ## Identity and assets
 - Page: LeadWing, id 1279663088571991, facebook.com/leadwingcrm. Ad account: act_173026079415266 (the founder's personal EUR account, Visa on file). Meta app "LeadWing" 1711705727055791, Published.
 - The tokens also see the founder's other pages (Roldlab, NØVA Marbella, Prisma Clinic) and their ad accounts. Never touch them.
-- Files in this folder: `launch-week.md` (captions + calendar), `scheduled.json` (post ids), `ads.json` (ad ids), `daily-log.md` (what happened, one entry per run), `news-digest-YYYY-MM-DD.md` (digest drafts + sources), `render.mjs` (branded 1080×1350 cards; run `node output/facebook/posts/render.mjs <out-dir>` from the repo root with Node 22+, after `npm ci` in a fresh clone; it uses the repo's Sharp, `assets/fonts/Geist-*.ttf` and the wing paths in `src/lib/brand-mark.ts`).
+- Files in this folder: `launch-week.md` (captions + calendar), `scheduled.json` (post ids), `ads.json` (ad ids), `daily-log.md` (what happened, one entry per run), `news-digest-YYYY-MM-DD.md` (digest drafts + sources), `render.mjs` (branded 1080×1350 cards; run `node output/facebook/posts/render.mjs <out-dir>` from the repo root with Node 22+; it uses `assets/fonts/Geist-*.ttf` and the wing paths in `src/lib/brand-mark.ts`). It takes Sharp from the repo's `node_modules`, or from `SHARP_DIR=<folder with sharp installed>` when `npm ci` will not run. The digest card is the last one it writes and reads `DIGEST_FILE`, `DIGEST_WEEK`, `DIGEST_LEAD` and `DIGEST_REST` from the environment, so each week's card is one command. Note that Linux renders the fonts a hair differently from macOS: re-rendering rewrites every PNG, so restore the cards you did not mean to change before committing.
 - Brand: orange #c0603f, ivory #faf8f3, ink #2b2926, muted #7b7469, Geist. Site copy lives in `messages/en/landing.json` and `src/content/pages`.
 
 ## Standing decisions (founder, Sep 2026)
@@ -37,11 +37,16 @@ Read this first on every run. It is the operator's memory: update it when a deci
 - Security: a burst of API edits triggered Meta's "authenticate your account" check on 20 Sep; keep edits few and spaced.
 
 ## Pending (keep current)
-- Monday 21 Sep 09:30 digest: draft in `news-digest-2026-09-21.md`, founder asked to edit it before it is scheduled. Not scheduled yet.
+- Monday 21 Sep 09:30 digest: text in `news-digest-2026-09-21.md`, card built (`05-digest-2026-09-21.png`). Re-checked against the week's news on 20 Sep, still current. **Waiting on the founder's edit + yes; not scheduled.**
 - Wednesday 23 Sep product post ("Most leads don't say no", scheduled, id in scheduled.json) still carries a typographic card; propose a real-screenshot image before it publishes.
 - Thursday 24 Sep founding-offer post scheduled (moved from Friday). Same image concern.
-- Click ad (ids in ads.json): €25 lifetime, ends 24 Sep 23:59 Madrid, feed-only since 20 Sep 13:11, re-approved by the founder 19:23. Watch whether feed delivery actually starts; if zero feed impressions for a full day, propose a fix.
+- No app screenshots exist yet: `output/facebook/screenshots/` is absent and the repo has no screenshot tooling, so the creative rule cannot be met without the founder sending one. Blocks both posts above.
+- Friday 25 Sep digest: nothing queued yet, to be drafted on the Thursday run. Candidate item held over: foreign renters take ~24% of Málaga rental demand (Idealista/La Opinión, 15 Sep) — headline only, verify with WebFetch before use.
+- Click ad (ids in ads.json): €25 lifetime, ends 24 Sep 23:59 Madrid, feed-only since 20 Sep 13:11, ACTIVE again since 19:23. **Delivery has all but stopped: 10 impressions and €0.00 in the 4.5 h since it went active.** Not yet a full day, so no fix applied; decide at the next run.
 - Page has 0 followers, no comments or messages yet (20 Sep).
 
 ## Learnings (append, dated)
 - 20 Sep 2026: Audience Network delivered 42k impressions and 165 "clicks" for €5 with 0 sign-ups; never leave placements automatic on a link-click ad set without a pixel. A Meta pixel on the site would let ads optimise for landing page views.
+- 20 Sep 2026 (late run): taking Audience Network away did not move the money to the feed — it stopped delivery almost entirely. The ad set is LOWEST_COST_WITHOUT_CAP with standard pacing on a €25 lifetime budget, so with four days left it only needs ~€4.80/day and will not bid up for a narrow feed audience (60 km of Marbella, agent job titles + interests, 24–64). Cheap junk inventory was what made the budget "work". Expect feed CPM of €5–15, i.e. €19.36 buys roughly 1,300–3,900 real feed impressions, not 40,000.
+- 20 Sep 2026: `render.mjs` had the founder's Mac path hardcoded, so it could not run in a cloud checkout; it now derives the repo root from its own location and falls back to `SHARP_DIR` for sharp. `npm ci` fails in this repo (package-lock.json is out of sync, missing @swc/helpers) — install sharp elsewhere and set `SHARP_DIR` rather than running `npm install`, which would rewrite the lockfile.
+- 20 Sep 2026: SearchAPI reports `remaining_credits` separately from the 10,000 monthly allowance — it was down to 65 with only 274 searches used. Judge by `remaining_credits`, not `current_month_usage`.

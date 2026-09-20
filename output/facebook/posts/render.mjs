@@ -1,6 +1,15 @@
-import { readFileSync, writeFileSync } from "node:fs";
-const ROOT = "/Users/lepadatumihail/Documents/work/personal/lena";
-const { default: sharp } = await import(`${ROOT}/node_modules/sharp/lib/index.js`);
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+// repo root, derived from this file's location (<root>/output/facebook/posts/render.mjs)
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+// the repo's own sharp when node_modules is installed, otherwise SHARP_DIR (a folder
+// that has sharp in its node_modules) — a fresh clone whose lockfile won't `npm ci`
+// can still render by installing sharp somewhere else and pointing SHARP_DIR at it.
+const sharpCandidates = [`${ROOT}/node_modules/sharp/lib/index.js`, process.env.SHARP_DIR && `${resolve(process.env.SHARP_DIR)}/node_modules/sharp/lib/index.js`].filter(Boolean);
+const sharpPath = sharpCandidates.find((p) => existsSync(p));
+if (!sharpPath) throw new Error(`sharp not found. Tried:\n  ${sharpCandidates.join("\n  ")}\nRun npm ci at the repo root, or set SHARP_DIR.`);
+const { default: sharp } = await import(sharpPath);
 const src = readFileSync(`${ROOT}/src/lib/brand-mark.ts`, "utf8");
 const wingBlock = src.slice(src.indexOf("WING_PATHS"), src.indexOf("WORDMARK_VIEWBOX"));
 const WING = [...wingBlock.matchAll(/"([^"]+)"/g)].map((m) => `<path d="${m[1]}"/>`).join("");
@@ -56,3 +65,13 @@ await card({ file: `${out}/03-founding.png`, bg: INK, fg: IVORY, accent: ORANGE,
   headline: (fg, ac) => `<span foreground="${ac}">€19</span><span foreground="${fg}"> a month\ninstead of €29.\nLocked for life.</span>`,
   sub: "Unlimited clients, every feature, cancel any time and nothing is deleted. Free still covers 10 clients forever.",
   pill: { text: "Cancel any time, nothing deleted", bg: ORANGE, fg: IVORY }, footer: "leadwing.app/pricing" });
+
+// Weekly news digest card. Text changes every week, so it is driven by env vars:
+//   DIGEST_FILE (basename), DIGEST_WEEK (goes after "COSTA DEL SOL PROPERTY · WEEK OF "),
+//   DIGEST_LEAD (accent-coloured opening, usually the number) and DIGEST_REST (the rest,
+//   "\n" for line breaks). Defaults are the week this card was last written for.
+await card({ file: `${out}/${process.env.DIGEST_FILE || "05-digest-2026-09-21.png"}`, bg: SAND, fg: INK, accent: ORANGE,
+  eyebrow: `Costa del Sol property · week of ${process.env.DIGEST_WEEK || "14–20 Sep 2026"}`,
+  headline: (fg, ac) => `<span foreground="${ac}">${process.env.DIGEST_LEAD || "€11.20"}</span><span foreground="${fg}">${(process.env.DIGEST_REST || " a m² in\nVélez-Málaga.\n€16.50 in the city.").replace(/\\n/g, "\n")}</span>`,
+  sub: "Five things agents should know this week.",
+  pill: { text: "Curated by LeadWing", bg: INK, fg: IVORY }, footer: "leadwing.app" });
