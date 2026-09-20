@@ -8,18 +8,20 @@
   "permalink": "https://www.facebook.com/122105574255476753/posts/122105598963476753"
  },
  {
-  "image": "output/facebook/posts/02-follow-up.png",
-  "photo_id": "122105598993476753",
-  "post_id": "1279663088571991_122105599035476753",
+  "image": "output/facebook/posts/06-wed-followup.png",
+  "photo_id": "122107059039476753",
+  "post_id": "1279663088571991_122107059069476753",
   "scheduled_for": "2026-09-23T09:30:00+02:00",
-  "error": null
+  "error": null,
+  "replaced": "typographic card replaced with the real-screenshot image on 21 Sep 00:37"
  },
  {
-  "image": "output/facebook/posts/03-founding.png",
-  "photo_id": "122105599065476753",
-  "post_id": "1279663088571991_122105599107476753",
+  "image": "output/facebook/posts/07-thu-founding.png",
+  "photo_id": "122107059123476753",
+  "post_id": "1279663088571991_122107059153476753",
   "scheduled_for": "2026-09-24T09:30:00+02:00",
-  "error": null
+  "error": null,
+  "replaced": "typographic card replaced with the real-screenshot image on 21 Sep 00:37"
  },
  {
   "image": "output/facebook/posts/04-spreadsheets-founder.jpg",

@@ -38,7 +38,7 @@ Read this first on every run. It is the operator's memory: update it when a deci
 
 ## Pending (keep current)
 - Monday 21 Sep 09:30 digest: SCHEDULED (post 1279663088571991_122107041849476753, card 05-digest-2026-09-21.png). After it publishes, post the source links from `news-digest-2026-09-21.md` as the first comment.
-- Wednesday 23 Sep product post ("Most leads don't say no") and Thursday 24 Sep founding post: replacement images BUILT on 21 Sep (06-wed-followup.png, 07-thu-founding.png; real dark Home screenshot on the brand background via compose-product.mjs + spec-*.json) and shown to the founder; the swap (delete the scheduled post, re-create with the new image, same caption and time, update scheduled.json) happens once the founder confirms, from the founder's desktop session. Real screenshots now live in output/facebook/screenshots/ for all future product creatives. Do not touch these two posts from the cloud until scheduled.json shows the new image files.
+- Wednesday 23 Sep ("Most leads don't say no", 06-wed-followup.png) and Thursday 24 Sep (founding offer, 07-thu-founding.png) are scheduled with the real-screenshot creatives on the matte terracotta background; ids in scheduled.json. Nothing to do until they publish.
 - Click ad (ids in ads.json): founder approved the pacing fix on 21 Sep; ad set end_time is now Tue 22 Sep 23:59 Madrid, budget unchanged (€25 lifetime, €19.36 left). Watch feed impressions; if still near zero by the 22 Sep evening check, say so and propose the next fix (daily budget, or pause and wait for the pixel).
 - Next digest: Friday 25 Sep 09:30, drafted by the Thursday noon run.
 - Page has 0 followers, no comments or messages yet (21 Sep).

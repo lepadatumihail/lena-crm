@@ -16,7 +16,7 @@ Built in Marbella. Free for your first 10 clients, no card and no time limit.
 
 leadwing.app
 
-## Post 2 — Wed 23 Sep 2026, 09:30 · image `02-follow-up.png`
+## Post 2 — Wed 23 Sep 2026, 09:30 · image `06-wed-followup.png` (real-screenshot creative; the typographic `02-follow-up.png` was replaced on 21 Sep)
 
 Most leads don't say no. They go quiet.
 
@@ -26,7 +26,7 @@ No more scrolling back through old chats to remember where you left it.
 
 Try it free with your first 10 clients: leadwing.app
 
-## Post 3 — Thu 24 Sep 2026, 09:30 (moved from Fri 25: Fridays are news digests) · image `03-founding.png`
+## Post 3 — Thu 24 Sep 2026, 09:30 (moved from Fri 25: Fridays are news digests) · image `07-thu-founding.png` (real-screenshot creative; the typographic `03-founding.png` was replaced on 21 Sep)
 
 The first 20 paying agents on LeadWing become Founding Agents.
 
