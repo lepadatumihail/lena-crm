@@ -1,0 +1,31 @@
+[
+ {
+  "image": "output/facebook/posts/01-one-card.png",
+  "photo_id": "122105598927476753",
+  "post_id": "1279663088571991_122105598963476753",
+  "error": null,
+  "published_at": "2026-09-19T20:09:15.396249+02:00",
+  "permalink": "https://www.facebook.com/122105574255476753/posts/122105598963476753"
+ },
+ {
+  "image": "output/facebook/posts/02-follow-up.png",
+  "photo_id": "122105598993476753",
+  "post_id": "1279663088571991_122105599035476753",
+  "scheduled_for": "2026-09-23T09:30:00+02:00",
+  "error": null
+ },
+ {
+  "image": "output/facebook/posts/03-founding.png",
+  "photo_id": "122105599065476753",
+  "post_id": "1279663088571991_122105599107476753",
+  "scheduled_for": "2026-09-24T09:30:00+02:00",
+  "error": null
+ },
+ {
+  "image": "output/facebook/posts/04-spreadsheets-founder.jpg",
+  "photo_id": "122105661993476753",
+  "post_id": "1279663088571991_122105662023476753",
+  "published_at": "2026-09-19T20:34:13.685667+02:00",
+  "permalink": "https://www.facebook.com/122105574255476753/posts/122105662023476753"
+ }
+]

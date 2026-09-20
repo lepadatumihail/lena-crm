@@ -1,0 +1,37 @@
+{
+ "click_ad": {
+  "kind": "click ad",
+  "post_id": "1279663088571991_122105662023476753",
+  "approved": "€25 lifetime as a link-click ad, 19 Sep 2026",
+  "link": "https://leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26",
+  "image_hash": "2c66ea9b404867530f0ce140fc8c0e14",
+  "campaign_id": "6995417076094",
+  "adset_id": "6995417079494",
+  "status": "founder authenticated + republished 20 Sep 19:20; ad IN_PROCESS, feed-only placements",
+  "creative_id": "4655037744778453",
+  "ad_id": "6995418317094",
+  "observed_2026_09_20": {
+   "spend_eur": 5.64,
+   "budget_remaining_eur": 19.36,
+   "reach": 6668,
+   "impressions": 42381,
+   "link_clicks_reported": 170,
+   "landing_page_views": 37,
+   "audience_network_share": "89% of spend, 97% of impressions (an_classic) - junk clicks",
+   "ad_effective_status": "PENDING_REVIEW (ad edited 2026-09-20T19:20 Madrid; adset edited 13:11; delivery stopped after 13:00)",
+   "live_creative_id": "1083235867424577"
+  }
+ },
+ "rejected_boost": {
+  "post_id": "1279663088571991_122105598963476753",
+  "approved": "€5/day x 5 days = €25 lifetime, 19 Sep 2026",
+  "campaign_id": "6995415486894",
+  "adset_id": "6995415491294",
+  "creative_id": "1803034517386725",
+  "ad_id": "6995415507494",
+  "created_at": "2026-09-19T20:22:42.222258+02:00",
+  "end_time": "2026-09-24T23:59:00+02:00",
+  "paused_at_reason": "19 Sep 2026: founder rejected the typographic creative before delivery",
+  "status": "ARCHIVED, never delivered"
+ }
+}
