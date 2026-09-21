@@ -7,7 +7,7 @@
   "image_hash": "2c66ea9b404867530f0ce140fc8c0e14",
   "campaign_id": "6995417076094",
   "adset_id": "6995417079494",
-  "status": "optimization_goal switched LINK_CLICKS -> REACH on founder's yes (21 Sep 12:30, 'lets do A'); placements, audience, EUR 25 lifetime budget and the Tue 22 Sep 23:59 end time all unchanged",
+  "status": "REACH since 21 Sep 12:18 (delivering on feed). NEXT, approved by the founder 21 Sep 17:30 but NOT YET APPLIED: optimization_goal LANDING_PAGE_VIEWS + promoted_object {pixel_id: 1625109429125373} + end_time back to Thu 24 Sep 23:59; Claude's tooling is blocked from editing ad sets, so the founder runs the edit himself (command given 21 Sep ~19:00). Until ads.json records that edit, treat the ad set as REACH.",
   "optimization_goal_previous": "LINK_CLICKS",
   "edit_2026_09_21": {
    "change": "optimization_goal LINK_CLICKS -> REACH",
@@ -91,5 +91,12 @@
   "end_time": "2026-09-24T23:59:00+02:00",
   "paused_at_reason": "19 Sep 2026: founder rejected the typographic creative before delivery",
   "status": "ARCHIVED, never delivered"
+ },
+ "pixel": {
+  "pixel_id": "1625109429125373",
+  "dataset_name": "LEADWING",
+  "created": "21 Sep 2026 ~18:50 by the founder in Events Manager (Meta API refused to create one with the page token)",
+  "site": "live on leadwing.app since 21 Sep 2026 ~19:05 (commits f512d57 + a19b77f): consent-gated cookie notice, marketing URLs only, PageView on load and on client navigation, autoConfig off, advanced matching off, host-based default in src/lib/site.ts (NEXT_PUBLIC_META_PIXEL_ID overrides)",
+  "verified": "21 Sep 2026 19:10 on www.leadwing.app: Accept -> fbq init 1625109429125373, PageView for / and /pricing; footer Cookies link reopens the notice; nothing on /login"
  }
 }
