@@ -7,7 +7,14 @@
   "image_hash": "2c66ea9b404867530f0ce140fc8c0e14",
   "campaign_id": "6995417076094",
   "adset_id": "6995417079494",
-  "status": "end moved to Tue 22 Sep 23:59 on founder's yes (21 Sep 00:18) so the remaining budget paces over 2 days",
+  "status": "optimization_goal switched LINK_CLICKS -> REACH on founder's yes (21 Sep 12:30, 'lets do A'); placements, audience, EUR 25 lifetime budget and the Tue 22 Sep 23:59 end time all unchanged",
+  "optimization_goal_previous": "LINK_CLICKS",
+  "edit_2026_09_21": {
+   "change": "optimization_goal LINK_CLICKS -> REACH",
+   "why": "a full day at zero impressions and zero spend; lowest-cost LINK_CLICKS with no pixel could not win a narrow feed auction",
+   "billing_event": "IMPRESSIONS already, so no second edit was needed",
+   "verified_after": "optimization_goal=REACH, adset ACTIVE, budget_remaining 1935, ad effective_status IN_PROCESS (re-review, same as the 20 Sep edit)"
+  },
   "creative_id": "1083235867424577",
   "creative_id_previous": "4655037744778453",
   "ad_id": "6995418317094",

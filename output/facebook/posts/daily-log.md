@@ -12,7 +12,11 @@ Finding: the pacing fix did not work. Hourly shows delivery stopped after 20 Sep
 
 Not paused: the playbook's waste test fires on lifetime AN share (89%), but that spend all predates the placement fix and the ad now spends ~€0.01/day, so pausing would save nothing and only freeze the budget. Reasoning surfaced to the founder instead; one fix proposed, not applied.
 
-Noticed: SearchAPI down to 65 remaining_credits (278 searches used this month) — enough for Thursday's Friday digest at 10 searches, thin after that. The Wed creative's screenshot shows "Mon 21 Sep" inside the app on a post that publishes Wednesday; left as is, not worth a re-render.
+Noticed: the Wed creative's screenshot shows "Mon 21 Sep" inside the app on a post that publishes Wednesday; left as is, not worth a re-render. SearchAPI is at 65 remaining_credits — founder says that is fine, so it stops being a talking point.
+
+Approved and done: fix A. Ad set 6995417079494 `optimization_goal` LINK_CLICKS → REACH (billing_event was already IMPRESSIONS, so one edit); placements, audience, €25 lifetime budget and the Tue 22 Sep 23:59 end time untouched. Verified after: REACH, ACTIVE, €19.35 remaining; the ad went IN_PROCESS for re-review, same as after the 20 Sep edit. Evening check to confirm it clears and that feed impressions start.
+
+Declined: the source-links first comment. Founder asked for no links at all, so the digest's attribution stays as the publication names in brackets and the rule is now in the playbook. URLs stay in `news-digest-*.md` for the founder's own checking.
 
 ## Sun 20 Sep 2026 (run 23:45 Madrid — weekly sitting, fired off-cycle, treated as a noon brief)
 

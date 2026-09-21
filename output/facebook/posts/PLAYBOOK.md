@@ -22,7 +22,8 @@ Read this first on every run. It is the operator's memory: update it when a deci
 - Search: `GET https://www.searchapi.io/api/v1/search` with `engine=google_news`, `gl=es`, `time_period=last_week`, `link=resolved`, once with `hl=en` and once with `hl=es`; queries like "Costa del Sol property", "Marbella real estate", "Málaga vivienda precios", "alquiler turístico Andalucía", "Estepona Mijas Fuengirola Benalmádena vivienda". Send the key as `Authorization: Bearer`. At most 10 searches per run; check `GET https://www.searchapi.io/api/v1/me` and judge by `current_month_usage` (allowance 10,000; stay under 400 a month).
 - Keep: market data, prices and rents, regulation and licences, new developments, infrastructure, agency and industry moves. Skip: crime, celebrities, portal listing pages, national stories without a coast angle, stories already used (check the log).
 - Every number comes from the article, opened with WebFetch, never from a headline. surinenglish.com blocks fetches: use a second source or drop the item.
-- Format: five items maximum, one or two sentences each in your own words, source in brackets; one line on what it means for an agent's buyers or sellers; sign-off "Curated by LeadWing, the CRM for independent agents on the Costa del Sol. leadwing.app". Source links go in the first comment after publishing, not in the post. Template: `news-digest-2026-09-21.md`.
+- Format: five items maximum, one or two sentences each in your own words, source in brackets; one line on what it means for an agent's buyers or sellers; sign-off "Curated by LeadWing, the CRM for independent agents on the Costa del Sol. leadwing.app". Template: `news-digest-2026-09-21.md`.
+- No links (founder, 21 Sep): do not post source links, in the digest or as a first comment. Naming the publication in brackets is the attribution. Keep collecting and verifying the URLs in the `news-digest-*.md` file for the founder's own checking — just never publish them.
 - Card: typographic digest card via render.mjs: eyebrow "COSTA DEL SOL PROPERTY · WEEK OF …", headline = the strongest fact, sub "Five things agents should know this week", footer leadwing.app.
 
 ## Product posts and images
@@ -37,10 +38,10 @@ Read this first on every run. It is the operator's memory: update it when a deci
 - Security: a burst of API edits triggered Meta's "authenticate your account" check on 20 Sep; keep edits few and spaced.
 
 ## Pending (keep current)
-- Monday 21 Sep 09:30 digest: PUBLISHED on time (post 1279663088571991_122107041849476753). The source-links first comment from `news-digest-2026-09-21.md` is drafted and waiting on the founder's yes (21 Sep noon brief, decision 1).
+- Monday 21 Sep 09:30 digest: PUBLISHED on time (post 1279663088571991_122107041849476753). No source-links comment — the founder declined it and asked for no links at all; see the No links rule under News digests. Nothing outstanding on this post.
 - Wednesday 23 Sep ("Most leads don't say no", 06-wed-followup.png) and Thursday 24 Sep (founding offer, 07-thu-founding.png) are scheduled with the real-screenshot creatives on the matte terracotta background; ids in scheduled.json. Nothing to do until they publish.
-- Click ad (ids in ads.json): the pacing fix did NOT restore delivery — zero impressions and zero spend for all of 21 Sep, €19.35 of €25 still unspent, ad set ends Tue 22 Sep 23:59. Fix proposed to the founder on 21 Sep and not applied: switch `optimization_goal` from LINK_CLICKS to REACH (keep placements, audience, budget, end time). Alternatives offered: turn on `targeting_automation.advantage_audience`, or let it expire and restart once a pixel is on the site. Awaiting the yes.
-- Next digest: Friday 25 Sep 09:30, drafted by the Thursday noon run. SearchAPI has 65 remaining_credits — enough for one more 10-search digest, then it needs topping up.
+- Click ad (ids in ads.json): founder approved fix A on 21 Sep — `optimization_goal` is now REACH, everything else unchanged, €19.35 left, ad set ends Tue 22 Sep 23:59. The ad went IN_PROCESS for re-review straight after the edit. The 21 Sep evening check must confirm it is ACTIVE again and that feed impressions have actually started; if it is still at zero on the 22 Sep noon run, the budget will expire that night and the honest call is to stop and wait for a pixel rather than edit again.
+- Next digest: Friday 25 Sep 09:30, drafted by the Thursday noon run. SearchAPI credits are not a concern (founder, 21 Sep) — do not raise them again unless a search actually fails.
 - Page has 0 followers, no comments or messages yet (21 Sep).
 
 ## Learnings (append, dated)
