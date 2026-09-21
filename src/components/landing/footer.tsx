@@ -4,7 +4,7 @@ import { Mail } from "lucide-react";
 
 import { asLocale, type AppLocale } from "@/i18n/config";
 import { marketingPath, type LinkedRoute } from "@/lib/routes";
-import { META_PIXEL_ID, SITE_NAME, SUPPORT_EMAIL } from "@/lib/site";
+import { SITE_NAME, SUPPORT_EMAIL } from "@/lib/site";
 import { Logo } from "@/components/brand/logo";
 import { CookieChoiceButton } from "@/components/marketing/cookie-choice-button";
 
@@ -86,13 +86,11 @@ export function LandingFooter() {
                 {tLegal(route)}
               </Link>
             ))}
-            {/* Only once ads are measured: without a pixel there is no notice to reopen. */}
-            {META_PIXEL_ID ? (
-              <CookieChoiceButton
-                label={tLegal("cookies")}
-                className="hover:text-foreground transition-colors"
-              />
-            ) : null}
+            {/* Renders only where the Meta Pixel exists (production hosts). */}
+            <CookieChoiceButton
+              label={tLegal("cookies")}
+              className="hover:text-foreground transition-colors"
+            />
           </nav>
         </div>
       </div>

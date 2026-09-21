@@ -13,8 +13,8 @@ import {
   writeConsent,
   type ConsentChoice,
 } from "@/lib/consent";
+import { metaPixelIdHere, noPixelOnServer, subscribeToNothing } from "@/lib/meta-pixel";
 import { marketingPath, marketingRouteAt } from "@/lib/routes";
-import { META_PIXEL_ID } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { MetaPixel } from "@/components/marketing/meta-pixel";
 
@@ -27,14 +27,16 @@ const serverState = (): ConsentState => "unknown";
 /**
  * Ad measurement on the public website, and the notice that asks for it.
  * Mounted once in the root layout; it renders nothing unless the URL is a
- * marketing page and a pixel id is configured, so the signed-in app, the
- * sign-in pages and every deployment without NEXT_PUBLIC_META_PIXEL_ID stay
- * exactly as they were. The stored answer lives in localStorage, so the
- * server renders "unknown" and the client swaps in the real answer after
- * hydration: the notice never flashes on a page that already has one.
+ * marketing page and the page has a pixel (src/lib/meta-pixel.ts), so the
+ * signed-in app, the sign-in pages, previews and local runs stay exactly as
+ * they were. Both the pixel id (it depends on the host) and the stored
+ * answer (it lives in localStorage) are read after hydration: the server
+ * renders nothing and the client fills in the truth, so the notice never
+ * flashes on a page that already has an answer.
  */
 export function MarketingTracking() {
   const pathname = usePathname();
+  const pixelId = useSyncExternalStore(subscribeToNothing, metaPixelIdHere, noPixelOnServer);
   const state = useSyncExternalStore(subscribeConsent, readState, serverState);
   const [reopened, setReopened] = useState(false);
 
@@ -44,7 +46,7 @@ export function MarketingTracking() {
     return () => window.removeEventListener(CONSENT_OPEN_EVENT, onOpen);
   }, []);
 
-  if (!META_PIXEL_ID || !marketingRouteAt(pathname)) return null;
+  if (!pixelId || !marketingRouteAt(pathname)) return null;
 
   const choose = (choice: ConsentChoice) => {
     writeConsent(choice);
@@ -53,7 +55,7 @@ export function MarketingTracking() {
 
   return (
     <>
-      <MetaPixel pixelId={META_PIXEL_ID} enabled={state === "granted"} />
+      <MetaPixel pixelId={pixelId} enabled={state === "granted"} />
       {state === "none" || (state !== "unknown" && reopened) ? (
         <ConsentNotice onChoose={choose} />
       ) : null}

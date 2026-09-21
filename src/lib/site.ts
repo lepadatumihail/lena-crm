@@ -70,10 +70,18 @@ export function absoluteUrl(path: string): string {
 }
 
 /**
- * Meta (Facebook) Pixel id for the public website, or null when ads are not
- * being measured. Set NEXT_PUBLIC_META_PIXEL_ID on production only: while it
- * is unset nothing loads and the cookie notice never shows. The pixel itself
- * waits for the visitor's answer to that notice (src/lib/consent.ts).
+ * Meta (Facebook) Pixel for the public website. The production site uses the
+ * "LEADWING" dataset on the founder's ad account; a pixel id is public (it
+ * sits in the page source of every site that has one), so like SITE_URL it
+ * lives here rather than in a dashboard setting. NEXT_PUBLIC_META_PIXEL_ID
+ * overrides it for any deployment, for instance to test on a preview;
+ * otherwise only pages served from PRODUCTION_HOSTS load a pixel, so previews
+ * and local runs never send Meta a thing. The pixel itself waits for the
+ * visitor's answer to the cookie notice (src/lib/consent.ts).
  */
+export const PRODUCTION_META_PIXEL_ID = "1625109429125373";
+
+export const PRODUCTION_HOSTS: readonly string[] = ["leadwing.app", "www.leadwing.app"];
+
 export const META_PIXEL_ID: string | null =
   process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() || null;
