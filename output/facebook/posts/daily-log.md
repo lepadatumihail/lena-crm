@@ -1,5 +1,19 @@
 # LeadWing Facebook daily log
 
+## Mon 21 Sep 2026 (noon brief, run 12:05 Madrid)
+
+Numbers: followers 0, comments 0 across all posts, inbox empty (0 conversations), queue = 2 (Wed 23 + Thu 24 Sep 09:30, verified). Page insights for 20 Sep: 3 post engagements, 0 page views, 0 follows.
+
+Published: the Monday digest went out on time at 09:30 Madrid (post 1279663088571991_122107041849476753). No reactions, no comments yet. The source-links first comment is drafted and waiting on the founder's yes.
+
+Ad: €5.65 of €25 spent, €19.35 left, ad and ad set both ACTIVE, no review issues, account healthy (status 1, Visa on file). Lifetime 42,405 imp / 6,691 reach / 171 reported clicks / 37 LPV. Real in-platform lifetime: Facebook feed 356 imp / 4 clicks / 1 LPV, Instagram feed 39 imp / 0 clicks; Audience Network still 89% of spend (€5.05), all of it before the 20 Sep 13:11 placement fix.
+
+Finding: the pacing fix did not work. Hourly shows delivery stopped after 20 Sep 13:00; 24 impressions and €0.01 in the 17 h after the fix, and **zero impressions and zero spend for all of 21 Sep** (12 h so far) — no insights row for today at all. The ad set ends Tue 22 Sep 23:59, so on the current path €19.35 expires unspent.
+
+Not paused: the playbook's waste test fires on lifetime AN share (89%), but that spend all predates the placement fix and the ad now spends ~€0.01/day, so pausing would save nothing and only freeze the budget. Reasoning surfaced to the founder instead; one fix proposed, not applied.
+
+Noticed: SearchAPI down to 65 remaining_credits (278 searches used this month) — enough for Thursday's Friday digest at 10 searches, thin after that. The Wed creative's screenshot shows "Mon 21 Sep" inside the app on a post that publishes Wednesday; left as is, not worth a re-render.
+
 ## Sun 20 Sep 2026 (run 23:45 Madrid — weekly sitting, fired off-cycle, treated as a noon brief)
 
 Numbers: followers 0, comments 0 on all 5 posts, inbox empty (0 conversations), queue = 2 (Wed 23 + Thu 24 Sep 09:30, timestamps verified against scheduled.json).
