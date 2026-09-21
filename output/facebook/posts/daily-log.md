@@ -1,5 +1,17 @@
 # LeadWing Facebook daily log
 
+## Mon 21 Sep 2026 (evening check, run 18:05 Madrid)
+
+Nothing to answer: 0 comments and 0 reactions on all 6 posts (the 09:30 digest included), inbox empty (0 conversations). Nothing drafted, nothing sent.
+
+Ad: the REACH switch worked. Ad and ad set both ACTIVE, review cleared, no issues_info. 21 Sep so far €3.23 / 4,089 impressions / 3,791 reach / CPM €0.79 / 4 link clicks / 1 LPV — all of it Facebook feed (€2.89, 3,596 imp) and Instagram feed (€0.34, 493 imp), **zero Audience Network today**. Delivery ran 14:00–18:00 Madrid, peaking 15:00 (€1.65 / 1,830 imp) then tapering as lifetime pacing takes over. Lifetime €8.85 of €25, €16.15 left.
+
+Not paused: lifetime AN share is 58% (€5.13 of €8.85) and lifetime cost per click €0.051, so the letter of the waste test is borderline — but every AN cent predates the 20 Sep 13:11 placement fix, and today's real cost per click is €0.81. Nothing is being wasted now.
+
+Flagged, not acted on: the ad set still ends Tue 22 Sep 23:59 with €16.15 unspent, and no pixel exists on the account yet (`/adspixels` empty), so the founder's 17:30 plan — LANDING_PAGE_VIEWS + pixel + end_time back to Thu 24 — cannot be applied. Roughly 30 hours to absorb €16.15 at today's ~€0.65/h. Ad set untouched per the playbook.
+
+Account healthy: status 1, no disable reason, Visa *1984, €1.45 balance.
+
 ## Mon 21 Sep 2026 (noon brief, run 12:05 Madrid)
 
 Numbers: followers 0, comments 0 across all posts, inbox empty (0 conversations), queue = 2 (Wed 23 + Thu 24 Sep 09:30, verified). Page insights for 20 Sep: 3 post engagements, 0 page views, 0 follows.
