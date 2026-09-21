@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
@@ -6,6 +7,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ServiceWorkerRegister } from "@/components/service-worker-register";
+import { MarketingTracking } from "@/components/marketing/marketing-tracking";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE_LOCALE, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -119,6 +121,10 @@ export default async function RootLayout({
           <NextIntlClientProvider>
             {children}
             <Toaster />
+            {/* Meta Pixel + cookie notice: marketing URLs only, and only after consent. */}
+            <Suspense fallback={null}>
+              <MarketingTracking />
+            </Suspense>
           </NextIntlClientProvider>
         </ThemeProvider>
         <ServiceWorkerRegister />

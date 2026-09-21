@@ -68,3 +68,12 @@ export const BRAND = {
 export function absoluteUrl(path: string): string {
   return path === "/" ? SITE_URL : `${SITE_URL}${path}`;
 }
+
+/**
+ * Meta (Facebook) Pixel id for the public website, or null when ads are not
+ * being measured. Set NEXT_PUBLIC_META_PIXEL_ID on production only: while it
+ * is unset nothing loads and the cookie notice never shows. The pixel itself
+ * waits for the visitor's answer to that notice (src/lib/consent.ts).
+ */
+export const META_PIXEL_ID: string | null =
+  process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() || null;

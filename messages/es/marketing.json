@@ -51,5 +51,12 @@
       "label": "Sobre LeadWing",
       "blurb": "Qué es LeadWing, para quién es, los datos clave y cómo contactar con nosotros."
     }
+  },
+  "consent": {
+    "title": "Cookies para nuestros anuncios",
+    "body": "Usamos el píxel de Meta para medir nuestros anuncios en Facebook e Instagram. Solo se activa si aceptas.",
+    "accept": "Aceptar",
+    "decline": "No, gracias",
+    "privacy": "Política de privacidad"
   }
 }

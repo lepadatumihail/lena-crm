@@ -4,8 +4,9 @@ import { Mail } from "lucide-react";
 
 import { asLocale, type AppLocale } from "@/i18n/config";
 import { marketingPath, type LinkedRoute } from "@/lib/routes";
-import { SITE_NAME, SUPPORT_EMAIL } from "@/lib/site";
+import { META_PIXEL_ID, SITE_NAME, SUPPORT_EMAIL } from "@/lib/site";
 import { Logo } from "@/components/brand/logo";
+import { CookieChoiceButton } from "@/components/marketing/cookie-choice-button";
 
 const LEGAL_LINKS = ["privacy", "terms", "legalNotice"] as const;
 
@@ -85,6 +86,13 @@ export function LandingFooter() {
                 {tLegal(route)}
               </Link>
             ))}
+            {/* Only once ads are measured: without a pixel there is no notice to reopen. */}
+            {META_PIXEL_ID ? (
+              <CookieChoiceButton
+                label={tLegal("cookies")}
+                className="hover:text-foreground transition-colors"
+              />
+            ) : null}
           </nav>
         </div>
       </div>

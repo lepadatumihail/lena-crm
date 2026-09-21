@@ -109,7 +109,9 @@ export function PrivacyEn() {
         </li>
         <li>
           Technical data: IP address, browser and device type in short-lived server logs,
-          and aggregated, cookie-free statistics about the public website (section 8).
+          and aggregated, cookie-free statistics about the public website (section 8). If
+          you accept the cookie notice, also the Meta Pixel’s record of the public pages you
+          viewed (section 8).
         </li>
         <li>Support: what you write to us by email.</li>
       </ul>
@@ -132,6 +134,11 @@ export function PrivacyEn() {
         <li>
           To understand how the public website is used: our legitimate interest, using
           statistics that do not identify you.
+        </li>
+        <li>
+          To measure our advertising on Facebook and Instagram with the Meta Pixel: your
+          consent, given in the cookie notice on the public website and withdrawable at any
+          time from the Cookies link in the footer (art. 6(1)(a); section 8).
         </li>
         <li>To run the referral programme you take part in: our contract with you.</li>
         <li>
@@ -243,6 +250,14 @@ export function PrivacyEn() {
             <td>United States (Data Privacy Framework)</td>
           </tr>
           <tr>
+            <td>Meta Platforms Ireland Limited</td>
+            <td>
+              Measuring our Facebook and Instagram ads with the Meta Pixel, only if you accept
+              it (section 8)
+            </td>
+            <td>Ireland and United States (Data Privacy Framework)</td>
+          </tr>
+          <tr>
             <td>OpenRouter, Inc. and OpenAI</td>
             <td>AI drafting and lead capture (section 5)</td>
             <td>United States (standard contractual clauses)</td>
@@ -271,8 +286,10 @@ export function PrivacyEn() {
 
       <h2>8. Cookies and storage on your device</h2>
       <p>
-        {SITE_NAME} uses only the cookies it needs to work and to remember your choices, so it
-        shows no cookie banner. Nothing on this site tracks you across other websites.
+        {SITE_NAME} uses the cookies it needs to work and to remember your choices without
+        asking. The one exception is the Meta Pixel on the public website, which measures our
+        Facebook and Instagram ads and runs only if you accept it in the cookie notice.
+        Nothing else on this site tracks you across other websites.
       </p>
       <table>
         <thead>
@@ -303,6 +320,16 @@ export function PrivacyEn() {
             <td>Remembers the invite link you arrived from, so the referral is credited</td>
             <td>30 minutes</td>
           </tr>
+          <tr>
+            <td>lw_consent</td>
+            <td>Remembers your answer to the cookie notice, in your browser’s local storage</td>
+            <td>One year</td>
+          </tr>
+          <tr>
+            <td>_fbp, _fbc (Meta Pixel, only if you accept)</td>
+            <td>Let Meta tell which visits came from our ads and which ad was clicked</td>
+            <td>90 days</td>
+          </tr>
         </tbody>
       </table>
       <p>
@@ -314,6 +341,15 @@ export function PrivacyEn() {
         Website statistics come from Vercel Web Analytics, which sets no cookies and stores
         nothing on your device: it counts page views with a hashed identifier that is
         discarded within a day.
+      </p>
+      <p>
+        If you accept the cookie notice, the Meta Pixel (Meta Platforms Ireland Limited) loads
+        on the public pages and sends Meta the pages you view there, your IP address and
+        browser details, and any Meta cookies already on your device, so we can see whether
+        our ads bring agents here. It never runs on the pages behind sign-in. You can change
+        your answer at any time from the Cookies link in the footer: declining stops it at
+        once, and its cookies expire on their own. How Meta uses this data is described in
+        its own privacy policy at facebook.com/privacy/policy.
       </p>
 
       <h2>9. Your rights</h2>

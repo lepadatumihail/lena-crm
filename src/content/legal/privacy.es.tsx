@@ -112,7 +112,8 @@ export function PrivacyEs() {
         <li>
           Datos técnicos: dirección IP, navegador y tipo de dispositivo en registros de
           servidor de corta duración, y estadísticas agregadas y sin cookies de la web pública
-          (apartado 8).
+          (apartado 8). Si aceptas el aviso de cookies, también el registro del píxel de Meta
+          de las páginas públicas que has visto (apartado 8).
         </li>
         <li>Soporte: lo que nos escribes por email.</li>
       </ul>
@@ -134,6 +135,12 @@ export function PrivacyEs() {
         <li>
           Entender cómo se usa la web pública: nuestro interés legítimo, con estadísticas que
           no te identifican.
+        </li>
+        <li>
+          Medir nuestra publicidad en Facebook e Instagram con el píxel de Meta: tu
+          consentimiento, dado en el aviso de cookies de la web pública y revocable en
+          cualquier momento desde el enlace Cookies del pie de página (art. 6.1.a; apartado
+          8).
         </li>
         <li>Gestionar el programa de referidos en el que participas: el contrato contigo.</li>
         <li>
@@ -253,6 +260,14 @@ export function PrivacyEs() {
             <td>Estados Unidos (Marco de Privacidad de Datos)</td>
           </tr>
           <tr>
+            <td>Meta Platforms Ireland Limited</td>
+            <td>
+              Medición de nuestros anuncios en Facebook e Instagram con el píxel de Meta, solo
+              si lo aceptas (apartado 8)
+            </td>
+            <td>Irlanda y Estados Unidos (Marco de Privacidad de Datos)</td>
+          </tr>
+          <tr>
             <td>OpenRouter, Inc. y OpenAI</td>
             <td>Redacción con IA y captura de leads (apartado 5)</td>
             <td>Estados Unidos (cláusulas contractuales tipo)</td>
@@ -281,9 +296,10 @@ export function PrivacyEs() {
 
       <h2>8. Cookies y almacenamiento en tu dispositivo</h2>
       <p>
-        {SITE_NAME} solo usa las cookies necesarias para funcionar y para recordar tus
-        preferencias, por lo que no muestra ningún aviso de cookies. Nada en este sitio te
-        rastrea en otras webs.
+        {SITE_NAME} usa sin preguntar las cookies necesarias para funcionar y para recordar
+        tus preferencias. La única excepción es el píxel de Meta en la web pública, que mide
+        nuestros anuncios en Facebook e Instagram y solo se activa si lo aceptas en el aviso
+        de cookies. Nada más en este sitio te rastrea en otras webs.
       </p>
       <table>
         <thead>
@@ -317,6 +333,22 @@ export function PrivacyEs() {
             </td>
             <td>30 minutos</td>
           </tr>
+          <tr>
+            <td>lw_consent</td>
+            <td>
+              Recuerda tu respuesta al aviso de cookies, en el almacenamiento local de tu
+              navegador
+            </td>
+            <td>Un año</td>
+          </tr>
+          <tr>
+            <td>_fbp, _fbc (píxel de Meta, solo si lo aceptas)</td>
+            <td>
+              Permiten a Meta saber qué visitas llegaron desde nuestros anuncios y en qué
+              anuncio se hizo clic
+            </td>
+            <td>90 días</td>
+          </tr>
         </tbody>
       </table>
       <p>
@@ -329,6 +361,16 @@ export function PrivacyEs() {
         Las estadísticas de la web provienen de Vercel Web Analytics, que no instala cookies
         ni guarda nada en tu dispositivo: cuenta las visitas con un identificador cifrado que
         se descarta en menos de un día.
+      </p>
+      <p>
+        Si aceptas el aviso de cookies, el píxel de Meta (Meta Platforms Ireland Limited) se
+        carga en las páginas públicas y envía a Meta las páginas que ves en ellas, tu dirección
+        IP y datos del navegador, y las cookies de Meta que ya tenga tu dispositivo, para que
+        podamos saber si nuestros anuncios traen agentes hasta aquí. Nunca se activa en las
+        páginas que requieren iniciar sesión. Puedes cambiar tu respuesta cuando quieras desde
+        el enlace Cookies del pie de página: si lo rechazas, deja de funcionar al momento y sus
+        cookies caducan por sí solas. Cómo usa Meta estos datos se explica en su propia
+        política de privacidad, en facebook.com/privacy/policy.
       </p>
 
       <h2>9. Tus derechos</h2>
