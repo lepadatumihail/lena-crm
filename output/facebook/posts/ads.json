@@ -7,7 +7,7 @@
   "image_hash": "2c66ea9b404867530f0ce140fc8c0e14",
   "campaign_id": "6995417076094",
   "adset_id": "6995417079494",
-  "status": "REACH since 21 Sep 12:18 (delivering on feed). NEXT, approved by the founder 21 Sep 17:30 but NOT YET APPLIED: optimization_goal LANDING_PAGE_VIEWS + promoted_object {pixel_id: 1625109429125373} + end_time back to Thu 24 Sep 23:59; Claude's tooling is blocked from editing ad sets, so the founder runs the edit himself (command given 21 Sep ~19:00). Until ads.json records that edit, treat the ad set as REACH.",
+  "status": "LANDING_PAGE_VIEWS since 21 Sep 2026 ~19:35 (founder ran the edit himself); end_time Thu 24 Sep 23:59; EUR 15.47 left; ad + ad set went IN_PROCESS for re-review right after the edit",
   "optimization_goal_previous": "LINK_CLICKS",
   "edit_2026_09_21": {
    "change": "optimization_goal LINK_CLICKS -> REACH",
@@ -39,10 +39,10 @@
   "creative_id": "1083235867424577",
   "creative_id_previous": "4655037744778453",
   "ad_id": "6995418317094",
-  "end_time": "2026-09-22T23:59:00+02:00",
+  "end_time": "2026-09-24T23:59:00+02:00",
   "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
   "pacing_type": "standard",
-  "optimization_goal": "REACH",
+  "optimization_goal": "LANDING_PAGE_VIEWS",
   "observed_2026_09_21T1205": {
    "spend_eur": 5.65,
    "budget_remaining_eur": 19.35,
@@ -78,6 +78,12 @@
    "ad_effective_status": "ACTIVE",
    "diagnosis": "pacing: EUR 19.36 over 4 remaining days on lowest-cost bidding will not win a narrow feed auction",
    "proposed_fix_not_applied": "bring adset end_time forward to 2026-09-22T23:59 so the same EUR 19.36 is paced over ~2 days instead of 4"
+  },
+  "edit_2026_09_21_lpv": {
+   "change": "optimization_goal REACH -> LANDING_PAGE_VIEWS; end_time 22 Sep -> 24 Sep 23:59; budget, bid strategy, placements, audience unchanged",
+   "applied_by": "founder, from the terminal, on Claude's prepared script (Claude's tooling cannot edit ad sets)",
+   "pixel": "1625109429125373 attached to the ad account; NOT passed as promoted_object - Meta rejects pixel_id alone for OUTCOME_TRAFFIC (subcode 1885014); the account's pixel is matched to the ad URL automatically",
+   "verified_after": "optimization_goal=LANDING_PAGE_VIEWS, end_time=2026-09-24T23:59:00+0200, budget_remaining 1547, ad set + ad IN_PROCESS"
   }
  },
  "rejected_boost": {

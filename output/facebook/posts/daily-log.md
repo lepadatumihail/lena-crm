@@ -6,7 +6,7 @@ Ad at 17:20: REACH had restarted delivery from ~13:00 — €2.73 / 3,362 imp / 
 
 Founder: "install the pixel now and use the left money to improve hunts." Built and shipped the Meta Pixel on the site (f512d57, a19b77f): loads only on marketing URLs and only after a cookie notice is accepted (Spanish law), page views only, footer Cookies link to change the answer, privacy policy §8 rewritten in EN + ES (the old "no cookie banner" promise is gone). Meta's API refused to create a pixel with the page token, so the founder created dataset LEADWING in Events Manager: pixel 1625109429125373 (he first sent the app id by mistake; advanced matching left off on request). Vercel's connector cannot set production env vars, so the pixel id is a host-based default in src/lib/site.ts. Verified live on www.leadwing.app at 19:10: PageView fires for / and /pricing after Accept, nothing on /login.
 
-Not done: the ad set switch to LANDING_PAGE_VIEWS with the pixel (and end_time back to Thu 24 Sep) — Claude's tooling is blocked from editing ad sets, so the founder runs the prepared command himself. Ad set still REACH at 19:15, ad ACTIVE, day total €3.67 / 4,717 imp / 6 clicks / 1 LPV.
+Ad set switched at ~19:35 by the founder from the terminal (Claude's tooling is blocked from editing ad sets): optimization_goal LANDING_PAGE_VIEWS, end_time Thu 24 Sep 23:59, €15.47 left; first attempt with promoted_object {pixel_id} was rejected (subcode 1885014), second without it succeeded. Ad and ad set IN_PROCESS for re-review. Day total before the edit: €3.67 / 4,717 imp / 6 clicks / 1 LPV.
 
 ## Mon 21 Sep 2026 (evening check, run 18:05 Madrid)
 
