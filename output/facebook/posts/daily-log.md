@@ -1,5 +1,9 @@
 # LeadWing Facebook daily log
 
+## Tue 22 Sep 2026 (evening check, run 18:10 Madrid)
+
+Nothing to answer: 0 comments, 0 reactions, 0 inbox conversations, including on both of the ad's dark posts. Ad healthy: the /start re-review cleared, ad + ad set ACTIVE, link verified as leadwing.app/start?utm_campaign=spreadsheets-sep26, feed-only, no Audience Network. 22 Sep to 18:00: €2.59 / 1,256 imp / 19 clicks / 12 LPV (63% of clicks, €0.22 each); lifetime €16.26 of €25, €8.74 left. Waste test does not fire on any reading. Noted: the creative swap minted a new dark post 1279663088571991_122109116961476753 (the old one, …122105682405476753, is orphaned — check both for comments); delivery dipped to €0.01/13 imp in the 17:00 hour during re-review and was recovering by 18:00. Nothing paused, nothing edited, nothing sent.
+
 ## Tue 22 Sep 2026 (local session with the founder, 15:45–16:55 Madrid)
 
 Numbers at 15:45: 0 comments, 0 messages, 0 followers. Ad on LANDING_PAGE_VIEWS: 21 Sep €8.02 / 6,993 imp / 21 clicks / 10 LPV; 22 Sep to 15:45 €2.27 / 1,082 imp / 17 clicks / 11 LPV (€0.21 per LPV), no Audience Network, €9.06 left. Sign-ups still 10. Pixel last fired 21 Sep 19:16 (Claude's own test), so no ad visitor accepts the cookie notice; Meta counts LPVs through its in-app browser regardless.

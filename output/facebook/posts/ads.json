@@ -7,7 +7,10 @@
   "image_hash": "2c66ea9b404867530f0ce140fc8c0e14",
   "campaign_id": "6995417076094",
   "adset_id": "6995417079494",
-  "status": "LANDING_PAGE_VIEWS, ends Thu 24 Sep 23:59; since 22 Sep ~16:50 the ad links to leadwing.app/start (creative 1140361055322528, same image and text, founder applied the swap); IN_PROCESS for re-review right after",
+  "status": "LANDING_PAGE_VIEWS, ends Thu 24 Sep 23:59; since 22 Sep ~16:50 the ad links to leadwing.app/start (creative 1140361055322528, same image and text, founder applied the swap); re-review CLEARED and ad + ad set ACTIVE again as of the 22 Sep 18:10 evening check",
+  "dark_post_id": "1279663088571991_122109116961476753",
+  "dark_post_id_previous": "1279663088571991_122105682405476753",
+  "dark_post_note": "the 22 Sep creative swap minted a new dark post; the old one is orphaned. Check both for comments on every run - neither appears in GET /{page}/posts.",
   "optimization_goal_previous": "LINK_CLICKS",
   "edit_2026_09_21": {
    "change": "optimization_goal LINK_CLICKS -> REACH",
@@ -106,6 +109,25 @@
    "account_status": "1 (active, no disable reason, Visa *1984, EUR 0.92 balance, EUR 97.88 lifetime spend)",
    "waste_test": "does not fire on any reading: lifetime AN share 33% (under half) and lifetime cost per click EUR 0.075 (over EUR 0.05); today EUR 0.145 per click with LPV at 64% of clicks",
    "runway_note": "EUR 9.75 over ~60 h to Thu 24 Sep 23:59; today's pace ~EUR 0.13/h would leave roughly EUR 1-2 unspent, and lifetime pacing usually accelerates at the end"
+  },
+  "observed_2026_09_22T1810": {
+   "spend_eur": 16.26,
+   "budget_remaining_eur": 8.74,
+   "reach": 14445,
+   "impressions": 50654,
+   "link_clicks_reported": 211,
+   "landing_page_views": 59,
+   "today_22_sep_to_1800": "EUR 2.59 / 1256 imp / 19 link clicks / 12 LPV - LPV is 63% of clicks, EUR 0.22 per LPV, EUR 0.14 per click",
+   "today_22_sep_placements": "facebook/feed EUR 1.46 / 760 imp / 12 clicks / 8 LPV; instagram/feed EUR 1.13 / 496 imp / 7 clicks / 4 LPV; audience_network zero",
+   "today_22_sep_hourly": "delivery in every hour 00:00-18:00; dipped to EUR 0.01 / 13 imp in the 17:00 hour during the post-swap re-review, back to a ~50 imp/h pace by 18:00",
+   "ad_effective_status": "ACTIVE - the re-review after the 16:50 /start creative swap has cleared",
+   "adset_effective_status": "ACTIVE",
+   "link_verified": "https://leadwing.app/start?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26 on both link_data.link and call_to_action",
+   "issues_info": "none on ad or ad set; no ad_review_feedback",
+   "account_status": "1 (active, no disable reason, Visa *1984, EUR 0.01 balance, EUR 97.90 lifetime spend)",
+   "engagement": "0 comments and 0 reactions on both dark posts and all page posts; lifetime actions show 1 post_reaction and 1 post_unlike from earlier in the run, nothing to answer",
+   "waste_test": "does not fire on any reading: lifetime AN share 31% (under half), lifetime cost per click EUR 0.077 (over EUR 0.05), today EUR 0.14 per click with LPV at 63% of clicks",
+   "runway_note": "EUR 8.74 over ~54 h to Thu 24 Sep 23:59; today's ~EUR 0.14/h would leave roughly EUR 1 unspent - still the founder's call, for the Wed 23 and Thu 24 noon briefs"
   },
   "link_previous": "https://leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26",
   "edit_2026_09_22_landing": {
