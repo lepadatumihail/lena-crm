@@ -58,5 +58,51 @@
     "accept": "Accept",
     "decline": "No thanks",
     "privacy": "Privacy policy"
+  },
+  "start": {
+    "metaTitle": "Move your spreadsheet into LeadWing",
+    "metaDescription": "Still tracking clients in a spreadsheet? Bring it into LeadWing in five minutes: every buyer, seller, viewing and offer on one card, with the next follow-up already drafted. Free for {limit} clients.",
+    "eyebrow": "LeadWing · CRM for independent agents on the Costa del Sol",
+    "title": "Still tracking clients in a <accent>spreadsheet?</accent>",
+    "subtitle": "Bring it into LeadWing in five minutes. Every buyer, seller, viewing and offer on one card, with the next follow-up already drafted.",
+    "cta": "Start free, import your spreadsheet",
+    "note": "Free for {limit} clients, forever. No card. Sign in with Google or a one-time code.",
+    "steps": {
+      "eyebrow": "How it goes",
+      "heading": "Five minutes, three steps",
+      "signIn": {
+        "title": "Sign in",
+        "body": "Google or a code by email. No password to invent."
+      },
+      "upload": {
+        "title": "Upload your Excel or CSV",
+        "body": "LeadWing matches your columns, shows you a preview, and undoes the whole import in one click if something looks off."
+      },
+      "followUp": {
+        "title": "Send the first follow-up",
+        "body": "Open a buyer who has gone quiet. The message is already drafted in their language; you read, tweak and send."
+      }
+    },
+    "changes": {
+      "eyebrow": "What you get",
+      "heading": "What changes on Monday",
+      "card": {
+        "title": "One card per client",
+        "body": "Budget, viewings, offers, documents and notes in one place, on your phone and your laptop."
+      },
+      "drafts": {
+        "title": "Follow-ups you don't have to invent",
+        "body": "LeadWing spots who has gone quiet and drafts the next message for you."
+      },
+      "yours": {
+        "title": "Your book, on your account",
+        "body": "LeadWing is yours, not the agency's. Your clients stay with you."
+      }
+    },
+    "founding": "Founding agents: Pro for €{price} a month, for life, for the first {cap}.",
+    "final": {
+      "heading": "Your spreadsheet already has the clients. Give them a card.",
+      "body": "Sign-up takes a minute, and the Free plan needs no card."
+    }
   }
 }

@@ -58,5 +58,51 @@
     "accept": "Aceptar",
     "decline": "No, gracias",
     "privacy": "Política de privacidad"
+  },
+  "start": {
+    "metaTitle": "Pasa tu hoja de cálculo a LeadWing",
+    "metaDescription": "¿Sigues llevando a tus clientes en una hoja de cálculo? Pásala a LeadWing en cinco minutos: cada comprador, vendedor, visita y oferta en una sola ficha, con el siguiente seguimiento ya redactado. Gratis hasta {limit} clientes.",
+    "eyebrow": "LeadWing · CRM para agentes independientes en la Costa del Sol",
+    "title": "¿Sigues llevando a tus clientes en una <accent>hoja de cálculo?</accent>",
+    "subtitle": "Pásala a LeadWing en cinco minutos. Cada comprador, vendedor, visita y oferta en una sola ficha, con el siguiente seguimiento ya redactado.",
+    "cta": "Empieza gratis e importa tu hoja",
+    "note": "Gratis hasta {limit} clientes, para siempre. Sin tarjeta. Entra con Google o con un código de un solo uso.",
+    "steps": {
+      "eyebrow": "Cómo va",
+      "heading": "Cinco minutos, tres pasos",
+      "signIn": {
+        "title": "Inicia sesión",
+        "body": "Con Google o con un código por email. Sin inventar contraseñas."
+      },
+      "upload": {
+        "title": "Sube tu Excel o CSV",
+        "body": "LeadWing reconoce tus columnas, te muestra una vista previa y deshace toda la importación con un clic si algo no cuadra."
+      },
+      "followUp": {
+        "title": "Envía el primer seguimiento",
+        "body": "Abre un comprador que se ha quedado callado. El mensaje ya está redactado en su idioma; lo lees, lo retocas y lo envías."
+      }
+    },
+    "changes": {
+      "eyebrow": "Qué obtienes",
+      "heading": "Qué cambia el lunes",
+      "card": {
+        "title": "Una ficha por cliente",
+        "body": "Presupuesto, visitas, ofertas, documentos y notas en un solo sitio, en el móvil y en el portátil."
+      },
+      "drafts": {
+        "title": "Seguimientos que no tienes que inventar",
+        "body": "LeadWing detecta quién se ha enfriado y te redacta el siguiente mensaje."
+      },
+      "yours": {
+        "title": "Tu cartera, en tu cuenta",
+        "body": "LeadWing es tuyo, no de la agencia. Tus clientes se quedan contigo."
+      }
+    },
+    "founding": "Agentes fundadores: Pro por {price} € al mes, de por vida, para los {cap} primeros.",
+    "final": {
+      "heading": "Tu hoja ya tiene los clientes. Dales una ficha.",
+      "body": "Registrarse lleva un minuto y el plan gratuito no pide tarjeta."
+    }
   }
 }

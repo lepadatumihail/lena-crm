@@ -56,9 +56,25 @@ export const MARKETING_ROUTES = {
   privacy: { en: "/privacy", es: "/es/privacidad" },
   terms: { en: "/terms", es: "/es/terminos" },
   legalNotice: { en: "/legal", es: "/es/aviso-legal" },
+  start: { en: "/start", es: "/es/empezar" },
 } as const satisfies Record<string, Record<AppLocale, string>>;
 
 export type MarketingRoute = keyof typeof MARKETING_ROUTES;
+
+/**
+ * Ad landings: a real marketing page (language pinned by URL, cookie notice,
+ * pixel) that search engines are told not to index and that the sitemap and
+ * footer leave out. They say what the home page says, shaped for one ad.
+ */
+export const UNLISTED_ROUTES = ["start"] as const satisfies readonly MarketingRoute[];
+
+export type UnlistedRoute = (typeof UNLISTED_ROUTES)[number];
+
+export type ListedRoute = Exclude<MarketingRoute, UnlistedRoute>;
+
+export function isListedRoute(route: MarketingRoute): route is ListedRoute {
+  return !(UNLISTED_ROUTES as readonly MarketingRoute[]).includes(route);
+}
 
 /**
  * The written pages: one shared shell, one content module per language
