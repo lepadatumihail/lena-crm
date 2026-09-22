@@ -3,11 +3,11 @@
   "kind": "click ad",
   "post_id": "1279663088571991_122105662023476753",
   "approved": "\u20ac25 lifetime as a link-click ad, 19 Sep 2026",
-  "link": "https://leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26",
+  "link": "https://leadwing.app/start?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26",
   "image_hash": "2c66ea9b404867530f0ce140fc8c0e14",
   "campaign_id": "6995417076094",
   "adset_id": "6995417079494",
-  "status": "LANDING_PAGE_VIEWS, ACTIVE, re-review cleared; end_time Thu 24 Sep 23:59; EUR 9.75 left of EUR 25",
+  "status": "LANDING_PAGE_VIEWS, ends Thu 24 Sep 23:59; since 22 Sep ~16:50 the ad links to leadwing.app/start (creative 1140361055322528, same image and text, founder applied the swap); IN_PROCESS for re-review right after",
   "optimization_goal_previous": "LINK_CLICKS",
   "edit_2026_09_21": {
    "change": "optimization_goal LINK_CLICKS -> REACH",
@@ -36,8 +36,8 @@
    "pixel_status": "GET /act_173026079415266/adspixels returns an empty list - the founder has not created the pixel yet, so the LANDING_PAGE_VIEWS edit stays blocked and the ad set was not touched",
    "runway_note": "end_time is still Tue 22 Sep 23:59 with EUR 16.15 unspent - about 30 hours to absorb it at today's ~EUR 0.65/h"
   },
-  "creative_id": "1083235867424577",
-  "creative_id_previous": "4655037744778453",
+  "creative_id": "1140361055322528",
+  "creative_id_previous": "1083235867424577",
   "ad_id": "6995418317094",
   "end_time": "2026-09-24T23:59:00+02:00",
   "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
@@ -106,6 +106,13 @@
    "account_status": "1 (active, no disable reason, Visa *1984, EUR 0.92 balance, EUR 97.88 lifetime spend)",
    "waste_test": "does not fire on any reading: lifetime AN share 33% (under half) and lifetime cost per click EUR 0.075 (over EUR 0.05); today EUR 0.145 per click with LPV at 64% of clicks",
    "runway_note": "EUR 9.75 over ~60 h to Thu 24 Sep 23:59; today's pace ~EUR 0.13/h would leave roughly EUR 1-2 unspent, and lifetime pacing usually accelerates at the end"
+  },
+  "link_previous": "https://leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26",
+  "edit_2026_09_22_landing": {
+   "change": "creative 1083235867424577 -> 1140361055322528: link and call_to_action link now leadwing.app/start?utm_campaign=spreadsheets-sep26; message, name, description, image_hash unchanged",
+   "why": "~21 home-page landings produced 0 sign-in attempts (auth log, 4 days); /start answers the ad in its own words with one action",
+   "applied_by": "founder from the terminal (ad_link_to_start.py); Claude's tooling cannot edit ads",
+   "verified_after": "ad effective_status IN_PROCESS, creative id 1140361055322528"
   }
  },
  "rejected_boost": {

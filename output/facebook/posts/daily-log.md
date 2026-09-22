@@ -1,5 +1,13 @@
 # LeadWing Facebook daily log
 
+## Tue 22 Sep 2026 (local session with the founder, 15:45–16:55 Madrid)
+
+Numbers at 15:45: 0 comments, 0 messages, 0 followers. Ad on LANDING_PAGE_VIEWS: 21 Sep €8.02 / 6,993 imp / 21 clicks / 10 LPV; 22 Sep to 15:45 €2.27 / 1,082 imp / 17 clicks / 11 LPV (€0.21 per LPV), no Audience Network, €9.06 left. Sign-ups still 10. Pixel last fired 21 Sep 19:16 (Claude's own test), so no ad visitor accepts the cookie notice; Meta counts LPVs through its in-app browser regardless.
+
+Finding: auth.audit_log_entries has 0 rows in 4 days and 0 one-time tokens — about 21 ad landings on the home page produced not one sign-in attempt. The bottleneck is the page, not the ad. (Vercel Web Analytics is enabled — 193 visitors / 481 views / 77% bounce over 7 days in the founder's dashboard — but Claude's connector gets a 404 for it.)
+
+Built and shipped /start + /es/empezar (8e5470d): the ad's headline, the live board, three steps starting with the spreadsheet import, one CTA, noindex. Founder re-pointed the running ad at it from the terminal at ~16:50 (creative 1140361055322528, same image and text); ad IN_PROCESS for re-review.
+
 ## Tue 22 Sep 2026 (noon brief, run 12:05 Madrid)
 
 Numbers: followers 0, comments 0 and reactions 0 across every post including the ad's dark post, inbox empty (0 conversations), queue = 2 (Wed 23 + Thu 24 Sep 09:30, timestamps verified). Page insights for 21 Sep: 42 post engagements and 5 page views — the first non-zero page views the page has had, both ad-driven.
