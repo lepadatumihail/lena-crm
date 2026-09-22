@@ -7,7 +7,7 @@
   "image_hash": "2c66ea9b404867530f0ce140fc8c0e14",
   "campaign_id": "6995417076094",
   "adset_id": "6995417079494",
-  "status": "LANDING_PAGE_VIEWS since 21 Sep 2026 ~19:35 (founder ran the edit himself); end_time Thu 24 Sep 23:59; EUR 15.47 left; ad + ad set went IN_PROCESS for re-review right after the edit",
+  "status": "LANDING_PAGE_VIEWS, ACTIVE, re-review cleared; end_time Thu 24 Sep 23:59; EUR 9.75 left of EUR 25",
   "optimization_goal_previous": "LINK_CLICKS",
   "edit_2026_09_21": {
    "change": "optimization_goal LINK_CLICKS -> REACH",
@@ -84,6 +84,28 @@
    "applied_by": "founder, from the terminal, on Claude's prepared script (Claude's tooling cannot edit ad sets)",
    "pixel": "1625109429125373 attached to the ad account; NOT passed as promoted_object - Meta rejects pixel_id alone for OUTCOME_TRAFFIC (subcode 1885014); the account's pixel is matched to the ad URL automatically",
    "verified_after": "optimization_goal=LANDING_PAGE_VIEWS, end_time=2026-09-24T23:59:00+0200, budget_remaining 1547, ad set + ad IN_PROCESS"
+  },
+  "observed_2026_09_22T1205": {
+   "spend_eur": 15.25,
+   "budget_remaining_eur": 9.75,
+   "reach": 14051,
+   "impressions": 50132,
+   "link_clicks_reported": 203,
+   "landing_page_views": 54,
+   "day_21_sep_full": "EUR 8.00 / 6987 imp / 6875 reach / cpm 1.14 / 21 link clicks / 10 LPV - EUR 4.77 of it after the 19:35 LPV switch",
+   "day_21_sep_placements": "facebook/feed EUR 6.43 / 6075 imp / 19 clicks / 9 LPV; instagram/feed EUR 1.57 / 912 imp / 2 clicks / 1 LPV; audience_network zero",
+   "today_22_sep_to_1205": "EUR 1.60 / 740 imp / 676 reach / cpm 2.16 / 11 link clicks / 7 LPV - LPV is 64% of clicks",
+   "today_22_sep_placements": "facebook/feed EUR 0.88 / 425 imp / 8 clicks / 6 LPV; instagram/feed EUR 0.72 / 315 imp / 3 clicks / 1 LPV; audience_network zero",
+   "today_22_sep_hourly": "delivery in every hour 00:00-11:59, EUR 0.01-0.50 each, no stall",
+   "audience_network_lifetime": "EUR 5.07 / 41883 imp / 165 clicks - now 33% of lifetime spend, all of it before the 20 Sep 13:11 placement fix",
+   "facebook_feed_lifetime": "EUR 7.63 / 6850 imp / 31 clicks / 16 LPV",
+   "instagram_feed_lifetime": "EUR 2.30 / 1261 imp / 5 clicks / 2 LPV",
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none on ad or ad set; no ad_review_feedback",
+   "account_status": "1 (active, no disable reason, Visa *1984, EUR 0.92 balance, EUR 97.88 lifetime spend)",
+   "waste_test": "does not fire on any reading: lifetime AN share 33% (under half) and lifetime cost per click EUR 0.075 (over EUR 0.05); today EUR 0.145 per click with LPV at 64% of clicks",
+   "runway_note": "EUR 9.75 over ~60 h to Thu 24 Sep 23:59; today's pace ~EUR 0.13/h would leave roughly EUR 1-2 unspent, and lifetime pacing usually accelerates at the end"
   }
  },
  "rejected_boost": {

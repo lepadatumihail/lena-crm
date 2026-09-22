@@ -1,5 +1,17 @@
 # LeadWing Facebook daily log
 
+## Tue 22 Sep 2026 (noon brief, run 12:05 Madrid)
+
+Numbers: followers 0, comments 0 and reactions 0 across every post including the ad's dark post, inbox empty (0 conversations), queue = 2 (Wed 23 + Thu 24 Sep 09:30, timestamps verified). Page insights for 21 Sep: 42 post engagements and 5 page views — the first non-zero page views the page has had, both ad-driven.
+
+Ad: the LANDING_PAGE_VIEWS switch worked. Ad and ad set ACTIVE, re-review cleared, no issues_info, no review feedback. 21 Sep full day €8.00 / 6,987 imp / 6,875 reach / CPM €1.14 / 21 clicks / 10 LPV, of which €4.77 came after the 19:35 switch. 22 Sep to 12:05 €1.60 / 740 imp / 676 reach / CPM €2.16 / 11 clicks / 7 LPV — landing views are 64% of clicks, against 22% on Audience Network junk. Zero Audience Network on both days; FB feed and IG feed only. Hourly shows delivery in every hour of today, no stall. Lifetime €15.25 of €25, €9.75 left.
+
+Not paused, and the waste test no longer fires on any reading: lifetime AN share is down to 33% and lifetime cost per click is €0.075, both outside the test; today's own cost per click is €0.145.
+
+Drafted: nothing to reply to. No digest or product post needed — Wednesday is queued and Friday's digest belongs to the Thursday run.
+
+Surfaced, not acted on: €9.75 and ~60 hours to Thu 24 Sep 23:59, so roughly €1–2 may expire unspent. Whether to fund a follow-on budget is the founder's call; asked, not applied.
+
 ## Mon 21 Sep 2026 (local session with the founder, 17:20–19:15 Madrid)
 
 Ad at 17:20: REACH had restarted delivery from ~13:00 — €2.73 / 3,362 imp / 3,024 reach / 3 real feed clicks / 1 LPV, CTR 0.09%, €0.91 per click; €8.38 spent, €16.62 left; sign-ups still 10 (last 7 Sep).
