@@ -1,5 +1,11 @@
 # LeadWing Facebook daily log
 
+## Wed 23 Sep 2026 (evening, founder answered "post all, go 3")
+
+Scheduled: Fri 25 Sep 09:30 digest (1279663088571991_122110445859476753) and Wed 30 Sep 09:30 import post (1279663088571991_122110445967476753); text exactly as approved. The queue, checked via /scheduled_posts, is Thu 24, Fri 25 and Wed 30.
+Outreach: 8 SearchAPI Google Maps queries across Marbella, San Pedro, Nueva Andalucía, Estepona, Mijas, Fuengirola and Benalmádena gave 135 places. Big brands, franchises, lawyers and rental-only shops were removed, and the 50 smallest were ranked into a Google Sheet in the founder's Drive (id in PLAYBOOK Pending), each with an EN or ES message from Mihail naming their town and 25 with one-click WhatsApp links. #9 is marked Skip (Svensk Fast franchise). Nothing was sent; the founder sends. Contact data is not stored in the repo.
+Not answered: option 4 (second ad).
+
 ## Wed 23 Sep 2026 (evening, in session, at the founder's request to make content and plan growth)
 
 Drafted Friday 25 Sep's digest (`news-digest-2026-09-25.md`, card `08-digest-2026-09-25.png`): Marbella PGOM approval (~18,000 homes to regularise), Andalucía's record appraised price, Málaga's 38% rent-to-income, the 25 Golden Mile protected homes (registration closes 1 Oct), and the Málaga mayor on foreign buyers and rent caps. 9 SearchAPI calls (6 news, 3 maps). News sites are blocked by this environment's network policy, so figures were checked through WebSearch against two sources each; the single-source Málaga €3,083.5/m² was dropped.
