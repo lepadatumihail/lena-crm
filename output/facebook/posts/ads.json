@@ -2,7 +2,7 @@
  "click_ad": {
   "kind": "click ad",
   "post_id": "1279663088571991_122105662023476753",
-  "approved": "\u20ac25 lifetime as a link-click ad, 19 Sep 2026",
+  "approved": "€25 lifetime as a link-click ad, 19 Sep 2026",
   "link": "https://leadwing.app/start?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26",
   "image_hash": "2c66ea9b404867530f0ce140fc8c0e14",
   "campaign_id": "6995417076094",
@@ -166,11 +166,29 @@
    "why": "~21 home-page landings produced 0 sign-in attempts (auth log, 4 days); /start answers the ad in its own words with one action",
    "applied_by": "founder from the terminal (ad_link_to_start.py); Claude's tooling cannot edit ads",
    "verified_after": "ad effective_status IN_PROCESS, creative id 1140361055322528"
+  },
+  "observed_2026_09_23T1810": {
+   "spend_eur": 20.42,
+   "budget_remaining_eur": 4.58,
+   "reach": 15669,
+   "impressions": 52538,
+   "link_clicks_reported": 232,
+   "landing_page_views": 75,
+   "today_23_sep_to_1810": "EUR 2.45 / 1080 imp / 985 reach / cpm 2.27 / ctr 1.48% / 14 link clicks / 10 LPV - LPV is 71% of clicks, EUR 0.25 per LPV, EUR 0.18 per click",
+   "today_23_sep_placements": "facebook/feed EUR 1.26 / 611 imp / 9 clicks / 6 LPV; instagram/feed EUR 1.19 / 469 imp / 5 clicks / 4 LPV; audience_network zero",
+   "today_23_sep_hourly": "delivery in every hour 00:00-18:00 except 02:00, EUR 0.01-0.43 each, no stall; afternoon picked up (15:00 EUR 0.30 / 138 imp)",
+   "since_noon_brief": "EUR 1.04, 9 link clicks, 6 LPV in the ~6 h since the 12:05 reading",
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none on ad or ad set; no ad_review_feedback",
+   "waste_test": "does not fire: zero audience_network today, lifetime AN share 25%, lifetime cost per click EUR 0.088, today EUR 0.18 per click with LPV at 71% of clicks",
+   "engagement": "0 comments on every page post and on both dark posts; inbox empty. The current dark post 122109116961476753 now shows 1 reaction (was 0 at noon) - a reaction, nothing to answer",
+   "runway_note": "EUR 4.58 left over ~30 h to Thu 24 Sep 23:59 at a ~EUR 2.5/day pace. Option A stands: no top-up, roughly EUR 1 may expire unspent."
   }
  },
  "rejected_boost": {
   "post_id": "1279663088571991_122105598963476753",
-  "approved": "\u20ac5/day x 5 days = \u20ac25 lifetime, 19 Sep 2026",
+  "approved": "€5/day x 5 days = €25 lifetime, 19 Sep 2026",
   "campaign_id": "6995415486894",
   "adset_id": "6995415491294",
   "creative_id": "1803034517386725",

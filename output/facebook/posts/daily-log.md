@@ -1,5 +1,9 @@
 # LeadWing Facebook daily log
 
+## Wed 23 Sep 2026 (evening check, run 18:10 Madrid)
+
+Nothing to answer: 0 comments on every page post and on both ad dark posts, inbox empty (0 conversations). The current dark post `…122109116961476753` now shows 1 reaction, up from 0 at noon — the first engagement of the run, and not something to reply to. Ad healthy: ad + ad set ACTIVE, no issues_info, no ad_review_feedback. Today to 18:10 €2.45 / 1,080 imp / CPM €2.27 / CTR 1.48% / 14 clicks / 10 LPV (71% of clicks, €0.25 per landing view); feed-only, zero Audience Network, delivery in every hour but 02:00 with the afternoon picking up. Lifetime €20.42 of €25, €4.58 left, ends Thu 24 Sep 23:59 as decided (option A, no top-up). Waste test does not fire. Nothing paused, nothing edited, nothing sent.
+
 ## Wed 23 Sep 2026 (noon brief, run 12:05 Madrid)
 
 Published: the Wednesday product post went out on time at 09:30 Madrid (1279663088571991_122107059069476753), 0 reactions and 0 comments at 12:05. Queue is now 1 — Thu 24 Sep 09:30, founding offer, timestamp verified.
