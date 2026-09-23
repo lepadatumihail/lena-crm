@@ -1,5 +1,9 @@
 # LeadWing Facebook daily log
 
+## Wed 23 Sep 2026 (night, founder: "yeah i want both 4 and 5")
+
+Created via the API, all copied from ad set 6995417079494's targeting, feed-only: (4) campaign 6996508235894 / ad set 6996508321694 / ad 6996508363294 — "Quiet leads", €25 lifetime, 23-28 Sep, LANDING_PAGE_VIEWS, creative 29434012246199370 on `10-ad-quiet-leads.png`, link /start?utm_campaign=quiet-leads-sep26, ad PENDING_REVIEW; (5) campaign 6996508248894 / ad set 6996508580294 / ad 6996508595494 — €10 boost of the Friday digest post, POST_ENGAGEMENT on the post, 25 Sep 10:00 - 1 Oct 23:59, ad PENDING_REVIEW. Account status 1, €1.41 balance. Three API lessons in ads.json (promoted_object immutable, ON_POST destination needed, `+0200` in a form field must be URL-encoded). One empty ad set was created and deleted on the way. Total committed paid budget this week: €25 + €10, plus the ~€4.58 left on the original ad, which ends Thu 24 23:59.
+
 ## Wed 23 Sep 2026 (late evening, content review with the founder)
 
 Founder's calls: "card" is banned from public copy (internal jargon); digest cards get their own look, not the terracotta background. Built `compose-digest.mjs` (photo theme: OpenAI editorial photo on top, type below) and re-made Friday's card; made the "quiet leads" ad creative (`10-ad-quiet-leads.png`, /start) as the one to fund instead of the import creative; mocked the engagement boost (`mock-engagement-ad.png`). Outreach message rewritten by the founder (final in PLAYBOOK) and 50-agency sheet delivered to Drive.

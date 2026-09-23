@@ -204,5 +204,43 @@
   "created": "21 Sep 2026 ~18:50 by the founder in Events Manager (Meta API refused to create one with the page token)",
   "site": "live on leadwing.app since 21 Sep 2026 ~19:05 (commits f512d57 + a19b77f): consent-gated cookie notice, marketing URLs only, PageView on load and on client navigation, autoConfig off, advanced matching off, host-based default in src/lib/site.ts (NEXT_PUBLIC_META_PIXEL_ID overrides)",
   "verified": "21 Sep 2026 19:10 on www.leadwing.app: Accept -> fbq init 1625109429125373, PageView for / and /pricing; footer Cookies link reopens the notice; nothing on /login"
+ },
+ "quiet_leads_ad": {
+  "kind": "click ad #2 (quiet leads)",
+  "approved": "founder, 23 Sep 2026 evening ('yeah i want both 4 and 5')",
+  "created": "2026-09-23T21:36+02:00 by the operator via the API",
+  "campaign_id": "6996508235894",
+  "adset_id": "6996508321694",
+  "ad_id": "6996508363294",
+  "creative_id": "29434012246199370",
+  "image_hash": "e88921fb022463fd9b62eccdbd13c7f5",
+  "image": "output/facebook/posts/10-ad-quiet-leads.png",
+  "dark_post_id": "1279663088571991_122110568883476753",
+  "dark_post_note": "check for comments on every run; not in GET /{page}/posts",
+  "link": "https://leadwing.app/start?utm_source=facebook&utm_medium=paid&utm_campaign=quiet-leads-sep26",
+  "copy": {
+   "primary": "Most leads don't say no. They go quiet. / LeadWing shows you which buyers need a follow-up and has the message already written, in plain language. Send it as it is, or tweak it in ten seconds. / Built for independent agents on the Costa del Sol. Free for your first 10 clients, no card needed.",
+   "headline": "Follow-ups, already written",
+   "description": "Free for 10 clients",
+   "cta": "LEARN_MORE"
+  },
+  "setup": "OUTCOME_TRAFFIC, LANDING_PAGE_VIEWS, IMPRESSIONS, LOWEST_COST_WITHOUT_CAP, EUR 25 lifetime, 23 Sep 21:36 -> 28 Sep 23:59 Madrid, targeting copied from ad set 6995417079494 (24-64, 60 km Marbella, 3 interests + 5 job titles, facebook feed + instagram stream only, advantage_audience off), no promoted_object",
+  "status_at_creation": "campaign + ad set ACTIVE, ad PENDING_REVIEW",
+  "watch": "report spend / impressions / link clicks / landing_page_view / placement split each run; waste test applies; if review rejects, report the feedback and propose, never edit"
+ },
+ "digest_boost_ad": {
+  "kind": "engagement boost of the Fri 25 Sep digest post",
+  "approved": "founder, 23 Sep 2026 evening ('yeah i want both 4 and 5')",
+  "created": "2026-09-23T21:45+02:00 by the operator via the API",
+  "campaign_id": "6996508248894",
+  "adset_id": "6996508580294",
+  "ad_id": "6996508595494",
+  "creative_id": "1132591039195016",
+  "post_id": "1279663088571991_122110562607476753",
+  "post_note": "the scheduled Friday digest itself (publishes 25 Sep 09:30); reactions and comments land on the page post",
+  "setup": "OUTCOME_ENGAGEMENT, POST_ENGAGEMENT with destination_type ON_POST and promoted_object {page_id}, IMPRESSIONS, LOWEST_COST_WITHOUT_CAP, EUR 10 lifetime, 25 Sep 10:00 -> 1 Oct 23:59 Madrid, same targeting and feed-only placements as the quiet-leads ad",
+  "status_at_creation": "campaign + ad set ACTIVE, ad PENDING_REVIEW; nothing delivers before the 25 Sep 10:00 start",
+  "api_notes": "POST_ENGAGEMENT without promoted_object creates fine but the ad is then refused (1885154); promoted_object is immutable after creation (1885090); POST_ENGAGEMENT + promoted_object page_id needs destination_type=ON_POST or it is refused (2490408). A first empty ad set 6996508349894 was deleted.",
+  "watch": "report spend / impressions / post reactions, comments, shares / page follows each run; judge on cost per engagement and follows, not clicks"
  }
 }
