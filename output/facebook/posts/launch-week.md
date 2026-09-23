@@ -16,7 +16,7 @@ Built in Marbella. Free for your first 10 clients, no card and no time limit.
 
 leadwing.app
 
-## Post 2 — Wed 23 Sep 2026, 09:30 · image `06-wed-followup.png` (real-screenshot creative; the typographic `02-follow-up.png` was replaced on 21 Sep)
+## Post 2 — Wed 23 Sep 2026, 09:30 · image `06-wed-followup.png` — DELETED 23 Sep 22:28 and replaced by the post below (image said 'every buyer card') (real-screenshot creative; the typographic `02-follow-up.png` was replaced on 21 Sep)
 
 Most leads don't say no. They go quiet.
 
@@ -51,3 +51,13 @@ LeadWing takes that file as it is. Upload your Excel or CSV, check every row in 
 And if you ever want to leave, export works on every plan, the free one included.
 
 Free for your first 10 clients, no card: leadwing.app/start
+
+## Wed 23 Sep 2026, 22:28 · PUBLISHED · product post replacing Post 2 · image `10-ad-quiet-leads.png` (post 1279663088571991_122110619499476753; boosted from Fri 25 Sep 10:00 by ad 6996512397894)
+
+Most leads don't say no. They go quiet.
+
+LeadWing shows you which buyers need a follow-up, with the message already written in plain language. Send it as it is, or tweak it in ten seconds.
+
+No more scrolling back through old chats to remember where you left it.
+
+Try it free with your first 10 clients: leadwing.app/quiet

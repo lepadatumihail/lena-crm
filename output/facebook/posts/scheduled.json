@@ -16,7 +16,8 @@
   "permalink": "https://www.facebook.com/122105574255476753/posts/122107059069476753",
   "error": null,
   "replaced": "typographic card replaced with the real-screenshot image on 21 Sep 00:37",
-  "text_edited": "23 Sep ~20:30: 'every buyer card shows what comes next' -> 'LeadWing shows you which buyers need a follow-up' (founder: 'fix today'); image unchanged"
+  "text_edited": "23 Sep ~20:30: 'every buyer card shows what comes next' -> 'LeadWing shows you which buyers need a follow-up' (founder: 'fix today'); image unchanged",
+  "deleted": "23 Sep 2026 22:28 Madrid: deleted (0 reactions, 0 comments after 13 h) because its image still said 'every buyer card' and linked the home page; replaced by 1279663088571991_122110619499476753 (founder: 'do what you think is best')"
  },
  {
   "image": "output/facebook/posts/07-thu-founding.png",
@@ -60,6 +61,17 @@
   "post_id": "1279663088571991_122110445967476753",
   "scheduled_for": "2026-09-30T09:30:00+02:00",
   "approved": "founder, 23 Sep evening ('post all')",
+  "error": null
+ },
+ {
+  "image": "output/facebook/posts/10-ad-quiet-leads.png",
+  "kind": "product post (replaces the 23 Sep 09:30 post)",
+  "photo_id": "122110619457476753",
+  "post_id": "1279663088571991_122110619499476753",
+  "published_at": "2026-09-23T22:28:09+02:00",
+  "permalink": "https://www.facebook.com/122105574255476753/posts/122110619499476753",
+  "link": "leadwing.app/quiet",
+  "boosted_by": "ad 6996512397894 (EUR 10, 25 Sep 10:00 - 1 Oct 23:59)",
   "error": null
  }
 ]

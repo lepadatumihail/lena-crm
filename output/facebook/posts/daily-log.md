@@ -1,5 +1,11 @@
 # LeadWing Facebook daily log
 
+## Wed 23 Sep 2026 (22:15-22:35, founder: "do what you think is best")
+
+Site: built `/quiet` + `/es/seguimiento`, the landing for the quiet-leads hook (same ad-landing component, now with a `variant`; catalogs `marketing.quiet`), and removed every "card" from `/start` + `/es/empezar`. typecheck, lint (0 errors) and 699 tests green; commit 83e3e16, Vercel production READY at 22:26, pages verified live with noindex + canonical.
+Facebook: the 09:30 product post (image still said "every buyer card", 0 reactions / 0 comments) deleted and replaced at 22:28 by post 1279663088571991_122110619499476753 with `10-ad-quiet-leads.png` (re-rendered to print leadwing.app/quiet) and a caption linking leadwing.app/quiet. The €10 boost re-created on it: ad 6996512397894 (creative 1627298505638074), IN_PROCESS, 25 Sep 10:00 - 1 Oct. The quiet-leads click ad 6996508363294 re-pointed from /start to /quiet (creative 1299284655540840, image hash d548b0…), back in review. Interim ad 6996510974094 deleted.
+Research: Meta's housing Special Ad Category confirmed as the digest-boost rejection cause; rule recorded in Learnings. Paid budget unchanged: €25 + €10 + the original ad's last €4.58.
+
 ## Wed 23 Sep 2026 (22:05-22:15, review outcomes)
 
 Quiet-leads ad 6996508363294 cleared review and is ACTIVE. The digest boost ad was DISAPPROVED with generic policy feedback — most likely Meta's housing-ad rule (the digest names homes for sale with prices and a deadline; the ad set targets by age and job title). Founder: "ok do that" → 5b: new creative 1453312266699209 on today's 'quiet leads' page post, new ad 6996510974094 in the same €10 ad set (25 Sep 10:00 - 1 Oct), rejected ad deleted, campaign and ad set renamed "Post boost". Ad PENDING_REVIEW. Lesson recorded: never boost a digest without the HOUSING special ad category.
