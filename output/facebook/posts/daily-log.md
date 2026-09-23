@@ -1,5 +1,9 @@
 # LeadWing Facebook daily log
 
+## Wed 23 Sep 2026 (22:05-22:15, review outcomes)
+
+Quiet-leads ad 6996508363294 cleared review and is ACTIVE. The digest boost ad was DISAPPROVED with generic policy feedback — most likely Meta's housing-ad rule (the digest names homes for sale with prices and a deadline; the ad set targets by age and job title). Founder: "ok do that" → 5b: new creative 1453312266699209 on today's 'quiet leads' page post, new ad 6996510974094 in the same €10 ad set (25 Sep 10:00 - 1 Oct), rejected ad deleted, campaign and ad set renamed "Post boost". Ad PENDING_REVIEW. Lesson recorded: never boost a digest without the HOUSING special ad category.
+
 ## Wed 23 Sep 2026 (night, founder: "yeah i want both 4 and 5")
 
 Created via the API, all copied from ad set 6995417079494's targeting, feed-only: (4) campaign 6996508235894 / ad set 6996508321694 / ad 6996508363294 — "Quiet leads", €25 lifetime, 23-28 Sep, LANDING_PAGE_VIEWS, creative 29434012246199370 on `10-ad-quiet-leads.png`, link /start?utm_campaign=quiet-leads-sep26, ad PENDING_REVIEW; (5) campaign 6996508248894 / ad set 6996508580294 / ad 6996508595494 — €10 boost of the Friday digest post, POST_ENGAGEMENT on the post, 25 Sep 10:00 - 1 Oct 23:59, ad PENDING_REVIEW. Account status 1, €1.41 balance. Three API lessons in ads.json (promoted_object immutable, ON_POST destination needed, `+0200` in a form field must be URL-encoded). One empty ad set was created and deleted on the way. Total committed paid budget this week: €25 + €10, plus the ~€4.58 left on the original ad, which ends Thu 24 23:59.

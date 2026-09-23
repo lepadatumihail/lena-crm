@@ -229,20 +229,22 @@
   "watch": "report spend / impressions / link clicks / landing_page_view / placement split each run; waste test applies; if review rejects, report the feedback and propose, never edit",
   "status_2026_09_23T2205": "review CLEARED, ad ACTIVE"
  },
- "digest_boost_ad": {
-  "kind": "engagement boost of the Fri 25 Sep digest post",
+ "post_boost_ad": {
+  "kind": "engagement boost of the 23 Sep 'quiet leads' page post (5b)",
   "approved": "founder, 23 Sep 2026 evening ('yeah i want both 4 and 5')",
   "created": "2026-09-23T21:45+02:00 by the operator via the API",
   "campaign_id": "6996508248894",
   "adset_id": "6996508580294",
-  "ad_id": "6996508595494",
-  "creative_id": "1132591039195016",
-  "post_id": "1279663088571991_122110562607476753",
-  "post_note": "the scheduled Friday digest itself (publishes 25 Sep 09:30); reactions and comments land on the page post",
+  "ad_id": "6996510974094",
+  "creative_id": "1453312266699209",
+  "post_id": "1279663088571991_122107059069476753",
+  "post_note": "today's published product post; reactions and comments land on it",
   "setup": "OUTCOME_ENGAGEMENT, POST_ENGAGEMENT with destination_type ON_POST and promoted_object {page_id}, IMPRESSIONS, LOWEST_COST_WITHOUT_CAP, EUR 10 lifetime, 25 Sep 10:00 -> 1 Oct 23:59 Madrid, same targeting and feed-only placements as the quiet-leads ad",
   "status_at_creation": "campaign + ad set ACTIVE, ad PENDING_REVIEW; nothing delivers before the 25 Sep 10:00 start",
   "api_notes": "POST_ENGAGEMENT without promoted_object creates fine but the ad is then refused (1885154); promoted_object is immutable after creation (1885090); POST_ENGAGEMENT + promoted_object page_id needs destination_type=ON_POST or it is refused (2490408). A first empty ad set 6996508349894 was deleted.",
   "watch": "report spend / impressions / post reactions, comments, shares / page follows each run; judge on cost per engagement and follows, not clicks",
-  "status_2026_09_23T2205": "DISAPPROVED (generic 'Advertising Standards' feedback, no policy named). Most likely the housing-ad rule: the digest names homes for sale with prices and a registration deadline, and the ad set targets by age and job title, which housing ads may not. Proposed 5b: boost the 23 Sep product post instead. Appeal only possible from Ads Manager."
+  "status_2026_09_23T2205": "DISAPPROVED (generic 'Advertising Standards' feedback, no policy named). Most likely the housing-ad rule: the digest names homes for sale with prices and a registration deadline, and the ad set targets by age and job title, which housing ads may not. Proposed 5b: boost the 23 Sep product post instead. Appeal only possible from Ads Manager.",
+  "history": "first built on the scheduled Fri 25 Sep digest post (ad 6996508595494, creative 1132591039195016) and DISAPPROVED at review, most likely the housing-ad rule; the founder chose 5b on 23 Sep ~22:15, the rejected ad was deleted, campaign + ad set renamed 'Post boost'",
+  "status_2026_09_23T2215": "ad PENDING_REVIEW; ad set ACTIVE, EUR 10, 25 Sep 10:00 - 1 Oct 23:59"
  }
 }
