@@ -1,5 +1,4 @@
 {
- "background": "output/facebook/posts/bg-terracotta-dusk.png",
  "out": "output/facebook/posts/08-digest-2026-09-25.png",
  "eyebrow": "Week of 21–27 Sep",
  "headline": "18,000 Marbella homes\nin line to be regularised.",
@@ -14,5 +13,6 @@
  ],
  "pill": "Curated by LeadWing",
  "url": "leadwing.app",
- "takeaway": "If you have Marbella sellers whose paperwork has been a sticking point, this is a good week to call them."
+ "takeaway": "If you have Marbella sellers whose paperwork has been a sticking point, this is a good week to call them.",
+ "theme": "mono"
 }
