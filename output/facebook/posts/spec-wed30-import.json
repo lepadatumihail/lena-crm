@@ -1,0 +1,17 @@
+{
+ "background": "output/facebook/posts/bg-terracotta-dusk.png",
+ "screenshot": "output/facebook/screenshots/home-dark-1440x900@2x.png",
+ "out": "output/facebook/posts/09-wed30-import.png",
+ "pill": "Excel · CSV import",
+ "headline": "Clients in Excel?\nBring them with you.",
+ "headlineSize": 84,
+ "sub": "Preview every row first. Undo in one click.",
+ "audience": "The CRM for independent agents on the Costa del Sol.",
+ "chip": {
+  "title": "Import ready to check",
+  "sub": "clients.xlsx · undo in one click"
+ },
+ "button": "Import your list free",
+ "url": "leadwing.app/start",
+ "cropRatio": 0.86
+}

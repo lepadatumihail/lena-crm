@@ -37,3 +37,17 @@ Everything else is the same for everyone: unlimited clients, every feature, canc
 Not ready to pay? Free covers 10 clients forever, no card.
 
 Both plans side by side: leadwing.app/pricing
+
+## Fri 25 Sep 2026, 09:30 · news digest · image `08-digest-2026-09-25.png` (DRAFTED 23 Sep, waiting on the founder's yes)
+
+Text and sources: `news-digest-2026-09-25.md` (post the text above the `---` line only; no links).
+
+## Wed 30 Sep 2026, 09:30 · product post · image `09-wed30-import.png` (DRAFTED 23 Sep, waiting on the founder's yes; spec `spec-wed30-import.json`, background `bg-terracotta-dusk.png` from OpenAI, darkened)
+
+If your clients live in a spreadsheet, you know how it goes: a tab for buyers, a tab for sellers, and a follow-up column nobody has updated since June.
+
+LeadWing takes that file as it is. Upload your Excel or CSV, check every row in the preview before anything is saved, and if something looks wrong, undo the whole import in one click.
+
+And if you ever want to leave, export works on every plan, the free one included.
+
+Free for your first 10 clients, no card: leadwing.app/start

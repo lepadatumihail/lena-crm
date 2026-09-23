@@ -1,5 +1,12 @@
 # LeadWing Facebook daily log
 
+## Wed 23 Sep 2026 (evening, in session, at the founder's request to make content and plan growth)
+
+Drafted Friday 25 Sep's digest (`news-digest-2026-09-25.md`, card `08-digest-2026-09-25.png`): Marbella PGOM approval (~18,000 homes to regularise), Andalucía's record appraised price, Málaga's 38% rent-to-income, the 25 Golden Mile protected homes (registration closes 1 Oct), and the Málaga mayor on foreign buyers and rent caps. 9 SearchAPI calls (6 news, 3 maps). News sites are blocked by this environment's network policy, so figures were checked through WebSearch against two sources each; the single-source Málaga €3,083.5/m² was dropped.
+Drafted Wednesday 30 Sep's product post on the Excel/CSV import (`09-wed30-import.png`, caption in `launch-week.md`, links to /start). The background came from OpenAI (chatgpt-image-latest, one image) and was darkened for contrast. The card checks against the creative rule: LeadWing named, "the CRM for independent agents on the Costa del Sol", a real screenshot, a hook, a CTA and a URL.
+Checked outreach feasibility: Google Maps search via SearchAPI returns ~20 small local agencies per query with website and phone. No list stored.
+Sign-ups are still unreadable from here (no DB access, Vercel analytics 404s). Nothing published, scheduled, sent or edited; everything is waiting on the founder.
+
 ## Wed 23 Sep 2026 (evening check, run 18:10 Madrid)
 
 Nothing to answer: 0 comments on every page post and on both ad dark posts, inbox empty (0 conversations). The current dark post `…122109116961476753` now shows 1 reaction, up from 0 at noon — the first engagement of the run, and not something to reply to. Ad healthy: ad + ad set ACTIVE, no issues_info, no ad_review_feedback. Today to 18:10 €2.45 / 1,080 imp / CPM €2.27 / CTR 1.48% / 14 clicks / 10 LPV (71% of clicks, €0.25 per landing view); feed-only, zero Audience Network, delivery in every hour but 02:00 with the afternoon picking up. Lifetime €20.42 of €25, €4.58 left, ends Thu 24 Sep 23:59 as decided (option A, no top-up). Waste test does not fire. Nothing paused, nothing edited, nothing sent.
