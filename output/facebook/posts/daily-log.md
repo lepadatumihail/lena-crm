@@ -1,5 +1,19 @@
 # LeadWing Facebook daily log
 
+## Wed 23 Sep 2026 (noon brief, run 12:05 Madrid)
+
+Published: the Wednesday product post went out on time at 09:30 Madrid (1279663088571991_122107059069476753), 0 reactions and 0 comments at 12:05. Queue is now 1 — Thu 24 Sep 09:30, founding offer, timestamp verified.
+
+Numbers: followers 0, comments 0 and reactions 0 across every page post and both ad dark posts (the 22 Sep swap post created 22 Sep 14:54 and the orphaned one), inbox empty (0 conversations). Page insights for 22 Sep: 18 post engagements, 0 page views, 0 follows — down from 42 / 5 on 21 Sep, tracking the lower ad spend.
+
+Ad healthy: ad + ad set ACTIVE, no issues_info, no ad_review_feedback, link still leadwing.app/start?utm_campaign=spreadsheets-sep26 on both link_data.link and the call_to_action, placements feed-only. 22 Sep full day €4.29 / 2,049 imp / CPM €2.09 / CTR 1.56% / 26 clicks / 18 LPV — 69% of clicks, €0.24 per landing view, the run's best full day on quality. 23 Sep to 12:05: €1.41 / 636 imp / 5 clicks / 4 LPV, delivery in every hour but 02:00, zero Audience Network. Lifetime €19.37 of €25, €5.63 left.
+
+Not paused: the waste test fires on no reading — lifetime AN share 26%, lifetime cost per click €0.087, today €0.28 per click with LPV at 80% of clicks.
+
+Noticed: only about 10 landing views have reached /start since the 16:50 swap (6 on 22 Sep after 17:00, 4 today), too few to judge the page; the auth log is the founder's read. €0.25 of lifetime spend leaked to Reels/Stories/right-hand column, all historical, none today.
+
+Surfaced, not acted on: the runway decision again (€5.63, ends Thu 24 Sep 23:59), with three options. Nothing paused, nothing edited, nothing sent. Next Wednesday's product post left for the Sunday 27 Sep sitting per the batching decision.
+
 ## Tue 22 Sep 2026 (evening check, run 18:10 Madrid)
 
 Nothing to answer: 0 comments, 0 reactions, 0 inbox conversations, including on both of the ad's dark posts. Ad healthy: the /start re-review cleared, ad + ad set ACTIVE, link verified as leadwing.app/start?utm_campaign=spreadsheets-sep26, feed-only, no Audience Network. 22 Sep to 18:00: €2.59 / 1,256 imp / 19 clicks / 12 LPV (63% of clicks, €0.22 each); lifetime €16.26 of €25, €8.74 left. Waste test does not fire on any reading. Noted: the creative swap minted a new dark post 1279663088571991_122109116961476753 (the old one, …122105682405476753, is orphaned — check both for comments); delivery dipped to €0.01/13 imp in the 17:00 hour during re-review and was recovering by 18:00. Nothing paused, nothing edited, nothing sent.
