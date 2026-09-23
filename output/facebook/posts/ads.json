@@ -215,8 +215,8 @@
   "creative_id": "1299284655540840",
   "image_hash": "d548b01472e5ccd44a9627bb28348b71",
   "image": "output/facebook/posts/10-ad-quiet-leads.png",
-  "dark_post_id": "re-read on the next run: the 23 Sep 22:28 creative swap mints a new dark post once review clears; the previous one is orphaned, check both for comments",
-  "dark_post_note": "check for comments on every run; not in GET /{page}/posts",
+  "dark_post_id": "1279663088571991_122110619979476753",
+  "dark_post_note": "minted by the 23 Sep 22:28 creative swap; the previous one (…122110568883476753) is orphaned but reachable. Neither appears in GET /{page}/posts: check both for comments on every run.",
   "link": "https://leadwing.app/quiet?utm_source=facebook&utm_medium=paid&utm_campaign=quiet-leads-sep26",
   "copy": {
    "primary": "Most leads don't say no. They go quiet. / LeadWing shows you which buyers need a follow-up and has the message already written, in plain language. Send it as it is, or tweak it in ten seconds. / Built for independent agents on the Costa del Sol. Free for your first 10 clients, no card needed.",
