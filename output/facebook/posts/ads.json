@@ -226,7 +226,8 @@
   },
   "setup": "OUTCOME_TRAFFIC, LANDING_PAGE_VIEWS, IMPRESSIONS, LOWEST_COST_WITHOUT_CAP, EUR 25 lifetime, 23 Sep 21:36 -> 28 Sep 23:59 Madrid, targeting copied from ad set 6995417079494 (24-64, 60 km Marbella, 3 interests + 5 job titles, facebook feed + instagram stream only, advantage_audience off), no promoted_object",
   "status_at_creation": "campaign + ad set ACTIVE, ad PENDING_REVIEW",
-  "watch": "report spend / impressions / link clicks / landing_page_view / placement split each run; waste test applies; if review rejects, report the feedback and propose, never edit"
+  "watch": "report spend / impressions / link clicks / landing_page_view / placement split each run; waste test applies; if review rejects, report the feedback and propose, never edit",
+  "status_2026_09_23T2205": "review CLEARED, ad ACTIVE"
  },
  "digest_boost_ad": {
   "kind": "engagement boost of the Fri 25 Sep digest post",
@@ -241,6 +242,7 @@
   "setup": "OUTCOME_ENGAGEMENT, POST_ENGAGEMENT with destination_type ON_POST and promoted_object {page_id}, IMPRESSIONS, LOWEST_COST_WITHOUT_CAP, EUR 10 lifetime, 25 Sep 10:00 -> 1 Oct 23:59 Madrid, same targeting and feed-only placements as the quiet-leads ad",
   "status_at_creation": "campaign + ad set ACTIVE, ad PENDING_REVIEW; nothing delivers before the 25 Sep 10:00 start",
   "api_notes": "POST_ENGAGEMENT without promoted_object creates fine but the ad is then refused (1885154); promoted_object is immutable after creation (1885090); POST_ENGAGEMENT + promoted_object page_id needs destination_type=ON_POST or it is refused (2490408). A first empty ad set 6996508349894 was deleted.",
-  "watch": "report spend / impressions / post reactions, comments, shares / page follows each run; judge on cost per engagement and follows, not clicks"
+  "watch": "report spend / impressions / post reactions, comments, shares / page follows each run; judge on cost per engagement and follows, not clicks",
+  "status_2026_09_23T2205": "DISAPPROVED (generic 'Advertising Standards' feedback, no policy named). Most likely the housing-ad rule: the digest names homes for sale with prices and a registration deadline, and the ad set targets by age and job title, which housing ads may not. Proposed 5b: boost the 23 Sep product post instead. Appeal only possible from Ads Manager."
  }
 }
