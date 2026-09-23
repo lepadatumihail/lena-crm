@@ -1,0 +1,17 @@
+{
+ "background": "output/facebook/posts/bg-terracotta-dusk.png",
+ "screenshot": "output/facebook/screenshots/home-dark-1440x900@2x.png",
+ "out": "output/facebook/posts/10-ad-quiet-leads.png",
+ "pill": "Follow-ups, handled",
+ "headline": "Most leads don’t say no.\nThey go quiet.",
+ "headlineSize": 78,
+ "sub": "Every buyer card shows the next step, message already written.",
+ "audience": "The CRM for independent agents on the Costa del Sol.",
+ "chip": {
+  "title": "Follow-up drafted",
+  "sub": "Daniel Brown · quiet for 6 days"
+ },
+ "button": "Try it free, no card",
+ "url": "leadwing.app/start",
+ "cropRatio": 0.86
+}
