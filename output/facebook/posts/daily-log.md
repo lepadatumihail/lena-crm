@@ -14,6 +14,8 @@ Noticed: only about 10 landing views have reached /start since the 16:50 swap (6
 
 Surfaced, not acted on: the runway decision again (€5.63, ends Thu 24 Sep 23:59), with three options. Nothing paused, nothing edited, nothing sent. Next Wednesday's product post left for the Sunday 27 Sep sitting per the batching decision.
 
+Answered in session: runway = **option A**, no top-up and no follow-on budget. The ad set spends out its €5.63 and ends Thu 24 Sep 23:59; ~€1 may expire unspent, accepted. Nothing applied — A is the do-nothing option, no ad or ad set call was made. The runway question is closed; the Thursday evening check and Friday noon brief report the run's final totals.
+
 ## Tue 22 Sep 2026 (evening check, run 18:10 Madrid)
 
 Nothing to answer: 0 comments, 0 reactions, 0 inbox conversations, including on both of the ad's dark posts. Ad healthy: the /start re-review cleared, ad + ad set ACTIVE, link verified as leadwing.app/start?utm_campaign=spreadsheets-sep26, feed-only, no Audience Network. 22 Sep to 18:00: €2.59 / 1,256 imp / 19 clicks / 12 LPV (63% of clicks, €0.22 each); lifetime €16.26 of €25, €8.74 left. Waste test does not fire on any reading. Noted: the creative swap minted a new dark post 1279663088571991_122109116961476753 (the old one, …122105682405476753, is orphaned — check both for comments); delivery dipped to €0.01/13 imp in the 17:00 hour during re-review and was recovering by 18:00. Nothing paused, nothing edited, nothing sent.

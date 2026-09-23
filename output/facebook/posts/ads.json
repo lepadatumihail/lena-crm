@@ -154,6 +154,12 @@
    "waste_test": "does not fire on any reading: lifetime AN share 26% (under half), lifetime cost per click EUR 0.087 (over EUR 0.05), today EUR 0.28 per click with LPV at 80% of clicks",
    "runway_note": "EUR 5.63 over ~36 h to Thu 24 Sep 23:59. 22 Sep ran at EUR 4.29/day and today is on a ~EUR 2.8/day pace, so most of it should land but roughly EUR 1 may expire. Follow-on funding put to the founder again in this brief."
   },
+  "runway_decision_2026_09_23": {
+   "answer": "option A - no top-up, no follow-on budget (founder, 23 Sep, in the noon brief session)",
+   "effect": "the ad set spends out its remaining EUR 5.63 and ends Thu 24 Sep 23:59 as scheduled; roughly EUR 1 may expire unspent, accepted",
+   "applied": "nothing - A is the do-nothing option, no ad, ad set or budget call was made",
+   "next": "report final run totals in the Thu 24 evening check and the Fri 25 noon brief; do not resume, re-fund or edit the ad set without a fresh yes"
+  },
   "link_previous": "https://leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26",
   "edit_2026_09_22_landing": {
    "change": "creative 1083235867424577 -> 1140361055322528: link and call_to_action link now leadwing.app/start?utm_campaign=spreadsheets-sep26; message, name, description, image_hash unchanged",
