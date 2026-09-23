@@ -15,7 +15,8 @@
   "published_at": "2026-09-23T09:30:01+02:00",
   "permalink": "https://www.facebook.com/122105574255476753/posts/122107059069476753",
   "error": null,
-  "replaced": "typographic card replaced with the real-screenshot image on 21 Sep 00:37"
+  "replaced": "typographic card replaced with the real-screenshot image on 21 Sep 00:37",
+  "text_edited": "23 Sep ~20:30: 'every buyer card shows what comes next' -> 'LeadWing shows you which buyers need a follow-up' (founder: 'fix today'); image unchanged"
  },
  {
   "image": "output/facebook/posts/07-thu-founding.png",
@@ -45,11 +46,12 @@
  {
   "image": "output/facebook/posts/08-digest-2026-09-25.png",
   "kind": "news digest",
-  "photo_id": "122110445817476753",
-  "post_id": "1279663088571991_122110445859476753",
+  "photo_id": "122110562553476753",
+  "post_id": "1279663088571991_122110562607476753",
   "scheduled_for": "2026-09-25T09:30:00+02:00",
   "approved": "founder, 23 Sep evening ('post all')",
-  "error": null
+  "error": null,
+  "replaced": "23 Sep ~20:30: beige typographic card replaced with the editorial-photo card (founder: 'swap'); old scheduled post 122110445859476753 deleted, re-created with the same text for the same slot"
  },
  {
   "image": "output/facebook/posts/09-wed30-import.png",

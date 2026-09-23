@@ -1,5 +1,10 @@
 # LeadWing Facebook daily log
 
+## Wed 23 Sep 2026 (late evening, content review with the founder)
+
+Founder's calls: "card" is banned from public copy (internal jargon); digest cards get their own look, not the terracotta background. Built `compose-digest.mjs` (photo theme: OpenAI editorial photo on top, type below) and re-made Friday's card; made the "quiet leads" ad creative (`10-ad-quiet-leads.png`, /start) as the one to fund instead of the import creative; mocked the engagement boost (`mock-engagement-ad.png`). Outreach message rewritten by the founder (final in PLAYBOOK) and 50-agency sheet delivered to Drive.
+Applied on "do both": Friday's scheduled digest deleted and re-created with the photo card (new post 1279663088571991_122110562607476753, photo 122110562553476753, same text, 25 Sep 09:30); today's live post text edited to drop "every buyer card". Queue verified: Thu 24, Fri 25, Wed 30. Open: "go 4" (quiet-leads ad, wait for auth log), "go 5" (€10 engagement boost on Friday's digest), link-preview card rewrite (site code).
+
 ## Wed 23 Sep 2026 (evening, founder answered "post all, go 3")
 
 Scheduled: Fri 25 Sep 09:30 digest (1279663088571991_122110445859476753) and Wed 30 Sep 09:30 import post (1279663088571991_122110445967476753); text exactly as approved. The queue, checked via /scheduled_posts, is Thu 24, Fri 25 and Wed 30.
