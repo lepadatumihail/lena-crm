@@ -57,6 +57,7 @@ export const MARKETING_ROUTES = {
   terms: { en: "/terms", es: "/es/terminos" },
   legalNotice: { en: "/legal", es: "/es/aviso-legal" },
   start: { en: "/start", es: "/es/empezar" },
+  quiet: { en: "/quiet", es: "/es/seguimiento" },
 } as const satisfies Record<string, Record<AppLocale, string>>;
 
 export type MarketingRoute = keyof typeof MARKETING_ROUTES;
@@ -66,7 +67,7 @@ export type MarketingRoute = keyof typeof MARKETING_ROUTES;
  * pixel) that search engines are told not to index and that the sitemap and
  * footer leave out. They say what the home page says, shaped for one ad.
  */
-export const UNLISTED_ROUTES = ["start"] as const satisfies readonly MarketingRoute[];
+export const UNLISTED_ROUTES = ["start", "quiet"] as const satisfies readonly MarketingRoute[];
 
 export type UnlistedRoute = (typeof UNLISTED_ROUTES)[number];
 

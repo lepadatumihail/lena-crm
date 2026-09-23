@@ -5,10 +5,10 @@ import { AdLandingPage, adLandingMetadata } from "@/components/marketing/ad-land
 const LOCALE = "en";
 
 export function generateMetadata(): Promise<Metadata> {
-  return adLandingMetadata(LOCALE);
+  return adLandingMetadata("start", LOCALE);
 }
 
 /** English ad landing (the "spreadsheet" ad). Not indexed; see UNLISTED_ROUTES. */
 export default function Page() {
-  return <AdLandingPage locale={LOCALE} />;
+  return <AdLandingPage variant="start" locale={LOCALE} />;
 }

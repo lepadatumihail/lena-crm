@@ -114,6 +114,9 @@ describe("marketing routes", () => {
     });
     expect(marketingRouteAt("/about")).toEqual({ route: "about", locale: "en" });
     expect(marketingRouteAt("/es/sobre-nosotros")).toEqual({ route: "about", locale: "es" });
+    expect(marketingRouteAt("/start")).toEqual({ route: "start", locale: "en" });
+    expect(marketingRouteAt("/quiet")).toEqual({ route: "quiet", locale: "en" });
+    expect(marketingRouteAt("/es/seguimiento")).toEqual({ route: "quiet", locale: "es" });
   });
 
   it.each(["/login", "/es/nope", "/clients", "/privacy/x", "/join/abc"])(

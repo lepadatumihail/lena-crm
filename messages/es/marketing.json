@@ -61,24 +61,24 @@
   },
   "start": {
     "metaTitle": "Pasa tu hoja de cálculo a LeadWing",
-    "metaDescription": "¿Sigues llevando a tus clientes en una hoja de cálculo? Pásala a LeadWing en cinco minutos: cada comprador, vendedor, visita y oferta en una sola ficha, con el siguiente seguimiento ya redactado. Gratis hasta {limit} clientes.",
+    "metaDescription": "¿Sigues llevando a tus clientes en una hoja de cálculo? Pásala a LeadWing en cinco minutos: cada comprador, vendedor, visita y oferta en un solo sitio, con el siguiente seguimiento ya redactado. Gratis hasta {limit} clientes.",
     "eyebrow": "LeadWing · CRM para agentes independientes en la Costa del Sol",
     "title": "¿Sigues llevando a tus clientes en una <accent>hoja de cálculo?</accent>",
-    "subtitle": "Pásala a LeadWing en cinco minutos. Cada comprador, vendedor, visita y oferta en una sola ficha, con el siguiente seguimiento ya redactado.",
+    "subtitle": "Pásala a LeadWing en cinco minutos. Cada comprador, vendedor, visita y oferta en un solo sitio, con el siguiente seguimiento ya redactado.",
     "cta": "Empieza gratis e importa tu hoja",
     "note": "Gratis hasta {limit} clientes, para siempre. Sin tarjeta. Entra con Google o con un código de un solo uso.",
     "steps": {
       "eyebrow": "Cómo va",
       "heading": "Cinco minutos, tres pasos",
-      "signIn": {
+      "one": {
         "title": "Inicia sesión",
         "body": "Con Google o con un código por email. Sin inventar contraseñas."
       },
-      "upload": {
+      "two": {
         "title": "Sube tu Excel o CSV",
         "body": "LeadWing reconoce tus columnas, te muestra una vista previa y deshace toda la importación con un clic si algo no cuadra."
       },
-      "followUp": {
+      "three": {
         "title": "Envía el primer seguimiento",
         "body": "Abre un comprador que se ha quedado callado. El mensaje ya está redactado en su idioma; lo lees, lo retocas y lo envías."
       }
@@ -86,22 +86,68 @@
     "changes": {
       "eyebrow": "Qué obtienes",
       "heading": "Qué cambia el lunes",
-      "card": {
-        "title": "Una ficha por cliente",
-        "body": "Presupuesto, visitas, ofertas, documentos y notas en un solo sitio, en el móvil y en el portátil."
+      "one": {
+        "title": "Todo el cliente en un solo sitio",
+        "body": "Presupuesto, visitas, ofertas, documentos y notas juntos, en el móvil y en el portátil."
       },
-      "drafts": {
+      "two": {
         "title": "Seguimientos que no tienes que inventar",
         "body": "LeadWing detecta quién se ha enfriado y te redacta el siguiente mensaje."
       },
-      "yours": {
+      "three": {
         "title": "Tu cartera, en tu cuenta",
         "body": "LeadWing es tuyo, no de la agencia. Tus clientes se quedan contigo."
       }
     },
     "founding": "Agentes fundadores: Pro por {price} € al mes, de por vida, para los {cap} primeros.",
     "final": {
-      "heading": "Tu hoja ya tiene los clientes. Dales una ficha.",
+      "heading": "Tu hoja ya tiene los clientes. Deja que LeadWing haga el seguimiento.",
+      "body": "Registrarse lleva un minuto y el plan gratuito no pide tarjeta."
+    }
+  },
+  "quiet": {
+    "metaTitle": "Los seguimientos, ya escritos",
+    "metaDescription": "La mayoría de los clientes no dicen que no: se quedan callados. LeadWing te muestra qué compradores necesitan un seguimiento y tiene el mensaje ya escrito. Gratis hasta {limit} clientes.",
+    "eyebrow": "LeadWing · CRM para agentes independientes en la Costa del Sol",
+    "title": "La mayoría de los clientes no dicen que no. <accent>Se quedan callados.</accent>",
+    "subtitle": "LeadWing te muestra qué compradores necesitan un seguimiento hoy, con el mensaje ya escrito. Lo lees, lo retocas y lo envías.",
+    "cta": "Empieza gratis, sin tarjeta",
+    "note": "Gratis hasta {limit} clientes, para siempre. Sin tarjeta. Entra con Google o con un código de un solo uso.",
+    "steps": {
+      "eyebrow": "Cómo va",
+      "heading": "Cinco minutos, tres pasos",
+      "one": {
+        "title": "Inicia sesión",
+        "body": "Con Google o con un código por email. Sin inventar contraseñas."
+      },
+      "two": {
+        "title": "Añade tus compradores",
+        "body": "Escríbelos a mano o sube el Excel o CSV que ya tienes. LeadWing te muestra una vista previa y deshace toda la importación con un clic si algo no cuadra."
+      },
+      "three": {
+        "title": "Envía el primer seguimiento",
+        "body": "Abre un comprador que se ha quedado callado. El mensaje ya está redactado en su idioma; lo lees, lo retocas y lo envías."
+      }
+    },
+    "changes": {
+      "eyebrow": "Qué obtienes",
+      "heading": "Qué cambia el lunes",
+      "one": {
+        "title": "Ves quién te necesita hoy",
+        "body": "Al abrir LeadWing, los compradores que se han quedado callados están arriba, junto con las visitas y ofertas que necesitan un empujón."
+      },
+      "two": {
+        "title": "Seguimientos que no tienes que inventar",
+        "body": "El siguiente mensaje ya está redactado, en el idioma del comprador. Lo lees, lo retocas y lo envías."
+      },
+      "three": {
+        "title": "Tu cartera, en tu cuenta",
+        "body": "LeadWing es tuyo, no de la agencia. Tus clientes se quedan contigo."
+      }
+    },
+    "founding": "Agentes fundadores: Pro por {price} € al mes, de por vida, para los {cap} primeros.",
+    "final": {
+      "heading": "Tus compradores esperan un mensaje. Ya está escrito.",
       "body": "Registrarse lleva un minuto y el plan gratuito no pide tarjeta."
     }
   }

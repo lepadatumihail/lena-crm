@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { ArrowRight, FileSpreadsheet, MessageCircle, UserRound } from "lucide-react";
+import {
+  ArrowRight,
+  FileSpreadsheet,
+  ListChecks,
+  MessageCircle,
+  UserRound,
+  type LucideIcon,
+} from "lucide-react";
 
 import type { AppLocale } from "@/i18n/config";
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { FOUNDING_CAP, PRICES } from "@/lib/billing";
+import type { UnlistedRoute } from "@/lib/routes";
 import { marketingMetadata } from "@/lib/seo";
 import { Button } from "@/components/ui/button";
 import { MarketingNav } from "@/components/marketing-nav";
@@ -14,10 +22,28 @@ import { Eyebrow } from "@/components/marketing/eyebrow";
 import { AppPreview } from "@/components/landing/app-preview";
 import { LandingFooter } from "@/components/landing/footer";
 
-/** Head tags for the ad landing: the usual canonical and hreflang, but search engines are told not to index it. */
-export async function adLandingMetadata(locale: AppLocale): Promise<Metadata> {
-  const t = await getTranslations({ locale, namespace: "marketing.start" });
-  const base = await marketingMetadata("start", locale, {
+/**
+ * One ad, one landing. Each variant is a route in UNLISTED_ROUTES and a
+ * catalog under `marketing.<variant>` with the same shape, so the page reads
+ * the ad's own words back: "start" answers the spreadsheet ad, "quiet" the
+ * "most leads go quiet" ad. Only the icons of the "what you get" row differ.
+ */
+export type AdLandingVariant = UnlistedRoute;
+
+const CHANGE_ICONS: Record<AdLandingVariant, readonly [LucideIcon, LucideIcon, LucideIcon]> = {
+  start: [UserRound, MessageCircle, FileSpreadsheet],
+  quiet: [ListChecks, MessageCircle, FileSpreadsheet],
+};
+
+const STEPS = ["one", "two", "three"] as const;
+
+/** Head tags for an ad landing: the usual canonical and hreflang, but search engines are told not to index it. */
+export async function adLandingMetadata(
+  variant: AdLandingVariant,
+  locale: AppLocale
+): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: `marketing.${variant}` });
+  const base = await marketingMetadata(variant, locale, {
     title: t("metaTitle"),
     description: t("metaDescription", { limit: FREE_CLIENT_LIMIT }),
   });
@@ -25,21 +51,21 @@ export async function adLandingMetadata(locale: AppLocale): Promise<Metadata> {
 }
 
 /**
- * Where the Facebook ad lands. The ad asks "still tracking clients in a
- * spreadsheet?", so the page answers exactly that and nothing else: one
- * headline in the same words, the live app board, three steps that start
- * with the spreadsheet import, one action repeated at the end. The nav is
- * the minimal one, so the only way forward is the button. Same stage and
- * type as the home page, so it reads as the same product.
+ * Where a Facebook ad lands. The page answers exactly what the ad asked and
+ * nothing else: one headline in the same words, the live app board, three
+ * steps, one action repeated at the end. The nav is the minimal one, so the
+ * only way forward is the button. Same stage and type as the home page, so
+ * it reads as the same product.
  */
-export async function AdLandingPage({ locale }: { locale: AppLocale }) {
-  const t = await getTranslations({ locale, namespace: "marketing.start" });
-  const steps = ["signIn", "upload", "followUp"] as const;
-  const changes = [
-    { key: "card", icon: UserRound },
-    { key: "drafts", icon: MessageCircle },
-    { key: "yours", icon: FileSpreadsheet },
-  ] as const;
+export async function AdLandingPage({
+  variant,
+  locale,
+}: {
+  variant: AdLandingVariant;
+  locale: AppLocale;
+}) {
+  const t = await getTranslations({ locale, namespace: `marketing.${variant}` });
+  const changes = STEPS.map((key, i) => ({ key, icon: CHANGE_ICONS[variant][i] }));
 
   return (
     <div className="flex flex-1 flex-col">
@@ -84,7 +110,7 @@ export async function AdLandingPage({ locale }: { locale: AppLocale }) {
         </div>
       </section>
 
-      {/* Three steps, the import first: that is the promise the ad made. */}
+      {/* Three steps, in the order the ad promised them. */}
       <section className="section-y">
         <div className="mx-auto w-full max-w-6xl px-4">
           <Reveal className="mx-auto max-w-2xl text-center">
@@ -92,7 +118,7 @@ export async function AdLandingPage({ locale }: { locale: AppLocale }) {
             <h2 className="display-2 text-balance">{t("steps.heading")}</h2>
           </Reveal>
           <ol className="mx-auto mt-10 grid max-w-4xl gap-5 sm:grid-cols-3">
-            {steps.map((step, i) => (
+            {STEPS.map((step, i) => (
               <li key={step} className="bg-card text-card-foreground rounded-2xl border p-6">
                 <span className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-full text-sm font-semibold">
                   {i + 1}

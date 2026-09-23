@@ -61,24 +61,24 @@
   },
   "start": {
     "metaTitle": "Move your spreadsheet into LeadWing",
-    "metaDescription": "Still tracking clients in a spreadsheet? Bring it into LeadWing in five minutes: every buyer, seller, viewing and offer on one card, with the next follow-up already drafted. Free for {limit} clients.",
+    "metaDescription": "Still tracking clients in a spreadsheet? Bring it into LeadWing in five minutes: every buyer, seller, viewing and offer in one place, with the next follow-up already drafted. Free for {limit} clients.",
     "eyebrow": "LeadWing · CRM for independent agents on the Costa del Sol",
     "title": "Still tracking clients in a <accent>spreadsheet?</accent>",
-    "subtitle": "Bring it into LeadWing in five minutes. Every buyer, seller, viewing and offer on one card, with the next follow-up already drafted.",
+    "subtitle": "Bring it into LeadWing in five minutes. Every buyer, seller, viewing and offer in one place, with the next follow-up already drafted.",
     "cta": "Start free, import your spreadsheet",
     "note": "Free for {limit} clients, forever. No card. Sign in with Google or a one-time code.",
     "steps": {
       "eyebrow": "How it goes",
       "heading": "Five minutes, three steps",
-      "signIn": {
+      "one": {
         "title": "Sign in",
         "body": "Google or a code by email. No password to invent."
       },
-      "upload": {
+      "two": {
         "title": "Upload your Excel or CSV",
         "body": "LeadWing matches your columns, shows you a preview, and undoes the whole import in one click if something looks off."
       },
-      "followUp": {
+      "three": {
         "title": "Send the first follow-up",
         "body": "Open a buyer who has gone quiet. The message is already drafted in their language; you read, tweak and send."
       }
@@ -86,22 +86,68 @@
     "changes": {
       "eyebrow": "What you get",
       "heading": "What changes on Monday",
-      "card": {
-        "title": "One card per client",
-        "body": "Budget, viewings, offers, documents and notes in one place, on your phone and your laptop."
+      "one": {
+        "title": "Everything about a client in one place",
+        "body": "Budget, viewings, offers, documents and notes together, on your phone and your laptop."
       },
-      "drafts": {
+      "two": {
         "title": "Follow-ups you don't have to invent",
         "body": "LeadWing spots who has gone quiet and drafts the next message for you."
       },
-      "yours": {
+      "three": {
         "title": "Your book, on your account",
         "body": "LeadWing is yours, not the agency's. Your clients stay with you."
       }
     },
     "founding": "Founding agents: Pro for €{price} a month, for life, for the first {cap}.",
     "final": {
-      "heading": "Your spreadsheet already has the clients. Give them a card.",
+      "heading": "Your spreadsheet already has the clients. Let LeadWing do the follow-ups.",
+      "body": "Sign-up takes a minute, and the Free plan needs no card."
+    }
+  },
+  "quiet": {
+    "metaTitle": "Follow-ups, already written",
+    "metaDescription": "Most leads don't say no, they go quiet. LeadWing shows you which buyers need a follow-up and has the message already written. Free for {limit} clients.",
+    "eyebrow": "LeadWing · CRM for independent agents on the Costa del Sol",
+    "title": "Most leads don't say no. <accent>They go quiet.</accent>",
+    "subtitle": "LeadWing shows you which buyers need a follow-up today, with the message already written. Read it, tweak it, send it.",
+    "cta": "Start free, no card needed",
+    "note": "Free for {limit} clients, forever. No card. Sign in with Google or a one-time code.",
+    "steps": {
+      "eyebrow": "How it goes",
+      "heading": "Five minutes, three steps",
+      "one": {
+        "title": "Sign in",
+        "body": "Google or a code by email. No password to invent."
+      },
+      "two": {
+        "title": "Add your buyers",
+        "body": "Type them in, or upload the Excel or CSV you already have. LeadWing shows a preview and undoes the whole import in one click if something looks off."
+      },
+      "three": {
+        "title": "Send the first follow-up",
+        "body": "Open a buyer who has gone quiet. The message is already drafted in their language; you read, tweak and send."
+      }
+    },
+    "changes": {
+      "eyebrow": "What you get",
+      "heading": "What changes on Monday",
+      "one": {
+        "title": "You see who needs you today",
+        "body": "When you open LeadWing, the buyers who have gone quiet are at the top, with the viewings and offers that need a nudge."
+      },
+      "two": {
+        "title": "Follow-ups you don't have to invent",
+        "body": "The next message is drafted for you, in the buyer's language. Read, tweak, send."
+      },
+      "three": {
+        "title": "Your book, on your account",
+        "body": "LeadWing is yours, not the agency's. Your clients stay with you."
+      }
+    },
+    "founding": "Founding agents: Pro for €{price} a month, for life, for the first {cap}.",
+    "final": {
+      "heading": "Your buyers are waiting for a message. It's already written.",
       "body": "Sign-up takes a minute, and the Free plan needs no card."
     }
   }

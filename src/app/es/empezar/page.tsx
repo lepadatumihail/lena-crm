@@ -5,10 +5,10 @@ import { AdLandingPage, adLandingMetadata } from "@/components/marketing/ad-land
 const LOCALE = "es";
 
 export function generateMetadata(): Promise<Metadata> {
-  return adLandingMetadata(LOCALE);
+  return adLandingMetadata("start", LOCALE);
 }
 
-/** Spanish ad landing. The proxy pins /es/empezar to Spanish whatever the cookie says. */
+/** Spanish ad landing (the "spreadsheet" ad). The proxy pins /es/empezar to Spanish whatever the cookie says. */
 export default function Page() {
-  return <AdLandingPage locale={LOCALE} />;
+  return <AdLandingPage variant="start" locale={LOCALE} />;
 }
