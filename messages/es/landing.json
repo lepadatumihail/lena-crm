@@ -1,27 +1,186 @@
 {
   "hero": {
     "badge": "CRM para agentes inmobiliarios independientes",
-    "title": "Tus clientes, propiedades y ofertas. <accent>Así de simple.</accent>",
-    "subtitle": "Con LeadWing, cada comprador, vendedor, visita, oferta y documento vive en una sola ficha de cliente, y tienes un seguimiento listo para enviar antes de que un lead se enfríe.",
+    "title": "Ten claro a quién contactar. <accent>Y qué decirle.</accent>",
+    "subtitle": "Reúne tus leads en un solo sitio, crea tareas y recordatorios para cada cliente y redacta seguimientos en su idioma. Tú revisas el mensaje y lo envías.",
     "ctaPrimary": "Empieza gratis",
     "ctaSecondary": "Mira cómo funciona",
-    "note": "Sin contraseña: inicia sesión con Google o con un código de un solo uso."
+    "note": "Gratis hasta {limit} clientes. Sin tarjeta."
   },
   "preview": {
     "toasts": {
       "moved": "{name} → {stage}",
       "newLead": "Nuevo lead de Idealista",
       "offerAccepted": "{name} · oferta aceptada",
-      "reminderSent": "Recordatorio de WhatsApp enviado a {name}"
+      "reminderSent": "Recordatorio de WhatsApp listo para {name}"
     }
   },
-  "mock": {
-    "needsNudge": "Necesita un empujón",
-    "draft": "Borrador",
-    "to": "Para: {name}",
-    "aiDraft": "Borrador IA · Alemán",
-    "sent": "Enviado",
-    "quiet": "{days, plural, one {# día sin contacto} other {# días sin contacto}}"
+  "testimonials": {
+    "badge": "Opiniones de agentes",
+    "heading": "Menos cabos sueltos. El siguiente paso, más claro.",
+    "elena": {
+      "title": "Los datos de cada cliente, por fin juntos",
+      "body": "Llevar el control de los clientes entre notas, WhatsApp, Google Docs y Excel resultaba difícil. Tener un solo sitio donde organizar sus datos lo hace más fácil."
+    },
+    "adam": {
+      "title": "Un recordatorio para el próximo seguimiento",
+      "body": "Los recordatorios de seguimiento y las tareas integradas ayudan a tener presente el siguiente paso. Cada tarea se puede vincular a un cliente, con un recordatorio para cuando toca."
+    },
+    "note": "Resumen de los comentarios compartidos por Elena y Adam."
+  },
+  "howItWorks": {
+    "badge": "Cómo funciona",
+    "heading": "De un nuevo lead a tu próxima conversación.",
+    "body": "Es fácil perder de vista un nombre entre tus notas. Dale a cada consulta una ficha de cliente, un siguiente paso y un mensaje listo para enviar.",
+    "steps": {
+      "capture": {
+        "title": "Reúne el lead en un solo sitio",
+        "blurb": "Pega una consulta de un portal, WhatsApp o correo. Revisa los datos que extrae LeadWing y guarda al cliente con su presupuesto, idioma y notas."
+      },
+      "attention": {
+        "title": "Ten claro quién necesita tu atención",
+        "blurb": "Crea una tarea y un recordatorio para cada cliente. Consulta qué toca hacer y qué fichas llevan tiempo sin actualizar, con las visitas y los detalles de la operación a mano."
+      },
+      "draft": {
+        "title": "Ten claro qué decirle",
+        "blurb": "Redacta un seguimiento personal en el idioma de tu cliente. Revísalo, dale tu toque y ábrelo en WhatsApp o en el correo para enviarlo."
+      }
+    },
+    "tiles": {
+      "capture": {
+        "enquiry": "«Hola, soy Sofia. Busco un apartamento en Marbella de hasta 800.000 €».",
+        "action": "Pega la consulta · revisa los datos",
+        "details": "Compradora · 800.000 € · Alemán"
+      },
+      "attention": {
+        "heading": "Tus próximos pasos",
+        "today": "Hoy",
+        "task": "Hacer seguimiento tras la visita",
+        "client": "Compradora",
+        "reminder": "Recordatorio · 10:00",
+        "quietHeading": "Fichas sin actualizaciones recientes",
+        "quietDays": "{days} días"
+      },
+      "draft": {
+        "language": "Borrador IA · Alemán",
+        "openWhatsApp": "Abrir en WhatsApp"
+      }
+    }
+  },
+  "trust": {
+    "everywhere": {
+      "title": "Funciona en todas partes",
+      "body": "En ordenador y en móvil, e instalable como app en la pantalla de inicio de tu móvil."
+    },
+    "data": {
+      "title": "Tus datos, solo tuyos",
+      "body": "Los clientes de cada agente están totalmente aislados. Nadie ve tu cartera salvo tú."
+    },
+    "setup": {
+      "title": "Nada que configurar",
+      "body": "Inicia sesión y empieza a añadir clientes. Sin formación, sin ruido y sin llamadas comerciales por usuario."
+    }
+  },
+  "pricing": {
+    "heading": "Gratis para empezar. Un solo plan cuando creces.",
+    "body": "Todas las funciones en los dos planes. La única diferencia es cuántos clientes puedes tener.",
+    "free": {
+      "name": "Gratis",
+      "price": "0 €",
+      "period": "para siempre",
+      "limit": "Hasta {limit} clientes, entre compradores y vendedores",
+      "allFeatures": "Todas las funciones, nada bloqueado",
+      "noCard": "Sin tarjeta y sin límite de tiempo"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "{amount} €",
+      "period": "al mes + IVA",
+      "note": "o {yearly} € al año, ahorra un {pct} %",
+      "unlimited": "Clientes ilimitados",
+      "everythingFree": "Todo lo del plan Gratis",
+      "referral": "Un mes gratis por cada agente que refieras"
+    },
+    "founding": "Los primeros {cap} agentes de pago fijan Pro en {price} € al mes de por vida.",
+    "fullPage": "Ver la página de precios completa",
+    "ctaFree": "Empieza gratis",
+    "ctaPro": "Empieza gratis, mejora cuando quieras"
+  },
+  "finalCta": {
+    "heading": "Trae hoy a tu primer cliente.",
+    "body": "Registrarse lleva un minuto y el plan Free no pide tarjeta."
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "body": "La página que buscas no existe o se ha movido.",
+    "cta": "Ir a clientes",
+    "links": "Prueba con una de estas:",
+    "home": "Inicio",
+    "sitemap": "Mapa del sitio — todas las páginas",
+    "llms": "llms.txt — resumen en texto plano para agentes de IA"
+  },
+  "faq": {
+    "heading": "Lo que preguntan los agentes antes de empezar",
+    "body": "Respuestas cortas a lo que más nos preguntan. Para todo lo demás, escríbenos.",
+    "privacyLink": "Lee la política de privacidad.",
+    "items": {
+      "what": {
+        "q": "¿Qué es LeadWing?",
+        "a": "LeadWing es un CRM para agentes inmobiliarios independientes. Reúne en una ficha a cada comprador y vendedor, con sus propiedades, visitas, ofertas y documentos, de todas las agencias con las que trabajas, y redacta los seguimientos en el idioma de tu cliente. Funciona en el navegador del ordenador y del móvil, en español y en inglés."
+      },
+      "free": {
+        "q": "¿Hay un plan gratuito?",
+        "a": "Sí. El plan Gratis es gratis para siempre e incluye todas las funciones. Admite hasta {limit} clientes, entre compradores y vendedores, sin tarjeta y sin límite de tiempo."
+      },
+      "price": {
+        "q": "¿Cuánto cuesta Pro?",
+        "a": "Pro cuesta {monthly} € al mes o {yearly} € al año, más IVA, con clientes ilimitados. Todo lo demás es idéntico al plan Gratis."
+      },
+      "card": {
+        "q": "¿Necesito una tarjeta para empezar?",
+        "a": "No. Inicia sesión con Google o con un código de un solo uso por email y empieza a añadir clientes. Solo introduces una tarjeta si pasas a Pro."
+      },
+      "agencies": {
+        "q": "Trabajo con varias agencias. ¿Me sirve?",
+        "a": "Para eso está hecho LeadWing. Etiqueta cada lead con la agencia a la que pertenece y ten toda tu cartera en un solo sitio, sea con quien sea la operación."
+      },
+      "mobile": {
+        "q": "¿Hay aplicación móvil?",
+        "a": "LeadWing es una aplicación web que se instala en tu móvil desde el navegador y se abre desde la pantalla de inicio como cualquier otra app. Sin tienda de aplicaciones y sin actualizaciones."
+      },
+      "whatsapp": {
+        "q": "¿Puedo enviar WhatsApps desde LeadWing?",
+        "a": "Sí. LeadWing redacta un mensaje cercano y personal en el idioma de tu cliente, tú lo lees y lo retocas, y con un toque se abre en WhatsApp en tu móvil. Nunca se envía nada sin ti."
+      },
+      "portals": {
+        "q": "¿Con qué portales funciona?",
+        "a": "Pega una solicitud de Idealista, Fotocasa, Kyero, un email o un WhatsApp y LeadWing rellena el lead por ti: nombre, teléfono, idioma y presupuesto. Sin volver a teclear nada."
+      },
+      "import": {
+        "q": "¿Puedo traer mis clientes desde Excel u otro CRM?",
+        "a": "Sí. Sube un archivo de Excel o CSV (Google Contactos, Outlook y la mayoría de CRM lo exportan), revisa cómo encajan las columnas, previsualiza cada fila e impórtalo. ¿Te has equivocado? Deshaz toda la importación con un clic."
+      },
+      "privacy": {
+        "q": "¿Quién puede ver mis clientes?",
+        "a": "Solo tú. Los clientes de cada agente están totalmente aislados; nadie más ve tu cartera, ni siquiera otros agentes de la misma agencia."
+      },
+      "export": {
+        "q": "¿Puedo llevarme mis datos?",
+        "a": "Siempre, en todos los planes. Exporta cualquier lista a Excel o CSV, o descarga toda tu cuenta desde Ajustes, al instante."
+      },
+      "cancel": {
+        "q": "¿Puedo cancelar Pro?",
+        "a": "Cuando quieras, desde la página de facturación. Vuelves al plan Gratis al terminar el periodo que has pagado y no se borra nada: todo sigue visible y editable, solo que no puedes añadir clientes por encima del límite del plan Gratis."
+      },
+      "calendar": {
+        "q": "¿Funciona con Google Calendar?",
+        "a": "Sí, mediante un calendario de solo lectura. Suscríbete a tu enlace privado para ver las visitas y reuniones de LeadWing en Google Calendar. Google actualiza el calendario a su propio ritmo; los cambios en Google no se reflejan en LeadWing."
+      }
+    },
+    "ask": "¿Sigues con dudas? Escribe a"
+  },
+  "footer": {
+    "contactLead": "¿Dudas? Escríbenos —"
   },
   "onePlace": {
     "badge": "El problema",
@@ -38,68 +197,6 @@
       "docs": "Pasaporte, NIE · 2 archivos",
       "footer": "Todo en un solo sitio"
     }
-  },
-  "features": {
-    "badge": "Lo que obtienes",
-    "heading": "Toda la operación en una sola ficha",
-    "body": "Etapa del embudo, propiedades vistas, ofertas hechas, documentos firmados y por qué agencia llegó el lead.",
-    "items": {
-      "pipeline": {
-        "title": "Un embudo para compradores y vendedores",
-        "body": "Arrastra a cada cliente por nuevo, contactado, cualificado, visitas y reservado. Los vendedores tienen su propio flujo, de pendiente a cualificado."
-      },
-      "clients": {
-        "title": "Todo sobre cada cliente",
-        "body": "Nombre, teléfono, idioma, nacionalidad, presupuesto y notas. Marca los calientes, oculta los fríos y sabe a quién llamar después."
-      },
-      "deal": {
-        "title": "Propiedades, visitas, ofertas y documentos",
-        "body": "Registra cada propiedad que ve un comprador, agenda la visita, anota cada oferta frente al precio de salida y guarda el contrato y los DNI en la misma ficha."
-      },
-      "agencies": {
-        "title": "Un CRM para todas las agencias con las que vendes",
-        "body": "Etiqueta cada lead con la agencia por la que llegó. Toda tu cartera en un solo sitio, sea de quien sea el inmueble.",
-        "tags": "Norma Frank,Solvilla,Drumelia,Directo"
-      }
-    }
-  },
-  "howItWorks": {
-    "badge": "Cómo funciona",
-    "heading": "Cómo funciona LeadWing, en tres pasos",
-    "body": "Añade un cliente, muévelo por el embudo y deja que LeadWing se encargue del seguimiento. Todo el trabajo, en el orden en que lo haces de verdad.",
-    "steps": {
-      "plan": {
-        "title": "Planifica la visita",
-        "blurb": "Añade un comprador y agenda la visita. LeadWing mantiene juntos la fecha, el recordatorio y el aviso, y sincroniza con tu Google Calendar para que aparezca donde ya miras."
-      },
-      "pipeline": {
-        "title": "Muévelo por el embudo",
-        "blurb": "Arrastra a cada comprador por etapas claras: nuevo, contactado, cualificado, visitas, reservado. Anota la oferta frente al precio de salida y mira cómo la operación cruza la meta."
-      },
-      "followUp": {
-        "title": "Deja que LeadWing haga el seguimiento",
-        "blurb": "LeadWing detecta a los clientes que se quedan en silencio y redacta un mensaje cercano en su idioma. Tú lo lees, lo ajustas si quieres y lo envías: sin página en blanco y sin perseguir a nadie."
-      }
-    },
-    "tiles": {
-      "calendar": {
-        "month": "Junio",
-        "weekdays": "L,M,X,J,V,S,D",
-        "event": "Visita · Villa · 11:00",
-        "synced": "Sincronizado"
-      },
-      "pipeline": {
-        "offer": "Oferta"
-      },
-      "followUp": {
-        "sentToast": "Seguimiento enviado"
-      }
-    }
-  },
-  "pipelineStrip": {
-    "heading": "Cómo avanza un comprador por tu embudo",
-    "body": "Cada comprador sigue un recorrido sencillo. Hazlo avanzar y en cada paso se desbloquean los detalles que tocan.",
-    "note": "Los vendedores tienen su propio flujo: de pendiente a cualificado, con cada anuncio adjunto."
   },
   "deepDives": {
     "heading": "Deja de perseguir. Que LeadWing haga los <nowrap>seguimientos.</nowrap>",
@@ -169,125 +266,5 @@
         "whatsapp": "Un toque para enviar por WhatsApp"
       }
     }
-  },
-  "trust": {
-    "everywhere": {
-      "title": "Funciona en todas partes",
-      "body": "En ordenador y en móvil, e instalable como app en la pantalla de inicio de tu móvil."
-    },
-    "data": {
-      "title": "Tus datos, solo tuyos",
-      "body": "Los clientes de cada agente están totalmente aislados. Nadie ve tu cartera salvo tú."
-    },
-    "setup": {
-      "title": "Nada que configurar",
-      "body": "Inicia sesión y empieza a añadir clientes. Sin formación, sin ruido y sin llamadas comerciales por usuario."
-    }
-  },
-  "pricing": {
-    "heading": "Gratis para empezar. Un solo plan cuando creces.",
-    "body": "Todas las funciones en los dos planes. La única diferencia es cuántos clientes puedes tener.",
-    "free": {
-      "name": "Gratis",
-      "price": "0 €",
-      "period": "para siempre",
-      "limit": "Hasta {limit} clientes, entre compradores y vendedores",
-      "allFeatures": "Todas las funciones, nada bloqueado",
-      "noCard": "Sin tarjeta y sin límite de tiempo"
-    },
-    "pro": {
-      "name": "Pro",
-      "price": "{amount} €",
-      "period": "al mes + IVA",
-      "note": "o {yearly} € al año, ahorra un {pct} %",
-      "unlimited": "Clientes ilimitados",
-      "everythingFree": "Todo lo del plan Gratis",
-      "referral": "Un mes gratis por cada agente que refieras"
-    },
-    "founding": "Los primeros {cap} agentes de pago fijan Pro en {price} € al mes de por vida.",
-    "fullPage": "Ver la página de precios completa",
-    "ctaFree": "Empieza gratis",
-    "ctaPro": "Empieza gratis, mejora cuando quieras"
-  },
-  "rentals": {
-    "badge": "Muy pronto",
-    "heading": "Hoy, ventas. Después, alquileres.",
-    "body": "LeadWing ya lleva tu embudo de ventas; los alquileres de larga y corta estancia están en camino, con el mismo flujo sencillo que ya conoces."
-  },
-  "finalCta": {
-    "heading": "Trae hoy a tu primer cliente.",
-    "body": "Registrarse lleva un minuto y el plan Free no pide tarjeta."
-  },
-  "notFound": {
-    "title": "Página no encontrada",
-    "body": "La página que buscas no existe o se ha movido.",
-    "cta": "Ir a clientes",
-    "links": "Prueba con una de estas:",
-    "home": "Inicio",
-    "sitemap": "Mapa del sitio — todas las páginas",
-    "llms": "llms.txt — resumen en texto plano para agentes de IA"
-  },
-  "faq": {
-    "heading": "Lo que preguntan los agentes antes de empezar",
-    "body": "Respuestas cortas a lo que más nos preguntan. Para todo lo demás, escríbenos.",
-    "privacyLink": "Lee la política de privacidad.",
-    "items": {
-      "what": {
-        "q": "¿Qué es LeadWing?",
-        "a": "LeadWing es un CRM para agentes inmobiliarios independientes. Reúne en una ficha a cada comprador y vendedor, con sus propiedades, visitas, ofertas y documentos, de todas las agencias con las que trabajas, y redacta los seguimientos en el idioma de tu cliente. Funciona en el navegador del ordenador y del móvil, en español y en inglés."
-      },
-      "free": {
-        "q": "¿Hay un plan gratuito?",
-        "a": "Sí. El plan Gratis es gratis para siempre e incluye todas las funciones. Admite hasta {limit} clientes, entre compradores y vendedores, sin tarjeta y sin límite de tiempo."
-      },
-      "price": {
-        "q": "¿Cuánto cuesta Pro?",
-        "a": "Pro cuesta {monthly} € al mes o {yearly} € al año, más IVA, con clientes ilimitados. Todo lo demás es idéntico al plan Gratis."
-      },
-      "card": {
-        "q": "¿Necesito una tarjeta para empezar?",
-        "a": "No. Inicia sesión con Google o con un código de un solo uso por email y empieza a añadir clientes. Solo introduces una tarjeta si pasas a Pro."
-      },
-      "agencies": {
-        "q": "Trabajo con varias agencias. ¿Me sirve?",
-        "a": "Para eso está hecho LeadWing. Etiqueta cada lead con la agencia a la que pertenece y ten toda tu cartera en un solo sitio, sea con quien sea la operación."
-      },
-      "mobile": {
-        "q": "¿Hay aplicación móvil?",
-        "a": "LeadWing es una aplicación web que se instala en tu móvil desde el navegador y se abre desde la pantalla de inicio como cualquier otra app. Sin tienda de aplicaciones y sin actualizaciones."
-      },
-      "whatsapp": {
-        "q": "¿Puedo enviar WhatsApps desde LeadWing?",
-        "a": "Sí. LeadWing redacta un mensaje cercano y personal en el idioma de tu cliente, tú lo lees y lo retocas, y con un toque se abre en WhatsApp en tu móvil. Nunca se envía nada sin ti."
-      },
-      "portals": {
-        "q": "¿Con qué portales funciona?",
-        "a": "Pega una solicitud de Idealista, Fotocasa, Kyero, un email o un WhatsApp y LeadWing rellena el lead por ti: nombre, teléfono, idioma y presupuesto. Sin volver a teclear nada."
-      },
-      "import": {
-        "q": "¿Puedo traer mis clientes desde Excel u otro CRM?",
-        "a": "Sí. Sube un archivo de Excel o CSV (Google Contactos, Outlook y la mayoría de CRM lo exportan), revisa cómo encajan las columnas, previsualiza cada fila e impórtalo. ¿Te has equivocado? Deshaz toda la importación con un clic."
-      },
-      "privacy": {
-        "q": "¿Quién puede ver mis clientes?",
-        "a": "Solo tú. Los clientes de cada agente están totalmente aislados; nadie más ve tu cartera, ni siquiera otros agentes de la misma agencia."
-      },
-      "export": {
-        "q": "¿Puedo llevarme mis datos?",
-        "a": "Siempre, en todos los planes. Exporta cualquier lista a Excel o CSV, o descarga toda tu cuenta desde Ajustes, al instante."
-      },
-      "cancel": {
-        "q": "¿Puedo cancelar Pro?",
-        "a": "Cuando quieras, desde la página de facturación. Vuelves al plan Gratis al terminar el periodo que has pagado y no se borra nada: todo sigue visible y editable, solo que no puedes añadir clientes por encima del límite del plan Gratis."
-      },
-      "calendar": {
-        "q": "¿Se sincroniza con Google Calendar?",
-        "a": "Sí. Las visitas y reuniones que agendas en LeadWing aparecen en Google Calendar mediante un calendario al que te suscribes una sola vez, y LeadWing te avisa antes de cada una."
-      }
-    },
-    "ask": "¿Sigues con dudas? Escribe a"
-  },
-  "footer": {
-    "contactLead": "¿Dudas? Escríbenos —"
   }
 }

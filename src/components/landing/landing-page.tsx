@@ -3,32 +3,25 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowRight,
   Check,
-  ShieldCheck,
-  Smartphone,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Tag } from "@/components/ui/tag";
 import { AuthErrorListener } from "@/components/auth-error-listener";
 import { MarketingNav } from "@/components/marketing-nav";
 import { Reveal } from "@/components/reveal";
 import { Eyebrow } from "@/components/marketing/eyebrow";
-import { FeatureGrid } from "@/components/landing/feature-grid";
-import { HowItWorks } from "@/components/landing/how-it-works";
+import { OnePlace } from "@/components/landing/one-place";
+import { Workflow } from "@/components/landing/workflow";
 import { FeatureDeepDives } from "@/components/landing/feature-deep-dives";
 import { AppPreview } from "@/components/landing/app-preview";
-import { OnePlace } from "@/components/landing/one-place";
+import { Testimonials } from "@/components/landing/testimonials";
 import { Faq } from "@/components/landing/faq";
 import { LandingFooter } from "@/components/landing/footer";
-import { BUYER_STAGES } from "@/lib/crm";
-import { stageLabel } from "@/i18n/labels";
 import { asLocale } from "@/i18n/config";
 import { marketingPath } from "@/lib/routes";
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { FOUNDING_CAP, PRICES, yearlySavingPct } from "@/lib/billing";
 import { cn } from "@/lib/utils";
-
-const BUYER_STEPS = BUYER_STAGES;
 
 /**
  * The marketing home page. Rendered at / (English) and /es (Spanish); the
@@ -41,7 +34,6 @@ const BUYER_STEPS = BUYER_STAGES;
  */
 export function LandingPage() {
   const t = useTranslations("landing");
-  const tCrm = useTranslations("crm");
   const tNav = useTranslations("nav.marketing");
   const locale = asLocale(useLocale());
 
@@ -73,10 +65,11 @@ export function LandingPage() {
             <Eyebrow className="dark:text-stage-foreground/60 mb-6 text-[11px] sm:text-xs">
               {t("hero.badge")}
             </Eyebrow>
-            <h1 className="display-1 max-w-4xl text-balance">
+            <h1 className="display-1 max-w-5xl text-balance">
               {t.rich("hero.title", {
+                nowrap: (chunks) => <span className="whitespace-nowrap">{chunks}</span>,
                 accent: (chunks) => (
-                  <em className="bg-gradient-to-r from-[oklch(0.56_0.14_36)] to-[oklch(0.68_0.15_52)] bg-clip-text text-transparent dark:from-[oklch(0.74_0.13_42)] dark:to-[oklch(0.84_0.1_62)]">
+                  <em className="block bg-gradient-to-r from-[oklch(0.56_0.14_36)] to-[oklch(0.68_0.15_52)] bg-clip-text text-transparent dark:from-[oklch(0.74_0.13_42)] dark:to-[oklch(0.84_0.1_62)]">
                     {chunks}
                   </em>
                 ),
@@ -99,7 +92,7 @@ export function LandingPage() {
               </Button>
             </div>
             <p className="text-stage-foreground/55 mt-5 text-sm">
-              {t("hero.note")}
+              {t("hero.note", { limit: FREE_CLIENT_LIMIT })}
             </p>
           </div>
         </div>
@@ -111,8 +104,10 @@ export function LandingPage() {
         </div>
       </section>
 
+      <Testimonials />
+
       {/* One place — the apps agents juggle today, folded into one card */}
-      <section className="section-y">
+      <section className="section-y pt-0">
         <div className="mx-auto w-full max-w-6xl px-4">
           <Reveal className="mx-auto max-w-2xl text-center">
             <Eyebrow className="mb-4">{t("onePlace.badge")}</Eyebrow>
@@ -137,78 +132,12 @@ export function LandingPage() {
             </p>
           </div>
 
-          <HowItWorks />
+          <Workflow />
         </div>
       </section>
 
       {/* Feature deep-dives */}
       <FeatureDeepDives />
-
-      {/* What you get and the pipeline strip share one tinted chapter */}
-      <div className="bg-muted/50">
-        <section
-          id="features"
-          className="section-y mx-auto w-full max-w-6xl scroll-mt-20 px-4"
-        >
-          <Reveal className="mx-auto max-w-2xl text-center">
-            <Eyebrow className="mb-4">{t("features.badge")}</Eyebrow>
-            <h2 className="display-2 text-balance">{t("features.heading")}</h2>
-            <p className="text-muted-foreground mt-4 text-lg text-pretty">
-              {t("features.body")}
-            </p>
-          </Reveal>
-
-          <FeatureGrid />
-        </section>
-
-        {/* Pipeline strip */}
-        <section className="mx-auto w-full max-w-6xl px-4 pb-20 text-center sm:pb-24 lg:pb-32">
-          <h2 className="display-3 text-balance">{t("pipelineStrip.heading")}</h2>
-          <p className="text-muted-foreground mx-auto mt-4 max-w-xl text-pretty">
-            {t("pipelineStrip.body")}
-          </p>
-
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
-            {BUYER_STEPS.map((step, i) => (
-              <div key={step} className="flex items-center gap-2">
-                <div className="bg-background flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium shadow-sm">
-                  <span className="bg-primary/10 text-primary flex size-5 items-center justify-center rounded-full text-xs font-semibold">
-                    {i + 1}
-                  </span>
-                  {stageLabel(tCrm, step)}
-                </div>
-                {i < BUYER_STEPS.length - 1 && (
-                  <ArrowRight className="text-muted-foreground/50 size-4" />
-                )}
-              </div>
-            ))}
-          </div>
-          <p className="text-muted-foreground mt-6 text-sm">
-            {t("pipelineStrip.note")}
-          </p>
-        </section>
-      </div>
-
-      {/* Trust strip — a short chapter of its own, right before the inverted one */}
-      <section className="section-y mx-auto w-full max-w-6xl px-4">
-        <div className="grid gap-5 sm:grid-cols-3">
-          <TrustItem
-            icon={Smartphone}
-            title={t("trust.everywhere.title")}
-            body={t("trust.everywhere.body")}
-          />
-          <TrustItem
-            icon={ShieldCheck}
-            title={t("trust.data.title")}
-            body={t("trust.data.body")}
-          />
-          <TrustItem
-            icon={Check}
-            title={t("trust.setup.title")}
-            body={t("trust.setup.body")}
-          />
-        </div>
-      </section>
 
       {/* Pricing — the inverted chapter */}
       <section
@@ -279,21 +208,6 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Rentals coming soon */}
-      <section className="section-y">
-        <div className="mx-auto w-full max-w-6xl px-4">
-          <Reveal>
-            <div className="from-primary/10 to-accent/40 relative flex flex-col items-center gap-3 overflow-hidden rounded-3xl border bg-gradient-to-br p-8 text-center sm:p-12">
-              <Tag tone="brand">{t("rentals.badge")}</Tag>
-              <h2 className="display-3 text-balance">{t("rentals.heading")}</h2>
-              <p className="text-muted-foreground max-w-lg text-pretty">
-                {t("rentals.body")}
-              </p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
       <Faq />
 
       {/* Final CTA */}
@@ -312,28 +226,6 @@ export function LandingPage() {
       </section>
 
       <LandingFooter />
-    </div>
-  );
-}
-
-function TrustItem({
-  icon: Icon,
-  title,
-  body,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  title: string;
-  body: string;
-}) {
-  return (
-    <div className="flex gap-3">
-      <div className="bg-primary/10 text-primary flex size-9 shrink-0 items-center justify-center rounded-lg">
-        <Icon className="size-5" />
-      </div>
-      <div>
-        <h3 className="font-semibold">{title}</h3>
-        <p className="text-muted-foreground mt-1 text-sm">{body}</p>
-      </div>
     </div>
   );
 }

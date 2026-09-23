@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { LOCALES, type AppLocale } from "@/i18n/config";
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { PRICES } from "@/lib/billing";
-import { faqEntries } from "@/lib/faq";
+import { faqEntries, LANDING_FAQ_KEYS } from "@/lib/faq";
 import type { MarketingPageContent } from "@/lib/marketing";
 import {
   marketingAlternates,
@@ -203,7 +203,7 @@ export async function landingJsonLd(locale: AppLocale): Promise<JsonLd> {
         "@type": "FAQPage",
         "@id": `${pageUrl}#faq`,
         inLanguage: locale,
-        mainEntity: faqEntries(faq).map(({ question, answer }) => ({
+        mainEntity: faqEntries(faq, LANDING_FAQ_KEYS).map(({ question, answer }) => ({
           "@type": "Question",
           name: question,
           acceptedAnswer: { "@type": "Answer", text: answer },

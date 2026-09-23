@@ -1,27 +1,186 @@
 {
   "hero": {
     "badge": "CRM for independent real‑estate agents",
-    "title": "Your clients, properties, and offers. <accent>Made simple.</accent>",
-    "subtitle": "LeadWing keeps every buyer, seller, viewing, offer and document on one client card, and hands you a ready-to-send follow-up before a lead goes cold.",
+    "title": "Know who needs a <nowrap>follow-up.</nowrap> <accent>Know what to say.</accent>",
+    "subtitle": "Keep your leads in one place, set tasks and reminders for each client, and draft personal follow-ups in their language. You review the message and send it.",
     "ctaPrimary": "Start for free",
     "ctaSecondary": "See how it works",
-    "note": "No password — sign in with Google or a one-time code."
+    "note": "Free for up to {limit} clients. No card required."
   },
   "preview": {
     "toasts": {
       "moved": "{name} → {stage}",
       "newLead": "New lead from Idealista",
       "offerAccepted": "{name} · offer accepted",
-      "reminderSent": "WhatsApp reminder sent to {name}"
+      "reminderSent": "WhatsApp reminder ready for {name}"
     }
   },
-  "mock": {
-    "needsNudge": "Needs a nudge",
-    "draft": "Draft",
-    "to": "To: {name}",
-    "aiDraft": "AI draft · German",
-    "sent": "Sent",
-    "quiet": "{days, plural, one {# day quiet} other {# days quiet}}"
+  "testimonials": {
+    "badge": "Agent feedback",
+    "heading": "Fewer loose ends. A clearer next step.",
+    "elena": {
+      "title": "Client details, finally together",
+      "body": "Keeping track of clients across notes, WhatsApp, Google Docs and Excel was hard to manage. Having one place to organize their details makes that easier."
+    },
+    "adam": {
+      "title": "A reminder for the next follow-up",
+      "body": "Follow-up reminders and built-in tasks help keep the next step in view. Tasks can be attached to each client, with reminders for when they are due."
+    },
+    "note": "Summarized from feedback shared by Elena and Adam."
+  },
+  "howItWorks": {
+    "badge": "How it works",
+    "heading": "From a new lead to your next conversation.",
+    "body": "A name in your notes is easy to lose. Give each enquiry a client card, a next step and a message you can send.",
+    "steps": {
+      "capture": {
+        "title": "Bring the lead into one place",
+        "blurb": "Paste an enquiry from a portal, WhatsApp or email. Check the details LeadWing picks out, then save the client with their budget, language and notes."
+      },
+      "attention": {
+        "title": "See who needs your attention",
+        "blurb": "Set a task and reminder for each client. See what is due and which clients have no recent updates, with viewings and deal details close at hand."
+      },
+      "draft": {
+        "title": "Know what to say next",
+        "blurb": "Draft a personal follow-up in your client’s language. Review it, make it yours, then open it in WhatsApp or email to send."
+      }
+    },
+    "tiles": {
+      "capture": {
+        "enquiry": "“Hi, I’m Sofia. I’m looking for an apartment in Marbella, up to €800,000.”",
+        "action": "Paste enquiry · review details",
+        "details": "Buyer · €800,000 · German"
+      },
+      "attention": {
+        "heading": "Your next steps",
+        "today": "Today",
+        "task": "Follow up after the viewing",
+        "client": "Buyer",
+        "reminder": "Reminder · 10:00",
+        "quietHeading": "No recent client updates",
+        "quietDays": "{days} days"
+      },
+      "draft": {
+        "language": "AI draft · German",
+        "openWhatsApp": "Open in WhatsApp"
+      }
+    }
+  },
+  "trust": {
+    "everywhere": {
+      "title": "Works everywhere",
+      "body": "Desktop and mobile, and installable as an app on your phone's home screen."
+    },
+    "data": {
+      "title": "Your data, yours only",
+      "body": "Every agent's clients are fully isolated. Nobody sees your book but you."
+    },
+    "setup": {
+      "title": "Nothing to set up",
+      "body": "Sign in and start adding clients. No training, no clutter, no per-seat sales calls."
+    }
+  },
+  "pricing": {
+    "heading": "Free to start. One plan when you grow.",
+    "body": "Every feature on both plans. The only difference is how many clients you can hold.",
+    "free": {
+      "name": "Free",
+      "price": "€0",
+      "period": "forever",
+      "limit": "Up to {limit} clients, buyers and sellers together",
+      "allFeatures": "Every feature, nothing gated",
+      "noCard": "No card, no time limit"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "€{amount}",
+      "period": "per month + IVA",
+      "note": "or €{yearly} a year, save {pct}%",
+      "unlimited": "Unlimited clients",
+      "everythingFree": "Everything in Free",
+      "referral": "A free month for every agent you refer"
+    },
+    "founding": "The first {cap} paying agents lock Pro at €{price} a month for life.",
+    "fullPage": "See the full pricing page",
+    "ctaFree": "Start free",
+    "ctaPro": "Start free, upgrade any time"
+  },
+  "finalCta": {
+    "heading": "Bring your first client in today.",
+    "body": "Sign-up takes a minute, and the Free plan needs no card."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you're looking for doesn't exist or was moved.",
+    "cta": "Go to clients",
+    "links": "Try one of these instead:",
+    "home": "Home",
+    "sitemap": "Sitemap — every page on this site",
+    "llms": "llms.txt — a plain-text brief for AI agents"
+  },
+  "faq": {
+    "heading": "Questions agents ask before they start",
+    "body": "Short answers to what we hear most. Anything else, just ask.",
+    "privacyLink": "Read the privacy policy.",
+    "items": {
+      "what": {
+        "q": "What is LeadWing?",
+        "a": "LeadWing is a CRM for independent real-estate agents. It keeps every buyer, seller, property, viewing, offer and document on one client card, across every agency you work with, and drafts follow-ups in your client's language. It runs in the browser on your computer and phone, in English and Spanish."
+      },
+      "free": {
+        "q": "Is there a free plan?",
+        "a": "Yes. Free is free forever and includes every feature. It holds up to {limit} clients, buyers and sellers together, with no card and no time limit."
+      },
+      "price": {
+        "q": "What does Pro cost?",
+        "a": "Pro is €{monthly} a month or €{yearly} a year, plus VAT, for unlimited clients. Everything else is identical to Free."
+      },
+      "card": {
+        "q": "Do I need a card to start?",
+        "a": "No. Sign in with Google or a one-time email code and start adding clients. You only enter a card if you upgrade to Pro."
+      },
+      "agencies": {
+        "q": "I work with several agencies. Does that work?",
+        "a": "That is exactly what LeadWing is built for. Tag each lead with the agency it belongs to and keep your whole book in one place, whoever the deal is with."
+      },
+      "mobile": {
+        "q": "Is there a mobile app?",
+        "a": "LeadWing is a web app that installs on your phone from the browser, so it opens from your home screen like any other app. No app store, nothing to update."
+      },
+      "whatsapp": {
+        "q": "Can I send WhatsApp messages from LeadWing?",
+        "a": "Yes. LeadWing drafts a warm, personal message in your client's language, you read it and tweak it, and one tap opens it in WhatsApp on your phone. Nothing is ever sent without you."
+      },
+      "portals": {
+        "q": "Which portals does it work with?",
+        "a": "Paste an enquiry from Idealista, Fotocasa, Kyero, an email or a WhatsApp, and LeadWing fills in the lead for you: name, phone, language, budget. No retyping."
+      },
+      "import": {
+        "q": "Can I bring my clients from Excel or another CRM?",
+        "a": "Yes. Upload an Excel or CSV file (Google Contacts, Outlook and most CRMs export one), check how the columns match, preview every row, and import. Changed your mind? Undo the whole import in one click."
+      },
+      "privacy": {
+        "q": "Who can see my clients?",
+        "a": "Only you. Every agent's clients are fully isolated; nobody sees your book but you, not even other agents at the same agency."
+      },
+      "export": {
+        "q": "Can I take my data with me?",
+        "a": "Always, on every plan. Export any list as Excel or CSV, or download your whole account from Settings, instantly."
+      },
+      "cancel": {
+        "q": "Can I cancel Pro?",
+        "a": "Any time, from the billing page. You go back to Free at the end of the period you have paid for, and nothing is deleted: everything stays visible and editable, you just can't add clients above the Free limit."
+      },
+      "calendar": {
+        "q": "Does it work with Google Calendar?",
+        "a": "Yes, through a read-only calendar feed. Subscribe to your private link to see LeadWing viewings and meetings in Google Calendar. Google refreshes the feed on its own schedule; changes in Google do not update LeadWing."
+      }
+    },
+    "ask": "Still not sure? Write to"
+  },
+  "footer": {
+    "contactLead": "Questions? Write to us —"
   },
   "onePlace": {
     "badge": "The problem",
@@ -38,68 +197,6 @@
       "docs": "Passport, NIE · 2 files",
       "footer": "All in one place"
     }
-  },
-  "features": {
-    "badge": "What you get",
-    "heading": "The whole deal on one card",
-    "body": "Pipeline stage, properties viewed, offers made, documents signed, and which agency the lead came through.",
-    "items": {
-      "pipeline": {
-        "title": "A pipeline for buyers and sellers",
-        "body": "Drag each client through new, contacted, qualified, viewing and reserved. Sellers get their own flow, pending to qualified."
-      },
-      "clients": {
-        "title": "Everything about each client",
-        "body": "Name, phone, language, nationality, budget and notes. Star the hot ones, hide the cold, and see who to call next."
-      },
-      "deal": {
-        "title": "Properties, viewings, offers and documents",
-        "body": "Log each property a buyer sees, book the viewing, record every offer against the asking price, and keep the contract and IDs on the same card."
-      },
-      "agencies": {
-        "title": "One CRM for every agency you sell for",
-        "body": "Tag each lead with the agency it came through. Your whole book stays in one place, whoever's listing it is.",
-        "tags": "Norma Frank,Solvilla,Drumelia,Direct"
-      }
-    }
-  },
-  "howItWorks": {
-    "badge": "How it works",
-    "heading": "How LeadWing works, in three steps",
-    "body": "Add a client, move them through the pipeline, and let LeadWing handle the follow-up. The whole job, in the order you actually work it.",
-    "steps": {
-      "plan": {
-        "title": "Plan the viewing",
-        "blurb": "Add a buyer and book the tour. LeadWing keeps the date, the reminder and the bell together — and syncs to your Google Calendar so it shows up everywhere you already look."
-      },
-      "pipeline": {
-        "title": "Move them down the pipeline",
-        "blurb": "Drag every buyer through clear stages — new, contacted, qualified, viewing, reserved. Log the offer against the asking price, and watch a deal cross the line."
-      },
-      "followUp": {
-        "title": "Let LeadWing follow up",
-        "blurb": "LeadWing spots clients going quiet and drafts a warm message in their language. You read it, tweak if you like, and send — no blank page, no chasing."
-      }
-    },
-    "tiles": {
-      "calendar": {
-        "month": "June",
-        "weekdays": "M,T,W,T,F,S,S",
-        "event": "Viewing · Villa · 11:00",
-        "synced": "Synced"
-      },
-      "pipeline": {
-        "offer": "Offer"
-      },
-      "followUp": {
-        "sentToast": "Follow-up sent"
-      }
-    }
-  },
-  "pipelineStrip": {
-    "heading": "How a buyer moves through your pipeline",
-    "body": "Every buyer follows a simple journey. Move them forward and the right details unlock at each step.",
-    "note": "Sellers get their own flow too — pending to qualified, with every listing attached."
   },
   "deepDives": {
     "heading": "Stop chasing. Let LeadWing do the <nowrap>follow-ups.</nowrap>",
@@ -169,125 +266,5 @@
         "whatsapp": "One tap to send on WhatsApp"
       }
     }
-  },
-  "trust": {
-    "everywhere": {
-      "title": "Works everywhere",
-      "body": "Desktop and mobile, and installable as an app on your phone's home screen."
-    },
-    "data": {
-      "title": "Your data, yours only",
-      "body": "Every agent's clients are fully isolated. Nobody sees your book but you."
-    },
-    "setup": {
-      "title": "Nothing to set up",
-      "body": "Sign in and start adding clients. No training, no clutter, no per-seat sales calls."
-    }
-  },
-  "pricing": {
-    "heading": "Free to start. One plan when you grow.",
-    "body": "Every feature on both plans. The only difference is how many clients you can hold.",
-    "free": {
-      "name": "Free",
-      "price": "€0",
-      "period": "forever",
-      "limit": "Up to {limit} clients, buyers and sellers together",
-      "allFeatures": "Every feature, nothing gated",
-      "noCard": "No card, no time limit"
-    },
-    "pro": {
-      "name": "Pro",
-      "price": "€{amount}",
-      "period": "per month + IVA",
-      "note": "or €{yearly} a year, save {pct}%",
-      "unlimited": "Unlimited clients",
-      "everythingFree": "Everything in Free",
-      "referral": "A free month for every agent you refer"
-    },
-    "founding": "The first {cap} paying agents lock Pro at €{price} a month for life.",
-    "fullPage": "See the full pricing page",
-    "ctaFree": "Start free",
-    "ctaPro": "Start free, upgrade any time"
-  },
-  "rentals": {
-    "badge": "Coming soon",
-    "heading": "Sales today. Rentals next.",
-    "body": "LeadWing handles your sales pipeline now — long and short-term rentals are on the way, in the same simple flow you already know."
-  },
-  "finalCta": {
-    "heading": "Bring your first client in today.",
-    "body": "Sign-up takes a minute, and the Free plan needs no card."
-  },
-  "notFound": {
-    "title": "Page not found",
-    "body": "The page you're looking for doesn't exist or was moved.",
-    "cta": "Go to clients",
-    "links": "Try one of these instead:",
-    "home": "Home",
-    "sitemap": "Sitemap — every page on this site",
-    "llms": "llms.txt — a plain-text brief for AI agents"
-  },
-  "faq": {
-    "heading": "Questions agents ask before they start",
-    "body": "Short answers to what we hear most. Anything else, just ask.",
-    "privacyLink": "Read the privacy policy.",
-    "items": {
-      "what": {
-        "q": "What is LeadWing?",
-        "a": "LeadWing is a CRM for independent real-estate agents. It keeps every buyer, seller, property, viewing, offer and document on one client card, across every agency you work with, and drafts follow-ups in your client's language. It runs in the browser on your computer and phone, in English and Spanish."
-      },
-      "free": {
-        "q": "Is there a free plan?",
-        "a": "Yes. Free is free forever and includes every feature. It holds up to {limit} clients, buyers and sellers together, with no card and no time limit."
-      },
-      "price": {
-        "q": "What does Pro cost?",
-        "a": "Pro is €{monthly} a month or €{yearly} a year, plus VAT, for unlimited clients. Everything else is identical to Free."
-      },
-      "card": {
-        "q": "Do I need a card to start?",
-        "a": "No. Sign in with Google or a one-time email code and start adding clients. You only enter a card if you upgrade to Pro."
-      },
-      "agencies": {
-        "q": "I work with several agencies. Does that work?",
-        "a": "That is exactly what LeadWing is built for. Tag each lead with the agency it belongs to and keep your whole book in one place, whoever the deal is with."
-      },
-      "mobile": {
-        "q": "Is there a mobile app?",
-        "a": "LeadWing is a web app that installs on your phone from the browser, so it opens from your home screen like any other app. No app store, nothing to update."
-      },
-      "whatsapp": {
-        "q": "Can I send WhatsApp messages from LeadWing?",
-        "a": "Yes. LeadWing drafts a warm, personal message in your client's language, you read it and tweak it, and one tap opens it in WhatsApp on your phone. Nothing is ever sent without you."
-      },
-      "portals": {
-        "q": "Which portals does it work with?",
-        "a": "Paste an enquiry from Idealista, Fotocasa, Kyero, an email or a WhatsApp, and LeadWing fills in the lead for you: name, phone, language, budget. No retyping."
-      },
-      "import": {
-        "q": "Can I bring my clients from Excel or another CRM?",
-        "a": "Yes. Upload an Excel or CSV file (Google Contacts, Outlook and most CRMs export one), check how the columns match, preview every row, and import. Changed your mind? Undo the whole import in one click."
-      },
-      "privacy": {
-        "q": "Who can see my clients?",
-        "a": "Only you. Every agent's clients are fully isolated; nobody sees your book but you, not even other agents at the same agency."
-      },
-      "export": {
-        "q": "Can I take my data with me?",
-        "a": "Always, on every plan. Export any list as Excel or CSV, or download your whole account from Settings, instantly."
-      },
-      "cancel": {
-        "q": "Can I cancel Pro?",
-        "a": "Any time, from the billing page. You go back to Free at the end of the period you have paid for, and nothing is deleted: everything stays visible and editable, you just can't add clients above the Free limit."
-      },
-      "calendar": {
-        "q": "Does it sync with Google Calendar?",
-        "a": "Yes. Viewings and meetings you book in LeadWing appear in Google Calendar through a calendar feed you subscribe to once, and LeadWing reminds you before each one."
-      }
-    },
-    "ask": "Still not sure? Write to"
-  },
-  "footer": {
-    "contactLead": "Questions? Write to us —"
   }
 }

@@ -210,6 +210,10 @@ export default function LoginPage() {
                 </Button>
               </form>
 
+              <p className="text-muted-foreground text-center text-sm text-balance">
+                {t("freeNote")}
+              </p>
+
               <p className="text-muted-foreground text-center text-xs text-balance">
                 {t.rich("legal", {
                   terms: (chunks) => (

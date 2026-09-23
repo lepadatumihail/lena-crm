@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 
 import { asLocale } from "@/i18n/config";
-import { faqEntries } from "@/lib/faq";
+import { faqEntries, LANDING_FAQ_KEYS } from "@/lib/faq";
 import { marketingPath } from "@/lib/routes";
 import { SUPPORT_EMAIL } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -16,7 +16,7 @@ import { FAQ_CARD, FaqList } from "@/components/marketing/faq-list";
 export function Faq() {
   const t = useTranslations("landing.faq");
   const locale = asLocale(useLocale());
-  const entries = faqEntries(t).map(({ key, question, answer }) => ({
+  const entries = faqEntries(t, LANDING_FAQ_KEYS).map(({ key, question, answer }) => ({
     key,
     question,
     answer:
