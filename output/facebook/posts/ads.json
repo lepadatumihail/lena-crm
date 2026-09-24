@@ -8,9 +8,9 @@
   "campaign_id": "6995417076094",
   "adset_id": "6995417079494",
   "status": "LANDING_PAGE_VIEWS, ends Thu 24 Sep 23:59; since 22 Sep ~16:50 the ad links to leadwing.app/start (creative 1140361055322528, same image and text, founder applied the swap); re-review CLEARED and ad + ad set ACTIVE again as of the 22 Sep 18:10 evening check",
-  "dark_post_id": "1279663088571991_122109116961476753",
+  "dark_post_id": "1279663088571991_122110668759476753",
   "dark_post_id_previous": "1279663088571991_122105682405476753",
-  "dark_post_note": "the 22 Sep creative swap minted a new dark post; the old one is orphaned. Check both for comments on every run - neither appears in GET /{page}/posts.",
+  "dark_post_note": "both ads minted NEW dark posts at 2026-09-24T00:21 Madrid (same second on both), with new creative ids but the same image hash, link, copy and call_to_action; not an operator change - nothing was edited from the routine. Older dark posts stay reachable: check the current one plus 1279663088571991_122109116961476753 and 1279663088571991_122105682405476753 for comments.",
   "optimization_goal_previous": "LINK_CLICKS",
   "edit_2026_09_21": {
    "change": "optimization_goal LINK_CLICKS -> REACH",
@@ -39,7 +39,7 @@
    "pixel_status": "GET /act_173026079415266/adspixels returns an empty list - the founder has not created the pixel yet, so the LANDING_PAGE_VIEWS edit stays blocked and the ad set was not touched",
    "runway_note": "end_time is still Tue 22 Sep 23:59 with EUR 16.15 unspent - about 30 hours to absorb it at today's ~EUR 0.65/h"
   },
-  "creative_id": "1140361055322528",
+  "creative_id": "1421207649981623",
   "creative_id_previous": "1083235867424577",
   "ad_id": "6995418317094",
   "end_time": "2026-09-24T23:59:00+02:00",
@@ -184,6 +184,27 @@
    "waste_test": "does not fire: zero audience_network today, lifetime AN share 25%, lifetime cost per click EUR 0.088, today EUR 0.18 per click with LPV at 71% of clicks",
    "engagement": "0 comments on every page post and on both dark posts; inbox empty. The current dark post 122109116961476753 now shows 1 reaction (was 0 at noon) - a reaction, nothing to answer",
    "runway_note": "EUR 4.58 left over ~30 h to Thu 24 Sep 23:59 at a ~EUR 2.5/day pace. Option A stands: no top-up, roughly EUR 1 may expire unspent."
+  },
+  "creative_id_before_2026_09_24": "1140361055322528",
+  "dark_post_id_before_2026_09_24": "1279663088571991_122109116961476753",
+  "observed_2026_09_24T1210": {
+   "spend_eur": 22.78,
+   "budget_remaining_eur": 2.22,
+   "reach": 16366,
+   "impressions": 53448,
+   "link_clicks_reported": 249,
+   "landing_page_views": 87,
+   "day_23_sep_full": "EUR 3.57 / 1492 imp / 1343 reach / cpm 2.39 / 22 link clicks / 16 LPV (73% of clicks, EUR 0.22 per LPV)",
+   "today_24_sep_to_1210": "EUR 1.24 / 497 imp / 456 reach / cpm 2.49 / 9 link clicks / 6 LPV",
+   "today_24_sep_hourly": "delivery in every hour 00:00-12:00, EUR 0.03-0.21 each, no stall",
+   "placements_lifetime": "facebook feed EUR 12.00 / 8938 imp / 63 clicks / 39 LPV; instagram feed EUR 5.47 / 2496 imp / 19 clicks / 12 LPV; audience_network EUR 5.06 / 41876 imp (22% of lifetime spend, all before the 20 Sep placement fix); EUR 0.25 leaked historically to reels/stories/right column, none today",
+   "post_reactions_lifetime": 5,
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none",
+   "waste_test": "does not fire: lifetime AN share 22%, lifetime cost per click EUR 0.091, today EUR 0.14 per click with LPV at 67% of clicks",
+   "runway": "option A stands - ends today 23:59 with EUR 2.22 left; at ~EUR 0.10/h roughly EUR 1 expires unspent, as accepted",
+   "note": "the creative copy still says 'one card with their budget' (banned word) - the ad ends tonight, so it was not touched"
   }
  },
  "rejected_boost": {
@@ -212,10 +233,10 @@
   "campaign_id": "6996508235894",
   "adset_id": "6996508321694",
   "ad_id": "6996508363294",
-  "creative_id": "1299284655540840",
+  "creative_id": "1386955970174446",
   "image_hash": "d548b01472e5ccd44a9627bb28348b71",
   "image": "output/facebook/posts/10-ad-quiet-leads.png",
-  "dark_post_id": "1279663088571991_122110619979476753",
+  "dark_post_id": "1279663088571991_122110668771476753",
   "dark_post_note": "minted by the 23 Sep 22:28 creative swap; the previous one (…122110568883476753) is orphaned but reachable. Neither appears in GET /{page}/posts: check both for comments on every run.",
   "link": "https://leadwing.app/quiet?utm_source=facebook&utm_medium=paid&utm_campaign=quiet-leads-sep26",
   "copy": {
@@ -236,6 +257,22 @@
    "change": "creative 29434012246199370 -> 1299284655540840: link and call_to_action now leadwing.app/quiet (built tonight, deploy 83e3e16), image re-rendered with 'leadwing.app/quiet' printed, message/headline/description unchanged",
    "why": "/start answers the spreadsheet ad in its own words; this ad's hook is quiet leads, so it needs a page that says the same thing",
    "verified_after": "ad ACTIVE / IN_PROCESS (re-review), link verified on link_data.link"
+  },
+  "creative_id_before_2026_09_24": "1299284655540840",
+  "dark_post_id_before_2026_09_24": "1279663088571991_122110619979476753",
+  "status_2026_09_24T1210": "ad + ad set ACTIVE, re-review of the /quiet creative CLEARED, no issues_info, no ad_review_feedback; link verified as leadwing.app/quiet?utm_campaign=quiet-leads-sep26 on link_data.link and the call_to_action",
+  "observed_2026_09_24T1210": {
+   "spend_eur": 1.04,
+   "budget_remaining_eur": 23.97,
+   "reach": 506,
+   "impressions": 509,
+   "cpm": 2.04,
+   "link_clicks": 7,
+   "landing_page_views": 3,
+   "first_delivery": "nothing between creation 23 Sep 21:36 and midnight; delivery started 24 Sep 05:00 and ran every hour to 12:00 (peak 08:00, EUR 0.37 / 169 imp)",
+   "placements": "facebook feed EUR 0.81 / 417 imp / 6 clicks / 2 LPV; instagram feed EUR 0.23 / 92 imp / 1 click / 1 LPV; zero audience_network",
+   "waste_test": "does not fire: no audience_network, cost per click EUR 0.15",
+   "reactions_comments": "0 reactions and 0 comments on its dark post"
   }
  },
  "post_boost_ad": {
@@ -255,6 +292,7 @@
   "status_2026_09_23T2205": "DISAPPROVED (generic 'Advertising Standards' feedback, no policy named). Most likely the housing-ad rule: the digest names homes for sale with prices and a registration deadline, and the ad set targets by age and job title, which housing ads may not. Proposed 5b: boost the 23 Sep product post instead. Appeal only possible from Ads Manager.",
   "history": "first built on the scheduled Fri 25 Sep digest post (ad 6996508595494, creative 1132591039195016) and DISAPPROVED at review, most likely the housing-ad rule; the founder chose 5b on 23 Sep ~22:15, the rejected ad was deleted, campaign + ad set renamed 'Post boost' | 23 Sep ~22:20: the founder saw the 09:30 post still said 'every buyer card' on its image, so on 'do what you think is best' the pending boost ad 6996510974094 was deleted, the old post deleted, a new post published with the new creative and the boost re-created on it (ad 6996512397894, creative 1627298505638074)",
   "status_2026_09_23T2215": "ad PENDING_REVIEW; ad set ACTIVE, EUR 10, 25 Sep 10:00 - 1 Oct 23:59",
-  "status_2026_09_23T2230": "ad IN_PROCESS (review); ad set ACTIVE, EUR 10, 25 Sep 10:00 - 1 Oct 23:59"
+  "status_2026_09_23T2230": "ad IN_PROCESS (review); ad set ACTIVE, EUR 10, 25 Sep 10:00 - 1 Oct 23:59",
+  "status_2026_09_24T1210": "ad 6996512397894 ACTIVE - review CLEARED. Ad set ACTIVE, EUR 10 intact, delivery starts 25 Sep 10:00 Madrid, so no insights row yet (correct, not a stall)."
  }
 }

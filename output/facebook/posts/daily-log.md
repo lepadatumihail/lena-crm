@@ -1,5 +1,19 @@
 # LeadWing Facebook daily log
 
+## Thu 24 Sep 2026 (noon brief, run 12:10 Madrid)
+
+Published: the Thursday founding-offer post went out on time at 09:30 Madrid (1279663088571991_122107059153476753), 0 reactions and 0 comments at 12:10. Queue is now Fri 25 and Wed 30, both verified via /scheduled_posts.
+
+Numbers: followers 0, comments 0 and reactions 0 on every page post, inbox empty (0 conversations). Dark posts: both click ads minted NEW ones at 00:21 Madrid (click …122110668759476753, quiet …122110668771476753, new creative ids, same image, link and copy) — not an operator change; the new click dark post carries the 1 reaction, all six are comment-free. Page insights for 23 Sep: 29 post engagements and 20 page views (the page's best day so far), 0 follows.
+
+Ads, all three ACTIVE — the quiet-leads /quiet re-review and the post-boost review both cleared. Click ad 23 Sep full day €3.57 / 1,492 imp / 22 clicks / 16 LPV (73% of clicks, €0.22 each); 24 Sep to 12:10 €1.24 / 497 imp / 9 clicks / 6 LPV; lifetime €22.78 of €25, €2.22 left, ends tonight 23:59 on option A. Quiet-leads ad started delivering at 05:00 today: €1.04 / 509 imp / 7 clicks / 3 LPV, feed-only, €23.97 left, ends 28 Sep. Post boost: €10 intact, first delivery 25 Sep 10:00, empty insights row is correct. Waste test fires on neither. Account status 1, no disable reason.
+
+Checked, no swap: two searches (EN + ES) found nothing on 24 Sep that displaces Friday's digest — today's coast news is crime, a wildfire death and a wealth-migration feature.
+
+Skipped in one line: Vercel analytics — VERCEL_TOKEN is missing AND api.vercel.com still refuses the proxy CONNECT (403); www.leadwing.app is refused too. Meta's landing_page_view stays the only funnel number.
+
+Surfaced, not acted on: the outreach sheet still carries the rejected v1 message in all 50 rows (Status: 50 × "Not sent", #9 Skip), and the founder's own 01:26 homepage commit puts "client card" back into public copy. Nothing paused, nothing edited, nothing sent.
+
 ## Wed 23 Sep 2026 (22:15-22:35, founder: "do what you think is best")
 
 Site: built `/quiet` + `/es/seguimiento`, the landing for the quiet-leads hook (same ad-landing component, now with a `variant`; catalogs `marketing.quiet`), and removed every "card" from `/start` + `/es/empezar`. typecheck, lint (0 errors) and 699 tests green; commit 83e3e16, Vercel production READY at 22:26, pages verified live with noindex + canonical.
