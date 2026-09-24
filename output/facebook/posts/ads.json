@@ -205,6 +205,22 @@
    "waste_test": "does not fire: lifetime AN share 22%, lifetime cost per click EUR 0.091, today EUR 0.14 per click with LPV at 67% of clicks",
    "runway": "option A stands - ends today 23:59 with EUR 2.22 left; at ~EUR 0.10/h roughly EUR 1 expires unspent, as accepted",
    "note": "the creative copy still says 'one card with their budget' (banned word) - the ad ends tonight, so it was not touched"
+  },
+  "observed_2026_09_24T1810": {
+   "spend_eur": 23.9,
+   "budget_remaining_eur": 1.1,
+   "reach": 16598,
+   "impressions": 53870,
+   "link_clicks_reported": 253,
+   "landing_page_views": 90,
+   "today_24_sep_to_1810": "EUR 2.34 / 914 imp / 814 reach / cpm 2.56 / ctr 2.19% / 13 link clicks / 9 LPV - 69% of clicks, EUR 0.26 per landing view",
+   "today_24_sep_placements": "facebook/feed EUR 1.39 / 544 imp / 11 clicks / 8 LPV; instagram/feed EUR 0.95 / 370 imp / 2 clicks / 1 LPV; audience_network zero",
+   "day_23_sep_full": "EUR 3.59 / 1497 imp / 1349 reach / 22 clicks / 16 LPV",
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none on ad or ad set; no ad_review_feedback",
+   "waste_test": "does not fire: lifetime audience_network share 21% (under half) and lifetime cost per click EUR 0.094 (over EUR 0.05); today feed-only with LPV at 69% of clicks",
+   "run_totals_near_final": "EUR 23.90 of EUR 25 over 19-24 Sep: 53,870 impressions, 16,598 reach, 253 reported link clicks, 90 landing page views (EUR 0.27 each). Ad set ends tonight 24 Sep 23:59 Madrid on option A; EUR 1.10 expires unspent, as accepted. The Fri 25 noon brief confirms it has ended."
   }
  },
  "rejected_boost": {
@@ -273,6 +289,21 @@
    "placements": "facebook feed EUR 0.81 / 417 imp / 6 clicks / 2 LPV; instagram feed EUR 0.23 / 92 imp / 1 click / 1 LPV; zero audience_network",
    "waste_test": "does not fire: no audience_network, cost per click EUR 0.15",
    "reactions_comments": "0 reactions and 0 comments on its dark post"
+  },
+  "observed_2026_09_24T1810": {
+   "spend_eur": 2.75,
+   "budget_remaining_eur": 22.25,
+   "reach": 1049,
+   "impressions": 1119,
+   "link_clicks_reported": 17,
+   "landing_page_views": 10,
+   "today_24_sep_to_1810": "EUR 2.75 / 1119 imp / 1049 reach / cpm 2.46 / ctr 1.79% / 17 link clicks / 10 LPV - 59% of clicks, EUR 0.275 per landing view. All lifetime spend is today; delivery began 05:00.",
+   "today_24_sep_placements": "facebook/feed EUR 1.84 / 864 imp / 14 clicks / 8 LPV; instagram/feed EUR 0.91 / 255 imp / 3 clicks / 2 LPV; audience_network zero",
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none on ad or ad set; no ad_review_feedback",
+   "waste_test": "does not fire: zero audience_network spend, cost per click EUR 0.16",
+   "end_time": "2026-09-28T23:59:00+0200, EUR 22.25 of EUR 25 left"
   }
  },
  "post_boost_ad": {
@@ -293,6 +324,15 @@
   "history": "first built on the scheduled Fri 25 Sep digest post (ad 6996508595494, creative 1132591039195016) and DISAPPROVED at review, most likely the housing-ad rule; the founder chose 5b on 23 Sep ~22:15, the rejected ad was deleted, campaign + ad set renamed 'Post boost' | 23 Sep ~22:20: the founder saw the 09:30 post still said 'every buyer card' on its image, so on 'do what you think is best' the pending boost ad 6996510974094 was deleted, the old post deleted, a new post published with the new creative and the boost re-created on it (ad 6996512397894, creative 1627298505638074)",
   "status_2026_09_23T2215": "ad PENDING_REVIEW; ad set ACTIVE, EUR 10, 25 Sep 10:00 - 1 Oct 23:59",
   "status_2026_09_23T2230": "ad IN_PROCESS (review); ad set ACTIVE, EUR 10, 25 Sep 10:00 - 1 Oct 23:59",
-  "status_2026_09_24T1210": "ad 6996512397894 ACTIVE - review CLEARED. Ad set ACTIVE, EUR 10 intact, delivery starts 25 Sep 10:00 Madrid, so no insights row yet (correct, not a stall)."
- }
+  "status_2026_09_24T1210": "ad 6996512397894 ACTIVE - review CLEARED. Ad set ACTIVE, EUR 10 intact, delivery starts 25 Sep 10:00 Madrid, so no insights row yet (correct, not a stall).",
+  "observed_2026_09_24T1810": {
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none",
+   "spend_eur": 0.0,
+   "budget_remaining_eur": 10.0,
+   "insights": "empty - correct, delivery starts 25 Sep 10:00 Madrid"
+  }
+ },
+ "account_2026_09_24T1810": "status 1, no disable reason, EUR 2.86 balance, EUR 105.79 lifetime spend"
 }

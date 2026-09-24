@@ -1,5 +1,15 @@
 # LeadWing Facebook daily log
 
+## Thu 24 Sep 2026 (evening check, run 18:10 Madrid)
+
+Nothing to answer: 0 comments on all 8 page posts and all 6 ad dark posts, inbox empty (0 conversations), followers 0. Reactions on the dark posts are now 1 each on three of them (click …668759, quiet …668771, old click …109116961), up from 1 in total at noon — noted, not something to reply to. Nothing drafted, nothing sent, nothing edited.
+
+All three ads ACTIVE, no issues_info, no ad_review_feedback, feed-only, zero Audience Network. Click ad's last day: €2.34 / 914 imp / 13 clicks / 9 LPV (69% of clicks, €0.26 each) — FB feed €1.39 / 544 imp / 11 clicks / 8 LPV, IG feed €0.95 / 370 imp / 2 clicks / 1 LPV. It ends tonight 23:59 on option A with €1.10 of €25 unspent; near-final run totals €23.90 / 53,870 imp / 16,598 reach / 253 clicks / 90 landing views (€0.27 per landing view). Quiet-leads ad, day 1 of real delivery: €2.75 / 1,119 imp / 17 clicks / 10 LPV (59%, €0.275 each) — FB feed €1.84 / 864 imp / 14 clicks / 8 LPV, IG feed €0.91 / 255 imp / 3 clicks / 2 LPV; €22.25 left, ends 28 Sep. Post boost: €10 intact, ACTIVE, first delivery 25 Sep 10:00 — the empty insights row is correct. Waste test fires on neither click ad (lifetime AN share 21% and 0%, cost per click €0.09 and €0.16). Account status 1, no disable reason, €2.86 balance.
+
+Skipped in one line: Vercel analytics — VERCEL_TOKEN still missing from this environment and api.vercel.com still refuses the proxy CONNECT.
+
+Still waiting on the founder from noon, not re-asked: the outreach sheet's v1 message text in all 50 rows, and "client card" back in the homepage copy.
+
 ## Thu 24 Sep 2026 (noon brief, run 12:10 Madrid)
 
 Published: the Thursday founding-offer post went out on time at 09:30 Madrid (1279663088571991_122107059153476753), 0 reactions and 0 comments at 12:10. Queue is now Fri 25 and Wed 30, both verified via /scheduled_posts.
