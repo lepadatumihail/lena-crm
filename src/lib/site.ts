@@ -46,6 +46,12 @@ export const SITE_LOCALE = "en_GB";
 export const SUPPORT_EMAIL = "info@leadwing.app";
 
 /**
+ * The founder's WhatsApp, published on the ad landings as the "rather see it
+ * first?" option for visitors not ready to create an account.
+ */
+export const FOUNDER_WHATSAPP = "+34628825167";
+
+/**
  * Public profiles owned by the brand, for the Organization's `sameAs`. This is
  * what ties the domain to the listings carrying the same name, so it only
  * belongs here once a profile really exists and says the same name and URL.

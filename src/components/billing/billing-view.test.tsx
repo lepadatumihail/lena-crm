@@ -35,6 +35,7 @@ const founder: Profile = {
   plan: "founding_monthly",
   plan_monthly_eur: 19,
   pro_until: null,
+  signup_source: null,
   created_at: NOW,
   updated_at: NOW,
 };

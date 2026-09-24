@@ -95,6 +95,10 @@ export function PrivacyEn() {
           store a password.
         </li>
         <li>
+          How you found us: if you create your account from one of our pages, that page and
+          the campaign tags in its address (for example, which of our ads you tapped).
+        </li>
+        <li>
           Billing, on Pro only: the details Stripe collects at checkout, such as name,
           billing address, VAT number and payment method, and the status of your
           subscription. Card numbers go straight to Stripe and never touch our servers.
@@ -134,6 +138,11 @@ export function PrivacyEn() {
         <li>
           To understand how the public website is used: our legitimate interest, using
           statistics that do not identify you.
+        </li>
+        <li>
+          To learn which of our ads and pages bring the agents who sign up, from the tags
+          recorded with your account: our legitimate interest in knowing what our marketing
+          achieves (art. 6(1)(f)).
         </li>
         <li>
           To measure our advertising on Facebook and Instagram with the Meta Pixel: your
@@ -340,7 +349,9 @@ export function PrivacyEn() {
       <p>
         Website statistics come from Vercel Web Analytics, which sets no cookies and stores
         nothing on your device: it counts page views with a hashed identifier that is
-        discarded within a day.
+        discarded within a day. On the pages our ads link to, we also count each step
+        ourselves (page seen, sign-up opened, code sent, signed in) together with the
+        page’s campaign tags, again with no cookie and nothing that identifies you.
       </p>
       <p>
         If you accept the cookie notice, the Meta Pixel (Meta Platforms Ireland Limited) loads

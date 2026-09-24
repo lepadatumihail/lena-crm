@@ -88,6 +88,7 @@ const profile: Profile = {
   plan: null,
   plan_monthly_eur: null,
   pro_until: null,
+  signup_source: null,
   created_at: "2026-08-01T09:00:00Z",
   updated_at: "2026-08-01T09:00:00Z",
 };

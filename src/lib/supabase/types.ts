@@ -744,6 +744,7 @@ export type Database = {
           plan: Database["public"]["Enums"]["billing_plan"] | null;
           plan_monthly_eur: number | null;
           pro_until: string | null;
+          signup_source: Json | null;
           created_at: string;
           updated_at: string;
         };
@@ -763,6 +764,7 @@ export type Database = {
           plan?: Database["public"]["Enums"]["billing_plan"] | null;
           plan_monthly_eur?: number | null;
           pro_until?: string | null;
+          signup_source?: Json | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -782,6 +784,7 @@ export type Database = {
           plan?: Database["public"]["Enums"]["billing_plan"] | null;
           plan_monthly_eur?: number | null;
           pro_until?: string | null;
+          signup_source?: Json | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -913,6 +916,43 @@ export type Database = {
           delivered_at?: string | null;
           delivery_error?: string | null;
           created_at?: string;
+        };
+        Relationships: [];
+      };
+      site_events: {
+        Row: {
+          id: number;
+          created_at: string;
+          event: string;
+          path: string | null;
+          utm_source: string | null;
+          utm_medium: string | null;
+          utm_campaign: string | null;
+          utm_content: string | null;
+          in_app: boolean;
+          mobile: boolean;
+        };
+        Insert: {
+          created_at?: string;
+          event: string;
+          path?: string | null;
+          utm_source?: string | null;
+          utm_medium?: string | null;
+          utm_campaign?: string | null;
+          utm_content?: string | null;
+          in_app?: boolean;
+          mobile?: boolean;
+        };
+        Update: {
+          created_at?: string;
+          event?: string;
+          path?: string | null;
+          utm_source?: string | null;
+          utm_medium?: string | null;
+          utm_campaign?: string | null;
+          utm_content?: string | null;
+          in_app?: boolean;
+          mobile?: boolean;
         };
         Relationships: [];
       };

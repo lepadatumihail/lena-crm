@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import {
   ArrowRight,
@@ -15,10 +14,15 @@ import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { FOUNDING_CAP, PRICES } from "@/lib/billing";
 import type { UnlistedRoute } from "@/lib/routes";
 import { marketingMetadata } from "@/lib/seo";
-import { Button } from "@/components/ui/button";
+import { FOUNDER_WHATSAPP } from "@/lib/site";
+import { whatsappLink } from "@/lib/whatsapp";
 import { MarketingNav } from "@/components/marketing-nav";
 import { Reveal } from "@/components/reveal";
 import { Eyebrow } from "@/components/marketing/eyebrow";
+import { FilmPlayer } from "@/components/marketing/film-player";
+import { LandingViewBeacon } from "@/components/marketing/landing-view-beacon";
+import { SeeItFirst } from "@/components/marketing/see-it-first";
+import { SignUpDialog } from "@/components/marketing/sign-up-dialog";
 import { AppPreview } from "@/components/landing/app-preview";
 import { LandingFooter } from "@/components/landing/footer";
 
@@ -52,10 +56,12 @@ export async function adLandingMetadata(
 
 /**
  * Where a Facebook ad lands. The page answers exactly what the ad asked and
- * nothing else: one headline in the same words, the live app board, three
- * steps, one action repeated at the end. The nav is the minimal one, so the
- * only way forward is the button. Same stage and type as the home page, so
- * it reads as the same product.
+ * nothing else: one headline in the same words, the live app board, the film,
+ * three steps, one action repeated at the end. The nav is the minimal one, so
+ * the way forward is the button, which signs up in a dialog on this page
+ * rather than on a second one; beside it, WhatsApp for anyone who would
+ * rather see it first. Each step is counted anonymously (site_events). Same
+ * stage and type as the home page, so it reads as the same product.
  */
 export async function AdLandingPage({
   variant,
@@ -65,10 +71,18 @@ export async function AdLandingPage({
   locale: AppLocale;
 }) {
   const t = await getTranslations({ locale, namespace: `marketing.${variant}` });
+  const tAd = await getTranslations({ locale, namespace: "marketing.adLanding" });
   const changes = STEPS.map((key, i) => ({ key, icon: CHANGE_ICONS[variant][i] }));
+  const whatsapp = whatsappLink(FOUNDER_WHATSAPP, tAd("seeItFirst.message"));
+  const cta = (
+    <>
+      {t("cta")} <ArrowRight />
+    </>
+  );
 
   return (
     <div className="flex flex-1 flex-col">
+      <LandingViewBeacon />
       <MarketingNav variant="minimal" />
 
       <section className="px-3 pt-2 sm:px-4 sm:pt-3">
@@ -94,14 +108,20 @@ export async function AdLandingPage({
             <p className="text-stage-foreground/70 mt-5 max-w-xl text-base text-pretty sm:mt-6 sm:text-lg lg:text-xl dark:font-light dark:text-stage-foreground/65">
               {t("subtitle")}
             </p>
-            <Button asChild size="pill" className="mt-8 h-auto min-h-11 max-w-full px-6 py-2.5 text-center leading-snug text-balance whitespace-normal sm:mt-9">
-              <Link href="/login">
-                {t("cta")} <ArrowRight />
-              </Link>
-            </Button>
+            <SignUpDialog className="mt-8 h-auto min-h-11 max-w-full px-6 py-2.5 text-center leading-snug text-balance whitespace-normal sm:mt-9">
+              {cta}
+            </SignUpDialog>
             <p className="text-stage-foreground/55 mt-5 max-w-sm text-sm text-pretty">
               {t("note", { limit: FREE_CLIENT_LIMIT })}
             </p>
+            {whatsapp && (
+              <SeeItFirst
+                href={whatsapp}
+                question={tAd("seeItFirst.question")}
+                action={tAd("seeItFirst.action")}
+                className="text-stage-foreground/75 mt-3"
+              />
+            )}
           </div>
         </div>
 
@@ -109,6 +129,24 @@ export async function AdLandingPage({
           <AppPreview />
         </div>
       </section>
+
+      {/* The 30-second film. Its on-screen text is English, so the Spanish pages skip it. */}
+      {locale === "en" && (
+        <section className="section-y">
+          <div className="mx-auto w-full max-w-5xl px-4">
+            <Reveal className="mx-auto max-w-2xl text-center">
+              <Eyebrow className="mb-4">{tAd("film.eyebrow")}</Eyebrow>
+              <h2 className="display-2 text-balance">{tAd("film.heading")}</h2>
+            </Reveal>
+            <FilmPlayer
+              className="mt-10"
+              label={tAd("film.label")}
+              soundOn={tAd("film.soundOn")}
+              soundOff={tAd("film.soundOff")}
+            />
+          </div>
+        </section>
+      )}
 
       {/* Three steps, in the order the ad promised them. */}
       <section className="section-y">
@@ -163,11 +201,17 @@ export async function AdLandingPage({
           <p className="text-muted-foreground mx-auto mt-4 max-w-md text-lg text-pretty">
             {t("final.body")}
           </p>
-          <Button asChild size="pill" className="mt-8 h-auto min-h-11 max-w-full px-6 py-2.5 text-center leading-snug text-balance whitespace-normal">
-            <Link href="/login">
-              {t("cta")} <ArrowRight />
-            </Link>
-          </Button>
+          <SignUpDialog className="mt-8 h-auto min-h-11 max-w-full px-6 py-2.5 text-center leading-snug text-balance whitespace-normal">
+            {cta}
+          </SignUpDialog>
+          {whatsapp && (
+            <SeeItFirst
+              href={whatsapp}
+              question={tAd("seeItFirst.question")}
+              action={tAd("seeItFirst.action")}
+              className="text-muted-foreground mt-4"
+            />
+          )}
           <p className="text-muted-foreground mx-auto mt-6 max-w-md text-sm">
             {t("founding", { price: PRICES.founding.monthly, cap: FOUNDING_CAP })}
           </p>

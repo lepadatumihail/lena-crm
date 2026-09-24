@@ -1,0 +1,50 @@
+import { isInAppBrowser } from "@/lib/in-app-browser";
+import { readUtm } from "@/lib/signup-source";
+
+/**
+ * The ad-landing funnel, one step at a time: the page was seen, the sign-up
+ * dialog opened, Google or an email code was tried, the visitor got in, or
+ * chose WhatsApp instead. Each step is stored anonymously in site_events
+ * (no cookie, no identifier, no IP), so the drop between two steps shows
+ * without Vercel's dashboard and without a consent prompt.
+ */
+export const SITE_EVENTS = [
+  "landing_view",
+  "signup_open",
+  "google_start",
+  "code_sent",
+  "signed_in",
+  "whatsapp_click",
+] as const;
+
+export type SiteEvent = (typeof SITE_EVENTS)[number];
+
+export const SITE_EVENT_ENDPOINT = "/api/site-event";
+
+export function isSiteEvent(value: unknown): value is SiteEvent {
+  return (SITE_EVENTS as readonly unknown[]).includes(value);
+}
+
+/** Fire and forget from the browser; survives the page navigating away. */
+export function trackSiteEvent(event: SiteEvent): void {
+  if (typeof window === "undefined") return;
+  const ua = navigator.userAgent;
+  const body = JSON.stringify({
+    event,
+    path: window.location.pathname,
+    ...readUtm(window.location.search),
+    in_app: isInAppBrowser(ua),
+    mobile: /Mobi|Android/i.test(ua),
+  });
+  try {
+    if (navigator.sendBeacon?.(SITE_EVENT_ENDPOINT, new Blob([body], { type: "application/json" }))) return;
+  } catch {
+    // Fall through to fetch.
+  }
+  void fetch(SITE_EVENT_ENDPOINT, {
+    method: "POST",
+    body,
+    headers: { "content-type": "application/json" },
+    keepalive: true,
+  }).catch(() => null);
+}

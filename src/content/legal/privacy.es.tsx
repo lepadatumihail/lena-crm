@@ -96,6 +96,11 @@ export function PrivacyEs() {
           guardamos una contraseña.
         </li>
         <li>
+          Cómo nos encontraste: si creas tu cuenta desde una de nuestras páginas, esa página y
+          las etiquetas de campaña de su dirección (por ejemplo, en cuál de nuestros anuncios
+          pulsaste).
+        </li>
+        <li>
           Facturación, solo en Pro: los datos que Stripe recoge al pagar, como nombre,
           dirección de facturación, NIF-IVA y método de pago, y el estado de tu suscripción.
           Los números de tarjeta van directamente a Stripe y nunca pasan por nuestros
@@ -135,6 +140,11 @@ export function PrivacyEs() {
         <li>
           Entender cómo se usa la web pública: nuestro interés legítimo, con estadísticas que
           no te identifican.
+        </li>
+        <li>
+          Saber qué anuncios y páginas nos traen a los agentes que se registran, a partir de
+          las etiquetas guardadas con tu cuenta: nuestro interés legítimo en conocer el
+          resultado de nuestro marketing (art. 6.1.f).
         </li>
         <li>
           Medir nuestra publicidad en Facebook e Instagram con el píxel de Meta: tu
@@ -360,7 +370,10 @@ export function PrivacyEs() {
       <p>
         Las estadísticas de la web provienen de Vercel Web Analytics, que no instala cookies
         ni guarda nada en tu dispositivo: cuenta las visitas con un identificador cifrado que
-        se descarta en menos de un día.
+        se descarta en menos de un día. En las páginas a las que enlazan nuestros anuncios
+        también contamos nosotros cada paso (página vista, registro abierto, código enviado,
+        sesión iniciada) junto con las etiquetas de campaña de la página, igualmente sin
+        cookies y sin nada que te identifique.
       </p>
       <p>
         Si aceptas el aviso de cookies, el píxel de Meta (Meta Platforms Ireland Limited) se

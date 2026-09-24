@@ -95,7 +95,7 @@
         "body": "LeadWing spots who has gone quiet and drafts the next message for you."
       },
       "three": {
-        "title": "Your book, on your account",
+        "title": "Your clients, on your account",
         "body": "LeadWing is yours, not the agency's. Your clients stay with you."
       }
     },
@@ -141,7 +141,7 @@
         "body": "The next message is drafted for you, in the buyer's language. Read, tweak, send."
       },
       "three": {
-        "title": "Your book, on your account",
+        "title": "Your clients, on your account",
         "body": "LeadWing is yours, not the agency's. Your clients stay with you."
       }
     },
@@ -149,6 +149,20 @@
     "final": {
       "heading": "Your buyers are waiting for a message. It's already written.",
       "body": "Sign-up takes a minute, and the Free plan needs no card."
+    }
+  },
+  "adLanding": {
+    "seeItFirst": {
+      "question": "Rather see it first?",
+      "action": "Message Mihail on WhatsApp",
+      "message": "Hi Mihail, I found LeadWing and I'd like to see it before I sign up."
+    },
+    "film": {
+      "eyebrow": "See it first",
+      "heading": "LeadWing in 30 seconds.",
+      "label": "A 30-second film: a buyer goes quiet, LeadWing shows who needs a follow-up and drafts it in their language.",
+      "soundOn": "Sound on",
+      "soundOff": "Sound off"
     }
   }
 }

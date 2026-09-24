@@ -150,5 +150,19 @@
       "heading": "Tus compradores esperan un mensaje. Ya está escrito.",
       "body": "Registrarse lleva un minuto y el plan gratuito no pide tarjeta."
     }
+  },
+  "adLanding": {
+    "seeItFirst": {
+      "question": "¿Prefieres verlo primero?",
+      "action": "Escribe a Mihail por WhatsApp",
+      "message": "Hola Mihail, he visto LeadWing y me gustaría verlo antes de registrarme."
+    },
+    "film": {
+      "eyebrow": "Míralo primero",
+      "heading": "LeadWing en 30 segundos.",
+      "label": "Un vídeo de 30 segundos: un comprador deja de responder, LeadWing te muestra a quién escribir y te redacta el mensaje en su idioma.",
+      "soundOn": "Activar sonido",
+      "soundOff": "Silenciar"
+    }
   }
 }

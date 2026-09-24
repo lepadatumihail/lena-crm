@@ -2,6 +2,9 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { asJson, parseSignupSource, type SignupSource } from "@/lib/signup-source";
+import { recordSiteEvent } from "@/lib/site-events-server";
 import { LOCALE_COOKIE, isLocale } from "@/i18n/config";
 import { localeCookieOptions } from "@/i18n/cookie";
 
@@ -20,6 +23,7 @@ export async function GET(request: Request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       await adoptProfileLocale(supabase, data.user?.id);
+      await recordGoogleSignupSource(data.user?.id, parseSignupSource(searchParams.get("src")));
       const forwardedHost = request.headers.get("x-forwarded-host");
       const isLocalEnv = process.env.NODE_ENV === "development";
       const base =
@@ -29,6 +33,29 @@ export async function GET(request: Request) {
   }
 
   return NextResponse.redirect(`${origin}/login?error=auth`);
+}
+
+/**
+ * A Google sign-up can't carry metadata the way the email code does, so the
+ * page it started on sends its utm tags here. They go on the profile only if
+ * it was created in the last few minutes and has no source yet: an existing
+ * agent signing in from an ad keeps the source they joined with. The step is
+ * also counted in site_events. Best effort throughout.
+ */
+async function recordGoogleSignupSource(userId: string | undefined, source: SignupSource | null) {
+  if (!userId || !source) return;
+  try {
+    const recent = new Date(Date.now() - 10 * 60 * 1000).toISOString();
+    await createAdminClient()
+      .from("profiles")
+      .update({ signup_source: asJson(source) })
+      .eq("id", userId)
+      .is("signup_source", null)
+      .gte("created_at", recent);
+    await recordSiteEvent({ event: "signed_in", path: source.landing, ...source });
+  } catch (err) {
+    console.error("signup source not recorded:", err);
+  }
 }
 
 /** A device without the language cookie takes the language saved on the profile. */
