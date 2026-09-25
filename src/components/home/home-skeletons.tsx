@@ -22,7 +22,7 @@ const TILE_LABELS = ["w-24", "w-20", "w-28", "w-32"];
 
 export function StatTilesSkeleton() {
   return (
-    <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 max-md:order-2 xl:grid-cols-4">
       <Loading />
       {TILE_LABELS.map((width) => (
         <div

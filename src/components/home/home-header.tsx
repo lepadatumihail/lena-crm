@@ -16,7 +16,8 @@ export function HomeHeader({ now }: { now: Date }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-3">
       <Greeting nowISO={now.toISOString()} />
-      <div className="flex flex-wrap gap-2">
+      {/* On a phone the tab bar's + does all three. */}
+      <div className="hidden flex-wrap gap-2 md:flex">
         <Button asChild size="sm">
           <Link href="/clients/new?side=buyer">
             <Plus /> {t("actions.newBuyer")}

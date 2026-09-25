@@ -25,7 +25,8 @@ export type StatTile = {
  */
 export function StatTiles({ tiles }: { tiles: StatTile[] }) {
   return (
-    <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+    // Below the day's work on a phone (see HomeLayout).
+    <div className="grid grid-cols-2 gap-3 max-md:order-2 xl:grid-cols-4">
       {tiles.map((tile) => (
         <Link
           key={tile.label}

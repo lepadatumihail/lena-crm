@@ -3,6 +3,8 @@ import type { ReactNode } from "react";
 /**
  * Where Home's sections sit. The page fills the slots with streamed sections
  * and loading.tsx fills them with skeletons, so the two cannot drift apart.
+ * On a phone the day's work comes first: Needs attention, tasks and what's
+ * next move above the figures (the tiles carry their own phone order).
  */
 export function HomeLayout({
   notice,
@@ -24,18 +26,18 @@ export function HomeLayout({
   recent: ReactNode;
 }) {
   return (
-    <div className="space-y-5">
+    <div className="flex flex-col gap-5">
       {notice}
       {header}
       {summary}
-      <div className="grid gap-5 lg:grid-cols-5">
+      <div className="grid gap-5 max-md:order-1 lg:grid-cols-5">
         <div className="flex min-w-0 flex-col gap-5 lg:col-span-3">
           {attention}
           {tasks}
         </div>
         <div className="min-w-0 lg:col-span-2">{upcoming}</div>
       </div>
-      {recent}
+      <div className="max-md:order-3">{recent}</div>
     </div>
   );
 }
