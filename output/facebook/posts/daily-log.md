@@ -1,5 +1,9 @@
 # LeadWing Facebook daily log
 
+## Fri 25 Sep 2026 (evening check, run 18:10 Madrid)
+
+Nothing new and both ads healthy: 0 comments on all 10 page posts and all 6 dark posts, inbox empty, 0 followers, reactions unchanged (1 each on three dark posts). Quiet-leads €7.34/€25, 2,604 feed-only impressions, 41 clicks, 26 landing views (€0.28 each, 63% of clicks) — waste test does not fire. Post boost €0.30/€10, 95 impressions since its 10:00 start, 0 engagement actions yet; delivery is slow but 15× the noon reading, so not a stall — judged on a full day at the 26 Sep noon brief. Account healthy (status 1, €2.23 balance). Nothing approved, nothing published, nothing edited.
+
 ## Fri 25 Sep 2026 (noon brief, run 12:10 Madrid)
 
 Published: the Friday digest went out on time at 09:30 Madrid with the editorial-photo card (1279663088571991_122110562607476753), 0 reactions and 0 comments at 12:10. Queue is now Wed 30 Sep 09:30 alone, verified via /scheduled_posts. Monday's digest is left for the Sunday 27 sitting as decided.
