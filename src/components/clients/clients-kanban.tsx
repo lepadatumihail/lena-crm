@@ -5,7 +5,8 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   DndContext,
   DragOverlay,
-  PointerSensor,
+  MouseSensor,
+  TouchSensor,
   useDraggable,
   useDroppable,
   useSensor,
@@ -110,8 +111,9 @@ function KanbanCard({
       style={style}
       {...attributes}
       {...listeners}
+      // No touch-none: a swipe across a card scrolls the board; a long press drags.
       className={cn(
-        "cursor-grab touch-none active:cursor-grabbing",
+        "cursor-grab select-none active:cursor-grabbing [-webkit-touch-callout:none]",
         isDragging && "opacity-40"
       )}
       onClick={() => onOpen(client.id)}
@@ -137,7 +139,7 @@ function KanbanColumn({
   const { setNodeRef, isOver } = useDroppable({ id: stage });
 
   return (
-    <div className="flex w-72 shrink-0 flex-col">
+    <div className="flex w-[85vw] max-w-72 shrink-0 snap-start flex-col sm:w-72">
       <div className="flex h-9 items-center gap-2 px-1">
         <span
           aria-hidden
@@ -187,8 +189,11 @@ export function ClientsKanban({
   onOpen: (id: string) => void;
 }) {
   const [activeId, setActiveId] = useState<string | null>(null);
+  // A mouse drags after 8px; a finger has to hold for a moment first, so
+  // swiping across the board scrolls it instead of moving someone's stage.
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 8 } })
   );
   const stages = stagesForSide(side);
   const activeClient = data.find((c) => c.id === activeId) ?? null;
@@ -214,7 +219,7 @@ export function ClientsKanban({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="flex gap-3 overflow-x-auto pb-4">
+      <div className="flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto pb-4 sm:snap-none">
         {stages.map((stage) => (
           <KanbanColumn
             key={stage}
