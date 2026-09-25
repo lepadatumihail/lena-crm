@@ -59,7 +59,8 @@ describe("language routing", () => {
   });
 
   it.each(["/quiet", "/start"])("keeps a Spanish browser on the English ad landing %s", async (pathname) => {
-    for (const headers of [{ "accept-language": "es-ES,es;q=0.9" }, { cookie: "NEXT_LOCALE=es" }]) {
+    const spanish: Record<string, string>[] = [{ "accept-language": "es-ES,es;q=0.9" }, { cookie: "NEXT_LOCALE=es" }];
+    for (const headers of spanish) {
       const response = await visit(pathname, headers);
       expect(response.status, JSON.stringify(headers)).not.toBe(307);
       expect(response.headers.get("location")).toBeNull();
