@@ -1,5 +1,6 @@
 import { getClientRows } from "@/lib/data/clients";
 import { ClientsView } from "@/components/clients/clients-view";
+import { FOLLOW_UP_TAB } from "@/lib/activity";
 import { stagesForSide, type ClientSide } from "@/lib/crm";
 
 /** Shared list screen rendered by /clients/buyers and /clients/sellers. */
@@ -13,13 +14,14 @@ export async function ClientsScreen({
   side: ClientSide;
   view: "table" | "kanban";
   includeInactive: boolean;
-  /** Optional `?stage=` from the URL; ignored unless it belongs to this side. */
+  /** Optional `?stage=` from the URL: a stage of this side or Needs follow-up. */
   stage?: string;
   /** Optional `?agency=` from the URL; the list checks it against its rows. */
   agency?: string;
 }) {
   const initialStage =
-    stage && (stagesForSide(side) as readonly string[]).includes(stage)
+    stage &&
+    (stage === FOLLOW_UP_TAB || (stagesForSide(side) as readonly string[]).includes(stage))
       ? stage
       : "all";
   const clients = await getClientRows(side, { includeInactive });
@@ -30,6 +32,7 @@ export async function ClientsScreen({
       side={side}
       view={view}
       includeInactive={includeInactive}
+      now={new Date().toISOString()}
       initialStage={initialStage}
       initialAgency={agency}
     />

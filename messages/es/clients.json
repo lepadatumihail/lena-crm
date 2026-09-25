@@ -25,6 +25,8 @@
       "updateFailed": "No se ha podido actualizar"
     },
     "all": "Todos",
+    "followUp": "Por contactar",
+    "followUpEmpty": "Estás al día. No hay nadie por contactar.",
     "typeAll": "Todos los tipos",
     "agencyAll": "Todas",
     "agencyNone": "Sin agencia",
@@ -57,6 +59,22 @@
   "priority": {
     "flag": "Marcar como prioridad",
     "unflag": "Quitar la prioridad"
+  },
+  "latest": {
+    "none": "Aún sin contactos registrados",
+    "note": "Nota",
+    "channels": {
+      "whatsapp": "WhatsApp",
+      "call": "Llamada",
+      "email": "Email",
+      "meeting": "Reunión",
+      "other": "Contacto"
+    }
+  },
+  "reach": {
+    "whatsapp": "WhatsApp a {name}",
+    "call": "Llamar a {name}",
+    "email": "Enviar un email a {name}"
   },
   "table": {
     "name": "Nombre",

@@ -25,6 +25,8 @@
       "updateFailed": "Couldn't update"
     },
     "all": "All",
+    "followUp": "Needs follow-up",
+    "followUpEmpty": "All caught up. Nobody needs a follow-up.",
     "typeAll": "All types",
     "agencyAll": "All",
     "agencyNone": "No agency",
@@ -57,6 +59,22 @@
   "priority": {
     "flag": "Flag priority",
     "unflag": "Unflag priority"
+  },
+  "latest": {
+    "none": "No contact logged yet",
+    "note": "Note",
+    "channels": {
+      "whatsapp": "WhatsApp",
+      "call": "Call",
+      "email": "Email",
+      "meeting": "Meeting",
+      "other": "Contact"
+    }
+  },
+  "reach": {
+    "whatsapp": "WhatsApp {name}",
+    "call": "Call {name}",
+    "email": "Email {name}"
   },
   "table": {
     "name": "Name",

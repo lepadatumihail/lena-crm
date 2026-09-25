@@ -1,3 +1,5 @@
+import { STALE_AFTER_DAYS } from "@/lib/attention";
+import { defaultStageForSide, type ClientSide } from "@/lib/crm";
 import type { ContactChannel } from "@/lib/supabase/types";
 
 /**
@@ -59,4 +61,32 @@ export function lastTouchedAt(client: {
   updated_at: string;
 }): string {
   return client.last_contacted_at ?? client.updated_at;
+}
+
+/** The lists' Needs follow-up tab; it shares `?stage=` with the stage tabs. */
+export const FOLLOW_UP_TAB = "follow-up";
+
+/**
+ * Whether a client belongs in a list's Needs follow-up tab: Home's Needs
+ * attention rules applied to one row. An active buyer who isn't reserved
+ * and has been quiet for STALE_AFTER_DAYS (from lastTouchedAt, as in
+ * getAttentionSignals), or a new lead nobody has contacted yet: a buyer
+ * still New, a seller still Pending.
+ */
+export function needsFollowUp(
+  client: {
+    side: ClientSide;
+    stage: string;
+    is_active: boolean;
+    last_contacted_at: string | null;
+    updated_at: string;
+  },
+  nowMs: number
+): boolean {
+  if (!client.is_active) return false;
+  if (client.stage === defaultStageForSide(client.side) && client.last_contacted_at == null) {
+    return true;
+  }
+  if (client.side !== "buyer" || client.stage === "reserved") return false;
+  return Date.parse(lastTouchedAt(client)) <= nowMs - STALE_AFTER_DAYS * 86_400_000;
 }

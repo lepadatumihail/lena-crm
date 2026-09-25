@@ -4,6 +4,7 @@ import type { ComponentProps, ReactNode } from "react";
 import Link from "next/link";
 import { LayoutGrid, List } from "lucide-react";
 
+import { TONE_BG, TONE_INK, type Tone } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 import {
   Select,
@@ -130,6 +131,10 @@ export type ToolbarTab = {
   count?: number;
   /** A TONE_SOLID class for the dot before the label. */
   dot?: string;
+  /** An icon before the label, for a tab that is not a stage. */
+  icon?: ReactNode;
+  /** Tints a count above zero, for a tab whose rows wait on the agent. */
+  countTone?: Tone;
 };
 
 /**
@@ -170,7 +175,7 @@ export function ToolbarTabs({
               aria-selected={active}
               onClick={() => onChange(tab.value)}
               className={cn(
-                "-mb-px flex h-9 shrink-0 items-center gap-1.5 border-b-2 px-3 text-xs font-medium whitespace-nowrap transition-colors duration-150 outline-none focus-visible:bg-muted/60",
+                "-mb-px flex h-9 shrink-0 items-center gap-1.5 border-b-2 px-3 text-xs font-medium whitespace-nowrap transition-colors duration-150 outline-none focus-visible:bg-muted/60 [&>svg]:size-3.5 [&>svg]:shrink-0",
                 active
                   ? "border-foreground text-foreground"
                   : "text-muted-foreground hover:text-foreground border-transparent"
@@ -179,12 +184,17 @@ export function ToolbarTabs({
               {tab.dot ? (
                 <span aria-hidden className={cn("size-1.5 rounded-full", tab.dot)} />
               ) : null}
+              {tab.icon}
               {tab.label}
               {tab.count != null ? (
                 <span
                   className={cn(
                     "inline-flex h-[18px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] tabular-nums",
-                    active ? "bg-foreground/10 text-foreground" : "bg-muted text-muted-foreground"
+                    tab.countTone && tab.count > 0
+                      ? cn(TONE_BG[tab.countTone], TONE_INK[tab.countTone], "font-medium")
+                      : active
+                        ? "bg-foreground/10 text-foreground"
+                        : "bg-muted text-muted-foreground"
                   )}
                 >
                   {tab.count}

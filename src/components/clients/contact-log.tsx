@@ -294,42 +294,58 @@ function LogContactForm({
 }
 
 /**
- * Contact logging for one client: `logStarted` logs a message or call the
- * agent just started and opens the next-step dialog; `openLog` opens the
- * dialog to log a contact that happened elsewhere. Render `dialog` once.
+ * Contact logging with one next-step dialog for any client: `logStarted`
+ * logs a message or call the agent just started and opens the dialog;
+ * `openLog` opens it to log a contact that happened elsewhere. A list keeps
+ * one of these above its rows, because a row can leave the list the moment
+ * its client is contacted (Needs follow-up), and the dialog must outlive it.
+ * Render `dialog` once.
  */
-export function useContactLog(client: ContactTarget) {
+export function useContactLogger() {
   const t = useTranslations("clientDetail.contactLog");
   const [state, setState] = useState<{
     open: boolean;
+    client: ContactTarget | null;
     logged: Logged | null;
     channel?: ContactChannel;
-  }>({ open: false, logged: null });
+  }>({ open: false, client: null, logged: null });
 
-  async function logStarted(channel: ContactChannel, body?: string) {
+  async function logStarted(client: ContactTarget, channel: ContactChannel, body?: string) {
     const res = await logContact({ clientId: client.id, channel, body });
     if (res.error || !res.id) {
       toast.error(t("toasts.failed"), { description: res.error ?? undefined });
       return;
     }
-    setState({ open: true, logged: { id: res.id, channel } });
+    setState({ open: true, client, logged: { id: res.id, channel } });
   }
 
-  function openLog(channel?: ContactChannel) {
-    setState({ open: true, logged: null, channel });
+  function openLog(client: ContactTarget, channel?: ContactChannel) {
+    setState({ open: true, client, logged: null, channel });
   }
 
-  const dialog = (
+  // The client stays set while the dialog closes, so it animates out whole.
+  const dialog = state.client ? (
     <LogContactDialog
-      client={client}
+      client={state.client}
       open={state.open}
       onOpenChange={(open) => setState((s) => ({ ...s, open }))}
       logged={state.logged}
       defaultChannel={state.channel}
     />
-  );
+  ) : null;
 
   return { logStarted, openLog, dialog };
+}
+
+/** Contact logging for one client; see useContactLogger. Render `dialog` once. */
+export function useContactLog(client: ContactTarget) {
+  const log = useContactLogger();
+  return {
+    logStarted: (channel: ContactChannel, body?: string) =>
+      log.logStarted(client, channel, body),
+    openLog: (channel?: ContactChannel) => log.openLog(client, channel),
+    dialog: log.dialog,
+  };
 }
 
 /** "Log contact": for a call from the agent's own phone, a chat at a viewing. */

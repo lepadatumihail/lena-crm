@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
+  BellRing,
   Building2,
   CalendarSearch,
   Coins,
@@ -31,7 +32,9 @@ import { ClientSheet } from "@/components/clients/client-sheet";
 import { ClientsKanban } from "@/components/clients/clients-kanban";
 import { ClientsPhoneList } from "@/components/clients/clients-phone-list";
 import { ClientsTable } from "@/components/clients/clients-table";
+import { useContactLogger } from "@/components/clients/contact-log";
 import { ExportMenu } from "@/components/clients/export-menu";
+import type { RowChannel } from "@/components/clients/row-contact";
 import {
   FilterSelect,
   ToolbarChip,
@@ -52,6 +55,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { intlTag } from "@/i18n/config";
 import { dealTypeLabel, sellerRoleLabel, stageLabel } from "@/i18n/labels";
+import { FOLLOW_UP_TAB, needsFollowUp } from "@/lib/activity";
 import {
   setClientActive,
   setClientPriority,
@@ -87,6 +91,7 @@ export function ClientsView({
   side,
   view: initialView,
   includeInactive,
+  now,
   initialStage = "all",
   initialAgency = ALL_AGENCIES,
 }: {
@@ -94,7 +99,9 @@ export function ClientsView({
   side: ClientSide;
   view: ViewMode;
   includeInactive: boolean;
-  /** Stage the filter starts on ("all" or a stage of this side). */
+  /** When the rows were loaded (ISO); Needs follow-up counts quiet days from it. */
+  now: string;
+  /** Tab the filter starts on: "all", a stage of this side, or FOLLOW_UP_TAB. */
   initialStage?: string;
   /** The `?agency=` value the filter starts on; unknown values mean "all". */
   initialAgency?: string;
@@ -132,6 +139,9 @@ export function ClientsView({
   const [typeFilter, setTypeFilter] = useState("all");
   const [selection, setSelection] = useState<Record<string, boolean>>({});
   const [openId, setOpenId] = useState<string | null>(null);
+  // One next-step dialog for every row: a row leaves Needs follow-up as soon
+  // as its client is contacted, and the dialog has to stay.
+  const contactLog = useContactLogger();
 
   const isBuyer = side === "buyer";
   const stages = stagesForSide(side);
@@ -193,11 +203,21 @@ export function ClientsView({
     return counts;
   }, [scoped]);
 
+  // Home's Needs attention rules, row by row, so a stage change shows at once.
+  const followUpIds = useMemo(() => {
+    const nowMs = Date.parse(now);
+    return new Set(scoped.filter((c) => needsFollowUp(c, nowMs)).map((c) => c.id));
+  }, [scoped, now]);
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return scoped.filter((c) => {
       if (priorityOnly && !c.priority) return false;
-      if (stageFilter !== "all" && c.stage !== stageFilter) return false;
+      if (stageFilter === FOLLOW_UP_TAB) {
+        if (!followUpIds.has(c.id)) return false;
+      } else if (stageFilter !== "all" && c.stage !== stageFilter) {
+        return false;
+      }
       if (typeFilter !== "all") {
         const type = isBuyer ? c.deal_type : c.seller_role;
         if (type !== typeFilter) return false;
@@ -209,7 +229,7 @@ export function ClientsView({
         .toLowerCase()
         .includes(q);
     });
-  }, [scoped, search, priorityOnly, stageFilter, typeFilter, isBuyer]);
+  }, [scoped, search, priorityOnly, stageFilter, followUpIds, typeFilter, isBuyer]);
 
   // Exports follow the rows in view, in the list's own order (a column sort isn't carried over).
   const filteredIds = useMemo(() => filtered.map((c) => c.id), [filtered]);
@@ -244,6 +264,13 @@ export function ClientsView({
       const { error } = await setClientPriority(id, next);
       if (error) toast.error(t("toasts.priorityFailed"), { description: error });
     });
+  }
+
+  function handleContact(c: ClientRow, channel: RowChannel) {
+    void contactLog.logStarted(
+      { id: c.id, firstName: c.first_name, side: c.side, stage: c.stage },
+      channel
+    );
   }
 
   function handleSetActive(id: string, active: boolean) {
@@ -347,9 +374,11 @@ export function ClientsView({
         value={stageFilter}
         onChange={changeStageFilter}
         total={scoped.length}
+        followUp={followUpIds.size}
         stages={stages}
         counts={stageCounts}
         allLabel={t("all")}
+        followUpLabel={t("followUp")}
         labelFor={(s) => stageLabel(tCrm, s)}
       />
 
@@ -434,14 +463,16 @@ export function ClientsView({
         <EmptyState side={side} />
       ) : filtered.length === 0 ? (
         <p className="text-muted-foreground bg-card rounded-xl border border-dashed py-16 text-center text-sm">
-          {t("noMatches")}
+          {stageFilter === FOLLOW_UP_TAB && followUpIds.size === 0
+            ? t("followUpEmpty")
+            : t("noMatches")}
         </p>
       ) : view === "table" ? (
         <>
           <ClientsPhoneList
             data={filtered}
-            side={side}
             onOpen={setOpenId}
+            onContact={handleContact}
             className="md:hidden"
           />
           <div className="hidden md:block">
@@ -454,6 +485,7 @@ export function ClientsView({
               onTogglePriority={handleTogglePriority}
               onStageChange={handleStageChange}
               onSetActive={handleSetActive}
+              onContact={handleContact}
               footer={summary}
             />
           </div>
@@ -478,26 +510,34 @@ export function ClientsView({
         onTogglePriority={handleTogglePriority}
         onStageChange={handleStageChange}
       />
+      {contactLog.dialog}
     </div>
   );
 }
 
-/* Stage filter as underlined tabs with a dot and a count per stage. */
+/*
+  Stage filter as underlined tabs with a dot and a count per stage, after
+  All and Needs follow-up: the clients who went quiet or were never reached.
+*/
 function StageTabs({
   value,
   onChange,
   total,
+  followUp,
   stages,
   counts,
   allLabel,
+  followUpLabel,
   labelFor,
 }: {
   value: string;
   onChange: (stage: string) => void;
   total: number;
+  followUp: number;
   stages: readonly Stage[];
   counts: Map<string, number>;
   allLabel: string;
+  followUpLabel: string;
   labelFor: (stage: Stage) => string;
 }) {
   return (
@@ -506,6 +546,13 @@ function StageTabs({
       onChange={onChange}
       tabs={[
         { value: "all", label: allLabel, count: total },
+        {
+          value: FOLLOW_UP_TAB,
+          label: followUpLabel,
+          count: followUp,
+          icon: <BellRing aria-hidden strokeWidth={1.75} />,
+          countTone: "brand",
+        },
         ...stages.map((s) => ({
           value: s,
           label: labelFor(s),

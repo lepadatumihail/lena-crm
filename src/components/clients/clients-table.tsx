@@ -30,6 +30,11 @@ import {
 } from "lucide-react";
 
 import { ClientAvatar } from "@/components/clients/client-avatar";
+import {
+  ContactIcons,
+  LatestActivityLine,
+  type RowChannel,
+} from "@/components/clients/row-contact";
 import { StageBadge } from "@/components/clients/stage-badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -136,6 +141,12 @@ export function Budget({
   return <span className="text-muted-foreground">—</span>;
 }
 
+/**
+ * Last activity only where the table has room for it next to a readable last
+ * message; narrower, the time on the message line stands in for it.
+ */
+const LAST_ACTIVITY_CELL = "hidden @7xl:table-cell";
+
 export function ClientsTable({
   data,
   side,
@@ -145,6 +156,7 @@ export function ClientsTable({
   onTogglePriority,
   onStageChange,
   onSetActive,
+  onContact,
   footer,
 }: {
   data: ClientRow[];
@@ -155,6 +167,8 @@ export function ClientsTable({
   onTogglePriority: (id: string, next: boolean) => void;
   onStageChange: (id: string, stage: string) => void;
   onSetActive: (id: string, active: boolean) => void;
+  /** A one-tap WhatsApp, call or email from a row: log it, ask for the next step. */
+  onContact: (client: ClientRow, channel: RowChannel) => void;
   /** Summary cells under the rows. */
   footer?: ReactNode;
 }) {
@@ -261,22 +275,27 @@ export function ClientsTable({
         cell: ({ row }) => {
           const c = row.original;
           return (
-            <div className="flex min-w-0 items-center gap-2.5">
-              <ClientAvatar name={clientFullName(c)} side={c.side} />
-              <Link
-                href={`/clients/${c.id}`}
-                onClick={(event) => event.stopPropagation()}
-                className="truncate font-medium hover:underline"
-              >
-                {clientFullName(c)}
-              </Link>
-              {c.priority ? (
-                <Star
-                  className="fill-primary text-primary size-3.5 shrink-0"
-                  aria-label={t("priority.unflag")}
-                />
-              ) : null}
-              {!c.is_active ? <Tag>{t("table.inactive")}</Tag> : null}
+            <div className="flex min-w-56 items-center gap-2.5">
+              <ClientAvatar name={clientFullName(c)} side={c.side} size="md" />
+              <div className="min-w-0 flex-1">
+                <div className="flex min-w-0 items-center gap-2">
+                  <Link
+                    href={`/clients/${c.id}`}
+                    onClick={(event) => event.stopPropagation()}
+                    className="truncate font-medium hover:underline"
+                  >
+                    {clientFullName(c)}
+                  </Link>
+                  {c.priority ? (
+                    <Star
+                      className="fill-primary text-primary size-3.5 shrink-0"
+                      aria-label={t("priority.unflag")}
+                    />
+                  ) : null}
+                  {!c.is_active ? <Tag>{t("table.inactive")}</Tag> : null}
+                </div>
+                <LatestActivityLine activity={c.latest_activity} className="mt-0.5 text-xs" />
+              </div>
             </div>
           );
         },
@@ -334,6 +353,18 @@ export function ClientsTable({
             <CalendarDays className="size-3.5 shrink-0" strokeWidth={1.75} />
             {when(row.original.updated_at)}
           </span>
+        ),
+      },
+      {
+        id: "contact",
+        enableSorting: false,
+        header: () => <span className="sr-only">{t("table.contact")}</span>,
+        cell: ({ row }) => (
+          <ContactIcons
+            client={row.original}
+            onContact={(channel) => onContact(row.original, channel)}
+            className="justify-end"
+          />
         ),
       },
       {
@@ -407,7 +438,7 @@ export function ClientsTable({
         },
       },
     ];
-  }, [isBuyer, side, t, tCrm, tag, locale, onStageChange, onTogglePriority, onSetActive]);
+  }, [isBuyer, side, t, tCrm, tag, locale, onStageChange, onTogglePriority, onSetActive, onContact]);
 
   const table = useReactTable({
     data,
@@ -423,7 +454,7 @@ export function ClientsTable({
   });
 
   return (
-    <div className="bg-card overflow-hidden rounded-xl border shadow-xs">
+    <div className="bg-card @container overflow-hidden rounded-xl border shadow-xs">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((hg) => (
@@ -433,6 +464,8 @@ export function ClientsTable({
                   key={header.id}
                   className={cn(
                     header.column.id === "select" && "w-10 pl-4",
+                    header.column.id === "updated_at" && LAST_ACTIVITY_CELL,
+                    header.column.id === "contact" && "w-px px-1",
                     header.column.id === "actions" && "w-12 pr-3",
                     header.column.columnDef.meta?.align === "right" && "text-right"
                   )}
@@ -458,8 +491,12 @@ export function ClientsTable({
                   key={cell.id}
                   className={cn(
                     cell.column.id === "select" && "w-10 pl-4",
+                    cell.column.id === "updated_at" && LAST_ACTIVITY_CELL,
+                    cell.column.id === "contact" && "w-px px-1",
                     cell.column.id === "actions" && "w-12 pr-3",
-                    cell.column.id === "name" && "max-w-[18rem]",
+                    // The name takes the width the other columns leave, and
+                    // the last message truncates to it instead of widening it.
+                    cell.column.id === "name" && "w-full max-w-0 py-2",
                     cell.column.columnDef.meta?.align === "right" &&
                       "text-right tabular-nums"
                   )}
