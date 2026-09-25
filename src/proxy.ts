@@ -9,7 +9,7 @@ import {
   type AppLocale,
 } from "@/i18n/config";
 import { markdownRoute, prefersMarkdown } from "@/lib/markdown";
-import { isListedRoute, marketingPath, marketingRouteAt, pathLocale } from "@/lib/routes";
+import { marketingPath, marketingRouteAt, pathLocale } from "@/lib/routes";
 import { updateSession } from "@/lib/supabase/middleware";
 
 /**
@@ -32,10 +32,7 @@ export async function proxy(request: NextRequest) {
     // English URLs (the defaults) forward a visitor to the language they
     // chose earlier (cookie) or, failing that, the one their browser prefers.
     // Crawlers send neither and see exactly the URL they asked for.
-    // Ad landings (/start, /quiet) are the exception: the ad already chose the
-    // language, so a Spanish phone tapping an English ad stays on the English
-    // page, with the ad's own words and the film. Their EN/ES switch still works.
-    if (page.locale === DEFAULT_LOCALE && isListedRoute(page.route)) {
+    if (page.locale === DEFAULT_LOCALE) {
       const fromCookie = request.cookies.get(LOCALE_COOKIE)?.value;
       const preferred: AppLocale | null = isLocale(fromCookie)
         ? fromCookie

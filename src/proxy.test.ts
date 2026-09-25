@@ -49,21 +49,21 @@ describe("agent discovery Link header", () => {
 });
 
 describe("language routing", () => {
-  const visit = (pathname: string, headers: Record<string, string>) =>
-    proxy(new NextRequest(`https://www.leadwing.app${pathname}`, { headers: { accept: BROWSER, ...headers } }));
+  // A phone set to Spanish (or a visitor who chose Spanish before) opens the
+  // Spanish page, ad landings included: the founder wants Spanish speakers in Spanish.
+  const spanish: Record<string, string>[] = [{ "accept-language": "es-ES,es;q=0.9" }, { cookie: "NEXT_LOCALE=es" }];
 
-  it("sends a Spanish browser from the English home page to /es", async () => {
-    const response = await visit("/", { "accept-language": "es-ES,es;q=0.9" });
-    expect(response.status).toBe(307);
-    expect(response.headers.get("location")).toBe("https://www.leadwing.app/es");
-  });
-
-  it.each(["/quiet", "/start"])("keeps a Spanish browser on the English ad landing %s", async (pathname) => {
-    const spanish: Record<string, string>[] = [{ "accept-language": "es-ES,es;q=0.9" }, { cookie: "NEXT_LOCALE=es" }];
+  it.each([
+    ["/", "/es"],
+    ["/quiet", "/es/seguimiento"],
+    ["/start", "/es/empezar"],
+  ])("sends a Spanish visitor from %s to %s", async (pathname, target) => {
     for (const headers of spanish) {
-      const response = await visit(pathname, headers);
-      expect(response.status, JSON.stringify(headers)).not.toBe(307);
-      expect(response.headers.get("location")).toBeNull();
+      const response = await proxy(
+        new NextRequest(`https://www.leadwing.app${pathname}`, { headers: { accept: BROWSER, ...headers } })
+      );
+      expect(response.status, JSON.stringify(headers)).toBe(307);
+      expect(response.headers.get("location")).toBe(`https://www.leadwing.app${target}`);
     }
   });
 });
