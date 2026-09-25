@@ -74,7 +74,7 @@ export function RecentClients({
                 </Link>
                 {c.priority ? (
                   <Star
-                    className="fill-warning text-warning size-3.5 shrink-0"
+                    className="fill-primary text-primary size-3.5 shrink-0"
                     aria-label={priorityLabel}
                   />
                 ) : null}

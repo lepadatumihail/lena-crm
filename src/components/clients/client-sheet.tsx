@@ -172,7 +172,7 @@ export function ClientSheet({
                     <StageBadge stage={c.stage} dot />
                     <Tag>{sideLabel(tCrm, c.side)}</Tag>
                     {c.priority ? (
-                      <Tag tone="amber">
+                      <Tag tone="brand">
                         <Star className="fill-current" />
                         {t("priority")}
                       </Tag>
@@ -303,7 +303,7 @@ export function ClientSheet({
                   aria-label={c.priority ? tPriority("unflag") : tPriority("flag")}
                   title={c.priority ? tPriority("unflag") : tPriority("flag")}
                 >
-                  <Star className={cn(c.priority && "fill-warning text-warning")} />
+                  <Star className={cn(c.priority && "fill-primary text-primary")} />
                 </Button>
                 <Button asChild variant="ghost" size="icon-sm">
                   <Link href={`/clients/${c.id}/edit`} aria-label={tCommon("edit")} title={tCommon("edit")}>

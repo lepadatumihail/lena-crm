@@ -369,7 +369,7 @@ export async function ClientDetailView({
               <StageMenu clientId={client.id} stage={client.stage} side={side} />
               <Tag>{sideLabel(tCrm, side)}</Tag>
               {client.priority ? (
-                <Tag tone="amber">
+                <Tag tone="brand">
                   <Star className="fill-current" />
                   {tClients("list.priority")}
                 </Tag>

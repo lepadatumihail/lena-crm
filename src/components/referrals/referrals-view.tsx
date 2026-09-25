@@ -20,10 +20,10 @@ import {
 import { TONE_BG, TONE_INK, type Tone } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 
-/** A referral moves through the same hues as a lead: new, in progress, won. */
+/** A referral warms to terracotta once they subscribe, and goes green when it pays out. */
 const STATE_TONE: Record<ReferralState, Tone> = {
-  signed_up: "blue",
-  subscribed: "teal",
+  signed_up: "neutral",
+  subscribed: "brand",
   rewarded: "green",
   left: "neutral",
 };
@@ -163,7 +163,7 @@ export function ReferralsView({ overview }: { overview: ReferralOverview }) {
 
       <Panel>
         <div className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center">
-          <RowIcon icon={Sparkles} className={cn("mt-0", TONE_BG.amber, TONE_INK.amber)} />
+          <RowIcon icon={Sparkles} className={cn("mt-0", TONE_BG.brand, TONE_INK.brand)} />
           <div className="min-w-0 flex-1">
             <p className="text-sm font-medium">{foundingTitle}</p>
             <p className="text-muted-foreground text-[13px] text-pretty">{foundingBody}</p>

@@ -12,14 +12,14 @@ import { cn } from "@/lib/utils";
 
 const ICONS: Record<Tone, LucideIcon> = {
   neutral: Info,
-  blue: Info,
-  purple: Info,
-  teal: Info,
+  brand: Info,
   green: CircleCheck,
   amber: TriangleAlert,
-  orange: TriangleAlert,
   red: CircleAlert,
-  brand: Info,
+  sand: Info,
+  apricot: Info,
+  clay: Info,
+  terracotta: Info,
 };
 
 /**
@@ -41,7 +41,7 @@ export function Notice({
   children: ReactNode;
 }) {
   const Icon = icon === undefined ? ICONS[tone] : icon;
-  const urgent = tone === "red" || tone === "amber" || tone === "orange";
+  const urgent = tone === "red" || tone === "amber";
   return (
     <div
       role={urgent ? "alert" : "status"}

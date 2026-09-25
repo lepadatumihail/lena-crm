@@ -34,8 +34,8 @@ export const DUE_TASKS_LIMIT = 6;
 /** One tone per status: board column dots, list section dots, status glyphs. */
 export const TASK_STATUS_TONES: Record<TaskStatus, Tone> = {
   todo: "neutral",
-  in_progress: "blue",
-  waiting: "amber",
+  in_progress: "brand",
+  waiting: "neutral",
   done: "green",
 };
 
@@ -48,7 +48,7 @@ export const TASK_PRIORITY_TONES: Record<TaskPriority, Tone> = {
   low: "neutral",
   medium: "neutral",
   high: "neutral",
-  urgent: "orange",
+  urgent: "red",
 };
 
 export type DueState = "overdue" | "today" | "tomorrow" | "upcoming" | "none";

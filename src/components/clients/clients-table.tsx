@@ -269,7 +269,7 @@ export function ClientsTable({
               </Link>
               {c.priority ? (
                 <Star
-                  className="fill-warning text-warning size-3.5 shrink-0"
+                  className="fill-primary text-primary size-3.5 shrink-0"
                   aria-label={t("priority.unflag")}
                 />
               ) : null}
@@ -390,7 +390,7 @@ export function ClientsTable({
                     </DropdownMenuPortal>
                   </DropdownMenuSub>
                   <DropdownMenuItem onSelect={() => onTogglePriority(c.id, !c.priority)}>
-                    <Star className={cn(c.priority && "fill-warning text-warning")} />
+                    <Star className={cn(c.priority && "fill-primary text-primary")} />
                     {c.priority ? t("priority.unflag") : t("priority.flag")}
                   </DropdownMenuItem>
                   <DropdownMenuItem onSelect={() => onSetActive(c.id, !c.is_active)}>

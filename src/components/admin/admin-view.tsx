@@ -38,10 +38,10 @@ const STATUS_TONE: Record<Enums<"sub_status">, Tone> = {
   canceled: "neutral",
 };
 
-/* The agent-facing referral hues: in progress blue, qualified teal, won green. */
+/* The agent-facing referral hues: pending neutral, qualified terracotta, won green. */
 const REFERRAL_TONE: Record<Enums<"referral_status">, Tone> = {
-  pending: "blue",
-  qualified: "teal",
+  pending: "neutral",
+  qualified: "brand",
   rewarded: "green",
   void: "neutral",
 };
@@ -147,7 +147,7 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
                         <Tag>{t("agents.free")}</Tag>
                       )}
                       {p.founding_number != null ? (
-                        <Tag tone="amber">
+                        <Tag tone="brand">
                           {t("agents.founding", { number: p.founding_number })}
                         </Tag>
                       ) : null}

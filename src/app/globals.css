@@ -4,55 +4,77 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  Warm "Claude" palette baseline. These tokens are a placeholder until
-  `npx getdesign@latest add claude` generates DESIGN.md, after which they
-  should be reconciled against that spec.
+  White surfaces with a faint warm bias, and terracotta as the only hue. Other
+  colour is a signal (green done, amber due today, red overdue), or a step of
+  the brand ramp that stages use: sand, apricot and clay warm up toward a solid
+  terracotta. Status colours are mapped in src/lib/tones.ts.
 */
 :root {
   color-scheme: light;
   --radius: 0.625rem;
 
-  --background: oklch(0.971 0.008 84);
-  --foreground: oklch(0.242 0.006 56);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.23 0.006 60);
 
-  --card: oklch(0.995 0.004 84);
-  --card-foreground: oklch(0.242 0.006 56);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.23 0.006 60);
 
-  --popover: oklch(0.995 0.004 84);
-  --popover-foreground: oklch(0.242 0.006 56);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.23 0.006 60);
 
-  --primary: oklch(0.585 0.13 38);
-  --primary-foreground: oklch(0.985 0.008 84);
+  /* Deep enough that white text on it passes AA (4.79:1). */
+  --primary: oklch(0.56 0.13 38);
+  --primary-foreground: oklch(0.99 0.004 84);
 
-  --secondary: oklch(0.94 0.01 80);
-  --secondary-foreground: oklch(0.34 0.01 56);
+  --secondary: oklch(0.965 0.005 75);
+  --secondary-foreground: oklch(0.34 0.008 60);
 
-  --muted: oklch(0.945 0.008 80);
-  --muted-foreground: oklch(0.53 0.012 56);
+  --muted: oklch(0.965 0.005 75);
+  --muted-foreground: oklch(0.53 0.01 65);
 
-  --accent: oklch(0.92 0.022 64);
-  --accent-foreground: oklch(0.34 0.01 56);
+  --accent: oklch(0.955 0.005 75);
+  --accent-foreground: oklch(0.23 0.006 60);
 
   --destructive: oklch(0.577 0.205 27);
-  --destructive-foreground: oklch(0.985 0.008 84);
+  --destructive-foreground: oklch(0.99 0.004 84);
 
-  --border: oklch(0.9 0.01 72);
-  --input: oklch(0.9 0.01 72);
-  --ring: oklch(0.585 0.13 38);
+  --border: oklch(0.925 0.006 75);
+  --input: oklch(0.9 0.007 75);
+  --ring: oklch(0.56 0.13 38);
 
   --success: oklch(0.62 0.13 150);
-  --success-foreground: oklch(0.985 0.008 84);
+  --success-foreground: oklch(0.99 0.004 84);
   --warning: oklch(0.75 0.13 75);
   --warning-foreground: oklch(0.27 0.04 75);
 
-  --sidebar: oklch(0.965 0.008 84);
-  --sidebar-foreground: oklch(0.242 0.006 56);
-  --sidebar-primary: oklch(0.585 0.13 38);
-  --sidebar-primary-foreground: oklch(0.985 0.008 84);
-  --sidebar-accent: oklch(0.93 0.022 64);
-  --sidebar-accent-foreground: oklch(0.34 0.01 56);
-  --sidebar-border: oklch(0.9 0.01 72);
-  --sidebar-ring: oklch(0.585 0.13 38);
+  /* Terracotta text on a pale terracotta fill (brand tags). */
+  --brand-ink: oklch(0.47 0.12 38);
+
+  /* The stage ramp: fill, hairline, text, and the solid dot per step. */
+  --sand: oklch(0.965 0.02 80);
+  --sand-line: oklch(0.885 0.04 76);
+  --sand-ink: oklch(0.42 0.055 62);
+  --sand-dot: oklch(0.8 0.07 75);
+  --apricot: oklch(0.94 0.038 68);
+  --apricot-line: oklch(0.85 0.072 62);
+  --apricot-ink: oklch(0.41 0.088 50);
+  --apricot-dot: oklch(0.72 0.1 58);
+  --clay: oklch(0.905 0.062 52);
+  --clay-line: oklch(0.8 0.1 46);
+  --clay-ink: oklch(0.38 0.112 40);
+  --clay-dot: oklch(0.64 0.125 45);
+
+  --sidebar: oklch(0.982 0.003 80);
+  --sidebar-foreground: oklch(0.23 0.006 60);
+  --sidebar-primary: oklch(0.56 0.13 38);
+  --sidebar-primary-foreground: oklch(0.99 0.004 84);
+  --sidebar-accent: oklch(0.955 0.005 75);
+  --sidebar-accent-foreground: oklch(0.23 0.006 60);
+  /* The current page's nav item: the one warm spot in the chrome. */
+  --sidebar-active: oklch(0.955 0.014 45);
+  --sidebar-active-foreground: oklch(0.23 0.006 60);
+  --sidebar-border: oklch(0.925 0.006 75);
+  --sidebar-ring: oklch(0.56 0.13 38);
 
   /* The inverted chapter (pricing): always dark, in both themes. */
   --inverted: oklch(0.215 0.008 56);
@@ -103,12 +125,29 @@
   --warning: oklch(0.8 0.13 75);
   --warning-foreground: oklch(0.205 0.006 56);
 
+  --brand-ink: oklch(0.8 0.1 45);
+
+  --sand: color-mix(in oklab, oklch(0.8 0.07 75) 11%, transparent);
+  --sand-line: color-mix(in oklab, oklch(0.8 0.07 75) 20%, transparent);
+  --sand-ink: oklch(0.88 0.045 78);
+  --sand-dot: oklch(0.76 0.07 75);
+  --apricot: color-mix(in oklab, oklch(0.74 0.1 58) 15%, transparent);
+  --apricot-line: color-mix(in oklab, oklch(0.74 0.1 58) 26%, transparent);
+  --apricot-ink: oklch(0.88 0.065 62);
+  --apricot-dot: oklch(0.72 0.1 58);
+  --clay: color-mix(in oklab, oklch(0.7 0.125 45) 24%, transparent);
+  --clay-line: color-mix(in oklab, oklch(0.7 0.125 45) 36%, transparent);
+  --clay-ink: oklch(0.9 0.06 50);
+  --clay-dot: oklch(0.68 0.125 45);
+
   --sidebar: oklch(0.195 0.005 56);
   --sidebar-foreground: oklch(0.96 0.006 84);
   --sidebar-primary: oklch(0.68 0.13 40);
   --sidebar-primary-foreground: oklch(0.205 0.006 56);
   --sidebar-accent: oklch(0.275 0.006 56);
   --sidebar-accent-foreground: oklch(0.96 0.006 84);
+  --sidebar-active: oklch(0.27 0.03 42);
+  --sidebar-active-foreground: oklch(0.96 0.006 84);
   --sidebar-border: oklch(1 0 0 / 9%);
   --sidebar-ring: oklch(0.68 0.13 40);
 
@@ -143,12 +182,27 @@
   --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
+  --color-brand-ink: var(--brand-ink);
+  --color-sand: var(--sand);
+  --color-sand-line: var(--sand-line);
+  --color-sand-ink: var(--sand-ink);
+  --color-sand-dot: var(--sand-dot);
+  --color-apricot: var(--apricot);
+  --color-apricot-line: var(--apricot-line);
+  --color-apricot-ink: var(--apricot-ink);
+  --color-apricot-dot: var(--apricot-dot);
+  --color-clay: var(--clay);
+  --color-clay-line: var(--clay-line);
+  --color-clay-ink: var(--clay-ink);
+  --color-clay-dot: var(--clay-dot);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-active: var(--sidebar-active);
+  --color-sidebar-active-foreground: var(--sidebar-active-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-inverted: var(--inverted);

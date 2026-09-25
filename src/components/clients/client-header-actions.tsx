@@ -197,7 +197,7 @@ export function ClientHeaderActions({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-52">
           <DropdownMenuItem onSelect={togglePriority}>
-            <Star className={cn(client.priority && "fill-warning text-warning")} />
+            <Star className={cn(client.priority && "fill-primary text-primary")} />
             {client.priority ? t("priority.unflag") : t("priority.flag")}
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={() => toggleActive(!client.is_active)}>

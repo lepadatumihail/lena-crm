@@ -187,7 +187,7 @@ export function AppPreview() {
       if (step === 0) {
         setRows((list) => [ROWS.tom, ...list]);
         setUnread((n) => n + 1);
-        pushToast("newLead", "blue", UserPlus);
+        pushToast("newLead", "neutral", UserPlus);
       } else if (step === 1) {
         patch("james", { stage: "viewing" });
         pushToast("moved", "brand", ArrowRight);
@@ -298,7 +298,6 @@ export function AppPreview() {
                 {tNav("buyers")}
               </span>
               <span className="bg-card text-muted-foreground hidden h-6 shrink-0 items-center gap-1.5 rounded-full border px-2.5 text-xs whitespace-nowrap sm:inline-flex">
-                <span className={cn("size-1.5 rounded-full", TONE_SOLID.green)} />
                 <Flip value={tNav("active", { count: rows.length })} />
               </span>
             </div>
@@ -435,7 +434,7 @@ export function AppPreview() {
                         <ClientAvatar name={r.name} side="buyer" />
                         <span className="truncate font-medium">{r.name}</span>
                         {r.priority ? (
-                          <Star className="fill-warning text-warning size-3.5 shrink-0" />
+                          <Star className="fill-primary text-primary size-3.5 shrink-0" />
                         ) : null}
                       </span>
                       <span className="relative flex items-center">
@@ -530,7 +529,7 @@ function SideItem({
       className={cn(
         "relative flex h-8 items-center gap-2 rounded-lg px-2 text-sm",
         active
-          ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+          ? "bg-sidebar-active text-sidebar-active-foreground font-medium"
           : "text-muted-foreground font-medium"
       )}
     >
@@ -540,7 +539,8 @@ function SideItem({
       {badge != null ? (
         <span
           className={cn(
-            "text-muted-foreground bg-sidebar-accent/70 absolute right-2 flex h-[18px] min-w-6 items-center justify-center rounded-full border px-1.5 text-[11px] font-medium tabular-nums",
+            "text-muted-foreground absolute right-2 flex h-[18px] min-w-6 items-center justify-center rounded-full border px-1.5 text-[11px] font-medium tabular-nums",
+            active ? "bg-background" : "bg-sidebar-accent/70",
             badge === 0 && "opacity-50"
           )}
         >

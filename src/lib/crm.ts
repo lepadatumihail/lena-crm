@@ -16,20 +16,25 @@ export type BuyerStage = (typeof BUYER_STAGES)[number];
 export type SellerStage = (typeof SELLER_STAGES)[number];
 export type Stage = BuyerStage | SellerStage;
 
-/** One tone per stage, shared by pills, dots and stacked bars. */
+/**
+ * One step of the brand ramp per stage, shared by pills, dots and stacked
+ * bars: the colour warms as a client gets closer to a deal, and Reserved is
+ * solid terracotta. A seller's Qualified matches a buyer's, so the word
+ * always looks the same.
+ */
 export const STAGE_TONES: Record<Stage, Tone> = {
-  new: "blue",
-  contacted: "purple",
-  qualified: "teal",
-  viewing: "amber",
-  reserved: "green",
-  pending: "orange",
+  new: "neutral",
+  contacted: "sand",
+  qualified: "apricot",
+  viewing: "clay",
+  reserved: "terracotta",
+  pending: "neutral",
 };
 
-/** The tone that marks a buyer or a seller, e.g. on their avatar. */
+/** Buyers and sellers look alike; the list they're in or a label tells them apart. */
 export const SIDE_TONES: Record<ClientSide, Tone> = {
-  buyer: "brand",
-  seller: "teal",
+  buyer: "neutral",
+  seller: "neutral",
 };
 
 export function stagesForSide(side: ClientSide): readonly Stage[] {

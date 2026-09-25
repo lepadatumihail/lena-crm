@@ -77,7 +77,7 @@ function CardBody({
               className={cn(
                 "size-4 transition-colors duration-150",
                 client.priority
-                  ? "fill-warning text-warning"
+                  ? "fill-primary text-primary"
                   : "text-muted-foreground/40 hover:text-muted-foreground"
               )}
             />

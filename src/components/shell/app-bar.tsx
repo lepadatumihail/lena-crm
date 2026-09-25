@@ -54,13 +54,13 @@ export function AppBar({
   let pill: Pill | null = null;
   if (pathname === "/home") {
     title = t("home");
-    pill = { text: todayLabel, tone: "green" };
+    pill = { text: todayLabel, tone: "neutral" };
   } else if (pathname.startsWith("/clients/buyers")) {
     title = t("buyers");
-    pill = { text: t("active", { count: counts.buyers }), tone: "green" };
+    pill = { text: t("active", { count: counts.buyers }), tone: "neutral" };
   } else if (pathname.startsWith("/clients/sellers")) {
     title = t("sellers");
-    pill = { text: t("active", { count: counts.sellers }), tone: "green" };
+    pill = { text: t("active", { count: counts.sellers }), tone: "neutral" };
   } else if (pathname.startsWith("/clients/new") || pathname.startsWith("/clients/import")) {
     title = searchParams.get("side") === "seller" ? t("sellers") : t("buyers");
   } else if (onRecord) {
@@ -120,10 +120,12 @@ export function AppBar({
           </h1>
           {pill ? (
             <span className="bg-card text-muted-foreground hidden h-6 shrink-0 items-center gap-1.5 rounded-full border px-2.5 text-xs whitespace-nowrap sm:inline-flex">
-              <span
-                aria-hidden
-                className={cn("size-1.5 rounded-full", TONE_SOLID[pill.tone])}
-              />
+              {pill.tone !== "neutral" ? (
+                <span
+                  aria-hidden
+                  className={cn("size-1.5 rounded-full", TONE_SOLID[pill.tone])}
+                />
+              ) : null}
               {pill.text}
             </span>
           ) : null}

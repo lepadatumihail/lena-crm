@@ -257,7 +257,7 @@ function ClientCard({
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
             <p className="truncate text-sm font-semibold">Sofia Müller</p>
-            <Star className="fill-warning text-warning size-3.5 shrink-0" />
+            <Star className="fill-primary text-primary size-3.5 shrink-0" />
           </div>
           <p className="text-muted-foreground truncate text-xs">
             🇩🇪 {t("language")} · {sideLabel(tCrm, "buyer")}

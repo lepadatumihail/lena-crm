@@ -10,9 +10,8 @@ const SIZES = {
 } as const;
 
 /**
- * Initials on a disc tinted in the side's tone (brand for buyers, teal for
- * sellers), so a mixed list tells the two apart before a word is read. Decorative; the name
- * next to it carries the accessible label.
+ * Initials on a neutral disc in the side's tone. Decorative; the name next to
+ * it carries the accessible label.
  */
 export function ClientAvatar({
   name,

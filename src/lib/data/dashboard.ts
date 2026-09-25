@@ -178,6 +178,12 @@ export const getHomeEvents = cache(
 export type AttentionItem = {
   id: string;
   kind: "new_lead" | "stalled_offer" | "follow_up" | "reservation";
+  /**
+   * How late the item is, which is what its dot colours: a quiet lead is
+   * overdue, a lead nobody has called yet or a key date today is due today.
+   * Anything else is left uncoloured.
+   */
+  urgency?: "overdue" | "today";
   title: string;
   detail: string;
   href: string;
@@ -235,6 +241,7 @@ export const getNeedsAttention = cache(async (): Promise<AttentionItem[]> => {
     items.push({
       id: `resdate:${r.clientId}:${RES_COL[r.field]}`,
       kind: "reservation",
+      urgency: r.diff === 0 ? "today" : undefined,
       title: r.name,
       detail: t("attention.reservation", {
         label: t(`attention.reservationFields.${r.field}`),
@@ -252,6 +259,7 @@ export const getNeedsAttention = cache(async (): Promise<AttentionItem[]> => {
     items.push({
       id: `newlead:${c.id}`,
       kind: "new_lead",
+      urgency: "today",
       title: `${c.first_name} ${c.last_name}`.trim(),
       detail: t(c.side === "buyer" ? "attention.newBuyer" : "attention.newSeller"),
       href:
@@ -275,6 +283,7 @@ export const getNeedsAttention = cache(async (): Promise<AttentionItem[]> => {
     items.push({
       id: `followup:${b.clientId}`,
       kind: "follow_up",
+      urgency: "overdue",
       title: b.name,
       detail: t("attention.followUp", {
         stage: stageLabel(tCrm, b.stage),

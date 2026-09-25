@@ -366,7 +366,7 @@ function PlanPanel({
             {priceNote ? <span className="text-muted-foreground text-sm">{priceNote}</span> : null}
           </p>
           {foundingNumber != null ? (
-            <Tag tone="amber">
+            <Tag tone="brand">
               <Sparkles />
               {t("plan.foundingAgent", { number: foundingNumber })}
             </Tag>

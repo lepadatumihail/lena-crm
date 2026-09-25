@@ -5,11 +5,10 @@ import { PanelEmpty } from "@/components/shell/panel";
 import { cn } from "@/lib/utils";
 import { TONE_SOLID, type Tone } from "@/lib/tones";
 
-const KIND_TONE: Record<AttentionItem["kind"], Tone> = {
-  new_lead: "blue",
-  stalled_offer: "brand",
-  follow_up: "amber",
-  reservation: "green",
+/* The dot says how late an item is, not what kind it is: red overdue, amber today. */
+const URGENCY_TONE: Record<NonNullable<AttentionItem["urgency"]>, Tone> = {
+  overdue: "red",
+  today: "amber",
 };
 
 /**
@@ -40,7 +39,7 @@ export function AttentionList({
           >
             <span
               aria-hidden
-              className={cn("size-2 shrink-0 rounded-full", TONE_SOLID[KIND_TONE[a.kind]])}
+              className={cn("size-2 shrink-0 rounded-full", TONE_SOLID[a.urgency ? URGENCY_TONE[a.urgency] : "neutral"])}
             />
             <span className="min-w-0 flex-1 sm:flex sm:items-baseline sm:gap-2">
               <span className="block truncate text-sm font-medium">

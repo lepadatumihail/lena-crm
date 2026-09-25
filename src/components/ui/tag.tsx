@@ -5,8 +5,8 @@ import {
   TONE_BG,
   TONE_BORDER,
   TONE_INK,
-  TONE_SOLID,
   TONES,
+  tagDotClass,
   type Tone,
 } from "@/lib/tones";
 import { cn } from "@/lib/utils";
@@ -48,7 +48,7 @@ function Tag({
       {dot ? (
         <span
           aria-hidden
-          className={cn("size-1.5 rounded-full", TONE_SOLID[tone ?? "neutral"])}
+          className={cn("size-1.5 rounded-full", tagDotClass(tone ?? "neutral"))}
         />
       ) : null}
       {children}

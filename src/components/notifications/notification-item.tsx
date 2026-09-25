@@ -28,14 +28,14 @@ const ICONS: Record<NotificationType, ComponentType<{ className?: string }>> = {
   task_due: ListChecks,
 };
 
-/* The hues Home's "Needs attention" uses: quiet leads amber, key dates green, offers brand; appointments blue; tasks purple. */
+/* The icon tells the types apart; the discs stay neutral, like an inbox. */
 const TONES: Record<NotificationType, Tone> = {
-  appointment_reminder: "blue",
-  appointment_today: "blue",
-  follow_up: "amber",
-  reservation_date: "green",
-  stalled_offer: "brand",
-  task_due: "purple",
+  appointment_reminder: "neutral",
+  appointment_today: "neutral",
+  follow_up: "neutral",
+  reservation_date: "neutral",
+  stalled_offer: "neutral",
+  task_due: "neutral",
 };
 
 /**
