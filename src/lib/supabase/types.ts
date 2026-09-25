@@ -999,7 +999,19 @@ export type Database = {
         Relationships: [];
       };
     };
-    Views: Record<never, never>;
+    Views: {
+      client_latest_activity: {
+        Row: {
+          client_id: string;
+          side: Database["public"]["Enums"]["client_side"];
+          kind: Database["public"]["Enums"]["activity_kind"];
+          channel: Database["public"]["Enums"]["contact_channel"] | null;
+          preview: string | null;
+          occurred_at: string;
+        };
+        Relationships: [];
+      };
+    };
     Functions: {
       is_pro: {
         Args: { p_user_id: string };
@@ -1112,5 +1124,6 @@ export type TaskStatus = Enums<"task_status">;
 export type TaskPriority = Enums<"task_priority">;
 export type TaskNote = Tables<"task_notes">;
 export type ClientActivity = Tables<"client_activities">;
+export type ClientLatestActivity = PublicSchema["Views"]["client_latest_activity"]["Row"];
 export type ActivityKind = Enums<"activity_kind">;
 export type ContactChannel = Enums<"contact_channel">;
