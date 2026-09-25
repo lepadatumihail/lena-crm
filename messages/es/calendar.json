@@ -43,7 +43,8 @@
     "notes": "Notas (opcional)",
     "notesPlaceholder": "Algo que recordar…",
     "deleteTitle": "¿Eliminar la reunión?",
-    "deleteDescription": "Esta reunión se eliminará de forma permanente."
+    "deleteDescription": "Esta reunión se eliminará de forma permanente.",
+    "clientSearch": "Buscar clientes…"
   },
   "durations": {
     "30": "30 minutos",

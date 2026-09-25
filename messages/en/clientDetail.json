@@ -181,7 +181,8 @@
     "updated": "Viewing updated",
     "added": "Viewing added",
     "deleteError": "Couldn't delete",
-    "deleted": "Viewing deleted"
+    "deleted": "Viewing deleted",
+    "buyerSearch": "Search buyers…"
   },
   "composer": {
     "trigger": "Draft a message",

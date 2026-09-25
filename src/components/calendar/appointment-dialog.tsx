@@ -13,6 +13,7 @@ import { reminderLabel } from "@/i18n/labels";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { SearchSelect } from "@/components/search-select";
 import {
   Dialog,
   DialogContent,
@@ -196,26 +197,19 @@ export function AppointmentDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("form.client")}</FormLabel>
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder={t("form.clientPlaceholder")} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {clients.length === 0 ? (
-                        <div className="text-muted-foreground px-2 py-1.5 text-sm">
-                          {t("form.noClients")}
-                        </div>
-                      ) : (
-                        clients.map((c) => (
-                          <SelectItem key={c.id} value={c.id}>
-                            {c.name}
-                          </SelectItem>
-                        ))
-                      )}
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <SearchSelect
+                      value={field.value}
+                      onChange={field.onChange}
+                      options={clients.map((c) => ({ value: c.id, label: c.name }))}
+                      labels={{
+                        placeholder: t("form.clientPlaceholder"),
+                        search: t("form.clientSearch"),
+                        none: t("form.clientPlaceholder"),
+                        empty: clients.length === 0 ? t("form.noClients") : tCommon("noMatch"),
+                      }}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

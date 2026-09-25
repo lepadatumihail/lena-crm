@@ -68,7 +68,14 @@
     "clearDate": "Quitar la fecha límite",
     "create": "Crear tarea",
     "deleteTitle": "¿Eliminar la tarea?",
-    "deleteDescription": "«{title}» se eliminará de forma permanente."
+    "deleteDescription": "«{title}» se eliminará de forma permanente.",
+    "searchClient": "Buscar clientes…",
+    "duePresets": {
+      "today": "Hoy",
+      "tomorrow": "Mañana",
+      "three_days": "En 3 días",
+      "week": "En una semana"
+    }
   },
   "toasts": {
     "created": "Tarea creada",

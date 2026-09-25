@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { SearchSelect } from "@/components/search-select";
 import {
   Dialog,
   DialogContent,
@@ -187,29 +188,19 @@ export function ViewingDialog({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t("buyer")}</FormLabel>
-                    <Select
-                      value={field.value || ""}
-                      onValueChange={field.onChange}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder={t("buyerPlaceholder")} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {(buyers ?? []).length === 0 ? (
-                          <div className="text-muted-foreground px-2 py-1.5 text-sm">
-                            {t("noBuyers")}
-                          </div>
-                        ) : (
-                          (buyers ?? []).map((b) => (
-                            <SelectItem key={b.id} value={b.id}>
-                              {b.name}
-                            </SelectItem>
-                          ))
-                        )}
-                      </SelectContent>
-                    </Select>
+                    <FormControl>
+                      <SearchSelect
+                        value={field.value || ""}
+                        onChange={field.onChange}
+                        options={(buyers ?? []).map((b) => ({ value: b.id, label: b.name }))}
+                        labels={{
+                          placeholder: t("buyerPlaceholder"),
+                          search: t("buyerSearch"),
+                          none: t("buyerPlaceholder"),
+                          empty: (buyers ?? []).length === 0 ? t("noBuyers") : tCommon("noMatch"),
+                        }}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

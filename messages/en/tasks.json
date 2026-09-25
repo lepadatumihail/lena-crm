@@ -64,7 +64,14 @@
     "clearDate": "Clear due date",
     "create": "Create task",
     "deleteTitle": "Delete task?",
-    "deleteDescription": "“{title}” will be permanently deleted."
+    "deleteDescription": "“{title}” will be permanently deleted.",
+    "searchClient": "Search clients…",
+    "duePresets": {
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "three_days": "In 3 days",
+      "week": "In a week"
+    }
   },
   "toasts": {
     "created": "Task created",

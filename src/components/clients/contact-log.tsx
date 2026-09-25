@@ -43,6 +43,7 @@ import { deleteActivity, logContact } from "@/lib/actions/activity";
 import { updateClientStage } from "@/lib/actions/clients";
 import { createTask } from "@/lib/actions/tasks";
 import { dateKeyInTimeZone } from "@/lib/home";
+import { announceNotificationsChanged } from "@/lib/notifications";
 import type { ContactChannel } from "@/lib/supabase/types";
 import { cn } from "@/lib/utils";
 import { ACTIVITY_BODY_MAX } from "@/lib/validation/activity";
@@ -153,6 +154,9 @@ function LogContactForm({
         if (res.error) {
           taskFailed = true;
           toast.error(t("toasts.taskFailed"), { description: res.error });
+        } else {
+          // Let the bell pick up the new task's due date now.
+          announceNotificationsChanged();
         }
       }
       if (moveTarget && move) {

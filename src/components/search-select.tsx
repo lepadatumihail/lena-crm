@@ -35,14 +35,20 @@ type Labels = {
   search: string;
   /** The row that clears the field. */
   none: string;
-  /** The row that keeps what was typed when it is not in the list. */
-  useTyped: (typed: string) => string;
+  /**
+   * The row that keeps what was typed when it is not in the list. Leave it
+   * out for a strict picker (a client, say), where only listed values count.
+   */
+  useTyped?: (typed: string) => string;
+  /** Shown when nothing matches, in a strict picker. */
+  empty?: string;
 };
 
 /**
  * A text field picked from a searchable list. The value stays free text: one
  * that is not in the list (older data, a lead pasted in) is shown as it is,
- * and the agent can keep whatever they typed. Extra props (the form's id and
+ * and the agent can keep whatever they typed, unless `labels.useTyped` is
+ * left out, which makes it a strict picker. Extra props (the form's id and
  * aria attributes) land on the trigger button.
  */
 export function SearchSelect({
@@ -131,6 +137,7 @@ function OptionList({
   }, [options, typed]);
   // Offer the typed text itself unless the list already has it.
   const offerTyped =
+    labels.useTyped != null &&
     typed !== "" &&
     !options.some((o) => fold(o.label) === fold(typed) || fold(o.value) === fold(typed));
 
@@ -224,7 +231,7 @@ function OptionList({
             </button>
           );
         })}
-        {offerTyped ? (
+        {offerTyped && labels.useTyped ? (
           <button
             type="button"
             role="option"
@@ -236,6 +243,9 @@ function OptionList({
             <Check className="invisible size-3.5 shrink-0" />
             <span className="min-w-0 flex-1 truncate">{labels.useTyped(typed)}</span>
           </button>
+        ) : null}
+        {matches.length === 0 && !offerTyped && labels.empty ? (
+          <p className="text-muted-foreground px-2 py-1.5 text-sm">{labels.empty}</p>
         ) : null}
       </div>
     </div>

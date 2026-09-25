@@ -181,7 +181,8 @@
     "updated": "Visita actualizada",
     "added": "Visita añadida",
     "deleteError": "No se ha podido eliminar",
-    "deleted": "Visita eliminada"
+    "deleted": "Visita eliminada",
+    "buyerSearch": "Buscar compradores…"
   },
   "composer": {
     "trigger": "Redactar un mensaje",

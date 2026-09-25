@@ -51,6 +51,14 @@ export const TASK_PRIORITY_TONES: Record<TaskPriority, Tone> = {
   urgent: "red",
 };
 
+/** One-tap due dates in the task dialog, in days from the agent's today. */
+export const DUE_PRESETS = [
+  { id: "today", days: 0 },
+  { id: "tomorrow", days: 1 },
+  { id: "three_days", days: 3 },
+  { id: "week", days: 7 },
+] as const;
+
 export type DueState = "overdue" | "today" | "tomorrow" | "upcoming" | "none";
 
 /**

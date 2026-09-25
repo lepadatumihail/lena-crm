@@ -43,7 +43,8 @@
     "notes": "Notes (optional)",
     "notesPlaceholder": "Anything to remember…",
     "deleteTitle": "Delete meeting?",
-    "deleteDescription": "This meeting will be permanently deleted."
+    "deleteDescription": "This meeting will be permanently deleted.",
+    "clientSearch": "Search clients…"
   },
   "durations": {
     "30": "30 minutes",
