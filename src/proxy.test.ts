@@ -48,6 +48,25 @@ describe("agent discovery Link header", () => {
   });
 });
 
+describe("language routing", () => {
+  const visit = (pathname: string, headers: Record<string, string>) =>
+    proxy(new NextRequest(`https://www.leadwing.app${pathname}`, { headers: { accept: BROWSER, ...headers } }));
+
+  it("sends a Spanish browser from the English home page to /es", async () => {
+    const response = await visit("/", { "accept-language": "es-ES,es;q=0.9" });
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe("https://www.leadwing.app/es");
+  });
+
+  it.each(["/quiet", "/start"])("keeps a Spanish browser on the English ad landing %s", async (pathname) => {
+    for (const headers of [{ "accept-language": "es-ES,es;q=0.9" }, { cookie: "NEXT_LOCALE=es" }]) {
+      const response = await visit(pathname, headers);
+      expect(response.status, JSON.stringify(headers)).not.toBe(307);
+      expect(response.headers.get("location")).toBeNull();
+    }
+  });
+});
+
 describe("markdown for agents", () => {
   it.each([
     ["/", "/markdown"],
