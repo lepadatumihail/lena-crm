@@ -29,11 +29,13 @@ import {
 
 import { ClientSheet } from "@/components/clients/client-sheet";
 import { ClientsKanban } from "@/components/clients/clients-kanban";
+import { ClientsPhoneList } from "@/components/clients/clients-phone-list";
 import { ClientsTable } from "@/components/clients/clients-table";
 import { ExportMenu } from "@/components/clients/export-menu";
 import {
   FilterSelect,
   ToolbarChip,
+  Segmented,
   ToolbarTabs,
   ViewToggle,
 } from "@/components/shell/toolbar";
@@ -99,6 +101,7 @@ export function ClientsView({
 }) {
   const router = useRouter();
   const t = useTranslations("clients.list");
+  const tNav = useTranslations("nav");
   const tTable = useTranslations("clients.table");
   const tCrm = useTranslations("crm");
   const locale = useLocale();
@@ -330,6 +333,16 @@ export function ClientsView({
 
   return (
     <div className="space-y-4">
+      {/* The phone's tab bar has one Clients tab; this switches sides. */}
+      <Segmented
+        label={tNav("clients")}
+        value={side}
+        className="flex w-full md:hidden [&>*]:flex-1 [&>*]:justify-center"
+        items={[
+          { value: "buyer", label: tNav("buyers"), href: clientsPath("buyer") },
+          { value: "seller", label: tNav("sellers"), href: clientsPath("seller") },
+        ]}
+      />
       <StageTabs
         value={stageFilter}
         onChange={changeStageFilter}
@@ -391,7 +404,8 @@ export function ClientsView({
             asChild
             variant="outline"
             size="icon-sm"
-            className="text-muted-foreground hover:text-foreground rounded-lg"
+            // Import and export are desk work; a phone keeps the row for the list.
+            className="text-muted-foreground hover:text-foreground hidden rounded-lg sm:inline-flex"
             aria-label={t("import")}
             title={t("import")}
           >
@@ -399,7 +413,9 @@ export function ClientsView({
               <Upload strokeWidth={1.75} />
             </Link>
           </Button>
-          <ExportMenu side={side} ids={filteredIds} />
+          <div className="hidden sm:contents">
+            <ExportMenu side={side} ids={filteredIds} />
+          </div>
           <ViewToggle
             view={view}
             onChange={setView}
@@ -421,17 +437,27 @@ export function ClientsView({
           {t("noMatches")}
         </p>
       ) : view === "table" ? (
-        <ClientsTable
-          data={filtered}
-          side={side}
-          selection={selection}
-          onSelectionChange={setSelection}
-          onOpen={setOpenId}
-          onTogglePriority={handleTogglePriority}
-          onStageChange={handleStageChange}
-          onSetActive={handleSetActive}
-          footer={summary}
-        />
+        <>
+          <ClientsPhoneList
+            data={filtered}
+            side={side}
+            onOpen={setOpenId}
+            className="md:hidden"
+          />
+          <div className="hidden md:block">
+            <ClientsTable
+              data={filtered}
+              side={side}
+              selection={selection}
+              onSelectionChange={setSelection}
+              onOpen={setOpenId}
+              onTogglePriority={handleTogglePriority}
+              onStageChange={handleStageChange}
+              onSetActive={handleSetActive}
+              footer={summary}
+            />
+          </div>
+        </>
       ) : (
         <ClientsKanban
           data={filtered}

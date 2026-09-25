@@ -350,6 +350,11 @@
   text-transform: uppercase;
 }
 
+/* Toasts on a phone rise above the app's tab bar while it is on the page. */
+:root:has([data-mobile-tab-bar]) {
+  --toast-offset-bottom: calc(env(safe-area-inset-bottom, 0px) + 5rem);
+}
+
 /* Horizontal strips that scroll by touch or wheel, without a visible bar. */
 @utility scrollbar-none {
   scrollbar-width: none;

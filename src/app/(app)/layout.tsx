@@ -12,6 +12,7 @@ import { BUYER_STAGES } from "@/lib/crm";
 import { dateKeyInTimeZone, dayRangeInTimeZone, firstNameFrom } from "@/lib/home";
 import { resolveTimeZone } from "@/lib/time-zones";
 import { AppBar } from "@/components/shell/app-bar";
+import { MobileTabBar } from "@/components/shell/mobile-tab-bar";
 import {
   AppSidebar,
   type SidebarPlan,
@@ -129,9 +130,11 @@ export default async function AppLayout({
           counts={counts}
           todayLabel={todayLabel}
         />
-        <div className="mx-auto w-full max-w-[1600px] flex-1 px-4 py-5 md:px-6">
+        {/* On a phone the tab bar covers the last 4rem, so the page ends above it. */}
+        <div className="mx-auto w-full max-w-[1600px] flex-1 px-4 pt-5 pb-24 md:px-6 md:pb-5">
           {children}
         </div>
+        <MobileTabBar counts={{ today: counts.today, tasks: counts.tasks }} />
       </SidebarInset>
     </SidebarProvider>
     </ShellProvider>

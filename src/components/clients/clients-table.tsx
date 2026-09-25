@@ -106,30 +106,33 @@ function SortHead({
 }
 
 /** A buyer's budget as one figure: a range, "up to X" or "from X". */
-function Budget({
+export function Budget({
   min,
   max,
   locale,
   upTo,
   from,
+  compact = false,
 }: {
   min: number | null;
   max: number | null;
   locale: string;
   upTo: (amount: ReactNode) => ReactNode;
   from: (amount: ReactNode) => ReactNode;
+  /** Short figures ("€600K"), for a phone row. */
+  compact?: boolean;
 }) {
   if (min != null && max != null) {
     return (
       <span className="inline-flex items-center gap-1 tabular-nums">
-        <Money value={min} locale={locale} />
+        <Money value={min} locale={locale} compact={compact} />
         <span className="text-muted-foreground">–</span>
-        <Money value={max} locale={locale} />
+        <Money value={max} locale={locale} compact={compact} />
       </span>
     );
   }
-  if (max != null) return <>{upTo(<Money value={max} locale={locale} />)}</>;
-  if (min != null) return <>{from(<Money value={min} locale={locale} />)}</>;
+  if (max != null) return <>{upTo(<Money value={max} locale={locale} compact={compact} />)}</>;
+  if (min != null) return <>{from(<Money value={min} locale={locale} compact={compact} />)}</>;
   return <span className="text-muted-foreground">—</span>;
 }
 

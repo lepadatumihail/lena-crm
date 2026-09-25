@@ -22,6 +22,8 @@ function Toaster({ ...props }: ToasterProps) {
       toastOptions={{
         classNames: { description: "text-muted-foreground!" },
       }}
+      // Above the app's phone tab bar when there is one (see globals.css).
+      mobileOffset={{ bottom: "var(--toast-offset-bottom, 16px)" }}
       {...props}
     />
   );

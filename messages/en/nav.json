@@ -73,5 +73,12 @@
     "newTask": "New task"
   },
   "breadcrumb": "Breadcrumb",
-  "settings": "Settings"
+  "settings": "Settings",
+  "mobile": {
+    "label": "Main",
+    "new": "Add new",
+    "newTitle": "Add something new",
+    "newDescription": "A client, a lead, a task or an appointment.",
+    "pasteLead": "Paste a lead"
+  }
 }
