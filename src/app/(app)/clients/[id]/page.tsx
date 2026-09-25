@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { getClientActivities } from "@/lib/data/activity";
 import { getClientById } from "@/lib/data/clients";
 import {
   getBuyerPreferences,
@@ -38,6 +39,7 @@ export default async function ClientDetailPage({
     nextAppointment,
     timeZone,
     tasks,
+    activities,
   ] = await Promise.all([
     isBuyer ? getBuyerPreferences(client.id) : Promise.resolve(null),
     isBuyer ? getViewings(client.id) : Promise.resolve([]),
@@ -48,6 +50,7 @@ export default async function ClientDetailPage({
     getNextClientAppointment(client.id, now.toISOString()),
     getAgentTimeZone(),
     getClientTasks(client.id),
+    getClientActivities(client.id),
   ]);
 
   const matches =
@@ -72,6 +75,7 @@ export default async function ClientDetailPage({
       customTemplates={customTemplates}
       nextAppointment={nextAppointment}
       tasks={tasks}
+      activities={activities}
       compose={compose ?? null}
       now={now}
       timeZone={timeZone}

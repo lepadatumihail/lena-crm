@@ -19,7 +19,7 @@ import {
 
 import { ClientAvatar } from "@/components/clients/client-avatar";
 import { StageBadge } from "@/components/clients/stage-badge";
-import { WhatsAppButton } from "@/components/clients/whatsapp-button";
+import { ContactButtons } from "@/components/clients/contact-log";
 import { Button } from "@/components/ui/button";
 import { Money } from "@/components/ui/money";
 import {
@@ -197,11 +197,11 @@ export function ClientSheet({
                       value={c.phone}
                       href={c.phone ? `tel:${c.phone.replace(/\s+/g, "")}` : undefined}
                     />
-                    <WhatsAppButton
+                    <ContactButtons
+                      client={{ id: c.id, firstName: c.first_name, side: c.side, stage: c.stage }}
                       phone={c.phone}
-                      firstName={c.first_name}
                       language={c.language}
-                      className="mt-2 w-full"
+                      className="mt-2"
                     />
                   </div>
                 ) : (

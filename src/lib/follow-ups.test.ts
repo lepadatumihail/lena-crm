@@ -10,7 +10,7 @@ const copy: FollowUpCopy = {
   stageName: (stage) => stage.toUpperCase(),
 };
 const buyers = (n: number) =>
-  Array.from({ length: n }, (_, i) => ({ clientId: `c${i}`, name: `Buyer ${i}`, stage: "new", quietDays: 7 + i }));
+  Array.from({ length: n }, (_, i) => ({ clientId: `c${i}`, name: `Buyer ${i}`, firstName: "Buyer", stage: "new", quietDays: 7 + i }));
 const options = { agentId: "a1", weekKey: "2026-W38", nowISO: "2026-09-18T08:00:00.000Z", copy };
 
 describe("followUpRows", () => {

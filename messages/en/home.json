@@ -39,7 +39,8 @@
       "inDays": "in {count, plural, one {# day} other {# days}}"
     },
     "newBuyer": "New lead · no contact yet",
-    "newSeller": "New seller · not qualified yet"
+    "newSeller": "New seller · not qualified yet",
+    "log": "Log contact"
   },
   "pipeline": {
     "title": "Pipeline",

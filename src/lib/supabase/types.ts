@@ -71,6 +71,7 @@ export type Database = {
           deal_type: Database["public"]["Enums"]["deal_type"] | null;
           seller_role: Database["public"]["Enums"]["seller_role"] | null;
           import_id: string | null;
+          last_contacted_at: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -92,6 +93,7 @@ export type Database = {
           deal_type?: Database["public"]["Enums"]["deal_type"] | null;
           seller_role?: Database["public"]["Enums"]["seller_role"] | null;
           import_id?: string | null;
+          last_contacted_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -113,8 +115,48 @@ export type Database = {
           deal_type?: Database["public"]["Enums"]["deal_type"] | null;
           seller_role?: Database["public"]["Enums"]["seller_role"] | null;
           import_id?: string | null;
+          last_contacted_at?: string | null;
           created_at?: string;
           updated_at?: string;
+        };
+        Relationships: [];
+      };
+      client_activities: {
+        Row: {
+          id: string;
+          agent_id: string;
+          client_id: string;
+          kind: Database["public"]["Enums"]["activity_kind"];
+          channel: Database["public"]["Enums"]["contact_channel"] | null;
+          body: string | null;
+          stage_from: string | null;
+          stage_to: string | null;
+          occurred_at: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          agent_id?: string;
+          client_id: string;
+          kind: Database["public"]["Enums"]["activity_kind"];
+          channel?: Database["public"]["Enums"]["contact_channel"] | null;
+          body?: string | null;
+          stage_from?: string | null;
+          stage_to?: string | null;
+          occurred_at?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          agent_id?: string;
+          client_id?: string;
+          kind?: Database["public"]["Enums"]["activity_kind"];
+          channel?: Database["public"]["Enums"]["contact_channel"] | null;
+          body?: string | null;
+          stage_from?: string | null;
+          stage_to?: string | null;
+          occurred_at?: string;
+          created_at?: string;
         };
         Relationships: [];
       };
@@ -1019,6 +1061,8 @@ export type Database = {
         | "stalled_offer"
         | "task_due";
       task_status: "todo" | "in_progress" | "waiting" | "done";
+      activity_kind: "contact" | "note" | "stage";
+      contact_channel: "whatsapp" | "call" | "email" | "meeting" | "other";
       task_priority: "none" | "low" | "medium" | "high" | "urgent";
       cohort: "founding" | "standard";
       referral_status: "pending" | "qualified" | "rewarded" | "void";
@@ -1067,3 +1111,6 @@ export type Task = Tables<"tasks">;
 export type TaskStatus = Enums<"task_status">;
 export type TaskPriority = Enums<"task_priority">;
 export type TaskNote = Tables<"task_notes">;
+export type ClientActivity = Tables<"client_activities">;
+export type ActivityKind = Enums<"activity_kind">;
+export type ContactChannel = Enums<"contact_channel">;

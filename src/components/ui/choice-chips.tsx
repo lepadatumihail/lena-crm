@@ -1,0 +1,57 @@
+"use client";
+
+import type { ReactNode } from "react";
+
+import { cn } from "@/lib/utils";
+
+export type ChoiceChip<T extends string> = {
+  value: T;
+  label: ReactNode;
+  icon?: ReactNode;
+};
+
+/**
+ * A row of single-choice pills: every option stays one tap away, where a
+ * select would take two. Wraps onto a second line on a narrow screen.
+ */
+export function ChoiceChips<T extends string>({
+  items,
+  value,
+  onChange,
+  label,
+  className,
+}: {
+  items: readonly ChoiceChip<T>[];
+  value: T;
+  onChange: (value: T) => void;
+  /** The group's accessible name. */
+  label: string;
+  className?: string;
+}) {
+  return (
+    <div role="group" aria-label={label} className={cn("flex flex-wrap gap-1.5", className)}>
+      {items.map((item) => {
+        const active = item.value === value;
+        return (
+          <button
+            key={item.value}
+            type="button"
+            aria-pressed={active}
+            onClick={() => onChange(item.value)}
+            className={cn(
+              "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-[13px] font-medium whitespace-nowrap outline-none",
+              "transition-[color,background-color,border-color,scale] duration-150 active:scale-[0.97]",
+              "focus-visible:ring-ring/50 focus-visible:ring-[3px] [&_svg]:size-3.5 [&_svg]:shrink-0",
+              active
+                ? "border-primary/40 bg-primary/10 text-brand-ink"
+                : "bg-background text-muted-foreground hover:bg-accent hover:text-foreground"
+            )}
+          >
+            {item.icon}
+            {item.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}

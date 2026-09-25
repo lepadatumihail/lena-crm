@@ -7,6 +7,7 @@ import {
   CalendarPlus,
   Contact,
   Globe2,
+  History,
   Languages,
   Mail,
   MapPin,
@@ -19,7 +20,12 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import { ActivityPanel } from "@/components/clients/activity-panel";
 import { ClientAvatar } from "@/components/clients/client-avatar";
+import {
+  ContactButtons,
+  LogContactButton,
+} from "@/components/clients/contact-log";
 import {
   ClientHeaderActions,
   StageMenu,
@@ -27,7 +33,6 @@ import {
 import { CopyIconButton } from "@/components/clients/copy-icon-button";
 import { KeyValueList, KeyValueRow } from "@/components/shell/key-value";
 import { MessageComposer } from "@/components/clients/message-composer";
-import { WhatsAppButton } from "@/components/clients/whatsapp-button";
 import { DocumentsSection } from "@/components/clients/sections/documents-section";
 import { MatchingListingsSection } from "@/components/clients/sections/matching-listings-section";
 import { PreferencesSection } from "@/components/clients/sections/preferences-section";
@@ -54,6 +59,7 @@ import {
 } from "@/i18n/labels";
 import { formatTimeInTimeZone } from "@/lib/attention";
 import { clientFullName, formatCurrency, type ClientSide } from "@/lib/crm";
+import type { ActivityRow } from "@/lib/data/activity";
 import type { ViewingWithAttachments } from "@/lib/data/buyer";
 import type { ClientAppointment } from "@/lib/data/calendar";
 import type { ListingMatch, PropertyWithAttachments } from "@/lib/data/seller";
@@ -67,7 +73,6 @@ import type {
   EmailTemplate,
   Reservation,
 } from "@/lib/supabase/types";
-import { whatsappLink } from "@/lib/whatsapp";
 
 export type ClientDetailData = {
   client: Client;
@@ -82,6 +87,8 @@ export type ClientDetailData = {
   nextAppointment: ClientAppointment | null;
   /** The client's open tasks; null until the tasks table exists. */
   tasks: TaskRow[] | null;
+  /** Contacts, notes and stage moves, newest first; null until the table exists. */
+  activities: ActivityRow[] | null;
   /** `?compose=` from the URL: a template to open the composer on. */
   compose: string | null;
   /** The instant the page is rendered for; injectable for previews. */
@@ -132,11 +139,12 @@ export async function ClientDetailView({
   customTemplates,
   nextAppointment,
   tasks,
+  activities,
   compose,
   now = new Date(),
   timeZone = DEFAULT_TIME_ZONE,
 }: ClientDetailData) {
-  const [t, tCrm, tClients, tCommon, tRes, tViewings, tAppt, locale] =
+  const [t, tCrm, tClients, tCommon, tRes, tViewings, tAppt, tActivity, locale] =
     await Promise.all([
       getTranslations("clientDetail.page"),
       getTranslations("crm"),
@@ -145,6 +153,7 @@ export async function ClientDetailView({
       getTranslations("clientDetail.reservation"),
       getTranslations("clientDetail.viewings"),
       getTranslations("server.appointments"),
+      getTranslations("clientDetail.activity"),
       getLocale(),
     ]);
   const tag = intlTag(locale);
@@ -159,6 +168,12 @@ export async function ClientDetailView({
   const side = client.side as ClientSide;
   const isBuyer = side === "buyer";
   const name = clientFullName(client);
+  const contactTarget = {
+    id: client.id,
+    firstName: client.first_name,
+    side: client.side,
+    stage: client.stage,
+  };
   const typeLabel = isBuyer
     ? client.deal_type
       ? dealTypeLabel(tCrm, client.deal_type)
@@ -203,7 +218,20 @@ export async function ClientDetailView({
   ) {
     meta.push({ icon: MapPin, text: nationality });
   }
-  meta.push({ icon: RefreshCw, text: t("updated", { when: updatedLabel }) });
+  // When the agent last reached them says more than the last edit, once there is one.
+  meta.push(
+    client.last_contacted_at
+      ? {
+          icon: History,
+          text: tActivity("lastContact", {
+            when: formatDistanceStrict(parseISO(client.last_contacted_at), now, {
+              addSuffix: true,
+              locale: dfl,
+            }),
+          }),
+        }
+      : { icon: RefreshCw, text: t("updated", { when: updatedLabel }) }
+  );
 
   // What is booked next: a dated viewing or a calendar appointment.
   const upcoming = [
@@ -389,6 +417,10 @@ export async function ClientDetailView({
         <ClientHeaderActions
           client={client}
           primary={
+            <>
+            {activities ? (
+              <LogContactButton client={contactTarget} labelClassName="max-sm:sr-only" />
+            ) : null}
             <MessageComposer
               client={{
                 id: client.id,
@@ -396,6 +428,8 @@ export async function ClientDetailView({
                 phone: client.phone,
                 email: client.email,
                 language: client.language,
+                side: client.side,
+                stage: client.stage,
               }}
               varsInput={messageVarsInput}
               customTemplates={customTemplates}
@@ -404,6 +438,7 @@ export async function ClientDetailView({
               triggerVariant="default"
               triggerSize="sm"
             />
+            </>
           }
         />
       </div>
@@ -449,14 +484,12 @@ export async function ClientDetailView({
                     </KeyValueRow>
                   ) : null}
                 </KeyValueList>
-                {whatsappLink(client.phone) ? (
+                {client.phone ? (
                   <div className="border-t p-3">
-                    <WhatsAppButton
+                    <ContactButtons
+                      client={contactTarget}
                       phone={client.phone}
-                      firstName={client.first_name}
                       language={client.language}
-                      size="sm"
-                      className="w-full"
                     />
                   </div>
                 ) : null}
@@ -505,6 +538,36 @@ export async function ClientDetailView({
               todayKey={todayKey}
             />
           ) : null}
+          {activities ? (
+            <ActivityPanel
+              client={contactTarget}
+              activities={activities}
+              about={client.notes}
+              aboutHref={`/clients/${client.id}/edit`}
+              createdAt={client.created_at}
+              todayKey={todayKey}
+            />
+          ) : (
+            <Panel
+              title={t("notes")}
+              icon={<NotebookPen className="size-3.5" />}
+              action={
+                <Button asChild variant="outline" size="xs">
+                  <Link href={`/clients/${client.id}/edit`}>
+                    <Pencil /> {tCommon("edit")}
+                  </Link>
+                </Button>
+              }
+            >
+              {client.notes ? (
+                <p className="px-4 py-3.5 text-sm leading-relaxed whitespace-pre-wrap">
+                  {client.notes}
+                </p>
+              ) : (
+                <PanelEmpty>{t("notesEmpty")}</PanelEmpty>
+              )}
+            </Panel>
+          )}
           {isBuyer ? (
             <>
               <PreferencesSection clientId={client.id} prefs={prefs} />
@@ -527,25 +590,6 @@ export async function ClientDetailView({
               properties={properties}
             />
           )}
-          <Panel
-            title={t("notes")}
-            icon={<NotebookPen className="size-3.5" />}
-            action={
-              <Button asChild variant="outline" size="xs">
-                <Link href={`/clients/${client.id}/edit`}>
-                  <Pencil /> {tCommon("edit")}
-                </Link>
-              </Button>
-            }
-          >
-            {client.notes ? (
-              <p className="px-4 py-3.5 text-sm leading-relaxed whitespace-pre-wrap">
-                {client.notes}
-              </p>
-            ) : (
-              <PanelEmpty>{t("notesEmpty")}</PanelEmpty>
-            )}
-          </Panel>
           <DocumentsSection
             clientId={client.id}
             agentId={client.agent_id}

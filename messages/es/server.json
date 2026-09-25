@@ -44,5 +44,13 @@
       "notesNotReady": "Las notas aún no están disponibles.",
       "noteNotFound": "Nota no encontrada"
     }
+  },
+  "activity": {
+    "errors": {
+      "checkForm": "Revisa el formulario.",
+      "notFound": "Entrada no encontrada",
+      "clientNotFound": "Ese cliente ya no existe.",
+      "notReady": "La actividad aún no está disponible."
+    }
   }
 }

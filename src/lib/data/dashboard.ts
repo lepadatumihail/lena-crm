@@ -184,6 +184,8 @@ export type AttentionItem = {
    * Anything else is left uncoloured.
    */
   urgency?: "overdue" | "today";
+  /** Who the item is about, for logging a contact straight from the row. */
+  client: { id: string; firstName: string; side: ClientSide; stage: string };
   title: string;
   detail: string;
   href: string;
@@ -215,9 +217,11 @@ export const getNeedsAttention = cache(async (): Promise<AttentionItem[]> => {
     getAttentionSignals(supabase, ctx),
     supabase
       .from("clients")
-      .select("id, side, first_name, last_name, created_at")
+      .select("id, side, stage, first_name, last_name, created_at")
       .eq("is_active", true)
       .or("and(side.eq.buyer,stage.eq.new),and(side.eq.seller,stage.eq.pending)")
+      // a lead the agent has already reached isn't new any more, whatever its stage says
+      .is("last_contacted_at", null)
       .order("created_at", { ascending: false }),
   ]);
   if (newLeadsRes.error) throw new Error(newLeadsRes.error.message);
@@ -242,6 +246,7 @@ export const getNeedsAttention = cache(async (): Promise<AttentionItem[]> => {
       id: `resdate:${r.clientId}:${RES_COL[r.field]}`,
       kind: "reservation",
       urgency: r.diff === 0 ? "today" : undefined,
+      client: { id: r.clientId, firstName: r.firstName, side: "buyer", stage: "reserved" },
       title: r.name,
       detail: t("attention.reservation", {
         label: t(`attention.reservationFields.${r.field}`),
@@ -260,6 +265,7 @@ export const getNeedsAttention = cache(async (): Promise<AttentionItem[]> => {
       id: `newlead:${c.id}`,
       kind: "new_lead",
       urgency: "today",
+      client: { id: c.id, firstName: c.first_name, side: c.side, stage: c.stage },
       title: `${c.first_name} ${c.last_name}`.trim(),
       detail: t(c.side === "buyer" ? "attention.newBuyer" : "attention.newSeller"),
       href:
@@ -273,6 +279,7 @@ export const getNeedsAttention = cache(async (): Promise<AttentionItem[]> => {
     items.push({
       id: `stalled:${o.clientId}`,
       kind: "stalled_offer",
+      client: { id: o.clientId, firstName: o.firstName, side: "buyer", stage: o.stage },
       title: o.name,
       detail: t("attention.stalledOffer"),
       href: `/clients/${o.clientId}?compose=offer_followup`,
@@ -284,6 +291,7 @@ export const getNeedsAttention = cache(async (): Promise<AttentionItem[]> => {
       id: `followup:${b.clientId}`,
       kind: "follow_up",
       urgency: "overdue",
+      client: { id: b.clientId, firstName: b.firstName, side: "buyer", stage: b.stage },
       title: b.name,
       detail: t("attention.followUp", {
         stage: stageLabel(tCrm, b.stage),

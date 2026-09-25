@@ -18,12 +18,18 @@ export function WhatsAppButton({
   language,
   size = "default",
   className,
+  onOpen,
+  short = false,
 }: {
   phone: string | null | undefined;
   firstName: string;
   language: string | null | undefined;
   size?: "default" | "sm";
   className?: string;
+  /** Called as WhatsApp opens, e.g. to log the contact. */
+  onOpen?: () => void;
+  /** Just "WhatsApp", for a button that shares its row. */
+  short?: boolean;
 }) {
   const t = useTranslations("clientDetail.whatsapp");
   const href = whatsappLink(phone, whatsappGreeting(firstName, language));
@@ -34,12 +40,13 @@ export function WhatsAppButton({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={onOpen}
       className={cn(buttonVariants({ variant: "outline", size }), className)}
     >
       <span className="text-[#25D366]">
         <WhatsAppIcon />
       </span>
-      {t("message")}
+      {short ? "WhatsApp" : t("message")}
     </a>
   );
 }

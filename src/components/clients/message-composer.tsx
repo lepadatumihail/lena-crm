@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useContactLog } from "@/components/clients/contact-log";
 import { draftMessage } from "@/lib/actions/messages";
 import {
   MESSAGE_TEMPLATES,
@@ -41,6 +42,7 @@ import { whatsappLink } from "@/lib/whatsapp";
 import { languageLabel } from "@/i18n/labels";
 import { LANGUAGES } from "@/lib/crm";
 import { cn } from "@/lib/utils";
+import { ACTIVITY_BODY_MAX } from "@/lib/validation/activity";
 
 const BLANK = "blank";
 const NO_PROPERTY = "none";
@@ -70,6 +72,8 @@ export function MessageComposer({
     phone: string | null;
     email: string | null;
     language: string | null;
+    side: string;
+    stage: string;
   };
   varsInput: TemplateVarsInput;
   customTemplates?: ComposerTemplate[];
@@ -85,6 +89,13 @@ export function MessageComposer({
   const tTemplates = useTranslations("templates");
   const hasWhatsApp = whatsappLink(client.phone) != null;
   const hasEmail = Boolean(client.email);
+  // Sending logs the contact and asks for the next step.
+  const contactLog = useContactLog({
+    id: client.id,
+    firstName: client.first_name,
+    side: client.side,
+    stage: client.stage,
+  });
 
   const defaultLanguage =
     client.language && (LANGUAGES as readonly string[]).includes(client.language)
@@ -199,6 +210,7 @@ export function MessageComposer({
       window.location.href = url;
     }
     setOpen(false);
+    void contactLog.logStarted(channel, text.slice(0, ACTIVITY_BODY_MAX));
   }
 
   const canSend =
@@ -206,196 +218,199 @@ export function MessageComposer({
     (channel === "whatsapp" ? hasWhatsApp : hasEmail);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <Button
-        variant={triggerVariant}
-        size={triggerSize}
-        className={triggerClassName}
-        onClick={() => setOpen(true)}
-      >
-        <Sparkles /> {t("trigger")}
-      </Button>
-      <DialogContent className="max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{t("title", { name: client.first_name })}</DialogTitle>
-          <DialogDescription>{t("description")}</DialogDescription>
-        </DialogHeader>
+    <>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <Button
+          variant={triggerVariant}
+          size={triggerSize}
+          className={triggerClassName}
+          onClick={() => setOpen(true)}
+        >
+          <Sparkles /> {t("trigger")}
+        </Button>
+        <DialogContent className="max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{t("title", { name: client.first_name })}</DialogTitle>
+            <DialogDescription>{t("description")}</DialogDescription>
+          </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              disabled={!hasWhatsApp}
-              onClick={() => setChannel("whatsapp")}
-              className={cn(
-                "flex items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition-colors disabled:opacity-40",
-                channel === "whatsapp"
-                  ? "border-primary bg-primary/10 text-primary"
-                  : "hover:bg-accent"
-              )}
-            >
-              <MessageCircle className="size-4" /> WhatsApp
-            </button>
-            <button
-              type="button"
-              disabled={!hasEmail}
-              onClick={() => setChannel("email")}
-              className={cn(
-                "flex items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition-colors disabled:opacity-40",
-                channel === "email"
-                  ? "border-primary bg-primary/10 text-primary"
-                  : "hover:bg-accent"
-              )}
-            >
-              <Mail className="size-4" /> {t("email")}
-            </button>
-          </div>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                disabled={!hasWhatsApp}
+                onClick={() => setChannel("whatsapp")}
+                className={cn(
+                  "flex items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition-colors disabled:opacity-40",
+                  channel === "whatsapp"
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "hover:bg-accent"
+                )}
+              >
+                <MessageCircle className="size-4" /> WhatsApp
+              </button>
+              <button
+                type="button"
+                disabled={!hasEmail}
+                onClick={() => setChannel("email")}
+                className={cn(
+                  "flex items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition-colors disabled:opacity-40",
+                  channel === "email"
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "hover:bg-accent"
+                )}
+              >
+                <Mail className="size-4" /> {t("email")}
+              </button>
+            </div>
 
-          {propertyChoices.length > 0 && (
+            {propertyChoices.length > 0 && (
+              <div className="space-y-1.5">
+                <Label>{t("property")}</Label>
+                <Select
+                  value={propertyLabel || NO_PROPERTY}
+                  onValueChange={(v) =>
+                    setPropertyLabel(v === NO_PROPERTY ? "" : v)
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NO_PROPERTY}>
+                      {t("noProperty")}
+                    </SelectItem>
+                    {propertyChoices.map((p) => (
+                      <SelectItem key={p} value={p}>
+                        {p}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
             <div className="space-y-1.5">
-              <Label>{t("property")}</Label>
+              <Label>{t("template")}</Label>
               <Select
-                value={propertyLabel || NO_PROPERTY}
-                onValueChange={(v) =>
-                  setPropertyLabel(v === NO_PROPERTY ? "" : v)
-                }
+                value={templateId || BLANK}
+                onValueChange={(v) => selectTemplate(v === BLANK ? "" : v)}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={NO_PROPERTY}>
-                    {t("noProperty")}
-                  </SelectItem>
-                  {propertyChoices.map((p) => (
-                    <SelectItem key={p} value={p}>
-                      {p}
+                  <SelectItem value={BLANK}>{t("blank")}</SelectItem>
+                  <SelectGroup>
+                    <SelectLabel>{t("starters")}</SelectLabel>
+                    {MESSAGE_TEMPLATES.map((tpl) => (
+                      <SelectItem key={tpl.id} value={tpl.id}>
+                        {templateLabel(tTemplates, tpl.id)} —{" "}
+                        {templateDescription(tTemplates, tpl.id)}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                  {customTemplates.length > 0 && (
+                    <SelectGroup>
+                      <SelectLabel>{t("myTemplates")}</SelectLabel>
+                      {customTemplates.map((tpl) => (
+                        <SelectItem key={tpl.id} value={tpl.id}>
+                          {tpl.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label>{t("language")}</Label>
+              <Select value={language} onValueChange={changeLanguage}>
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {LANGUAGES.map((l) => (
+                    <SelectItem key={l} value={l}>
+                      {languageLabel(tCrm, l)}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-          )}
 
-          <div className="space-y-1.5">
-            <Label>{t("template")}</Label>
-            <Select
-              value={templateId || BLANK}
-              onValueChange={(v) => selectTemplate(v === BLANK ? "" : v)}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={BLANK}>{t("blank")}</SelectItem>
-                <SelectGroup>
-                  <SelectLabel>{t("starters")}</SelectLabel>
-                  {MESSAGE_TEMPLATES.map((tpl) => (
-                    <SelectItem key={tpl.id} value={tpl.id}>
-                      {templateLabel(tTemplates, tpl.id)} —{" "}
-                      {templateDescription(tTemplates, tpl.id)}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-                {customTemplates.length > 0 && (
-                  <SelectGroup>
-                    <SelectLabel>{t("myTemplates")}</SelectLabel>
-                    {customTemplates.map((tpl) => (
-                      <SelectItem key={tpl.id} value={tpl.id}>
-                        {tpl.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                )}
-              </SelectContent>
-            </Select>
-          </div>
+            {channel === "email" && (
+              <div className="space-y-1.5">
+                <Label htmlFor="msg-subject">{t("subject")}</Label>
+                <Input
+                  id="msg-subject"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  placeholder={t("subjectPlaceholder")}
+                />
+              </div>
+            )}
 
-          <div className="space-y-1.5">
-            <Label>{t("language")}</Label>
-            <Select value={language} onValueChange={changeLanguage}>
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {LANGUAGES.map((l) => (
-                  <SelectItem key={l} value={l}>
-                    {languageLabel(tCrm, l)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {channel === "email" && (
             <div className="space-y-1.5">
-              <Label htmlFor="msg-subject">{t("subject")}</Label>
-              <Input
-                id="msg-subject"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                placeholder={t("subjectPlaceholder")}
-              />
+              <Label htmlFor="msg-ai">
+                {t.rich("aiLabel", {
+                  muted: (chunks) => (
+                    <span className="text-muted-foreground font-normal">
+                      {chunks}
+                    </span>
+                  ),
+                })}
+              </Label>
+              <div className="flex gap-2">
+                <Input
+                  id="msg-ai"
+                  value={instruction}
+                  onChange={(e) => setInstruction(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      writeWithAI();
+                    }
+                  }}
+                  placeholder={t("aiPlaceholder")}
+                />
+                <Button
+                  type="button"
+                  onClick={writeWithAI}
+                  disabled={aiLoading}
+                  className="shrink-0"
+                >
+                  {aiLoading ? <Loader2 className="animate-spin" /> : <Sparkles />}
+                  {body.trim() ? t("rewrite") : t("write")}
+                </Button>
+              </div>
             </div>
-          )}
 
-          <div className="space-y-1.5">
-            <Label htmlFor="msg-ai">
-              {t.rich("aiLabel", {
-                muted: (chunks) => (
-                  <span className="text-muted-foreground font-normal">
-                    {chunks}
-                  </span>
-                ),
-              })}
-            </Label>
-            <div className="flex gap-2">
-              <Input
-                id="msg-ai"
-                value={instruction}
-                onChange={(e) => setInstruction(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    writeWithAI();
-                  }
-                }}
-                placeholder={t("aiPlaceholder")}
+            <div className="space-y-1.5">
+              <Label htmlFor="msg-body">{t("message")}</Label>
+              <Textarea
+                id="msg-body"
+                rows={6}
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                placeholder={t("messagePlaceholder")}
               />
-              <Button
-                type="button"
-                onClick={writeWithAI}
-                disabled={aiLoading}
-                className="shrink-0"
-              >
-                {aiLoading ? <Loader2 className="animate-spin" /> : <Sparkles />}
-                {body.trim() ? t("rewrite") : t("write")}
-              </Button>
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="msg-body">{t("message")}</Label>
-            <Textarea
-              id="msg-body"
-              rows={6}
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              placeholder={t("messagePlaceholder")}
-            />
-          </div>
-        </div>
-
-        <DialogFooter>
-          <Button variant="ghost" onClick={() => setOpen(false)}>
-            {tCommon("cancel")}
-          </Button>
-          <Button onClick={send} disabled={!canSend}>
-            <Send />
-            {channel === "whatsapp" ? t("openWhatsApp") : t("openEmail")}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setOpen(false)}>
+              {tCommon("cancel")}
+            </Button>
+            <Button onClick={send} disabled={!canSend}>
+              <Send />
+              {channel === "whatsapp" ? t("openWhatsApp") : t("openEmail")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      {contactLog.dialog}
+    </>
   );
 }

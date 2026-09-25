@@ -3,6 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
 import {
   calendarDaysFromToday,
+  OFFER_CHASE_AFTER_DAYS,
   RESERVATION_LOOKAHEAD_DAYS,
   STALE_AFTER_DAYS,
 } from "@/lib/attention";
@@ -12,22 +13,28 @@ import {
  * reservation key dates. Both the notifications sync and the Home cockpit read
  * from here so they can never diverge again.
  *
+ * "Quiet" counts from the last logged contact (clients.last_contacted_at),
+ * falling back to the last edit for clients nobody has logged a contact for
+ * yet, so reaching out to a client is what clears them.
+ *
  * Data-module convention (see src/lib/data/clients.ts): throw on query error;
  * callers decide how to surface it.
  */
 
 export type AttentionContext = { nowISO: string; todayKey: string };
 
-export type StalledOffer = { clientId: string; name: string };
+export type StalledOffer = { clientId: string; name: string; firstName: string; stage: string };
 export type StaleBuyer = {
   clientId: string;
   name: string;
+  firstName: string;
   stage: string;
   quietDays: number;
 };
 export type ReservationDate = {
   clientId: string;
   name: string;
+  firstName: string;
   field: "ppc" | "notary" | "downpayment";
   label: string;
   dateStr: string;
@@ -51,6 +58,7 @@ type OfferRow = {
     side: string;
     is_active: boolean;
     stage: string;
+    last_contacted_at: string | null;
   }>;
 };
 type StaleRow = {
@@ -59,6 +67,7 @@ type StaleRow = {
   last_name: string;
   stage: string;
   updated_at: string;
+  last_contacted_at: string | null;
 };
 type ResRow = {
   client_id: string;
@@ -90,16 +99,18 @@ export async function getAttentionSignals(
     supabase
       .from("viewings")
       .select(
-        "client_id, client:clients(first_name, last_name, side, is_active, stage)"
+        "client_id, client:clients(first_name, last_name, side, is_active, stage, last_contacted_at)"
       )
       .eq("had_offer", true),
     supabase
       .from("clients")
-      .select("id, first_name, last_name, stage, updated_at")
+      .select("id, first_name, last_name, stage, updated_at, last_contacted_at")
       .eq("side", "buyer")
       .eq("is_active", true)
       .neq("stage", "reserved")
-      .lte("updated_at", staleBefore),
+      .or(
+        `last_contacted_at.lte."${staleBefore}",and(last_contacted_at.is.null,updated_at.lte."${staleBefore}")`
+      ),
     supabase
       .from("reservations")
       .select(
@@ -111,7 +122,8 @@ export async function getAttentionSignals(
   if (staleRes.error) throw new Error(staleRes.error.message);
   if (resRes.error) throw new Error(resRes.error.message);
 
-  // ---- Stalled offers: buyers who made an offer but aren't reserved yet ----
+  // ---- Stalled offers: buyers who made an offer but aren't reserved yet.
+  // Chasing one (a logged contact) quiets it for OFFER_CHASE_AFTER_DAYS days. ----
   const stalledOffers: StalledOffer[] = [];
   const stalledClients = new Set<string>();
   for (const v of (offerRes.data ?? []) as unknown as OfferRow[]) {
@@ -119,7 +131,16 @@ export async function getAttentionSignals(
     if (!c || c.side !== "buyer" || c.is_active === false) continue;
     if (c.stage === "reserved" || stalledClients.has(v.client_id)) continue;
     stalledClients.add(v.client_id);
-    stalledOffers.push({ clientId: v.client_id, name: fullName(c) });
+    const chasedDaysAgo = c.last_contacted_at
+      ? -calendarDaysFromToday(c.last_contacted_at.slice(0, 10), ctx.todayKey)
+      : null;
+    if (chasedDaysAgo != null && chasedDaysAgo < OFFER_CHASE_AFTER_DAYS) continue;
+    stalledOffers.push({
+      clientId: v.client_id,
+      name: fullName(c),
+      firstName: c.first_name,
+      stage: c.stage,
+    });
   }
 
   // ---- Stale buyers: active, non-reserved buyers quiet for 7+ days. A client
@@ -127,13 +148,15 @@ export async function getAttentionSignals(
   const staleBuyers: StaleBuyer[] = [];
   for (const c of (staleRes.data ?? []) as StaleRow[]) {
     if (stalledClients.has(c.id)) continue;
+    const quietSince = c.last_contacted_at ?? c.updated_at;
     const quietDays = Math.max(
       1,
-      -calendarDaysFromToday(c.updated_at.slice(0, 10), ctx.todayKey)
+      -calendarDaysFromToday(quietSince.slice(0, 10), ctx.todayKey)
     );
     staleBuyers.push({
       clientId: c.id,
       name: fullName(c),
+      firstName: c.first_name,
       stage: c.stage,
       quietDays,
     });
@@ -152,6 +175,7 @@ export async function getAttentionSignals(
       reservationDates.push({
         clientId: r.client_id,
         name: fullName(c),
+        firstName: c.first_name,
         field: f.key,
         label: f.label,
         dateStr,

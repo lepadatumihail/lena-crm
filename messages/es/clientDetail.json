@@ -34,7 +34,8 @@
       "since": "Desde el {date}",
       "nextUp": "Próximo",
       "nothingScheduled": "Nada reservado"
-    }
+    },
+    "call": "Llamar"
   },
   "attachments": {
     "attach": "Adjuntar un archivo",
@@ -221,5 +222,74 @@
     "clientNotFound": "Cliente no encontrado",
     "aiRequestFailed": "La solicitud a la IA ha fallado",
     "aiUnreadable": "No se ha podido leer la respuesta de la IA."
+  },
+  "contactLog": {
+    "trigger": "Registrar contacto",
+    "title": "Registrar un contacto con {name}",
+    "description": "Reinicia el contador de silencio y queda en la actividad de {name}.",
+    "loggedTitle": "{channel, select, whatsapp {WhatsApp a {name} registrado} call {Llamada con {name} registrada} email {Email a {name} registrado} meeting {Reunión con {name} registrada} other {Contacto con {name} registrado}}",
+    "loggedDescription": "Fija el siguiente paso para que {name} no se enfríe.",
+    "undo": "¿No llegó a pasar? Deshacer",
+    "channelLabel": "Cómo",
+    "channels": {
+      "whatsapp": "WhatsApp",
+      "call": "Llamada",
+      "email": "Email",
+      "meeting": "Reunión",
+      "other": "Otro"
+    },
+    "note": "¿De qué hablasteis?",
+    "notePlaceholder": "Opcional: quiere una segunda visita el sábado",
+    "nextStep": "Seguimiento",
+    "steps": {
+      "tomorrow": "Mañana",
+      "three_days": "En 3 días",
+      "week": "En una semana",
+      "none": "Sin seguimiento"
+    },
+    "taskTitle": "Tarea",
+    "taskTitleDefault": "Hacer seguimiento a {name}",
+    "moveTo": "Pasar a {stage}",
+    "save": "Guardar",
+    "skip": "Omitir",
+    "toasts": {
+      "saved": "Contacto registrado",
+      "savedWithTask": "Contacto registrado · seguimiento {date}",
+      "taskOnly": "Seguimiento fijado para el {date}",
+      "undone": "Contacto eliminado",
+      "failed": "No se pudo registrar el contacto",
+      "taskFailed": "No se pudo crear el seguimiento",
+      "undoFailed": "No se pudo deshacer"
+    }
+  },
+  "activity": {
+    "title": "Actividad",
+    "noteLabel": "Nota nueva",
+    "notePlaceholder": "Añade una nota…",
+    "addNote": "Añadir nota",
+    "about": "Sobre el cliente",
+    "empty": "Aún no hay nada registrado. Los mensajes y llamadas que inicies desde LeadWing aparecen aquí.",
+    "added": "Añadido a LeadWing",
+    "contact": {
+      "whatsapp": "Mensaje de WhatsApp",
+      "call": "Llamada",
+      "email": "Email",
+      "meeting": "Reunión en persona",
+      "other": "Contacto"
+    },
+    "stage": "Pasó a {stage}",
+    "stageFrom": "desde {stage}",
+    "time": "{day}, {time}",
+    "yesterday": "Ayer",
+    "delete": "Eliminar",
+    "deleteTitle": "¿Eliminar esta entrada?",
+    "deleteDescription": "Se quita de la actividad. Un contacto eliminado deja de contar como la última vez que hablasteis.",
+    "lastContact": "Último contacto {when}",
+    "noContact": "Sin contactos registrados",
+    "toasts": {
+      "noteFailed": "No se pudo guardar la nota",
+      "deleted": "Eliminado",
+      "deleteFailed": "No se pudo eliminar"
+    }
   }
 }

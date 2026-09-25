@@ -34,7 +34,8 @@
       "since": "Since {date}",
       "nextUp": "Next up",
       "nothingScheduled": "Nothing booked"
-    }
+    },
+    "call": "Call"
   },
   "attachments": {
     "attach": "Attach a file",
@@ -221,5 +222,74 @@
     "clientNotFound": "Client not found",
     "aiRequestFailed": "AI request failed",
     "aiUnreadable": "Couldn't read the AI response."
+  },
+  "contactLog": {
+    "trigger": "Log contact",
+    "title": "Log a contact with {name}",
+    "description": "It resets the quiet timer and goes on {name}'s activity.",
+    "loggedTitle": "{channel, select, whatsapp {WhatsApp to {name} logged} call {Call with {name} logged} email {Email to {name} logged} meeting {Meeting with {name} logged} other {Contact with {name} logged}}",
+    "loggedDescription": "Set the next step so {name} doesn't go quiet.",
+    "undo": "Didn't happen? Undo",
+    "channelLabel": "How",
+    "channels": {
+      "whatsapp": "WhatsApp",
+      "call": "Call",
+      "email": "Email",
+      "meeting": "Meeting",
+      "other": "Other"
+    },
+    "note": "What was it about?",
+    "notePlaceholder": "Optional: wants a second viewing on Saturday",
+    "nextStep": "Follow up",
+    "steps": {
+      "tomorrow": "Tomorrow",
+      "three_days": "In 3 days",
+      "week": "In a week",
+      "none": "No follow-up"
+    },
+    "taskTitle": "Task",
+    "taskTitleDefault": "Follow up with {name}",
+    "moveTo": "Move to {stage}",
+    "save": "Save",
+    "skip": "Skip",
+    "toasts": {
+      "saved": "Contact logged",
+      "savedWithTask": "Contact logged · follow-up {date}",
+      "taskOnly": "Follow-up set for {date}",
+      "undone": "Contact removed",
+      "failed": "Couldn't log the contact",
+      "taskFailed": "Couldn't create the follow-up",
+      "undoFailed": "Couldn't undo"
+    }
+  },
+  "activity": {
+    "title": "Activity",
+    "noteLabel": "New note",
+    "notePlaceholder": "Add a note…",
+    "addNote": "Add note",
+    "about": "About",
+    "empty": "Nothing logged yet. Messages and calls you start from LeadWing show up here.",
+    "added": "Added to LeadWing",
+    "contact": {
+      "whatsapp": "WhatsApp message",
+      "call": "Call",
+      "email": "Email",
+      "meeting": "Met in person",
+      "other": "Contact"
+    },
+    "stage": "Moved to {stage}",
+    "stageFrom": "from {stage}",
+    "time": "{day}, {time}",
+    "yesterday": "Yesterday",
+    "delete": "Delete",
+    "deleteTitle": "Delete this entry?",
+    "deleteDescription": "It comes off the activity. A deleted contact no longer counts as the last time you spoke.",
+    "lastContact": "Last contact {when}",
+    "noContact": "No contact logged",
+    "toasts": {
+      "noteFailed": "Couldn't save the note",
+      "deleted": "Deleted",
+      "deleteFailed": "Couldn't delete"
+    }
   }
 }

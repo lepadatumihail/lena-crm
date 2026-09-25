@@ -11,6 +11,8 @@
 
 /** Follow-up nudge threshold: a buyer quiet this many days is "stale". */
 export const STALE_AFTER_DAYS = 7;
+/** A pending offer comes back as a nudge this many days after the agent last chased it. */
+export const OFFER_CHASE_AFTER_DAYS = 3;
 /** Reservation key dates within this many days surface as a signal. */
 export const RESERVATION_LOOKAHEAD_DAYS = 5;
 

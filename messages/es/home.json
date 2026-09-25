@@ -39,7 +39,8 @@
       "inDays": "en {count, plural, one {# día} other {# días}}"
     },
     "newBuyer": "Lead nuevo · sin contactar",
-    "newSeller": "Vendedor nuevo · sin cualificar"
+    "newSeller": "Vendedor nuevo · sin cualificar",
+    "log": "Registrar contacto"
   },
   "pipeline": {
     "title": "Embudo",
