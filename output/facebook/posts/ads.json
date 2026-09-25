@@ -221,6 +221,23 @@
    "issues_info": "none on ad or ad set; no ad_review_feedback",
    "waste_test": "does not fire: lifetime audience_network share 21% (under half) and lifetime cost per click EUR 0.094 (over EUR 0.05); today feed-only with LPV at 69% of clicks",
    "run_totals_near_final": "EUR 23.90 of EUR 25 over 19-24 Sep: 53,870 impressions, 16,598 reach, 253 reported link clicks, 90 landing page views (EUR 0.27 each). Ad set ends tonight 24 Sep 23:59 Madrid on option A; EUR 1.10 expires unspent, as accepted. The Fri 25 noon brief confirms it has ended."
+  },
+  "status_2026_09_25T1210": "ENDED as scheduled 24 Sep 23:59 Madrid on option A. Ad + ad set still read effective_status ACTIVE but the end_time has passed, so there is no 25 Sep row and no further spend. Do not resume, re-fund or edit without a fresh yes.",
+  "final_2026_09_25T1210": {
+   "spend_eur": 24.56,
+   "budget_unspent_eur": 0.44,
+   "impressions": 54155,
+   "reach": 16680,
+   "cpm": 0.4535,
+   "ctr": 0.5023,
+   "link_clicks_reported": 255,
+   "landing_page_views": 91,
+   "cost_per_landing_view_eur": 0.27,
+   "cost_per_click_eur": 0.096,
+   "last_day_24_sep": "EUR 2.99 / 1198 imp / 1049 reach / cpm 2.50 / ctr 2.17 / 15 clicks / 10 LPV",
+   "placements_lifetime": "facebook/feed EUR 12.94 / 9333 imp / 66 clicks / 42 LPV; instagram/feed EUR 6.31 / 2812 imp / 22 clicks / 13 LPV; audience_network EUR 5.06 / 41872 imp / 165 clicks / 36 LPV (all before the 20 Sep 13:11 placement fix); EUR 0.25 leaked to Reels/Stories/right-hand column, all historical",
+   "real_feed_totals": "12145 feed impressions, 88 feed clicks, 55 feed landing views for EUR 19.25 - the honest read of the run",
+   "reactions": "5 post_reaction, 3 net page likes, 0 comments across its dark posts"
   }
  },
  "rejected_boost": {
@@ -304,6 +321,26 @@
    "issues_info": "none on ad or ad set; no ad_review_feedback",
    "waste_test": "does not fire: zero audience_network spend, cost per click EUR 0.16",
    "end_time": "2026-09-28T23:59:00+0200, EUR 22.25 of EUR 25 left"
+  },
+  "status_2026_09_25T1210": "ad + ad set ACTIVE, no issues_info, no ad_review_feedback, feed-only, zero audience_network.",
+  "observed_2026_09_25T1210": {
+   "spend_eur": 5.33,
+   "budget_remaining_eur": 19.67,
+   "impressions": 1983,
+   "reach": 1702,
+   "cpm": 2.69,
+   "ctr": 1.92,
+   "link_clicks_reported": 30,
+   "landing_page_views": 17,
+   "cost_per_landing_view_eur": 0.31,
+   "cost_per_click_eur": 0.178,
+   "day_24_sep_full": "EUR 3.48 / 1360 imp / 1221 reach / cpm 2.56 / ctr 1.84 / 20 clicks / 11 LPV (55% of clicks)",
+   "today_25_sep_to_1210": "EUR 1.85 / 623 imp / 605 reach / cpm 2.97 / 10 clicks / 6 LPV (60% of clicks, EUR 0.31 each)",
+   "today_placements": "facebook/feed EUR 0.89 / 358 imp / 4 clicks / 2 LPV; instagram/feed EUR 0.96 / 265 imp / 6 clicks / 4 LPV; zero audience_network",
+   "today_hourly": "delivery in every hour 01:00-12:00, EUR 0.07-0.36 each, no stall; nothing in the 00:00 hour",
+   "waste_test": "does not fire: 0% audience_network, cost per click EUR 0.18, LPV 57% of clifetime clicks",
+   "runway": "EUR 19.67 left with ~84 h to Sun 28 Sep 23:59; today's pace ~EUR 3.7/day would spend ~EUR 13 of it and leave ~EUR 6-7 to expire. Proposed to the founder: extend end_time to Tue 30 Sep 23:59. Not applied.",
+   "reactions_comments": "1 reaction on the live dark post, 0 comments on it or the two orphans"
   }
  },
  "post_boost_ad": {
@@ -332,7 +369,20 @@
    "spend_eur": 0.0,
    "budget_remaining_eur": 10.0,
    "insights": "empty - correct, delivery starts 25 Sep 10:00 Madrid"
+  },
+  "status_2026_09_25T1210": "ad + ad set ACTIVE, no issues_info; delivery began at the scheduled 25 Sep 10:00 Madrid.",
+  "observed_2026_09_25T1210": {
+   "spend_eur": 0.02,
+   "budget_remaining_eur": 9.98,
+   "impressions": 12,
+   "reach": 11,
+   "cpm": 1.67,
+   "engagement_actions": "none yet - 0 reactions, 0 comments, 0 shares, 0 page follows attributable to it",
+   "placements": "facebook/feed 5 imp EUR 0.00; instagram/feed 7 imp EUR 0.02",
+   "hourly": "10:00 h 3 imp, 11:00 h 9 imp",
+   "note": "first 2 h only, and very slow: 12 impressions against a EUR 10 / 6.5-day budget (~EUR 1.43/day). Not a stall by the playbook's test (delivery is non-zero). Evening check to confirm it picks up."
   }
  },
- "account_2026_09_24T1810": "status 1, no disable reason, EUR 2.86 balance, EUR 105.79 lifetime spend"
+ "account_2026_09_24T1810": "status 1, no disable reason, EUR 2.86 balance, EUR 105.79 lifetime spend",
+ "account_2026_09_25T1210": "status 1, no disable reason, EUR 6.12 balance, EUR 112.27 lifetime spend"
 }

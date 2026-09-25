@@ -55,7 +55,10 @@
   "scheduled_for": "2026-09-25T09:30:00+02:00",
   "approved": "founder, 23 Sep evening ('post all')",
   "error": null,
-  "replaced": "23 Sep ~20:30: beige typographic card replaced with the editorial-photo card (founder: 'swap'); old scheduled post 122110445859476753 deleted, re-created with the same text for the same slot"
+  "replaced": "23 Sep ~20:30: beige typographic card replaced with the editorial-photo card (founder: 'swap'); old scheduled post 122110445859476753 deleted, re-created with the same text for the same slot",
+  "published_at": "2026-09-25T09:30:02+02:00",
+  "permalink": "https://www.facebook.com/122105574255476753/posts/122110562607476753",
+  "note": "published on time with the editorial-photo card; 0 reactions and 0 comments at 12:10 Madrid"
  },
  {
   "image": "output/facebook/posts/09-wed30-import.png",

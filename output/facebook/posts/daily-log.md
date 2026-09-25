@@ -1,5 +1,21 @@
 # LeadWing Facebook daily log
 
+## Fri 25 Sep 2026 (noon brief, run 12:10 Madrid)
+
+Published: the Friday digest went out on time at 09:30 Madrid with the editorial-photo card (1279663088571991_122110562607476753), 0 reactions and 0 comments at 12:10. Queue is now Wed 30 Sep 09:30 alone, verified via /scheduled_posts. Monday's digest is left for the Sunday 27 sitting as decided.
+
+Nothing to answer: 0 comments on all 10 page posts and all 6 ad dark posts, inbox empty (0 conversations), followers 0. Reactions unchanged from last night — 1 each on three dark posts, nothing on any page post. Page insights for 24 Sep: 37 post engagements (the page's best day), 1,454 media views, 0 page views and 0 follows.
+
+Click ad ENDED as scheduled 24 Sep 23:59 on option A. FINAL €24.56 of €25 (€0.44 expired), 54,155 imp, 16,680 reach, 255 clicks, 91 landing views at €0.27; last day €2.99 / 1,198 imp / 15 clicks / 10 LPV. Honest feed-only read of the whole run: 12,145 feed impressions, 88 feed clicks, 55 feed landing views for €19.25. Both ad and ad set still report ACTIVE — normal for a finished lifetime ad set, recorded as a Learning.
+
+Quiet-leads ad healthy: ACTIVE, no issues, feed-only, zero Audience Network. 24 Sep full day €3.48 / 1,360 imp / 20 clicks / 11 LPV; today to 12:10 €1.85 / 623 imp / 10 clicks / 6 LPV (€0.31 each), delivery in every hour from 01:00. Lifetime €5.33, €19.67 left, ends 28 Sep 23:59. Waste test does not fire (0% AN, €0.18 per click).
+
+Post boost started on time at 10:00 Madrid but slowly: €0.02 / 12 imp / 0 engagements in two hours, €9.98 left. Non-zero, so not a stall; watched at the evening check.
+
+Account status 1, no disable reason, €6.12 balance. Skipped in one line: Vercel analytics — VERCEL_TOKEN still missing from this environment.
+
+Surfaced, not acted on: extending the quiet-leads end_time to 30 Sep so its committed €25 actually spends (~€6-7 would otherwise expire); plus the two items still open from 24 Sep — the outreach sheet's v1 message text in all 50 rows, and "client card" back in the homepage copy. Noticed: the founder changed the page cover photo at 10:58, which minted story post …3227886770727921. Nothing paused, nothing edited, nothing sent.
+
 ## Thu 24 Sep 2026 (evening check, run 18:10 Madrid)
 
 Nothing to answer: 0 comments on all 8 page posts and all 6 ad dark posts, inbox empty (0 conversations), followers 0. Reactions on the dark posts are now 1 each on three of them (click …668759, quiet …668771, old click …109116961), up from 1 in total at noon — noted, not something to reply to. Nothing drafted, nothing sent, nothing edited.
