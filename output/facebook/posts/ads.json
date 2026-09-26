@@ -352,6 +352,24 @@
    "today_25_sep": "EUR 3.86, 1,244 impressions, 21 link clicks, 15 landing page views",
    "placements": "Facebook feed EUR 4.42 / 1,727 imp / 26 lc / 18 lpv; Instagram feed EUR 2.92 / 877 imp / 15 lc / 8 lpv; zero audience_network",
    "waste_test": "does not fire - no AN spend, cost per click EUR 0.18, landing views 63% of clicks"
+  },
+  "status_2026_09_26T1225": "ad + ad set ACTIVE, no issues_info, no ad_review_feedback, feed-only, zero audience_network.",
+  "observed_2026_09_26T1225": {
+   "spend_eur": 10.8,
+   "budget_remaining_eur": 14.2,
+   "impressions": 3733,
+   "reach": 3042,
+   "cpm": 2.89,
+   "ctr": 1.88,
+   "link_clicks_reported": 54,
+   "landing_page_views": 33,
+   "cost_per_landing_view_eur": 0.33,
+   "cost_per_click_eur": 0.2,
+   "day_25_sep_full": "EUR 5.72 / 1837 imp / 1617 reach / cpm 3.11 / ctr 1.85 / 26 clicks / 17 LPV (65% of clicks, EUR 0.34 each) / 1 post reaction",
+   "today_26_sep_to_1225": "EUR 1.60 / 536 imp / 511 reach / cpm 2.99 / ctr 2.05 / 8 clicks / 5 LPV",
+   "placements_lifetime": "facebook/feed EUR 6.14 / 2281 imp / 31 clicks / 22 LPV; instagram/feed EUR 4.67 / 1452 imp / 23 clicks / 11 LPV; zero audience_network",
+   "waste_test": "does not fire: 0% audience_network, EUR 0.20 per click, landing views 61% of clicks",
+   "runway": "EUR 14.20 left, ends Sun 28 Sep 23:59 (~2.6 days) = EUR 5.4/day needed against a 25 Sep pace of EUR 5.72/day, so it is now on track to spend out, better than the EUR 6-7 shortfall forecast on 25 Sep. No action per the founder 25 Sep."
   }
  },
  "post_boost_ad": {
@@ -401,8 +419,31 @@
    "lifetime": "95 impressions, 88 reach, CPM EUR 3.16, 0 engagement actions of any kind",
    "placements": "Facebook feed EUR 0.09 / 36 imp; Instagram feed EUR 0.21 / 59 imp",
    "note": "delivery began 25 Sep 10:00 Madrid; EUR 0.30 / 95 imp in the first 8 h against EUR 0.02 / 12 imp in the first 2 h, so it is ramping, not stalled. Needs EUR 1.54/day to spend out by 1 Oct and is running at ~EUR 0.90/day. Zero engagement on 95 impressions is the thing to watch. Full-day judgement at the 26 Sep noon brief."
+  },
+  "status_2026_09_26T1225": "ad + ad set ACTIVE, no issues_info; delivering in every hour of 25 Sep, not stalled.",
+  "observed_2026_09_26T1225": {
+   "spend_eur": 1.45,
+   "budget_remaining_eur": 8.55,
+   "impressions": 360,
+   "reach": 319,
+   "cpm": 4.03,
+   "engagement_lifetime": "1 post reaction, 2 post engagements, 0 comments, 0 shares, 0 page follows",
+   "day_25_sep_first_partial": "EUR 0.87 / 207 imp / 1 post reaction / 2 post engagements (delivery started 10:00 Madrid, so 14 h not 24)",
+   "today_26_sep_to_1225": "EUR 0.58 / 153 imp / 0 engagement actions",
+   "placements_lifetime": "facebook/feed EUR 0.92 / 236 imp / 1 reaction; instagram/feed EUR 0.53 / 124 imp / 0",
+   "hourly_25_sep": "non-zero impressions in all 24 hourly buckets, 1-39 per hour - steady, just small",
+   "verdict": "engagement is not literally zero any more (the 1 reaction on page post 122110619499476753 is this ad), but EUR 1.45 bought one reaction: EUR 0.73 per post engagement, EUR 1.45 per reaction, 0 follows, 0 comments. Waste test does not fire (0% AN; the clicks-under-EUR-0.05 leg does not apply to an engagement ad).",
+   "runway": "EUR 8.55 left to 1 Oct 23:59 = EUR 1.55/day needed, running ~EUR 0.95/day, so ~EUR 3 expires unspent on the current pace.",
+   "proposed_not_applied": "see PLAYBOOK Pending - decision put to the founder at the 26 Sep noon brief, nothing edited."
   }
  },
  "account_2026_09_24T1810": "status 1, no disable reason, EUR 2.86 balance, EUR 105.79 lifetime spend",
- "account_2026_09_25T1210": "status 1, no disable reason, EUR 6.12 balance, EUR 112.27 lifetime spend"
+ "account_2026_09_25T1210": "status 1, no disable reason, EUR 6.12 balance, EUR 112.27 lifetime spend",
+ "account_2026_09_26T1225": {
+  "account_status": 1,
+  "disable_reason": 0,
+  "balance_eur": 3.56,
+  "amount_spent_eur": 118.86,
+  "funding": "VISA *1984"
+ }
 }

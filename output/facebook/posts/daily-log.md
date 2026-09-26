@@ -1,5 +1,17 @@
 # LeadWing Facebook daily log
 
+## Sat 26 Sep 2026 (noon brief, run 12:25 Madrid)
+
+Nothing to answer: 0 comments on all 10 page posts and all 6 ad dark posts, inbox empty (0 conversations), followers 0. One new reaction — on the boosted 23 Sep product post (…122110619499476753), bought by the post-boost ad; the three dark-post reactions are unchanged. Page insights for 25 Sep: 22 post engagements, 4 page views, 0 follows. Queue verified via /scheduled_posts: Wed 30 Sep 09:30 import post alone. Monday's digest belongs to tomorrow's Sunday sitting, so nothing was drafted today.
+
+Quiet-leads ad: ACTIVE, no issues, feed-only, zero audience_network. €10.80 of €25, 3,733 impressions, 3,042 reach, 54 link clicks, 33 landing views (61% of clicks, €0.33 each). 25 Sep full day €5.72 / 1,837 imp / 26 clicks / 17 LPV. Waste test does not fire. The 25 Sep shortfall forecast is gone: €14.20 over 2.6 days needs €5.4/day and it is running at €5.72/day, so it should spend out by Sun 28 Sep.
+
+Post boost, judged on its first day as planned: not a stall (it delivered in all 24 hourly buckets of 25 Sep) but it is buying almost nothing — €1.45 of €10 for 360 impressions and 1 reaction, 2 post engagements, 0 comments, 0 shares, 0 follows. €0.73 per post engagement. Waste test does not fire, so nothing paused; one decision put to the founder (pause, or widen the audience by dropping the job titles), nothing applied.
+
+Account healthy: status 1, no disable reason, Visa *1984, €3.56 balance, €118.86 lifetime. Vercel analytics skipped again — VERCEL_TOKEN still absent from this environment.
+
+Nothing approved, nothing published, nothing edited.
+
 ## Fri 25 Sep 2026 (evening check, run 18:10 Madrid)
 
 Nothing new and both ads healthy: 0 comments on all 10 page posts and all 6 dark posts, inbox empty, 0 followers, reactions unchanged (1 each on three dark posts). Quiet-leads €7.34/€25, 2,604 feed-only impressions, 41 clicks, 26 landing views (€0.28 each, 63% of clicks) — waste test does not fire. Post boost €0.30/€10, 95 impressions since its 10:00 start, 0 engagement actions yet; delivery is slow but 15× the noon reading, so not a stall — judged on a full day at the 26 Sep noon brief. Account healthy (status 1, €2.23 balance). Nothing approved, nothing published, nothing edited.
