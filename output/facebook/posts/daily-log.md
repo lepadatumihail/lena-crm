@@ -1,5 +1,9 @@
 # LeadWing Facebook daily log
 
+## Sat 26 Sep 2026 (evening, founder pasted a Vercel token into the session)
+
+Not used, not stored, not committed — and it could not have helped anyway. Re-tested both routes at 17:45 UTC: `api.vercel.com` still returns proxy CONNECT 403 (policy denial), and the Vercel connector's `aggregate_pageviews` on the project still returns 404 "Web Analytics not found". So the token is only half the blocker; the environment's network policy has to allow `api.vercel.com` as well. Verified the value appears in no file in the repo (0 hits). Told the founder to rotate it, since a Vercel personal token carries account-wide access and a chat transcript is not a safe place for one, and that it belongs in the environment's settings as `VERCEL_TOKEN` where a new session picks it up. Analytics stays skipped in one line until both halves are in place.
+
 ## Sat 26 Sep 2026 (evening, founder reported the first outreach results)
 
 Founder sent 20 of the 50 sheet rows: **15 no answer, 5 "not interested", 0 interested.** First real market signal the project has had — worth more than the €39 of ads.
