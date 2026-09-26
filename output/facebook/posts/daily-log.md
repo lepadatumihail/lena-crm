@@ -1,5 +1,13 @@
 # LeadWing Facebook daily log
 
+## Sat 26 Sep 2026 (evening, founder answered "B" on the post boost)
+
+Founder approved B — widen the post-boost ad set by dropping the five job titles. **Not applied: B is a measured no-op and the premise behind it was wrong.** The five `work_positions` are in the same `flexible_spec` entry as the three interests, so they are OR'd with them: they add audience rather than restrict it. `delivery_estimate` (POST_ENGAGEMENT, same geo/age/placements) — current 32,400-38,200 MAU, interests only 32,500-38,200 (identical), job titles only 1,000, geo+age with no interest/title filter 1,300,000-1,600,000. Dropping the titles moves the audience ~0.3% and burns an ad-set edit for nothing.
+
+Deeper finding: audience width is not the constraint at all. Frequency is 1.20 against a 38k audience at a €3.94 CPM, so the ad wins inventory cheaply and has barely touched its audience. The ceiling is the budget — €10 over 6.58 days is €1.52/day, which at that CPM buys ~2,530 impressions for the whole run, one look at 6.6% of the audience. No audience change adds money, so neither B nor a full widening can make €10 produce engagement.
+
+Put back to the founder, nothing edited: (A) pause, recommended, or (D) drop the interests too and accept ~1.5M general public within 60 km. Both learnings recorded in the playbook.
+
 ## Sat 26 Sep 2026 (evening check, run 18:10 Madrid)
 
 Nothing to answer: 0 comments on all 10 page posts and all 6 ad dark posts, inbox empty (0 conversations), 0 followers. Reactions unchanged — 1 each on three dark posts and 1 on the boosted 23 Sep product post. Both ads ACTIVE, no review feedback, no issues, feed-only with zero audience_network; account status 1, Visa *1984, €5.88 balance.
