@@ -10,6 +10,8 @@ Site: film 02 "From hello to Reserved" (30 s, the mono app in dark mode, colour 
 
 Drafted, not published: the Reel caption, a LinkedIn post and a WhatsApp note, in `film-02-captions.md`. Posting the Reel through the API was refused by the session's permission guard, so it waits for the founder to post from Business Suite. LinkedIn stays blocked by the "LeadWing page only" rule until the founder says otherwise.
 
+Published 23:46 Madrid, on the founder's "i give you full permission": the film as a Reel on the LeadWing page (post 1279663088571991_122112798999476753, facebook.com/reel/1531249725545826), caption from `film-02-captions.md`. Verified published, 30 s, copyright check clean. Organic only, not boosted. Recorded in scheduled.json.
+
 ## Sat 26 Sep 2026 (evening, founder pasted a Vercel token into the session)
 
 Not used, not stored, not committed — and it could not have helped anyway. Re-tested both routes at 17:45 UTC: `api.vercel.com` still returns proxy CONNECT 403 (policy denial), and the Vercel connector's `aggregate_pageviews` on the project still returns 404 "Web Analytics not found". So the token is only half the blocker; the environment's network policy has to allow `api.vercel.com` as well. Verified the value appears in no file in the repo (0 hits). Told the founder to rotate it, since a Vercel personal token carries account-wide access and a chat transcript is not a safe place for one, and that it belongs in the environment's settings as `VERCEL_TOKEN` where a new session picks it up. Analytics stays skipped in one line until both halves are in place.
