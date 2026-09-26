@@ -1,5 +1,15 @@
 # LeadWing Facebook daily log
 
+## Sat 26 Sep 2026 (evening check, run 18:10 Madrid)
+
+Nothing to answer: 0 comments on all 10 page posts and all 6 ad dark posts, inbox empty (0 conversations), 0 followers. Reactions unchanged — 1 each on three dark posts and 1 on the boosted 23 Sep product post. Both ads ACTIVE, no review feedback, no issues, feed-only with zero audience_network; account status 1, Visa *1984, €5.88 balance.
+
+Quiet-leads healthy: €12.63 of €25, €12.37 left, 4,625 imp, 3,626 reach, 64 clicks, 41 landing views (64% of clicks, €0.31 each). Today to 18:10 €3.43 / 1,427 imp / 18 clicks / 13 LPV — €0.26 per landing view, its best rate yet. Placements FB feed €7.09 / 2,752 imp / 29 LPV, IG feed €5.59 / 1,879 imp / 12 LPV. Waste test does not fire (0% AN, €0.20 per click, LPV 64% of clicks). Ends Sun 28 Sep 23:59 as the founder decided; not touched.
+
+Post boost, second day, worse: €1.06 and 282 impressions today for **zero actions of any kind** — no reaction, comment, share or follow. Whole run now €1.93 of €10 for 489 imp and 1 reaction / 2 post engagements (€1.93 per reaction). Meta also restated 25 Sep down from €1.45 / 360 imp to €0.87 / 207 imp, so this morning's first-day read was flattering. Not paused: the playbook's waste test does not fire (0% AN; the click leg does not apply to an engagement ad) and it has feed delivery, so neither evening trigger applies. The A/B decision from the noon brief (pause, or widen the audience by dropping the job titles) is still unanswered and today's numbers argue for A.
+
+Nothing approved, nothing published, nothing edited. VERCEL_TOKEN still absent — analytics skipped.
+
 ## Sat 26 Sep 2026 (noon brief, run 12:25 Madrid)
 
 Nothing to answer: 0 comments on all 10 page posts and all 6 ad dark posts, inbox empty (0 conversations), followers 0. One new reaction — on the boosted 23 Sep product post (…122110619499476753), bought by the post-boost ad; the three dark-post reactions are unchanged. Page insights for 25 Sep: 22 post engagements, 4 page views, 0 follows. Queue verified via /scheduled_posts: Wed 30 Sep 09:30 import post alone. Monday's digest belongs to tomorrow's Sunday sitting, so nothing was drafted today.

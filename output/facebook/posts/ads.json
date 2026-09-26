@@ -370,6 +370,45 @@
    "placements_lifetime": "facebook/feed EUR 6.14 / 2281 imp / 31 clicks / 22 LPV; instagram/feed EUR 4.67 / 1452 imp / 23 clicks / 11 LPV; zero audience_network",
    "waste_test": "does not fire: 0% audience_network, EUR 0.20 per click, landing views 61% of clicks",
    "runway": "EUR 14.20 left, ends Sun 28 Sep 23:59 (~2.6 days) = EUR 5.4/day needed against a 25 Sep pace of EUR 5.72/day, so it is now on track to spend out, better than the EUR 6-7 shortfall forecast on 25 Sep. No action per the founder 25 Sep."
+  },
+  "status_2026_09_26T1810": "ad + ad set ACTIVE, no issues_info, no ad_review_feedback; creative 1386955970174446, dark post 1279663088571991_122110668771476753 unchanged; 0 comments on it",
+  "observed_2026_09_26T1810": {
+   "spend_eur": 12.63,
+   "lifetime_budget_eur": 25,
+   "budget_remaining_eur": 12.37,
+   "impressions": 4625,
+   "reach": 3626,
+   "cpm_eur": 2.73,
+   "link_clicks": 64,
+   "landing_page_views": 41,
+   "lpv_share_of_clicks": "64%",
+   "cost_per_lpv_eur": 0.31,
+   "cost_per_click_eur": 0.2,
+   "day_2026_09_26_to_1810": {
+    "spend_eur": 3.43,
+    "impressions": 1427,
+    "link_clicks": 18,
+    "landing_page_views": 13,
+    "cost_per_lpv_eur": 0.26
+   },
+   "placements": {
+    "facebook/feed": {
+     "spend_eur": 7.09,
+     "impressions": 2752,
+     "link_clicks": 39,
+     "landing_page_views": 29
+    },
+    "instagram/feed": {
+     "spend_eur": 5.59,
+     "impressions": 1879,
+     "link_clicks": 25,
+     "landing_page_views": 12
+    },
+    "audience_network": "none"
+   },
+   "end_time": "2026-09-28T23:59+0200",
+   "waste_test": "does not fire",
+   "action": "none"
   }
  },
  "post_boost_ad": {
@@ -395,8 +434,8 @@
    "ad_effective_status": "ACTIVE",
    "adset_effective_status": "ACTIVE",
    "issues_info": "none",
-   "spend_eur": 0.0,
-   "budget_remaining_eur": 10.0,
+   "spend_eur": 0,
+   "budget_remaining_eur": 10,
    "insights": "empty - correct, delivery starts 25 Sep 10:00 Madrid"
   },
   "status_2026_09_25T1210": "ad + ad set ACTIVE, no issues_info; delivery began at the scheduled 25 Sep 10:00 Madrid.",
@@ -435,6 +474,48 @@
    "verdict": "engagement is not literally zero any more (the 1 reaction on page post 122110619499476753 is this ad), but EUR 1.45 bought one reaction: EUR 0.73 per post engagement, EUR 1.45 per reaction, 0 follows, 0 comments. Waste test does not fire (0% AN; the clicks-under-EUR-0.05 leg does not apply to an engagement ad).",
    "runway": "EUR 8.55 left to 1 Oct 23:59 = EUR 1.55/day needed, running ~EUR 0.95/day, so ~EUR 3 expires unspent on the current pace.",
    "proposed_not_applied": "see PLAYBOOK Pending - decision put to the founder at the 26 Sep noon brief, nothing edited."
+  },
+  "status_2026_09_26T1810": "ad + ad set ACTIVE, no issues_info, no ad_review_feedback; creative 1627298505638074 boosting page post 1279663088571991_122110619499476753",
+  "observed_2026_09_26T1810": {
+   "spend_eur": 1.93,
+   "lifetime_budget_eur": 10,
+   "budget_remaining_eur": 8.07,
+   "impressions": 489,
+   "reach": 408,
+   "cpm_eur": 3.95,
+   "post_reactions": 1,
+   "post_engagements": 2,
+   "comments": 0,
+   "shares": 0,
+   "page_follows": 0,
+   "cost_per_reaction_eur": 1.93,
+   "cost_per_post_engagement_eur": 0.97,
+   "day_2026_09_25": {
+    "spend_eur": 0.87,
+    "impressions": 207,
+    "note": "RESTATED DOWN by Meta from the 1.45 EUR / 360 imp read at the 26 Sep noon brief"
+   },
+   "day_2026_09_26_to_1810": {
+    "spend_eur": 1.06,
+    "impressions": 282,
+    "actions": "none at all"
+   },
+   "placements": {
+    "facebook/feed": {
+     "spend_eur": 1.26,
+     "impressions": 331,
+     "post_reactions": 1
+    },
+    "instagram/feed": {
+     "spend_eur": 0.66,
+     "impressions": 159,
+     "post_reactions": 0
+    },
+    "audience_network": "none"
+   },
+   "end_time": "2026-10-01T23:59+0200",
+   "waste_test": "does not fire (0% AN; clicks leg does not apply to POST_ENGAGEMENT)",
+   "action": "none - A/B decision from the 26 Sep noon brief still unanswered"
   }
  },
  "account_2026_09_24T1810": "status 1, no disable reason, EUR 2.86 balance, EUR 105.79 lifetime spend",
@@ -443,6 +524,13 @@
   "account_status": 1,
   "disable_reason": 0,
   "balance_eur": 3.56,
+  "amount_spent_eur": 118.86,
+  "funding": "VISA *1984"
+ },
+ "account_2026_09_26T1810": {
+  "account_status": 1,
+  "disable_reason": 0,
+  "balance_eur": 5.88,
   "amount_spent_eur": 118.86,
   "funding": "VISA *1984"
  }
