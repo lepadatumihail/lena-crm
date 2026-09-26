@@ -1,5 +1,11 @@
 # LeadWing Facebook daily log
 
+## Sat 26 Sep 2026 (evening, founder asked what the best move is)
+
+Ran the estimate wider to test the 1,000-person figure and found the real story: the five job titles return Meta's floor `1000 - 1000` for **all of Spain at 18-65+**, so those work_position fields are empty nationwide. Meta has never been able to target independent agents here. The only populated audience is the three interests (32,400-38,100 within 60 km), which is mostly property-curious consumers. So ~€39 of ad spend went to a proxy audience that was largely not the customer — a better explanation for 132 landing views and 0 detectable sign-ups than creative, budget or CPM.
+
+Recommended to the founder, nothing applied: pause the post boost (no audience setting fixes an audience that does not exist on Meta); let quiet-leads finish Sun 28 as its last data point and judge it on /login attempts; no new ad spend until sign-ups are actually visible; treat the page as the credibility asset an agent finds when he looks the company up, fed by the digests, with free page invites from the founder's own network rather than €1.93 reactions; and unblock the outreach sheet, which is the only channel that addresses the real market. Four labelled decisions put to him.
+
 ## Sat 26 Sep 2026 (evening, founder answered "B" on the post boost)
 
 Founder approved B — widen the post-boost ad set by dropping the five job titles. **Not applied: B is a measured no-op and the premise behind it was wrong.** The five `work_positions` are in the same `flexible_spec` entry as the three interests, so they are OR'd with them: they add audience rather than restrict it. `delivery_estimate` (POST_ENGAGEMENT, same geo/age/placements) — current 32,400-38,200 MAU, interests only 32,500-38,200 (identical), job titles only 1,000, geo+age with no interest/title filter 1,300,000-1,600,000. Dropping the titles moves the audience ~0.3% and burns an ad-set edit for nothing.
