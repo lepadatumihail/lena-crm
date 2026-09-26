@@ -516,7 +516,8 @@
    "end_time": "2026-10-01T23:59+0200",
    "waste_test": "does not fire (0% AN; clicks leg does not apply to POST_ENGAGEMENT)",
    "action": "none - A/B decision from the 26 Sep noon brief still unanswered"
-  }
+  },
+  "status_2026_09_26T2020": "PAUSED at the ad-set level (6996508580294) at 20:20 Madrid in a Claude session, on the founder's in-session 'do whatever you think is best' to the recommendation 'pause the post boost'. EUR 7.95 of EUR 10 unspent, end_time still 1 Oct 23:59; resuming it needs the founder's yes."
  },
  "account_2026_09_24T1810": "status 1, no disable reason, EUR 2.86 balance, EUR 105.79 lifetime spend",
  "account_2026_09_25T1210": "status 1, no disable reason, EUR 6.12 balance, EUR 112.27 lifetime spend",
