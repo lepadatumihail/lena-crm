@@ -1,5 +1,15 @@
 # LeadWing Facebook daily log
 
+## Sat 26 Sep 2026 (evening, founder reported the first outreach results)
+
+Founder sent 20 of the 50 sheet rows: **15 no answer, 5 "not interested", 0 interested.** First real market signal the project has had — worth more than the €39 of ads.
+
+Read: 25% answer rate is normal for cold outreach; 0/5 interest among answerers is the finding. 0/20 puts the 95% upper bound on the true interest rate at ~14%, so this does not prove the market is dead. What it does expose is arithmetic — 20 Founding Agents needs 200-400 sends at a 5-10% rate, and the list holds 50. That goal was never reachable from this list, and the unit is probably wrong: the list is agencies, the customer is an individual agent.
+
+Two unknowns that change everything and were asked back: whether the sheet's v1 text or the FINAL text went out (the sheet still carried v1 with the banned word, which would make this a copy test, not a market test), and what the five actually said. Live hypothesis named, not evidence: agents here already pay for an MLS/listings system with a CRM bundled (Resales Online, Inmovilla), and LeadWing has no listings or portal integration.
+
+Drafted, unsent, awaiting yes: a one-question follow-up to the five ("what do you use today for buyer follow-ups") and an optional second touch for the fifteen — `outreach-followup-2026-09-26.md`. Recommended holding the remaining 30 until the reasons are in. Nothing sent, nothing published, no ad edited.
+
 ## Sat 26 Sep 2026 (evening, founder asked what the best move is)
 
 Ran the estimate wider to test the 1,000-person figure and found the real story: the five job titles return Meta's floor `1000 - 1000` for **all of Spain at 18-65+**, so those work_position fields are empty nationwide. Meta has never been able to target independent agents here. The only populated audience is the three interests (32,400-38,100 within 60 km), which is mostly property-curious consumers. So ~€39 of ad spend went to a proxy audience that was largely not the customer — a better explanation for 132 landing views and 0 detectable sign-ups than creative, budget or CPM.
