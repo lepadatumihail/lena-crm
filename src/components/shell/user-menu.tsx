@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import {
   Check,
@@ -9,6 +10,7 @@ import {
   CreditCard,
   Gift,
   Languages,
+  ListChecks,
   LogOut,
   Monitor,
   Moon,
@@ -18,7 +20,8 @@ import {
 
 import { signOut } from "@/lib/actions/auth";
 import { LOCALES, LOCALE_LABELS, isLocale } from "@/i18n/config";
-import { initialsOf } from "@/lib/home";
+import { initialsOf, onboardingCookie, onboardingState, readOnboardingCookie } from "@/lib/home";
+import { useAgentId } from "@/components/shell/shell-context";
 import { useSwitchLocale } from "@/components/locale-switcher";
 import { SupportDialog } from "@/components/support-dialog";
 import { useThemeSwitch } from "@/components/theme-toggle";
@@ -47,7 +50,8 @@ const THEMES = [
 /**
  * The signed-in agent as a chip at the top right: avatar and first name,
  * opening a menu with theme, language, settings, account pages and sign out.
- * Account things live here, so the sidebar stays about navigation.
+ * Account things live here, so the sidebar stays about navigation. After
+ * the agent has closed Home's getting-started strip, the menu offers it back.
  */
 export function UserMenu({
   email,
@@ -63,21 +67,44 @@ export function UserMenu({
   const { pending: localePending, switchTo } = useSwitchLocale();
   const [supportOpen, setSupportOpen] = useState(false);
   const [, startTransition] = useTransition();
+  const router = useRouter();
+  const pathname = usePathname();
+  const agentId = useAgentId();
+  // Read when the menu opens: the cookie lives in the browser, and reading it
+  // during render would disagree with the server's HTML.
+  const [onboardingHidden, setOnboardingHidden] = useState(false);
 
   const display = name?.trim() || email.split("@")[0] || email;
   const initials = initialsOf(display) || "?";
 
+  function showOnboarding() {
+    document.cookie = onboardingCookie(null);
+    setOnboardingHidden(false);
+    if (pathname === "/home") router.refresh();
+    else router.push("/home");
+  }
+
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu
+        onOpenChange={(open) => {
+          if (open) {
+            setOnboardingHidden(
+              onboardingState(readOnboardingCookie(document.cookie), agentId) === "hidden"
+            );
+          }
+        }}
+      >
         <DropdownMenuTrigger asChild>
           <button
             type="button"
             aria-label={display}
-            className="bg-card hover:bg-muted/60 focus-visible:ring-ring/50 flex h-8 items-center gap-2 rounded-full border pr-2.5 pl-0.5 text-xs font-medium transition-[color,background-color,scale] duration-150 outline-none focus-visible:ring-[3px] active:scale-[0.96] data-[state=open]:bg-muted/60"
+            className="bg-card hover:bg-muted/60 focus-visible:ring-ring/50 flex h-8 items-center gap-2 rounded-lg border px-[3px] text-xs transition-[color,background-color,scale] duration-150 outline-none focus-visible:ring-[3px] active:scale-[0.96] data-[state=open]:bg-muted/60 sm:pr-2.5"
           >
-            <Avatar className="size-[26px]">
-              <AvatarFallback className="bg-primary/12 text-primary text-[10px] font-semibold">
+            {/* An even 3px round the avatar, so the circle sits squarely in
+                the rounded square; on a phone the chip is the avatar alone. */}
+            <Avatar className="size-6">
+              <AvatarFallback className="bg-muted text-foreground/80 text-[10px] font-medium">
                 {initials}
               </AvatarFallback>
             </Avatar>
@@ -85,7 +112,7 @@ export function UserMenu({
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" sideOffset={8} className="w-60">
-          <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal">
+          <DropdownMenuLabel className="flex flex-col gap-0.5">
             <span className="truncate text-sm font-medium">{display}</span>
             <span className="text-muted-foreground truncate text-xs">{email}</span>
           </DropdownMenuLabel>
@@ -167,6 +194,12 @@ export function UserMenu({
             <CircleQuestionMark />
             {tSupport("trigger")}
           </DropdownMenuItem>
+          {onboardingHidden ? (
+            <DropdownMenuItem onSelect={showOnboarding}>
+              <ListChecks />
+              {t("menu.showOnboarding")}
+            </DropdownMenuItem>
+          ) : null}
 
           <DropdownMenuSeparator />
           <DropdownMenuItem

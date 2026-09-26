@@ -33,8 +33,10 @@ export function StatTiles({ tiles }: { tiles: StatTile[] }) {
           href={tile.href}
           className="bg-card text-card-foreground hover:bg-muted/40 focus-visible:ring-ring/50 flex min-w-0 flex-col gap-3 rounded-xl border p-4 shadow-xs transition-colors duration-150 outline-none focus-visible:ring-[3px]"
         >
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-muted-foreground line-clamp-2 text-xs leading-snug sm:truncate sm:leading-normal">
+          {/* On a phone a label may take two lines; every label keeps room
+              for two, so the figures in a row of tiles line up. */}
+          <div className="flex items-start justify-between gap-2 sm:items-center">
+            <span className="text-muted-foreground line-clamp-2 min-h-[2lh] text-xs leading-snug sm:truncate sm:min-h-0 sm:leading-normal">
               {tile.label}
             </span>
             <tile.icon

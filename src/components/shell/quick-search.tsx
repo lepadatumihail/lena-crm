@@ -15,14 +15,12 @@ import {
   Building2,
   Calculator,
   CalendarDays,
-  CalendarPlus,
   CornerDownLeft,
   CreditCard,
   FileText,
   Gift,
   Home,
   ListChecks,
-  Plus,
   Search,
   Settings,
   Users,
@@ -31,9 +29,9 @@ import {
 import { searchIndex, type SearchClient } from "@/lib/actions/search";
 import { sideLabel, stageLabel } from "@/i18n/labels";
 import { clientsPath } from "@/lib/crm";
-import { tasksHref } from "@/lib/tasks-view";
 import { cn } from "@/lib/utils";
 import { ClientAvatar } from "@/components/clients/client-avatar";
+import { NEW_ACTIONS, openNewInPlace } from "@/components/shell/new-actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -117,13 +115,14 @@ export function QuickSearch() {
     [tNav]
   );
   const actions: Item[] = useMemo(
-    () => [
-      { id: "new-buyer", href: "/clients/new?side=buyer", label: t("newBuyer"), icon: Plus },
-      { id: "new-seller", href: "/clients/new?side=seller", label: t("newSeller"), icon: Plus },
-      { id: "new-appointment", href: "/calendar", label: t("newAppointment"), icon: CalendarPlus },
-      { id: "new-task", href: tasksHref({ openNew: true }), label: t("newTask"), icon: Plus },
-    ],
-    [t]
+    () =>
+      NEW_ACTIONS.map((action) => ({
+        id: action.id,
+        href: action.href,
+        label: tNav(action.labelKey),
+        icon: action.icon,
+      })),
+    [tNav]
   );
 
   const q = query.trim().toLowerCase();
@@ -174,16 +173,7 @@ export function QuickSearch() {
 
   function select(item: Item) {
     handleOpenChange(false);
-    if (item.id === "new-task" && window.location.pathname === "/tasks") {
-      // Already on /tasks: add the intent in place. No server round trip, so the tab,
-      // the client filter and the loaded Done range survive. Next syncs replaceState
-      // into useSearchParams; TasksView opens the dialog and strips the param again.
-      const url = new URL(window.location.href);
-      url.searchParams.set("new", "1");
-      window.history.replaceState(null, "", url.toString());
-      return;
-    }
-    router.push(item.href);
+    if (!openNewInPlace(item.id)) router.push(item.href);
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLInputElement>) {
@@ -240,7 +230,7 @@ export function QuickSearch() {
               aria-label={tNav("search")}
               className="placeholder:text-muted-foreground h-12 min-w-0 flex-1 bg-transparent text-sm outline-none"
             />
-            <kbd className="bg-muted text-muted-foreground hidden rounded border px-1.5 py-0.5 font-sans text-[10px] font-medium sm:block">
+            <kbd className="bg-muted text-muted-foreground hidden rounded border px-1.5 py-0.5 font-sans text-[10px] sm:block">
               esc
             </kbd>
           </div>
@@ -251,7 +241,7 @@ export function QuickSearch() {
             ) : null}
             {groups.map((group) => (
               <div key={group.key} className="pb-1">
-                <p className="label-caps text-muted-foreground px-2 pt-2 pb-1.5">{group.label}</p>
+                <p className="section-label text-muted-foreground px-2 pt-2 pb-1.5">{group.label}</p>
                 {group.items.map((item) => {
                   runningIndex += 1;
                   const index = runningIndex;

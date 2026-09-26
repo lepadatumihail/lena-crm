@@ -99,18 +99,12 @@ export default async function AppLayout({
     };
   }
 
-  const todayLabel = new Intl.DateTimeFormat(intlTag(locale), {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    timeZone,
-  }).format(now);
-
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
 
   return (
     <ShellProvider
+      agentId={user.id}
       agentFirstName={firstNameFrom(profile?.full_name, user.email)}
       timeZone={timeZone}
     >
@@ -128,7 +122,6 @@ export default async function AppLayout({
           email={user.email ?? ""}
           name={profile?.full_name ?? null}
           counts={counts}
-          todayLabel={todayLabel}
         />
         {/* On a phone the tab bar covers the last 4rem, so the page ends above it. */}
         <div className="mx-auto w-full max-w-[1600px] flex-1 px-4 pt-5 pb-24 md:px-6 md:pb-5">

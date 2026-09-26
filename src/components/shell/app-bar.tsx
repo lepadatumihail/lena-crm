@@ -14,7 +14,7 @@ import { QuickSearch } from "@/components/shell/quick-search";
 import { useShellCrumb } from "@/components/shell/shell-context";
 import { UserMenu } from "@/components/shell/user-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { TONE_SOLID, type Tone } from "@/lib/tones";
+import { TONE_TAG, type Tone } from "@/lib/tones";
 
 type Pill = { text: string; tone: Tone };
 
@@ -30,14 +30,11 @@ export function AppBar({
   email,
   name,
   counts,
-  todayLabel,
   route,
 }: {
   email: string;
   name: string | null;
   counts: SidebarCounts;
-  /** Today's date in the agent's language and time zone, e.g. "Mon 14 Sep". */
-  todayLabel: string;
   route?: RouteOverride;
 }) {
   const t = useTranslations("nav");
@@ -53,8 +50,8 @@ export function AppBar({
   let title = SITE_NAME;
   let pill: Pill | null = null;
   if (pathname === "/home") {
+    // Home's greeting already says the date; no pill repeating it.
     title = t("home");
-    pill = { text: todayLabel, tone: "neutral" };
   } else if (pathname.startsWith("/clients/buyers")) {
     title = t("buyers");
     pill = { text: t("active", { count: counts.buyers }), tone: "neutral" };
@@ -67,10 +64,7 @@ export function AppBar({
     title = t("clients");
   } else if (pathname.startsWith("/calendar")) {
     title = t("calendar");
-    pill = {
-      text: t("today", { count: counts.today }),
-      tone: counts.today > 0 ? "brand" : "neutral",
-    };
+    pill = { text: t("today", { count: counts.today }), tone: "neutral" };
   } else if (pathname.startsWith("/tasks")) {
     title = t("tasks");
     if (counts.tasks != null) {
@@ -98,7 +92,7 @@ export function AppBar({
       {onRecord && crumb ? (
         <nav
           aria-label={t("breadcrumb")}
-          className="flex min-w-0 items-center gap-1.5 text-[15px] font-medium tracking-tight"
+          className="flex min-w-0 items-center gap-1.5 text-[15px]"
         >
           <h1 className="shrink-0">
             <Link
@@ -109,23 +103,24 @@ export function AppBar({
             </Link>
           </h1>
           <ChevronRight aria-hidden className="text-muted-foreground/60 size-4 shrink-0" />
-          <span aria-current="page" className="truncate">
+          <span aria-current="page" className="truncate font-medium">
             {crumb.label}
           </span>
         </nav>
       ) : (
         <div className="flex min-w-0 items-center gap-2.5">
-          <h1 className="truncate text-[15px] font-medium tracking-tight">
+          <h1 className="truncate text-[15px] font-medium">
             {title}
           </h1>
           {pill ? (
-            <span className="bg-card text-muted-foreground hidden h-6 shrink-0 items-center gap-1.5 rounded-full border px-2.5 text-xs whitespace-nowrap sm:inline-flex">
-              {pill.tone !== "neutral" ? (
-                <span
-                  aria-hidden
-                  className={cn("size-1.5 rounded-full", TONE_SOLID[pill.tone])}
-                />
-              ) : null}
+            <span
+              className={cn(
+                "hidden h-6 shrink-0 items-center rounded-full border px-2.5 text-xs whitespace-nowrap sm:inline-flex",
+                pill.tone === "neutral"
+                  ? "bg-card text-muted-foreground"
+                  : TONE_TAG[pill.tone]
+              )}
+            >
               {pill.text}
             </span>
           ) : null}

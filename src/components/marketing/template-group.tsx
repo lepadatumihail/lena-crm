@@ -78,7 +78,7 @@ export function TemplateGroup({
       <div
         role="tablist"
         aria-label={t("language")}
-        className="bg-muted inline-flex rounded-full p-1 text-sm"
+        className="bg-muted inline-flex rounded-lg p-1 text-sm"
       >
         {blocks.map((block, index) => (
           <button
@@ -95,9 +95,9 @@ export function TemplateGroup({
             onClick={() => setSelected(index)}
             onKeyDown={(event) => onKeyDown(event, index)}
             className={cn(
-              "rounded-full px-4 py-1.5 font-medium transition-colors",
+              "rounded-md px-4 py-1.5 transition-colors",
               index === selected
-                ? "bg-background text-foreground shadow-sm"
+                ? "bg-background text-foreground font-medium shadow-xs"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >

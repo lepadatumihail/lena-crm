@@ -22,7 +22,7 @@ export function CopyButton({ text, label }: { text: string; label?: string }) {
     }
   }
   return (
-    <Button type="button" variant="outline" size="sm" onClick={copy}>
+    <Button type="button" size="sm" onClick={copy}>
       {copied ? <Check /> : <Copy />}
       {label ?? t("link.copy")}
     </Button>

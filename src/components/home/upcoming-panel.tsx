@@ -58,7 +58,10 @@ export function UpcomingPanel({
         {t.rich(waitingBuyers > 0 ? "emptyWaiting" : "empty", {
           count: waitingBuyers,
           link: (chunks) => (
-            <Link href="/calendar" className="text-primary hover:underline">
+            <Link
+              href="/calendar"
+              className="text-foreground decoration-foreground/25 hover:decoration-foreground font-medium underline underline-offset-4"
+            >
               {chunks}
             </Link>
           ),
@@ -73,8 +76,9 @@ export function UpcomingPanel({
         const remind = eventReminderHref(e);
         return (
           <li key={e.id} className="flex items-center gap-3 px-4 py-2.5">
-            <div className="w-16 shrink-0 leading-tight">
-              <p className="truncate text-xs font-medium first-letter:uppercase">
+            {/* Wide enough for "Wed 30 Sep" and "mié 30 sept" in full. */}
+            <div className="w-[4.75rem] shrink-0 leading-tight">
+              <p className="truncate text-xs first-letter:uppercase">
                 {dayLabel(e.starts_at)}
               </p>
               <p className="text-muted-foreground text-xs tabular-nums">
@@ -102,13 +106,14 @@ export function UpcomingPanel({
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(
-                  buttonVariants({ variant: "outline", size: "icon-xs" }),
-                  "shrink-0 rounded-full"
+                  buttonVariants({ variant: "ghost", size: "icon-xs" }),
+                  "text-muted-foreground hover:text-foreground shrink-0"
                 )}
                 title={t("remindTitle")}
                 aria-label={t("remindAria")}
               >
-                <MessageCircle className="size-3.5 text-[#25D366]" />
+                {/* A thin grey channel icon, like the rest of the row. */}
+                <MessageCircle className="size-4" strokeWidth={1.75} />
               </a>
             ) : null}
           </li>

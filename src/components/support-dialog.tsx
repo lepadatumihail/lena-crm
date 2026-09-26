@@ -165,7 +165,7 @@ export function SupportDialog({
                 <FormItem>
                   <FormLabel>
                     {t("subject.label")}{" "}
-                    <span className="text-muted-foreground font-normal">
+                    <span className="text-muted-foreground">
                       · {tCommon("optional")}
                     </span>
                   </FormLabel>

@@ -86,16 +86,17 @@ export function PricingCards({
   return (
     <div className="mt-10">
       <div className="flex justify-center">
-        <div className="bg-muted inline-flex rounded-full p-1 text-sm">
+        <div className="bg-muted inline-flex rounded-lg p-1 text-sm">
           {(["monthly", "yearly"] as const).map((option) => (
             <button
               key={option}
               type="button"
+              aria-pressed={interval === option}
               onClick={() => setInterval(option)}
               className={cn(
-                "rounded-full px-4 py-1.5 font-medium transition-colors",
+                "rounded-md px-4 py-1.5 transition-colors",
                 interval === option
-                  ? "bg-background text-foreground shadow-sm"
+                  ? "bg-background text-foreground font-medium shadow-xs"
                   : "text-muted-foreground hover:text-foreground",
               )}
             >
@@ -108,28 +109,30 @@ export function PricingCards({
       </div>
 
       <div className="mx-auto mt-8 grid max-w-3xl gap-5 sm:grid-cols-2">
-        {/* Free */}
-        <Card className={cn(current?.tier === "free" && "border-primary/40")}>
+        {/* Free: its "Your plan" tag marks it, so the edge stays Pro's. */}
+        <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">{t("pricing.freeTitle")}</h2>
+              <h2 className="text-lg font-medium">{t("pricing.freeTitle")}</h2>
               {current?.tier === "free" ? (
                 <Tag>{t("pricing.yourPlan")}</Tag>
               ) : null}
             </div>
-            <div className="mt-2 flex items-baseline gap-1">
+            <div className="mt-2 flex items-baseline gap-2">
               <span className="font-display text-5xl leading-none tracking-tight">{formatCurrency(0, tag)}</span>
               <span className="text-muted-foreground text-sm">{t("pricing.forever")}</span>
             </div>
           </CardHeader>
-          <CardContent className="space-y-5">
+          {/* The action sits on the card's floor, so the two plans' buttons
+              line up however long either feature list runs. */}
+          <CardContent className="flex flex-1 flex-col gap-5">
             <FeatureList items={freeFeatures} />
             {current === null ? (
-              <Button asChild size="pill" variant="outline" className={PILL_ACTION}>
+              <Button asChild size="pill" variant="outline" className={cn(PILL_ACTION, "mt-auto")}>
                 <Link href="/login">{t("pricing.ctaFree")}</Link>
               </Button>
             ) : current.tier === "free" ? (
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground mt-auto text-sm">
                 {t("pricing.clientsUsed", { count: clientCount, limit: FREE_CLIENT_LIMIT })}
               </p>
             ) : null}
@@ -137,14 +140,15 @@ export function PricingCards({
         </Card>
 
         {/* Pro */}
-        <Card className="border-primary/60 relative shadow-md">
+        {/* The plan to pick stands out by its edge and its ink button, not a colour. */}
+        <Card className="border-foreground/25 relative">
           <CardHeader>
             <div className="flex items-center justify-between gap-2">
-              <h2 className="text-lg font-semibold">{t("pricing.proTitle")}</h2>
+              <h2 className="text-lg font-medium">{t("pricing.proTitle")}</h2>
               {current?.tier === "pro" ? (
-                <Tag tone="brand">{t("pricing.yourPlan")}</Tag>
+                <Tag>{t("pricing.yourPlan")}</Tag>
               ) : founding ? (
-                <Tag tone="amber">
+                <Tag tone="blue">
                   <Sparkles />
                   {t("founding.spots", { count: spotsLeft })}
                 </Tag>
@@ -160,31 +164,31 @@ export function PricingCards({
               </span>
             </div>
             {founding ? (
-              <p className="text-primary mt-1 text-sm font-medium">
+              <p className="text-foreground mt-1 text-sm">
                 {t("pricing.foundingLocked", { cap: FOUNDING_CAP })}
               </p>
             ) : (
               <p className="text-muted-foreground mt-1 text-sm">{t("pricing.cohortFull")}</p>
             )}
           </CardHeader>
-          <CardContent className="space-y-5">
+          <CardContent className="flex flex-1 flex-col gap-5">
             <FeatureList items={proFeatures} />
 
             {current === null ? (
-              <Button asChild size="pill" className={PILL_ACTION}>
+              <Button asChild size="pill" className={cn(PILL_ACTION, "mt-auto")}>
                 <Link href={signInToUpgrade}>
                   {t("pricing.ctaPro")} <ArrowRight />
                 </Link>
               </Button>
             ) : subscribed ? (
-              <div className="space-y-3">
+              <div className="mt-auto space-y-3">
                 <p className="text-sm">
                   {current.foundingNumber != null
                     ? t.rich("pricing.onPlanFounding", {
                         plan: current.planLabel ?? t("plan.titlePro"),
                         number: current.foundingNumber,
                         b: bold,
-                        f: (chunks) => <span className="text-primary">{chunks}</span>,
+                        f: bold,
                       })
                     : t.rich("pricing.onPlan", {
                         plan: current.planLabel ?? t("plan.titlePro"),
@@ -198,7 +202,7 @@ export function PricingCards({
                 </Button>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="mt-auto space-y-3">
                 {comped && current.proUntil ? (
                   <p className="text-sm">
                     {t.rich("pricing.compedUntil", {
@@ -241,7 +245,7 @@ function FeatureList({ items }: { items: string[] }) {
     <ul className="space-y-2 text-sm">
       {items.map((item) => (
         <li key={item} className="flex items-start gap-2">
-          <Check className="text-primary mt-0.5 size-4 shrink-0" />
+          <Check className="text-foreground mt-0.5 size-4 shrink-0" />
           <span>{item}</span>
         </li>
       ))}

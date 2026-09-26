@@ -145,7 +145,7 @@ export function ImportWizard({
                 aria-current={state === "current" ? "step" : undefined}
                 className={cn(
                   "rounded-full px-2.5 py-0.5",
-                  state === "current" && "bg-primary/10 text-primary font-medium",
+                  state === "current" && "bg-muted text-foreground font-medium",
                   state === "done" && "text-foreground",
                   state === "todo" && "text-muted-foreground"
                 )}

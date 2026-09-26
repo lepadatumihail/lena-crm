@@ -29,7 +29,7 @@ export function ClientAvatar({
     <span
       aria-hidden
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-full font-semibold uppercase ring-1 ring-black/[0.06] select-none ring-inset dark:ring-white/10",
+        "inline-flex shrink-0 items-center justify-center rounded-full font-medium uppercase ring-1 ring-foreground/[0.06] select-none ring-inset dark:ring-foreground/10",
         SIZES[size],
         TONE_BG[tone],
         TONE_INK[tone],

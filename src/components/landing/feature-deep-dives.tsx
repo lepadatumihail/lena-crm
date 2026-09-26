@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import { Reveal } from "@/components/reveal";
+import { TONE_TAG } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 
 function VisualWhatsApp() {
@@ -33,7 +34,7 @@ function VisualWhatsApp() {
           Hallo Sofia, zwei neue Apartments mit Meerblick sind in Ihrem Budget
           aufgetaucht — sollen wir diese Woche eine Besichtigung einplanen?
         </div>
-        <p className="text-primary flex items-center justify-end gap-1 text-[10px] font-medium">
+        <p className="text-muted-foreground flex items-center justify-end gap-1 text-[10px]">
           <Sparkles className="size-3" /> {t("whatsapp.draftedBy")}
         </p>
       </div>
@@ -81,7 +82,7 @@ function VisualPortal() {
         {["Idealista", "Fotocasa", "Kyero"].map((p) => (
           <span
             key={p}
-            className="bg-muted rounded-full px-2.5 py-1 text-[10px] font-medium"
+            className="bg-muted text-foreground/80 rounded-full px-2.5 py-1 text-[10px] font-medium"
           >
             {p}
           </span>
@@ -95,7 +96,8 @@ function VisualPortal() {
           <p className="text-sm font-medium">
             {t("newLead", { name: "Anya Petrova" })}
           </p>
-          <span className="bg-success/15 text-success rounded-full px-1.5 py-0.5 text-[9px] font-semibold">
+          {/* Blue, the New stage's tone: the lead arrived filled in. */}
+          <span className={cn("rounded-full border px-1.5 py-0.5 text-[9px] font-medium", TONE_TAG.blue)}>
             {t("portal.aiFilled")}
           </span>
         </div>
@@ -115,15 +117,15 @@ function VisualSpeed() {
         <span className="font-medium">
           {t("newLead", { name: "Lars Nielsen" })}
         </span>
-        <span className="text-success inline-flex items-center gap-1 font-medium">
+        <span className="text-tone-green-ink inline-flex items-center gap-1">
           <Zap className="size-3" /> {t("speed.firstReply")}
         </span>
       </div>
       {/* Client-facing sample: follows the client's language, not the UI's. */}
-      <div className="bg-primary/5 mt-3 rounded-2xl rounded-tl-sm p-3 text-xs leading-relaxed">
+      <div className="bg-muted mt-3 rounded-2xl rounded-tl-sm p-3 text-xs leading-relaxed">
         Hej Lars! Tak for din henvendelse — jeg har et par lejligheder i
         Estepona, der passer perfekt. Hvornår passer det at ringe?
-        <span className="text-primary mt-1.5 flex items-center gap-1 text-[10px] font-medium">
+        <span className="text-muted-foreground mt-1.5 flex items-center gap-1 text-[10px]">
           <Sparkles className="size-3" /> {t("speed.aiDraft")}
         </span>
       </div>
@@ -136,11 +138,11 @@ function VisualScheduler() {
   return (
     <div className="bg-card mock-lift mx-auto max-w-sm space-y-3 rounded-2xl p-4">
       <div className="flex items-center gap-3 rounded-lg border p-3">
-        <div className="bg-primary/10 text-primary flex size-10 flex-col items-center justify-center rounded-lg">
-          <span className="text-[9px] font-semibold uppercase">
+        <div className="bg-muted text-foreground flex size-10 flex-col items-center justify-center rounded-lg">
+          <span className="text-muted-foreground text-[9px] font-medium uppercase">
             {t("scheduler.month")}
           </span>
-          <span className="text-sm leading-none font-bold">14</span>
+          <span className="text-sm leading-none font-medium tabular-nums">14</span>
         </div>
         <div className="text-xs">
           <p className="font-medium">{t("scheduler.event")}</p>
@@ -160,75 +162,19 @@ function VisualScheduler() {
   );
 }
 
-type Accent = {
-  panel: string;
-  icon: string;
-  num: string;
-  check: string;
-};
-
-const ACCENTS: Record<string, Accent> = {
-  success: {
-    panel: "from-success/10",
-    icon: "bg-success/15 text-success",
-    num: "text-success/30",
-    check: "text-success",
-  },
-  primary: {
-    panel: "from-primary/10",
-    icon: "bg-primary/15 text-primary",
-    num: "text-primary/20",
-    check: "text-primary",
-  },
-  warning: {
-    panel: "from-warning/10",
-    icon: "bg-warning/15 text-warning",
-    num: "text-warning/30",
-    check: "text-warning",
-  },
-  destructive: {
-    panel: "from-destructive/10",
-    icon: "bg-destructive/15 text-destructive",
-    num: "text-destructive/25",
-    check: "text-destructive",
-  },
-};
-
-/** Copy lives in `landing.deepDives.items.<key>`; only the shell stays here. */
+/**
+ * Copy lives in `landing.deepDives.items.<key>`; only the shell stays here.
+ * Every panel is the same quiet grey, so the colour on the page is the
+ * product's own: the tags and WhatsApp green inside each mock.
+ */
 const FEATURES = [
-  {
-    key: "whatsapp",
-    accent: "success",
-    icon: MessageCircle,
-    visual: <VisualWhatsApp />,
-  },
-  {
-    key: "match",
-    accent: "primary",
-    icon: BadgeCheck,
-    visual: <VisualMatch />,
-  },
-  {
-    key: "portal",
-    accent: "warning",
-    icon: Inbox,
-    visual: <VisualPortal />,
-  },
-  {
-    key: "speed",
-    accent: "destructive",
-    icon: Zap,
-    visual: <VisualSpeed />,
-  },
-  {
-    key: "scheduler",
-    accent: "primary",
-    icon: CalendarClock,
-    visual: <VisualScheduler />,
-  },
+  { key: "whatsapp", icon: MessageCircle, visual: <VisualWhatsApp /> },
+  { key: "match", icon: BadgeCheck, visual: <VisualMatch /> },
+  { key: "portal", icon: Inbox, visual: <VisualPortal /> },
+  { key: "speed", icon: Zap, visual: <VisualSpeed /> },
+  { key: "scheduler", icon: CalendarClock, visual: <VisualScheduler /> },
 ] as const satisfies readonly {
   key: string;
-  accent: keyof typeof ACCENTS;
   icon: React.ComponentType<{ className?: string }>;
   visual: React.ReactNode;
 }[];
@@ -255,38 +201,21 @@ export function FeatureDeepDives() {
 
       <div className="mt-12 space-y-6 sm:space-y-8">
         {FEATURES.map((f, i) => {
-          const accent = ACCENTS[f.accent];
           const reverse = i % 2 === 1;
           return (
             <Reveal key={f.key}>
-              <div
-                className={cn(
-                  "relative overflow-hidden rounded-3xl border to-transparent p-6 sm:p-10",
-                  reverse ? "bg-gradient-to-bl" : "bg-gradient-to-br",
-                  accent.panel
-                )}
-              >
+              <div className="bg-muted/40 relative overflow-hidden rounded-3xl border p-6 sm:p-10">
                 <div className="grid items-center gap-8 md:grid-cols-2">
                   <div className={cn("space-y-4", reverse && "md:order-2")}>
                     <div className="flex items-center gap-3">
-                      <div
-                        className={cn(
-                          "flex size-11 items-center justify-center rounded-xl",
-                          accent.icon
-                        )}
-                      >
+                      <div className="bg-background text-foreground/70 flex size-11 items-center justify-center rounded-xl border shadow-xs">
                         <f.icon className="size-5" />
                       </div>
-                      <span
-                        className={cn(
-                          "font-display text-5xl tabular-nums",
-                          accent.num
-                        )}
-                      >
+                      <span className="text-foreground/20 font-display text-5xl tabular-nums">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                     </div>
-                    <h3 className="text-2xl font-semibold tracking-tight">
+                    <h3 className="text-2xl font-medium tracking-tight">
                       {t(`deepDives.items.${f.key}.title`)}
                     </h3>
                     <p className="text-muted-foreground">
@@ -298,9 +227,7 @@ export function FeatureDeepDives() {
                           key={point}
                           className="flex items-start gap-2 text-sm"
                         >
-                          <BadgeCheck
-                            className={cn("mt-0.5 size-4 shrink-0", accent.check)}
-                          />
+                          <BadgeCheck className="text-foreground mt-0.5 size-4 shrink-0" />
                           {t(`deepDives.items.${f.key}.${point}`)}
                         </li>
                       ))}

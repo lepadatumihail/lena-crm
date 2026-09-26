@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 
 import { ClientAvatar } from "@/components/clients/client-avatar";
+import { Budget, lastActivityAt } from "@/components/clients/clients-table";
 import { StageBadge } from "@/components/clients/stage-badge";
 import { ContactButtons } from "@/components/clients/contact-log";
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,7 @@ import { cn } from "@/lib/utils";
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="border-b px-5 py-4 last:border-b-0">
-      <h4 className="label-caps text-muted-foreground mb-3">{title}</h4>
+      <h4 className="section-label text-muted-foreground mb-3">{title}</h4>
       {children}
     </section>
   );
@@ -66,7 +67,7 @@ function Stat({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="rounded-lg border p-3">
       <p className="text-muted-foreground text-xs">{label}</p>
-      <div className="mt-1.5 text-sm font-medium tabular-nums">{children}</div>
+      <div className="mt-1.5 text-sm tabular-nums">{children}</div>
     </div>
   );
 }
@@ -88,7 +89,7 @@ function InfoRow({
       <span className="text-muted-foreground mt-0.5 shrink-0 [&>svg]:size-4">{icon}</span>
       <span className="min-w-0">
         <span className="text-muted-foreground block text-xs">{label}</span>
-        <span className="block truncate text-sm font-medium">{value}</span>
+        <span className="block truncate text-sm">{value}</span>
       </span>
     </>
   );
@@ -122,6 +123,7 @@ export function ClientSheet({
   onStageChange: (id: string, stage: string) => void;
 }) {
   const t = useTranslations("clients.sheet");
+  const tClients = useTranslations("clients");
   const tDetail = useTranslations("clientDetail.page");
   const tPriority = useTranslations("clients.priority");
   const tCommon = useTranslations("common");
@@ -154,7 +156,7 @@ export function ClientSheet({
         {c ? (
           <>
             <SheetHeader className="flex-row items-center gap-2 border-b py-3.5 pr-14">
-              <SheetTitle className="label-caps text-muted-foreground flex items-center gap-2 font-medium">
+              <SheetTitle className="section-label text-muted-foreground flex items-center gap-2 font-normal">
                 <UserRound className="size-3.5" strokeWidth={1.75} />
                 {t("title")}
               </SheetTitle>
@@ -165,15 +167,15 @@ export function ClientSheet({
               <section className="flex items-center gap-4 border-b px-5 py-5">
                 <ClientAvatar name={clientFullName(c)} side={c.side} size="lg" />
                 <div className="min-w-0">
-                  <h3 className="truncate text-lg font-semibold tracking-tight">
+                  <h3 className="truncate text-lg font-medium">
                     {clientFullName(c)}
                   </h3>
                   <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                    <StageBadge stage={c.stage} dot />
+                    <StageBadge stage={c.stage} />
                     <Tag>{sideLabel(tCrm, c.side)}</Tag>
                     {c.priority ? (
-                      <Tag tone="brand">
-                        <Star className="fill-current" />
+                      <Tag>
+                        <Star className="fill-foreground text-foreground" />
                         {t("priority")}
                       </Tag>
                     ) : null}
@@ -218,7 +220,7 @@ export function ClientSheet({
                     >
                       <SelectTrigger
                         size="sm"
-                        className="-mx-2 -my-1 h-7 w-[calc(100%+1rem)] border-0 bg-transparent px-2 text-sm font-medium shadow-none hover:bg-muted/60"
+                        className="-mx-2 -my-1 h-7 w-[calc(100%+1rem)] border-0 bg-transparent px-2 text-sm shadow-none hover:bg-muted/60"
                       >
                         <SelectValue />
                       </SelectTrigger>
@@ -233,11 +235,15 @@ export function ClientSheet({
                   </Stat>
                   <Stat label={isBuyer ? t("budget") : t("askingPrice")}>
                     {isBuyer ? (
-                      c.budget_max ?? c.budget_min ? (
-                        <Money value={c.budget_max ?? c.budget_min} locale={tag} />
-                      ) : (
-                        <span className="text-muted-foreground">—</span>
-                      )
+                      // The same range as the list, short enough for a half-width tile.
+                      <Budget
+                        min={c.budget_min}
+                        max={c.budget_max}
+                        locale={tag}
+                        compact
+                        upTo={(a) => tClients.rich("table.upTo", { amount: () => a })}
+                        from={(a) => tClients.rich("table.from", { amount: () => a })}
+                      />
                     ) : (
                       <Money value={c.asking_price} locale={tag} />
                     )}
@@ -246,12 +252,10 @@ export function ClientSheet({
                     {isBuyer ? c.viewing_count : c.property_count}
                   </Stat>
                   <Stat label={t("lastActivity")}>
-                    <span className="font-normal">
-                      {formatDistanceToNowStrict(new Date(c.updated_at), {
-                        addSuffix: true,
-                        locale: dateFnsLocale(locale),
-                      })}
-                    </span>
+                    {formatDistanceToNowStrict(new Date(lastActivityAt(c)), {
+                      addSuffix: true,
+                      locale: dateFnsLocale(locale),
+                    })}
                   </Stat>
                 </div>
               </Section>
@@ -303,7 +307,7 @@ export function ClientSheet({
                   aria-label={c.priority ? tPriority("unflag") : tPriority("flag")}
                   title={c.priority ? tPriority("unflag") : tPriority("flag")}
                 >
-                  <Star className={cn(c.priority && "fill-primary text-primary")} />
+                  <Star className={cn(c.priority && "fill-foreground text-foreground")} />
                 </Button>
                 <Button asChild variant="ghost" size="icon-sm">
                   <Link href={`/clients/${c.id}/edit`} aria-label={tCommon("edit")} title={tCommon("edit")}>

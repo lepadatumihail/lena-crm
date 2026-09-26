@@ -1,134 +1,132 @@
 /**
  * The colour tones behind every status surface: tags, dots, bars, meters,
- * notices, calendar events and avatars. Terracotta is the app's only hue, so
- * besides neutral a tone is either a step of the brand ramp or one of three
- * signals: green for done or paid, amber for due today, red for overdue or
- * failed. Each surface takes the shades it needs from the maps below, so a
- * stage, an event kind, a plan or an invoice status looks the same wherever
- * it shows.
+ * notices, calendar events and avatars. The app is mono, so a tone is either
+ * a shade of grey or a colour that means something: blue for new or in
+ * motion, violet for viewing, green for won or done, amber (a yellow) for
+ * waiting or due today, red for overdue or failed. Ink is a solid dark pill,
+ * kept for the plan badge. Each surface takes the shades it needs from the
+ * maps below, so a stage, an event kind, a plan or an invoice status looks
+ * the same wherever it shows.
  *
- * Feedback colours that are not a status (a delete button's red hover, a
- * success check) keep the semantic tokens in globals.css.
+ * The colours themselves are tokens in globals.css (--tone-*), with dark
+ * variants there. Feedback colours that are not a status (a delete button's
+ * red hover, a success check) keep the semantic tokens.
  */
 export const TONES = [
   "neutral",
-  "brand",
+  "grey",
+  "blue",
   "green",
   "amber",
   "red",
-  "sand",
-  "apricot",
-  "clay",
-  "terracotta",
+  "violet",
+  "ink",
 ] as const;
 
 export type Tone = (typeof TONES)[number];
 
 /**
- * The brand ramp, coolest first: for ordered things such as pipeline stages.
- * The fill warms as a deal gets closer, so the hot ones stand out without a
- * colour key. The last step is a solid terracotta pill.
+ * Pills, Structurely-style: a coloured tone is a pale fill with dark text
+ * and no visible edge; neutral is an outline on the page; grey a quiet fill;
+ * ink a solid dark pill. The border stays on every tone (transparent where
+ * it isn't drawn) so all pills are the same size.
  */
-export const RAMP = [
-  "neutral",
-  "sand",
-  "apricot",
-  "clay",
-  "terracotta",
-] as const satisfies readonly Tone[];
-
-/** Solid fills: dots, bar segments, meters. */
-export const TONE_SOLID: Record<Tone, string> = {
-  neutral: "bg-muted-foreground/50",
-  brand: "bg-primary",
-  green: "bg-emerald-500",
-  amber: "bg-amber-500",
-  red: "bg-red-500",
-  sand: "bg-sand-dot",
-  apricot: "bg-apricot-dot",
-  clay: "bg-clay-dot",
-  terracotta: "bg-primary",
+export const TONE_TAG: Record<Tone, string> = {
+  neutral: "border-border bg-background text-foreground/80",
+  grey: "border-transparent bg-muted text-foreground/80",
+  blue: "border-transparent bg-tone-blue-soft text-tone-blue-ink",
+  green: "border-transparent bg-tone-green-soft text-tone-green-ink",
+  amber: "border-transparent bg-tone-amber-soft text-tone-amber-ink",
+  red: "border-transparent bg-tone-red-soft text-tone-red-ink",
+  violet: "border-transparent bg-tone-violet-soft text-tone-violet-ink",
+  ink: "border-transparent bg-foreground text-background",
 };
 
-/** Pale fills: tags, notices, avatars, calendar events. */
+/** Solid fills: dots, bar segments, meters. Neutral and grey are light and dark grey. */
+export const TONE_SOLID: Record<Tone, string> = {
+  neutral: "bg-foreground/20",
+  grey: "bg-foreground/45",
+  blue: "bg-tone-blue",
+  green: "bg-tone-green",
+  amber: "bg-tone-amber",
+  red: "bg-tone-red",
+  violet: "bg-tone-violet",
+  ink: "bg-foreground",
+};
+
+/** Pale fills behind content: notices, avatars, calendar events, icon discs. */
 export const TONE_BG: Record<Tone, string> = {
   neutral: "bg-muted",
-  brand: "bg-primary/10",
-  green: "bg-emerald-500/10 dark:bg-emerald-400/15",
-  amber: "bg-amber-500/12 dark:bg-amber-400/15",
-  red: "bg-red-500/10 dark:bg-red-400/15",
-  sand: "bg-sand",
-  apricot: "bg-apricot",
-  clay: "bg-clay",
-  terracotta: "bg-primary",
+  grey: "bg-muted",
+  blue: "bg-tone-blue-soft",
+  green: "bg-tone-green-soft",
+  amber: "bg-tone-amber-soft",
+  red: "bg-tone-red-soft",
+  violet: "bg-tone-violet-soft",
+  ink: "bg-foreground/10",
 };
 
 /** The pale fill one step darker, for pressable surfaces on hover. */
 export const TONE_BG_HOVER: Record<Tone, string> = {
   neutral: "hover:bg-accent",
-  brand: "hover:bg-primary/20",
-  green: "hover:bg-emerald-500/20 dark:hover:bg-emerald-400/25",
-  amber: "hover:bg-amber-500/22 dark:hover:bg-amber-400/25",
-  red: "hover:bg-red-500/20 dark:hover:bg-red-400/25",
-  sand: "hover:bg-apricot",
-  apricot: "hover:bg-clay",
-  clay: "hover:bg-clay-line/60",
-  terracotta: "hover:bg-primary/90",
+  grey: "hover:bg-accent",
+  blue: "hover:bg-tone-blue/20",
+  green: "hover:bg-tone-green/20",
+  amber: "hover:bg-tone-amber/25",
+  red: "hover:bg-tone-red/20",
+  violet: "hover:bg-tone-violet/20",
+  ink: "hover:bg-foreground/15",
 };
 
-/** Hairline borders that sit on a pale fill. */
+/** Hairline borders that sit on a pale fill (notices, calendar blocks). */
 export const TONE_BORDER: Record<Tone, string> = {
   neutral: "border-border",
-  brand: "border-primary/25",
-  green: "border-emerald-500/25 dark:border-emerald-300/20",
-  amber: "border-amber-500/30 dark:border-amber-300/20",
-  red: "border-red-500/25 dark:border-red-300/20",
-  sand: "border-sand-line",
-  apricot: "border-apricot-line",
-  clay: "border-clay-line",
-  terracotta: "border-primary",
+  grey: "border-border",
+  blue: "border-tone-blue/25",
+  green: "border-tone-green/25",
+  amber: "border-tone-amber/35",
+  red: "border-tone-red/25",
+  violet: "border-tone-violet/25",
+  ink: "border-foreground/20",
 };
 
 /** Full-strength borders, for an accent edge such as a calendar event's. */
 export const TONE_EDGE: Record<Tone, string> = {
-  neutral: "border-muted-foreground/50",
-  brand: "border-primary",
-  green: "border-emerald-500",
-  amber: "border-amber-500",
-  red: "border-red-500",
-  sand: "border-sand-dot",
-  apricot: "border-apricot-dot",
-  clay: "border-clay-dot",
-  terracotta: "border-primary",
+  neutral: "border-foreground/25",
+  grey: "border-foreground/45",
+  blue: "border-tone-blue",
+  green: "border-tone-green",
+  amber: "border-tone-amber",
+  red: "border-tone-red",
+  violet: "border-tone-violet",
+  ink: "border-foreground",
 };
 
 /** Text and icons in the tone, readable on its pale fill and on the page. */
 export const TONE_INK: Record<Tone, string> = {
   neutral: "text-foreground/75",
-  brand: "text-brand-ink",
-  green: "text-emerald-800 dark:text-emerald-200",
-  amber: "text-amber-900 dark:text-amber-200",
-  red: "text-red-800 dark:text-red-200",
-  sand: "text-sand-ink",
-  apricot: "text-apricot-ink",
-  clay: "text-clay-ink",
-  terracotta: "text-primary-foreground",
+  grey: "text-foreground/80",
+  blue: "text-tone-blue-ink",
+  green: "text-tone-green-ink",
+  amber: "text-tone-amber-ink",
+  red: "text-tone-red-ink",
+  violet: "text-tone-violet-ink",
+  ink: "text-foreground",
 };
 
 /** Glyphs drawn in the tone at full strength on the page: status icons, priority bars. */
 export const TONE_ICON: Record<Tone, string> = {
   neutral: "text-muted-foreground/70",
-  brand: "text-primary",
-  green: "text-emerald-500 dark:text-emerald-400",
-  amber: "text-amber-500 dark:text-amber-400",
-  red: "text-red-500 dark:text-red-400",
-  sand: "text-sand-dot",
-  apricot: "text-apricot-dot",
-  clay: "text-clay-dot",
-  terracotta: "text-primary",
+  grey: "text-foreground/55",
+  blue: "text-tone-blue",
+  green: "text-tone-green",
+  amber: "text-tone-amber",
+  red: "text-tone-red",
+  violet: "text-tone-violet",
+  ink: "text-foreground",
 };
 
-/** The dot a tag draws before its label: on the solid step it has to be light. */
+/** The dot a tag draws before its label: on the solid ink pill it has to be light. */
 export function tagDotClass(tone: Tone): string {
-  return tone === "terracotta" ? "bg-primary-foreground/80" : TONE_SOLID[tone];
+  return tone === "ink" ? "bg-background/80" : TONE_SOLID[tone];
 }

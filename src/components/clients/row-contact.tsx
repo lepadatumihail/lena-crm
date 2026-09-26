@@ -24,9 +24,11 @@ type Reachable = {
 
 /**
  * The line under a client's name: how they were last reached, the first line
- * of what it was about, and when ("WhatsApp · Hi Sofia, I found two villas…
- * · 2 days ago"). A note shows the same way. Only the text truncates, so the
- * channel and the time always show.
+ * of what it was about, and when ("[WhatsApp icon] Hi Sofia, I found two
+ * villas… · 2 days ago"). With a message the icon alone names the channel
+ * (the word stays for screen readers), so the message gets the room;
+ * without one the word shows ("[phone] Call · 9 days ago"). A note shows the
+ * same way. Only the text truncates, so the channel and the time always show.
  */
 export function LatestActivityLine({
   activity,
@@ -38,9 +40,12 @@ export function LatestActivityLine({
   const t = useTranslations("clients.latest");
   const locale = useLocale();
 
+  // Plain muted grey, not a fainter step: at 12px anything lighter drops
+  // under 4.5:1 (about 3.6 on white, 4.3 in dark). It stays quieter than a
+  // real message, which reads in near-foreground.
   if (!activity) {
     return (
-      <span className={cn("text-muted-foreground/80 block truncate", className)}>
+      <span className={cn("text-muted-foreground block truncate", className)}>
         {t("none")}
       </span>
     );
@@ -48,20 +53,25 @@ export function LatestActivityLine({
 
   const channel = activity.channel ?? "other";
   const Icon = activity.kind === "note" ? NotebookPen : CHANNEL_ICONS[channel];
+  const label = activity.kind === "note" ? t("note") : t(`channels.${channel}`);
   return (
     <span className={cn("text-muted-foreground flex min-w-0 items-center gap-1.5", className)}>
-      <Icon aria-hidden className="size-3.5 shrink-0" strokeWidth={1.75} />
-      <span className="shrink-0">
-        {activity.kind === "note" ? t("note") : t(`channels.${channel}`)}
-      </span>
       {activity.preview ? (
         <>
-          <span aria-hidden>·</span>
+          <span className="flex shrink-0" title={label}>
+            <Icon aria-hidden className="size-3.5" strokeWidth={1.75} />
+            <span className="sr-only">{label}:</span>
+          </span>
           <span className="text-foreground/75 min-w-0 truncate" title={activity.preview}>
             {activity.preview}
           </span>
         </>
-      ) : null}
+      ) : (
+        <>
+          <Icon aria-hidden className="size-3.5 shrink-0" strokeWidth={1.75} />
+          <span className="shrink-0">{label}</span>
+        </>
+      )}
       <span aria-hidden>·</span>
       <time dateTime={activity.occurred_at} className="shrink-0 whitespace-nowrap">
         {formatDistanceToNowStrict(new Date(activity.occurred_at), {

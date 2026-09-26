@@ -130,10 +130,12 @@ export const getRecentClients = cache(async (): Promise<RecentClient[]> => {
 /** How far the account is set up, for the getting-started checklist. */
 export const getOnboardingInput = cache(async (): Promise<OnboardingInput> => {
   const supabase = await createSupabase();
-  const [profile, clients, appointmentsRes, templatesRes, referralCount] = await Promise.all([
+  const [profile, clients, appointmentsRes, viewingsRes, templatesRes, referralCount] = await Promise.all([
     getSessionProfile(),
     getActiveClients(),
     supabase.from("appointments").select("id", { count: "exact", head: true }),
+    // A viewing booked from the calendar's chooser counts as much as a meeting.
+    supabase.from("viewings").select("id", { count: "exact", head: true }),
     supabase.from("email_templates").select("id", { count: "exact", head: true }),
     getSessionUser().then(async (user) => {
       if (!user) return 0;
@@ -146,12 +148,13 @@ export const getOnboardingInput = cache(async (): Promise<OnboardingInput> => {
     }),
   ]);
   if (appointmentsRes.error) throw new Error(appointmentsRes.error.message);
+  if (viewingsRes.error) throw new Error(viewingsRes.error.message);
   if (templatesRes.error) throw new Error(templatesRes.error.message);
 
   return {
     hasName: Boolean(profile?.full_name?.trim()),
     clientCount: clients.length,
-    appointmentCount: appointmentsRes.count ?? 0,
+    appointmentCount: (appointmentsRes.count ?? 0) + (viewingsRes.count ?? 0),
     templateCount: templatesRes.count ?? 0,
     referralCount,
   };

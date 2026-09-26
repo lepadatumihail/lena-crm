@@ -1,5 +1,9 @@
 import { DueTasksPanel } from "@/components/home/due-tasks-panel";
 import {
+  GettingStartedStrip,
+  RememberOnboarding,
+} from "@/components/home/getting-started-strip";
+import {
   AttentionPanel,
   RecentClientsPanel,
   SummaryPanel,
@@ -15,7 +19,7 @@ import {
 } from "@/lib/data/dashboard";
 import { getAgentTimeZone } from "@/lib/data/session";
 import { countDueTasks, getDueTasks } from "@/lib/data/tasks";
-import { buyersBeforeViewing, dateKeyInTimeZone } from "@/lib/home";
+import { buyersBeforeViewing, dateKeyInTimeZone, showOnboarding } from "@/lib/home";
 import { DUE_TASKS_LIMIT } from "@/lib/tasks";
 
 /*
@@ -24,22 +28,26 @@ import { DUE_TASKS_LIMIT } from "@/lib/tasks";
   Shared loads (the client scan, the events) are deduplicated by `cache`.
 */
 
+/**
+ * The getting-started strip. The page renders this only while the book is
+ * young and the agent hasn't finished it on this device; when every required
+ * step turns out to be done, it says so to the cookie instead, so the next
+ * visit holds no place for it. `hidden`: the agent closed the strip, so it
+ * only checks, and draws nothing.
+ */
+export async function OnboardingSection({ hidden = false }: { hidden?: boolean }) {
+  const onboarding = await getOnboardingInput();
+  if (!showOnboarding(onboarding)) return <RememberOnboarding value="done" />;
+  return hidden ? null : <GettingStartedStrip onboarding={onboarding} />;
+}
+
 export async function SummarySection({ now }: { now: Date }) {
-  const [counts, onboarding, events, commission] = await Promise.all([
+  const [counts, events, commission] = await Promise.all([
     getPipelineCounts(),
-    getOnboardingInput(),
     getHomeEvents(now.toISOString()),
     getCommissionSummary(),
   ]);
-  return (
-    <SummaryPanel
-      counts={counts}
-      onboarding={onboarding}
-      events={events}
-      commission={commission}
-      now={now}
-    />
-  );
+  return <SummaryPanel counts={counts} events={events} commission={commission} now={now} />;
 }
 
 export async function AttentionSection() {

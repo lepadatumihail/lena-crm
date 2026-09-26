@@ -41,7 +41,7 @@ export function NavFrame({ children }: { children: React.ReactNode }) {
         className={cn(
           "nav-frame pointer-events-auto mx-3 mt-2 flex h-12 max-w-6xl transform-gpu items-center justify-between rounded-full border pl-4 pr-2 transition-[background-color,border-color,box-shadow,max-width] duration-300 ease-out xl:mx-auto",
           condensed
-            ? "border-border/60 bg-background/85 shadow-[0_8px_24px_-12px_rgb(0_0_0/0.3)] backdrop-blur-md xl:max-w-5xl"
+            ? "border-border/60 bg-background/95 shadow-[0_8px_24px_-12px_rgb(0_0_0/0.3)] backdrop-blur-md xl:max-w-5xl"
             : "border-transparent bg-transparent shadow-none"
         )}
       >

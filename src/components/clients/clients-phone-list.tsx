@@ -53,10 +53,10 @@ export function ClientsPhoneList({
                   {c.priority ? (
                     <Star
                       aria-label={t("list.priority")}
-                      className="fill-primary text-primary size-3.5 shrink-0"
+                      className="fill-foreground text-foreground size-3.5 shrink-0"
                     />
                   ) : null}
-                  <StageBadge stage={c.stage} dot className="ml-auto" />
+                  <StageBadge stage={c.stage} className="ml-auto" />
                 </span>
                 <LatestActivityLine
                   activity={c.latest_activity}

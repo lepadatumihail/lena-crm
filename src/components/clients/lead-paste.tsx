@@ -53,9 +53,9 @@ export function LeadPaste({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="border-primary/40 bg-primary/5 hover:bg-primary/10 flex w-full items-center gap-3 rounded-xl border border-dashed p-4 text-left transition-colors"
+        className="bg-background hover:bg-muted/60 focus-visible:ring-ring/50 flex w-full items-center gap-3 rounded-xl border border-dashed p-4 text-left outline-none transition-colors duration-150 focus-visible:ring-[3px]"
       >
-        <span className="bg-primary/10 text-primary flex size-9 shrink-0 items-center justify-center rounded-lg">
+        <span className="bg-muted text-foreground/70 flex size-9 shrink-0 items-center justify-center rounded-lg">
           <Sparkles className="size-5" />
         </span>
         <span className="min-w-0">
@@ -77,7 +77,7 @@ export function LeadPaste({
           placeholder={t("placeholder")}
         />
         <DialogFooter>
-          <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
+          <Button type="button" variant="outline" onClick={() => setOpen(false)}>
             {tCommon("cancel")}
           </Button>
           <Button

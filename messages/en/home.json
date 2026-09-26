@@ -2,9 +2,7 @@
   "title": "Home",
   "subtitle": "Everything that needs you, in one place.",
   "actions": {
-    "newBuyer": "New buyer",
-    "newSeller": "New seller",
-    "newAppointment": "New appointment"
+    "new": "New"
   },
   "upcoming": {
     "title": "Upcoming",
@@ -100,26 +98,39 @@
   },
   "onboarding": {
     "title": "Getting started",
-    "subtitle": "{done} of {total} done",
+    "progress": "{done} of {total}",
+    "progressLabel": "{done} of {total} steps done",
+    "next": "<muted>Next:</muted> {step}",
+    "showSteps": "Show steps",
+    "hideSteps": "Hide steps",
+    "dismiss": "Hide getting started",
+    "hidden": "Getting started is hidden. Your account menu brings it back.",
+    "optional": "Optional",
+    "stepDone": "Done:",
     "steps": {
       "addName": {
         "title": "Add your name",
+        "short": "Add your name",
         "detail": "Home greets you by it instead of by your email."
       },
       "addClient": {
         "title": "Bring in your clients",
+        "short": "Bring in clients",
         "detail": "Import a spreadsheet, or add them one at a time."
       },
       "scheduleAppointment": {
         "title": "Schedule a viewing or meeting",
+        "short": "Book a viewing",
         "detail": "It lands on your calendar, with a WhatsApp reminder ready to send."
       },
       "createTemplate": {
         "title": "Set up a message template",
+        "short": "Add a template",
         "detail": "Start from a ready-made starter, or write your own."
       },
       "inviteColleague": {
         "title": "Invite a colleague",
+        "short": "Invite a colleague",
         "detail": "Share your link and earn a free month of Pro.",
         "locked": "Unlocks after {count, plural, one {# client} other {# clients}}."
       }

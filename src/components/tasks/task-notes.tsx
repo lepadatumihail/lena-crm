@@ -148,10 +148,10 @@ export function TaskNotes({ taskId, todayKey }: { taskId: string; todayKey: stri
 
   return (
     <section className="px-5 py-4">
-      <h4 className="label-caps text-muted-foreground mb-3 flex items-center gap-2">
+      <h4 className="section-label text-muted-foreground mb-3 flex items-center gap-2">
         {t("notes.title")}
         {notes.length > 0 ? (
-          <span className="bg-muted text-foreground/80 inline-flex h-[18px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] font-medium tracking-normal normal-case tabular-nums">
+          <span className="bg-muted text-muted-foreground inline-flex h-[18px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] tabular-nums">
             {notes.length}
           </span>
         ) : null}
@@ -187,6 +187,7 @@ export function TaskNotes({ taskId, todayKey }: { taskId: string; todayKey: stri
             <div className="mt-2 flex justify-end">
               <Button
                 type="submit"
+                variant="outline"
                 size="sm"
                 disabled={state.status !== "ready" || draft.trim() === ""}
               >

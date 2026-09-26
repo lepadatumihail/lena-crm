@@ -7,8 +7,8 @@ export default function Loading() {
   return (
     <div className="space-y-4" aria-busy="true">
       <div className="flex items-center justify-between gap-3">
-        <Skeleton className="h-8 w-64" />
-        <Skeleton className="h-8 w-32" />
+        <Skeleton className="h-8 w-64 rounded-lg" />
+        <Skeleton className="h-8 w-32 rounded-lg" />
       </div>
       <div className="bg-card overflow-hidden rounded-xl border">
         <div className="bg-muted/30 h-[38px] border-b" />
@@ -19,7 +19,7 @@ export default function Loading() {
           >
             <Skeleton className="size-6 rounded-full" />
             <Skeleton className="h-3 w-40" />
-            <Skeleton className="h-5 w-20 rounded-full" />
+            <Skeleton className="h-[22px] w-20 rounded-full" />
             <Skeleton className="ml-auto h-3 w-24" />
           </div>
         ))}

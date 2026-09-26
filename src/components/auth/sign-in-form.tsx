@@ -213,7 +213,10 @@ export function SignInForm({
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={sending || !email}>
+              {/* Enabled while the field is empty: the input's own required
+                  and type=email checks say what is missing, where a disabled
+                  ink button would sit in the card as a flat grey slab. */}
+              <Button type="submit" className="w-full" disabled={sending}>
                 {sending ? <Loader2 className="animate-spin" /> : <Mail />}
                 {t("sendCode")}
               </Button>
@@ -228,12 +231,12 @@ export function SignInForm({
             <p className="text-muted-foreground text-center text-xs text-balance">
               {t.rich("legal", {
                 terms: (chunks) => (
-                  <Link href={marketingPath("terms", locale)} className="underline underline-offset-4">
+                  <Link href={marketingPath("terms", locale)} className="hover:text-foreground underline underline-offset-4">
                     {chunks}
                   </Link>
                 ),
                 privacy: (chunks) => (
-                  <Link href={marketingPath("privacy", locale)} className="underline underline-offset-4">
+                  <Link href={marketingPath("privacy", locale)} className="hover:text-foreground underline underline-offset-4">
                     {chunks}
                   </Link>
                 ),
@@ -277,7 +280,7 @@ export function SignInForm({
               <Button
                 variant="link"
                 size="sm"
-                className="px-0"
+                className="text-muted-foreground hover:text-foreground px-0 font-normal"
                 onClick={() => {
                   setStep("email");
                   setCode("");
@@ -286,7 +289,13 @@ export function SignInForm({
               >
                 <ArrowLeft className="size-3.5" /> {t("differentEmail")}
               </Button>
-              <Button variant="link" size="sm" className="px-0" onClick={handleResend} disabled={sending || verifying}>
+              <Button
+                variant="link"
+                size="sm"
+                className="text-muted-foreground hover:text-foreground px-0 font-normal"
+                onClick={handleResend}
+                disabled={sending || verifying}
+              >
                 {t("resend")}
               </Button>
             </div>

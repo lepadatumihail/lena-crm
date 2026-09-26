@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
+  Check,
   ChevronDown,
   EyeOff,
   Loader2,
@@ -52,9 +53,25 @@ import {
   type ClientSide,
   type Stage,
 } from "@/lib/crm";
-import { TONE_SOLID } from "@/lib/tones";
+import { TONE_SOLID, type Tone } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 import type { Client } from "@/lib/supabase/types";
+
+/**
+ * The stage pill one step darker while it is hovered or open, so it reads as
+ * a control. Per tone, because the pills differ: an outline, a grey fill, a
+ * pale colour, or solid ink.
+ */
+const STAGE_PILL_HOVER: Record<Tone, string> = {
+  neutral: "hover:bg-muted data-[state=open]:bg-muted",
+  grey: "hover:bg-foreground/10 data-[state=open]:bg-foreground/10",
+  blue: "hover:bg-tone-blue/20 data-[state=open]:bg-tone-blue/20",
+  green: "hover:bg-tone-green/20 data-[state=open]:bg-tone-green/20",
+  amber: "hover:bg-tone-amber/25 data-[state=open]:bg-tone-amber/25",
+  red: "hover:bg-tone-red/20 data-[state=open]:bg-tone-red/20",
+  violet: "hover:bg-tone-violet/20 data-[state=open]:bg-tone-violet/20",
+  ink: "hover:bg-foreground/85 data-[state=open]:bg-foreground/85",
+};
 
 /**
  * The stage tag under the client's name, which is also the way to change
@@ -94,10 +111,10 @@ export function StageMenu({
       <DropdownMenuTrigger
         className={cn(
           tagVariants({ tone }),
-          "cursor-pointer pr-1.5 outline-none transition-[filter,box-shadow] duration-150 hover:brightness-[0.96] focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[state=open]:brightness-[0.96] dark:hover:brightness-110 dark:data-[state=open]:brightness-110"
+          "cursor-pointer pr-1.5 outline-none transition-[background-color,box-shadow] duration-150 focus-visible:ring-[3px] focus-visible:ring-ring/50",
+          STAGE_PILL_HOVER[tone]
         )}
       >
-        <span aria-hidden className={cn("size-1.5 rounded-full", TONE_SOLID[tone])} />
         <span className="sr-only">{t("table.stage")}: </span>
         {stageLabel(tCrm, current)}
         <ChevronDown aria-hidden className="size-3 opacity-60" />
@@ -108,12 +125,22 @@ export function StageMenu({
         </DropdownMenuLabel>
         <DropdownMenuRadioGroup value={current} onValueChange={change}>
           {stagesForSide(side).map((s) => (
-            <DropdownMenuRadioItem key={s} value={s}>
+            // The stage's own dot leads; the radio's dot would sit beside it
+            // (two dots on the current row), so it is hidden for a check at the end.
+            <DropdownMenuRadioItem
+              key={s}
+              value={s}
+              className="group/stage pl-2 [&>span:first-child]:hidden"
+            >
               <span
                 aria-hidden
-                className={cn("size-2 rounded-full", TONE_SOLID[STAGE_TONES[s]])}
+                className={cn("size-2 shrink-0 rounded-full", TONE_SOLID[STAGE_TONES[s]])}
               />
               {stageLabel(tCrm, s)}
+              <Check
+                aria-hidden
+                className="text-foreground ml-auto size-3.5 opacity-0 group-data-[state=checked]/stage:opacity-100"
+              />
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>
@@ -197,7 +224,7 @@ export function ClientHeaderActions({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-52">
           <DropdownMenuItem onSelect={togglePriority}>
-            <Star className={cn(client.priority && "fill-primary text-primary")} />
+            <Star className={cn(client.priority && "fill-foreground text-foreground")} />
             {client.priority ? t("priority.unflag") : t("priority.flag")}
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={() => toggleActive(!client.is_active)}>
@@ -222,7 +249,7 @@ export function ClientHeaderActions({
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="ghost">{tCommon("cancel")}</Button>
+              <Button variant="outline">{tCommon("cancel")}</Button>
             </DialogClose>
             <Button variant="destructive" onClick={onDelete} disabled={deleting}>
               {deleting && <Loader2 className="animate-spin" />}

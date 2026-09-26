@@ -279,7 +279,8 @@ function LogContactForm({
         ) : (
           <span className="hidden sm:block" />
         )}
-        <div className="flex gap-2">
+        {/* Stacked and full width on a phone, like the other dialogs' footers. */}
+        <div className="flex w-full flex-col-reverse gap-2 sm:w-auto sm:flex-row">
           <Button type="button" variant="outline" disabled={pending} onClick={onDone}>
             {logged ? t("skip") : tCommon("cancel")}
           </Button>

@@ -147,6 +147,18 @@ export function Budget({
  */
 const LAST_ACTIVITY_CELL = "hidden @7xl:table-cell";
 
+/**
+ * When anything last happened to the client: an edit of the record, or a
+ * logged contact or note, whichever is newer. A note doesn't touch the
+ * record's `updated_at`, and the column must never read "10 days ago" beside
+ * a line that says "1 day ago".
+ */
+export function lastActivityAt(c: ClientRow): number {
+  const edited = Date.parse(c.updated_at);
+  const logged = c.latest_activity ? Date.parse(c.latest_activity.occurred_at) : 0;
+  return Math.max(edited, logged);
+}
+
 export function ClientsTable({
   data,
   side,
@@ -180,8 +192,8 @@ export function ClientsTable({
   const isBuyer = side === "buyer";
 
   const columns = useMemo<ColumnDef<ClientRow>[]>(() => {
-    const when = (iso: string) =>
-      formatDistanceToNowStrict(new Date(iso), {
+    const when = (at: number) =>
+      formatDistanceToNowStrict(at, {
         addSuffix: true,
         locale: dateFnsLocale(locale),
       });
@@ -287,9 +299,10 @@ export function ClientsTable({
                     {clientFullName(c)}
                   </Link>
                   {c.priority ? (
+                    // A marker, not an action: it reads "Priority", like the phone row.
                     <Star
-                      className="fill-primary text-primary size-3.5 shrink-0"
-                      aria-label={t("priority.unflag")}
+                      className="fill-foreground text-foreground size-3.5 shrink-0"
+                      aria-label={t("list.priority")}
                     />
                   ) : null}
                   {!c.is_active ? <Tag>{t("table.inactive")}</Tag> : null}
@@ -308,7 +321,7 @@ export function ClientsTable({
         ),
         sortingFn: (a, b) =>
           stageIndex(side, a.original.stage) - stageIndex(side, b.original.stage),
-        cell: ({ row }) => <StageBadge stage={row.original.stage} dot />,
+        cell: ({ row }) => <StageBadge stage={row.original.stage} />,
       },
       amount,
       tally,
@@ -336,22 +349,26 @@ export function ClientsTable({
         header: ({ column }) => (
           <SortHead column={column}>{t("table.agency")}</SortHead>
         ),
+        // A long agency name truncates rather than taking the last message's room.
         cell: ({ row }) => (
-          <span className="text-muted-foreground text-[13px]">
+          <span
+            className="text-muted-foreground block max-w-40 truncate text-[13px] @7xl:max-w-56"
+            title={row.original.agency || undefined}
+          >
             {row.original.agency || "—"}
           </span>
         ),
       },
       {
         id: "updated_at",
-        accessorKey: "updated_at",
+        accessorFn: lastActivityAt,
         header: ({ column }) => (
           <SortHead column={column}>{t("table.lastActivity")}</SortHead>
         ),
         cell: ({ row }) => (
           <span className="text-muted-foreground inline-flex items-center gap-1.5 text-[13px]">
             <CalendarDays className="size-3.5 shrink-0" strokeWidth={1.75} />
-            {when(row.original.updated_at)}
+            {when(lastActivityAt(row.original))}
           </span>
         ),
       },
@@ -424,7 +441,7 @@ export function ClientsTable({
                     </DropdownMenuPortal>
                   </DropdownMenuSub>
                   <DropdownMenuItem onSelect={() => onTogglePriority(c.id, !c.priority)}>
-                    <Star className={cn(c.priority && "fill-primary text-primary")} />
+                    <Star className={cn(c.priority && "fill-foreground text-foreground")} />
                     {c.priority ? t("priority.unflag") : t("priority.flag")}
                   </DropdownMenuItem>
                   <DropdownMenuItem onSelect={() => onSetActive(c.id, !c.is_active)}>

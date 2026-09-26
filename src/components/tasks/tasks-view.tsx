@@ -38,6 +38,7 @@ import {
   type TasksViewKind,
 } from "@/lib/tasks-view";
 import { TONE_SOLID } from "@/lib/tones";
+import { cn } from "@/lib/utils";
 
 function rememberView(view: TasksViewKind) {
   document.cookie = `${TASKS_VIEW_COOKIE}=${view}; path=/; max-age=${TASKS_VIEW_COOKIE_MAX_AGE}; samesite=lax`;
@@ -239,6 +240,10 @@ export function TasksView(props: {
   const doneCount = doneRows.length;
   const openVisible = openRows.filter((row) => matches(row, true));
   const doneVisible = doneRows.filter((row) => matches(row, false));
+  // No tasks at all yet: the empty card is the whole page, so there is
+  // nothing to search, filter or lay out as a board.
+  const isEmpty =
+    tab === "open" && openCount === 0 && doneCount === 0 && !props.done.hasMore && clientFilter === null;
   const byStatus = groupTasksByStatus(openVisible);
   const groups = OPEN_TASK_STATUSES.map((status) => ({
     status,
@@ -261,8 +266,10 @@ export function TasksView(props: {
     ...PRIORITY_ORDER.map((p) => ({ value: p, label: taskPriorityLabel(tCrm, p) })),
   ];
 
+  // A phone has the tab bar's + for this (it opens this same dialog in
+  // place), and one ink button per screen is enough.
   const newButton = (
-    <Button size="sm" className="rounded-full" onClick={openCreate}>
+    <Button size="sm" onClick={openCreate} className="hidden md:inline-flex">
       <Plus /> {t("new")}
     </Button>
   );
@@ -283,8 +290,24 @@ export function TasksView(props: {
     } else {
       body = <DoneList rows={doneVisible} emptyMessage={null} {...doneListProps} />;
     }
-  } else if (openCount === 0 && doneCount === 0 && !props.done.hasMore && clientFilter === null) {
-    body = <EmptyState action={newButton} />;
+  } else if (isEmpty) {
+    // As on the client lists: the empty page's one ink button lives here,
+    // where the eye is, and the toolbar drops its own. A phone keeps the tab
+    // bar's ink + and gets an outline one.
+    body = (
+      <EmptyState
+        action={
+          <>
+            <Button size="sm" variant="outline" onClick={openCreate} className="md:hidden">
+              <Plus /> {t("new")}
+            </Button>
+            <Button size="sm" onClick={openCreate} className="hidden md:inline-flex">
+              <Plus /> {t("new")}
+            </Button>
+          </>
+        }
+      />
+    );
   } else {
     const board = (
       <TaskBoard
@@ -337,47 +360,56 @@ export function TasksView(props: {
         ]}
       />
 
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="relative w-full sm:w-64">
-          <Search
-            className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2"
-            strokeWidth={1.75}
-          />
-          <Input
-            placeholder={t("searchPlaceholder")}
-            aria-label={t("searchLabel")}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="h-8 pl-8 md:text-[13px]"
-          />
-        </div>
-
-        <FilterSelect
-          label={t("filters.client")}
-          value={clientFilter ?? "all"}
-          onValueChange={changeClientFilter}
-          options={clientSelectOptions}
-        />
-
-        <FilterSelect
-          label={t("filters.priority")}
-          value={priorityFilter}
-          onValueChange={setPriorityFilter}
-          options={priorityOptions}
-        />
-
-        <div className="ml-auto flex items-center gap-2">
-          {tab === "open" ? (
-            <ViewToggle
-              view={view === "board" ? "kanban" : "table"}
-              onChange={(next) => changeView(next === "kanban" ? "board" : "list")}
-              tableLabel={t("views.list")}
-              boardLabel={t("views.board")}
+      {/* No tasks at all: the empty card below holds the page's one action. */}
+      {isEmpty ? null : (
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative min-w-0 flex-1 sm:w-64 sm:flex-none">
+            <Search
+              className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2"
+              strokeWidth={1.75}
             />
-          ) : null}
-          {newButton}
+            <Input
+              placeholder={t("searchPlaceholder")}
+              aria-label={t("searchLabel")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="h-8 pl-8 text-ellipsis md:text-[13px]"
+            />
+          </div>
+
+          {/* As on the client lists: on a phone the filters are one row under
+              the search that scrolls sideways, edge to edge; from sm up they
+              join the toolbar's own row. */}
+          <div className="scrollbar-none order-last -mx-4 -my-1 flex w-[calc(100%+2rem)] gap-2 overflow-x-auto px-4 py-1 sm:contents [&>*]:shrink-0">
+            <FilterSelect
+              label={t("filters.client")}
+              value={clientFilter ?? "all"}
+              onValueChange={changeClientFilter}
+              options={clientSelectOptions}
+            />
+
+            <FilterSelect
+              label={t("filters.priority")}
+              value={priorityFilter}
+              onValueChange={setPriorityFilter}
+              options={priorityOptions}
+            />
+          </div>
+
+          {/* Done on a phone has neither the toggle nor New: no empty slot beside the search. */}
+          <div className={cn("ml-auto flex items-center gap-2", tab === "done" && "max-md:hidden")}>
+            {tab === "open" ? (
+              <ViewToggle
+                view={view === "board" ? "kanban" : "table"}
+                onChange={(next) => changeView(next === "kanban" ? "board" : "list")}
+                tableLabel={t("views.list")}
+                boardLabel={t("views.board")}
+              />
+            ) : null}
+            {newButton}
+          </div>
         </div>
-      </div>
+      )}
 
       {body}
 
@@ -410,7 +442,7 @@ function EmptyState({ action }: { action: ReactNode }) {
         <ListChecks className="size-6" strokeWidth={1.5} />
       </div>
       <h3 className="font-medium">{t("title")}</h3>
-      <p className="text-muted-foreground mt-1 max-w-xs text-sm">{t("body")}</p>
+      <p className="text-muted-foreground mt-1 max-w-xs text-sm text-balance">{t("body")}</p>
       <div className="mt-4">{action}</div>
     </div>
   );

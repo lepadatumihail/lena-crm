@@ -64,8 +64,6 @@ import {
   type MessageVars,
 } from "@/lib/message-templates";
 import type { EmailTemplate } from "@/lib/supabase/types";
-import { TONE_BG, TONE_INK } from "@/lib/tones";
-import { cn } from "@/lib/utils";
 
 type ClientOption = { id: string; name: string };
 
@@ -102,7 +100,6 @@ export function TemplatesView({
         </p>
         <Button
           size="sm"
-          className="rounded-full"
           onClick={() => setCreateInit({ name: "", subject: "", body: "" })}
         >
           <Plus /> {t("new")}
@@ -135,10 +132,8 @@ export function TemplatesView({
           <ul className="divide-y">
             {MESSAGE_TEMPLATES.map((tpl) => (
               <li key={tpl.id} className="flex items-center gap-3 px-4 py-3">
-                <RowIcon
-                  icon={Sparkles}
-                  className={cn("mt-0", TONE_BG.brand, TONE_INK.brand)}
-                />
+                {/* The same icon on every row: on a phone the name needs the room more. */}
+                <RowIcon icon={Sparkles} className="mt-0 max-sm:hidden" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium">
                     {templateLabel(t, tpl.id)}
@@ -211,7 +206,7 @@ function TemplateRow({
 
   return (
     <li className="flex items-center gap-3 px-4 py-3">
-      <RowIcon icon={MessageSquareText} className="mt-0" />
+      <RowIcon icon={MessageSquareText} className="mt-0 max-sm:hidden" />
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium">{template.name}</p>
         <p className="text-muted-foreground truncate text-xs">{preview}</p>
@@ -276,7 +271,10 @@ function UseTemplateButton({
   // composer opens with this template once the client is saved.
   const newClientHref = `/clients/new?side=buyer&compose=${templateId}`;
   const addLink = (chunks: React.ReactNode) => (
-    <Link href={newClientHref} className="text-primary hover:underline">
+    <Link
+      href={newClientHref}
+      className="text-foreground decoration-foreground/25 hover:decoration-foreground font-medium underline underline-offset-4"
+    >
       {chunks}
     </Link>
   );
@@ -315,12 +313,15 @@ function UseTemplateButton({
           </div>
         )}
         <DialogFooter>
-          <Button variant="ghost" onClick={() => setOpen(false)}>
-            {tCommon("cancel")}
+          {/* With no clients the link above is the way forward, not a dead button. */}
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            {clients.length === 0 ? tCommon("close") : tCommon("cancel")}
           </Button>
-          <Button onClick={go} disabled={!clientId}>
-            {t("use.open")}
-          </Button>
+          {clients.length > 0 ? (
+            <Button onClick={go} disabled={!clientId}>
+              {t("use.open")}
+            </Button>
+          ) : null}
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -452,7 +453,7 @@ function TemplateDialog({
                         key={v}
                         type="button"
                         onClick={() => insertVar(v)}
-                        className="bg-muted hover:bg-accent rounded border px-1.5 py-0.5 font-mono text-[11px] transition-colors"
+                        className="bg-background hover:bg-muted text-foreground/80 hover:text-foreground focus-visible:ring-ring/50 rounded-md border px-1.5 py-0.5 font-mono text-[11px] outline-none transition-colors focus-visible:ring-[3px]"
                       >
                         {`{{${v}}}`}
                       </button>
@@ -491,7 +492,7 @@ function TemplateDialog({
             <DialogFooter>
               <Button
                 type="button"
-                variant="ghost"
+                variant="outline"
                 onClick={() => onOpenChange(false)}
               >
                 {tCommon("cancel")}

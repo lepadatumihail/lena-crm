@@ -10,7 +10,7 @@
   },
   "founding": {
     "youAre": "Agente fundador n.º {number}",
-    "spots": "{count, plural, one {queda # plaza fundadora} other {quedan # plazas fundadoras}}",
+    "spots": "{count, plural, one {Queda # plaza fundadora} other {Quedan # plazas fundadoras}}",
     "full": "La cohorte fundadora está completa",
     "lockedWithSpots": "Tu precio queda bloqueado de por vida. {count, plural, one {Queda # plaza fundadora} other {Quedan # plazas fundadoras}}.",
     "lockedFull": "Tu precio queda bloqueado de por vida. La cohorte fundadora está completa.",

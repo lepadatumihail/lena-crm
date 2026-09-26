@@ -207,7 +207,7 @@ function PlanPanel({
     description = t("plan.descComp");
     badge = {
       label: t("plan.badgeUntil", { date: formatBillingDate(plan.proUntil, tag) ?? "" }),
-      tone: "brand",
+      tone: "blue",
     };
     priceMain = formatCurrency(0, tag);
     priceNote = t("plan.priceForNow");
@@ -355,7 +355,7 @@ function PlanPanel({
     >
       <div className="space-y-4 px-4 py-5">
         <div className="space-y-1">
-          <p className="text-lg leading-6 font-semibold tracking-tight">{title}</p>
+          <p className="text-lg leading-6 font-medium">{title}</p>
           <p className="text-muted-foreground text-sm text-pretty">{description}</p>
         </div>
         <div className="flex flex-wrap items-end justify-between gap-3">
@@ -366,7 +366,7 @@ function PlanPanel({
             {priceNote ? <span className="text-muted-foreground text-sm">{priceNote}</span> : null}
           </p>
           {foundingNumber != null ? (
-            <Tag tone="brand">
+            <Tag>
               <Sparkles />
               {t("plan.foundingAgent", { number: foundingNumber })}
             </Tag>
@@ -397,7 +397,7 @@ function PlanPanel({
               <span className="text-muted-foreground text-xs">{t("actions.manualHint")}</span>
             )
           ) : plan.source === "comp" ? (
-            <Button asChild size="sm" className="rounded-full">
+            <Button asChild size="sm">
               <Link href="/pricing">
                 {t("actions.subscribeToKeepPro")} <ArrowRight />
               </Link>
@@ -409,7 +409,7 @@ function PlanPanel({
               </Link>
             </Button>
           ) : (
-            <Button asChild size="sm" className="rounded-full">
+            <Button asChild size="sm">
               <Link href="/pricing">
                 {t("actions.upgradeToPro")} <ArrowRight />
               </Link>
@@ -453,8 +453,9 @@ function ClientsPanel({ clientCount, limit }: { clientCount: number; limit: numb
             aria-valuemax={limit}
             aria-valuenow={used}
           >
+            {/* The same meter as the sidebar's plan card: grey, ink once full. */}
             <div
-              className={cn("h-full rounded-full", TONE_SOLID[atCap ? "amber" : "brand"])}
+              className={cn("h-full rounded-full", TONE_SOLID[atCap ? "ink" : "grey"])}
               style={{ width: `${(used / limit) * 100}%` }}
             />
           </div>
@@ -575,14 +576,15 @@ function CreditsPanel({ overview }: { overview: BillingOverview }) {
           {credits.slice(0, 5).map((credit) => {
             const line = creditLine(t, credit);
             return (
-              <li key={credit.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
+              <li key={credit.id} className="flex items-start justify-between gap-3 px-4 py-2.5">
                 <div className="min-w-0">
-                  <p className="truncate text-sm">{line.title}</p>
+                  {/* A third-width panel: the reason wraps rather than lose its end. */}
+                  <p className="text-sm text-pretty">{line.title}</p>
                   <p className="text-muted-foreground truncate text-xs">
                     {formatBillingDate(credit.created_at, tag)} · {line.detail}
                   </p>
                 </div>
-                <span className="shrink-0 text-sm font-medium tabular-nums">
+                <span className="shrink-0 text-sm tabular-nums">
                   {credit.kind === "pro_time"
                     ? t("credits.monthsShort", { count: credit.months })
                     : formatCurrency(Number(credit.amount_eur), tag)}
@@ -634,9 +636,16 @@ function InvoicesPanel({
       count={invoices.length}
       action={
         canManage && invoices.length ? (
-          <PortalButton variant="ghost" size="xs">
-            {t("invoices.all")} <ExternalLink />
-          </PortalButton>
+          // Looks like every other panel's header link (PanelAction), but it
+          // posts: the portal URL is minted per visit.
+          <form action={openBillingPortal}>
+            <button
+              type="submit"
+              className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 -mr-1.5 inline-flex h-7 shrink-0 items-center gap-1 rounded-md px-1.5 text-xs outline-none transition-colors duration-150 focus-visible:ring-[3px]"
+            >
+              {t("invoices.all")} <ExternalLink className="size-3.5" />
+            </button>
+          </form>
         ) : null
       }
       footer={t("invoices.description")}
@@ -648,7 +657,8 @@ function InvoicesPanel({
           <TableHeader>
             <TableRow>
               <TableHead className="pl-4">{t("invoices.date")}</TableHead>
-              <TableHead>{t("invoices.period")}</TableHead>
+              {/* On a phone the row keeps date, amount, status and the links. */}
+              <TableHead className="hidden sm:table-cell">{t("invoices.period")}</TableHead>
               <TableHead className="text-right">{t("invoices.amount")}</TableHead>
               <TableHead>{t("invoices.status")}</TableHead>
               <TableHead className="pr-4 text-right">
@@ -664,10 +674,12 @@ function InvoicesPanel({
                   <TableCell className="pl-4">
                     <span className="tabular-nums">{formatBillingDate(inv.createdAt, tag)}</span>
                     {inv.number ? (
-                      <span className="text-muted-foreground ml-2 text-xs">{inv.number}</span>
+                      <span className="text-muted-foreground ml-2 hidden text-xs sm:inline">
+                        {inv.number}
+                      </span>
                     ) : null}
                   </TableCell>
-                  <TableCell className="text-muted-foreground text-[13px]">
+                  <TableCell className="text-muted-foreground hidden text-[13px] sm:table-cell">
                     {formatPeriod(inv.periodStart, inv.periodEnd, tag) ?? "—"}
                   </TableCell>
                   <TableCell className="text-right tabular-nums">
@@ -676,19 +688,22 @@ function InvoicesPanel({
                   <TableCell>
                     <Tag tone={status.tone}>{status.label}</Tag>
                   </TableCell>
-                  <TableCell className="pr-4 text-right">
+                  <TableCell className="pr-4 text-right max-sm:pl-1">
                     <div className="flex justify-end gap-1">
+                      {/* Icons only on a phone; the label stays for screen readers. */}
                       {inv.hostedUrl ? (
-                        <Button asChild variant="ghost" size="xs">
+                        <Button asChild variant="ghost" size="xs" className="max-sm:px-1.5!">
                           <a href={inv.hostedUrl} target="_blank" rel="noreferrer">
-                            {common("view")} <ExternalLink />
+                            <span className="sr-only sm:not-sr-only">{common("view")}</span>
+                            <ExternalLink />
                           </a>
                         </Button>
                       ) : null}
                       {inv.pdfUrl ? (
-                        <Button asChild variant="ghost" size="xs">
+                        <Button asChild variant="ghost" size="xs" className="max-sm:px-1.5!">
                           <a href={inv.pdfUrl} target="_blank" rel="noreferrer">
-                            PDF <Download />
+                            <span className="sr-only sm:not-sr-only">PDF</span>
+                            <Download />
                           </a>
                         </Button>
                       ) : null}

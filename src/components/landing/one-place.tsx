@@ -34,6 +34,7 @@ import { sideLabel, stageLabel } from "@/i18n/labels";
 import { cn } from "@/lib/utils";
 import { useRevealFloor } from "@/hooks/use-reveal-floor";
 import { STAGE_TONES } from "@/lib/crm";
+import { TONE_BG, TONE_INK } from "@/lib/tones";
 
 /*
  * "One place" — the consolidation pitch as a loop:
@@ -74,8 +75,12 @@ const BEAM = {
   pathLength: { duration: 0.45, ease: "easeOut" },
   opacity: { duration: 0.25 },
 } as const;
-/** Card width in px (17rem) — the slot is measured, the card is not. */
-const CARD_W = 272;
+/**
+ * Card width in px (18rem) — the slot is measured, the card is not. 18rem is
+ * the room the longest Spanish row needs ("Apartamento · 600–800 k€ · vistas
+ * al mar", 231px at 12px) to show without an ellipsis.
+ */
+const CARD_W = 288;
 // Silhouettes trailing the card out of the wing: [peak opacity, delay].
 const CARD_GHOSTS: readonly [number, number][] = [
   [0.45, 0.07],
@@ -142,8 +147,8 @@ function NotesTile() {
 
 function CalendarTile() {
   return (
-    <Tile className="flex-col items-stretch bg-white text-neutral-900">
-      <div className="bg-[#FF3B30] py-[1px] text-center text-[6px] font-semibold tracking-wide text-white uppercase sm:text-[7px]">
+    <Tile className="text-inverted flex-col items-stretch bg-white">
+      <div className="bg-[#FF3B30] py-[1px] text-center text-[6px] font-medium tracking-wide text-white uppercase sm:text-[7px]">
         Thu
       </div>
       <div className="flex flex-1 items-center justify-center text-base leading-none font-medium tabular-nums sm:text-lg">
@@ -162,7 +167,7 @@ function RemindersTile() {
             className="size-[5px] shrink-0 rounded-full sm:size-1.5"
             style={{ backgroundColor: c }}
           />
-          <span className="h-px flex-1 bg-neutral-300" />
+          <span className="bg-inverted/20 h-px flex-1" />
         </span>
       ))}
     </Tile>
@@ -217,12 +222,14 @@ const TILES: Record<AppKey, () => ReactNode> = {
 /* The card that comes out                                             */
 /* ------------------------------------------------------------------ */
 
+// The card is LeadWing's own, so it is drawn like the app: thin grey icons,
+// WhatsApp included.
 const ROWS = [
-  { key: "phone", Icon: MessageCircle, tone: "text-[#25D366]" },
-  { key: "budget", Icon: Home, tone: "text-[#d9a800]" },
-  { key: "viewing", Icon: CalendarClock, tone: "text-[#FF3B30]" },
-  { key: "followUp", Icon: Bell, tone: "text-[#FF9500]" },
-  { key: "docs", Icon: FileText, tone: "text-[#4285F4]" },
+  { key: "phone", Icon: MessageCircle, tone: "text-muted-foreground" },
+  { key: "budget", Icon: Home, tone: "text-muted-foreground" },
+  { key: "viewing", Icon: CalendarClock, tone: "text-muted-foreground" },
+  { key: "followUp", Icon: Bell, tone: "text-muted-foreground" },
+  { key: "docs", Icon: FileText, tone: "text-muted-foreground" },
 ] as const;
 
 function ClientCard({
@@ -248,22 +255,28 @@ function ClientCard({
         scale: OUT_SPRING,
         opacity: { duration: 0.2 },
       }}
-      className="bg-card relative w-[17rem] max-w-full rounded-2xl border p-4 shadow-[0_24px_60px_-20px_rgb(0_0_0/0.35)]"
+      className="bg-card relative w-[18rem] max-w-full rounded-2xl border p-4 shadow-[0_24px_60px_-20px_rgb(0_0_0/0.35)]"
     >
       <div className="flex items-start gap-3">
-        <span className="bg-primary/15 text-primary flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
+        <span
+          className={cn(
+            "flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-medium",
+            TONE_BG.neutral,
+            TONE_INK.neutral
+          )}
+        >
           SM
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
-            <p className="truncate text-sm font-semibold">Sofia Müller</p>
-            <Star className="fill-primary text-primary size-3.5 shrink-0" />
+            <p className="truncate text-sm font-medium">Sofia Müller</p>
+            <Star className="fill-foreground text-foreground size-3.5 shrink-0" />
           </div>
           <p className="text-muted-foreground truncate text-xs">
             🇩🇪 {t("language")} · {sideLabel(tCrm, "buyer")}
           </p>
         </div>
-        <Tag tone={STAGE_TONES.viewing} dot className="shrink-0">
+        <Tag tone={STAGE_TONES.viewing} className="shrink-0">
           {stageLabel(tCrm, "viewing")}
         </Tag>
       </div>
@@ -286,8 +299,8 @@ function ClientCard({
         ))}
       </motion.ul>
 
-      <p className="text-primary mt-3 flex items-center gap-1.5 text-[11px] font-medium">
-        <Check className="size-3.5" /> {t("footer")}
+      <p className="text-muted-foreground mt-3 flex items-center gap-1.5 text-[11px]">
+        <Check className="text-foreground size-3.5" /> {t("footer")}
       </p>
     </motion.div>
   );
@@ -480,11 +493,6 @@ export function OnePlace() {
         aria-hidden
         className="bg-muted/30 relative mx-auto mt-10 max-w-5xl overflow-hidden rounded-3xl border px-4 py-8 sm:px-8 sm:py-10"
       >
-        {/* soft glow behind the wing */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="bg-primary/10 absolute top-1/2 left-1/2 size-72 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl" />
-        </div>
-
         {/* Dotted guides: every app has a channel that flows into the wing. */}
         {geom && curves && (
           <svg className="pointer-events-none absolute inset-0 size-full overflow-visible">
@@ -499,7 +507,7 @@ export function OnePlace() {
                   strokeWidth={1.5}
                   strokeLinecap="round"
                   strokeDasharray="2 6"
-                  className="stroke-primary animate-[dash-flow_1s_linear_infinite] motion-reduce:animate-none"
+                  className="stroke-foreground animate-[dash-flow_1s_linear_infinite] motion-reduce:animate-none"
                   initial={false}
                   animate={{ opacity: gone ? (showCard ? 0.14 : 0.7) : 0.3 }}
                   transition={{ duration: 0.4 }}
@@ -523,7 +531,7 @@ export function OnePlace() {
                       fill="none"
                       strokeWidth={8}
                       strokeLinecap="round"
-                      className="stroke-primary"
+                      className="stroke-foreground"
                       initial={false}
                       animate={{
                         pathLength: showCard ? 1 : 0,
@@ -536,7 +544,7 @@ export function OnePlace() {
                       fill="none"
                       strokeWidth={2}
                       strokeLinecap="round"
-                      className="stroke-primary"
+                      className="stroke-foreground"
                       initial={false}
                       animate={{
                         pathLength: showCard ? 1 : 0,
@@ -662,7 +670,7 @@ export function OnePlace() {
                 initial={{ scale: 0.7, opacity: 0.55 }}
                 animate={{ scale: 1.9, opacity: 0 }}
                 transition={{ duration: 0.7, ease: "easeOut" }}
-                className="border-primary/50 absolute size-16 rounded-full border-2 sm:size-20"
+                className="border-foreground/30 absolute size-16 rounded-full border-2 sm:size-20"
               />
             )}
             <div ref={wingRef}>

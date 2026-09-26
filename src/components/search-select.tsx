@@ -9,7 +9,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from "react";
-import { Check, ChevronsUpDown, Search } from "lucide-react";
+import { Check, ChevronDown, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -89,7 +89,7 @@ export function SearchSelect({
               {current?.label ?? (value || labels.placeholder)}
             </span>
           </span>
-          <ChevronsUpDown className="text-muted-foreground size-3.5 shrink-0" />
+          <ChevronDown className="text-muted-foreground size-4 shrink-0" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -224,7 +224,7 @@ function OptionList({
               className={cn(rowClass, selected && "bg-accent/60")}
             >
               <Check
-                className={cn("size-3.5 shrink-0", selected ? "text-primary" : "invisible")}
+                className={cn("size-3.5 shrink-0", selected ? "text-foreground" : "invisible")}
               />
               {o.prefix}
               <span className="min-w-0 flex-1 truncate">{o.label}</span>

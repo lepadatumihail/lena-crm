@@ -202,7 +202,8 @@ export function ClientForm({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {mode === "create" && <LeadPaste onApply={applyLead} defaultOpen={paste} />}
-        <div className="grid gap-4 sm:grid-cols-2">
+        {/* One grid, so every row keeps the same 16px rhythm. */}
+        <div className="grid items-start gap-4 sm:grid-cols-2">
           <FormField
             control={form.control}
             name="first_name"
@@ -301,9 +302,6 @@ export function ClientForm({
               </FormItem>
             )}
           />
-        </div>
-
-        <div className="grid items-start gap-4 sm:grid-cols-2">
           {side === "buyer" ? (
             <FormField
               control={form.control}
@@ -388,7 +386,7 @@ export function ClientForm({
                               shouldValidate: true,
                             })
                           }
-                          className="bg-primary/10 text-primary hover:bg-primary/15 focus-visible:ring-ring/50 inline-flex min-h-8 max-w-full items-center rounded-full px-2.5 text-xs font-medium outline-none focus-visible:ring-[3px]"
+                          className="bg-background text-foreground hover:bg-muted/60 focus-visible:ring-ring/50 inline-flex min-h-8 max-w-full items-center rounded-lg border px-2.5 text-xs shadow-xs outline-none transition-colors duration-150 focus-visible:ring-[3px]"
                         >
                           <span className="truncate">{o.name}</span>
                         </button>
@@ -401,49 +399,49 @@ export function ClientForm({
               );
             }}
           />
+
+          <FormField
+            control={form.control}
+            name="notes"
+            render={({ field }) => (
+              <FormItem className="sm:col-span-2">
+                <FormLabel>{t("notes")}</FormLabel>
+                <FormControl>
+                  <Textarea
+                    rows={4}
+                    placeholder={t("notesPlaceholder")}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="priority"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 sm:col-span-2">
+                <div className="space-y-0.5">
+                  <FormLabel>{t("priority")}</FormLabel>
+                  <FormDescription>{t("priorityDescription")}</FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
         </div>
-
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("notes")}</FormLabel>
-              <FormControl>
-                <Textarea
-                  rows={4}
-                  placeholder={t("notesPlaceholder")}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="priority"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel>{t("priority")}</FormLabel>
-                <FormDescription>{t("priorityDescription")}</FormDescription>
-              </div>
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
 
         <div className="flex justify-end gap-2">
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             onClick={() => router.push(cancelHref)}
             disabled={submitting}
           >

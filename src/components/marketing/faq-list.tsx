@@ -12,7 +12,7 @@ export type FaqListEntry = {
  * caller so it can be a `Reveal`, a plain div or a section — only the styling
  * is shared.
  */
-export const FAQ_CARD = "bg-card divide-y rounded-2xl border shadow-sm";
+export const FAQ_CARD = "bg-card divide-y rounded-2xl border shadow-xs";
 
 /**
  * Plain <details> so every answer is in the HTML for crawlers and works with

@@ -4,84 +4,89 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  White surfaces with a faint warm bias, and terracotta as the only hue. Other
-  colour is a signal (green done, amber due today, red overdue), or a step of
-  the brand ramp that stages use: sand, apricot and clay warm up toward a solid
-  terracotta. Status colours are mapped in src/lib/tones.ts.
+  Mono: pure grey surfaces, ink for actions and emphasis. Colour is kept for
+  meaning only: the badge palette below (blue, green, amber, red, violet), mapped to
+  stages, events and statuses in src/lib/tones.ts. Dark mode keeps its warm
+  near-black surfaces; its actions turn near-white.
 */
 :root {
   color-scheme: light;
   --radius: 0.625rem;
 
   --background: oklch(1 0 0);
-  --foreground: oklch(0.23 0.006 60);
+  --foreground: oklch(0.205 0 0);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.23 0.006 60);
+  --card-foreground: oklch(0.205 0 0);
 
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.23 0.006 60);
+  --popover-foreground: oklch(0.205 0 0);
 
-  /* Deep enough that white text on it passes AA (4.79:1). */
-  --primary: oklch(0.56 0.13 38);
-  --primary-foreground: oklch(0.99 0.004 84);
+  /* Ink: buttons, checked controls, the current tab. */
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
 
-  --secondary: oklch(0.965 0.005 75);
-  --secondary-foreground: oklch(0.34 0.008 60);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.269 0 0);
 
-  --muted: oklch(0.965 0.005 75);
-  --muted-foreground: oklch(0.53 0.01 65);
+  --muted: oklch(0.97 0 0);
+  /* AA for small text on white (5.5:1) and on the muted grey (5:1). */
+  --muted-foreground: oklch(0.52 0 0);
 
-  --accent: oklch(0.955 0.005 75);
-  --accent-foreground: oklch(0.23 0.006 60);
+  --accent: oklch(0.967 0 0);
+  --accent-foreground: oklch(0.205 0 0);
 
   --destructive: oklch(0.577 0.205 27);
-  --destructive-foreground: oklch(0.99 0.004 84);
+  --destructive-foreground: oklch(0.985 0 0);
 
-  --border: oklch(0.925 0.006 75);
-  --input: oklch(0.9 0.007 75);
-  --ring: oklch(0.56 0.13 38);
+  --border: oklch(0.93 0 0);
+  --input: oklch(0.91 0 0);
+  /* Focus borders and rings at 3:1 or better on white and the sidebar. */
+  --ring: oklch(0.55 0 0);
 
   --success: oklch(0.62 0.13 150);
-  --success-foreground: oklch(0.99 0.004 84);
+  --success-foreground: oklch(0.985 0 0);
   --warning: oklch(0.75 0.13 75);
   --warning-foreground: oklch(0.27 0.04 75);
 
-  /* Terracotta text on a pale terracotta fill (brand tags). */
-  --brand-ink: oklch(0.47 0.12 38);
+  /*
+    The badge palette, Structurely-style: a pale fill with dark text of the
+    same hue for pills, and a solid for dots, bars and glyphs.
+  */
+  --tone-blue: oklch(0.623 0.19 259);
+  --tone-blue-soft: oklch(0.95 0.025 255);
+  --tone-blue-ink: oklch(0.47 0.19 263);
+  --tone-green: oklch(0.68 0.16 150);
+  --tone-green-soft: oklch(0.955 0.04 155);
+  --tone-green-ink: oklch(0.47 0.12 152);
+  --tone-amber: oklch(0.82 0.16 86);
+  --tone-amber-soft: oklch(0.97 0.06 99);
+  --tone-amber-ink: oklch(0.5 0.105 78);
+  --tone-red: oklch(0.637 0.21 25);
+  --tone-red-soft: oklch(0.955 0.025 18);
+  --tone-red-ink: oklch(0.5 0.19 27);
+  --tone-violet: oklch(0.6 0.2 295);
+  --tone-violet-soft: oklch(0.955 0.03 300);
+  --tone-violet-ink: oklch(0.48 0.2 295);
 
-  /* The stage ramp: fill, hairline, text, and the solid dot per step. */
-  --sand: oklch(0.965 0.02 80);
-  --sand-line: oklch(0.885 0.04 76);
-  --sand-ink: oklch(0.42 0.055 62);
-  --sand-dot: oklch(0.8 0.07 75);
-  --apricot: oklch(0.94 0.038 68);
-  --apricot-line: oklch(0.85 0.072 62);
-  --apricot-ink: oklch(0.41 0.088 50);
-  --apricot-dot: oklch(0.72 0.1 58);
-  --clay: oklch(0.905 0.062 52);
-  --clay-line: oklch(0.8 0.1 46);
-  --clay-ink: oklch(0.38 0.112 40);
-  --clay-dot: oklch(0.64 0.125 45);
-
-  --sidebar: oklch(0.982 0.003 80);
-  --sidebar-foreground: oklch(0.23 0.006 60);
-  --sidebar-primary: oklch(0.56 0.13 38);
-  --sidebar-primary-foreground: oklch(0.99 0.004 84);
-  --sidebar-accent: oklch(0.955 0.005 75);
-  --sidebar-accent-foreground: oklch(0.23 0.006 60);
-  /* The current page's nav item: the one warm spot in the chrome. */
-  --sidebar-active: oklch(0.955 0.014 45);
-  --sidebar-active-foreground: oklch(0.23 0.006 60);
-  --sidebar-border: oklch(0.925 0.006 75);
-  --sidebar-ring: oklch(0.56 0.13 38);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.205 0 0);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: oklch(0.955 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  /* The current page's nav item: a white card raised off the grey sidebar. */
+  --sidebar-active: oklch(1 0 0);
+  --sidebar-active-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.93 0 0);
+  --sidebar-ring: var(--ring);
 
   /* The inverted chapter (pricing): always dark, in both themes. */
-  --inverted: oklch(0.215 0.008 56);
-  --inverted-foreground: oklch(0.97 0.008 84);
+  --inverted: oklch(0.205 0 0);
+  --inverted-foreground: oklch(0.97 0 0);
 
-  /* The hero stage: warm sand by day; at night it drops to the inverted dark. */
-  --stage: oklch(0.952 0.02 74);
+  /* The hero stage: a light grey by day; at night it drops to the inverted dark. */
+  --stage: oklch(0.975 0 0);
   --stage-foreground: var(--foreground);
 
   /* Motion. Strong curves so an entrance reads as deliberate, not default. */
@@ -101,14 +106,14 @@
   --popover: oklch(0.225 0.005 56);
   --popover-foreground: oklch(0.96 0.006 84);
 
-  --primary: oklch(0.68 0.13 40);
+  --primary: oklch(0.93 0.004 84);
   --primary-foreground: oklch(0.205 0.006 56);
 
   --secondary: oklch(0.27 0.006 56);
   --secondary-foreground: oklch(0.96 0.006 84);
 
   --muted: oklch(0.27 0.006 56);
-  --muted-foreground: oklch(0.66 0.01 70);
+  --muted-foreground: oklch(0.68 0.008 70);
 
   --accent: oklch(0.3 0.008 60);
   --accent-foreground: oklch(0.96 0.006 84);
@@ -118,38 +123,39 @@
 
   --border: oklch(1 0 0 / 9%);
   --input: oklch(1 0 0 / 14%);
-  --ring: oklch(0.68 0.13 40);
+  --ring: oklch(0.56 0.006 70);
 
   --success: oklch(0.68 0.13 150);
   --success-foreground: oklch(0.205 0.006 56);
   --warning: oklch(0.8 0.13 75);
   --warning-foreground: oklch(0.205 0.006 56);
 
-  --brand-ink: oklch(0.8 0.1 45);
-
-  --sand: color-mix(in oklab, oklch(0.8 0.07 75) 11%, transparent);
-  --sand-line: color-mix(in oklab, oklch(0.8 0.07 75) 20%, transparent);
-  --sand-ink: oklch(0.88 0.045 78);
-  --sand-dot: oklch(0.76 0.07 75);
-  --apricot: color-mix(in oklab, oklch(0.74 0.1 58) 15%, transparent);
-  --apricot-line: color-mix(in oklab, oklch(0.74 0.1 58) 26%, transparent);
-  --apricot-ink: oklch(0.88 0.065 62);
-  --apricot-dot: oklch(0.72 0.1 58);
-  --clay: color-mix(in oklab, oklch(0.7 0.125 45) 24%, transparent);
-  --clay-line: color-mix(in oklab, oklch(0.7 0.125 45) 36%, transparent);
-  --clay-ink: oklch(0.9 0.06 50);
-  --clay-dot: oklch(0.68 0.125 45);
+  --tone-blue: oklch(0.7 0.15 255);
+  --tone-blue-soft: oklch(0.62 0.18 259 / 18%);
+  --tone-blue-ink: oklch(0.83 0.09 252);
+  --tone-green: oklch(0.72 0.15 152);
+  --tone-green-soft: oklch(0.68 0.15 152 / 16%);
+  --tone-green-ink: oklch(0.86 0.11 155);
+  --tone-amber: oklch(0.84 0.14 88);
+  --tone-amber-soft: oklch(0.82 0.15 88 / 16%);
+  --tone-amber-ink: oklch(0.9 0.11 92);
+  --tone-red: oklch(0.68 0.19 25);
+  --tone-red-soft: oklch(0.64 0.2 25 / 18%);
+  --tone-red-ink: oklch(0.82 0.1 20);
+  --tone-violet: oklch(0.7 0.16 295);
+  --tone-violet-soft: oklch(0.62 0.2 295 / 20%);
+  --tone-violet-ink: oklch(0.84 0.09 298);
 
   --sidebar: oklch(0.195 0.005 56);
   --sidebar-foreground: oklch(0.96 0.006 84);
-  --sidebar-primary: oklch(0.68 0.13 40);
-  --sidebar-primary-foreground: oklch(0.205 0.006 56);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
   --sidebar-accent: oklch(0.275 0.006 56);
   --sidebar-accent-foreground: oklch(0.96 0.006 84);
-  --sidebar-active: oklch(0.27 0.03 42);
+  --sidebar-active: oklch(0.27 0.006 56);
   --sidebar-active-foreground: oklch(0.96 0.006 84);
   --sidebar-border: oklch(1 0 0 / 9%);
-  --sidebar-ring: oklch(0.68 0.13 40);
+  --sidebar-ring: var(--ring);
 
   --inverted: oklch(0.145 0.006 56);
   --inverted-foreground: oklch(0.97 0.008 84);
@@ -182,19 +188,21 @@
   --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
-  --color-brand-ink: var(--brand-ink);
-  --color-sand: var(--sand);
-  --color-sand-line: var(--sand-line);
-  --color-sand-ink: var(--sand-ink);
-  --color-sand-dot: var(--sand-dot);
-  --color-apricot: var(--apricot);
-  --color-apricot-line: var(--apricot-line);
-  --color-apricot-ink: var(--apricot-ink);
-  --color-apricot-dot: var(--apricot-dot);
-  --color-clay: var(--clay);
-  --color-clay-line: var(--clay-line);
-  --color-clay-ink: var(--clay-ink);
-  --color-clay-dot: var(--clay-dot);
+  --color-tone-blue: var(--tone-blue);
+  --color-tone-blue-soft: var(--tone-blue-soft);
+  --color-tone-blue-ink: var(--tone-blue-ink);
+  --color-tone-green: var(--tone-green);
+  --color-tone-green-soft: var(--tone-green-soft);
+  --color-tone-green-ink: var(--tone-green-ink);
+  --color-tone-amber: var(--tone-amber);
+  --color-tone-amber-soft: var(--tone-amber-soft);
+  --color-tone-amber-ink: var(--tone-amber-ink);
+  --color-tone-red: var(--tone-red);
+  --color-tone-red-soft: var(--tone-red-soft);
+  --color-tone-red-ink: var(--tone-red-ink);
+  --color-tone-violet: var(--tone-violet);
+  --color-tone-violet-soft: var(--tone-violet-soft);
+  --color-tone-violet-ink: var(--tone-violet-ink);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -260,35 +268,27 @@
 }
 
 /*
-  The hero stage's glow: three soft radial gradients, painted once. By day the
-  stage itself is light, so the mixes stay faint; at night they carry the
-  dark stage's original strength.
+  The hero stage's glow: a faint light from the top, painted once. By day it
+  is barely there on the grey stage; at night it lifts the dark stage a little.
 */
 .hero-glow {
-  --glow-top: 18%;
-  --glow-side: 16%;
-  --glow-foot: 12%;
+  --glow-top: 5%;
+  --glow-foot: 3%;
   background:
     radial-gradient(
       60% 55% at 50% -5%,
-      color-mix(in oklab, var(--primary) var(--glow-top), transparent),
-      transparent 70%
-    ),
-    radial-gradient(
-      38% 40% at 12% 8%,
-      color-mix(in oklab, var(--warning) var(--glow-side), transparent),
+      color-mix(in oklab, var(--stage-foreground) var(--glow-top), transparent),
       transparent 70%
     ),
     radial-gradient(
       42% 45% at 92% 96%,
-      color-mix(in oklab, var(--primary) var(--glow-foot), transparent),
+      color-mix(in oklab, var(--stage-foreground) var(--glow-foot), transparent),
       transparent 70%
     );
 }
 .dark .hero-glow {
-  --glow-top: 42%;
-  --glow-side: 22%;
-  --glow-foot: 24%;
+  --glow-top: 9%;
+  --glow-foot: 5%;
 }
 
 @keyframes fade-up {
@@ -339,15 +339,13 @@
 }
 
 /*
-  Section labels in the app: tiny tracked capitals, the same in the sidebar,
-  a panel header and a detail sheet. Colour is left to the caller.
+  Section labels in the app: small, regular, sentence case, the same in the
+  sidebar, a panel header and a detail sheet. Colour is left to the caller.
 */
-@utility label-caps {
-  font-size: 0.6875rem;
+@utility section-label {
+  font-size: 0.75rem;
   line-height: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-weight: 400;
 }
 
 /* Toasts on a phone rise above the app's tab bar while it is on the page. */
@@ -452,7 +450,7 @@
     box-shadow: 0 0 0 0 transparent;
   }
   to {
-    background-color: color-mix(in oklab, var(--background) 85%, transparent);
+    background-color: color-mix(in oklab, var(--background) 94%, transparent);
     border-color: color-mix(in oklab, var(--border) 60%, transparent);
     box-shadow: 0 8px 24px -12px rgb(0 0 0 / 0.3);
   }

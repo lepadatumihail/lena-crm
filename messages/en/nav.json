@@ -56,7 +56,8 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System",
-    "language": "Language"
+    "language": "Language",
+    "showOnboarding": "Show getting started"
   },
   "quickSearch": {
     "placeholder": "Search clients or jump to a page…",

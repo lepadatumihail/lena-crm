@@ -37,7 +37,7 @@ export function AttentionList({
       {items.map((a) => (
         <li
           key={a.id}
-          className="hover:bg-muted/40 relative flex items-center gap-2 pr-2.5 transition-colors duration-150"
+          className="group hover:bg-muted/40 relative flex items-center gap-2 pr-2.5 transition-colors duration-150"
         >
           {/* The link stretches over the row; the log button sits above it. */}
           <Link
@@ -56,7 +56,7 @@ export function AttentionList({
                 {a.detail}
               </span>
             </span>
-            <span className="text-primary shrink-0 text-xs font-medium">
+            <span className="text-muted-foreground group-focus-within:text-foreground group-hover:text-foreground shrink-0 text-xs transition-colors duration-150">
               {a.href.includes("compose=") ? draftLabel : openLabel}
             </span>
           </Link>

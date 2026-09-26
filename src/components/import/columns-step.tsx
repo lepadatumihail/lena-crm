@@ -154,7 +154,7 @@ export function ColumnsStep({
           </div>
         ) : null}
         <div className="space-y-1.5">
-          <span className="text-sm font-medium">{t("headerRow")}</span>
+          <span className="block text-sm leading-none">{t("headerRow")}</span>
           <div className="flex items-center gap-1">
             <Button type="button" variant="outline" size="icon-sm" onClick={() => moveHeader(-1)} disabled={draft.headerRow === 0} aria-label="−1">
               <Minus />
@@ -172,7 +172,7 @@ export function ColumnsStep({
       ) : null}
 
       <div className="bg-card overflow-hidden rounded-xl border">
-        <div className="text-muted-foreground label-caps hidden grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_14rem] gap-4 border-b px-4 py-2 md:grid">
+        <div className="text-muted-foreground section-label hidden grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_14rem] gap-4 border-b px-4 py-2 md:grid">
           <span>{t("header")}</span>
           <span>{t("examples")}</span>
           <span>{t("importAs")}</span>
@@ -221,7 +221,7 @@ export function ColumnsStep({
       {!hasName ? <Notice tone="amber">{t("needName")}</Notice> : null}
 
       <section className="bg-card space-y-4 rounded-xl border p-4">
-        <h3 className="label-caps text-muted-foreground">{t("settings")}</h3>
+        <h3 className="section-label text-muted-foreground">{t("settings")}</h3>
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="space-y-1.5">
             <Label htmlFor={`${ids}-agency`}>{t("agency")}</Label>
@@ -279,9 +279,7 @@ export function ColumnsStep({
 
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
-            <Label htmlFor={`${ids}-filter`} className="text-sm font-medium">
-              {t("filter")}
-            </Label>
+            <Label htmlFor={`${ids}-filter`}>{t("filter")}</Label>
             <span className="text-muted-foreground text-sm">{t("filterColumn")}</span>
             <Select value={filterColumn === null ? NONE : String(filterColumn)} onValueChange={setFilterColumn}>
               <SelectTrigger id={`${ids}-filter`} size="sm" className="w-52">

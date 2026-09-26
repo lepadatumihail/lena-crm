@@ -1,7 +1,9 @@
 import { useTranslations } from "next-intl";
-import { ArrowDown, Bell, Check, MessageCircle, Sparkles } from "lucide-react";
+import { ArrowDown, Bell, Check, Send, Sparkles } from "lucide-react";
 
 import { Reveal } from "@/components/reveal";
+import { TONE_BG, TONE_INK, TONE_TAG } from "@/lib/tones";
+import { cn } from "@/lib/utils";
 
 const TILE_FRAME =
   "bg-muted/30 mt-auto flex min-h-64 flex-col rounded-xl border p-4";
@@ -22,12 +24,20 @@ function CaptureTile() {
       <div className="bg-background text-muted-foreground mt-3 rounded-lg border p-3 text-xs leading-relaxed">
         {t("enquiry")}
       </div>
-      <div className="text-primary my-2 flex items-center justify-center gap-1.5 text-[10px] font-medium">
+      <div className="text-muted-foreground my-2 flex items-center justify-center gap-1.5 text-[10px]">
         <ArrowDown className="size-3" /> {t("action")}
       </div>
-      <div className="bg-card rounded-lg border p-3 shadow-sm">
+      <div className="bg-card rounded-lg border p-3 shadow-xs">
         <div className="flex items-center gap-2">
-          <span className="bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold">SM</span>
+          <span
+            className={cn(
+              "flex size-8 shrink-0 items-center justify-center rounded-full text-[10px] font-medium",
+              TONE_BG.neutral,
+              TONE_INK.neutral
+            )}
+          >
+            SM
+          </span>
           <div>
             <p className="text-xs font-medium">Sofia Müller</p>
             <p className="text-muted-foreground mt-0.5 text-[11px]">{t("details")}</p>
@@ -45,21 +55,24 @@ function AttentionTile() {
   return (
     <div className={TILE_FRAME} aria-hidden>
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold">{t("heading")}</p>
-        <span className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-[10px]">{t("today")}</span>
+        <p className="text-xs font-medium">{t("heading")}</p>
+        {/* The app's tag for work due today. */}
+        <span className={cn("rounded-full border px-2 py-0.5 text-[10px] font-medium", TONE_TAG.amber)}>
+          {t("today")}
+        </span>
       </div>
-      <div className="bg-card mt-3 rounded-lg border p-3 shadow-sm">
+      <div className="bg-card mt-3 rounded-lg border p-3 shadow-xs">
         <div className="flex items-center gap-2">
-          <span className="border-primary/40 size-3.5 shrink-0 rounded border" />
+          <span className="border-input size-3.5 shrink-0 rounded border shadow-xs" />
           <p className="text-xs font-medium">{t("task")}</p>
         </div>
         <p className="text-muted-foreground mt-2 text-[11px]">Sofia Müller · {t("client")}</p>
-        <div className="text-primary mt-3 flex items-center gap-1.5 text-[11px]">
+        <div className="text-muted-foreground mt-3 flex items-center gap-1.5 text-[11px]">
           <Bell className="size-3" /> {t("reminder")}
         </div>
       </div>
       <div className="mt-auto pt-4">
-        <p className="text-muted-foreground text-[10px] font-medium">{t("quietHeading")}</p>
+        <p className="text-muted-foreground text-[10px]">{t("quietHeading")}</p>
         <div className="mt-2 flex items-center justify-between gap-2 text-[11px]">
           <span>Lars Nielsen</span>
           <span className="text-muted-foreground">{t("quietDays", { days: 16 })}</span>
@@ -76,7 +89,7 @@ function DraftTile() {
     <div className={TILE_FRAME} aria-hidden>
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs font-medium">Sofia Müller</p>
-        <span className="text-primary inline-flex items-center gap-1 text-[10px]">
+        <span className="text-muted-foreground inline-flex items-center gap-1 text-[10px]">
           <Sparkles className="size-3" /> {t("language")}
         </span>
       </div>
@@ -85,8 +98,9 @@ function DraftTile() {
         <p className="mt-2">wie hat Ihnen die Wohnung gefallen? Wenn Sie Fragen haben oder noch einmal besichtigen möchten, melden Sie sich gerne.</p>
       </div>
       <div className="mt-3 flex justify-end">
-        <span className="bg-primary text-primary-foreground inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[10px] font-medium">
-          <MessageCircle className="size-3" /> {t("openWhatsApp")}
+        {/* The composer's own send button: the one ink action, a rectangle. */}
+        <span className="bg-primary text-primary-foreground inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[10px] font-medium shadow-xs">
+          <Send className="size-3" /> {t("openWhatsApp")}
         </span>
       </div>
     </div>
@@ -106,11 +120,11 @@ export function Workflow() {
     <ol className="mt-10 grid gap-5 lg:grid-cols-3">
       {STEPS.map(({ key, Tile }, index) => (
         <li key={key}>
-          <Reveal className="bg-card flex h-full flex-col rounded-2xl border p-5 shadow-sm sm:p-6">
-            <span className="text-primary mb-5 font-display text-3xl" aria-hidden>
+          <Reveal className="bg-card flex h-full flex-col rounded-2xl border p-5 shadow-xs sm:p-6">
+            <span className="text-muted-foreground mb-5 font-display text-3xl" aria-hidden>
               {String(index + 1).padStart(2, "0")}
             </span>
-            <h3 className="text-lg font-semibold tracking-tight">{t(`steps.${key}.title`)}</h3>
+            <h3 className="text-lg font-medium">{t(`steps.${key}.title`)}</h3>
             <p className="text-muted-foreground mt-2 mb-6 text-sm leading-relaxed">{t(`steps.${key}.blurb`)}</p>
             <Tile />
           </Reveal>

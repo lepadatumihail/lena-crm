@@ -83,7 +83,6 @@ export function CalendarSyncDialog() {
       <Button
         variant="outline"
         size="sm"
-        className="rounded-lg"
         onClick={() => handleOpenChange(true)}
         aria-label={t("button")}
       >

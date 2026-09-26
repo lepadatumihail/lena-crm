@@ -13,7 +13,7 @@ export function UpgradePrompt({ backHref, backLabel }: { backHref: string; backL
   return (
     <Card className="mx-auto max-w-lg">
       <CardHeader>
-        <div className="bg-primary/10 text-primary mb-2 flex size-10 items-center justify-center rounded-lg">
+        <div className="bg-muted text-foreground/70 mb-2 flex size-10 items-center justify-center rounded-lg">
           <Lock className="size-5" />
         </div>
         <CardTitle>{t("upgradePrompt.title", { limit: FREE_CLIENT_LIMIT })}</CardTitle>
@@ -31,7 +31,7 @@ export function UpgradePrompt({ backHref, backLabel }: { backHref: string; backL
             {t("actions.seePlans")} <ArrowRight />
           </Link>
         </Button>
-        <Button asChild variant="ghost">
+        <Button asChild variant="outline">
           <Link href={backHref}>
             <ArrowLeft /> {backLabel}
           </Link>

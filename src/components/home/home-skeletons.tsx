@@ -18,6 +18,31 @@ function Loading() {
   return <span className="sr-only">{tCommon("loading")}</span>;
 }
 
+/**
+ * The getting-started strip: the same 44px card, a ring, the progress and
+ * the next step, and the two icon buttons. The page only draws it when the
+ * strip is expected, so the swap never moves the figures below it.
+ */
+export function OnboardingStripSkeleton() {
+  return (
+    <div className="bg-card flex h-11 items-center gap-2.5 rounded-xl border pr-1.5 pl-3 shadow-xs sm:pl-4">
+      <Loading />
+      <Skeleton aria-hidden className="size-4 shrink-0 rounded-full" />
+      <Skeleton aria-hidden className="hidden h-3 w-24 sm:block" />
+      <Skeleton aria-hidden className="h-3 w-10 shrink-0" />
+      <Skeleton aria-hidden className="h-3 w-44 min-w-0 shrink" />
+      <div aria-hidden className="ml-auto flex shrink-0 items-center gap-0.5">
+        <span className="flex size-7 items-center justify-center">
+          <Skeleton className="size-3.5 rounded-sm" />
+        </span>
+        <span className="flex size-7 items-center justify-center">
+          <Skeleton className="size-3.5 rounded-sm" />
+        </span>
+      </div>
+    </div>
+  );
+}
+
 const TILE_LABELS = ["w-24", "w-20", "w-28", "w-32"];
 
 export function StatTilesSkeleton() {
@@ -30,8 +55,10 @@ export function StatTilesSkeleton() {
           aria-hidden
           className="bg-card flex min-w-0 flex-col gap-3 rounded-xl border p-4 shadow-xs"
         >
-          <div className="flex h-4 items-center justify-between gap-2">
-            <Skeleton className={cn("h-3", width)} />
+          {/* The label row is one 18px line from sm up and two lines on a
+              phone, as the tiles keep (stat-tiles.tsx). */}
+          <div className="flex h-[18px] items-center justify-between gap-2 max-sm:h-[2lh] max-sm:items-start max-sm:text-xs max-sm:leading-snug">
+            <Skeleton className={cn("h-3 max-sm:mt-0.5", width)} />
             <Skeleton className="size-4 rounded" />
           </div>
           <Skeleton className="h-6 w-16" />
@@ -55,7 +82,7 @@ const ATTENTION_ROWS = [
 export function AttentionSkeleton() {
   const t = useTranslations("home.attention");
   return (
-    <Panel className="flex-1" title={t("title")} icon={<BellRing className="size-3.5" />}>
+    <Panel title={t("title")} icon={<BellRing className="size-3.5" />}>
       <Loading />
       <ul aria-hidden className="divide-y">
         {ATTENTION_ROWS.map(([name, detail]) => (
@@ -101,7 +128,6 @@ export function UpcomingSkeleton() {
   const t = useTranslations("home.upcoming");
   return (
     <Panel
-      className="h-full"
       title={t("title")}
       icon={<CalendarDays className="size-3.5" />}
       action={<PanelAction href="/calendar">{t("calendar")}</PanelAction>}
@@ -110,12 +136,13 @@ export function UpcomingSkeleton() {
       <ul aria-hidden className="divide-y">
         {UPCOMING_ROWS.map((width) => (
           <li key={width} className="flex items-center gap-3 px-4 py-2.5">
-            <div className="flex h-8 w-14 shrink-0 flex-col justify-center gap-1.5">
+            {/* The real row's day column and its two text lines (36px). */}
+            <div className="flex h-9 w-[4.75rem] shrink-0 flex-col justify-center gap-1.5">
               <Skeleton className="h-2.5 w-10" />
               <Skeleton className="h-2.5 w-8" />
             </div>
             <Skeleton className="size-2 shrink-0 rounded-full" />
-            <div className="min-w-0 flex-1 space-y-1.5">
+            <div className="flex h-9 min-w-0 flex-1 flex-col justify-center gap-2">
               <Skeleton className={cn("h-3", width)} />
               <Skeleton className="h-2.5 w-24" />
             </div>

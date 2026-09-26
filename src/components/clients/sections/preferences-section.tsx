@@ -20,6 +20,7 @@ import {
 
 import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { Button } from "@/components/ui/button";
+import { SteadyLabel } from "@/components/ui/steady-label";
 import { Tag } from "@/components/ui/tag";
 import { Input } from "@/components/ui/input";
 import { PriceInput } from "@/components/price-input";
@@ -89,7 +90,12 @@ export function PreferencesSection({
       title={t("title")}
       icon={<SlidersHorizontal className="size-3.5" />}
       action={
-        <Button variant="outline" size="xs" onClick={() => setOpen(true)}>
+        <Button
+          variant="ghost"
+          size="xs"
+          className="text-muted-foreground -mr-1.5"
+          onClick={() => setOpen(true)}
+        >
           {prefs ? <Pencil /> : <Plus />}
           {prefs ? tCommon("edit") : tCommon("add")}
         </Button>
@@ -208,22 +214,24 @@ function PreferencesDialog({
               render={() => (
                 <FormItem>
                   <FormLabel>{t("propertyTypes")}</FormLabel>
-                  <div className="flex flex-wrap gap-2">
+                  {/* ChoiceChips' look, with more than one allowed. */}
+                  <div className="flex flex-wrap gap-1.5">
                     {PROPERTY_TYPES.map((type) => {
                       const active = selectedTypes.includes(type);
                       return (
                         <button
                           key={type}
                           type="button"
+                          aria-pressed={active}
                           onClick={() => toggleType(type)}
                           className={cn(
-                            "rounded-full border px-3 py-1 text-sm transition-colors",
+                            "inline-flex h-8 items-center rounded-lg border px-3 text-[13px] whitespace-nowrap outline-none transition-[color,background-color,border-color,scale] duration-150 focus-visible:ring-[3px] focus-visible:ring-ring/50 active:scale-[0.97]",
                             active
-                              ? "border-primary bg-primary text-primary-foreground"
-                              : "hover:bg-accent"
+                              ? "border-foreground/20 bg-muted text-foreground font-medium"
+                              : "bg-background text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                           )}
                         >
-                          {propertyTypeLabel(tCrm, type)}
+                          <SteadyLabel>{propertyTypeLabel(tCrm, type)}</SteadyLabel>
                         </button>
                       );
                     })}
@@ -319,7 +327,7 @@ function PreferencesDialog({
             <DialogFooter>
               <Button
                 type="button"
-                variant="ghost"
+                variant="outline"
                 onClick={() => onOpenChange(false)}
               >
                 {tCommon("cancel")}

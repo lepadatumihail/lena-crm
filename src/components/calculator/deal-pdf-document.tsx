@@ -16,19 +16,25 @@ import {
 } from "@/lib/calculator/deal";
 import type { DealView } from "@/components/calculator/deal-summary";
 
-// Hex approximations of the app's oklch design tokens (@react-pdf takes no CSS vars).
-const INK = "#1c1917";
-const FAINT = "#a8a29e";
+// Hex approximations of the app's neutral (grey, chroma 0) design tokens:
+// @react-pdf takes no CSS vars. Green and red are the profit/loss signals.
+const INK = "#171717";
+const MUTED = "#525252";
+const FAINT = "#a3a3a3";
 const GREEN = "#1a874f";
 const RED = "#dc2626";
-const BORDER = "#e7e5e4";
-const HAIR = "#f0efed";
-const HEADBG = "#f4f3f1";
-const ZEBRA = "#faf9f8";
-const BASEBG = "#fbf2ec";
+const RULE = "#d4d4d4";
+const BORDER = "#e5e5e5";
+const HAIR = "#f0f0f0";
+const HEADBG = "#f5f5f5";
+const BASEBG = "#fafafa";
+const WHITE = "#ffffff";
 
+// The same rules as the on-screen summary: profit green and loss red on the
+// headline figures (zero stays ink), and only a loss coloured in the table.
 const toneColor = (n: number) =>
-  !Number.isFinite(n) ? INK : n >= 0 ? GREEN : RED;
+  !Number.isFinite(n) || n === 0 ? INK : n > 0 ? GREEN : RED;
+const lossColor = (n: number) => (Number.isFinite(n) && n < 0 ? RED : INK);
 
 const styles = StyleSheet.create({
   page: {
@@ -41,7 +47,7 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 22, fontFamily: "Helvetica-Bold" },
   subtitle: { fontSize: 9.5, color: FAINT, marginTop: 5 },
-  rule: { borderBottomWidth: 1.5, borderBottomColor: INK, marginTop: 12 },
+  rule: { borderBottomWidth: 1, borderBottomColor: INK, marginTop: 12 },
 
   kpiRow: {
     flexDirection: "row",
@@ -52,27 +58,15 @@ const styles = StyleSheet.create({
   },
   kpiCell: { flex: 1, paddingVertical: 11, paddingHorizontal: 12 },
   kpiDivider: { borderRightWidth: 1, borderRightColor: BORDER },
-  kpiLabel: {
-    fontSize: 7.5,
-    color: FAINT,
-    letterSpacing: 0.6,
-    textTransform: "uppercase",
-    fontFamily: "Helvetica-Bold",
-  },
+  // Labels are sentence case and regular, as in the app.
+  kpiLabel: { fontSize: 8.5, color: MUTED },
   kpiValue: { fontSize: 13.5, fontFamily: "Helvetica-Bold", marginTop: 4 },
 
   columns: { flexDirection: "row", marginTop: 22 },
   col: { flex: 1 },
   colLeft: { flex: 1, marginRight: 26 },
   section: { marginTop: 22 },
-  sectionLabel: {
-    fontSize: 8,
-    color: FAINT,
-    letterSpacing: 1,
-    textTransform: "uppercase",
-    fontFamily: "Helvetica-Bold",
-    marginBottom: 6,
-  },
+  sectionLabel: { fontSize: 9, color: MUTED, marginBottom: 6 },
 
   row: {
     flexDirection: "row",
@@ -85,15 +79,13 @@ const styles = StyleSheet.create({
   rowTop: {
     borderBottomWidth: 0,
     borderTopWidth: 1,
-    borderTopColor: "#d6d3d1",
+    borderTopColor: RULE,
     marginTop: 3,
     paddingTop: 6,
   },
-  rowLabel: { color: "#57534e" },
-  rowValue: { fontFamily: "Helvetica-Bold", color: INK },
+  rowLabel: { color: MUTED },
+  rowValue: { color: INK },
   bold: { fontFamily: "Helvetica-Bold" },
-
-  gap: { height: 8 },
 
   table: {
     marginTop: 2,
@@ -115,13 +107,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: HAIR,
   },
-  thText: {
-    fontSize: 7.5,
-    color: FAINT,
-    letterSpacing: 0.5,
-    textTransform: "uppercase",
-    fontFamily: "Helvetica-Bold",
-  },
+  thText: { fontSize: 8.5, color: MUTED },
   cExit: { width: "28%" },
   cNum: { width: "24%", textAlign: "right" },
   cExitBold: { width: "28%", fontFamily: "Helvetica-Bold" },
@@ -155,11 +141,11 @@ function Row({
 }) {
   return (
     <View style={top ? [styles.row, styles.rowTop] : styles.row}>
-      <Text style={bold ? [styles.rowLabel, styles.bold] : styles.rowLabel}>
+      <Text style={bold ? [styles.bold, { color: INK }] : styles.rowLabel}>
         {label}
       </Text>
       <Text
-        style={[styles.rowValue, tone ? { color: tone } : {}]}
+        style={[styles.rowValue, bold ? styles.bold : {}, tone ? { color: tone } : {}]}
       >
         {value}
       </Text>
@@ -217,7 +203,6 @@ export function DealPdfDocument({
             <Text style={styles.sectionLabel}>{labels.acquisition}</Text>
             <Row label={labels.purchasePrice} value={formatEuro(input.askingPrice)} />
             <Row label={labels.transferTax} value={formatEuro(r.transferTax)} />
-            <View style={styles.gap} />
             <Row label={labels.lawyerFee} value={formatEuro(r.lawyerFee)} />
             <Row label={labels.notaryFee} value={formatEuro(r.notaryFee)} />
             <Row label={labels.totalAcquisition} value={formatEuro(r.totalAcquisition)} bold top />
@@ -256,22 +241,25 @@ export function DealPdfDocument({
               <Text style={[styles.thText, styles.cNum]}>{labels.colRoi}</Text>
               <Text style={[styles.thText, styles.cNum]}>{labels.colIrr}</Text>
             </View>
-            {r.exitTimeline.map((row, i) => {
+            {/* As on screen: hairlines, and only the plan's own exit shaded and bold. */}
+            {r.exitTimeline.map((row) => {
               const isBase = row.months === input.durationMonths;
-              const bg = isBase ? BASEBG : i % 2 === 1 ? ZEBRA : "#ffffff";
               return (
-                <View key={row.months} style={[styles.tr, { backgroundColor: bg }]}>
-                  <Text style={styles.cExitBold}>
+                <View
+                  key={row.months}
+                  style={[styles.tr, { backgroundColor: isBase ? BASEBG : WHITE }]}
+                >
+                  <Text style={isBase ? styles.cExitBold : styles.cExit}>
                     {labels.exitRow(row.months)}
                     {isBase ? " •" : ""}
                   </Text>
-                  <Text style={[styles.cNum, { color: toneColor(row.netProfit) }]}>
+                  <Text style={[styles.cNum, { color: lossColor(row.netProfit) }]}>
                     {formatEuro(row.netProfit)}
                   </Text>
-                  <Text style={[styles.cNum, { color: toneColor(row.roi) }]}>
+                  <Text style={[styles.cNum, { color: lossColor(row.roi) }]}>
                     {formatSignedPercent(row.roi)}
                   </Text>
-                  <Text style={[styles.cNum, { color: toneColor(row.irr) }]}>
+                  <Text style={[styles.cNum, { color: lossColor(row.irr) }]}>
                     {formatSignedPercent(row.irr)}
                   </Text>
                 </View>

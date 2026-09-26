@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { FileSpreadsheet, FileText, Loader2, Upload } from "lucide-react";
 
+import { Segmented } from "@/components/shell/toolbar";
 import { Button } from "@/components/ui/button";
 import { Notice } from "@/components/ui/notice";
 import type { ClientSide } from "@/lib/crm";
@@ -74,22 +75,16 @@ export function FileStep({
       <div className="space-y-4">
         <div className="flex flex-wrap items-center gap-3">
           <span className="text-muted-foreground text-sm">{t("side")}</span>
-          <div role="group" className="bg-muted inline-flex rounded-lg p-0.5 text-sm">
-            {(["buyer", "seller"] as const).map((option) => (
-              <button
-                key={option}
-                type="button"
-                aria-pressed={side === option}
-                onClick={() => router.replace(`/clients/import?side=${option}`)}
-                className={cn(
-                  "rounded-md px-3 py-1 transition-colors",
-                  side === option ? "bg-background text-foreground shadow-xs" : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {tCrm(`side.${option}s`)}
-              </button>
-            ))}
-          </div>
+          {/* Buttons, not links: switching sides replaces the history entry. */}
+          <Segmented
+            label={t("side")}
+            value={side}
+            onChange={(option) => router.replace(`/clients/import?side=${option}`)}
+            items={(["buyer", "seller"] as const).map((option) => ({
+              value: option,
+              label: tCrm(`side.${option}s`),
+            }))}
+          />
         </div>
 
         <div
@@ -101,7 +96,7 @@ export function FileStep({
           onDrop={onDrop}
           className={cn(
             "bg-card flex flex-col items-center justify-center rounded-xl border border-dashed px-6 py-14 text-center transition-colors",
-            over && "border-primary bg-primary/5"
+            over && "border-foreground/40 bg-muted/50"
           )}
         >
           <div className="bg-muted text-muted-foreground mb-3 flex size-12 items-center justify-center rounded-full">
@@ -114,7 +109,7 @@ export function FileStep({
               {t("drop")}{" "}
               <button
                 type="button"
-                className="text-primary font-medium underline-offset-4 hover:underline"
+                className="text-foreground decoration-foreground/25 hover:decoration-foreground font-medium underline underline-offset-4 transition-colors duration-150"
                 onClick={() => input.current?.click()}
               >
                 {t("browse")}

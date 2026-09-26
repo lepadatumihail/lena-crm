@@ -10,10 +10,10 @@ import {
   WORDMARK_VIEWBOX,
 } from "../src/lib/brand-mark.ts";
 
-// Match the site's warm foreground/background; artwork has no orange tile.
-const ink = "#2b2926";
-const paper = "#faf8f3";
-const muted = "#7b7469";
+// Match the site's mono foreground/background: ink on white, no warm tint.
+const ink = "#171717";
+const paper = "#ffffff";
+const muted = "#737373";
 const publicDir = resolve("public/brand");
 const facebookDir = resolve("output/facebook");
 
@@ -79,7 +79,7 @@ await writeFile(resolve(publicDir, "mark.svg"), svg(240, 190, wing));
 await writeFile(resolve(publicDir, "wordmark.svg"), svg(757, 172, wordmark));
 await writeFile(resolve(publicDir, "logo.svg"), svg(1024, 214, logo));
 
-// A transparent, theme-aware favicon; installed-app PNGs have an opaque ivory
+// A transparent, theme-aware favicon; installed-app PNGs have an opaque white
 // background so system cropping never exposes a transparent black backdrop.
 await writeFile("public/icon.svg", svg(512, 512, `<style>
   .wing { fill: ${ink}; }

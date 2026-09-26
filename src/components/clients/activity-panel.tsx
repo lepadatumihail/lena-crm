@@ -160,7 +160,7 @@ export function ActivityPanel({
             />
             {t("stage", { stage: stageLabel(tCrm, to) })}
             {a.stage_from ? (
-              <span className="text-muted-foreground font-normal">
+              <span className="text-muted-foreground">
                 {t("stageFrom", { stage: stageLabel(tCrm, a.stage_from) })}
               </span>
             ) : null}
@@ -175,7 +175,14 @@ export function ActivityPanel({
     <Panel
       title={t("title")}
       icon={<History className="size-3.5" />}
-      action={<LogContactButton client={client} size="xs" />}
+      action={
+        <LogContactButton
+          client={client}
+          variant="ghost"
+          size="xs"
+          className="text-muted-foreground -mr-1.5"
+        />
+      }
     >
       <form
         className="border-b px-4 py-3"
@@ -206,7 +213,7 @@ export function ActivityPanel({
       {about ? (
         <div className="bg-muted/40 border-b px-4 py-3">
           <div className="flex items-center justify-between gap-3">
-            <p className="label-caps text-muted-foreground">{t("about")}</p>
+            <p className="section-label text-muted-foreground">{t("about")}</p>
             <Button asChild variant="ghost" size="xs" className="text-muted-foreground -mr-1.5">
               <Link href={aboutHref}>
                 <Pencil /> {tCommon("edit")}
@@ -234,14 +241,14 @@ export function ActivityPanel({
                 <div className="flex min-h-5 items-start justify-between gap-3">
                   {/* A note is its own text; other entries get a title and the text below. */}
                   {title ? (
-                    <p className="text-sm font-medium">{title}</p>
+                    <p className="text-sm">{title}</p>
                   ) : (
                     <p className="text-foreground/90 min-w-0 text-sm break-words whitespace-pre-wrap">
                       {a.body}
                     </p>
                   )}
                   <div className="flex shrink-0 items-center gap-1">
-                    <time dateTime={a.occurred_at} className="text-muted-foreground text-xs leading-5 tabular-nums">
+                    <time dateTime={a.occurred_at} className="text-muted-foreground text-xs leading-5 tabular-nums max-sm:hidden">
                       {when(a.occurred_at)}
                     </time>
                     {/* Every row keeps this slot, so the times line up. */}
@@ -273,6 +280,10 @@ export function ActivityPanel({
                     {a.body}
                   </p>
                 ) : null}
+                {/* On a phone the time goes under the entry, so the text keeps the width. */}
+                <time dateTime={a.occurred_at} className="text-muted-foreground mt-0.5 block text-xs tabular-nums sm:hidden">
+                  {when(a.occurred_at)}
+                </time>
               </div>
             </li>
           );
@@ -281,19 +292,19 @@ export function ActivityPanel({
           <span className="bg-muted text-muted-foreground relative flex size-7 shrink-0 items-center justify-center rounded-full">
             <UserPlus className="size-3.5" />
           </span>
-          <div className="flex min-w-0 flex-1 items-start justify-between gap-3 pt-[3px]">
-            <p className="text-sm font-medium">{t("added")}</p>
+          <div className="flex min-w-0 flex-1 items-start justify-between gap-3 pt-[3px] max-sm:flex-col max-sm:gap-0.5">
+            <p className="text-sm">{t("added")}</p>
             <div className="flex shrink-0 items-center gap-1">
-              <time dateTime={createdAt} className="text-muted-foreground text-xs leading-5 tabular-nums">
+              <time dateTime={createdAt} className="text-muted-foreground text-xs leading-5 tabular-nums max-sm:leading-4">
                 {when(createdAt)}
               </time>
-              <span className="w-6" />
+              <span className="w-6 max-sm:hidden" />
             </div>
           </div>
         </li>
       </ol>
       {shown.length === 0 ? (
-        <p className="text-muted-foreground px-4 pb-4 text-sm">{t("empty")}</p>
+        <p className="text-muted-foreground pr-4 pb-4 pl-14 text-[13px]">{t("empty")}</p>
       ) : null}
     </Panel>
   );

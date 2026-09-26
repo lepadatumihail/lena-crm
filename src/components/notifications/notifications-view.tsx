@@ -11,7 +11,7 @@ import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { useAgentTimeZone } from "@/components/shell/shell-context";
 import { ToolbarTabs } from "@/components/shell/toolbar";
 import { Button } from "@/components/ui/button";
-import { dateFnsLocale } from "@/i18n/dates";
+import { intlTag } from "@/i18n/config";
 import { dateKeyInTimeZone } from "@/lib/home";
 import {
   announceNotificationsChanged,
@@ -131,7 +131,14 @@ export function NotificationsView({ initial }: { initial: NotificationHistory })
   function dayLabel(key: string) {
     if (key === todayKey) return tCommon("today");
     if (key === yesterdayKey) return t("yesterday");
-    return format(parseISO(key), "EEEE d MMMM", { locale: dateFnsLocale(locale) });
+    // Each language's own long date ("Thursday 24 September", "jueves, 24 de
+    // septiembre"), capitalised because it is a panel title.
+    const label = new Intl.DateTimeFormat(intlTag(locale), {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    }).format(parseISO(key));
+    return label.charAt(0).toUpperCase() + label.slice(1);
   }
 
   const groups = groupByDay(items, timeZone);
@@ -149,7 +156,7 @@ export function NotificationsView({ initial }: { initial: NotificationHistory })
       >
         {busy ? <Loader2 className="text-muted-foreground size-4 animate-spin" /> : null}
         {unread > 0 ? (
-          <Button variant="outline" size="xs" className="rounded-lg" onClick={handleMarkAll}>
+          <Button variant="outline" size="xs" onClick={handleMarkAll}>
             <CheckCheck /> {t("markAllRead")}
           </Button>
         ) : null}
@@ -178,7 +185,6 @@ export function NotificationsView({ initial }: { initial: NotificationHistory })
           <Button
             variant="outline"
             size="sm"
-            className="rounded-lg"
             onClick={handleLoadMore}
             disabled={busy}
           >

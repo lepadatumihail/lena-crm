@@ -5,20 +5,20 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
-  Building2,
   CalendarDays,
-  CalendarPlus,
-  ClipboardPaste,
   Home,
   ListChecks,
-  ListPlus,
   Plus,
-  UserPlus,
   Users,
   type LucideIcon,
 } from "lucide-react";
 
 import type { RouteOverride } from "@/components/shell/app-sidebar";
+import {
+  NEW_ACTIONS,
+  openNewInPlace,
+  type NewAction,
+} from "@/components/shell/new-actions";
 import {
   Sheet,
   SheetContent,
@@ -27,7 +27,6 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { clientsPath } from "@/lib/crm";
-import { tasksHref } from "@/lib/tasks-view";
 import { cn } from "@/lib/utils";
 
 type Tab = {
@@ -37,8 +36,6 @@ type Tab = {
   active: boolean;
   badge?: number | null;
 };
-
-type Action = { id: string; href: string; label: string; icon: LucideIcon };
 
 /**
  * The phone's main navigation: the four places an agent goes all day, with a
@@ -54,7 +51,6 @@ export function MobileTabBar({
   route?: RouteOverride;
 }) {
   const t = useTranslations("nav");
-  const tNew = useTranslations("nav.quickSearch");
   const router = useRouter();
   const livePathname = usePathname();
   const pathname = route?.pathname ?? livePathname;
@@ -86,25 +82,9 @@ export function MobileTabBar({
     },
   ];
 
-  const actions: Action[] = [
-    { id: "new-buyer", href: "/clients/new?side=buyer", label: tNew("newBuyer"), icon: UserPlus },
-    { id: "new-seller", href: "/clients/new?side=seller", label: tNew("newSeller"), icon: Building2 },
-    { id: "paste-lead", href: "/clients/new?side=buyer&paste=1", label: t("mobile.pasteLead"), icon: ClipboardPaste },
-    { id: "new-task", href: tasksHref({ openNew: true }), label: tNew("newTask"), icon: ListPlus },
-    { id: "new-appointment", href: "/calendar", label: tNew("newAppointment"), icon: CalendarPlus },
-  ];
-
-  function pick(action: Action) {
+  function pick(action: NewAction) {
     setOpen(false);
-    if (action.id === "new-task" && window.location.pathname === "/tasks") {
-      // Already on /tasks: add the intent in place, the way quick search does,
-      // so the tab and filters survive. TasksView opens the dialog.
-      const url = new URL(window.location.href);
-      url.searchParams.set("new", "1");
-      window.history.replaceState(null, "", url.toString());
-      return;
-    }
-    router.push(action.href);
+    if (!openNewInPlace(action.id)) router.push(action.href);
   }
 
   return (
@@ -124,9 +104,9 @@ export function MobileTabBar({
               onClick={() => setOpen(true)}
               aria-label={t("mobile.new")}
               aria-haspopup="dialog"
-              className="bg-primary text-primary-foreground focus-visible:ring-ring/50 flex size-12 items-center justify-center rounded-full shadow-[0_6px_16px_-6px_color-mix(in_oklab,var(--primary)_70%,transparent)] transition-transform duration-150 outline-none focus-visible:ring-[3px] active:scale-[0.94]"
+              className="bg-primary text-primary-foreground focus-visible:ring-ring/50 flex size-12 items-center justify-center rounded-full shadow-md transition-transform duration-150 outline-none focus-visible:ring-[3px] active:scale-[0.94]"
             >
-              <Plus className="size-6" strokeWidth={2.25} />
+              <Plus className="size-6" strokeWidth={2} />
             </button>
           </li>
           {right.map((tab) => (
@@ -145,17 +125,17 @@ export function MobileTabBar({
             <SheetDescription className="sr-only">{t("mobile.newDescription")}</SheetDescription>
           </SheetHeader>
           <ul className="grid gap-0.5 px-2">
-            {actions.map((action) => (
+            {NEW_ACTIONS.map((action) => (
               <li key={action.id}>
                 <button
                   type="button"
                   onClick={() => pick(action)}
-                  className="hover:bg-accent focus-visible:bg-accent flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[15px] font-medium outline-none transition-colors duration-150"
+                  className="hover:bg-accent focus-visible:bg-accent flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[15px] outline-none transition-colors duration-150"
                 >
-                  <span className="bg-muted text-foreground/80 flex size-9 shrink-0 items-center justify-center rounded-full">
-                    <action.icon className="size-4" />
+                  <span className="bg-muted text-foreground/80 flex size-9 shrink-0 items-center justify-center rounded-lg">
+                    <action.icon className="size-4" strokeWidth={1.75} />
                   </span>
-                  {action.label}
+                  {t(action.labelKey)}
                 </button>
               </li>
             ))}
@@ -174,14 +154,14 @@ function TabLink({ tab }: { tab: Tab }) {
         href={tab.href}
         aria-current={tab.active ? "page" : undefined}
         className={cn(
-          "focus-visible:bg-accent flex h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium outline-none transition-colors duration-150",
-          tab.active ? "text-foreground" : "text-muted-foreground"
+          "focus-visible:bg-accent flex h-16 flex-col items-center justify-center gap-1 text-[11px] outline-none transition-colors duration-150",
+          tab.active ? "text-foreground font-medium" : "text-muted-foreground"
         )}
       >
         <span className="relative">
           <Icon className="size-5" strokeWidth={tab.active ? 2.1 : 1.75} />
           {tab.badge ? (
-            <span className="bg-primary text-primary-foreground ring-background absolute -top-1.5 -right-2.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] leading-none font-semibold tabular-nums ring-2">
+            <span className="bg-muted text-foreground ring-background absolute -top-1.5 -right-2.5 flex h-4 min-w-4 items-center justify-center rounded-full border px-1 text-[10px] leading-none font-normal tabular-nums ring-2">
               {tab.badge}
             </span>
           ) : null}

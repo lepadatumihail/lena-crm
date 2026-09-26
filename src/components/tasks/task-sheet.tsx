@@ -88,7 +88,7 @@ export function TaskSheet({
           {task ? (
             <>
               <SheetHeader className="flex-row items-center gap-2 border-b py-3.5 pr-14">
-                <SheetTitle className="label-caps text-muted-foreground flex items-center gap-2 font-medium">
+                <SheetTitle className="section-label text-muted-foreground flex items-center gap-2 font-normal">
                   <ListChecks className="size-3.5" strokeWidth={1.75} />
                   {t("sheet.title")}
                 </SheetTitle>
@@ -99,7 +99,7 @@ export function TaskSheet({
                 <section className="border-b px-5 py-5">
                   <h3
                     className={cn(
-                      "text-lg font-semibold tracking-tight text-pretty break-words",
+                      "text-lg font-medium text-pretty break-words",
                       !isOpenStatus(task.status) && "text-muted-foreground"
                     )}
                   >
@@ -113,7 +113,7 @@ export function TaskSheet({
                 </section>
 
                 <section className="border-b px-5 py-4">
-                  <h4 className="label-caps text-muted-foreground mb-2">{t("sheet.details")}</h4>
+                  <h4 className="section-label text-muted-foreground mb-2">{t("sheet.details")}</h4>
                   <dl>
                     <DetailRow label={t("sheet.status")}>
                       <StatusMenu

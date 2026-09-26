@@ -115,16 +115,18 @@ export function NotificationsBell() {
           }
         >
           <Bell />
+          {/* Unread is a small red dot, like an inbox; the count is in the label. */}
           {unread > 0 && (
-            <span className="bg-primary text-primary-foreground ring-background absolute -top-0.5 -right-0.5 flex size-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-semibold ring-2">
-              {unread > 9 ? "9+" : unread}
-            </span>
+            <span
+              aria-hidden
+              className="bg-tone-red ring-background absolute top-1 right-1 size-2 rounded-full ring-2"
+            />
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-80 p-0 sm:w-96">
         <div className="flex items-center justify-between border-b px-3 py-2.5">
-          <p className="text-sm font-semibold">{t("title")}</p>
+          <p className="text-sm font-medium">{t("title")}</p>
           {unread > 0 && (
             <button
               type="button"
@@ -156,7 +158,7 @@ export function NotificationsBell() {
           <Link
             href="/notifications"
             onClick={() => setOpen(false)}
-            className="text-muted-foreground hover:text-foreground hover:bg-accent flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs font-medium transition-colors"
+            className="text-muted-foreground hover:text-foreground hover:bg-accent flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs transition-colors"
           >
             {t("viewAll")} <ArrowRight className="size-3.5" />
           </Link>

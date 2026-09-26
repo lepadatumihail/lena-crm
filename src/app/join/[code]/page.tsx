@@ -61,7 +61,7 @@ export default async function JoinPage({
             <LogoMark className="mx-auto mb-3 size-12" />
             {inviter ? (
               <>
-                <CardTitle className="text-2xl text-balance">
+                <CardTitle className="text-2xl font-semibold text-balance">
                   {inviterName
                     ? t("invitedBy", { name: inviterName, site: SITE_NAME })
                     : t("invited", { site: SITE_NAME })}
@@ -72,7 +72,7 @@ export default async function JoinPage({
               </>
             ) : (
               <>
-                <CardTitle className="text-2xl">{t("invalidTitle")}</CardTitle>
+                <CardTitle className="text-2xl font-semibold">{t("invalidTitle")}</CardTitle>
                 <CardDescription className="text-pretty">
                   {t("invalidDescription", { site: SITE_NAME })}
                 </CardDescription>
@@ -85,7 +85,7 @@ export default async function JoinPage({
                 <ul className="space-y-2 text-sm">
                   {perks.map((perk) => (
                     <li key={perk} className="flex items-start gap-2">
-                      <Check className="text-primary mt-0.5 size-4 shrink-0" />
+                      <Check className="text-foreground mt-0.5 size-4 shrink-0" />
                       <span>{perk}</span>
                     </li>
                   ))}

@@ -279,6 +279,12 @@ export async function ClientDetailView({
         )
       : null;
     const offers = viewings.filter((v) => v.had_offer).length;
+    const reservationMoney =
+      reservation?.commission != null
+        ? `${tRes("commission")} ${formatCurrency(reservation.commission, tag)}`
+        : reservation?.down_payment != null
+          ? `${tRes("downPayment")} ${formatCurrency(reservation.down_payment, tag)}`
+          : null;
 
     stats = [
       {
@@ -317,18 +323,31 @@ export async function ClientDetailView({
             date: format(parseISO(reservation.closed_at), "d MMM", { locale: dfl }),
           })
         ) : milestone ? (
-          `${milestone.label} · ${format(parseISO(milestone.date), "d MMM", { locale: dfl })}`
+          // When, then what under it, like "Next up": a long step name
+          // ("Contrato de arras (PPC)") would break the date across lines.
+          format(parseISO(milestone.date), "d MMM", { locale: dfl })
         ) : reservation ? (
           <Muted>—</Muted>
         ) : (
           <Muted>{t("stats.none")}</Muted>
         ),
+        // The step, then the money when the cell has room for both: a
+        // truncated figure ("Commission €21,6…") reads as broken, so on a
+        // phone and in the narrow four-up row at lg the step stands alone,
+        // and elsewhere a long step name gives way before the figure does.
         hint:
-          reservation?.commission != null
-            ? `${tRes("commission")} ${formatCurrency(reservation.commission, tag)}`
-            : reservation?.down_payment != null
-              ? `${tRes("downPayment")} ${formatCurrency(reservation.down_payment, tag)}`
-              : null,
+          milestone && !reservation?.closed_at ? (
+            <span className="flex min-w-0">
+              <span className="truncate">{milestone.label}</span>
+              {reservationMoney ? (
+                <span className="shrink-0 whitespace-pre max-sm:hidden lg:max-xl:hidden">
+                  {` · ${reservationMoney}`}
+                </span>
+              ) : null}
+            </span>
+          ) : (
+            reservationMoney
+          ),
       },
       nextUp,
     ];
@@ -381,6 +400,39 @@ export async function ClientDetailView({
     ? viewings.map((v) => v.title).filter((v): v is string => Boolean(v))
     : properties.map((p) => p.address || p.property_type || "").filter(Boolean);
 
+  // Reference facts. Beside the working panels from lg up; on a phone they
+  // go last, after the tasks and activity (the header already says agency,
+  // language and nationality), so it renders in both places, one hidden.
+  const detailsPanel = (className: string) => (
+    <Panel title={t("details")} icon={<TagIcon className="size-3.5" />} className={className}>
+      <KeyValueList>
+        {language ? (
+          <KeyValueRow icon={Globe2} label={t("language")}>
+            {language}
+          </KeyValueRow>
+        ) : null}
+        {nationality ? (
+          <KeyValueRow icon={MapPin} label={t("nationality")}>
+            {nationality}
+          </KeyValueRow>
+        ) : null}
+        {typeLabel ? (
+          <KeyValueRow icon={TagIcon} label={isBuyer ? t("dealType") : t("role")}>
+            {typeLabel}
+          </KeyValueRow>
+        ) : null}
+        {client.agency ? (
+          <KeyValueRow icon={Building2} label={t("agency")}>
+            {client.agency}
+          </KeyValueRow>
+        ) : null}
+        <KeyValueRow icon={CalendarPlus} label={t("addedLabel")}>
+          {calendarDate(client.created_at)}
+        </KeyValueRow>
+      </KeyValueList>
+    </Panel>
+  );
+
   return (
     <div className="space-y-5">
       <ShellCrumb side={side} label={name} />
@@ -397,8 +449,8 @@ export async function ClientDetailView({
               <StageMenu clientId={client.id} stage={client.stage} side={side} />
               <Tag>{sideLabel(tCrm, side)}</Tag>
               {client.priority ? (
-                <Tag tone="brand">
-                  <Star className="fill-current" />
+                <Tag>
+                  <Star className="fill-foreground text-foreground" />
                   {tClients("list.priority")}
                 </Tag>
               ) : null}
@@ -446,9 +498,11 @@ export async function ClientDetailView({
       {/* Headline figures */}
       <StatStrip items={stats} />
 
-      <div className="grid items-start gap-5 lg:grid-cols-3">
+      {/* Two to one, but the side column never drops under 20rem: at
+          1024-1279px a third of the row would cut the phone number short. */}
+      <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(20rem,1fr)]">
         {/* Contact first in the DOM: on a phone it is what you reach for. */}
-        <aside className="min-w-0 space-y-5 lg:sticky lg:top-[4.75rem] lg:col-start-3 lg:row-start-1">
+        <aside className="flex min-w-0 flex-col gap-5 lg:sticky lg:top-[4.75rem] lg:col-start-2 lg:row-start-1">
           <Panel title={t("contact")} icon={<Contact className="size-3.5" />}>
             {client.email || client.phone ? (
               <>
@@ -499,36 +553,10 @@ export async function ClientDetailView({
             )}
           </Panel>
 
-          <Panel title={t("details")} icon={<TagIcon className="size-3.5" />}>
-            <KeyValueList>
-              {language ? (
-                <KeyValueRow icon={Globe2} label={t("language")}>
-                  {language}
-                </KeyValueRow>
-              ) : null}
-              {nationality ? (
-                <KeyValueRow icon={MapPin} label={t("nationality")}>
-                  {nationality}
-                </KeyValueRow>
-              ) : null}
-              {typeLabel ? (
-                <KeyValueRow icon={TagIcon} label={isBuyer ? t("dealType") : t("role")}>
-                  {typeLabel}
-                </KeyValueRow>
-              ) : null}
-              {client.agency ? (
-                <KeyValueRow icon={Building2} label={t("agency")}>
-                  {client.agency}
-                </KeyValueRow>
-              ) : null}
-              <KeyValueRow icon={CalendarPlus} label={t("addedLabel")}>
-                {calendarDate(client.created_at)}
-              </KeyValueRow>
-            </KeyValueList>
-          </Panel>
+          {detailsPanel("max-lg:hidden")}
         </aside>
 
-        <div className="min-w-0 space-y-5 lg:col-span-2 lg:col-start-1 lg:row-start-1">
+        <div className="flex min-w-0 flex-col gap-5 lg:col-start-1 lg:row-start-1">
           {tasks ? (
             <TasksSection
               clientId={client.id}
@@ -552,7 +580,12 @@ export async function ClientDetailView({
               title={t("notes")}
               icon={<NotebookPen className="size-3.5" />}
               action={
-                <Button asChild variant="outline" size="xs">
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="xs"
+                  className="text-muted-foreground -mr-1.5"
+                >
                   <Link href={`/clients/${client.id}/edit`}>
                     <Pencil /> {tCommon("edit")}
                   </Link>
@@ -595,6 +628,7 @@ export async function ClientDetailView({
             agentId={client.agent_id}
             documents={documents}
           />
+          {detailsPanel("lg:hidden")}
         </div>
       </div>
     </div>

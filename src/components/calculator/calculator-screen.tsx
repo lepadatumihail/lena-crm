@@ -258,16 +258,14 @@ export function CalculatorScreen({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h2 className="text-lg font-semibold tracking-tight">{t("heading")}</h2>
-          <p className="text-muted-foreground text-sm">{t("subheading")}</p>
-        </div>
+      {/* The app bar names the page; this line says what it is for, as on Templates. */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-muted-foreground max-w-2xl text-sm text-pretty">{t("subheading")}</p>
         <div className="flex items-center gap-2">
           {/* Transient picker: value stays "" so re-selecting the same saved
               analysis still fires onValueChange and reloads (reverting edits). */}
           <Select value="" onValueChange={loadAnalysis}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger size="sm" className="w-[200px]">
               <SelectValue placeholder={t("savedPlaceholder")} />
             </SelectTrigger>
             <SelectContent>
@@ -284,7 +282,7 @@ export function CalculatorScreen({
               )}
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={newAnalysis}>
+          <Button variant="outline" size="sm" onClick={newAnalysis}>
             <Plus /> {t("new")}
           </Button>
         </div>
@@ -295,16 +293,19 @@ export function CalculatorScreen({
         <Form {...form}>
           <form
             onSubmit={onSave}
-            className="bg-card @container h-fit space-y-5 rounded-xl border p-4"
+            className="bg-card @container h-fit space-y-5 rounded-xl border p-4 shadow-xs"
           >
-            <div className="flex flex-wrap gap-2">
-              <Button type="submit" disabled={pending} className="flex-1">
+            {/* The form's own toolbar, at the page's button size: save is the
+                one ink action, the PDF an outline, delete a quiet icon. */}
+            <div className="flex flex-wrap items-center gap-2">
+              <Button type="submit" size="sm" disabled={pending}>
                 {pending ? <Loader2 className="animate-spin" /> : <Save />}
                 {currentId ? tc("save") : t("saveAnalysis")}
               </Button>
               <Button
                 type="button"
                 variant="outline"
+                size="sm"
                 onClick={onDownload}
                 disabled={downloading}
               >
@@ -322,8 +323,8 @@ export function CalculatorScreen({
                     <Button
                       type="button"
                       variant="ghost"
-                      size="icon"
-                      className="text-muted-foreground hover:text-destructive"
+                      size="icon-sm"
+                      className="text-muted-foreground hover:text-destructive ml-auto"
                       aria-label={t("deleteAria")}
                     >
                       <Trash2 />
@@ -463,7 +464,7 @@ export function CalculatorScreen({
         </Form>
 
         {/* Live preview = exactly what the PDF exports */}
-        <div className="bg-card overflow-x-auto rounded-xl border p-6">
+        <div className="bg-card overflow-x-auto rounded-xl border p-4 shadow-xs sm:p-6">
           <DealSummary {...view} />
         </div>
       </div>
@@ -480,7 +481,7 @@ function FieldGroup({
 }) {
   return (
     <div className="space-y-3">
-      <h3 className="text-muted-foreground text-[11px] font-semibold tracking-[0.12em] uppercase">
+      <h3 className="section-label text-muted-foreground">
         {label}
       </h3>
       {children}

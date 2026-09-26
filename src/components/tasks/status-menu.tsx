@@ -53,7 +53,7 @@ export function StatusMenu({
         onTouchStart={stop}
         className={cn(
           "hover:bg-muted data-[state=open]:bg-accent focus-visible:ring-ring/50 inline-flex shrink-0 cursor-pointer items-center rounded-md outline-none transition-colors duration-150 focus-visible:ring-[3px]",
-          showLabel ? "h-8 gap-2 px-2 text-sm font-medium" : "size-7 justify-center",
+          showLabel ? "h-8 gap-2 px-2 text-sm" : "size-7 justify-center",
           className
         )}
       >
@@ -68,7 +68,7 @@ export function StatusMenu({
         onMouseDown={stop}
         onTouchStart={stop}
       >
-        <DropdownMenuLabel className="text-muted-foreground text-xs font-normal">
+        <DropdownMenuLabel className="text-muted-foreground text-xs">
           {t("controls.status")}
         </DropdownMenuLabel>
         <DropdownMenuRadioGroup value={status} onValueChange={(next) => onChange(next as TaskStatus)}>

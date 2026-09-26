@@ -50,7 +50,7 @@ export function DueTasksPanel({
             link: (chunks) => (
               <Link
                 href={tasksHref({ openNew: true })}
-                className="text-foreground font-medium underline-offset-4 hover:underline"
+                className="text-foreground decoration-foreground/25 hover:decoration-foreground font-medium underline underline-offset-4"
               >
                 {chunks}
               </Link>
@@ -62,7 +62,12 @@ export function DueTasksPanel({
           {visible.map((task) => {
             const label = t("complete", { title: task.title });
             return (
-              <li key={task.id} className="flex h-11 items-center gap-3 px-4">
+              // On a phone a long title takes a second line rather than
+              // losing its end to the due chip.
+              <li
+                key={task.id}
+                className="flex min-h-11 items-center gap-3 px-4 py-1.5 sm:h-11 sm:py-0"
+              >
                 <button
                   type="button"
                   aria-label={label}
@@ -83,7 +88,7 @@ export function DueTasksPanel({
                 </button>
                 <Link
                   href={tasksHref({ taskId: task.id })}
-                  className="min-w-0 flex-1 truncate text-sm font-medium hover:underline"
+                  className="line-clamp-2 min-w-0 flex-1 text-sm font-medium break-words hover:underline sm:line-clamp-1"
                 >
                   {task.title}
                 </Link>

@@ -10,6 +10,7 @@ import { AuthErrorListener } from "@/components/auth-error-listener";
 import { MarketingNav } from "@/components/marketing-nav";
 import { Reveal } from "@/components/reveal";
 import { Eyebrow } from "@/components/marketing/eyebrow";
+import { HeroAccent } from "@/components/marketing/hero-accent";
 import { OnePlace } from "@/components/landing/one-place";
 import { Workflow } from "@/components/landing/workflow";
 import { FeatureDeepDives } from "@/components/landing/feature-deep-dives";
@@ -27,10 +28,11 @@ import { cn } from "@/lib/utils";
  * The marketing home page. Rendered at / (English) and /es (Spanish); the
  * proxy pins the language per URL and the page files add metadata + JSON-LD.
  *
- * It reads as chapters: a framed stage for the hero (warm sand by day, dark
+ * It reads as chapters: a framed stage for the hero (light grey by day, dark
  * at night), sections that alternate between the page background and a
- * faint tint, one inverted chapter for pricing, then the footer. Headlines sit in the display face and
- * every chapter opens with a small tracked label rather than a pill.
+ * faint grey, one inverted chapter for pricing, then the footer. Headlines
+ * sit in the display face and every chapter opens with a small grey tracked
+ * label rather than a pill. Colour is left to the product itself.
  */
 export function LandingPage() {
   const t = useTranslations("landing");
@@ -47,10 +49,10 @@ export function LandingPage() {
       {/* Hero — a stage inset from the page edges. The live board below
           straddles its bottom edge, so the stage's bottom padding and the
           board's negative margin are tuned as a pair. No horizontal clip here:
-          the board's glow stays inside the gutter on its own. */}
+          nothing around the board reaches past the page gutter. */}
       <section className="px-3 pt-2 sm:px-4 sm:pt-3">
         <div className="bg-stage text-stage-foreground ring-foreground/[0.06] relative mx-auto max-w-[88rem] overflow-hidden rounded-[1.75rem] ring-1 sm:rounded-[2.25rem] sm:shadow-[0_24px_60px_-32px_rgb(0_0_0/0.22)] dark:ring-white/10 dark:sm:shadow-[0_30px_80px_-40px_rgb(0_0_0/0.5)]">
-          {/* Backdrop: a faint grid and three warm glows, painted once. Animated
+          {/* Backdrop: a faint grid and a faint neutral light, painted once. Animated
               blur layers here cost iOS Safari so much that the page could
               stall on a slow load and stop receiving scroll updates. */}
           <div
@@ -68,15 +70,11 @@ export function LandingPage() {
             <h1 className="display-1 max-w-5xl text-balance">
               {t.rich("hero.title", {
                 nowrap: (chunks) => <span className="whitespace-nowrap">{chunks}</span>,
-                accent: (chunks) => (
-                  <em className="block bg-gradient-to-r from-[oklch(0.56_0.14_36)] to-[oklch(0.68_0.15_52)] bg-clip-text text-transparent dark:from-[oklch(0.74_0.13_42)] dark:to-[oklch(0.84_0.1_62)]">
-                    {chunks}
-                  </em>
-                ),
+                accent: (chunks) => <HeroAccent className="block">{chunks}</HeroAccent>,
               })}
             </h1>
-            {/* Light weight at night only: cream on a dark ground reads a step
-                heavier than the same face on sand. */}
+            {/* Light weight at night only: light text on a dark ground reads a
+                step heavier than the same face on grey. */}
             <p className="text-stage-foreground/70 mt-5 max-w-xl text-base text-pretty sm:mt-6 sm:text-lg lg:text-xl dark:font-light dark:text-stage-foreground/65">
               {t("hero.subtitle")}
             </p>
@@ -147,7 +145,7 @@ export function LandingPage() {
         <div className="mx-auto w-full max-w-6xl px-4">
           <Reveal>
             <div className="text-center">
-              <Eyebrow className="mb-4">{tNav("pricing")}</Eyebrow>
+              <Eyebrow className="text-inverted-foreground/60 mb-4">{tNav("pricing")}</Eyebrow>
               <h2 className="display-2 text-balance">{t("pricing.heading")}</h2>
               <p className="text-inverted-foreground/70 mx-auto mt-4 max-w-xl text-lg text-pretty">
                 {t("pricing.body")}
@@ -199,7 +197,7 @@ export function LandingPage() {
             <p className="mt-3 text-center text-sm">
               <Link
                 href={marketingPath("pricing", locale)}
-                className="text-inverted-foreground hover:text-primary font-medium underline underline-offset-4 transition-colors"
+                className="text-inverted-foreground decoration-inverted-foreground/30 hover:decoration-inverted-foreground font-medium underline underline-offset-4 transition-colors"
               >
                 {t("pricing.fullPage")}
               </Link>
@@ -258,13 +256,13 @@ function PlanCard({
   return (
     <div
       className={cn(
-        "rounded-2xl p-6 ring-1",
+        "flex h-full flex-col rounded-2xl p-6 ring-1",
         highlighted
-          ? "bg-card text-card-foreground ring-primary/50 shadow-[0_30px_80px_-30px_rgb(0_0_0/0.6)]"
+          ? "bg-card text-card-foreground ring-inverted-foreground/15 shadow-[0_30px_80px_-30px_rgb(0_0_0/0.6)]"
           : "bg-inverted-foreground/5 ring-inverted-foreground/10"
       )}
     >
-      <h3 className="text-lg font-semibold">{name}</h3>
+      <h3 className="text-lg font-medium">{name}</h3>
       <div className="mt-3 flex items-baseline gap-2">
         <span className="font-display text-5xl leading-none tracking-tight">
           {price}
@@ -272,10 +270,15 @@ function PlanCard({
         <span className={cn("text-sm", muted)}>{period}</span>
       </div>
       {note ? <p className={cn("mt-2 text-sm", muted)}>{note}</p> : null}
-      <ul className="mt-6 space-y-2.5 text-sm">
+      <ul className="mt-6 mb-7 space-y-2.5 text-sm">
         {items.map((item) => (
           <li key={item} className="flex items-start gap-2">
-            <Check className="text-primary mt-0.5 size-4 shrink-0" />
+            <Check
+              className={cn(
+                "mt-0.5 size-4 shrink-0",
+                highlighted ? "text-foreground" : "text-inverted-foreground/70"
+              )}
+            />
             <span>{item}</span>
           </li>
         ))}
@@ -283,11 +286,12 @@ function PlanCard({
       {/* Buttons never wrap by default, and the Spanish Pro label is wider
           than a phone's card: let it take a second line instead of widening
           both plans past the screen. Sides of 20px keep the English label on
-          one line down to 320px. */}
+          one line down to 320px. It sits on the card's floor, so both plans'
+          buttons line up although only Pro carries the yearly note. */}
       <Button
         asChild
         size="pill"
-        className="mt-7 h-auto min-h-11 w-full px-5 py-2.5 text-center leading-snug text-balance whitespace-normal"
+        className="mt-auto h-auto min-h-11 w-full px-5 py-2.5 text-center leading-snug text-balance whitespace-normal"
         variant={highlighted ? "default" : "glass"}
       >
         <Link href="/login">{cta}</Link>

@@ -12,13 +12,16 @@ export default function TasksLoading() {
           <Skeleton className="h-4 w-12" />
         </div>
       </div>
+      {/* The toolbar's two rows on a phone: search and the view toggle, then the filters. */}
       <div className="flex flex-wrap items-center gap-2">
-        <Skeleton className="h-8 w-full rounded-lg sm:w-64" />
-        <Skeleton className="h-8 w-32 rounded-lg" />
-        <Skeleton className="h-8 w-32 rounded-lg" />
+        <Skeleton className="h-8 min-w-0 flex-1 rounded-lg sm:w-64 sm:flex-none" />
+        <div className="order-last flex w-full gap-2 sm:order-none sm:w-auto">
+          <Skeleton className="h-8 w-32 rounded-lg" />
+          <Skeleton className="h-8 w-32 rounded-lg" />
+        </div>
         <div className="ml-auto flex items-center gap-2">
           <Skeleton className="h-8 w-16 rounded-lg" />
-          <Skeleton className="h-8 w-24 rounded-full" />
+          <Skeleton className="hidden h-8 w-24 rounded-lg md:block" />
         </div>
       </div>
       <div className="bg-card overflow-hidden rounded-xl border shadow-xs">

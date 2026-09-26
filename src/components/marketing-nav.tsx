@@ -20,7 +20,8 @@ import { NavFrame } from "@/components/marketing/nav-frame";
  *   minimal — controls and a way home, for the legal pages.
  * Every link follows the page's own language, so a Spanish page never sends
  * a visitor to an English URL. The strip it sits in condenses into a floating
- * pill once the page scrolls (see NavFrame).
+ * pill once the page scrolls (see NavFrame). Links are regular weight; only
+ * the ink call to action is medium.
  */
 export function MarketingNav({
   variant = "landing",
@@ -59,7 +60,7 @@ export function MarketingNav({
               asChild
               variant="ghost"
               size="sm"
-              className="hidden rounded-full sm:inline-flex"
+              className="hidden rounded-full font-normal sm:inline-flex"
             >
               <Link href="#how-it-works">{t("howItWorks")}</Link>
             </Button>
@@ -67,7 +68,7 @@ export function MarketingNav({
               asChild
               variant="ghost"
               size="sm"
-              className="hidden rounded-full sm:inline-flex"
+              className="hidden rounded-full font-normal sm:inline-flex"
             >
               <Link href="#pricing">{t("pricing")}</Link>
             </Button>
@@ -82,7 +83,7 @@ export function MarketingNav({
               asChild
               variant="ghost"
               size="sm"
-              className="hidden rounded-full sm:inline-flex"
+              className="hidden rounded-full font-normal sm:inline-flex"
             >
               <Link href={`${home}#how-it-works`}>{t("howItWorks")}</Link>
             </Button>
@@ -90,7 +91,7 @@ export function MarketingNav({
               asChild
               variant="ghost"
               size="sm"
-              className="hidden rounded-full sm:inline-flex"
+              className="hidden rounded-full font-normal sm:inline-flex"
             >
               <Link href={marketingPath("pricing", locale)}>{t("pricing")}</Link>
             </Button>
@@ -108,7 +109,7 @@ export function MarketingNav({
               asChild
               variant="ghost"
               size="sm"
-              className="rounded-full max-sm:size-9 max-sm:p-0"
+              className="rounded-full font-normal max-sm:size-9 max-sm:p-0"
             >
               <Link href={home}>
                 <ArrowLeft />

@@ -61,7 +61,7 @@ export function LandingFooter() {
             <span>{tFooter("contactLead")}</span>
             <a
               href={`mailto:${SUPPORT_EMAIL}`}
-              className="text-foreground hover:text-primary inline-flex items-center gap-2 font-medium underline decoration-current/30 underline-offset-4 transition-colors hover:decoration-current"
+              className="text-foreground inline-flex items-center gap-2 font-medium underline decoration-current/30 underline-offset-4 transition-colors hover:decoration-current"
             >
               <Mail className="size-4 shrink-0" aria-hidden />
               {SUPPORT_EMAIL}
@@ -116,7 +116,7 @@ function FooterColumn({
   const t = useTranslations("marketing.routes");
   return (
     <nav aria-label={heading}>
-      <h2 className="text-foreground text-xs font-semibold tracking-wide uppercase">
+      <h2 className="text-foreground text-sm font-medium">
         {heading}
       </h2>
       <ul className="mt-3 space-y-2">

@@ -60,7 +60,7 @@ export function TemplateBlock({
   }
 
   return (
-    <div className={cn("bg-card mt-6 rounded-2xl border shadow-sm", className)}>
+    <div className={cn("bg-card mt-6 rounded-2xl border shadow-xs", className)}>
       <div className="flex flex-wrap items-center justify-between gap-2 border-b px-4 py-2.5">
         <div className="text-muted-foreground flex min-w-0 items-center gap-2 text-xs">
           <ChannelIcon className="size-4 shrink-0" aria-hidden />
@@ -77,7 +77,7 @@ export function TemplateBlock({
           className="text-muted-foreground hover:text-foreground inline-flex shrink-0 items-center gap-1.5 rounded-md border px-2 py-1 text-xs font-medium transition-colors"
         >
           {copied ? (
-            <Check className="text-primary size-3.5" aria-hidden />
+            <Check className="text-foreground size-3.5" aria-hidden />
           ) : (
             <Copy className="size-3.5" aria-hidden />
           )}

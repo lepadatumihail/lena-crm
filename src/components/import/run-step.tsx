@@ -12,6 +12,8 @@ import type { AppLocale } from "@/i18n/config";
 import { clientsPath, type ClientSide } from "@/lib/crm";
 import { toBatches } from "@/lib/import/batch";
 import type { RowOutcome } from "@/lib/import/build";
+import { TONE_BG, TONE_INK } from "@/lib/tones";
+import { cn } from "@/lib/utils";
 import type { ImportRow } from "@/lib/validation/import";
 
 import { UndoDialog } from "./undo-dialog";
@@ -165,7 +167,7 @@ export function RunStep({
       {busy ? (
         <section className="bg-card space-y-4 rounded-xl border p-5">
           <div className="flex items-center gap-3">
-            <Loader2 className="text-primary size-5 animate-spin" aria-hidden />
+            <Loader2 className="text-muted-foreground size-5 animate-spin" aria-hidden />
             <p className="text-sm font-medium" aria-live="polite">
               {t("run.progress", { done: state.imported, total })}
             </p>
@@ -209,11 +211,11 @@ export function RunStep({
       {state.phase === "done" || state.phase === "stopped" ? (
         <section className="bg-card space-y-5 rounded-xl border p-5">
           <div className="flex items-start gap-3">
-            <div className="bg-green-500/10 text-green-700 dark:text-green-400 flex size-10 shrink-0 items-center justify-center rounded-full">
+            <div className={cn("flex size-10 shrink-0 items-center justify-center rounded-full", TONE_BG.green, TONE_INK.green)}>
               <Check className="size-5" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-lg font-semibold">
+              <h3 className="text-lg font-medium">
                 {state.phase === "stopped"
                   ? t("run.stopped", { done: state.imported, total })
                   : t("done.title", { imported: state.imported, skipped: outcomes.length - state.imported })}

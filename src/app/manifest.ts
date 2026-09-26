@@ -9,8 +9,9 @@ export default function manifest(): MetadataRoute.Manifest {
     description: SITE_TAGLINE,
     start_url: "/clients/buyers",
     display: "standalone",
-    background_color: "#faf8f3",
-    theme_color: "#c0603f",
+    // Neutral: the installed app's splash and title bar are the white page.
+    background_color: "#ffffff",
+    theme_color: "#ffffff",
     icons: [
       { src: "/icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
       { src: "/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },

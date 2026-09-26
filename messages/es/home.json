@@ -2,9 +2,7 @@
   "title": "Inicio",
   "subtitle": "Todo lo que necesita tu atención, en un solo sitio.",
   "actions": {
-    "newBuyer": "Nuevo comprador",
-    "newSeller": "Nuevo vendedor",
-    "newAppointment": "Nueva cita"
+    "new": "Nuevo"
   },
   "upcoming": {
     "title": "Próximas citas",
@@ -100,26 +98,39 @@
   },
   "onboarding": {
     "title": "Primeros pasos",
-    "subtitle": "{done} de {total} completados",
+    "progress": "{done} de {total}",
+    "progressLabel": "{done} de {total} pasos completados",
+    "next": "<muted>Siguiente:</muted> {step}",
+    "showSteps": "Ver pasos",
+    "hideSteps": "Ocultar pasos",
+    "dismiss": "Ocultar primeros pasos",
+    "hidden": "Has ocultado los primeros pasos. Puedes recuperarlos desde el menú de tu cuenta.",
+    "optional": "Opcional",
+    "stepDone": "Hecho:",
     "steps": {
       "addName": {
         "title": "Añade tu nombre",
+        "short": "Añade tu nombre",
         "detail": "El inicio te saluda por tu nombre y no por tu correo."
       },
       "addClient": {
         "title": "Trae a tus clientes",
+        "short": "Trae a tus clientes",
         "detail": "Importa una hoja de cálculo o añádelos uno a uno."
       },
       "scheduleAppointment": {
         "title": "Programa una visita o una reunión",
+        "short": "Programa una visita",
         "detail": "Va a tu calendario, con un recordatorio de WhatsApp listo para enviar."
       },
       "createTemplate": {
         "title": "Crea una plantilla de mensaje",
+        "short": "Crea una plantilla",
         "detail": "Parte de una plantilla de ejemplo o escribe la tuya."
       },
       "inviteColleague": {
         "title": "Invita a un compañero",
+        "short": "Invita a un compañero",
         "detail": "Comparte tu enlace y gana un mes gratis de Pro.",
         "locked": "Se desbloquea con {count, plural, one {# cliente} other {# clientes}}."
       }

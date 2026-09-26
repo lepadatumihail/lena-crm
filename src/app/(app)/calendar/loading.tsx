@@ -14,7 +14,7 @@ export default function CalendarLoading() {
         <div className="ml-auto flex items-center gap-2">
           <Skeleton className="h-8 w-32 rounded-lg" />
           <Skeleton className="h-8 w-8 rounded-lg sm:w-24" />
-          <Skeleton className="h-8 w-20 rounded-full" />
+          <Skeleton className="h-8 w-20 rounded-lg" />
         </div>
       </div>
       <Skeleton className="h-[32rem] w-full rounded-xl" />

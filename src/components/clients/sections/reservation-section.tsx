@@ -62,8 +62,8 @@ type Milestone = { key: string; label: string; date: string | null };
 
 /**
  * Down payment → PPC → notary → closed as a four-step track. Passed dates
- * are filled, the next dated step is ringed in the brand colour with how far
- * off it is, later steps stay hollow.
+ * are filled green, the next dated step is an ink dot with a halo and how
+ * far off it is, later steps stay hollow.
  */
 function MilestoneTrack({
   reservation: r,
@@ -112,7 +112,7 @@ function MilestoneTrack({
                 className={cn(
                   "size-2.5 shrink-0 rounded-full",
                   state === "done" && TONE_SOLID.green,
-                  state === "next" && cn(TONE_SOLID.brand, "ring-primary/20 ring-4"),
+                  state === "next" && cn(TONE_SOLID.ink, "ring-foreground/10 ring-4"),
                   state === "todo" && "border-muted-foreground/35 border-2"
                 )}
               />
@@ -128,11 +128,11 @@ function MilestoneTrack({
             <p className="text-muted-foreground mt-2 pr-2 text-xs leading-tight break-words">
               {step.label}
             </p>
-            <p className="mt-0.5 truncate pr-2 text-[13px] font-medium tabular-nums">
+            <p className="mt-0.5 truncate pr-2 text-[13px] tabular-nums">
               {step.date ? fmtShort(step.date, locale) : "—"}
             </p>
             {state === "next" && step.date ? (
-              <p className="text-primary truncate pr-2 text-xs">
+              <p className="text-foreground truncate pr-2 text-xs">
                 {relative(step.date)}
               </p>
             ) : null}
@@ -174,11 +174,16 @@ export function ReservationSection({
       action={
         <div className="flex items-center gap-2">
           {r?.closed_at ? (
-            <Tag tone="green" dot>
+            <Tag tone="green">
               {t("closedBadge")}
             </Tag>
           ) : null}
-          <Button variant="outline" size="xs" onClick={() => setOpen(true)}>
+          <Button
+            variant="ghost"
+            size="xs"
+            className="text-muted-foreground -mr-1.5"
+            onClick={() => setOpen(true)}
+          >
             {r ? <Pencil /> : <Plus />}
             {r ? tCommon("edit") : tCommon("add")}
           </Button>
@@ -410,7 +415,7 @@ function ReservationDialog({
             <DialogFooter>
               <Button
                 type="button"
-                variant="ghost"
+                variant="outline"
                 onClick={() => onOpenChange(false)}
               >
                 {tCommon("cancel")}

@@ -90,8 +90,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+// The phone browser bar takes the page's own ground: white by day, the dark
+// background (--background in .dark, oklch(0.19 0.005 56)) at night.
 export const viewport: Viewport = {
-  themeColor: "#c0603f",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#161312" },
+  ],
 };
 
 export default async function RootLayout({
@@ -111,7 +116,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         {/* Thin progress bar at the top during route transitions. */}
         <NextTopLoader
-          color="var(--primary)"
+          color="var(--foreground)"
           height={3}
           showSpinner={false}
           shadow={false}

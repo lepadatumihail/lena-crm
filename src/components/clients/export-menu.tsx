@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Download, Loader2 } from "lucide-react";
 
+import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -68,12 +69,15 @@ export function ExportMenu({
         disabled={disabled || busy || ids.length === 0}
         aria-label={variant === "toolbar" ? t("label") : undefined}
         title={variant === "toolbar" ? t("label") : undefined}
-        className={cn(
-          "inline-flex shrink-0 items-center justify-center outline-none transition-[color,background-color,scale] duration-150 focus-visible:ring-[3px] focus-visible:ring-ring/50 active:scale-[0.96] disabled:pointer-events-none disabled:opacity-50",
+        // The toolbar's outline icon button, or the bulk bar's ghost xs.
+        className={
           variant === "toolbar"
-            ? "bg-background text-muted-foreground hover:bg-muted/60 hover:text-foreground size-8 rounded-lg border shadow-xs [&_svg]:size-4"
-            : "hover:bg-muted text-foreground h-7 gap-1.5 rounded-md px-2 text-xs font-medium [&_svg]:size-3.5"
-        )}
+            ? cn(
+                buttonVariants({ variant: "outline", size: "icon-sm" }),
+                "text-muted-foreground hover:text-foreground data-[state=open]:bg-muted/60"
+              )
+            : buttonVariants({ variant: "ghost", size: "xs" })
+        }
       >
         <Icon className={cn(busy && "animate-spin")} strokeWidth={1.75} />
         {variant === "bulk" ? t("selected") : null}

@@ -1,27 +1,17 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
-import {
-  TONE_BG,
-  TONE_BORDER,
-  TONE_INK,
-  TONES,
-  tagDotClass,
-  type Tone,
-} from "@/lib/tones";
+import { TONE_TAG, tagDotClass } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 
-const TONE_TAG = Object.fromEntries(
-  TONES.map((tone) => [tone, `${TONE_BORDER[tone]} ${TONE_BG[tone]} ${TONE_INK[tone]}`])
-) as Record<Tone, string>;
-
 /*
-  A tinted pill: pale fill, hairline border in the same hue, readable text.
-  Regular weight at 13px so a row of them reads as data, not as buttons.
-  This is the app's only pill; its colours come from lib/tones.ts.
+  A status pill, Structurely-style: a pale fill with dark text of the same
+  hue, or an outline for neutral. 12px medium, so a row of them reads as
+  data, not as buttons. This is the app's only pill; its colours come from
+  lib/tones.ts.
 */
 const tagVariants = cva(
-  "inline-flex h-[22px] shrink-0 items-center gap-1.5 rounded-full border px-2 text-[13px] leading-none whitespace-nowrap [&>svg]:size-3 [&>svg]:shrink-0",
+  "inline-flex h-[22px] shrink-0 items-center gap-1.5 rounded-full border px-2 text-xs leading-none font-medium whitespace-nowrap [&>svg]:size-3 [&>svg]:shrink-0",
   {
     variants: { tone: TONE_TAG },
     defaultVariants: { tone: "neutral" },

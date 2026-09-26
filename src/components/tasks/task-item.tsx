@@ -70,18 +70,23 @@ export function TaskItem({
         >
           {task.title}
         </button>
-        <div className="text-muted-foreground flex min-w-0 items-center gap-1.5 text-xs md:hidden">
-          <PriorityIcon priority={task.priority} className="size-3" />
-          {/* The glyph is aria-hidden and the priority menu is desktop-only. */}
-          {task.priority !== "none" ? (
-            <span className="sr-only">
-              {taskPriorityLabel(tCrm, task.priority)}
-            </span>
-          ) : null}
-          {client ? (
-            <span className="truncate">{clientFullName(client)}</span>
-          ) : null}
-        </div>
+        {/* Only what there is: a lone "no priority" dash under the title read as a stray mark. */}
+        {task.priority !== "none" || client ? (
+          <div className="text-muted-foreground flex min-w-0 items-center gap-1.5 text-xs md:hidden">
+            {task.priority !== "none" ? (
+              <>
+                <PriorityIcon priority={task.priority} className="size-3" />
+                {/* The glyph is aria-hidden and the priority menu is desktop-only. */}
+                <span className="sr-only">
+                  {taskPriorityLabel(tCrm, task.priority)}
+                </span>
+              </>
+            ) : null}
+            {client ? (
+              <span className="truncate">{clientFullName(client)}</span>
+            ) : null}
+          </div>
+        ) : null}
       </div>
       {client ? (
         <ClientChip

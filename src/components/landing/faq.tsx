@@ -25,7 +25,7 @@ export function Faq() {
           {answer}{" "}
           <Link
             href={marketingPath("privacy", locale)}
-            className="text-foreground underline underline-offset-4"
+            className="text-foreground decoration-foreground/25 hover:decoration-foreground font-medium underline underline-offset-4 transition-colors"
           >
             {t("privacyLink")}
           </Link>
@@ -53,7 +53,7 @@ export function Faq() {
           {t("ask")}{" "}
           <a
             href={`mailto:${SUPPORT_EMAIL}`}
-            className="text-foreground hover:text-primary font-medium underline underline-offset-4 transition-colors"
+            className="text-foreground decoration-foreground/25 hover:decoration-foreground font-medium underline underline-offset-4 transition-colors"
           >
             {SUPPORT_EMAIL}
           </a>

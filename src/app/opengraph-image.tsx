@@ -8,6 +8,7 @@ import {
   WORDMARK_PATHS,
   WORDMARK_VIEWBOX,
 } from "@/lib/brand-mark";
+import { STAGE_TONES, type BuyerStage } from "@/lib/crm";
 import {
   BRAND,
   SITE_DESCRIPTION,
@@ -15,28 +16,56 @@ import {
   SITE_TAGLINE,
   SITE_URL,
 } from "@/lib/site";
+import type { Tone } from "@/lib/tones";
 
 export const alt = `${SITE_NAME} — ${SITE_TAGLINE}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 const TAGLINE_LINES = ["The CRM for", "independent", "real-estate agents"];
-const STAGES = ["New", "Contacted", "Qualified", "Viewing", "Reserved"];
-const ROWS = [
-  { initials: "SM", name: "Sofia Martín", stage: "Viewing", when: "Tomorrow 11:00" },
-  { initials: "JH", name: "James Holt", stage: "Qualified", when: "Follow up today" },
-  { initials: "AK", name: "Anna Karlsson", stage: "Reserved", when: "Deposit paid" },
+// Four stages fit the card on one line; Reserved, the fifth, shows on
+// Anna's row below, so the strip never wraps a lone pill onto a second line.
+const STAGES: { stage: BuyerStage; label: string }[] = [
+  { stage: "new", label: "New" },
+  { stage: "contacted", label: "Contacted" },
+  { stage: "qualified", label: "Qualified" },
+  { stage: "viewing", label: "Viewing" },
 ];
+const ROWS: { initials: string; name: string; stage: BuyerStage; label: string; when: string }[] = [
+  { initials: "SM", name: "Sofia Martín", stage: "viewing", label: "Viewing", when: "Tomorrow 11:00" },
+  { initials: "JH", name: "James Holt", stage: "qualified", label: "Qualified", when: "Follow up today" },
+  { initials: "AK", name: "Anna Karlsson", stage: "reserved", label: "Reserved", when: "Deposit paid" },
+];
+
+/**
+ * The app's Tag in hex: a pale fill with dark same-hue text, an outline for
+ * neutral, a grey fill for grey, solid ink for ink. Stage tones come from
+ * STAGE_TONES, so the card shows the pills the app does.
+ */
+// Every tone, so a stage that changes tone can never fall back silently.
+const TAG: Record<Tone, { background: string; color: string; border: string }> = {
+  neutral: { background: BRAND.card, color: BRAND.foreground, border: BRAND.border },
+  grey: { background: BRAND.mutedSurface, color: BRAND.foreground, border: BRAND.mutedSurface },
+  blue: { background: BRAND.blueSoft, color: BRAND.blueInk, border: BRAND.blueSoft },
+  green: { background: BRAND.greenSoft, color: BRAND.greenInk, border: BRAND.greenSoft },
+  amber: { background: BRAND.amberSoft, color: BRAND.amberInk, border: BRAND.amberSoft },
+  red: { background: BRAND.redSoft, color: BRAND.redInk, border: BRAND.redSoft },
+  violet: { background: BRAND.violetSoft, color: BRAND.violetInk, border: BRAND.violetSoft },
+  ink: { background: BRAND.foreground, color: BRAND.background, border: BRAND.foreground },
+};
+const tagStyle = (stage: BuyerStage) => {
+  const { background, color, border } = TAG[STAGE_TONES[stage]];
+  return { background, color, border: `1px solid ${border}` };
+};
 
 function font(file: string) {
   return readFile(join(process.cwd(), "assets/fonts", file));
 }
 
 export default async function Image() {
-  const [regular, medium, bold] = await Promise.all([
+  const [regular, medium] = await Promise.all([
     font("Geist-Regular.ttf"),
     font("Geist-Medium.ttf"),
-    font("Geist-Bold.ttf"),
   ]);
   const host = new URL(SITE_URL).host;
   const summary = SITE_DESCRIPTION.split(". ")[1] ?? SITE_TAGLINE;
@@ -55,32 +84,6 @@ export default async function Image() {
           overflow: "hidden",
         }}
       >
-        {/* Warm glows, echoing the landing hero */}
-        <div
-          style={{
-            position: "absolute",
-            top: -220,
-            right: -160,
-            width: 720,
-            height: 720,
-            borderRadius: 9999,
-            background:
-              "radial-gradient(circle at center, rgba(192,96,63,0.22) 0%, rgba(192,96,63,0) 65%)",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: -260,
-            left: -120,
-            width: 640,
-            height: 640,
-            borderRadius: 9999,
-            background:
-              "radial-gradient(circle at center, rgba(222,176,92,0.18) 0%, rgba(222,176,92,0) 65%)",
-          }}
-        />
-
         {/* Left: brand */}
         <div
           style={{
@@ -115,7 +118,7 @@ export default async function Image() {
                 display: "flex",
                 flexDirection: "column",
                 fontSize: 50,
-                fontWeight: 700,
+                fontWeight: 500,
                 lineHeight: 1.08,
                 letterSpacing: -1.5,
               }}
@@ -148,7 +151,7 @@ export default async function Image() {
               gap: 12,
               fontSize: 26,
               fontWeight: 500,
-              color: BRAND.primary,
+              color: BRAND.foreground,
             }}
           >
             <div
@@ -156,7 +159,7 @@ export default async function Image() {
                 width: 10,
                 height: 10,
                 borderRadius: 9999,
-                background: BRAND.primary,
+                background: BRAND.foreground,
                 display: "flex",
               }}
             />
@@ -182,7 +185,7 @@ export default async function Image() {
               background: BRAND.card,
               border: `2px solid ${BRAND.border}`,
               borderRadius: 28,
-              boxShadow: "0 30px 70px rgba(43,41,38,0.12)",
+              boxShadow: "0 30px 70px rgba(23,23,23,0.10)",
               padding: 28,
               gap: 22,
             }}
@@ -194,13 +197,13 @@ export default async function Image() {
                 alignItems: "center",
               }}
             >
-              <div style={{ fontSize: 24, fontWeight: 700, display: "flex" }}>
+              <div style={{ fontSize: 24, fontWeight: 500, display: "flex" }}>
                 Buyers
               </div>
               <div
                 style={{
                   fontSize: 16,
-                  fontWeight: 500,
+                  fontWeight: 400,
                   color: BRAND.muted,
                   display: "flex",
                 }}
@@ -209,21 +212,20 @@ export default async function Image() {
               </div>
             </div>
 
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {STAGES.map((s, i) => (
+            <div style={{ display: "flex", gap: 8 }}>
+              {STAGES.map(({ stage, label }) => (
                 <div
-                  key={s}
+                  key={stage}
                   style={{
                     display: "flex",
                     fontSize: 15,
                     fontWeight: 500,
-                    padding: "6px 12px",
+                    padding: "5px 12px",
                     borderRadius: 9999,
-                    background: i === 3 ? BRAND.primary : BRAND.primarySoft,
-                    color: i === 3 ? BRAND.background : BRAND.primary,
+                    ...tagStyle(stage),
                   }}
                 >
-                  {s}
+                  {label}
                 </div>
               ))}
             </div>
@@ -238,7 +240,7 @@ export default async function Image() {
                     gap: 14,
                     padding: "12px 14px",
                     borderRadius: 16,
-                    background: BRAND.background,
+                    background: BRAND.card,
                     border: `1px solid ${BRAND.border}`,
                   }}
                 >
@@ -250,10 +252,10 @@ export default async function Image() {
                       width: 44,
                       height: 44,
                       borderRadius: 9999,
-                      background: BRAND.primarySoft,
-                      color: BRAND.primary,
+                      background: BRAND.mutedSurface,
+                      color: BRAND.foreground,
                       fontSize: 16,
-                      fontWeight: 700,
+                      fontWeight: 500,
                     }}
                   >
                     {r.initials}
@@ -277,13 +279,12 @@ export default async function Image() {
                       display: "flex",
                       fontSize: 14,
                       fontWeight: 500,
-                      padding: "5px 10px",
+                      padding: "4px 10px",
                       borderRadius: 9999,
-                      background: BRAND.primarySoft,
-                      color: BRAND.primary,
+                      ...tagStyle(r.stage),
                     }}
                   >
-                    {r.stage}
+                    {r.label}
                   </div>
                 </div>
               ))}
@@ -297,7 +298,6 @@ export default async function Image() {
       fonts: [
         { name: "Geist", data: regular, weight: 400, style: "normal" },
         { name: "Geist", data: medium, weight: 500, style: "normal" },
-        { name: "Geist", data: bold, weight: 700, style: "normal" },
       ],
     }
   );

@@ -67,7 +67,7 @@ export function NotificationItem({
       className={cn(
         "hover:bg-muted/50 focus-visible:bg-muted/50 flex w-full items-start gap-3 text-left outline-none transition-colors duration-150",
         compact ? "px-3 py-2.5" : "px-4 py-3",
-        isUnread && "bg-primary/[0.04]",
+        isUnread && "bg-muted/30",
         className
       )}
     >
@@ -85,7 +85,7 @@ export function NotificationItem({
           className={cn(
             "text-sm",
             compact && "truncate",
-            isUnread ? "font-semibold" : "font-medium"
+            isUnread ? "font-medium" : "font-normal"
           )}
         >
           {n.title}
@@ -104,7 +104,7 @@ export function NotificationItem({
         </p>
       </div>
       {isUnread && (
-        <span aria-hidden className="bg-primary mt-2 size-2 shrink-0 rounded-full" />
+        <span aria-hidden className="bg-tone-red mt-2 size-2 shrink-0 rounded-full" />
       )}
     </button>
   );

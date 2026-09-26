@@ -59,14 +59,19 @@ export function TasksSection({
         icon={<ListChecks className="size-3.5" />}
         count={open.length}
         action={
-          <Button variant="outline" size="xs" onClick={() => setDialogOpen(true)}>
+          <Button
+            variant="ghost"
+            size="xs"
+            className="text-muted-foreground -mr-1.5"
+            onClick={() => setDialogOpen(true)}
+          >
             <Plus /> {t("new")}
           </Button>
         }
         footer={
           <Link
             href={tasksHref({ tab: "done", clientId })}
-            className="hover:text-foreground inline-flex items-center gap-1 font-medium transition-colors duration-150"
+            className="hover:text-foreground inline-flex items-center gap-1 transition-colors duration-150"
           >
             {t("clientPanel.doneLink")}
             <ArrowRight className="size-3.5" />

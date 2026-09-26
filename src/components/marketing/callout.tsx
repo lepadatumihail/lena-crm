@@ -1,5 +1,6 @@
 import { Info, Lightbulb, TriangleAlert } from "lucide-react";
 
+import { TONE_BG, TONE_BORDER, TONE_ICON } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 
 type CalloutKind = "tip" | "note" | "warning";
@@ -8,10 +9,11 @@ const STYLES: Record<
   CalloutKind,
   { icon: React.ComponentType<{ className?: string }>; box: string; mark: string }
 > = {
+  // A tip is the pale blue of the app's notices, so it never reads as a note.
   tip: {
     icon: Lightbulb,
-    box: "border-primary/30 bg-primary/5",
-    mark: "text-primary",
+    box: cn(TONE_BORDER.blue, TONE_BG.blue),
+    mark: TONE_ICON.blue,
   },
   note: {
     icon: Info,
@@ -20,8 +22,8 @@ const STYLES: Record<
   },
   warning: {
     icon: TriangleAlert,
-    box: "border-warning/40 bg-warning/10",
-    mark: "text-warning",
+    box: cn(TONE_BORDER.amber, TONE_BG.amber),
+    mark: TONE_ICON.amber,
   },
 };
 
@@ -46,14 +48,20 @@ export function Callout({
     <aside
       className={cn(
         "mt-6 flex gap-3 rounded-xl border p-4 text-sm leading-relaxed",
-        "[&>div>:first-child]:mt-0",
+        // A title leads straight into its text; the article's paragraph
+        // gap would float it off as a heading of its own.
+        "[&>div>:first-child]:mt-0 [&>div>[data-callout-title]+*]:mt-1",
         box,
         className
       )}
     >
       <Icon className={cn("mt-0.5 size-4 shrink-0", mark)} aria-hidden />
       <div className="min-w-0">
-        {title ? <p className="text-foreground font-semibold">{title}</p> : null}
+        {title ? (
+          <p data-callout-title className="text-foreground font-medium">
+            {title}
+          </p>
+        ) : null}
         {children}
       </div>
     </aside>

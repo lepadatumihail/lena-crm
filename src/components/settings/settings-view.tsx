@@ -86,24 +86,7 @@ export function SettingsView({
     <div className="mx-auto w-full max-w-3xl space-y-4">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
-          <Panel
-            title={t("profile.title")}
-            icon={<UserRound className="size-3.5" />}
-            footer={
-              <>
-                <span aria-live="polite">{dirty ? t("profile.unsaved") : null}</span>
-                <Button
-                  type="submit"
-                  size="sm"
-                  className="ml-auto"
-                  disabled={saving || !dirty}
-                >
-                  {saving ? <Loader2 className="animate-spin" /> : null}
-                  {t("profile.save")}
-                </Button>
-              </>
-            }
-          >
+          <Panel title={t("profile.title")} icon={<UserRound className="size-3.5" />}>
             <div className="divide-y">
               <FormField
                 control={form.control}
@@ -111,7 +94,7 @@ export function SettingsView({
                 render={({ field }) => (
                   <FormItem className={ROW}>
                     <div className="space-y-1.5">
-                      <FormLabel>{t("profile.name")}</FormLabel>
+                      <FormLabel className="font-medium">{t("profile.name")}</FormLabel>
                       <FormDescription className="text-[13px] text-pretty">
                         {t("profile.nameHint")}
                       </FormDescription>
@@ -144,7 +127,7 @@ export function SettingsView({
                 render={({ field }) => (
                   <FormItem className={ROW}>
                     <div className="space-y-1.5">
-                      <FormLabel>{t("profile.timeZone")}</FormLabel>
+                      <FormLabel className="font-medium">{t("profile.timeZone")}</FormLabel>
                       <FormDescription className="text-[13px] text-pretty">
                         {t("profile.timeZoneHint")}
                       </FormDescription>
@@ -164,6 +147,18 @@ export function SettingsView({
                   </FormItem>
                 )}
               />
+
+              {/* The save row: a full row's padding, not the 36px caption footer,
+                  so the button doesn't sit on the panel's bottom edge. */}
+              <div className="flex items-center justify-end gap-3 px-4 py-3">
+                <span aria-live="polite" className="text-muted-foreground text-xs">
+                  {dirty ? t("profile.unsaved") : null}
+                </span>
+                <Button type="submit" size="sm" disabled={saving || !dirty}>
+                  {saving ? <Loader2 className="animate-spin" /> : null}
+                  {t("profile.save")}
+                </Button>
+              </div>
             </div>
           </Panel>
         </form>
@@ -216,7 +211,7 @@ function ZoneFootnote({
         <button
           type="button"
           onClick={() => onUseDevice(device)}
-          className="text-primary font-medium hover:underline"
+          className="text-foreground decoration-foreground/25 hover:decoration-foreground font-medium underline underline-offset-4"
         >
           {t("useDevice", { zone: timeZoneCity(device) })}
         </button>

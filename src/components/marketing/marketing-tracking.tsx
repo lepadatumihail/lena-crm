@@ -77,7 +77,7 @@ function ConsentNotice({ onChoose }: { onChoose: (choice: ConsentChoice) => void
       aria-label={t("title")}
       className="bg-card text-card-foreground fixed inset-x-4 bottom-4 z-[1500] mx-auto max-w-md rounded-xl border p-4 shadow-lg sm:inset-x-auto sm:right-6 sm:bottom-6 sm:w-full sm:max-w-sm"
     >
-      <p className="text-sm font-semibold">{t("title")}</p>
+      <p className="text-sm font-medium">{t("title")}</p>
       <p className="text-muted-foreground mt-1 text-sm">
         {t("body")}{" "}
         <Link

@@ -3,8 +3,7 @@
  * bar and the onboarding checklist. No I/O, so the data module and the page
  * stay thin and this file is unit-tested.
  */
-import { BUYER_STAGES, SELLER_STAGES, STAGE_TONES, type Stage } from "@/lib/crm";
-import { TONE_SOLID } from "@/lib/tones";
+import { BUYER_STAGES, SELLER_STAGES, type Stage } from "@/lib/crm";
 
 export type GreetingPeriod = "morning" | "afternoon" | "evening";
 
@@ -139,11 +138,6 @@ export function relativeAgo(
   return { unit: "month", value: Math.floor(days / 30) };
 }
 
-/** Solid fill for a stage's bar segment or dot, from its shared tone. */
-export function stageBarColor(stage: Stage): string {
-  return TONE_SOLID[STAGE_TONES[stage]];
-}
-
 export type BarSegment = { stage: Stage; count: number; percent: number };
 
 /**
@@ -195,15 +189,24 @@ export type OnboardingStepState = {
   done: boolean;
   /** Not worth doing yet: listed, but not offered. */
   locked: boolean;
+  /** Listed, but the checklist is complete without it. */
+  optional: boolean;
 };
 
 /** Referrals wait until the book has this many clients: the ask comes after the value. */
 export const INVITE_UNLOCK_CLIENTS = 3;
 
+/**
+ * Steps the checklist lists but does not wait for. An invite only counts
+ * once a colleague has signed up, which the agent cannot make happen, so
+ * it never holds the checklist open.
+ */
+export const OPTIONAL_ONBOARDING_STEPS: readonly OnboardingStep[] = ["inviteColleague"];
+
 /** Which getting-started steps are done, in display order. */
 export function onboardingSteps(input: OnboardingInput): OnboardingStepState[] {
   const invited = input.referralCount > 0;
-  return [
+  const states: Omit<OnboardingStepState, "optional">[] = [
     { step: "addName", done: input.hasName, locked: false },
     { step: "addClient", done: input.clientCount > 0, locked: false },
     { step: "scheduleAppointment", done: input.appointmentCount > 0, locked: false },
@@ -214,18 +217,89 @@ export function onboardingSteps(input: OnboardingInput): OnboardingStepState[] {
       locked: !invited && input.clientCount < INVITE_UNLOCK_CLIENTS,
     },
   ];
+  return states.map((s) => ({ ...s, optional: OPTIONAL_ONBOARDING_STEPS.includes(s.step) }));
 }
 
-/** Accounts still finding their feet: fewer than this many clients. */
+/** The required steps done so far and in all: the strip's "2 of 4". */
+export function onboardingProgress(input: OnboardingInput): { done: number; total: number } {
+  const required = onboardingSteps(input).filter((s) => !s.optional);
+  return { done: required.filter((s) => s.done).length, total: required.length };
+}
+
+/** The first step still to do that can be done now, for the strip's "Next:" link. */
+export function nextOnboardingStep(input: OnboardingInput): OnboardingStep | null {
+  return onboardingSteps(input).find((s) => !s.done && !s.locked)?.step ?? null;
+}
+
+/**
+ * Accounts still finding their feet: fewer than this many active clients.
+ * It happens to equal the Free plan's client limit; the two are unrelated.
+ */
 export const ONBOARDING_CLIENT_CAP = 10;
 
 /**
- * Show the checklist while the account is young and something is left to do.
+ * Show the checklist while the account is young and a required step is left.
  * An agent who imports a full book of clients on day one never sees it.
  */
 export function showOnboarding(input: OnboardingInput): boolean {
   if (input.clientCount >= ONBOARDING_CLIENT_CAP) return false;
-  return onboardingSteps(input).some((s) => !s.done);
+  return onboardingSteps(input).some((s) => !s.done && !s.optional);
+}
+
+/**
+ * The cookie that remembers, per device and agent, whether Home still makes
+ * room for Getting started. Its value names the agent ("done.<user id>"), so
+ * on a shared device one account's choice never hides the strip from another.
+ */
+export const HOME_ONBOARDING_COOKIE = "home_onboarding";
+export const HOME_ONBOARDING_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
+/**
+ * What the cookie can say. "hidden": the agent closed the strip, and the
+ * account menu can bring it back. "done": the steps are finished or the book
+ * outgrew them. Either way Home stops holding a place for the strip, so
+ * neither the page nor its loading skeleton draws one that then vanishes.
+ */
+export type OnboardingCookieValue = "hidden" | "done";
+
+/**
+ * What the cookie says for this agent. A value written by another agent, or
+ * in the old unnamed form, counts as nothing. Without an agent id (a page
+ * outside the signed-in shell) any valid value counts.
+ */
+export function onboardingState(
+  cookieValue: string | undefined,
+  agentId: string | null | undefined
+): OnboardingCookieValue | undefined {
+  if (!cookieValue) return undefined;
+  const [state, owner] = cookieValue.split(".");
+  if (state !== "hidden" && state !== "done") return undefined;
+  if (agentId && owner !== agentId) return undefined;
+  return state;
+}
+
+/** Whether Home should hold a place for the strip before its data loads. */
+export function onboardingExpected(state: OnboardingCookieValue | undefined): boolean {
+  return state === undefined;
+}
+
+/** The onboarding cookie's value in a `document.cookie` string. */
+export function readOnboardingCookie(cookies: string): string | undefined {
+  for (const part of cookies.split(";")) {
+    const [name, ...value] = part.trim().split("=");
+    if (name === HOME_ONBOARDING_COOKIE) return value.join("=");
+  }
+  return undefined;
+}
+
+/** A `document.cookie` assignment that stores `value` for this agent, or clears the cookie for null. */
+export function onboardingCookie(
+  value: OnboardingCookieValue | null,
+  agentId?: string | null
+): string {
+  return value
+    ? `${HOME_ONBOARDING_COOKIE}=${value}.${agentId ?? ""}; path=/; max-age=${HOME_ONBOARDING_COOKIE_MAX_AGE}; samesite=lax`
+    : `${HOME_ONBOARDING_COOKIE}=; path=/; max-age=0; samesite=lax`;
 }
 
 /**

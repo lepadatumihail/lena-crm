@@ -53,7 +53,10 @@ export function MonthGrid({
         ))}
       </div>
 
-      <div className="bg-border grid grid-cols-7 gap-px">
+      {/* Cell borders, not a gap over a grey backing: the tinted cells
+          (other months, the selected day, hover) are translucent and would
+          let that grey through. */}
+      <div className="grid grid-cols-7">
         {days.map((day) => {
           const key = dayKey(day);
           const items = byDay.get(key) ?? [];
@@ -66,9 +69,10 @@ export function MonthGrid({
               key={key}
               onClick={() => onSelectDay(key)}
               className={cn(
-                "bg-card hover:bg-accent/50 flex min-h-16 cursor-pointer flex-col gap-1 p-1 transition-colors md:min-h-24 md:p-1.5",
-                !inMonth && "bg-muted/30",
-                selected && "bg-accent/60 md:bg-card"
+                "hover:bg-accent/50 flex min-h-16 cursor-pointer flex-col gap-1 border-r border-b p-1 transition-colors md:min-h-24 md:p-1.5 [&:nth-child(7n)]:border-r-0 [&:nth-last-child(-n+7)]:border-b-0",
+                !inMonth && "bg-muted/50",
+                // A phone lists the selected day below; a desktop opens a dialog.
+                selected && "max-md:bg-accent/60"
               )}
             >
               <button
@@ -80,10 +84,10 @@ export function MonthGrid({
                 aria-label={format(day, "EEEE d MMMM", { locale: dateLocale })}
                 aria-pressed={selected}
                 className={cn(
-                  "flex size-6 items-center justify-center rounded-full text-xs font-medium",
+                  "flex size-6 items-center justify-center rounded-full text-xs",
                   (!inMonth || past) && "text-muted-foreground",
-                  today && "bg-primary text-primary-foreground",
-                  selected && !today && "ring-primary ring-1"
+                  today && "bg-primary text-primary-foreground font-medium",
+                  selected && !today && "ring-primary font-medium ring-1"
                 )}
               >
                 {format(day, "d")}
@@ -123,7 +127,7 @@ export function MonthGrid({
                       TONE_BG[EVENT_TONES[e.kind]],
                       TONE_INK[EVENT_TONES[e.kind]],
                       TONE_BG_HOVER[EVENT_TONES[e.kind]],
-                      past && "opacity-60"
+                      past && "opacity-70"
                     )}
                   >
                     <span className="tabular-nums">

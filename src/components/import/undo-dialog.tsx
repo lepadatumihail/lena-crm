@@ -101,7 +101,7 @@ export function UndoDialog({
         ) : null}
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="ghost">{tCommon("cancel")}</Button>
+            <Button variant="outline">{tCommon("cancel")}</Button>
           </DialogClose>
           <Button variant="destructive" onClick={undo} disabled={busy || preview === null || !!preview.error}>
             {busy && <Loader2 className="animate-spin" />}

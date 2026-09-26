@@ -5,8 +5,9 @@ import { cn } from "@/lib/utils";
 
 /*
   Labelled values inside a panel (the client page, billing): one value per
-  row, label left and value right, hairlines between. The same rhythm as the list table, so a panel of
-  details reads like a small table.
+  row, label left in grey and value right in ink, both regular weight,
+  hairlines between. The same rhythm as the list table, so a panel of details
+  reads like a small table.
 */
 
 export function KeyValueList({
@@ -64,13 +65,13 @@ export function KeyValueRow({
         {Icon ? <Icon className="size-3.5 shrink-0" strokeWidth={1.75} /> : null}
         {label}
       </dt>
-      <dd className="flex min-w-0 items-center gap-1 text-right text-sm font-medium tabular-nums">
+      <dd className="text-foreground flex min-w-0 items-center gap-1 text-right text-sm tabular-nums">
         <div className="min-w-0">
           {value}
           {hint ? (
             <span
               className={cn(
-                "text-muted-foreground block text-xs font-normal",
+                "text-muted-foreground block text-xs",
                 wrap ? "text-pretty" : "truncate"
               )}
             >

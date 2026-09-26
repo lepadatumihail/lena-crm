@@ -56,7 +56,8 @@
     "light": "Claro",
     "dark": "Oscuro",
     "system": "Sistema",
-    "language": "Idioma"
+    "language": "Idioma",
+    "showOnboarding": "Mostrar primeros pasos"
   },
   "quickSearch": {
     "placeholder": "Busca clientes o salta a una página…",

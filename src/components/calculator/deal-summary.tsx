@@ -59,8 +59,12 @@ export type DealView = {
   labels: DealLabels;
 };
 
+/** Profit green, loss red; zero (an empty form) and "—" stay ink. */
 const tone = (n: number) =>
-  !Number.isFinite(n) ? "" : n >= 0 ? "text-success" : "text-destructive";
+  !Number.isFinite(n) || n === 0 ? "" : n > 0 ? "text-success" : "text-destructive";
+
+/** The exit table is a grid of figures: only a loss is coloured, so it stands out. */
+const lossTone = (n: number) => (Number.isFinite(n) && n < 0 ? "text-destructive" : "");
 
 /** A label / value ledger line. */
 function Line({
@@ -81,7 +85,7 @@ function Line({
       className={cn(
         "flex items-baseline justify-between gap-4 py-1.5 text-sm",
         divider && "border-border mt-1 border-t pt-2.5",
-        bold && "font-semibold"
+        bold && "font-medium"
       )}
     >
       <span className={cn(!bold && "text-muted-foreground")}>{label}</span>
@@ -92,7 +96,7 @@ function Line({
 
 function SectionLabel({ children }: { children: string }) {
   return (
-    <h3 className="text-muted-foreground mb-1 text-[11px] font-semibold tracking-[0.12em] uppercase">
+    <h3 className="section-label text-muted-foreground mb-1">
       {children}
     </h3>
   );
@@ -103,25 +107,34 @@ export function DealSummary({ title, input, result, labels }: DealView) {
   return (
     <div className="text-foreground">
       {/* Header */}
-      <div className="border-foreground/80 border-b-2 pb-3">
-        <h2 className="text-2xl font-bold tracking-tight">
+      <div className="border-foreground/70 border-b pb-3">
+        <h2 className="text-2xl font-semibold tracking-tight">
           {title || labels.untitled}
         </h2>
         <p className="text-muted-foreground mt-1 text-xs">{labels.subtitle}</p>
       </div>
 
-      {/* KPI row */}
-      <div className="border-border mt-5 grid grid-cols-2 divide-x divide-y rounded-lg border sm:grid-cols-4 sm:divide-y-0">
+      {/* KPI row: 2 x 2 on a phone, 4 across from sm. Each tile draws only its
+          inner edges, so no line doubles up on the outer border or runs past
+          its rounded corners. */}
+      <div className="border-border mt-5 grid grid-cols-2 rounded-lg border sm:grid-cols-4">
         <Kpi
           label={labels.netProfit}
           value={formatEuro(r.netProfit)}
           valueClass={tone(r.netProfit)}
+          className="border-r border-b sm:border-b-0"
         />
-        <Kpi label={labels.roi} value={formatSignedPercent(r.roi)} valueClass={tone(r.roi)} />
+        <Kpi
+          label={labels.roi}
+          value={formatSignedPercent(r.roi)}
+          valueClass={tone(r.roi)}
+          className="border-b sm:border-r sm:border-b-0"
+        />
         <Kpi
           label={labels.irrExit}
           value={formatSignedPercent(r.irr)}
           valueClass={tone(r.irr)}
+          className="border-r"
         />
         <Kpi label={labels.capitalDeployed} value={formatEuro(r.capitalDeployed)} />
       </div>
@@ -132,7 +145,7 @@ export function DealSummary({ title, input, result, labels }: DealView) {
           <SectionLabel>{labels.acquisition}</SectionLabel>
           <Line label={labels.purchasePrice} value={formatEuro(input.askingPrice)} />
           <Line label={labels.transferTax} value={formatEuro(r.transferTax)} />
-          <div className="mt-1.5" />
+          {/* No spacer here: the rows line up with the Project column beside them. */}
           <Line label={labels.lawyerFee} value={formatEuro(r.lawyerFee)} />
           <Line label={labels.notaryFee} value={formatEuro(r.notaryFee)} />
           <Line
@@ -184,37 +197,38 @@ export function DealSummary({ title, input, result, labels }: DealView) {
         <div className="overflow-hidden rounded-lg border">
           <table className="w-full text-sm tabular-nums">
             <thead>
-              <tr className="text-muted-foreground bg-muted/60 text-[11px] tracking-wide uppercase">
-                <th className="px-3 py-2 text-left font-medium">{labels.colExit}</th>
-                <th className="px-3 py-2 text-right font-medium">
+              <tr className="text-muted-foreground bg-muted/60 border-b text-xs">
+                <th className="px-2 py-2 text-left font-normal sm:px-3">{labels.colExit}</th>
+                <th className="px-2 py-2 text-right font-normal sm:px-3">
                   {labels.colNetProfit}
                 </th>
-                <th className="px-3 py-2 text-right font-medium">{labels.colRoi}</th>
-                <th className="px-3 py-2 text-right font-medium">{labels.colIrr}</th>
+                <th className="px-2 py-2 text-right font-normal sm:px-3">{labels.colRoi}</th>
+                <th className="px-2 py-2 text-right font-normal sm:px-3">{labels.colIrr}</th>
               </tr>
             </thead>
-            <tbody>
-              {r.exitTimeline.map((row, i) => {
+            {/* Hairlines between rows, not stripes; the plan's own exit is the one
+                shaded, medium-weight row. */}
+            <tbody className="divide-y">
+              {r.exitTimeline.map((row) => {
                 const isBase = row.months === input.durationMonths;
                 return (
-                  <tr
-                    key={row.months}
-                    className={cn(
-                      i % 2 === 1 && "bg-muted/30",
-                      isBase && "bg-primary/5"
-                    )}
-                  >
-                    <td className="px-3 py-2 text-left font-medium">
+                  <tr key={row.months} className={cn(isBase && "bg-muted/40")}>
+                    <td
+                      className={cn(
+                        "px-2 py-2 text-left whitespace-nowrap sm:px-3",
+                        isBase && "font-medium"
+                      )}
+                    >
                       {labels.exitRow(row.months)}
                       {isBase ? " •" : ""}
                     </td>
-                    <td className={cn("px-3 py-2 text-right", tone(row.netProfit))}>
+                    <td className={cn("px-2 py-2 text-right sm:px-3", lossTone(row.netProfit))}>
                       {formatEuro(row.netProfit)}
                     </td>
-                    <td className={cn("px-3 py-2 text-right", tone(row.roi))}>
+                    <td className={cn("px-2 py-2 text-right sm:px-3", lossTone(row.roi))}>
                       {formatSignedPercent(row.roi)}
                     </td>
-                    <td className={cn("px-3 py-2 text-right", tone(row.irr))}>
+                    <td className={cn("px-2 py-2 text-right sm:px-3", lossTone(row.irr))}>
                       {formatSignedPercent(row.irr)}
                     </td>
                   </tr>
@@ -232,17 +246,19 @@ function Kpi({
   label,
   value,
   valueClass,
+  className,
 }: {
   label: string;
   value: string;
   valueClass?: string;
+  className?: string;
 }) {
   return (
-    <div className="px-4 py-3">
-      <div className="text-muted-foreground text-[10px] font-semibold tracking-[0.1em] uppercase">
+    <div className={cn("border-border px-4 py-3", className)}>
+      <div className="section-label text-muted-foreground">
         {label}
       </div>
-      <div className={cn("mt-1 text-lg font-bold tabular-nums", valueClass)}>
+      <div className={cn("mt-1 text-lg font-medium tabular-nums", valueClass)}>
         {value}
       </div>
     </div>

@@ -6,15 +6,19 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
   Bell,
+  BellRing,
   Building2,
   CalendarDays,
   Check,
-  EllipsisVertical,
   Home,
   LayoutGrid,
   List,
+  ListChecks,
+  Mail,
   MessageCircle,
+  MoreHorizontal,
   PanelLeft,
+  Phone,
   Plus,
   Search,
   Star,
@@ -30,17 +34,19 @@ import { ClientAvatar } from "@/components/clients/client-avatar";
 import { Money } from "@/components/ui/money";
 import { Tag } from "@/components/ui/tag";
 import { BUYER_STAGES, STAGE_TONES, type Stage } from "@/lib/crm";
-import { TONE_INK, TONE_SOLID, type Tone } from "@/lib/tones";
+import { TONE_BG, TONE_INK, TONE_SOLID, type Tone } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 
 /*
   The hero's live demo: the Buyers list inside the app shell, drawn with the
-  same primitives as the real screen (tags, avatars, money, the 38/42px table
-  rhythm), so what a visitor sees above the fold is what they get after
-  signing in. A short loop plays out a week: a lead arrives, a buyer moves to
+  same primitives as the real screen (tags, avatars, money, two-line rows
+  with the last contact under the name, the Needs follow-up tab), so what a
+  visitor sees above the fold is what they get after signing in. A short loop plays out a week: a lead arrives, a buyer moves to
   a viewing, an offer is accepted, a reminder goes out; then the board resets.
   Decorative: aria-hidden, nothing in it takes focus.
 */
+
+type Channel = "whatsapp" | "call" | "email";
 
 type Row = {
   id: string;
@@ -50,9 +56,24 @@ type Row = {
   budgetMin: number | null;
   budgetMax: number | null;
   viewings: number;
-  /** Hours since the agent last touched the record. */
-  quietHours: number;
+  /** How the agent last reached the client, and how many hours ago; null for never. */
+  contact: { channel: Channel; hours: number } | null;
+  /** The channels the row's icons can open (the others keep their slot). */
+  reach: Channel[];
 };
+
+const CHANNELS: Channel[] = ["whatsapp", "call", "email"];
+const CHANNEL_ICONS: Record<Channel, LucideIcon> = {
+  whatsapp: MessageCircle,
+  call: Phone,
+  email: Mail,
+};
+
+/** The app's Needs follow-up rule: a lead nobody has reached, or a buyer quiet for a week. */
+function needsFollowUp(r: Row): boolean {
+  if (r.contact == null) return r.stage === "new";
+  return r.stage !== "reserved" && r.contact.hours >= 7 * 24;
+}
 
 // Sample records. Names are proper nouns and figures are numbers, so the rows
 // read the same in every UI language; only the labels around them translate.
@@ -65,7 +86,8 @@ const ROWS: Record<string, Row> = {
     budgetMin: 600_000,
     budgetMax: 800_000,
     viewings: 3,
-    quietHours: 2,
+    contact: { channel: "whatsapp", hours: 2 },
+    reach: CHANNELS,
   },
   james: {
     id: "james",
@@ -74,7 +96,8 @@ const ROWS: Record<string, Row> = {
     budgetMin: null,
     budgetMax: 750_000,
     viewings: 0,
-    quietHours: 26,
+    contact: { channel: "call", hours: 26 },
+    reach: CHANNELS,
   },
   anya: {
     id: "anya",
@@ -83,7 +106,8 @@ const ROWS: Record<string, Row> = {
     budgetMin: 1_200_000,
     budgetMax: null,
     viewings: 0,
-    quietHours: 120,
+    contact: { channel: "email", hours: 9 * 24 },
+    reach: ["email"],
   },
   tom: {
     id: "tom",
@@ -92,7 +116,8 @@ const ROWS: Record<string, Row> = {
     budgetMin: null,
     budgetMax: 2_400_000,
     viewings: 0,
-    quietHours: 0,
+    contact: null,
+    reach: ["whatsapp", "call"],
   },
 };
 
@@ -118,13 +143,13 @@ type ToastKind = "newLead" | "moved" | "offerAccepted" | "reminderSent";
 type ToastTone = Tone | "whatsapp";
 type Toast = { id: number; kind: ToastKind; tone: ToastTone; icon: LucideIcon };
 
-/** "2 hours ago", "yesterday", "last week": Intl does the wording per language. */
+/** "2 hours ago", "yesterday", "9 days ago": Intl does the wording per language. */
 function sinceLabel(hours: number, tag: string): string {
   const rtf = new Intl.RelativeTimeFormat(tag, { numeric: "auto" });
   if (hours < 1) return rtf.format(0, "second");
   if (hours < 24) return rtf.format(-hours, "hour");
   const days = Math.round(hours / 24);
-  if (days < 7) return rtf.format(-days, "day");
+  if (days < 14) return rtf.format(-days, "day");
   return rtf.format(-Math.round(days / 7), "week");
 }
 
@@ -149,12 +174,16 @@ function Flip({ value, className }: { value: ReactNode; className?: string }) {
 }
 
 /*
-  Column templates per breakpoint: name and stage on a phone, budget from sm,
-  the checkbox, activity and menu from md, the viewings tally from lg (where
-  the sidebar takes its share of the width, the name still needs ~180px).
+  Column templates per breakpoint. A phone gets the app's row list: the stage
+  on the name's line, the last contact under it, one WhatsApp or Call icon at
+  the end. From sm it is the table: name, stage and budget, the checkbox and
+  menu from md, the contact icons from lg, the viewings tally from xl, where
+  the window reaches its full width. Each column waits until the name keeps
+  room for the line under it ("WhatsApp · hace 2 horas"). The icons column
+  is three 28px buttons, as in the app.
 */
 const GRID =
-  "grid grid-cols-[minmax(0,1fr)_7.5rem] items-center sm:grid-cols-[minmax(0,1fr)_7rem_10.5rem] md:grid-cols-[2.25rem_minmax(0,1fr)_7rem_10.5rem_8rem_2.5rem] lg:grid-cols-[2.25rem_minmax(0,1fr)_7rem_10.5rem_4.5rem_8rem_2.5rem]";
+  "grid grid-cols-[minmax(0,1fr)_2.25rem] items-center sm:grid-cols-[minmax(0,1fr)_7rem_10.5rem] md:grid-cols-[2.25rem_minmax(0,1fr)_7rem_10.5rem_2.5rem] lg:grid-cols-[2.25rem_minmax(0,1fr)_7rem_10.5rem_6rem_2.5rem] xl:grid-cols-[2.25rem_minmax(0,1fr)_7rem_10.5rem_4.5rem_6rem_2.5rem]";
 
 export function AppPreview() {
   const t = useTranslations("landing");
@@ -190,13 +219,13 @@ export function AppPreview() {
         pushToast("newLead", "neutral", UserPlus);
       } else if (step === 1) {
         patch("james", { stage: "viewing" });
-        pushToast("moved", "brand", ArrowRight);
+        pushToast("moved", "neutral", ArrowRight);
       } else if (step === 2) {
         patch("sofia", { stage: "reserved" });
         setUnread((n) => n + 1);
         pushToast("offerAccepted", "green", Check);
       } else if (step === 3) {
-        patch("james", { quietHours: 0 });
+        patch("james", { contact: { channel: "whatsapp", hours: 0 } });
         pushToast("reminderSent", "whatsapp", MessageCircle);
       } else {
         setRows(initialRows());
@@ -209,6 +238,7 @@ export function AppPreview() {
 
   const stageCount = new Map<Stage, number>();
   for (const r of rows) stageCount.set(r.stage, (stageCount.get(r.stage) ?? 0) + 1);
+  const followUpCount = rows.filter(needsFollowUp).length;
 
   function toastText(kind: ToastKind): string {
     switch (kind) {
@@ -248,10 +278,6 @@ export function AppPreview() {
 
   return (
     <div aria-hidden className="relative mx-auto w-full max-w-5xl">
-      {/* The glow stays inside the page gutter on phones: anything wider
-          than the viewport gives the whole page a horizontal scroll. */}
-      <div className="from-primary/12 absolute -inset-x-3 -top-8 -bottom-8 -z-10 rounded-[2.5rem] bg-gradient-to-tr to-transparent blur-2xl sm:-inset-x-8" />
-
       <div className="bg-background text-foreground mock-lift flex overflow-hidden rounded-2xl text-left text-sm select-none">
         {/* Sidebar: the shell's destinations and the buyer pipeline. */}
         <aside className="bg-sidebar text-sidebar-foreground hidden w-52 shrink-0 flex-col border-r lg:flex">
@@ -269,9 +295,10 @@ export function AppPreview() {
             <SideItem icon={Users} label={tNav("buyers")} badge={rows.length} active />
             <SideItem icon={Building2} label={tNav("sellers")} badge={3} />
             <SideItem icon={CalendarDays} label={tNav("calendar")} badge={2} />
+            <SideItem icon={ListChecks} label={tNav("tasks")} badge={2} />
           </div>
           <div className="px-2 pb-2">
-            <p className="label-caps text-muted-foreground/80 flex h-7 items-center px-2">
+            <p className="section-label text-muted-foreground flex h-7 items-center px-2">
               {tNav("pipeline")}
             </p>
             <div className="flex flex-col gap-0.5">
@@ -294,7 +321,7 @@ export function AppPreview() {
               <PanelLeft className="size-4" strokeWidth={1.75} />
             </span>
             <div className="flex min-w-0 items-center gap-2.5">
-              <span className="truncate text-[15px] font-medium tracking-tight">
+              <span className="truncate text-[15px] font-medium">
                 {tNav("buyers")}
               </span>
               <span className="bg-card text-muted-foreground hidden h-6 shrink-0 items-center gap-1.5 rounded-full border px-2.5 text-xs whitespace-nowrap sm:inline-flex">
@@ -315,15 +342,20 @@ export function AppPreview() {
                       animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                       exit={{ opacity: 0, scale: 0.25, filter: "blur(4px)" }}
                       transition={SPRING}
-                      className="bg-primary text-primary-foreground ring-background absolute top-0.5 right-0.5 flex size-4 items-center justify-center rounded-full text-[10px] font-semibold ring-2"
-                    >
-                      {unread}
-                    </motion.span>
+                      aria-hidden
+                      className="bg-tone-red ring-background absolute top-1.5 right-1.5 size-2 rounded-full ring-2"
+                    />
                   ) : null}
                 </AnimatePresence>
               </span>
-              <span className="bg-card ml-1 flex h-8 items-center gap-2 rounded-full border pr-2.5 pl-0.5 text-xs font-medium">
-                <span className="bg-primary/12 text-primary flex size-[26px] items-center justify-center rounded-full text-[10px] font-semibold">
+              <span className="bg-card ml-1 flex h-8 items-center gap-2 rounded-lg border pr-2.5 pl-0.5 text-xs">
+                <span
+                  className={cn(
+                    "flex size-[26px] items-center justify-center rounded-full text-[10px] font-medium",
+                    TONE_BG.neutral,
+                    TONE_INK.neutral
+                  )}
+                >
                   MR
                 </span>
                 <span className="hidden sm:block">Marta</span>
@@ -337,8 +369,16 @@ export function AppPreview() {
               a card inside a card. */}
           <div className="relative flex-1 space-y-3 pt-3 pb-14 sm:p-4 sm:pb-14">
             {/* Stage tabs: every stage with its live count. */}
-            <div className="scrollbar-none flex items-end overflow-x-auto border-b max-md:[mask-image:linear-gradient(to_right,#000_calc(100%-2.5rem),transparent)] sm:-mx-1 sm:px-1">
+            {/* The strip fades out at its right end at every width: in Spanish
+                it runs past the window until the window is at full width. */}
+            <div className="scrollbar-none flex items-end overflow-x-auto border-b [mask-image:linear-gradient(to_right,#000_calc(100%-2.5rem),transparent)] sm:-mx-1 sm:px-1">
               <StageTab label={tClients("list.all")} count={rows.length} active />
+              <StageTab
+                icon={BellRing}
+                label={tClients("list.followUp")}
+                count={followUpCount}
+                inkCount
+              />
               {BUYER_STAGES.map((s) => (
                 <StageTab
                   key={s}
@@ -351,11 +391,11 @@ export function AppPreview() {
 
             {/* Toolbar */}
             <div className="flex items-center gap-2 px-3 sm:px-0">
-              <span className="bg-background text-muted-foreground flex h-8 min-w-0 flex-1 items-center gap-2 rounded-md border px-2.5 text-[13px] shadow-xs sm:max-w-64">
+              <span className="bg-background text-muted-foreground flex h-8 min-w-0 flex-1 items-center gap-2 rounded-lg border px-2.5 text-[13px] shadow-xs sm:max-w-64">
                 <Search className="size-4 shrink-0" strokeWidth={1.75} />
                 <span className="truncate">{tClients("list.searchPlaceholder")}</span>
               </span>
-              <span className="bg-background text-muted-foreground hidden h-8 items-center gap-1.5 rounded-lg border px-2.5 text-xs font-medium shadow-xs sm:inline-flex">
+              <span className="bg-background text-muted-foreground hidden h-8 items-center gap-1.5 rounded-lg border px-2.5 text-xs shadow-xs sm:inline-flex">
                 <Star className="size-3.5" />
                 {tClients("list.priority")}
               </span>
@@ -368,7 +408,8 @@ export function AppPreview() {
                     <LayoutGrid className="size-4" strokeWidth={1.75} />
                   </span>
                 </span>
-                <span className="bg-primary text-primary-foreground inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-medium shadow-xs">
+                {/* The view's one ink action, drawn as the app's Button at size sm. */}
+                <span className="bg-primary text-primary-foreground inline-flex h-8 shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-[13px] font-medium shadow-xs">
                   <Plus className="size-4" />
                   {tClients("list.newClient", { side: "buyer" })}
                 </span>
@@ -380,7 +421,8 @@ export function AppPreview() {
               <div
                 className={cn(
                   GRID,
-                  "text-muted-foreground h-[38px] border-b text-xs [&>span]:px-3"
+                  // A phone gets the app's row list, which has no header.
+                  "text-muted-foreground h-[38px] border-b text-xs max-sm:hidden [&>span]:px-3"
                 )}
               >
                 <span className="hidden md:block">
@@ -389,19 +431,20 @@ export function AppPreview() {
                 <span>{tClients("table.name")}</span>
                 <span>{tClients("table.stage")}</span>
                 <span className="hidden text-right sm:block">{tClients("table.budget")}</span>
-                <span className="hidden text-right lg:block">
+                <span className="hidden text-right xl:block">
                   {tClients("table.viewings")}
                 </span>
-                <span className="hidden md:block">{tClients("table.lastActivity")}</span>
+                <span className="hidden lg:block" />
                 <span className="hidden md:block" />
               </div>
 
               {/* A fixed window of three rows, so the board keeps its height
                   when the fourth arrives: the list scrolls the way a real one
                   would, and the last row slides out under the bottom edge.
-                  125px is three 42px rows less the third row's bottom border,
-                  which would otherwise double the card's own. */}
-              <div className="relative h-[125px] overflow-hidden">
+                  164px is three 55px rows (the app's two-line row) less the
+                  third row's bottom border, which would otherwise double the
+                  card's own. */}
+              <div className="relative h-[164px] overflow-hidden">
                 <AnimatePresence initial={false} mode="popLayout">
                   {rows.map((r) => (
                     <motion.div
@@ -413,60 +456,104 @@ export function AppPreview() {
                       transition={LAYOUT_SPRING}
                       className={cn(
                         GRID,
-                        "relative h-[42px] border-b whitespace-nowrap last:border-0 [&>span]:px-3"
+                        "relative h-[55px] border-b whitespace-nowrap last:border-0 [&>span]:px-3"
                       )}
                     >
                       {r.id === "tom" ? (
-                        // A new lead lands on a brand-tinted row that settles
-                        // into the list, so the eye finds it before reading.
+                        // A new lead lands on a pale blue row (blue is the New
+                        // stage's tone) that settles into the list, so the eye
+                        // finds it before reading.
                         <motion.span
                           aria-hidden
                           initial={{ opacity: 1 }}
                           animate={{ opacity: 0 }}
                           transition={{ duration: 1.4, delay: 0.5, ease: "easeOut" }}
-                          className="bg-primary/[0.07] pointer-events-none absolute inset-0 !px-0"
+                          className="bg-tone-blue-soft pointer-events-none absolute inset-0 !px-0"
                         />
                       ) : null}
                       <span className="hidden md:block">
                         <span className="border-input block size-4 rounded-[4px] border shadow-xs" />
                       </span>
                       <span className="flex min-w-0 items-center gap-2.5">
-                        <ClientAvatar name={r.name} side="buyer" />
-                        <span className="truncate font-medium">{r.name}</span>
-                        {r.priority ? (
-                          <Star className="fill-primary text-primary size-3.5 shrink-0" />
-                        ) : null}
+                        <ClientAvatar name={r.name} side="buyer" size="md" />
+                        <span className="min-w-0 flex-1">
+                          <span className="flex min-w-0 items-center gap-2">
+                            <span className="truncate font-medium">{r.name}</span>
+                            {r.priority ? (
+                              <Star className="fill-foreground text-foreground size-3.5 shrink-0" />
+                            ) : null}
+                            <StageSwap
+                              stage={r.stage}
+                              label={stageLabel(tCrm, r.stage)}
+                              className="ml-auto shrink-0 sm:hidden"
+                            />
+                          </span>
+                          <span className="relative mt-0.5 flex text-xs">
+                            <AnimatePresence mode="popLayout" initial={false}>
+                              <motion.span
+                                key={r.contact ? `${r.contact.channel}-${r.contact.hours}` : "none"}
+                                initial={{ opacity: 0, y: 6, filter: "blur(4px)" }}
+                                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                                exit={{ opacity: 0, y: -6, filter: "blur(4px)" }}
+                                transition={SPRING}
+                                className="text-muted-foreground flex min-w-0 items-center gap-1.5"
+                              >
+                                {r.contact ? (
+                                  <ContactLine
+                                    icon={CHANNEL_ICONS[r.contact.channel]}
+                                    label={tClients(`latest.channels.${r.contact.channel}`)}
+                                    since={sinceLabel(r.contact.hours, tag)}
+                                  />
+                                ) : (
+                                  <span className="truncate">{tClients("latest.none")}</span>
+                                )}
+                              </motion.span>
+                            </AnimatePresence>
+                          </span>
+                        </span>
                       </span>
-                      <span className="relative flex items-center">
-                        <AnimatePresence mode="popLayout" initial={false}>
-                          <motion.span
-                            key={r.stage}
-                            initial={{ opacity: 0, scale: 0.9, filter: "blur(4px)" }}
-                            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                            exit={{ opacity: 0, scale: 0.9, filter: "blur(4px)" }}
-                            transition={SPRING}
-                            className="inline-flex"
-                          >
-                            <Tag tone={STAGE_TONES[r.stage]} dot>
-                              {stageLabel(tCrm, r.stage)}
-                            </Tag>
-                          </motion.span>
-                        </AnimatePresence>
+                      <StageSwap
+                        stage={r.stage}
+                        label={stageLabel(tCrm, r.stage)}
+                        className="hidden sm:flex"
+                      />
+                      {/* Right-aligned by flex, so a range wider than the column
+                          ("600.000 € – 800.000 €") grows to the left instead of
+                          past the column's edge. */}
+                      <span className="hidden justify-end tabular-nums sm:flex">
+                        <span className="whitespace-nowrap">{budget(r)}</span>
                       </span>
-                      <span className="hidden text-right tabular-nums sm:block">{budget(r)}</span>
-                      <span className="hidden text-right tabular-nums lg:block">
+                      <span className="hidden text-right tabular-nums xl:block">
                         {r.viewings > 0 ? (
                           r.viewings
                         ) : (
                           <span className="text-muted-foreground">0</span>
                         )}
                       </span>
-                      <span className="text-muted-foreground hidden items-center gap-1.5 text-[13px] md:flex">
-                        <CalendarDays className="size-3.5 shrink-0" strokeWidth={1.75} />
-                        <Flip value={sinceLabel(r.quietHours, tag)} />
+                      {/* One-tap WhatsApp, Call and Email; a missing channel keeps its slot. */}
+                      <span className="text-muted-foreground hidden items-center justify-end gap-0.5 !px-1 lg:flex">
+                        {CHANNELS.map((channel) => {
+                          const Icon = CHANNEL_ICONS[channel];
+                          return (
+                            <span key={channel} className="flex size-7 items-center justify-center">
+                              {r.reach.includes(channel) ? (
+                                <Icon className="size-3.5" strokeWidth={1.75} />
+                              ) : null}
+                            </span>
+                          );
+                        })}
                       </span>
                       <span className="text-muted-foreground hidden items-center justify-end md:flex">
-                        <EllipsisVertical className="size-4" strokeWidth={1.75} />
+                        <MoreHorizontal className="size-3.5" strokeWidth={1.75} />
+                      </span>
+                      {/* The phone row's one icon: WhatsApp, else Call. */}
+                      <span className="text-muted-foreground flex items-center justify-end !pl-0 sm:hidden">
+                        {(() => {
+                          const channel = r.reach.find((c) => c !== "email");
+                          if (!channel) return null;
+                          const Icon = CHANNEL_ICONS[channel];
+                          return <Icon className="size-4" strokeWidth={1.75} />;
+                        })()}
                       </span>
                     </motion.div>
                   ))}
@@ -494,7 +581,7 @@ export function AppPreview() {
                     <toast.icon
                       className={cn(
                         "size-4 shrink-0",
-                        toast.tone === "whatsapp" ? "text-[#25D366]" : TONE_INK[toast.tone]
+                        toast.tone === "whatsapp" ? "text-muted-foreground" : TONE_INK[toast.tone]
                       )}
                       strokeWidth={2}
                     />
@@ -529,8 +616,8 @@ function SideItem({
       className={cn(
         "relative flex h-8 items-center gap-2 rounded-lg px-2 text-sm",
         active
-          ? "bg-sidebar-active text-sidebar-active-foreground font-medium"
-          : "text-muted-foreground font-medium"
+          ? "bg-sidebar-active text-sidebar-active-foreground inset-ring-sidebar-border font-medium shadow-xs inset-ring dark:shadow-none dark:inset-ring-0"
+          : "text-muted-foreground"
       )}
     >
       {Icon ? <Icon className="size-4 shrink-0" strokeWidth={1.75} /> : null}
@@ -539,8 +626,8 @@ function SideItem({
       {badge != null ? (
         <span
           className={cn(
-            "text-muted-foreground absolute right-2 flex h-[18px] min-w-6 items-center justify-center rounded-full border px-1.5 text-[11px] font-medium tabular-nums",
-            active ? "bg-background" : "bg-sidebar-accent/70",
+            "absolute right-2 flex h-5 min-w-5 items-center justify-end text-xs tabular-nums",
+            active ? "text-sidebar-active-foreground" : "text-muted-foreground",
             badge === 0 && "opacity-50"
           )}
         >
@@ -551,31 +638,91 @@ function SideItem({
   );
 }
 
+/** A row's stage tag, cross-fading when the stage changes. */
+function StageSwap({
+  stage,
+  label,
+  className,
+}: {
+  stage: Stage;
+  label: string;
+  className?: string;
+}) {
+  return (
+    <span className={cn("relative flex items-center", className)}>
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={stage}
+          initial={{ opacity: 0, scale: 0.9, filter: "blur(4px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          exit={{ opacity: 0, scale: 0.9, filter: "blur(4px)" }}
+          transition={SPRING}
+          className="inline-flex"
+        >
+          <Tag tone={STAGE_TONES[stage]}>{label}</Tag>
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
+
+/** The line under a name: the channel's icon and word, then when ("Call · yesterday"). */
+function ContactLine({
+  icon: Icon,
+  label,
+  since,
+}: {
+  icon: LucideIcon;
+  label: string;
+  since: string;
+}) {
+  return (
+    <>
+      <Icon className="size-3.5 shrink-0" strokeWidth={1.75} />
+      <span className="truncate">{label}</span>
+      <span aria-hidden>·</span>
+      <span className="shrink-0">{since}</span>
+    </>
+  );
+}
+
 /** One tab in the stage strip above the list. */
 function StageTab({
   label,
   count,
   dot,
+  icon: Icon,
+  inkCount = false,
   active = false,
 }: {
   label: string;
   count: number;
   dot?: string;
+  icon?: LucideIcon;
+  /** Needs follow-up: above zero the count reads in ink, as in the app. */
+  inkCount?: boolean;
   active?: boolean;
 }) {
   return (
     <span
       className={cn(
-        "-mb-px flex h-9 shrink-0 items-center gap-1.5 border-b-2 px-3 text-xs font-medium whitespace-nowrap",
-        active ? "border-foreground text-foreground" : "text-muted-foreground border-transparent"
+        "-mb-px flex h-9 shrink-0 items-center gap-1.5 border-b-2 px-3 text-xs whitespace-nowrap",
+        active
+          ? "border-foreground text-foreground font-medium"
+          : "text-muted-foreground border-transparent"
       )}
     >
       {dot ? <span className={cn("size-1.5 rounded-full", dot)} /> : null}
+      {Icon ? <Icon className="size-3.5 shrink-0" strokeWidth={1.75} /> : null}
       {label}
       <span
         className={cn(
-          "inline-flex h-[18px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] tabular-nums",
-          active ? "bg-foreground/10 text-foreground" : "bg-muted text-muted-foreground"
+          "inline-flex h-[18px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] font-normal tabular-nums",
+          inkCount && count > 0
+            ? cn(TONE_BG.ink, TONE_INK.ink, "font-medium")
+            : active
+              ? "bg-foreground/10 text-foreground"
+              : "bg-muted text-muted-foreground"
         )}
       >
         <Flip value={count} />

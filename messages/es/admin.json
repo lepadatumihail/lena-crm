@@ -59,11 +59,11 @@
     },
     "empty": "Todavía no hay meses gratis.",
     "kind": {
-      "proTime": "tiempo pro",
-      "balance": "saldo"
+      "proTime": "Tiempo pro",
+      "balance": "Saldo"
     },
     "months": "{count, plural, one {# mes} other {# meses}}",
-    "applied": "aplicado",
-    "pending": "pendiente"
+    "applied": "Aplicado",
+    "pending": "Pendiente"
   }
 }

@@ -360,7 +360,7 @@ export function AppointmentDialog({
               <div className="flex gap-2">
                 <Button
                   type="button"
-                  variant="ghost"
+                  variant="outline"
                   onClick={() => onOpenChange(false)}
                 >
                   {tCommon("cancel")}

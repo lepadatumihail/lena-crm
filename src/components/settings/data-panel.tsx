@@ -46,7 +46,7 @@ export function DataPanel({ rowClassName }: { rowClassName: string }) {
             email: () => (
               <a
                 href={`mailto:${SUPPORT_EMAIL}`}
-                className="text-foreground font-medium hover:underline"
+                className="text-foreground decoration-foreground/25 hover:decoration-foreground font-medium underline underline-offset-4"
               >
                 {SUPPORT_EMAIL}
               </a>
@@ -55,29 +55,32 @@ export function DataPanel({ rowClassName }: { rowClassName: string }) {
         </span>
       }
     >
-      <div className={rowClassName}>
-        <div className="space-y-1.5">
-          <p className="text-sm leading-none font-medium">{t("import")}</p>
-          <p className="text-muted-foreground text-[13px] text-pretty">{t("importHint")}</p>
+      {/* Hairlines between rows, like the profile and preferences panels. */}
+      <div className="divide-y">
+        <div className={rowClassName}>
+          <div className="space-y-1.5">
+            <p className="text-sm leading-none font-medium">{t("import")}</p>
+            <p className="text-muted-foreground text-[13px] text-pretty">{t("importHint")}</p>
+          </div>
+          <div>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/clients/import">
+                <Upload /> {t("importButton")}
+              </Link>
+            </Button>
+          </div>
         </div>
-        <div>
-          <Button asChild variant="outline" size="sm">
-            <Link href="/clients/import">
-              <Upload /> {t("importButton")}
-            </Link>
-          </Button>
-        </div>
-      </div>
-      <div className={rowClassName}>
-        <div className="space-y-1.5">
-          <p className="text-sm leading-none font-medium">{t("download")}</p>
-          <p className="text-muted-foreground text-[13px] text-pretty">{t("downloadHint")}</p>
-        </div>
-        <div>
-          <Button type="button" variant="outline" size="sm" onClick={download} disabled={busy}>
-            {busy ? <Loader2 className="animate-spin" /> : <Download />}
-            {busy ? t("preparing") : t("button")}
-          </Button>
+        <div className={rowClassName}>
+          <div className="space-y-1.5">
+            <p className="text-sm leading-none font-medium">{t("download")}</p>
+            <p className="text-muted-foreground text-[13px] text-pretty">{t("downloadHint")}</p>
+          </div>
+          <div>
+            <Button type="button" variant="outline" size="sm" onClick={download} disabled={busy}>
+              {busy ? <Loader2 className="animate-spin" /> : <Download />}
+              {busy ? t("preparing") : t("button")}
+            </Button>
+          </div>
         </div>
       </div>
     </Panel>

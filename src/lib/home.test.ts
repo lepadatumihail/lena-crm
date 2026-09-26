@@ -9,10 +9,17 @@ import {
   greetingPeriod,
   hourInTimeZone,
   initialsOf,
+  HOME_ONBOARDING_COOKIE,
   INVITE_UNLOCK_CLIENTS,
   isFirstSession,
+  nextOnboardingStep,
+  onboardingCookie,
+  onboardingExpected,
+  onboardingProgress,
+  onboardingState,
   onboardingSteps,
   pipelineSegments,
+  readOnboardingCookie,
   relativeAgo,
   showOnboarding,
 } from "./home";
@@ -130,6 +137,7 @@ describe("onboarding", () => {
       step: "inviteColleague",
       done: true,
       locked: false,
+      optional: true,
     });
     // Nothing else ever locks.
     expect(onboardingSteps(fresh).filter((s) => s.locked).map((s) => s.step)).toEqual([
@@ -150,9 +158,83 @@ describe("onboarding", () => {
     ).toBe(false);
     expect(showOnboarding({ ...fresh, clientCount: 10 })).toBe(false);
   });
+  it("does not wait for the invite: it is optional", () => {
+    const required = { hasName: true, clientCount: 4, appointmentCount: 1, templateCount: 1 };
+    const optional = onboardingSteps({ ...required, referralCount: 0 }).filter((s) => s.optional);
+    expect(optional.map((s) => s.step)).toEqual(["inviteColleague"]);
+    // Every required step done, no colleague signed up: finished all the same.
+    expect(showOnboarding({ ...required, referralCount: 0 })).toBe(false);
+    // Only the invite done: still young.
+    expect(showOnboarding({ ...fresh, referralCount: 1 })).toBe(true);
+  });
+  it("counts progress over the required steps only", () => {
+    expect(onboardingProgress(fresh)).toEqual({ done: 0, total: 4 });
+    expect(onboardingProgress({ ...fresh, hasName: true, clientCount: 2 })).toEqual({
+      done: 2,
+      total: 4,
+    });
+    // An invite that landed does not count toward the four.
+    expect(onboardingProgress({ ...fresh, referralCount: 1 })).toEqual({ done: 0, total: 4 });
+  });
+  it("offers the first step that is neither done nor locked", () => {
+    expect(nextOnboardingStep(fresh)).toBe("addName");
+    expect(nextOnboardingStep({ ...fresh, hasName: true })).toBe("addClient");
+    expect(nextOnboardingStep({ ...fresh, hasName: true, clientCount: 1 })).toBe(
+      "scheduleAppointment"
+    );
+    expect(
+      nextOnboardingStep({ ...fresh, hasName: true, clientCount: 1, appointmentCount: 1 })
+    ).toBe("createTemplate");
+    const required = { hasName: true, appointmentCount: 1, templateCount: 1, referralCount: 0 };
+    // Everything left is locked: nothing to offer.
+    expect(nextOnboardingStep({ ...required, clientCount: 1 })).toBeNull();
+    expect(nextOnboardingStep({ ...required, clientCount: INVITE_UNLOCK_CLIENTS })).toBe(
+      "inviteColleague"
+    );
+    expect(nextOnboardingStep({ ...required, clientCount: 1, referralCount: 1 })).toBeNull();
+  });
   it("calls an account without clients a first session", () => {
     expect(isFirstSession(0)).toBe(true);
     expect(isFirstSession(1)).toBe(false);
+  });
+});
+
+describe("onboarding cookie", () => {
+  const me = "1b4e28ba-2fa1-11d2-883f-0016d3cca427";
+  const other = "6fa459ea-ee8a-3ca4-894e-db77e160355e";
+  it("holds a place for the strip unless it was closed or finished on this device", () => {
+    expect(onboardingExpected(undefined)).toBe(true);
+    expect(onboardingExpected("hidden")).toBe(false);
+    expect(onboardingExpected("done")).toBe(false);
+  });
+  it("counts only this agent's value on a shared device", () => {
+    expect(onboardingState(undefined, me)).toBeUndefined();
+    expect(onboardingState("", me)).toBeUndefined();
+    expect(onboardingState(`done.${me}`, me)).toBe("done");
+    expect(onboardingState(`hidden.${me}`, me)).toBe("hidden");
+    // Another account finished or closed it on this browser: not ours.
+    expect(onboardingState(`done.${other}`, me)).toBeUndefined();
+    // The old unnamed form, and garbage, count as nothing.
+    expect(onboardingState("done", me)).toBeUndefined();
+    expect(onboardingState(`maybe.${me}`, me)).toBeUndefined();
+    // Outside the signed-in shell there is no agent to match.
+    expect(onboardingState(`hidden.${other}`, null)).toBe("hidden");
+  });
+  it("reads its value out of document.cookie", () => {
+    expect(readOnboardingCookie("")).toBeUndefined();
+    expect(readOnboardingCookie("sidebar_state=true")).toBeUndefined();
+    expect(readOnboardingCookie(`sidebar_state=true; ${HOME_ONBOARDING_COOKIE}=hidden`)).toBe(
+      "hidden"
+    );
+    expect(readOnboardingCookie(`${HOME_ONBOARDING_COOKIE}=done;tasks_view=list`)).toBe("done");
+    // A cookie whose name only starts the same is someone else's.
+    expect(readOnboardingCookie(`${HOME_ONBOARDING_COOKIE}_x=hidden`)).toBeUndefined();
+  });
+  it("writes a year-long cookie for the whole site that names its agent, and clears it", () => {
+    expect(onboardingCookie("hidden", me)).toBe(
+      `home_onboarding=hidden.${me}; path=/; max-age=31536000; samesite=lax`
+    );
+    expect(onboardingCookie(null)).toBe("home_onboarding=; path=/; max-age=0; samesite=lax");
   });
 });
 

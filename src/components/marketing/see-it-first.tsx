@@ -29,9 +29,15 @@ export function SeeItFirst({
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => trackSiteEvent("whatsapp_click")}
-        className="inline-flex items-center gap-1 font-medium whitespace-nowrap underline decoration-current/30 underline-offset-4 transition-colors hover:decoration-current"
+        className="font-medium whitespace-nowrap underline decoration-current/30 underline-offset-4 transition-colors hover:decoration-current"
       >
-        <MessageCircle className="size-4" aria-hidden />
+        {/* Inline, not inline-flex: a flex link takes its baseline from the
+            icon and rides 3px above the question beside it. */}
+        <MessageCircle
+          className="mr-1 inline size-4 align-[-3px]"
+          strokeWidth={1.75}
+          aria-hidden
+        />
         {action}
       </a>
     </p>

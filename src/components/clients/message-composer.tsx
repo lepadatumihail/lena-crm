@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { SteadyLabel } from "@/components/ui/steady-label";
 import {
   Dialog,
   DialogContent,
@@ -239,28 +240,30 @@ export function MessageComposer({
               <button
                 type="button"
                 disabled={!hasWhatsApp}
+                aria-pressed={channel === "whatsapp"}
                 onClick={() => setChannel("whatsapp")}
                 className={cn(
-                  "flex items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition-colors disabled:opacity-40",
+                  "focus-visible:ring-ring/50 flex h-9 items-center justify-center gap-2 rounded-lg border px-3 text-sm outline-none transition-colors duration-150 focus-visible:ring-[3px] disabled:opacity-40",
                   channel === "whatsapp"
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "hover:bg-accent"
+                    ? "border-foreground/20 bg-muted text-foreground font-medium"
+                    : "bg-background text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                 )}
               >
-                <MessageCircle className="size-4" /> WhatsApp
+                <MessageCircle className="size-4" /> <SteadyLabel>WhatsApp</SteadyLabel>
               </button>
               <button
                 type="button"
                 disabled={!hasEmail}
+                aria-pressed={channel === "email"}
                 onClick={() => setChannel("email")}
                 className={cn(
-                  "flex items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition-colors disabled:opacity-40",
+                  "focus-visible:ring-ring/50 flex h-9 items-center justify-center gap-2 rounded-lg border px-3 text-sm outline-none transition-colors duration-150 focus-visible:ring-[3px] disabled:opacity-40",
                   channel === "email"
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "hover:bg-accent"
+                    ? "border-foreground/20 bg-muted text-foreground font-medium"
+                    : "bg-background text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                 )}
               >
-                <Mail className="size-4" /> {t("email")}
+                <Mail className="size-4" /> <SteadyLabel>{t("email")}</SteadyLabel>
               </button>
             </div>
 
@@ -377,6 +380,7 @@ export function MessageComposer({
                 />
                 <Button
                   type="button"
+                  variant="outline"
                   onClick={writeWithAI}
                   disabled={aiLoading}
                   className="shrink-0"
@@ -400,7 +404,7 @@ export function MessageComposer({
           </div>
 
           <DialogFooter>
-            <Button variant="ghost" onClick={() => setOpen(false)}>
+            <Button variant="outline" onClick={() => setOpen(false)}>
               {tCommon("cancel")}
             </Button>
             <Button onClick={send} disabled={!canSend}>

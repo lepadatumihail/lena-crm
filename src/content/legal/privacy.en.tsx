@@ -325,6 +325,16 @@ export function PrivacyEn() {
             <td>Seven days</td>
           </tr>
           <tr>
+            <td>home_onboarding</td>
+            <td>Remembers whether Home shows the getting-started strip</td>
+            <td>One year</td>
+          </tr>
+          <tr>
+            <td>tasks_view, calendar_view</td>
+            <td>Remember how you last looked at your tasks and your calendar</td>
+            <td>One year</td>
+          </tr>
+          <tr>
             <td>lw_ref</td>
             <td>Remembers the invite link you arrived from, so the referral is credited</td>
             <td>30 minutes</td>

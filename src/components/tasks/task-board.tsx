@@ -108,10 +108,11 @@ function BoardColumn({
   const tCrm = useTranslations("crm");
   const { setNodeRef, isOver } = useDroppable({ id: status });
 
-  // The columns share the board's width but never narrow past 18rem: below
-  // that (phones) the board scrolls sideways instead.
+  // The columns share the board's width but never narrow past 16rem, so all
+  // four fit a 1440px screen beside the sidebar; below that (phones) the
+  // board scrolls sideways and the next column peeks in.
   return (
-    <div className="flex min-w-72 flex-1 flex-col">
+    <div className="flex min-w-64 flex-1 snap-start flex-col">
       <div className="flex h-9 items-center gap-2 px-1">
         <span
           aria-hidden
@@ -123,7 +124,7 @@ function BoardColumn({
         <span className="text-sm font-medium">
           {taskStatusLabel(tCrm, status)}
         </span>
-        <span className="bg-muted text-muted-foreground inline-flex h-[18px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] font-medium tabular-nums">
+        <span className="bg-muted text-muted-foreground inline-flex h-[18px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] tabular-nums">
           {countLabel}
         </span>
       </div>
@@ -131,7 +132,7 @@ function BoardColumn({
         ref={setNodeRef}
         className={cn(
           "bg-muted/40 min-h-32 flex-1 space-y-2 rounded-xl p-2 transition-[background-color,box-shadow] duration-150",
-          isOver && "bg-accent ring-primary/40 ring-2",
+          isOver && "bg-accent ring-foreground/20 ring-2",
         )}
       >
         {tasks.map((task) => (
@@ -152,7 +153,7 @@ function BoardColumn({
             type="button"
             onClick={onViewAll}
             aria-label={t("viewAllDoneLabel")}
-            className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 w-full rounded-md py-1.5 text-xs font-medium outline-none transition-colors duration-150 focus-visible:ring-[3px]"
+            className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 w-full rounded-md py-1.5 text-xs outline-none transition-colors duration-150 focus-visible:ring-[3px]"
           >
             {t("viewAllDone")}
           </button>
@@ -262,7 +263,8 @@ export function TaskBoard({
     >
       {/* relative, so the cards' absolutely positioned sr-only text stays
           inside this scroll box instead of widening the page on phones */}
-      <div className="relative flex gap-3 overflow-x-auto pb-4">
+      {/* On a phone a swipe settles on a column, as on the client board. */}
+      <div className="relative flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 sm:snap-none">
         {TASK_STATUSES.map((status) =>
           status === "done" ? (
             <BoardColumn

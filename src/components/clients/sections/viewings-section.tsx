@@ -50,7 +50,12 @@ export function ViewingsSection({
       icon={<Eye className="size-3.5" />}
       count={viewings.length}
       action={
-        <Button variant="outline" size="xs" onClick={() => setAdding(true)}>
+        <Button
+          variant="ghost"
+          size="xs"
+          className="text-muted-foreground -mr-1.5"
+          onClick={() => setAdding(true)}
+        >
           <Plus /> {t("add")}
         </Button>
       }
@@ -116,7 +121,7 @@ function ViewingCard({
               {viewing.title || t("untitled")}
             </p>
             {viewing.had_offer ? (
-              <Tag tone="green" dot className="tabular-nums">
+              <Tag tone="green" className="tabular-nums">
                 {t("offer", {
                   price: formatCurrency(viewing.offer_price, intlTag(locale)),
                 })}
@@ -142,7 +147,7 @@ function ViewingCard({
                   {t.rich("asking", {
                     amount: formatCurrency(viewing.property_price, intlTag(locale)),
                     price: (chunks) => (
-                      <span className="text-foreground font-medium tabular-nums">
+                      <span className="text-foreground tabular-nums">
                         {chunks}
                       </span>
                     ),

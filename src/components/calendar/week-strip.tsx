@@ -54,23 +54,25 @@ export function WeekStrip({
             aria-label={format(day, "EEEE d MMMM", { locale: dateLocale })}
             className="flex flex-col items-center gap-1 py-1"
           >
+            {/* "Mon", as the desktop grid's header says it: sentence case,
+                no caps tracking. */}
             <span
               className={cn(
-                "text-[11px] uppercase tracking-wide",
-                today ? "text-primary font-semibold" : "text-muted-foreground"
+                "text-xs first-letter:uppercase",
+                today ? "text-foreground font-medium" : "text-muted-foreground"
               )}
             >
-              {format(day, "EEEEEE", { locale: dateLocale })}
+              {format(day, "EEE", { locale: dateLocale })}
             </span>
+            {/* As in the month grid: today is the ink disc, another selected
+                day an ink ring. */}
             <span
               className={cn(
-                "flex size-8 items-center justify-center rounded-full text-sm font-medium transition-colors",
-                selected
-                  ? today
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-foreground text-background"
-                  : today
-                    ? "text-primary"
+                "flex size-8 items-center justify-center rounded-full text-sm transition-colors",
+                today
+                  ? "bg-primary text-primary-foreground font-medium"
+                  : selected
+                    ? "ring-primary text-foreground font-medium ring-1"
                     : "text-foreground"
               )}
             >

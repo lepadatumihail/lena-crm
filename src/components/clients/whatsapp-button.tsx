@@ -43,9 +43,7 @@ export function WhatsAppButton({
       onClick={onOpen}
       className={cn(buttonVariants({ variant: "outline", size }), className)}
     >
-      <span className="text-[#25D366]">
-        <WhatsAppIcon />
-      </span>
+      <WhatsAppIcon />
       {short ? "WhatsApp" : t("message")}
     </a>
   );

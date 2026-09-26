@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { eachDayOfInterval, format, parseISO } from "date-fns";
 import {
@@ -55,6 +56,10 @@ import type {
   CalendarEvent,
 } from "@/lib/data/calendar";
 import type { Viewing } from "@/lib/supabase/types";
+
+function upperFirst(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
 
 /** Kept as a plain cookie, like the sidebar's state: a preference, not data. */
 function rememberView(view: CalendarViewKind) {
@@ -177,13 +182,38 @@ export function CalendarView({
     time?: string;
   } | null>(null);
 
+  // The day a new appointment starts on: the day in focus on a phone's week,
+  // else the picked day, else today when it is on screen.
+  const newDay = view === "week" && isMobile ? focusDay : activeDay ?? (todayInView ? todayKey : firstKey);
+
+  // ?new=1 (the phone's + sheet, ⌘K) opens the meeting-or-viewing chooser on
+  // that day, adopted once the browser knows what today is. React's
+  // derived-state pattern, as TasksView does for its own ?new=1.
+  const searchParams = useSearchParams();
+  const intentNew = searchParams.get("new") === "1";
+  const [seenNew, setSeenNew] = useState(false);
+  if (hydrated && intentNew !== seenNew) {
+    setSeenNew(intentNew);
+    if (intentNew) setChoosing({ dateKey: newDay });
+  }
+  // One-shot: take it off the URL so a refresh or Back doesn't reopen it.
+  // Deferred a task, for the reason TasksView gives.
+  useEffect(() => {
+    if (!intentNew) return;
+    const timer = window.setTimeout(() => {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("new");
+      window.history.replaceState(null, "", url.toString());
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [intentNew]);
+
   function startChoosing(dateKey: string, time?: string) {
     if (!isMobile) setSelectedDay(null);
     setChoosing({ dateKey, time });
   }
   function startNew() {
-    if (view === "week" && isMobile) startChoosing(focusDay);
-    else startChoosing(activeDay ?? (todayInView ? todayKey : firstKey));
+    startChoosing(newDay);
   }
   function chooseMeeting() {
     const picked = choosing;
@@ -219,7 +249,7 @@ export function CalendarView({
           sync and the one "new" action. Folds to two rows on a phone. */}
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2.5">
         <div className="flex items-center gap-1">
-          <Button asChild variant="outline" size="sm" className="rounded-lg">
+          <Button asChild variant="outline" size="sm">
             <Link href={calendarHref(view)}>{tCommon("today")}</Link>
           </Button>
           <Button
@@ -245,7 +275,7 @@ export function CalendarView({
             </Link>
           </Button>
         </div>
-        <h2 className="min-w-0 flex-1 truncate text-lg font-semibold tracking-tight first-letter:uppercase">
+        <h2 className="min-w-0 flex-1 truncate text-lg font-medium first-letter:uppercase">
           {rangeLabel(view, anchor, dateLocale)}
         </h2>
         <div className="flex items-center gap-2">
@@ -261,7 +291,9 @@ export function CalendarView({
             }))}
           />
           <CalendarSyncDialog />
-          <Button size="sm" className="rounded-full" onClick={startNew}>
+          {/* On a phone the tab bar's + opens the same chooser (?new=1), as
+              it opens the task dialog on the task list. */}
+          <Button size="sm" onClick={startNew} className="hidden md:inline-flex">
             <Plus /> {t("actions.new")}
           </Button>
         </div>
@@ -315,9 +347,10 @@ export function CalendarView({
           {activeDay && (
             <Panel
               className="md:hidden"
-              title={format(parseISO(activeDay), "EEEE d MMMM", {
-                locale: dateLocale,
-              })}
+              // Spanish weekdays come lowercase ("sábado"); a heading starts with a capital.
+              title={upperFirst(
+                format(parseISO(activeDay), "EEEE d MMMM", { locale: dateLocale })
+              )}
               count={dayList.length}
               action={
                 <Button
@@ -328,10 +361,10 @@ export function CalendarView({
                   <Plus /> {tCommon("add")}
                 </Button>
               }
-              bodyClassName="space-y-2 p-3"
+              bodyClassName="divide-y"
             >
               {dayList.length === 0 ? (
-                <p className="text-muted-foreground px-1 py-1.5 text-sm">
+                <p className="text-muted-foreground px-4 py-3 text-sm">
                   {t("day.empty")}
                 </p>
               ) : (
@@ -365,23 +398,23 @@ export function CalendarView({
             </DialogTitle>
             <DialogDescription>{t("day.description")}</DialogDescription>
           </DialogHeader>
-          <div className="space-y-2">
-            {dayList.length === 0 ? (
-              <p className="text-muted-foreground text-sm">{t("day.empty")}</p>
-            ) : (
-              dayList.map((e) => (
+          {dayList.length === 0 ? (
+            <p className="text-muted-foreground text-sm">{t("day.empty")}</p>
+          ) : (
+            <div className="divide-y overflow-hidden rounded-lg border">
+              {dayList.map((e) => (
                 <EventRow
                   key={e.id}
                   event={e}
                   past={eventEndMs(e.starts_at, e.ends_at) < nowMs}
                   onOpen={() => openEvent(e)}
+                  className="px-3"
                 />
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
           <Button
             onClick={() => activeDay && startChoosing(activeDay)}
-            variant="outline"
             className="w-full"
           >
             <Plus /> {tCommon("add")}

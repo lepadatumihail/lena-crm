@@ -318,8 +318,21 @@ export function ClientsView({
   const showAgencyFilter =
     agencyChoices.length > 2 || agencyValue !== ALL_AGENCIES;
 
+  // A stage tab on the board draws that stage's column alone; Needs
+  // follow-up keeps every column, holding just those clients.
+  const boardStages = (stages as readonly string[]).includes(stageFilter)
+    ? [stageFilter as Stage]
+    : undefined;
+
+  // With no clients at all there is nothing to count, search, sort or
+  // export: the page keeps the Inactive switch (hidden clients live behind
+  // it) and the New button, and the empty card does the rest.
+  const isEmpty = optimisticClients.length === 0;
+
+  // "Type · All", like "Agency · All": the chip already names what it filters,
+  // and a seller's Role chip must not read "All types".
   const typeOptions = [
-    { value: "all", label: t("typeAll") },
+    { value: "all", label: t("all") },
     ...(isBuyer
       ? BUYER_TYPES.map((v) => ({ value: v, label: dealTypeLabel(tCrm, v) }))
       : SELLER_ROLES.map((v) => ({ value: v, label: sellerRoleLabel(tCrm, v) }))),
@@ -370,96 +383,117 @@ export function ClientsView({
           { value: "seller", label: tNav("sellers"), href: clientsPath("seller") },
         ]}
       />
-      <StageTabs
-        value={stageFilter}
-        onChange={changeStageFilter}
-        total={scoped.length}
-        followUp={followUpIds.size}
-        stages={stages}
-        counts={stageCounts}
-        allLabel={t("all")}
-        followUpLabel={t("followUp")}
-        labelFor={(s) => stageLabel(tCrm, s)}
-      />
+      {isEmpty ? null : (
+        <StageTabs
+          value={stageFilter}
+          onChange={changeStageFilter}
+          total={scoped.length}
+          followUp={followUpIds.size}
+          stages={stages}
+          counts={stageCounts}
+          allLabel={t("all")}
+          followUpLabel={t("followUp")}
+          labelFor={(s) => stageLabel(tCrm, s)}
+        />
+      )}
 
       <div className="flex flex-wrap items-center gap-2">
-        <div className="relative w-full sm:w-64">
-          <Search
-            className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2"
-            strokeWidth={1.75}
-          />
-          <Input
-            placeholder={t("searchPlaceholder")}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="h-8 pl-8 md:text-[13px]"
-          />
-        </div>
-
-        <ToolbarChip pressed={priorityOnly} onClick={() => setPriorityOnly((p) => !p)}>
-          <Star className={cn(priorityOnly && "fill-current")} />
-          {t("priority")}
-        </ToolbarChip>
-
-        <FilterSelect
-          label={isBuyer ? tTable("type") : tTable("role")}
-          value={typeFilter}
-          onValueChange={setTypeFilter}
-          options={typeOptions}
-        />
-
-        {showAgencyFilter ? (
-          <FilterSelect
-            label={tTable("agency")}
-            value={agencyValue}
-            onValueChange={setAgencyFilter}
-            options={agencyChoices}
-            // Agency names run long: the chip shrinks and the name truncates.
-            className="max-w-full sm:max-w-72 [&_[data-slot=select-trigger]]:min-w-0 [&_[data-slot=select-value]]:block [&_[data-slot=select-value]]:truncate"
-          />
-        ) : null}
-
-        <label className="text-muted-foreground bg-background inline-flex h-8 cursor-pointer items-center gap-2 rounded-lg border px-2.5 text-xs font-medium shadow-xs">
-          <Switch
-            checked={includeInactive}
-            onCheckedChange={toggleInactive}
-            className="scale-90"
-          />
-          {t("inactive")}
-        </label>
-
-        <div className="ml-auto flex items-center gap-2">
-          <Button
-            asChild
-            variant="outline"
-            size="icon-sm"
-            // Import and export are desk work; a phone keeps the row for the list.
-            className="text-muted-foreground hover:text-foreground hidden rounded-lg sm:inline-flex"
-            aria-label={t("import")}
-            title={t("import")}
-          >
-            <Link href={`/clients/import?side=${side}`}>
-              <Upload strokeWidth={1.75} />
-            </Link>
-          </Button>
-          <div className="hidden sm:contents">
-            <ExportMenu side={side} ids={filteredIds} />
+        {isEmpty ? null : (
+          <div className="relative min-w-0 flex-1 sm:w-64 sm:flex-none">
+            <Search
+              className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2"
+              strokeWidth={1.75}
+            />
+            <Input
+              placeholder={t("searchPlaceholder")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              // Beside the view toggle on a phone the hint can run out of room
+              // (Spanish does): it ends in an ellipsis rather than a hard cut.
+              className="h-8 pl-8 text-ellipsis md:text-[13px]"
+            />
           </div>
-          <ViewToggle
-            view={view}
-            onChange={setView}
-            tableLabel={t("table")}
-            boardLabel={t("board")}
-          />
-          <Button asChild size="sm" className="rounded-full">
-            <Link href={`/clients/new?side=${side}`}>
-              <Plus /> {t("newClient", { side })}
-            </Link>
-          </Button>
+        )}
+
+        {/*
+          On a phone the filters are one row under the search that scrolls
+          sideways (edge to edge), so the list starts after two rows in any
+          language; from sm up they join the toolbar's own row.
+        */}
+        <div className="scrollbar-none order-last -mx-4 -my-1 flex w-[calc(100%+2rem)] gap-2 overflow-x-auto px-4 py-1 sm:contents [&>*]:shrink-0">
+          {isEmpty ? null : (
+            <>
+              <ToolbarChip pressed={priorityOnly} onClick={() => setPriorityOnly((p) => !p)}>
+                <Star className={cn(priorityOnly && "fill-current")} />
+                {t("priority")}
+              </ToolbarChip>
+
+              <FilterSelect
+                label={isBuyer ? tTable("type") : tTable("role")}
+                value={typeFilter}
+                onValueChange={setTypeFilter}
+                options={typeOptions}
+              />
+            </>
+          )}
+
+          {showAgencyFilter && !isEmpty ? (
+            <FilterSelect
+              label={tTable("agency")}
+              value={agencyValue}
+              onValueChange={setAgencyFilter}
+              options={agencyChoices}
+              // Agency names run long: the chip caps its width and the name truncates.
+              className="max-w-full sm:max-w-72 [&_[data-slot=select-trigger]]:min-w-0 [&_[data-slot=select-value]]:block [&_[data-slot=select-value]]:truncate"
+            />
+          ) : null}
+
+          <label className="text-muted-foreground bg-background hover:bg-muted/60 hover:text-foreground inline-flex h-8 cursor-pointer items-center gap-2 rounded-lg border px-2.5 text-xs whitespace-nowrap shadow-xs transition-colors duration-150">
+            <Switch
+              checked={includeInactive}
+              onCheckedChange={toggleInactive}
+              className="scale-90"
+            />
+            {t("inactive")}
+          </label>
         </div>
+
+        {/* Empty, the card below holds New and Import. */}
+        {isEmpty ? null : (
+          <div className="ml-auto flex items-center gap-2">
+            <Button
+              asChild
+              variant="outline"
+              size="icon-sm"
+              // Import and export are desk work; a phone keeps the row for the list.
+              className="text-muted-foreground hover:text-foreground hidden sm:inline-flex"
+              aria-label={t("import")}
+              title={t("import")}
+            >
+              <Link href={`/clients/import?side=${side}`}>
+                <Upload strokeWidth={1.75} />
+              </Link>
+            </Button>
+            <div className="hidden sm:contents">
+              <ExportMenu side={side} ids={filteredIds} />
+            </div>
+            <ViewToggle
+              view={view}
+              onChange={setView}
+              tableLabel={t("table")}
+              boardLabel={t("board")}
+            />
+            {/* A phone has the tab bar's + for this, and one ink button is enough. */}
+            <Button asChild size="sm" className="hidden md:inline-flex">
+              <Link href={`/clients/new?side=${side}`}>
+                <Plus /> {t("newClient", { side })}
+              </Link>
+            </Button>
+          </div>
+        )}
       </div>
 
-      {optimisticClients.length === 0 ? (
+      {isEmpty ? (
         <EmptyState side={side} />
       ) : filtered.length === 0 ? (
         <p className="text-muted-foreground bg-card rounded-xl border border-dashed py-16 text-center text-sm">
@@ -494,6 +528,7 @@ export function ClientsView({
         <ClientsKanban
           data={filtered}
           side={side}
+          stages={boardStages}
           onStageChange={handleStageChange}
           onTogglePriority={handleTogglePriority}
           onOpen={setOpenId}
@@ -551,7 +586,9 @@ function StageTabs({
           label: followUpLabel,
           count: followUp,
           icon: <BellRing aria-hidden strokeWidth={1.75} />,
-          countTone: "brand",
+          // Above zero the count reads in ink, not a colour: these clients
+          // wait on the agent, and the list stays mono.
+          countTone: "ink",
         },
         ...stages.map((s) => ({
           value: s,
@@ -578,7 +615,7 @@ function SummaryCell({
       {Icon ? <Icon className="size-3.5 shrink-0" strokeWidth={1.75} /> : null}
       <span className="whitespace-nowrap">{label}</span>
       {value != null ? (
-        <span className="text-foreground font-medium tabular-nums">{value}</span>
+        <span className="text-foreground tabular-nums">{value}</span>
       ) : null}
     </div>
   );
@@ -619,7 +656,7 @@ function Summary({
   if (selectedCount > 0) {
     return (
       <div className="flex h-9 w-full items-center gap-1 px-2 text-xs">
-        <span className="text-foreground px-2 font-medium tabular-nums">
+        <span className="text-foreground px-2 tabular-nums">
           {t("selected", { count: selectedCount })}
         </span>
         <Select value="" onValueChange={onBulkStage}>
@@ -727,13 +764,23 @@ function EmptyState({ side }: { side: ClientSide }) {
       <p className="text-muted-foreground mt-1 max-w-xs text-sm">
         {t("empty.body", { side })}
       </p>
+      {/*
+        The empty page's one ink button lives here, where the eye is; the
+        toolbar drops its own. A phone keeps the tab bar's ink + and gets an
+        outline one.
+      */}
       <div className="mt-4 flex flex-wrap justify-center gap-2">
-        <Button asChild>
+        <Button asChild size="sm" variant="outline" className="md:hidden">
           <Link href={`/clients/new?side=${side}`}>
             <Plus /> {t("newClient", { side })}
           </Link>
         </Button>
-        <Button asChild variant="outline">
+        <Button asChild size="sm" className="hidden md:inline-flex">
+          <Link href={`/clients/new?side=${side}`}>
+            <Plus /> {t("newClient", { side })}
+          </Link>
+        </Button>
+        <Button asChild size="sm" variant="outline">
           <Link href={`/clients/import?side=${side}`}>
             <Upload /> {t("empty.import")}
           </Link>

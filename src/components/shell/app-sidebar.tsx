@@ -68,9 +68,12 @@ export type StageCount = { stage: Stage; count: number };
 /** A route to highlight instead of the live one; for previews and tests. */
 export type RouteOverride = { pathname: string; search?: string };
 
-/* Inactive items sit back in muted ink; the current one comes forward. */
+/*
+  Inactive items sit back in muted ink at regular weight; the current one
+  comes forward in ink at 500 on a raised card (sidebar.tsx).
+*/
 const ITEM_CLASSES =
-  "text-muted-foreground hover:text-foreground data-[active=true]:text-foreground font-medium";
+  "text-muted-foreground hover:text-foreground data-[active=true]:text-foreground";
 
 function NavItem({
   href,
@@ -96,7 +99,7 @@ function NavItem({
         tooltip={label}
         className={cn(ITEM_CLASSES, showBadge && "pr-10")}
       >
-        <Link href={href} onClick={onNavigate}>
+        <Link href={href} onClick={onNavigate} aria-current={active ? "page" : undefined}>
           <Icon strokeWidth={1.75} />
           <span>{label}</span>
         </Link>
@@ -158,6 +161,9 @@ export function AppSidebar({
   const activeStage = pathname.startsWith("/clients/buyers")
     ? searchParams.get("stage")
     : null;
+  // One current item at a time: a stage picked in the Pipeline group takes it
+  // from Buyers.
+  const stageInNav = activeStage != null && stages.some((s) => s.stage === activeStage);
   const buyersHref = clientsPath("buyer");
 
   return (
@@ -194,7 +200,7 @@ export function AppSidebar({
                 href={buyersHref}
                 icon={Users}
                 label={t("buyers")}
-                active={onBuyers}
+                active={onBuyers && !stageInNav}
                 badge={counts.buyers}
                 onNavigate={closeMobile}
               />
@@ -241,6 +247,7 @@ export function AppSidebar({
                       <Link
                         href={`${buyersHref}?stage=${s.stage}`}
                         onClick={closeMobile}
+                        aria-current={onBuyers && activeStage === s.stage ? "page" : undefined}
                       >
                         <span
                           aria-hidden
@@ -365,7 +372,8 @@ export function AppSidebar({
 /**
  * The plan at a glance, pinned under the navigation. Free: "2 of 3 clients"
  * with a meter and an Upgrade button. Pro: the tier and what it grants, with
- * a way to the billing page.
+ * a way to the billing page. Mono: the meter is grey and turns ink when the
+ * plan is full, when the button turns ink too.
  */
 function PlanCard({
   plan,
@@ -413,7 +421,7 @@ function PlanCard({
         <Button
           asChild
           size="xs"
-          variant={atCap ? "default" : "secondary"}
+          variant="outline"
           className="shrink-0"
         >
           <Link href={isPro ? "/billing" : "/pricing"} onClick={onNavigate}>
@@ -433,14 +441,14 @@ function PlanCard({
           <div
             className={cn(
               "h-full rounded-full transition-[width] duration-300 ease-(--ease-standard)",
-              TONE_SOLID[atCap ? "amber" : "brand"]
+              TONE_SOLID[atCap ? "ink" : "grey"]
             )}
             style={{ width: `${limit ? (used / limit) * 100 : 0}%` }}
           />
         </div>
       ) : null}
       {foundingNumber != null ? (
-        <p className="text-primary mt-2 truncate text-[11px] font-medium">
+        <p className="text-muted-foreground mt-2 truncate text-[11px]">
           {tNav("foundingAgent", { number: foundingNumber })}
         </p>
       ) : null}

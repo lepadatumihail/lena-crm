@@ -68,13 +68,13 @@ export function ReviewStep({
   const capped = capacity !== null && limit !== null && counts.skipped.overCap > 0;
   const shown = showAll ? ready : ready.slice(0, PREVIEW_ROWS);
 
-  const tiles: { label: string; value: number; tone: "green" | "amber" | "neutral" }[] = [
-    { label: t("counts.ready"), value: counts.ready, tone: "green" },
-    { label: t("counts.withNotes"), value: counts.withNotes, tone: "amber" },
-    { label: t("counts.existing"), value: counts.skipped.duplicateExisting, tone: "neutral" },
-    { label: t("counts.repeated"), value: counts.skipped.duplicateInFile, tone: "neutral" },
-    { label: t("counts.filteredOut"), value: counts.skipped.filteredOut, tone: "neutral" },
-    { label: t("counts.noName"), value: counts.skipped.noName, tone: "neutral" },
+  const tiles: { label: string; value: number }[] = [
+    { label: t("counts.ready"), value: counts.ready },
+    { label: t("counts.withNotes"), value: counts.withNotes },
+    { label: t("counts.existing"), value: counts.skipped.duplicateExisting },
+    { label: t("counts.repeated"), value: counts.skipped.duplicateInFile },
+    { label: t("counts.filteredOut"), value: counts.skipped.filteredOut },
+    { label: t("counts.noName"), value: counts.skipped.noName },
   ];
 
   return (
@@ -83,7 +83,7 @@ export function ReviewStep({
         {tiles.map((tile) => (
           <div key={tile.label} className="bg-card rounded-xl border px-3 py-2.5">
             <dt className="text-muted-foreground truncate text-xs">{tile.label}</dt>
-            <dd className={cn("text-xl font-semibold tabular-nums", tile.value === 0 && "text-muted-foreground/60")}>{tile.value}</dd>
+            <dd className={cn("text-xl font-medium tabular-nums", tile.value === 0 && "text-muted-foreground/60")}>{tile.value}</dd>
           </div>
         ))}
       </dl>
@@ -100,19 +100,25 @@ export function ReviewStep({
         <Notice tone="amber">{t("nothingReady")}</Notice>
       ) : (
         <section className="bg-card overflow-hidden rounded-xl border">
-          <header className="flex flex-wrap items-center justify-between gap-2 border-b px-4 py-2.5">
-            <h3 className="text-sm font-medium">
+          <header className="flex min-h-11 flex-wrap items-center justify-between gap-2 border-b px-4 py-2">
+            <h3 className="text-[13px] font-medium">
               {showAll || ready.length <= PREVIEW_ROWS ? t("previewAll") : t("preview", { count: PREVIEW_ROWS })}
             </h3>
             {ready.length > PREVIEW_ROWS ? (
-              <Button type="button" variant="ghost" size="sm" onClick={() => setShowAll((v) => !v)}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="xs"
+                className="text-muted-foreground -mr-1.5"
+                onClick={() => setShowAll((v) => !v)}
+              >
                 {showAll ? t("preview", { count: PREVIEW_ROWS }) : t("previewAll")}
               </Button>
             ) : null}
           </header>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="text-muted-foreground label-caps">
+              <thead className="text-muted-foreground section-label">
                 <tr className="border-b [&>th]:px-3 [&>th]:py-2 [&>th]:text-left [&>th]:font-normal">
                   <th className="w-12">{t("line")}</th>
                   <th>{t("name")}</th>
@@ -191,7 +197,7 @@ export function ReviewStep({
           {lookOpen ? (
             <div className="overflow-x-auto border-t">
               <table className="w-full text-sm">
-                <thead className="text-muted-foreground label-caps">
+                <thead className="text-muted-foreground section-label">
                   <tr className="border-b [&>th]:px-3 [&>th]:py-2 [&>th]:text-left [&>th]:font-normal">
                     <th className="w-12">{t("line")}</th>
                     <th>{t("reason")}</th>

@@ -205,7 +205,7 @@ function ZoneList({
         ) : (
           groups.map((group) => (
             <div key={group.region} role="group" aria-label={t(`regions.${group.region}`)}>
-              <p className="label-caps text-muted-foreground/80 px-2 pt-2.5 pb-1">
+              <p className="section-label text-muted-foreground px-2 pt-2.5 pb-1">
                 {t(`regions.${group.region}`)}
               </p>
               {group.items.map((o) => {
@@ -224,7 +224,7 @@ function ZoneList({
                     )}
                   >
                     <Check
-                      className={cn("size-3.5 shrink-0", selected ? "text-primary" : "invisible")}
+                      className={cn("size-3.5 shrink-0", selected ? "text-foreground" : "invisible")}
                     />
                     <span className="min-w-0 flex-1 truncate">{o.city}</span>
                     <span className="text-muted-foreground shrink-0 text-xs tabular-nums">

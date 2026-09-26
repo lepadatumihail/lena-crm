@@ -62,7 +62,7 @@ export function ConfirmDialog({
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="ghost" disabled={pending}>
+            <Button variant="outline" disabled={pending}>
               {cancelLabel ?? t("cancel")}
             </Button>
           </DialogClose>

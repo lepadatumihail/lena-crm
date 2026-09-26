@@ -83,7 +83,12 @@ export function PropertiesSection({
       icon={<Building2 className="size-3.5" />}
       count={properties.length}
       action={
-        <Button variant="outline" size="xs" onClick={() => setAdding(true)}>
+        <Button
+          variant="ghost"
+          size="xs"
+          className="text-muted-foreground -mr-1.5"
+          onClick={() => setAdding(true)}
+        >
           <Plus /> {t("add")}
         </Button>
       }
@@ -151,11 +156,18 @@ function PropertyCard({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <p className="text-sm leading-6 font-medium">{title}</p>
-            {property.property_type ? (
+            {/* Without an address the type is already the title. */}
+            {property.address && property.property_type ? (
               <Tag>{propertyTypeLabel(tCrm, property.property_type)}</Tag>
             ) : null}
           </div>
           <p className="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+            {/* On a phone the price joins this line, so the title keeps the width. */}
+            {property.price != null ? (
+              <span className="text-foreground tabular-nums sm:hidden">
+                <Money value={property.price} locale={tag} />
+              </span>
+            ) : null}
             {property.city ? (
               <span className="inline-flex items-center gap-1">
                 <MapPin className="size-3.5" strokeWidth={1.75} /> {property.city}
@@ -186,7 +198,7 @@ function PropertyCard({
             </div>
           ) : null}
         </div>
-        <span className="shrink-0 text-sm font-medium">
+        <span className="shrink-0 text-sm leading-6 tabular-nums max-sm:hidden">
           <Money value={property.price} locale={tag} />
         </span>
         <div className="flex shrink-0 items-center gap-0.5">
@@ -405,7 +417,7 @@ function PropertyDialog({
             <DialogFooter>
               <Button
                 type="button"
-                variant="ghost"
+                variant="outline"
                 onClick={() => onOpenChange(false)}
               >
                 {tCommon("cancel")}

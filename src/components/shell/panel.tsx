@@ -5,9 +5,9 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
- * A bordered surface with a slim header: tracked-caps title, an optional
- * count, an action on the right. Rows inside butt against the edges, so a
- * panel of rows reads like a small table.
+ * A bordered surface with a slim header: a sentence-case title with a muted
+ * icon, an optional count, an action on the right. Rows inside butt against
+ * the edges, so a panel of rows reads like a small table.
  */
 export function Panel({
   title,
@@ -37,11 +37,15 @@ export function Panel({
     >
       {title || action ? (
         <header className="flex h-11 shrink-0 items-center justify-between gap-3 border-b px-4">
-          <h3 className="label-caps text-muted-foreground flex min-w-0 items-center gap-2">
-            {icon}
+          <h3 className="text-foreground flex min-w-0 items-center gap-2 text-[13px] leading-5 font-medium">
+            {icon ? (
+              <span className="text-muted-foreground flex shrink-0 items-center">
+                {icon}
+              </span>
+            ) : null}
             <span className="truncate">{title}</span>
             {count != null && count > 0 ? (
-              <span className="bg-muted text-foreground/80 inline-flex h-[18px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] font-medium tracking-normal normal-case tabular-nums">
+              <span className="bg-muted text-muted-foreground inline-flex h-[18px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] font-normal tabular-nums">
                 {count}
               </span>
             ) : null}
@@ -70,7 +74,7 @@ export function PanelAction({
   return (
     <Link
       href={href}
-      className="text-muted-foreground hover:text-foreground -mr-1.5 inline-flex h-7 shrink-0 items-center gap-1 rounded-md px-1.5 text-xs font-medium transition-colors duration-150"
+      className="text-muted-foreground hover:text-foreground -mr-1.5 inline-flex h-7 shrink-0 items-center gap-1 rounded-md px-1.5 text-xs transition-colors duration-150"
     >
       {children}
       <ArrowRight className="size-3.5" />
@@ -88,7 +92,7 @@ export function PanelEmpty({
   return (
     <p
       className={cn(
-        "text-muted-foreground px-4 py-10 text-center text-sm text-balance",
+        "text-muted-foreground px-4 py-6 text-center text-sm text-balance",
         className
       )}
     >

@@ -22,6 +22,22 @@ type ItemHandlers = {
   onPriorityChange: (id: string, priority: TaskPriority) => void;
 };
 
+/** One surface for a list of tasks, a grey band heading each section. */
+const SURFACE = "bg-card text-card-foreground overflow-hidden rounded-xl border shadow-xs";
+
+/** A section's band: an optional status dot, the name and how many rows follow. */
+function GroupHeader({ title, count, dot }: { title: string; count: number; dot?: string }) {
+  return (
+    <header className="bg-muted/30 flex h-[38px] items-center gap-2 border-b px-4">
+      {dot ? <span aria-hidden className={cn("size-2 rounded-full", dot)} /> : null}
+      <h3 className="text-[13px] font-medium">{title}</h3>
+      <span className="bg-muted text-muted-foreground inline-flex h-[18px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] tabular-nums">
+        {count}
+      </span>
+    </header>
+  );
+}
+
 /** Open tasks in one surface, a section per status that has any. */
 export function TaskList({
   groups,
@@ -36,21 +52,16 @@ export function TaskList({
   const tCrm = useTranslations("crm");
 
   return (
-    <div className="bg-card text-card-foreground overflow-hidden rounded-xl border shadow-xs">
+    <div className={SURFACE}>
       {groups
         .filter((group) => group.tasks.length > 0)
         .map((group) => (
           <section key={group.status} className="border-t first:border-t-0">
-            <header className="bg-muted/30 flex h-[38px] items-center gap-2 border-b px-4">
-              <span
-                aria-hidden
-                className={cn("size-2 rounded-full", TONE_SOLID[TASK_STATUS_TONES[group.status]])}
-              />
-              <h3 className="label-caps text-muted-foreground">{taskStatusLabel(tCrm, group.status)}</h3>
-              <span className="bg-muted text-muted-foreground inline-flex h-[18px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] font-medium tabular-nums">
-                {group.tasks.length}
-              </span>
-            </header>
+            <GroupHeader
+              title={taskStatusLabel(tCrm, group.status)}
+              count={group.tasks.length}
+              dot={TONE_SOLID[TASK_STATUS_TONES[group.status]]}
+            />
             <ul className="divide-y">
               {group.tasks.map((task) => (
                 <TaskItem
@@ -83,7 +94,7 @@ function groupDoneByDay(rows: TaskRow[], timeZone: string): DayGroup[] {
   return groups;
 }
 
-/** Done tasks, one panel per day completed, with "Load more" below. */
+/** Done tasks in one surface, a section per day completed, with "Load more" below. */
 export function DoneList({
   rows,
   todayKey,
@@ -126,22 +137,27 @@ export function DoneList({
           </Panel>
         ) : null
       ) : (
-        groupDoneByDay(rows, timeZone).map((group) => (
-          <Panel key={group.key} title={dayLabel(group.key)} count={group.rows.length}>
-            <ul className="divide-y">
-              {group.rows.map((task) => (
-                <TaskItem
-                  key={task.id}
-                  task={task}
-                  todayKey={todayKey}
-                  onOpen={onOpen}
-                  onStatusChange={onStatusChange}
-                  onPriorityChange={onPriorityChange}
-                />
-              ))}
-            </ul>
-          </Panel>
-        ))
+        // One surface with a band per day, like the Open list, rather than a
+        // stack of small panels that each hold a row or two.
+        <div className={SURFACE}>
+          {groupDoneByDay(rows, timeZone).map((group) => (
+            <section key={group.key} className="border-t first:border-t-0">
+              <GroupHeader title={dayLabel(group.key)} count={group.rows.length} />
+              <ul className="divide-y">
+                {group.rows.map((task) => (
+                  <TaskItem
+                    key={task.id}
+                    task={task}
+                    todayKey={todayKey}
+                    onOpen={onOpen}
+                    onStatusChange={onStatusChange}
+                    onPriorityChange={onPriorityChange}
+                  />
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
       )}
 
       {hasMore ? (
@@ -149,7 +165,6 @@ export function DoneList({
           <Button
             variant="outline"
             size="sm"
-            className="rounded-lg"
             onClick={onLoadMore}
             disabled={loadingMore}
           >

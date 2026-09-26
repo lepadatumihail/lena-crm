@@ -48,7 +48,8 @@ function snapWithinHour(event: React.MouseEvent<HTMLElement>): number {
  * A full day, midnight to midnight, one column per day given: seven on a
  * desktop, one on a phone under the week strip. Events are sized by
  * duration, a line marks the current time, and clicking an empty slot starts
- * a new event at that time. Scrolls itself to now, or to the working day.
+ * a new event at that time. Scrolls itself to now, but never above the
+ * start of the working day.
  */
 export function TimeGrid({
   days,
@@ -121,9 +122,13 @@ export function TimeGrid({
     const el = scroller.current;
     if (!el || todayKey == null || scrolledFor.current === scrollKey) return;
     scrolledFor.current = scrollKey;
+    // Never above the working day: at night "now" would open on empty small
+    // hours with the day's first viewings out of sight below. Half an hour of
+    // lead-in keeps the 08:00 label clear of the top edge.
+    const workday = top(WORKDAY_START_HOUR * 60) - HOUR_PX / 2;
     const target = todayShown
-      ? top(nowMin) - el.clientHeight / 3
-      : top(WORKDAY_START_HOUR * 60);
+      ? Math.max(top(nowMin) - el.clientHeight / 3, workday)
+      : workday;
     el.scrollTop = Math.max(0, target);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scrollKey, todayKey, todayShown]);
@@ -156,8 +161,8 @@ export function TimeGrid({
                   </span>
                   <span
                     className={cn(
-                      "flex size-7 items-center justify-center rounded-full text-sm font-medium",
-                      today && "bg-primary text-primary-foreground"
+                      "flex size-7 items-center justify-center rounded-full text-sm",
+                      today && "bg-primary text-primary-foreground font-medium"
                     )}
                   >
                     {format(day, "d")}
@@ -184,10 +189,6 @@ export function TimeGrid({
                 </div>
                 {days.map((day) => {
                   const key = dayKey(day);
-                  const today = key === todayKey;
-                  const pastHour =
-                    todayKey != null &&
-                    (key < todayKey || (today && (hour + 1) * 60 <= nowMin));
                   return (
                     <button
                       key={key}
@@ -208,11 +209,12 @@ export function TimeGrid({
                         }
                       }}
                       onPointerLeave={() => setHover(null)}
-                      className={cn(
-                        "hover:bg-accent/40 focus-visible:bg-accent/40 border-t border-l outline-none transition-colors",
-                        today && !single && "bg-primary/[0.04]",
-                        pastHour && "bg-muted/40"
-                      )}
+                      // White all through, as in Google or Apple Calendar: a
+                      // grey wash on past hours shaded Monday to Friday on a
+                      // weekend and read as "workdays", and it swallowed the
+                      // grey meeting blocks. Faded past events, the ink date
+                      // disc and the now line tell the time instead.
+                      className="hover:bg-accent/40 focus-visible:bg-accent/40 border-t border-l outline-none transition-colors"
                       style={{ height: HOUR_PX }}
                     />
                   );
@@ -228,7 +230,7 @@ export function TimeGrid({
             <div className="relative">
               {todayShown && (
                 <span
-                  className="bg-destructive text-destructive-foreground absolute right-1 z-30 -translate-y-1/2 rounded-full px-1.5 py-px text-[10px] font-semibold tabular-nums"
+                  className="bg-destructive text-destructive-foreground absolute right-1 z-30 -translate-y-1/2 rounded-full px-1.5 py-px text-[10px] font-medium tabular-nums"
                   style={{ top: top(nowMin) }}
                   aria-hidden="true"
                 >
@@ -278,7 +280,8 @@ export function TimeGrid({
                           TONE_INK[EVENT_TONES[b.event.kind]],
                           TONE_EDGE[EVENT_TONES[b.event.kind]],
                           TONE_BG_HOVER[EVENT_TONES[b.event.kind]],
-                          b.past && "opacity-55"
+                          // Faded, still readable: a grey meeting at 55% all but vanished.
+                          b.past && "opacity-70"
                         )}
                         style={{
                           top: top(b.startMin) + 1,

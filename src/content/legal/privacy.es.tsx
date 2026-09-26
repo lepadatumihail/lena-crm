@@ -336,6 +336,16 @@ export function PrivacyEs() {
             <td>Siete días</td>
           </tr>
           <tr>
+            <td>home_onboarding</td>
+            <td>Recuerda si el inicio muestra la guía de primeros pasos</td>
+            <td>Un año</td>
+          </tr>
+          <tr>
+            <td>tasks_view, calendar_view</td>
+            <td>Recuerdan cómo viste por última vez tus tareas y tu calendario</td>
+            <td>Un año</td>
+          </tr>
+          <tr>
             <td>lw_ref</td>
             <td>
               Recuerda el enlace de invitación desde el que llegaste, para atribuir el

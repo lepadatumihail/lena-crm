@@ -59,11 +59,11 @@
     },
     "empty": "No free months yet.",
     "kind": {
-      "proTime": "pro time",
-      "balance": "balance"
+      "proTime": "Pro time",
+      "balance": "Balance"
     },
     "months": "{count, plural, one {# month} other {# months}}",
-    "applied": "applied",
-    "pending": "pending"
+    "applied": "Applied",
+    "pending": "Pending"
   }
 }

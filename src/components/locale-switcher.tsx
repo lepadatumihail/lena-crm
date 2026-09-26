@@ -43,7 +43,7 @@ export function LocaleToggle({ className }: { className?: string }) {
       role="group"
       aria-label={t("language")}
       className={cn(
-        "flex items-center rounded-md border p-0.5 text-xs font-medium",
+        "flex items-center rounded-md border p-0.5 text-xs",
         className
       )}
     >
@@ -57,7 +57,7 @@ export function LocaleToggle({ className }: { className?: string }) {
           className={cn(
             "rounded-sm px-2 py-1 uppercase transition-colors",
             l === locale
-              ? "bg-primary/10 text-primary"
+              ? "bg-muted text-foreground font-medium"
               : "text-muted-foreground hover:text-foreground"
           )}
         >

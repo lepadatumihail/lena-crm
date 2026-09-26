@@ -55,7 +55,7 @@ export function MatchingListingsSection({
                       <span>{sellerName}</span>
                     </p>
                   </div>
-                  <span className="text-sm font-medium">
+                  <span className="text-sm tabular-nums">
                     <Money value={property.price} locale={tag} />
                   </span>
                   <ArrowRight className="text-muted-foreground/50 size-4 shrink-0" />

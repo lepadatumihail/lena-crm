@@ -123,15 +123,18 @@ export async function MarketingPage({
                 <Link
                   key={r}
                   href={marketingPath(r, locale)}
-                  className="bg-card hover:border-primary/40 group flex h-full flex-col rounded-2xl border p-6 shadow-sm transition-colors"
+                  className="bg-card hover:bg-muted/40 group flex h-full flex-col rounded-2xl border p-6 shadow-xs transition-colors"
                 >
-                  <h3 className="group-hover:text-primary font-semibold transition-colors">
+                  <h3 className="font-medium">
                     {t(`routes.${r}.label`)}
                   </h3>
                   <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
                     {t(`routes.${r}.blurb`)}
                   </p>
-                  <ArrowRight className="text-primary mt-4 size-4" aria-hidden />
+                  <ArrowRight
+                    className="text-muted-foreground group-hover:text-foreground mt-4 size-4 transition-[color,translate] duration-150 group-hover:translate-x-0.5"
+                    aria-hidden
+                  />
                 </Link>
               ))}
             </div>
@@ -139,7 +142,7 @@ export async function MarketingPage({
         ) : null}
 
         <section className="mx-auto w-full max-w-6xl px-4 pb-20">
-          <div className="from-primary/10 to-accent/40 flex flex-col items-center gap-3 overflow-hidden rounded-2xl border bg-gradient-to-br p-8 text-center sm:p-12">
+          <div className="bg-muted/50 flex flex-col items-center gap-3 overflow-hidden rounded-2xl border p-8 text-center sm:p-12">
             <h2 className="display-3 text-balance">
               {t("cta.heading")}
             </h2>

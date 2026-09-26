@@ -51,8 +51,8 @@ export default async function GlobalNotFound() {
       <body className="min-h-full">
         <main className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 px-6 py-16">
           <div>
-            <p className="text-primary text-sm font-semibold">404</p>
-            <h1 className="mt-1 text-2xl font-semibold tracking-tight">
+            <p className="text-muted-foreground text-sm">404</p>
+            <h1 className="mt-1 text-2xl font-semibold">
               {t("title")}
             </h1>
             <p className="text-muted-foreground mt-2 text-sm">{t("body")}</p>
@@ -62,7 +62,10 @@ export default async function GlobalNotFound() {
             <ul className="mt-2 space-y-1 text-sm">
               {LINKS.map(({ href, key }) => (
                 <li key={href}>
-                  <a className="text-primary underline underline-offset-4" href={href}>
+                  <a
+                    className="text-foreground decoration-foreground/25 hover:decoration-foreground font-medium underline underline-offset-4"
+                    href={href}
+                  >
                     {t(key)}
                   </a>
                 </li>

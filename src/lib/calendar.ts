@@ -8,10 +8,10 @@ export type NotificationType = Enums<"notification_type">;
 
 export const APPOINTMENT_TYPES = ["meeting", "viewing"] as const;
 
-/** One tone per kind of event, shared by the calendar and Home: viewings are the brand's. */
+/** One tone per kind of event, shared by the calendar and Home: viewings are violet, like the Viewing stage. */
 export const EVENT_TONES: Record<AppointmentType, Tone> = {
-  viewing: "brand",
-  meeting: "neutral",
+  viewing: "violet",
+  meeting: "grey",
 };
 
 export type ReminderPreset = { value: number | null; label: string };

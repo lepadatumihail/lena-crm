@@ -59,15 +59,27 @@ export const FOUNDER_WHATSAPP = "+34628825167";
  */
 export const SITE_PROFILES: readonly string[] = [];
 
-/** Brand palette, mirrored from globals.css (oklch → hex) for image rendering. */
+/**
+ * Brand palette, mirrored from globals.css (oklch → hex) for image rendering:
+ * the mono light theme plus the badge tones the OG card's stage pills use.
+ */
 export const BRAND = {
-  primary: "#c0603f",
-  primarySoft: "#f3d9cf",
-  background: "#faf8f3",
-  card: "#fffdf9",
-  foreground: "#2b2926",
-  muted: "#7b7469",
-  border: "#e7e2d9",
+  background: "#ffffff",
+  card: "#ffffff",
+  foreground: "#171717",
+  muted: "#696969",
+  mutedSurface: "#f5f5f5",
+  border: "#e8e8e8",
+  blueSoft: "#e4f0ff",
+  blueInk: "#1b4fc3",
+  greenSoft: "#dcf9e5",
+  greenInk: "#0a6d37",
+  amberSoft: "#fff7c9",
+  amberInk: "#845a00",
+  redSoft: "#ffeaea",
+  redInk: "#b7191c",
+  violetSoft: "#f3ecff",
+  violetInk: "#6a37bf",
 } as const;
 
 /** Absolute URL for a site path; the home page is the bare origin, no trailing slash. */

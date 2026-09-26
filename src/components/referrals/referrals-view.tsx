@@ -17,15 +17,14 @@ import {
   type ReferralState,
   formatReferralCode,
 } from "@/lib/referrals/links";
-import { TONE_BG, TONE_INK, type Tone } from "@/lib/tones";
-import { cn } from "@/lib/utils";
+import type { Tone } from "@/lib/tones";
 
-/** A referral warms to terracotta once they subscribe, and goes green when it pays out. */
+/** A referral turns blue once they subscribe, green when it pays out, and quiet grey if they leave. */
 const STATE_TONE: Record<ReferralState, Tone> = {
   signed_up: "neutral",
-  subscribed: "brand",
+  subscribed: "blue",
   rewarded: "green",
-  left: "neutral",
+  left: "grey",
 };
 
 /**
@@ -62,8 +61,8 @@ export function ReferralsView({ overview }: { overview: ReferralOverview }) {
 
   return (
     <div className="space-y-4">
-
-      <div className="grid items-start gap-4 lg:grid-cols-3">
+      {/* The two panels share a height, so their footers line up. */}
+      <div className="grid gap-4 lg:grid-cols-3">
         <Panel
           className="lg:col-span-2"
           title={t("link.title")}
@@ -75,7 +74,7 @@ export function ReferralsView({ overview }: { overview: ReferralOverview }) {
             {profile && referralUrl ? (
               <div className="bg-muted/40 flex flex-col gap-3 rounded-lg border px-3.5 py-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="min-w-0">
-                  <p className="font-mono text-sm font-medium tracking-wider">
+                  <p className="font-mono text-sm tracking-wider">
                     {formatReferralCode(profile.referral_code)}
                   </p>
                   <p className="text-muted-foreground truncate text-xs">{referralUrl}</p>
@@ -136,13 +135,14 @@ export function ReferralsView({ overview }: { overview: ReferralOverview }) {
                 <li key={agent.id} className="flex items-center gap-3 px-4 py-2.5">
                   <span
                     aria-hidden
-                    className="bg-muted text-muted-foreground flex size-8 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold uppercase ring-1 ring-black/[0.06] ring-inset dark:ring-white/10"
+                    className="bg-muted text-muted-foreground flex size-8 shrink-0 items-center justify-center rounded-full text-[11px] font-medium uppercase ring-border ring-1 ring-inset"
                   >
                     {initialsOf(name)}
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium">{name}</p>
-                    <p className="text-muted-foreground truncate text-xs">
+                    {/* Wraps beside a wide tag on a phone rather than cut the paid count. */}
+                    <p className="text-muted-foreground text-xs text-pretty">
                       {agent.paidInvoices > 0
                         ? t("agents.joinedWithPaid", {
                             date: formatDate(agent.joinedAt),
@@ -151,7 +151,7 @@ export function ReferralsView({ overview }: { overview: ReferralOverview }) {
                         : t("agents.joined", { date: formatDate(agent.joinedAt) })}
                     </p>
                   </div>
-                  <Tag tone={STATE_TONE[agent.state]} dot>
+                  <Tag tone={STATE_TONE[agent.state]}>
                     {t(REFERRAL_STATE_KEY[agent.state])}
                   </Tag>
                 </li>
@@ -162,14 +162,16 @@ export function ReferralsView({ overview }: { overview: ReferralOverview }) {
       </Panel>
 
       <Panel>
-        <div className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center">
-          <RowIcon icon={Sparkles} className={cn("mt-0", TONE_BG.brand, TONE_INK.brand)} />
-          <div className="min-w-0 flex-1">
+        {/* One row on a wide screen; on a phone the icon stays beside the text
+            and the button wraps under the text (ml-11 = icon + gap). */}
+        <div className="flex flex-wrap items-center gap-3 px-4 py-4">
+          <RowIcon icon={Sparkles} className="mt-0 self-start sm:self-center" />
+          <div className="min-w-0 flex-1 basis-56">
             <p className="text-sm font-medium">{foundingTitle}</p>
             <p className="text-muted-foreground text-[13px] text-pretty">{foundingBody}</p>
           </div>
           {!isFounder && plan.source !== "subscription" ? (
-            <Button asChild size="sm" className="self-start rounded-full sm:self-center">
+            <Button asChild variant="outline" size="sm" className="ml-11 sm:ml-0">
               <Link href="/pricing">
                 {t("founding.seePlans")} <ArrowRight />
               </Link>

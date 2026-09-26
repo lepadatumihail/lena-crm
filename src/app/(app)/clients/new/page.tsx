@@ -61,7 +61,7 @@ export default async function NewClientPage({
           {t("description", { side })}{" "}
           {t.rich("importHint", {
             link: (chunks) => (
-              <Link href={`/clients/import?side=${side}`} className="text-foreground font-medium underline-offset-4 hover:underline">
+              <Link href={`/clients/import?side=${side}`} className="text-foreground decoration-foreground/25 hover:decoration-foreground font-medium underline underline-offset-4 transition-colors duration-150">
                 {chunks}
               </Link>
             ),

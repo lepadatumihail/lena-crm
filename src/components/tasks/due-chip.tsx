@@ -2,16 +2,17 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { format, parseISO } from "date-fns";
-import { CalendarDays, CircleAlert } from "lucide-react";
+import { CircleAlert } from "lucide-react";
 
 import { Tag } from "@/components/ui/tag";
 import { dateFnsLocale } from "@/i18n/dates";
 import { dueState, DUE_TONES } from "@/lib/tasks";
 
 /**
- * A task's due date against the agent's today: red with an alert icon when
- * overdue, amber today. The visible text is short ("Today", "16 Sep"); screen
- * readers hear one full sentence instead, so colour is never the only cue.
+ * A task's due date against the agent's today: a text-only pill, red with an
+ * alert icon when overdue (so colour is never the only cue), yellow today.
+ * The visible text is short ("Today", "16 Sep"); screen readers hear one
+ * full sentence instead.
  */
 export function DueChip({
   dueOn,
@@ -34,7 +35,7 @@ export function DueChip({
 
   return (
     <Tag tone={DUE_TONES[state]} title={sentence} className={className}>
-      {state === "overdue" ? <CircleAlert aria-hidden /> : <CalendarDays aria-hidden />}
+      {state === "overdue" ? <CircleAlert aria-hidden /> : null}
       <span aria-hidden>{visible}</span>
       <span className="sr-only">{sentence}</span>
     </Tag>

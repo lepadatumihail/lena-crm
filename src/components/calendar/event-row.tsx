@@ -21,17 +21,20 @@ function eventDescription(e: CalendarEvent): string | null {
 
 /**
  * One event in a list: the time down the left, what it is, and a one-tap
- * WhatsApp reminder. Shared by the week agenda and the month view's day list.
+ * WhatsApp reminder. A flat row; the list around it draws the dividers and
+ * the frame (the phone's day panel, the desktop day dialog).
  */
 export function EventRow({
   event: e,
   past = false,
   onOpen,
+  className,
 }: {
   event: CalendarEvent;
   /** Already happened: drawn quieter so what's next stands out. */
   past?: boolean;
   onOpen: () => void;
+  className?: string;
 }) {
   const t = useTranslations("calendar");
   const tCrm = useTranslations("crm");
@@ -53,19 +56,20 @@ export function EventRow({
   return (
     <div
       className={cn(
-        "hover:bg-accent flex items-center gap-2 rounded-lg border p-3 transition-colors",
-        past && "opacity-60"
+        "hover:bg-muted/40 flex items-center gap-2 px-4 py-3 transition-colors",
+        past && "opacity-60",
+        className
       )}
     >
       <button
         type="button"
         onClick={onOpen}
-        className="flex min-w-0 flex-1 items-start gap-3 text-left"
+        className="focus-visible:ring-ring/50 -m-1 flex min-w-0 flex-1 items-start gap-3 rounded-md p-1 text-left outline-none focus-visible:ring-[3px]"
       >
-        <span className="w-11 shrink-0 pt-0.5 text-sm leading-tight tabular-nums">
-          <span className="block font-medium">{format(start, "HH:mm")}</span>
+        <span className="w-11 shrink-0 text-sm leading-5 tabular-nums">
+          <span className="block">{format(start, "HH:mm")}</span>
           {e.ends_at && (
-            <span className="text-muted-foreground block text-xs">
+            <span className="text-muted-foreground block text-xs leading-4">
               {format(new Date(e.ends_at), "HH:mm")}
             </span>
           )}
@@ -77,10 +81,10 @@ export function EventRow({
           )}
         />
         <span className="min-w-0">
-          <span className="block font-medium">{e.title}</span>
-          <span className="text-muted-foreground block text-sm">{meta}</span>
+          <span className="block text-sm leading-5 font-medium">{e.title}</span>
+          <span className="text-muted-foreground block text-[13px]">{meta}</span>
           {desc && (
-            <span className="text-muted-foreground mt-1 line-clamp-2 block text-sm whitespace-pre-wrap">
+            <span className="text-muted-foreground mt-1 line-clamp-2 block text-[13px] whitespace-pre-wrap">
               {desc}
             </span>
           )}
@@ -106,13 +110,13 @@ export function EventRow({
           target="_blank"
           rel="noopener noreferrer"
           className={cn(
-            buttonVariants({ variant: "outline", size: "icon" }),
-            "shrink-0"
+            buttonVariants({ variant: "ghost", size: "icon" }),
+            "text-muted-foreground hover:text-foreground shrink-0"
           )}
           title={t("day.remind")}
           aria-label={t("day.remindAria")}
         >
-          <MessageCircle className="size-4 text-[#25D366]" />
+          <MessageCircle className="size-4" strokeWidth={1.75} />
         </a>
       )}
     </div>

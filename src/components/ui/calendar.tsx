@@ -37,13 +37,14 @@ function Calendar({
         month_caption: "flex h-7 items-center justify-center",
         caption_label: "text-sm font-medium",
         nav: "absolute inset-x-0 top-0 flex items-center justify-between",
+        // The 28px icon size carries its own smaller radius (rounded-md).
         button_previous: cn(
-          buttonVariants({ variant: "outline" }),
-          "size-7 bg-transparent p-0 opacity-70 hover:opacity-100"
+          buttonVariants({ variant: "outline", size: "icon-xs" }),
+          "bg-transparent opacity-70 hover:opacity-100"
         ),
         button_next: cn(
-          buttonVariants({ variant: "outline" }),
-          "size-7 bg-transparent p-0 opacity-70 hover:opacity-100"
+          buttonVariants({ variant: "outline", size: "icon-xs" }),
+          "bg-transparent opacity-70 hover:opacity-100"
         ),
         month_grid: "w-full border-collapse",
         weekdays: "flex",
@@ -56,8 +57,10 @@ function Calendar({
           "size-9 rounded-md p-0 font-normal",
           "aria-selected:bg-primary aria-selected:text-primary-foreground aria-selected:hover:bg-primary aria-selected:hover:text-primary-foreground"
         ),
+        // The chosen day is solid ink; today is an ink outline, so the two
+        // stay apart without colour and a hovered day (grey) matches neither.
         today:
-          "[&>button:not([aria-selected=true])]:bg-accent [&>button:not([aria-selected=true])]:text-accent-foreground",
+          "[&>button]:font-medium [&>button:not([aria-selected=true])]:text-foreground [&>button:not([aria-selected=true])]:inset-ring [&>button:not([aria-selected=true])]:inset-ring-foreground/25",
         outside: "[&>button]:text-muted-foreground/40",
         disabled: "[&>button]:pointer-events-none [&>button]:opacity-40",
         hidden: "invisible",

@@ -12,14 +12,13 @@ import { cn } from "@/lib/utils";
 
 const ICONS: Record<Tone, LucideIcon> = {
   neutral: Info,
-  brand: Info,
+  grey: Info,
+  blue: Info,
   green: CircleCheck,
   amber: TriangleAlert,
   red: CircleAlert,
-  sand: Info,
-  apricot: Info,
-  clay: Info,
-  terracotta: Info,
+  violet: Info,
+  ink: Info,
 };
 
 /**

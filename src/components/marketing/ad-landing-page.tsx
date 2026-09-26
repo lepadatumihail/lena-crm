@@ -19,6 +19,7 @@ import { whatsappLink } from "@/lib/whatsapp";
 import { MarketingNav } from "@/components/marketing-nav";
 import { Reveal } from "@/components/reveal";
 import { Eyebrow } from "@/components/marketing/eyebrow";
+import { HeroAccent } from "@/components/marketing/hero-accent";
 import { FilmPlayer } from "@/components/marketing/film-player";
 import { LandingViewBeacon } from "@/components/marketing/landing-view-beacon";
 import { SeeItFirst } from "@/components/marketing/see-it-first";
@@ -98,11 +99,7 @@ export async function AdLandingPage({
             </Eyebrow>
             <h1 className="display-1 max-w-4xl text-balance">
               {t.rich("title", {
-                accent: (chunks) => (
-                  <em className="bg-gradient-to-r from-[oklch(0.56_0.14_36)] to-[oklch(0.68_0.15_52)] bg-clip-text text-transparent dark:from-[oklch(0.74_0.13_42)] dark:to-[oklch(0.84_0.1_62)]">
-                    {chunks}
-                  </em>
-                ),
+                accent: (chunks) => <HeroAccent>{chunks}</HeroAccent>,
               })}
             </h1>
             <p className="text-stage-foreground/70 mt-5 max-w-xl text-base text-pretty sm:mt-6 sm:text-lg lg:text-xl dark:font-light dark:text-stage-foreground/65">
@@ -158,10 +155,10 @@ export async function AdLandingPage({
           <ol className="mx-auto mt-10 grid max-w-4xl gap-5 sm:grid-cols-3">
             {STEPS.map((step, i) => (
               <li key={step} className="bg-card text-card-foreground rounded-2xl border p-6">
-                <span className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-full text-sm font-semibold">
+                <span className="bg-muted text-foreground flex size-8 items-center justify-center rounded-full text-sm font-medium tabular-nums">
                   {i + 1}
                 </span>
-                <h3 className="mt-4 font-semibold">{t(`steps.${step}.title`)}</h3>
+                <h3 className="mt-4 font-medium">{t(`steps.${step}.title`)}</h3>
                 <p className="text-muted-foreground mt-2 text-sm text-pretty">
                   {t(`steps.${step}.body`)}
                 </p>
@@ -180,11 +177,11 @@ export async function AdLandingPage({
           <div className="mx-auto mt-10 grid max-w-4xl gap-5 sm:grid-cols-3">
             {changes.map(({ key, icon: Icon }) => (
               <div key={key} className="flex gap-3">
-                <div className="bg-primary/10 text-primary flex size-9 shrink-0 items-center justify-center rounded-lg">
+                <div className="bg-background text-foreground/70 flex size-9 shrink-0 items-center justify-center rounded-lg border shadow-xs">
                   <Icon className="size-5" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">{t(`changes.${key}.title`)}</h3>
+                  <h3 className="font-medium">{t(`changes.${key}.title`)}</h3>
                   <p className="text-muted-foreground mt-1 text-sm text-pretty">
                     {t(`changes.${key}.body`)}
                   </p>

@@ -6,6 +6,7 @@ import { LayoutGrid, List } from "lucide-react";
 
 import { TONE_BG, TONE_INK, type Tone } from "@/lib/tones";
 import { cn } from "@/lib/utils";
+import { SteadyLabel } from "@/components/ui/steady-label";
 import {
   Select,
   SelectContent,
@@ -15,9 +16,11 @@ import {
 } from "@/components/ui/select";
 
 /*
-  Toolbar controls above a list: 32px tall, 12px type, hairline borders. The
-  filter chip pairs a muted label with the chosen value in one outline, so a
-  row of them scans as "Stage: Any · Type: All" rather than as loose menus.
+  Toolbar controls above a list: 32px tall, 12px type at regular weight,
+  hairline borders. The filter chip pairs a muted label with the chosen value
+  in one outline, so a row of them scans as "Stage: Any · Type: All" rather
+  than as loose menus. Only the current tab or segment turns 500, and it keeps
+  its width while doing so (SteadyLabel), so its neighbours never shift.
 */
 
 export function FilterSelect({
@@ -46,9 +49,9 @@ export function FilterSelect({
       <Select value={value} onValueChange={onValueChange}>
         <SelectTrigger
           size="sm"
-          className="h-full gap-1.5 rounded-none border-0 bg-transparent px-2.5 text-xs font-medium shadow-none focus-visible:ring-0 data-[size=sm]:h-full"
+          className="text-foreground h-full gap-1.5 rounded-none border-0 bg-transparent px-2.5 text-xs shadow-none focus-visible:ring-0 data-[size=sm]:h-full"
         >
-          <SelectValue />
+          <SelectValue>{options.find((option) => option.value === value)?.label}</SelectValue>
         </SelectTrigger>
         <SelectContent align="end">
           {options.map((option) => (
@@ -62,7 +65,7 @@ export function FilterSelect({
   );
 }
 
-/** A toggle in the toolbar: outline at rest, brand-tinted when pressed. */
+/** A toggle in the toolbar: outline at rest, a quiet grey fill when pressed. */
 export function ToolbarChip({
   pressed = false,
   className,
@@ -74,9 +77,9 @@ export function ToolbarChip({
       type="button"
       aria-pressed={pressed}
       className={cn(
-        "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-lg border px-2.5 text-xs font-medium whitespace-nowrap shadow-xs transition-[color,background-color,border-color,scale] duration-150 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 active:scale-[0.96] [&_svg]:size-3.5 [&_svg]:shrink-0",
+        "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-lg border px-2.5 text-xs whitespace-nowrap shadow-xs transition-[color,background-color,border-color,scale] duration-150 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 active:scale-[0.96] [&_svg]:size-3.5 [&_svg]:shrink-0",
         pressed
-          ? "border-primary/30 bg-primary/10 text-primary"
+          ? "border-foreground/20 bg-muted text-foreground"
           : "bg-background text-muted-foreground hover:bg-muted/60 hover:text-foreground",
         className
       )}
@@ -109,7 +112,7 @@ export function ViewToggle({
       className={cn(
         "flex size-7 items-center justify-center rounded-md transition-[color,background-color,box-shadow] duration-150 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 [&_svg]:size-4",
         view === value
-          ? "bg-background text-foreground shadow-xs"
+          ? "bg-background text-foreground shadow-xs dark:bg-accent"
           : "text-muted-foreground hover:text-foreground"
       )}
     >
@@ -133,7 +136,10 @@ export type ToolbarTab = {
   dot?: string;
   /** An icon before the label, for a tab that is not a stage. */
   icon?: ReactNode;
-  /** Tints a count above zero, for a tab whose rows wait on the agent. */
+  /**
+   * Tints a count above zero in a signal tone, for a tab whose rows wait on
+   * the agent (Needs follow-up). Every other count stays grey.
+   */
   countTone?: Tone;
 };
 
@@ -175,9 +181,9 @@ export function ToolbarTabs({
               aria-selected={active}
               onClick={() => onChange(tab.value)}
               className={cn(
-                "-mb-px flex h-9 shrink-0 items-center gap-1.5 border-b-2 px-3 text-xs font-medium whitespace-nowrap transition-colors duration-150 outline-none focus-visible:bg-muted/60 [&>svg]:size-3.5 [&>svg]:shrink-0",
+                "-mb-px flex h-9 shrink-0 items-center gap-1.5 border-b-2 px-3 text-xs whitespace-nowrap transition-colors duration-150 outline-none focus-visible:bg-muted/60 [&>svg]:size-3.5 [&>svg]:shrink-0",
                 active
-                  ? "border-foreground text-foreground"
+                  ? "border-foreground text-foreground font-medium"
                   : "text-muted-foreground hover:text-foreground border-transparent"
               )}
             >
@@ -185,13 +191,13 @@ export function ToolbarTabs({
                 <span aria-hidden className={cn("size-1.5 rounded-full", tab.dot)} />
               ) : null}
               {tab.icon}
-              {tab.label}
+              <SteadyLabel>{tab.label}</SteadyLabel>
               {tab.count != null ? (
                 <span
                   className={cn(
-                    "inline-flex h-[18px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] tabular-nums",
+                    "inline-flex h-[18px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] font-normal tabular-nums",
                     tab.countTone && tab.count > 0
-                      ? cn(TONE_BG[tab.countTone], TONE_INK[tab.countTone], "font-medium")
+                      ? cn(TONE_BG[tab.countTone], TONE_INK[tab.countTone])
                       : active
                         ? "bg-foreground/10 text-foreground"
                         : "bg-muted text-muted-foreground"
@@ -248,9 +254,9 @@ export function Segmented({
       {items.map((item) => {
         const active = item.value === value;
         const itemClass = cn(
-          "flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium whitespace-nowrap transition-[color,background-color,box-shadow] duration-150 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 [&_svg]:size-3.5 [&_svg]:shrink-0",
+          "flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs whitespace-nowrap transition-[color,background-color,box-shadow] duration-150 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 [&_svg]:size-3.5 [&_svg]:shrink-0",
           active
-            ? "bg-background text-foreground shadow-xs"
+            ? "bg-background text-foreground font-medium shadow-xs dark:bg-accent"
             : "text-muted-foreground hover:text-foreground"
         );
         return item.href ? (
@@ -262,7 +268,7 @@ export function Segmented({
             className={itemClass}
           >
             {item.icon}
-            {item.label}
+            <SteadyLabel>{item.label}</SteadyLabel>
           </Link>
         ) : (
           <button
@@ -276,7 +282,7 @@ export function Segmented({
             className={itemClass}
           >
             {item.icon}
-            {item.label}
+            <SteadyLabel>{item.label}</SteadyLabel>
           </button>
         );
       })}

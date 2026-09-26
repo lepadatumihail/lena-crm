@@ -180,7 +180,7 @@ export function AttachmentChip({
         type="button"
         onClick={open}
         disabled={busy}
-        className="min-w-0 flex-1 truncate text-left font-medium hover:underline"
+        className="min-w-0 flex-1 truncate text-left hover:underline"
       >
         {file.file_name}
       </button>

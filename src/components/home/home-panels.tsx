@@ -2,7 +2,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { BellRing, Building2, CalendarDays, Euro, Users } from "lucide-react";
 
 import { AttentionList } from "@/components/home/attention-list";
-import { GettingStarted } from "@/components/home/onboarding-card";
 import { RecentClients } from "@/components/home/recent-clients";
 import {
   StatTiles,
@@ -26,12 +25,7 @@ import type {
   PipelineCounts,
   RecentClient,
 } from "@/lib/data/dashboard";
-import {
-  countViewingsWithin,
-  pipelineSegments,
-  showOnboarding,
-  type OnboardingInput,
-} from "@/lib/home";
+import { countViewingsWithin, pipelineSegments } from "@/lib/home";
 
 const ATTENTION_LIMIT = 8;
 
@@ -40,16 +34,14 @@ const ATTENTION_LIMIT = 8;
   home-skeletons.tsx draws the same shapes while it loads.
 */
 
-/** The getting-started checklist (young accounts only) and the four headline figures. */
+/** The four headline figures. */
 export function SummaryPanel({
   counts,
-  onboarding,
   events,
   commission,
   now,
 }: {
   counts: PipelineCounts;
-  onboarding: OnboardingInput;
   events: CalendarEvent[];
   commission: { pipeline: number; closed: number };
   now: Date;
@@ -102,19 +94,13 @@ export function SummaryPanel({
     },
   ];
 
-  return (
-    <>
-      {showOnboarding(onboarding) ? <GettingStarted onboarding={onboarding} /> : null}
-      <StatTiles tiles={tiles} />
-    </>
-  );
+  return <StatTiles tiles={tiles} />;
 }
 
 export function AttentionPanel({ items }: { items: AttentionItem[] }) {
   const t = useTranslations("home.attention");
   return (
     <Panel
-      className="flex-1"
       title={t("title")}
       icon={<BellRing className="size-3.5" />}
       count={items.length}
@@ -141,8 +127,9 @@ export function UpcomingEventsPanel({
 }) {
   const t = useTranslations("home.upcoming");
   return (
+    // Sized to its rows, not stretched to the left column: a short week
+    // leaves page space under the card, not an empty card.
     <Panel
-      className="h-full"
       title={t("title")}
       icon={<CalendarDays className="size-3.5" />}
       action={<PanelAction href="/calendar">{t("calendar")}</PanelAction>}

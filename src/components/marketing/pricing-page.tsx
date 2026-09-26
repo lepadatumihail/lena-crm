@@ -199,11 +199,11 @@ export async function PricingPage({ locale }: { locale: AppLocale }) {
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map(({ key, icon: Icon }, i) => (
               <Reveal key={key} delay={(i % 3) * 80}>
-                <div className="bg-card h-full rounded-2xl border p-5 shadow-sm">
-                  <div className="bg-primary/10 text-primary flex size-9 items-center justify-center rounded-lg">
+                <div className="bg-card h-full rounded-2xl border p-5 shadow-xs">
+                  <div className="bg-muted text-foreground/70 flex size-9 items-center justify-center rounded-lg">
                     <Icon className="size-5" />
                   </div>
-                  <h3 className="mt-3 font-semibold">{t(`features.${key}.title`)}</h3>
+                  <h3 className="mt-3 font-medium">{t(`features.${key}.title`)}</h3>
                   <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
                     {t(`features.${key}.body`)}
                   </p>
@@ -231,7 +231,7 @@ export async function PricingPage({ locale }: { locale: AppLocale }) {
                   ? tBilling("founding.spots", { count: spotsLeft })
                   : tBilling("pricing.cohortFull")
               }
-              badgeTone={founding ? "brand" : "neutral"}
+              badgeTone={founding ? "blue" : "neutral"}
             />
           </Reveal>
           <Reveal delay={80}>
@@ -268,7 +268,7 @@ export async function PricingPage({ locale }: { locale: AppLocale }) {
       {/* Closing call to action */}
       <section className="mx-auto w-full max-w-6xl section-y px-4">
         <Reveal>
-          <div className="from-primary/10 to-accent/40 flex flex-col items-center gap-3 overflow-hidden rounded-2xl border bg-gradient-to-br p-8 text-center sm:p-12">
+          <div className="bg-muted/50 flex flex-col items-center gap-3 overflow-hidden rounded-2xl border p-8 text-center sm:p-12">
             <h2 className="display-3 text-balance">
               {t("cta.heading")}
             </h2>
@@ -301,11 +301,11 @@ function Explainer({
   badgeTone?: Tone;
 }) {
   return (
-    <div className="bg-card flex h-full flex-col rounded-2xl border p-6 shadow-sm">
-      <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-lg">
+    <div className="bg-card flex h-full flex-col rounded-2xl border p-6 shadow-xs">
+      <div className="bg-muted text-foreground/70 flex size-10 items-center justify-center rounded-lg">
         <Icon className="size-5" />
       </div>
-      <h3 className="mt-4 text-lg font-semibold">{title}</h3>
+      <h3 className="mt-4 text-lg font-medium">{title}</h3>
       <p className="text-muted-foreground mt-2 text-sm leading-relaxed">{body}</p>
       {badge ? (
         <Tag tone={badgeTone} className="mt-4 w-fit">

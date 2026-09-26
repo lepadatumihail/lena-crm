@@ -40,7 +40,7 @@ export function StatStrip({
       {items.map((item) => (
         <div key={item.label} className="bg-card min-w-0 px-4 py-3.5">
           <dt className="text-muted-foreground truncate text-xs">{item.label}</dt>
-          <dd className="mt-1.5 text-lg leading-6 font-semibold tracking-tight break-words tabular-nums">
+          <dd className="mt-1.5 text-lg leading-6 font-medium break-words tabular-nums">
             {item.value}
           </dd>
           <dd className="text-muted-foreground mt-0.5 truncate text-xs">
