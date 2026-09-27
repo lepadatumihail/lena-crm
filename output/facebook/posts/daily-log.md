@@ -1,5 +1,11 @@
 # LeadWing Facebook daily log
 
+## Sun 27 Sep 2026 (evening check, run 18:10 Madrid)
+
+Nothing new and nothing to answer: 0 comments on all 11 page posts and all 6 ad dark posts, inbox empty (0 conversations), 0 followers, reactions unchanged (1 each on three dark posts, 1 on page post …122110619499476753). No ad is running — the quiet-leads pause applied at noon is holding: last hourly spend bucket is 13:00-13:59 Madrid, nothing after 14:00, final EUR 18.65 of EUR 25 with EUR 6.35 forfeited (7,257 imp, 5,436 reach, 112 clicks, 63 LPV at EUR 0.30; feed-only portion EUR 16.31 / 6,169 imp). Post boost still PAUSED with EUR 7.91 unspent; the original click ad still reads ACTIVE but ended 24 Sep and has no row since. Queue verified via /scheduled_posts: Mon 28 Sep 09:30 digest and Wed 30 Sep 09:30 import post, both is_published false, nothing else.
+
+Noticed: the quiet-leads ad set's `publisher_platforms` / `facebook_positions` / `instagram_positions` are STILL absent — Meta never restored them, so the 27 Sep regression is a permanent state of that ad set, not a transient. Recorded in the playbook and ads.json. Today's split is the honest version of noon's read: 79% of the day's EUR 2.98 went off-feed. Nothing published, nothing sent, nothing edited; VERCEL_TOKEN still absent, analytics skipped.
+
 ## Sun 27 Sep 2026 (founder answered in session: "ok pause for now" + "2- schedule it")
 
 Applied both. **Quiet-leads ad set 6996508321694 PAUSED** — verified status PAUSED, ad 6996508363294 ADSET_PAUSED, €6.40 of the €25 forfeited, €18.60 spent. Option A on the placement regression: Meta had stripped the feed-only placements overnight and the last day's data was the only reason the ad was still alive, so off-feed delivery made it worthless. Final run 7,115+ imp, 5,306 reach, 107 link clicks, 63 landing views at €0.29; feed-only portion €16.28 for 6,057 impressions. No ad is now running on Meta at all — all three are paused or ended, ~€45 spent across the whole experiment for 0 detectable sign-ups.
