@@ -1,5 +1,19 @@
 # LeadWing Facebook daily log
 
+## Sun 27 Sep 2026 (noon brief / weekly sitting, run 12:10 Madrid)
+
+**Placement regression on the quiet-leads ad, found today.** The ad set's `publisher_platforms` / `facebook_positions` / `instagram_positions` fields are GONE — `updated_time` 2026-09-27T00:18:38+0200, an edit the routine did not make (same overnight-midnight pattern as the 24 Sep dark-post minting). Meta has put it back on automatic placements. Effect: of today's €2.77, only ~€0.66 went to feed; €2.12 went to Audience Network (€0.74 / 383 imp), Instagram Reels (€0.84 / 372), Stories (€0.23), FB Reels (€0.16) and in-stream (€0.15). Every cent of the run's non-feed spend is dated today; it was 100% feed through 26 Sep. NOT paused: the founder's waste test does not fire (AN is 27% of today and 4% of lifetime, not "more than half"; cost per link click €0.14, not under €0.05; landing views 59% of clicks, not under 30%). Reported with two labelled options, nothing edited.
+
+Numbers: followers 0, 0 comments on all 11 page posts and all 6 ad dark posts, inbox empty. 26 Sep page insights: 34 post engagements, 0 views, 0 follows. Queue verified via /scheduled_posts: Wed 30 Sep 09:30 import post alone.
+
+Quiet-leads lifetime: €18.27 of €25, €6.73 left, 7,115 imp, 5,306 reach, 107 link clicks, 63 landing views (59% of clicks, €0.29 each). 26 Sep was its best day — €6.42 / 2,705 imp / 41 clicks / 25 LPV at €0.26. Ends Sun 28 Sep 23:59. Post boost still PAUSED, €7.91 of €10 unspent, untouched. Account status 1, €4.99 balance.
+
+Reel (live 26 Sep 23:46): 26 organic 3-second views, average watch 1.6 s, 0 reactions, 0 comments, 0 shares — the page's first organic reach of its own.
+
+Drafted, not published: Mon 28 Sep 09:30 digest — `news-digest-2026-09-28.md` + card `11-digest-2026-09-28.png` (new editorial photo `photo-2026-09-28-andalusian-door.png`, OpenAI ~€0.10). Lead is Andalucía's ITP cut from 2027. The 38%-of-income rent story was dropped as already used on 25 Sep. Fri 2 Oct's digest belongs to Thursday's run, not this one; Wed 30 is already queued, so the week is laid out.
+
+Nothing published, nothing sent, nothing edited. VERCEL_TOKEN still absent — analytics skipped.
+
 ## Sat 26 Sep 2026 (evening, Claude session with the founder: "do whatever you think is best")
 
 Paused: the post boost (ad set 6996508580294), verified PAUSED with €7.95 of €10 unspent. It had bought 1 reaction for €1.93; no audience setting fixes it (see the job-title finding above). Quiet-leads untouched, ends Sun 28 Sep 23:59 with €11.69 left at 20:20.

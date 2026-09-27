@@ -1,0 +1,22 @@
+{
+ "out": "output/facebook/posts/11-digest-2026-09-28.png",
+ "eyebrow": "Week of 21–27 Sep",
+ "headline": "Andalucía cuts its\nresale tax from 2027.",
+ "headlineSize": 60,
+ "sub": "Five things Costa del Sol agents should know this week.",
+ "items": [
+  "Transfer tax on resale homes drops from 7% to 6.75% in 2027, then a quarter point a year until it reaches 6%.",
+  "The cap for the reduced 3.5% rate rises from €150,000 to €200,000 — €300,000 for large families and buyers with a disability.",
+  "Benahavís averaged €5,553/m² in August, still the top end of the national market.",
+  "Málaga city signed off ~100 tourist apartments this summer despite the moratorium that began on 25 July.",
+  "The market has split: the coast keeps climbing, inland stays cheap — Humilladero at €903/m²."
+ ],
+ "pill": "Curated by LeadWing",
+ "url": "leadwing.app",
+ "theme": "photo",
+ "photo": "output/facebook/posts/photo-2026-09-28-andalusian-door.png",
+ "photoHeight": 380,
+ "itemSize": 27,
+ "itemGap": 18,
+ "ruleGap": 18
+}
