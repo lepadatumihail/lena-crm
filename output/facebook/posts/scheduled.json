@@ -90,5 +90,19 @@
   "caption": "output/facebook/posts/film-02-captions.md (Facebook Reel section)",
   "error": null,
   "approved": "founder in session, 26 Sep ~23:45: 'i give you full permission'"
+ },
+ {
+  "image": "output/facebook/posts/11-digest-2026-09-28.png",
+  "kind": "Monday news digest (week of 21-27 Sep), lead: Andalucia ITP cut from 2027",
+  "photo_id": "122113173429476753",
+  "post_id": "1279663088571991_122113173585476753",
+  "scheduled_publish_time": 1790580600,
+  "scheduled_for": "2026-09-28T09:30:00+02:00",
+  "is_published": false,
+  "source_file": "output/facebook/posts/news-digest-2026-09-28.md",
+  "spec": "output/facebook/posts/spec-digest-2026-09-28.json",
+  "photo_asset": "output/facebook/posts/photo-2026-09-28-andalusian-door.png",
+  "error": null,
+  "approved": "founder in session, 27 Sep: '2- schedule it'"
  }
 ]

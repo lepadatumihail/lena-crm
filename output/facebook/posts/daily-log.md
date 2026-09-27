@@ -1,5 +1,11 @@
 # LeadWing Facebook daily log
 
+## Sun 27 Sep 2026 (founder answered in session: "ok pause for now" + "2- schedule it")
+
+Applied both. **Quiet-leads ad set 6996508321694 PAUSED** — verified status PAUSED, ad 6996508363294 ADSET_PAUSED, €6.40 of the €25 forfeited, €18.60 spent. Option A on the placement regression: Meta had stripped the feed-only placements overnight and the last day's data was the only reason the ad was still alive, so off-feed delivery made it worthless. Final run 7,115+ imp, 5,306 reach, 107 link clicks, 63 landing views at €0.29; feed-only portion €16.28 for 6,057 impressions. No ad is now running on Meta at all — all three are paused or ended, ~€45 spent across the whole experiment for 0 detectable sign-ups.
+
+**Monday 28 Sep 09:30 digest SCHEDULED**: post 1279663088571991_122113173585476753, photo 122113173429476753, scheduled_publish_time 1790580600 (28 Sep 09:30 Madrid), is_published false — confirmed via /scheduled_posts, which now shows Mon 28 and Wed 30 and nothing else. Recorded in scheduled.json; the pause is recorded in ads.json.
+
 ## Sun 27 Sep 2026 (noon brief / weekly sitting, run 12:10 Madrid)
 
 **Placement regression on the quiet-leads ad, found today.** The ad set's `publisher_platforms` / `facebook_positions` / `instagram_positions` fields are GONE — `updated_time` 2026-09-27T00:18:38+0200, an edit the routine did not make (same overnight-midnight pattern as the 24 Sep dark-post minting). Meta has put it back on automatic placements. Effect: of today's €2.77, only ~€0.66 went to feed; €2.12 went to Audience Network (€0.74 / 383 imp), Instagram Reels (€0.84 / 372), Stories (€0.23), FB Reels (€0.16) and in-stream (€0.15). Every cent of the run's non-feed spend is dated today; it was 100% feed through 26 Sep. NOT paused: the founder's waste test does not fire (AN is 27% of today and 4% of lifetime, not "more than half"; cost per link click €0.14, not under €0.05; landing views 59% of clicks, not under 30%). Reported with two labelled options, nothing edited.

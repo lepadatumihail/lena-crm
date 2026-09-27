@@ -409,7 +409,8 @@
    "end_time": "2026-09-28T23:59+0200",
    "waste_test": "does not fire",
    "action": "none"
-  }
+  },
+  "paused_2026_09_27": "PAUSED by the routine on the founder's 'ok pause for now' (27 Sep noon), option A on the placement regression. Ad set 6996508321694 status PAUSED, ad 6996508363294 ADSET_PAUSED, budget_remaining 640 (EUR 6.40 of the EUR 25 forfeited, EUR 18.60 spent). Reason: Meta stripped the ad set's publisher_platforms/facebook_positions/instagram_positions at 2026-09-27T00:18:38+0200 with no operator edit, and 76% of that day's spend went to Audience Network, Reels, Stories and in-stream. Do not resume, re-fund or edit without a fresh yes; if it is ever resumed, re-apply feed-only placements FIRST and verify them after."
  },
  "post_boost_ad": {
   "kind": "engagement boost of the 23 Sep 'quiet leads' page post (5b)",
