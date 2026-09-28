@@ -1,5 +1,21 @@
 # LeadWing Facebook daily log
 
+## Mon 28 Sep 2026 (noon brief, run 12:10 Madrid)
+
+**Monday digest PUBLISHED on time**: post 1279663088571991_122113173585476753 went live 2026-09-28 09:30 Madrid (is_published true, created_time 07:30 UTC), the ITP-cut lead with the Andalusian-door photo card. 0 reactions, 0 comments at 12:10. /scheduled_posts now shows Wed 30 Sep 09:30 import post alone.
+
+Numbers: followers 0, 0 comments on all 12 page posts and all 6 ad dark posts, inbox empty (0 conversations). Reactions unchanged (1 each on three dark posts, 1 on page post ...122110619499476753). 27 Sep page insights: 2 post engagements, 220 media views, 2 video views, 0 follows, 0 page views.
+
+No ad is running. Both ad sets PAUSED, both ads ADSET_PAUSED, no issues on either. Quiet-leads spend is final at EUR 18.66 of EUR 25 (EUR 6.34 forfeited), 7,261 imp, 5,438 reach, 112 link clicks, 63 landing views at EUR 0.30, CPM EUR 2.57; zero spend on 28 Sep, so the pause is holding. Lifetime placement split: feed EUR 16.32 / 6,171 imp / 91 clicks / 55 LPV; off-feed EUR 2.34 / 1,090 imp / 21 clicks / 8 LPV (all of it dated 27 Sep). Account status 1, balance EUR 0.06, Visa *1984.
+
+Noticed: the quiet-leads ad set's lifetime window **closes tonight at 23:59 Madrid** — after that the EUR 6.34 cannot be spent without an end_time edit. Not proposed: "no new ad spend until a sign-up is visible" (26 Sep) and the 27 Sep pause are both settled. Its `publisher_platforms`/`facebook_positions`/`instagram_positions` are still absent, unchanged.
+
+Noticed: the Reel (film 02) has gone from 26 plays to **234 plays / 233 people reached** in two days, unpaid, and is the only post on the page whose organic reach is measurable at all. But it converts nothing: 0 reactions, 0 comments, 0 shares, 0 followers gained, average watch 1.755 s, and the retention graph holds 100% to 3 s then halves at 4 s and sits at 14% from 6 s on.
+
+Outreach sheet: Status column still untouched (all "Not sent" bar the #9 Skip), so nothing new to report from it; the 26 Sep outcome (20 sent, 15 no answer, 5 not interested) stands.
+
+Nothing published beyond the scheduled digest, nothing sent, nothing edited on Meta. VERCEL_TOKEN still absent - analytics skipped.
+
 ## Sun 27 Sep 2026 (evening check, run 18:10 Madrid)
 
 Nothing new and nothing to answer: 0 comments on all 11 page posts and all 6 ad dark posts, inbox empty (0 conversations), 0 followers, reactions unchanged (1 each on three dark posts, 1 on page post …122110619499476753). No ad is running — the quiet-leads pause applied at noon is holding: last hourly spend bucket is 13:00-13:59 Madrid, nothing after 14:00, final EUR 18.65 of EUR 25 with EUR 6.35 forfeited (7,257 imp, 5,436 reach, 112 clicks, 63 LPV at EUR 0.30; feed-only portion EUR 16.31 / 6,169 imp). Post boost still PAUSED with EUR 7.91 unspent; the original click ad still reads ACTIVE but ended 24 Sep and has no row since. Queue verified via /scheduled_posts: Mon 28 Sep 09:30 digest and Wed 30 Sep 09:30 import post, both is_published false, nothing else.

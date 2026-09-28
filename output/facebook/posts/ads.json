@@ -428,6 +428,24 @@
    "placements_lifetime": "facebook/feed 9.36 EUR / 3699 imp; instagram/feed 6.95 / 2470; audience_network 0.87 / 411; instagram_reels 0.87 / 409; instagram_stories 0.26 / 124; facebook_reels 0.19 / 93; instream_video 0.15 / 43; feed-only portion 16.31 EUR / 6169 imp",
    "placement_fields": "publisher_platforms / facebook_positions / instagram_positions STILL ABSENT at the evening check - Meta did not restore them. Targeting holds only age_max, age_min, flexible_spec, geo_locations, targeting_automation. Re-apply feed-only placements FIRST and verify after, if this ad set is ever resumed.",
    "note": "do not resume, re-fund or edit without a fresh yes"
+  },
+  "final_2026_09_28T1210": {
+   "adset_status": "PAUSED",
+   "ad_effective_status": "ADSET_PAUSED",
+   "issues_info": "none",
+   "spend_eur": 18.66,
+   "budget_remaining_eur": 6.34,
+   "impressions": 7261,
+   "reach": 5438,
+   "link_clicks": 112,
+   "landing_page_views": 63,
+   "cost_per_lpv_eur": 0.3,
+   "cpm_eur": 2.57,
+   "spend_28_sep": "0.00 - no insights row for 28 Sep, the pause is holding",
+   "placements_lifetime": "feed EUR 16.32 / 6171 imp / 91 clicks / 55 LPV (fb feed 9.37/3701/52/37, ig feed 6.95/2470/39/18); off-feed EUR 2.34 / 1090 imp / 21 clicks / 8 LPV (an_classic 0.87/411, ig_reels 0.87/409, ig_stories 0.26/124, fb_reels 0.19/95, instream 0.15/43)",
+   "placement_fields": "publisher_platforms / facebook_positions / instagram_positions STILL ABSENT - Meta never restored them",
+   "end_time": "2026-09-28T23:59:00+0200 - the lifetime window closes tonight; after that the EUR 6.34 needs an end_time edit as well as a fresh yes",
+   "account": "status 1, balance EUR 0.06, Visa *1984, amount_spent EUR 129.54 lifetime on the account"
   }
  },
  "post_boost_ad": {
@@ -537,7 +555,15 @@
    "action": "none - A/B decision from the 26 Sep noon brief still unanswered"
   },
   "status_2026_09_26T2020": "PAUSED at the ad-set level (6996508580294) at 20:20 Madrid in a Claude session, on the founder's in-session 'do whatever you think is best' to the recommendation 'pause the post boost'. EUR 7.95 of EUR 10 unspent, end_time still 1 Oct 23:59; resuming it needs the founder's yes.",
-  "status_2026_09_27T1810": "still PAUSED, ad reads ADSET_PAUSED, budget_remaining EUR 7.91 of EUR 10, untouched, no spend"
+  "status_2026_09_27T1810": "still PAUSED, ad reads ADSET_PAUSED, budget_remaining EUR 7.91 of EUR 10, untouched, no spend",
+  "state_2026_09_28T1210": {
+   "adset_status": "PAUSED",
+   "ad_effective_status": "ADSET_PAUSED",
+   "budget_remaining_eur": 7.91,
+   "placements": "publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream] - intact, unlike quiet-leads",
+   "end_time": "2026-10-01T23:59:00+0200",
+   "note": "untouched since the 26 Sep pause"
+  }
  },
  "account_2026_09_24T1810": "status 1, no disable reason, EUR 2.86 balance, EUR 105.79 lifetime spend",
  "account_2026_09_25T1210": "status 1, no disable reason, EUR 6.12 balance, EUR 112.27 lifetime spend",

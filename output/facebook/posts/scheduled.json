@@ -103,6 +103,8 @@
   "spec": "output/facebook/posts/spec-digest-2026-09-28.json",
   "photo_asset": "output/facebook/posts/photo-2026-09-28-andalusian-door.png",
   "error": null,
-  "approved": "founder in session, 27 Sep: '2- schedule it'"
+  "approved": "founder in session, 27 Sep: '2- schedule it'",
+  "published_at": "2026-09-28T09:30:01+02:00",
+  "verified": "28 Sep noon: is_published true, 0 reactions, 0 comments at 12:10"
  }
 ]
