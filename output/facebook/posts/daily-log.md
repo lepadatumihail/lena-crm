@@ -1,5 +1,9 @@
 # LeadWing Facebook daily log
 
+## Mon 28 Sep 2026 (evening check, run 18:10 Madrid)
+
+Nothing new and the ads are healthy: 0 comments on all 12 page posts and all 6 ad dark posts, inbox empty, 0 followers, reactions unchanged (1 each on three dark posts, 1 on page post ...122110619499476753); both ad sets still PAUSED with no issues and zero spend on 28 Sep — quiet-leads final EUR 18.66 of EUR 25 (its lifetime window closes tonight 23:59 Madrid as the founder decided), post boost EUR 2.09 of EUR 10. Wed 30 Sep 09:30 import post still queued.
+
 ## Mon 28 Sep 2026 (founder answered in session: "let it expire, i need to rethink our strategy anyway")
 
 Decision 1 ANSWERED: **let the quiet-leads ad set expire.** Do-nothing — nothing was edited, resumed or funded on Meta, and there is nothing to verify. The ad set ran to its own end_time of 28 Sep 23:59 Madrid with EUR 6.34 of EUR 25 unspent; the quiet-leads experiment is now CLOSED and is not to be re-proposed. Recorded in ads.json and the playbook.
