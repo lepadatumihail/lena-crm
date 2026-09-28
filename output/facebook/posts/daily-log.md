@@ -1,5 +1,11 @@
 # LeadWing Facebook daily log
 
+## Mon 28 Sep 2026 (founder answered in session: "let it expire, i need to rethink our strategy anyway")
+
+Decision 1 ANSWERED: **let the quiet-leads ad set expire.** Do-nothing — nothing was edited, resumed or funded on Meta, and there is nothing to verify. The ad set ran to its own end_time of 28 Sep 23:59 Madrid with EUR 6.34 of EUR 25 unspent; the quiet-leads experiment is now CLOSED and is not to be re-proposed. Recorded in ads.json and the playbook.
+
+Also recorded: a founder-owned **strategy rethink** is open. Until he says what the new strategy is, runs propose no ad spend, no new audiences or channels, and do not reopen the closed experiments — the weekly rhythm, comment and message replies, and the numbers carry on as decided. Wed 30 Sep 09:30 import post is still queued and will publish unless he says to pull it.
+
 ## Mon 28 Sep 2026 (noon brief, run 12:10 Madrid)
 
 **Monday digest PUBLISHED on time**: post 1279663088571991_122113173585476753 went live 2026-09-28 09:30 Madrid (is_published true, created_time 07:30 UTC), the ITP-cut lead with the Andalusian-door photo card. 0 reactions, 0 comments at 12:10. /scheduled_posts now shows Wed 30 Sep 09:30 import post alone.

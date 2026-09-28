@@ -446,6 +446,13 @@
    "placement_fields": "publisher_platforms / facebook_positions / instagram_positions STILL ABSENT - Meta never restored them",
    "end_time": "2026-09-28T23:59:00+0200 - the lifetime window closes tonight; after that the EUR 6.34 needs an end_time edit as well as a fresh yes",
    "account": "status 1, balance EUR 0.06, Visa *1984, amount_spent EUR 129.54 lifetime on the account"
+  },
+  "closed_2026_09_28": {
+   "decision": "founder, 28 Sep noon: 'let it expire, i need to rethink our strategy anyway'",
+   "applied": "nothing - do-nothing option; no edit, resume or top-up was made",
+   "outcome": "ad set left PAUSED and allowed to pass its own end_time 2026-09-28T23:59:00+0200 with EUR 6.34 of EUR 25 unspent",
+   "status": "CLOSED - do not re-propose resuming, re-funding or extending this ad set",
+   "final": "EUR 18.66 spent, 7,261 imp, 5,438 reach, 112 link clicks, 63 landing page views at EUR 0.30, CPM EUR 2.57"
   }
  },
  "post_boost_ad": {
