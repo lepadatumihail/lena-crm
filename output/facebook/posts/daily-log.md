@@ -1,5 +1,13 @@
 # LeadWing Facebook daily log
 
+## Mon 28 Sep 2026 (founder opened the strategy rethink: "what did we do wrong? how did Audience Network happen?")
+
+Answered from the ad account activity log, which settles the Audience Network question: `update_ad_set_target_spec` at 27 Sep 00:18:21 Madrid, **actor "Meta" (1051435468209173)**, rewrote the quiet-leads ad set from 4 feed placements to 29 including Audience Network, then re-activated it 17 s later. Not an operator change; the 20 Sep feed-only fix had held for 7 days. The post-boost ad set, same placements, untouched, still has them — so only the LANDING_PAGE_VIEWS ad set was rewritten. Recorded in Learnings with the operational rule: re-verify placements every run on any live ad.
+
+Corrected a premise: **there has never been a video ad.** Film 02 ran organic-only as a Reel (never boosted — the villa/EUR 1.2M footage trips the housing detector that already got the 23 Sep digest boost DISAPPROVED). Its numbers today: 236 plays, 0 reactions, 0 comments, 0 shares, 0 followers, average watch 1.748 s, retention 100% to 3 s then 50% at 4 s and ~14% from 6 s.
+
+Whole-funnel read given: EUR 45.31 across three LeadWing ads -> 154 landing page views -> 1 signup_open -> 0 accounts. Nothing proposed; no ad spend proposed, per the founder-owned rethink.
+
 ## Mon 28 Sep 2026 (evening check, run 18:10 Madrid)
 
 Nothing new and the ads are healthy: 0 comments on all 12 page posts and all 6 ad dark posts, inbox empty, 0 followers, reactions unchanged (1 each on three dark posts, 1 on page post ...122110619499476753); both ad sets still PAUSED with no issues and zero spend on 28 Sep — quiet-leads final EUR 18.66 of EUR 25 (its lifetime window closes tonight 23:59 Madrid as the founder decided), post boost EUR 2.09 of EUR 10. Wed 30 Sep 09:30 import post still queued.
