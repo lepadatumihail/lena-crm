@@ -1,5 +1,19 @@
 # LeadWing Facebook daily log
 
+## Tue 29 Sep 2026 (evening check, 18:10 Madrid)
+
+**A new Meta ad is LIVE — the founder created it himself in Ads Manager at 15:42 Madrid, hours after "stop the ads".** Campaign 6997552551894 "Free 10 · Sep 26", ad set 6997552554894, ad 6997552574094. EUR 25 lifetime to 4 Oct 23:59, LANDING_PAGE_VIEWS. The routine created, funded and edited nothing; found it in the account activity log.
+
+It is a better-built ad than any that came before it: the image is this repo's own `12-ad-free10-mono.png` (commit d59b74b), the audience drops the five dead job titles and keeps only the three interests, and **feed-only placements are present and verified**. Review cleared (ACTIVE, no issues); the 17:58 `update_ad_run_status` by actor "Meta" was review returning it after his 17:52 creative swap.
+
+First 2.2 h: **EUR 0.35 / 146 imp / 141 reach / CPM 2.40 / 1 link click / 1 landing page view.** FB feed EUR 0.20 / 78 imp, IG feed EUR 0.15 / 68 imp, **zero Audience Network**. Waste test does not fire on any leg, so nothing paused. Needs ~EUR 4.67/day to spend out; too early to judge.
+
+One thing recorded, not queried: it links to the **home page** (`utm_campaign=free10-sep26`), not a hook-matched landing — his deliberate choice, the ad is named for it.
+
+Comments/inbox: 0 comments on all 12 page posts and all 6 dark posts, inbox still empty. Queue verified: Wed 30 Sep 09:30 import post, is_published false. Old ad sets unchanged — quiet-leads PAUSED (window closed), post-boost PAUSED EUR 7.91 (window closes 1 Oct), spreadsheet past its 24 Sep window.
+
+Playbook updated: the "stopped for good" standing decision is marked reversed by his own action, and the new ad is in Pending with the per-run checks.
+
 ## Tue 29 Sep 2026 (Keyword Planner: Google Search answered for EUR 0)
 
 The founder created the Google Ads account in session (CID 475-283-0127, Spain/Madrid/EUR/Business, no payment method, **0 campaigns confirmed** — the "your ads will go live" screen was boilerplate). Pulled Keyword Planner, Spain + Spanish.
