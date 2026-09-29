@@ -7,9 +7,8 @@ import { getAttentionSignals } from "@/lib/data/attention";
 import { getCalendarEvents, type CalendarEvent } from "@/lib/data/calendar";
 import { getAgentTimeZone, getSessionProfile, getSessionUser } from "@/lib/data/session";
 import { formatDateKey } from "@/lib/attention";
-import { dateKeyInTimeZone, type OnboardingInput } from "@/lib/home";
+import { countAddedWithin, dateKeyInTimeZone, type OnboardingInput } from "@/lib/home";
 import { intlTag } from "@/i18n/config";
-import { stageLabel } from "@/i18n/labels";
 
 /*
   Home's data, one loader per section so each section streams on its own.
@@ -67,6 +66,12 @@ const getActiveClients = cache(async (): Promise<ClientRow[]> => {
 /** Active clients per stage: the stat tiles and the upcoming panel's empty state. */
 export const getPipelineCounts = cache(
   async (): Promise<PipelineCounts> => tallyPipeline(await getActiveClients())
+);
+
+/** Active clients added in the `days` before `nowISO`, per side: the figures' "+2 in 30 days". */
+export const getRecentlyAdded = cache(
+  async (nowISO: string, days: number): Promise<{ buyer: number; seller: number }> =>
+    countAddedWithin(await getActiveClients(), nowISO, days)
 );
 
 /** A row in the Home "Recent clients" list. */
@@ -203,9 +208,8 @@ export type AttentionItem = {
  * language (this always runs inside a request).
  */
 export const getNeedsAttention = cache(async (): Promise<AttentionItem[]> => {
-  const [t, tCrm, locale, timeZone] = await Promise.all([
+  const [t, locale, timeZone] = await Promise.all([
     getTranslations("home"),
-    getTranslations("crm"),
     getLocale(),
     getAgentTimeZone(),
   ]);
@@ -296,10 +300,8 @@ export const getNeedsAttention = cache(async (): Promise<AttentionItem[]> => {
       urgency: "overdue",
       client: { id: b.clientId, firstName: b.firstName, side: "buyer", stage: b.stage },
       title: b.name,
-      detail: t("attention.followUp", {
-        stage: stageLabel(tCrm, b.stage),
-        days: b.quietDays,
-      }),
+      // The row shows the stage as a pill, so the line says only how long.
+      detail: t("attention.quiet", { days: b.quietDays }),
       href: `/clients/${b.clientId}?compose=check_in`,
     });
   }

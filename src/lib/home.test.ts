@@ -1,12 +1,14 @@
 import { describe, it, expect } from "vitest";
 
 import {
+  addDaysToKey,
   buyersBeforeViewing,
-  countViewingsWithin,
+  countAddedWithin,
   dateKeyInTimeZone,
   dayRangeInTimeZone,
   firstNameFrom,
   greetingPeriod,
+  groupByDay,
   hourInTimeZone,
   initialsOf,
   HOME_ONBOARDING_COOKIE,
@@ -22,6 +24,7 @@ import {
   readOnboardingCookie,
   relativeAgo,
   showOnboarding,
+  viewingsByDay,
 } from "./home";
 
 describe("greetingPeriod", () => {
@@ -238,22 +241,84 @@ describe("onboarding cookie", () => {
   });
 });
 
-describe("countViewingsWithin", () => {
-  const now = "2026-09-07T12:00:00.000Z";
-  it("counts dated viewings and viewing-type appointments inside the window", () => {
+describe("addDaysToKey", () => {
+  it("steps over month and year ends", () => {
+    expect(addDaysToKey("2026-09-26", 0)).toBe("2026-09-26");
+    expect(addDaysToKey("2026-09-26", 6)).toBe("2026-10-02");
+    expect(addDaysToKey("2026-12-31", 1)).toBe("2027-01-01");
+  });
+  it("keeps whole days across the October clock change", () => {
+    expect(addDaysToKey("2026-10-24", 2)).toBe("2026-10-26");
+  });
+});
+
+describe("viewingsByDay", () => {
+  const events = [
+    { kind: "viewing" as const, starts_at: "2026-09-26T08:00:00.000Z" },
+    { kind: "meeting" as const, starts_at: "2026-09-26T09:00:00.000Z", appointment: { type: "viewing" } },
+    { kind: "meeting" as const, starts_at: "2026-09-27T09:00:00.000Z", appointment: { type: "meeting" } },
+    // 00:30 on 30 September in Madrid, 29 September in UTC
+    { kind: "viewing" as const, starts_at: "2026-09-29T22:30:00.000Z" },
+    // the eighth day is past the week
+    { kind: "viewing" as const, starts_at: "2026-10-03T10:00:00.000Z" },
+  ];
+
+  it("counts viewings and viewing appointments on each of the agent's days", () => {
+    expect(viewingsByDay(events, "2026-09-26", "Europe/Madrid", 7)).toEqual([
+      { key: "2026-09-26", count: 2 },
+      { key: "2026-09-27", count: 0 },
+      { key: "2026-09-28", count: 0 },
+      { key: "2026-09-29", count: 0 },
+      { key: "2026-09-30", count: 1 },
+      { key: "2026-10-01", count: 0 },
+      { key: "2026-10-02", count: 0 },
+    ]);
+  });
+  it("reads the day in the agent's zone, not UTC", () => {
+    const utc = viewingsByDay(events, "2026-09-26", "UTC", 7);
+    expect(utc.find((d) => d.key === "2026-09-29")?.count).toBe(1);
+    expect(utc.find((d) => d.key === "2026-09-30")?.count).toBe(0);
+  });
+});
+
+describe("groupByDay", () => {
+  it("sorts events and groups them under the agent's calendar day", () => {
+    const groups = groupByDay(
+      [
+        { id: "b", starts_at: "2026-09-27T16:00:00.000Z" },
+        { id: "a", starts_at: "2026-09-26T08:00:00.000Z" },
+        { id: "c", starts_at: "2026-09-27T09:00:00.000Z" },
+        { id: "d", starts_at: "2026-09-27T22:30:00.000Z" },
+      ],
+      "Europe/Madrid"
+    );
+    expect(groups.map((g) => [g.key, g.events.map((e) => e.id)])).toEqual([
+      ["2026-09-26", ["a"]],
+      ["2026-09-27", ["c", "b"]],
+      ["2026-09-28", ["d"]],
+    ]);
+  });
+  it("returns nothing for no events", () => {
+    expect(groupByDay([], "Europe/Madrid")).toEqual([]);
+  });
+});
+
+describe("countAddedWithin", () => {
+  it("counts each side's clients added inside the window", () => {
+    const now = "2026-09-26T12:00:00.000Z";
     expect(
-      countViewingsWithin(
+      countAddedWithin(
         [
-          { kind: "viewing", starts_at: "2026-09-08T10:00:00.000Z" },
-          { kind: "meeting", starts_at: "2026-09-09T10:00:00.000Z", appointment: { type: "viewing" } },
-          { kind: "meeting", starts_at: "2026-09-09T11:00:00.000Z", appointment: { type: "meeting" } },
-          { kind: "viewing", starts_at: "2026-09-20T10:00:00.000Z" },
-          { kind: "viewing", starts_at: "2026-09-06T10:00:00.000Z" },
+          { side: "buyer", created_at: "2026-09-25T10:00:00.000Z" },
+          { side: "buyer", created_at: "2026-08-28T12:00:01.000Z" },
+          { side: "buyer", created_at: "2026-08-27T12:00:00.000Z" },
+          { side: "seller", created_at: "2026-09-20T10:00:00.000Z" },
+          { side: "seller", created_at: "2026-09-27T10:00:00.000Z" },
         ],
         now,
-        7
+        30
       )
-    ).toBe(2);
+    ).toEqual({ buyer: 2, seller: 1 });
   });
 });
 

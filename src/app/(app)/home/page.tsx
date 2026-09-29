@@ -7,6 +7,7 @@ import { HomeHeader } from "@/components/home/home-header";
 import { HomeLayout } from "@/components/home/home-layout";
 import {
   AttentionSection,
+  DaySummarySection,
   DueTasksSection,
   OnboardingSection,
   RecentSection,
@@ -15,6 +16,7 @@ import {
 } from "@/components/home/home-sections";
 import {
   AttentionSkeleton,
+  DaySummarySkeleton,
   DueTasksSkeleton,
   OnboardingStripSkeleton,
   RecentSkeleton,
@@ -86,7 +88,16 @@ export default async function HomePage({
   return (
     <HomeLayout
       notice={notice}
-      header={<HomeHeader now={now} />}
+      header={
+        <HomeHeader
+          now={now}
+          summary={
+            <Suspense fallback={<DaySummarySkeleton />}>
+              <DaySummarySection now={now} />
+            </Suspense>
+          }
+        />
+      }
       onboarding={onboardingSlot}
       summary={
         <Suspense fallback={<StatTilesSkeleton />}>

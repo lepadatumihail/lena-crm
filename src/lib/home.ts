@@ -312,21 +312,74 @@ export function isFirstSession(clientCount: number): boolean {
 
 export { BUYER_STAGES, SELLER_STAGES };
 
-/** Viewings (dated viewings and viewing-type appointments) starting within `days` of now. */
-export function countViewingsWithin(
-  events: {
-    kind: "meeting" | "viewing";
-    starts_at: string;
-    appointment?: { type: string };
-  }[],
+/** The calendar day `days` after a "yyyy-MM-dd" day, in the same form. */
+export function addDaysToKey(key: string, days: number): string {
+  const [year, month, day] = key.split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1, day + days)).toISOString().slice(0, 10);
+}
+
+type EventLike = {
+  kind: "meeting" | "viewing";
+  starts_at: string;
+  appointment?: { type: string };
+};
+
+/** A dated viewing, or an appointment booked as a viewing. */
+export function isViewing(event: EventLike): boolean {
+  return event.kind === "viewing" || event.appointment?.type === "viewing";
+}
+
+/**
+ * The `days` calendar days from `todayKey` in the agent's zone, each with how
+ * many of `events` are viewings on it: the figures' week of bars and their
+ * total. Events outside those days are left out.
+ */
+export function viewingsByDay(
+  events: EventLike[],
+  todayKey: string,
+  timeZone: string,
+  days: number
+): { key: string; count: number }[] {
+  const counts = new Map<string, number>();
+  for (let i = 0; i < days; i++) counts.set(addDaysToKey(todayKey, i), 0);
+  for (const event of events) {
+    if (!isViewing(event)) continue;
+    const key = dateKeyInTimeZone(event.starts_at, timeZone);
+    const count = counts.get(key);
+    if (count !== undefined) counts.set(key, count + 1);
+  }
+  return [...counts].map(([key, count]) => ({ key, count }));
+}
+
+/** Events in start order, grouped under the agent's calendar day each one falls on. */
+export function groupByDay<T extends { starts_at: string }>(
+  events: T[],
+  timeZone: string
+): { key: string; events: T[] }[] {
+  const groups: { key: string; events: T[] }[] = [];
+  const sorted = [...events].sort((a, b) => Date.parse(a.starts_at) - Date.parse(b.starts_at));
+  for (const event of sorted) {
+    const key = dateKeyInTimeZone(event.starts_at, timeZone);
+    const last = groups.at(-1);
+    if (last?.key === key) last.events.push(event);
+    else groups.push({ key, events: [event] });
+  }
+  return groups;
+}
+
+/** Clients per side added in the `days` before `nowISO`: the figures' "+2 in 30 days". */
+export function countAddedWithin(
+  clients: { side: string; created_at: string }[],
   nowISO: string,
   days: number
-): number {
-  const start = new Date(nowISO).getTime();
-  const end = start + days * 86_400_000;
-  return events.filter((e) => {
-    const at = new Date(e.starts_at).getTime();
-    if (at < start || at > end) return false;
-    return e.kind === "viewing" || e.appointment?.type === "viewing";
-  }).length;
+): { buyer: number; seller: number } {
+  const now = Date.parse(nowISO);
+  const since = now - days * 86_400_000;
+  const added = { buyer: 0, seller: 0 };
+  for (const client of clients) {
+    if (client.side !== "buyer" && client.side !== "seller") continue;
+    const at = Date.parse(client.created_at);
+    if (at > since && at <= now) added[client.side] += 1;
+  }
+  return added;
 }

@@ -3,11 +3,13 @@ import type { ReactNode } from "react";
 /**
  * Where Home's sections sit. The page fills the slots with streamed sections
  * and loading.tsx fills them with skeletons, so the two cannot drift apart.
- * On a phone the day's work comes first: Needs attention, tasks and what's
- * next move above the figures (the tiles carry their own phone order). The
- * getting-started strip is one 44px line, so it stays under the greeting.
- * The two columns' cards size to their rows rather than stretching to match,
- * so a short list never draws a tall empty card.
+ * On a wide screen the day's work (Needs attention, then tasks) takes the
+ * left, and what's next and who was touched last take the right. On a phone
+ * the day's work comes first and the figures move below it (the figures
+ * carry their own phone order). The getting-started strip is one 44px line,
+ * so it stays under the greeting. The two columns' cards size to their rows
+ * rather than stretching to match, so a short list never draws a tall empty
+ * card.
  */
 export function HomeLayout({
   notice,
@@ -29,6 +31,7 @@ export function HomeLayout({
   /** Due tasks, stacked under attention in the left column. */
   tasks: ReactNode;
   upcoming: ReactNode;
+  /** Recent clients, under upcoming in the right column. */
   recent: ReactNode;
 }) {
   return (
@@ -42,9 +45,11 @@ export function HomeLayout({
           {attention}
           {tasks}
         </div>
-        <div className="min-w-0 lg:col-span-2">{upcoming}</div>
+        <div className="flex min-w-0 flex-col gap-5 lg:col-span-2">
+          {upcoming}
+          {recent}
+        </div>
       </div>
-      <div className="max-md:order-3">{recent}</div>
     </div>
   );
 }

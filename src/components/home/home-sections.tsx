@@ -1,3 +1,4 @@
+import { DaySummary } from "@/components/home/day-summary";
 import { DueTasksPanel } from "@/components/home/due-tasks-panel";
 import {
   GettingStartedStrip,
@@ -16,10 +17,17 @@ import {
   getOnboardingInput,
   getPipelineCounts,
   getRecentClients,
+  getRecentlyAdded,
 } from "@/lib/data/dashboard";
 import { getAgentTimeZone } from "@/lib/data/session";
 import { countDueTasks, getDueTasks } from "@/lib/data/tasks";
-import { buyersBeforeViewing, dateKeyInTimeZone, showOnboarding } from "@/lib/home";
+import {
+  addDaysToKey,
+  buyersBeforeViewing,
+  dateKeyInTimeZone,
+  showOnboarding,
+  viewingsByDay,
+} from "@/lib/home";
 import { DUE_TASKS_LIMIT } from "@/lib/tasks";
 
 /*
@@ -41,13 +49,47 @@ export async function OnboardingSection({ hidden = false }: { hidden?: boolean }
   return hidden ? null : <GettingStartedStrip onboarding={onboarding} />;
 }
 
-export async function SummarySection({ now }: { now: Date }) {
-  const [counts, events, commission] = await Promise.all([
-    getPipelineCounts(),
-    getHomeEvents(now.toISOString()),
-    getCommissionSummary(),
+/** How many days the figures' viewings and the summary's week look ahead, today included. */
+const WEEK_DAYS = 7;
+/** How far back the figures count clients as newly added. */
+const ADDED_WINDOW_DAYS = 30;
+
+/**
+ * The line under the greeting. It shares its loads with the sections below
+ * (cached per request), so it costs no query of its own.
+ */
+export async function DaySummarySection({ now }: { now: Date }) {
+  const nowISO = now.toISOString();
+  const timeZone = await getAgentTimeZone();
+  const todayKey = dateKeyInTimeZone(nowISO, timeZone);
+  const [attention, tasks, events] = await Promise.all([
+    getNeedsAttention(),
+    countDueTasks(todayKey),
+    getHomeEvents(nowISO),
   ]);
-  return <SummaryPanel counts={counts} events={events} commission={commission} now={now} />;
+  const weekEnd = addDaysToKey(todayKey, WEEK_DAYS);
+  const week = events.filter((e) => dateKeyInTimeZone(e.starts_at, timeZone) < weekEnd).length;
+  return <DaySummary attention={attention.length} tasks={tasks} week={week} />;
+}
+
+export async function SummarySection({ now }: { now: Date }) {
+  const nowISO = now.toISOString();
+  const [counts, events, commission, added, timeZone] = await Promise.all([
+    getPipelineCounts(),
+    getHomeEvents(nowISO),
+    getCommissionSummary(),
+    getRecentlyAdded(nowISO, ADDED_WINDOW_DAYS),
+    getAgentTimeZone(),
+  ]);
+  const todayKey = dateKeyInTimeZone(nowISO, timeZone);
+  return (
+    <SummaryPanel
+      counts={counts}
+      added={added}
+      viewings={viewingsByDay(events, todayKey, timeZone, WEEK_DAYS)}
+      commission={commission}
+    />
+  );
 }
 
 export async function AttentionSection() {

@@ -3,6 +3,7 @@ import { HomeHeader } from "@/components/home/home-header";
 import { HomeLayout } from "@/components/home/home-layout";
 import {
   AttentionSkeleton,
+  DaySummarySkeleton,
   DueTasksSkeleton,
   OnboardingStripSkeleton,
   RecentSkeleton,
@@ -19,7 +20,7 @@ import {
 export default async function Loading() {
   return (
     <HomeLayout
-      header={<HomeHeader now={new Date()} />}
+      header={<HomeHeader now={new Date()} summary={<DaySummarySkeleton />} />}
       onboarding={
         <IfOnboardingExpected>
           <OnboardingStripSkeleton />

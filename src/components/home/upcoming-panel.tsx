@@ -2,24 +2,30 @@
 
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { addDays, format, parseISO } from "date-fns";
-import { MessageCircle } from "lucide-react";
+import { format, parseISO } from "date-fns";
+import { CalendarDays, MessageCircle } from "lucide-react";
 
-import { PanelEmpty } from "@/components/shell/panel";
 import { useAgentTimeZone } from "@/components/shell/shell-context";
 import { buttonVariants } from "@/components/ui/button";
 import { intlTag } from "@/i18n/config";
 import { dateFnsLocale } from "@/i18n/dates";
 import { formatTimeInTimeZone } from "@/lib/attention";
-import { eventReminderHref } from "@/lib/event-reminder";
-import { cn } from "@/lib/utils";
-import type { CalendarEvent } from "@/lib/data/calendar";
-import { TONE_SOLID } from "@/lib/tones";
 import { EVENT_TONES } from "@/lib/calendar";
-import { dateKeyInTimeZone } from "@/lib/home";
+import { calendarHref } from "@/lib/calendar-view";
+import type { CalendarEvent } from "@/lib/data/calendar";
+import { eventReminderHref } from "@/lib/event-reminder";
+import { dateKeyInTimeZone, groupByDay } from "@/lib/home";
+import { TONE_SOLID } from "@/lib/tones";
+import { cn } from "@/lib/utils";
 
 const LIMIT = 6;
 
+/**
+ * What's next, a day at a time: a calendar leaf for each day (today's in
+ * ink) beside that day's viewings and meetings. A leaf opens the calendar on
+ * its week. Days and times are read in the agent's zone from values the
+ * server and the browser share, so both render the same labels.
+ */
 export function UpcomingPanel({
   events,
   waitingBuyers = 0,
@@ -32,93 +38,137 @@ export function UpcomingPanel({
   nowISO: string;
 }) {
   const t = useTranslations("home.upcoming");
-  const tCommon = useTranslations("common");
   const locale = useLocale();
   const tag = intlTag(locale);
   const timeZone = useAgentTimeZone();
 
-  // Days and times are read in the agent's zone from values the server and
-  // the browser share, so both render the same labels.
   const todayKey = dateKeyInTimeZone(nowISO, timeZone);
-  const tomorrowKey = format(addDays(parseISO(todayKey), 1), "yyyy-MM-dd");
-  function dayLabel(iso: string): string {
-    const key = dateKeyInTimeZone(iso, timeZone);
-    if (key === todayKey) return tCommon("today");
-    if (key === tomorrowKey) return tCommon("tomorrow");
-    return format(parseISO(key), "EEE d MMM", { locale: dateFnsLocale(locale) });
-  }
-
-  const sorted = [...events]
-    .sort((a, b) => a.starts_at.localeCompare(b.starts_at))
+  const next = [...events]
+    .sort((a, b) => Date.parse(a.starts_at) - Date.parse(b.starts_at))
     .slice(0, LIMIT);
+  const days = groupByDay(next, timeZone);
 
-  if (sorted.length === 0) {
+  if (days.length === 0) {
     return (
-      <PanelEmpty>
-        {t.rich(waitingBuyers > 0 ? "emptyWaiting" : "empty", {
-          count: waitingBuyers,
-          link: (chunks) => (
-            <Link
-              href="/calendar"
-              className="text-foreground decoration-foreground/25 hover:decoration-foreground font-medium underline underline-offset-4"
-            >
-              {chunks}
-            </Link>
-          ),
-        })}
-      </PanelEmpty>
+      <div className="flex flex-col items-center gap-3 px-6 py-7 text-center">
+        <span className="bg-muted text-muted-foreground flex size-9 items-center justify-center rounded-full">
+          <CalendarDays className="size-4" strokeWidth={1.5} />
+        </span>
+        <p className="text-muted-foreground max-w-xs text-sm text-balance">
+          {t.rich(waitingBuyers > 0 ? "emptyWaiting" : "empty", {
+            count: waitingBuyers,
+            link: (chunks) => (
+              <Link
+                href="/calendar"
+                className="text-foreground decoration-foreground/25 hover:decoration-foreground font-medium underline underline-offset-4"
+              >
+                {chunks}
+              </Link>
+            ),
+          })}
+        </p>
+      </div>
     );
   }
 
   return (
     <ul className="divide-y">
-      {sorted.map((e) => {
-        const remind = eventReminderHref(e);
+      {days.map((day) => {
+        const date = parseISO(day.key);
+        const isToday = day.key === todayKey;
         return (
-          <li key={e.id} className="flex items-center gap-3 px-4 py-2.5">
-            {/* Wide enough for "Wed 30 Sep" and "mié 30 sept" in full. */}
-            <div className="w-[4.75rem] shrink-0 leading-tight">
-              <p className="truncate text-xs first-letter:uppercase">
-                {dayLabel(e.starts_at)}
-              </p>
-              <p className="text-muted-foreground text-xs tabular-nums">
-                {formatTimeInTimeZone(e.starts_at, timeZone, tag)}
-              </p>
-            </div>
-            <span
-              aria-hidden
+          <li key={day.key} className="flex gap-3.5 px-4 py-3">
+            <Link
+              href={calendarHref("week", day.key)}
+              aria-label={format(date, "EEEE d MMMM", { locale: dateFnsLocale(locale) })}
               className={cn(
-                "size-2 shrink-0 rounded-full",
-                TONE_SOLID[EVENT_TONES[e.kind]]
+                "focus-visible:ring-ring/50 flex h-11 w-10 shrink-0 flex-col items-center justify-center gap-1 rounded-lg leading-none outline-none transition-colors duration-150 focus-visible:ring-[3px]",
+                isToday
+                  ? "bg-foreground text-background"
+                  : "bg-muted/60 hover:bg-muted text-foreground"
               )}
-            />
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">{e.title}</p>
-              {e.location ? (
-                <p className="text-muted-foreground truncate text-xs">
-                  {e.location}
-                </p>
-              ) : null}
-            </div>
-            {remind ? (
-              <a
-                href={remind}
-                target="_blank"
-                rel="noopener noreferrer"
+            >
+              <span
                 className={cn(
-                  buttonVariants({ variant: "ghost", size: "icon-xs" }),
-                  "text-muted-foreground hover:text-foreground shrink-0"
+                  "text-[10px] first-letter:uppercase",
+                  isToday ? "text-background/70" : "text-muted-foreground"
                 )}
-                title={t("remindTitle")}
-                aria-label={t("remindAria")}
               >
-                {/* A thin grey channel icon, like the rest of the row. */}
-                <MessageCircle className="size-4" strokeWidth={1.75} />
-              </a>
-            ) : null}
+                {format(date, "EEE", { locale: dateFnsLocale(locale) }).replace(".", "")}
+              </span>
+              <span className="text-[15px] font-semibold tabular-nums">
+                {format(date, "d")}
+              </span>
+            </Link>
+            <ul className="min-w-0 flex-1 space-y-2">
+              {day.events.map((e) => (
+                <EventRow
+                  key={e.id}
+                  event={e}
+                  time={formatTimeInTimeZone(e.starts_at, timeZone, tag)}
+                  remind={eventReminderHref(e, timeZone)}
+                  remindTitle={t("remindTitle")}
+                  remindAria={t("remindAria")}
+                />
+              ))}
+            </ul>
           </li>
         );
       })}
     </ul>
+  );
+}
+
+function EventRow({
+  event,
+  time,
+  remind,
+  remindTitle,
+  remindAria,
+}: {
+  event: CalendarEvent;
+  time: string;
+  /** A WhatsApp link with the reminder written, when the contact has a phone. */
+  remind: string | null;
+  remindTitle: string;
+  remindAria: string;
+}) {
+  return (
+    <li className="flex min-h-11 items-center gap-2.5">
+      <div className="min-w-0 flex-1">
+        <p className="flex min-w-0 items-center gap-2">
+          <span
+            aria-hidden
+            className={cn("size-1.5 shrink-0 rounded-full", TONE_SOLID[EVENT_TONES[event.kind]])}
+          />
+          <span className="truncate text-sm leading-5 font-medium">{event.title}</span>
+        </p>
+        <p className="text-muted-foreground truncate pl-3.5 text-xs leading-5">
+          <span className="tabular-nums">{time}</span>
+          {event.location ? (
+            <>
+              <span className="mx-1">·</span>
+              {event.location}
+            </>
+          ) : null}
+        </p>
+      </div>
+      {remind ? (
+        <a
+          href={remind}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(
+            buttonVariants({ variant: "ghost", size: "icon-xs" }),
+            "text-muted-foreground hover:text-foreground shrink-0"
+          )}
+          title={remindTitle}
+          aria-label={remindAria}
+        >
+          {/* A thin grey channel icon, like the rest of the row. */}
+          <MessageCircle className="size-4" strokeWidth={1.75} />
+        </a>
+      ) : null}
+    </li>
   );
 }

@@ -18,6 +18,16 @@ function Loading() {
   return <span className="sr-only">{tCommon("loading")}</span>;
 }
 
+/** The summary line under the greeting: one line of text. */
+export function DaySummarySkeleton() {
+  return (
+    <div className="flex h-5 items-center">
+      <Loading />
+      <Skeleton aria-hidden className="h-3 w-72 max-w-full" />
+    </div>
+  );
+}
+
 /**
  * The getting-started strip: the same 44px card, a ring, the progress and
  * the next step, and the two icon buttons. The page only draws it when the
@@ -47,26 +57,27 @@ const TILE_LABELS = ["w-24", "w-20", "w-28", "w-32"];
 
 export function StatTilesSkeleton() {
   return (
-    <div className="grid grid-cols-2 gap-3 max-md:order-2 xl:grid-cols-4">
+    <div className="bg-card overflow-hidden rounded-xl border shadow-xs max-md:order-2">
       <Loading />
-      {TILE_LABELS.map((width) => (
-        <div
-          key={width}
-          aria-hidden
-          className="bg-card flex min-w-0 flex-col gap-3 rounded-xl border p-4 shadow-xs"
-        >
-          {/* The label row is one 18px line from sm up and two lines on a
-              phone, as the tiles keep (stat-tiles.tsx). */}
-          <div className="flex h-[18px] items-center justify-between gap-2 max-sm:h-[2lh] max-sm:items-start max-sm:text-xs max-sm:leading-snug">
-            <Skeleton className={cn("h-3 max-sm:mt-0.5", width)} />
-            <Skeleton className="size-4 rounded" />
+      <div aria-hidden className="bg-border grid grid-cols-2 gap-px xl:grid-cols-4">
+        {TILE_LABELS.map((width) => (
+          <div
+            key={width}
+            className="bg-card row-span-3 grid min-w-0 grid-rows-subgrid gap-y-0 p-4 sm:px-5"
+          >
+            {/* One line of label, as the figures take where it fits (stat-tiles.tsx). */}
+            <div className="flex h-[1lh] items-center text-[13px] leading-snug sm:leading-5">
+              <Skeleton className={cn("h-3", width)} />
+            </div>
+            <div className="mt-2 flex h-8 items-center sm:h-9">
+              <Skeleton className="h-6 w-12 sm:h-7" />
+            </div>
+            <div className="mt-3 flex h-8 items-end">
+              <Skeleton className="h-2 w-full rounded-full" />
+            </div>
           </div>
-          <Skeleton className="h-6 w-16" />
-          <div className="flex h-4 items-center">
-            <Skeleton className="h-1.5 w-full rounded-full" />
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
@@ -79,6 +90,7 @@ const ATTENTION_ROWS = [
   ["w-28", "w-24"],
 ];
 
+/** Two-line rows behind a round avatar, as AttentionList draws them. */
 export function AttentionSkeleton() {
   const t = useTranslations("home.attention");
   return (
@@ -86,11 +98,16 @@ export function AttentionSkeleton() {
       <Loading />
       <ul aria-hidden className="divide-y">
         {ATTENTION_ROWS.map(([name, detail]) => (
-          <li key={name + detail} className="flex h-11 items-center gap-3 px-4">
-            <Skeleton className="size-2 rounded-full" />
-            <Skeleton className={cn("h-3", name)} />
-            <Skeleton className={cn("hidden h-2.5 sm:block", detail)} />
-            <Skeleton className="ml-auto h-2.5 w-8" />
+          <li key={name + detail} className="flex items-center gap-3 py-2.5 pr-2.5 pl-4">
+            <Skeleton className="size-8 shrink-0 rounded-full" />
+            <div className="flex h-10 min-w-0 flex-1 flex-col justify-center gap-2.5">
+              <div className="flex items-center gap-2">
+                <Skeleton className={cn("h-3", name)} />
+                <Skeleton className="h-3.5 w-14 rounded-full" />
+              </div>
+              <Skeleton className={cn("h-2.5", detail)} />
+            </div>
+            <span className="size-7 shrink-0" />
           </li>
         ))}
       </ul>
@@ -122,8 +139,9 @@ export function DueTasksSkeleton() {
   );
 }
 
-const UPCOMING_ROWS = ["w-44", "w-36", "w-48", "w-32"];
+const UPCOMING_ROWS = ["w-40", "w-32", "w-44"];
 
+/** A calendar leaf beside a two-line event per day, as UpcomingPanel draws them. */
 export function UpcomingSkeleton() {
   const t = useTranslations("home.upcoming");
   return (
@@ -135,16 +153,11 @@ export function UpcomingSkeleton() {
       <Loading />
       <ul aria-hidden className="divide-y">
         {UPCOMING_ROWS.map((width) => (
-          <li key={width} className="flex items-center gap-3 px-4 py-2.5">
-            {/* The real row's day column and its two text lines (36px). */}
-            <div className="flex h-9 w-[4.75rem] shrink-0 flex-col justify-center gap-1.5">
-              <Skeleton className="h-2.5 w-10" />
-              <Skeleton className="h-2.5 w-8" />
-            </div>
-            <Skeleton className="size-2 shrink-0 rounded-full" />
-            <div className="flex h-9 min-w-0 flex-1 flex-col justify-center gap-2">
+          <li key={width} className="flex gap-3.5 px-4 py-3">
+            <Skeleton className="h-11 w-10 shrink-0 rounded-lg" />
+            <div className="flex h-11 min-w-0 flex-1 flex-col justify-center gap-2.5">
               <Skeleton className={cn("h-3", width)} />
-              <Skeleton className="h-2.5 w-24" />
+              <Skeleton className="ml-3.5 h-2.5 w-24" />
             </div>
           </li>
         ))}
@@ -153,8 +166,9 @@ export function UpcomingSkeleton() {
   );
 }
 
-const RECENT_ROWS = ["w-28", "w-32", "w-24", "w-36", "w-28"];
+const RECENT_ROWS = ["w-28", "w-32", "w-24", "w-36", "w-28", "w-32"];
 
+/** Avatar rows with a stage pill, as RecentClients draws them. */
 export function RecentSkeleton() {
   const t = useTranslations("home.recent");
   return (
@@ -164,26 +178,18 @@ export function RecentSkeleton() {
       action={<PanelAction href={clientsPath("buyer")}>{t("all")}</PanelAction>}
     >
       <Loading />
-      <div aria-hidden>
-        <div className="flex h-[38px] items-center gap-4 border-b px-4">
-          <Skeleton className="h-2.5 w-12" />
-          <Skeleton className="ml-[20%] h-2.5 w-10" />
-          <Skeleton className="ml-auto h-2.5 w-14" />
-          <Skeleton className="h-2.5 w-14" />
-        </div>
+      <ul aria-hidden className="divide-y">
         {RECENT_ROWS.map((width, i) => (
-          <div
-            key={width + i}
-            className="flex h-[42px] items-center gap-4 border-b px-4 last:border-b-0"
-          >
-            <Skeleton className="size-6 shrink-0 rounded-full" />
-            <Skeleton className={cn("h-3", width)} />
-            <Skeleton className="ml-[8%] h-[22px] w-20 rounded-full" />
-            <Skeleton className="ml-auto h-3 w-20" />
-            <Skeleton className="hidden h-2.5 w-20 sm:block" />
-          </div>
+          <li key={width + i} className="flex items-center gap-3 px-4 py-2.5">
+            <Skeleton className="size-8 shrink-0 rounded-full" />
+            <div className="flex h-10 min-w-0 flex-1 flex-col justify-center gap-2.5">
+              <Skeleton className={cn("h-3", width)} />
+              <Skeleton className="h-2.5 w-36" />
+            </div>
+            <Skeleton className="h-[22px] w-16 shrink-0 rounded-full" />
+          </li>
         ))}
-      </div>
+      </ul>
     </Panel>
   );
 }

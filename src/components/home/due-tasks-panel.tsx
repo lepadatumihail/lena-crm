@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Circle, CircleCheck, ListChecks } from "lucide-react";
 
+import { ClientAvatar } from "@/components/clients/client-avatar";
 import { Panel, PanelAction, PanelEmpty } from "@/components/shell/panel";
 import { DueChip } from "@/components/tasks/due-chip";
 import { reduceTasks, useTaskActions } from "@/components/tasks/use-task-actions";
@@ -93,8 +94,9 @@ export function DueTasksPanel({
                   {task.title}
                 </Link>
                 {task.client ? (
-                  <span className="text-muted-foreground hidden max-w-40 truncate text-xs sm:block">
-                    {clientFullName(task.client)}
+                  <span className="text-muted-foreground hidden max-w-48 min-w-0 items-center gap-2 text-xs sm:flex">
+                    <ClientAvatar name={clientFullName(task.client)} side={task.client.side} />
+                    <span className="truncate">{clientFullName(task.client)}</span>
                   </span>
                 ) : null}
                 <DueChip dueOn={task.due_on} todayKey={todayKey} className="shrink-0" />

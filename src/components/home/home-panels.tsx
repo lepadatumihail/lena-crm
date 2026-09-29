@@ -1,18 +1,22 @@
+import type { ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { BellRing, Building2, CalendarDays, Euro, Users } from "lucide-react";
+import { format, parseISO } from "date-fns";
+import { BellRing, CalendarDays, Users } from "lucide-react";
 
 import { AttentionList } from "@/components/home/attention-list";
 import { RecentClients } from "@/components/home/recent-clients";
 import {
   StatTiles,
-  type StatSegment,
+  type StatFooter,
   type StatTile,
 } from "@/components/home/stat-tiles";
 import { UpcomingPanel } from "@/components/home/upcoming-panel";
 import { Panel, PanelAction } from "@/components/shell/panel";
 import { Money } from "@/components/ui/money";
 import { intlTag } from "@/i18n/config";
+import { dateFnsLocale } from "@/i18n/dates";
 import { sideLabel, stageLabel } from "@/i18n/labels";
+import { EVENT_TONES } from "@/lib/calendar";
 import {
   clientsPath,
   formatCurrency,
@@ -25,7 +29,7 @@ import type {
   PipelineCounts,
   RecentClient,
 } from "@/lib/data/dashboard";
-import { countViewingsWithin, pipelineSegments } from "@/lib/home";
+import { pipelineSegments } from "@/lib/home";
 
 const ATTENTION_LIMIT = 8;
 
@@ -37,60 +41,104 @@ const ATTENTION_LIMIT = 8;
 /** The four headline figures. */
 export function SummaryPanel({
   counts,
-  events,
+  added,
+  viewings,
   commission,
-  now,
 }: {
   counts: PipelineCounts;
-  events: CalendarEvent[];
+  /** Clients added in the last 30 days, per side. */
+  added: { buyer: number; seller: number };
+  /** Viewings on each of the next seven days, today first. */
+  viewings: { key: string; count: number }[];
   commission: { pipeline: number; closed: number };
-  now: Date;
 }) {
   const t = useTranslations("home");
   const tCrm = useTranslations("crm");
-  const tag = intlTag(useLocale());
+  const locale = useLocale();
+  const tag = intlTag(locale);
+  const dateLocale = dateFnsLocale(locale);
 
-  const bar = (side: ClientSide): StatSegment[] =>
-    pipelineSegments(side === "buyer" ? counts.buyer : counts.seller).map((s) => ({
-      tone: STAGE_TONES[s.stage],
-      percent: s.percent,
-      label: `${stageLabel(tCrm, s.stage)} ${s.count}`,
-    }));
+  const bar = (side: ClientSide): StatFooter => {
+    const segments = pipelineSegments(side === "buyer" ? counts.buyer : counts.seller).map(
+      (s) => ({
+        tone: STAGE_TONES[s.stage],
+        percent: s.percent,
+        label: `${stageLabel(tCrm, s.stage)} ${s.count}`,
+      })
+    );
+    return { kind: "bar", segments, label: segments.map((s) => s.label).join(", ") };
+  };
+
+  // "+2 in 30 days", the figure in green: the book is growing.
+  const growth = (count: number): ReactNode =>
+    count > 0 ? (
+      <span title={t("stats.addedTitle", { count })}>
+        {t.rich("stats.added", {
+          count,
+          up: (chunks) => (
+            <span className="text-tone-green-ink font-medium tabular-nums">{chunks}</span>
+          ),
+        })}
+      </span>
+    ) : null;
+
+  const days = viewings.map((d, i) => {
+    const date = parseISO(d.key);
+    return {
+      key: d.key,
+      // Two letters: one would read "S S" and "T T" in English, "m m" in Spanish.
+      letter: format(date, "EEEEEE", { locale: dateLocale }),
+      title: t("stats.viewingsOn", {
+        date: format(date, "EEEE d MMM", { locale: dateLocale }),
+        count: d.count,
+      }),
+      count: d.count,
+      today: i === 0,
+    };
+  });
 
   const tiles: StatTile[] = [
     {
       label: t("stats.buyers"),
       value: String(counts.buyerTotal),
+      aside: growth(added.buyer),
+      footer: bar("buyer"),
       href: clientsPath("buyer"),
-      icon: Users,
-      bar: bar("buyer"),
     },
     {
       label: t("stats.sellers"),
       value: String(counts.sellerTotal),
+      aside: growth(added.seller),
+      footer: bar("seller"),
       href: clientsPath("seller"),
-      icon: Building2,
-      bar: bar("seller"),
     },
     {
       label: t("stats.viewings"),
-      value: String(countViewingsWithin(events, now.toISOString(), 7)),
+      value: String(viewings.reduce((sum, d) => sum + d.count, 0)),
+      footer: {
+        kind: "days",
+        days,
+        tone: EVENT_TONES.viewing,
+        label: days.map((d) => d.title).join(", "),
+      },
       href: "/calendar",
-      icon: CalendarDays,
     },
     {
       label: t("stats.commission"),
       value: <Money value={commission.pipeline} locale={tag} />,
-      hint:
+      footer:
         commission.closed > 0
-          ? t("stats.commissionClosed", {
-              amount: formatCurrency(commission.closed, tag),
-            })
+          ? {
+              kind: "note",
+              tone: "green",
+              text: t("stats.commissionClosed", {
+                amount: formatCurrency(commission.closed, tag),
+              }),
+            }
           : commission.pipeline === 0
-            ? t("stats.commissionHint")
-            : null,
+            ? { kind: "note", text: t("stats.commissionHint") }
+            : undefined,
       href: `${clientsPath("buyer")}?stage=reserved`,
-      icon: Euro,
     },
   ];
 
@@ -163,12 +211,6 @@ export function RecentClientsPanel({
         clients={clients}
         intlTag={tag}
         nowISO={now.toISOString()}
-        columns={{
-          client: t("columns.client"),
-          stage: t("columns.stage"),
-          amount: t("columns.amount"),
-          updated: t("columns.updated"),
-        }}
         emptyLabel={t("empty")}
         priorityLabel={t("priority")}
         nowLabel={t("now")}

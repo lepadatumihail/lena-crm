@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ChevronDown, Plus } from "lucide-react";
@@ -13,22 +14,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 /**
- * The top of Home: the greeting and today's date, then one "New" button.
- * Its menu lists what the phone's + sheet and ⌘K list (a buyer, a seller,
- * a pasted lead, a task, an appointment), so Home's corner holds a single
- * ink action instead of a row of them. Nothing here waits for data (the
- * agent's name and time zone come from the layout), so it paints with the
- * first byte and never shifts.
+ * The top of Home: today's date, the greeting and a line summing up the day,
+ * then one "New" button. Its menu lists what the phone's + sheet and ⌘K list
+ * (a buyer, a seller, a pasted lead, a task, an appointment), so Home's
+ * corner holds a single ink action instead of a row of them. The date and
+ * greeting wait for no data (the agent's name and time zone come from the
+ * layout), so they paint with the first byte; the summary streams in under
+ * them, on a line whose height is held from the start.
  */
-export function HomeHeader({ now }: { now: Date }) {
+export function HomeHeader({ now, summary }: { now: Date; summary?: ReactNode }) {
   const t = useTranslations("home");
   const tNav = useTranslations("nav");
 
   return (
-    // No wrap: on a narrow window the greeting's line wraps, and New stays
-    // in the corner rather than dropping under it.
-    <div className="flex items-end justify-between gap-3">
-      <Greeting nowISO={now.toISOString()} />
+    // No wrap: on a narrow window the summary wraps, and New stays in the
+    // corner rather than dropping under it.
+    <div className="flex items-center justify-between gap-3">
+      <Greeting nowISO={now.toISOString()} subtitle={summary} />
       {/* On a phone the tab bar's + opens the same list. */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

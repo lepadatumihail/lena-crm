@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { format, parseISO } from "date-fns";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -9,22 +10,21 @@ import {
 } from "@/components/shell/shell-context";
 import { dateFnsLocale } from "@/i18n/dates";
 import { dateKeyInTimeZone, greetingPeriod, hourInTimeZone } from "@/lib/home";
-import { cn } from "@/lib/utils";
 
 /**
- * "Good afternoon, Mihail" over today's date. The instant comes from the
- * server, the name and time zone from the shell, so the server and the
- * browser render the same words and nothing here waits on a query.
+ * Today's date over "Good afternoon, Mihail", then a line about the day. The
+ * instant comes from the server, the name and time zone from the shell, so
+ * the server and the browser render the same words and nothing here waits on
+ * a query. The line under it may: Home streams its summary of the day there.
  */
 export function Greeting({
   nowISO,
   subtitle,
 }: {
   nowISO: string;
-  /** Replaces the everyday line under the greeting. */
-  subtitle?: string;
+  /** The line under the greeting. */
+  subtitle?: ReactNode;
 }) {
-  const t = useTranslations("home");
   const tGreeting = useTranslations("home.greeting");
   const locale = useLocale();
   const firstName = useAgentFirstName();
@@ -40,20 +40,17 @@ export function Greeting({
 
   return (
     <div className="min-w-0">
-      <h2 className="truncate text-xl font-semibold tracking-tight">
+      <p className="text-muted-foreground text-[13px] leading-5 first-letter:uppercase">
+        {dateLabel}
+      </p>
+      <h2 className="truncate text-2xl font-semibold tracking-tight sm:text-[28px] sm:leading-9">
         {tGreeting(period, {
           name: firstName ? tGreeting("named", { name: firstName }) : "",
         })}
       </h2>
-      <p className="text-muted-foreground text-sm">
-        <span className="inline-block first-letter:uppercase">{dateLabel}</span>
-        {/* On a phone the everyday line gives way to the day's work; a
-            first-session line says something, so it stays. */}
-        <span className={cn(!subtitle && "max-sm:hidden")}>
-          <span className="mx-1.5">·</span>
-          {subtitle ?? t("subtitle")}
-        </span>
-      </p>
+      {subtitle ? (
+        <div className="text-muted-foreground mt-1 text-sm">{subtitle}</div>
+      ) : null}
     </div>
   );
 }

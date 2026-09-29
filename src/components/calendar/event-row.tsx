@@ -6,6 +6,7 @@ import { MessageCircle } from "lucide-react";
 
 import { intlTag } from "@/i18n/config";
 import { appointmentTypeLabel } from "@/i18n/labels";
+import { useAgentTimeZone } from "@/components/shell/shell-context";
 import { buttonVariants } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/crm";
 import { eventReminderHref } from "@/lib/event-reminder";
@@ -39,8 +40,9 @@ export function EventRow({
   const t = useTranslations("calendar");
   const tCrm = useTranslations("crm");
   const tag = intlTag(useLocale());
+  const timeZone = useAgentTimeZone();
 
-  const remind = eventReminderHref(e);
+  const remind = eventReminderHref(e, timeZone);
   const desc = eventDescription(e);
   const start = new Date(e.starts_at);
   // `e.title` is derived and translated server-side, so it already follows

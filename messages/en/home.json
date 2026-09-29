@@ -1,6 +1,10 @@
 {
   "title": "Home",
-  "subtitle": "Everything that needs you, in one place.",
+  "summary": {
+    "attention": "{count, plural, =0 {Nobody is waiting on you} one {<b>#</b> client needs you} other {<b>#</b> clients need you}}",
+    "tasks": "{count, plural, =0 {no tasks due} one {<b>#</b> task due} other {<b>#</b> tasks due}}",
+    "week": "{count, plural, =0 {a clear week ahead} one {<b>#</b> appointment this week} other {<b>#</b> appointments this week}}"
+  },
   "actions": {
     "new": "New"
   },
@@ -24,7 +28,7 @@
     "open": "Open",
     "draft": "Draft",
     "stalledOffer": "Made an offer — not reserved yet",
-    "followUp": "{stage} · quiet {days, plural, one {# day} other {# days}}",
+    "quiet": "Quiet for {days, plural, one {# day} other {# days}}",
     "reservation": "{label} · {date} ({when})",
     "reservationFields": {
       "ppc": "PPC payment",
@@ -36,8 +40,8 @@
       "tomorrow": "tomorrow",
       "inDays": "in {count, plural, one {# day} other {# days}}"
     },
-    "newBuyer": "New lead · no contact yet",
-    "newSeller": "New seller · not qualified yet",
+    "newBuyer": "New buyer, no contact yet",
+    "newSeller": "New seller, no contact yet",
     "log": "Log contact"
   },
   "pipeline": {
@@ -57,20 +61,17 @@
     "viewings": "Viewings, next 7 days",
     "commission": "Commission in pipeline",
     "commissionClosed": "{amount} closed",
-    "commissionHint": "Add a reservation to start counting"
+    "commissionHint": "Add a reservation to start counting",
+    "added": "<up>+{count}</up> in 30 days",
+    "addedTitle": "{count, plural, one {# client} other {# clients}} added in the last 30 days",
+    "viewingsOn": "{date}: {count, plural, =0 {no viewings} one {# viewing} other {# viewings}}"
   },
   "recent": {
     "title": "Recent clients",
     "all": "All clients",
     "empty": "Your clients will show up here as you add them.",
     "now": "just now",
-    "priority": "Priority",
-    "columns": {
-      "client": "Client",
-      "stage": "Stage",
-      "amount": "Amount",
-      "updated": "Updated"
-    }
+    "priority": "Priority"
   },
   "firstSession": {
     "subtitle": "No clients yet. Bring them in and Home fills itself.",

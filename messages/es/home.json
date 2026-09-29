@@ -1,6 +1,10 @@
 {
   "title": "Inicio",
-  "subtitle": "Todo lo que necesita tu atención, en un solo sitio.",
+  "summary": {
+    "attention": "{count, plural, =0 {Nadie espera tu respuesta} one {<b>#</b> cliente te necesita} other {<b>#</b> clientes te necesitan}}",
+    "tasks": "{count, plural, =0 {ninguna tarea pendiente} one {<b>#</b> tarea pendiente} other {<b>#</b> tareas pendientes}}",
+    "week": "{count, plural, =0 {semana despejada} one {<b>#</b> cita esta semana} other {<b>#</b> citas esta semana}}"
+  },
   "actions": {
     "new": "Nuevo"
   },
@@ -24,7 +28,7 @@
     "open": "Abrir",
     "draft": "Redactar",
     "stalledOffer": "Hizo una oferta — aún sin reservar",
-    "followUp": "{stage} · {days, plural, one {# día} other {# días}} sin novedades",
+    "quiet": "{days, plural, one {# día} other {# días}} sin novedades",
     "reservation": "{label} · {date} ({when})",
     "reservationFields": {
       "ppc": "Pago de arras (PPC)",
@@ -36,8 +40,8 @@
       "tomorrow": "mañana",
       "inDays": "en {count, plural, one {# día} other {# días}}"
     },
-    "newBuyer": "Lead nuevo · sin contactar",
-    "newSeller": "Vendedor nuevo · sin cualificar",
+    "newBuyer": "Comprador nuevo, sin contactar",
+    "newSeller": "Vendedor nuevo, sin contactar",
     "log": "Registrar contacto"
   },
   "pipeline": {
@@ -57,20 +61,17 @@
     "viewings": "Visitas, próximos 7 días",
     "commission": "Comisión en el embudo",
     "commissionClosed": "{amount} cerrado",
-    "commissionHint": "Añade una reserva para empezar a contar"
+    "commissionHint": "Añade una reserva para empezar a contar",
+    "added": "<up>+{count}</up> en 30 días",
+    "addedTitle": "{count, plural, one {# cliente añadido} other {# clientes añadidos}} en los últimos 30 días",
+    "viewingsOn": "{date}: {count, plural, =0 {sin visitas} one {# visita} other {# visitas}}"
   },
   "recent": {
     "title": "Clientes recientes",
     "all": "Ver todos",
     "empty": "Tus clientes aparecerán aquí a medida que los añadas.",
     "now": "ahora mismo",
-    "priority": "Prioritario",
-    "columns": {
-      "client": "Cliente",
-      "stage": "Etapa",
-      "amount": "Importe",
-      "updated": "Actualizado"
-    }
+    "priority": "Prioritario"
   },
   "firstSession": {
     "subtitle": "Aún no hay clientes. Tráelos y el inicio se llena solo.",
