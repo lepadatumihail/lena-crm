@@ -28,7 +28,7 @@ done.
 | 017 | WhatsApp conversations on the client card (Meta's official coexistence, never QR) | P3 | XL (18–25 d) | 016 Phase 1, token module from 013 | TODO (gated: score J on 9 Oct + Meta verification) — [plan](017-whatsapp-coexistence.md) |
 | 018 | Commission and split calculator, the first free public tool (+ tool pages in the marketing shell) | P1 | M (≈2 d) | — | TODO — [plan](018-commission-calculator.md) |
 | 019 | Free client-tracker spreadsheet that imports into LeadWing (+ the /tools hub) | P1 | S–M (≈1–1.5 d) | 018 Phase A (hard), 012 (built) | TODO — [plan](019-client-spreadsheet.md) |
-| 020 | Andalucía agent register explainer (downgraded after the 18 Sep 2026 agreement) | P3 | S (≈0.5 d) | — | TODO (optional; re-verify the law on the build day) — [plan](020-andalucia-agent-register.md) |
+| 020 | Andalucía agent register explainer (downgraded after the 18 Sep 2026 agreement) | P3 | S (≈0.5 d) | — | DONE (built and live 2026-09-29 as 1c3747d; facts as of that day, re-check monthly until the amending law passes) — [plan](020-andalucia-agent-register.md) |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) | REJECTED (with one-line rationale)
 

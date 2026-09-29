@@ -1,8 +1,8 @@
 {
   "hero": {
     "badge": "CRM para agentes inmobiliarios independientes",
-    "title": "Ten claro a quién contactar. <accent>Y qué decirle.</accent>",
-    "subtitle": "Reúne tus leads en un solo sitio, crea tareas y recordatorios para cada cliente y redacta seguimientos en su idioma. Tú revisas el mensaje y lo envías.",
+    "title": "Tus compradores <nowrap>se enfrían.</nowrap> <accent>Y tu comisión se va con ellos.</accent>",
+    "subtitle": "LeadWing es el CRM para agentes inmobiliarios independientes: todos tus compradores en un solo sitio, a quién contactar hoy y el mensaje ya escrito en su idioma.",
     "ctaPrimary": "Empieza gratis",
     "ctaSecondary": "Mira cómo funciona",
     "note": "Gratis hasta {limit} clientes. Sin tarjeta."

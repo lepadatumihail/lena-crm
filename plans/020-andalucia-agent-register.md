@@ -373,3 +373,21 @@ irrelevant.)
    `PUBLISHED.guideAndaluciaRegister` either way, and re-run the link check.
 6. When the agreement's text appears, compare it with the press release
    (STOP condition 2) before quoting it on the page.
+
+### Live, 2026-09-29
+
+- Pushed as e4cbfc6: 1c3747d merged with origin's 971c7fa (merge, not rebase).
+  The merge commit itself passed typecheck, lint, 745 tests and the build
+  before the push.
+- GitHub Actions run 36593551486: success (npm ci, typecheck, lint, test,
+  build): https://github.com/lepadatumihail/lena-crm/actions/runs/36593551486
+- Vercel production deployment dpl_CP82U86SHyUHmwTCF5UTAyyUs1KR is READY
+  (fra1) and aliased to www.leadwing.app about a minute after the push. No
+  runtime errors in the following hour.
+- Live checks: both URLs answer 200 from fra1, with www canonicals, hreflang
+  en/es/x-default and `index, follow`. The JSON-LD has Article (`about`:
+  Legislation), BreadcrumbList and FAQPage (5), and the page shows the
+  "Situation as of 29 September 2026" box. The sitemap lists 22 URLs,
+  including both new ones; llms.txt has the line; both markdown twins
+  answer 200 `text/markdown`; and the footer links appear on `/` and `/es`.
+- Next re-check: late October 2026 (see the routine above).

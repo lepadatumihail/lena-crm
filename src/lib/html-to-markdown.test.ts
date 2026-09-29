@@ -62,6 +62,51 @@ describe("htmlToMarkdown", () => {
     );
   });
 
+  it("keeps the header a page opens <main> with, without its buttons", () => {
+    expect(
+      htmlToMarkdown(
+        page(
+          "",
+          `<header><nav><a href="/">Site nav</a></nav></header>
+           <main>
+             <header>
+               <p>Guide</p>
+               <h1>Idealista leads</h1>
+               <p>Answer the same day.</p>
+               <p>Updated 13 September 2026</p>
+               <div class="flex gap-3"><a data-slot="button" href="/login">Start for free</a></div>
+             </header>
+             <p>The routine.</p>
+           </main>
+           <footer><a href="/legal">Footer link</a></footer>`
+        ),
+        PAGE_URL
+      )
+    ).toBe(
+      "Guide\n\n# Idealista leads\n\nAnswer the same day.\n\nUpdated 13 September 2026\n\nThe routine.\n"
+    );
+  });
+
+  it("drops only the site's own header and footer when there is no <main>", () => {
+    expect(
+      htmlToMarkdown(
+        page(
+          "",
+          `<div>
+             <header><a href="/">Site banner</a></header>
+             <section>
+               <header><h2>Pricing</h2></header>
+               <p>Free forever</p>
+               <footer>Prices exclude VAT</footer>
+             </section>
+             <footer><a href="/legal">Footer link</a></footer>
+           </div>`
+        ),
+        PAGE_URL
+      )
+    ).toBe("## Pricing\n\nFree forever\n\nPrices exclude VAT\n");
+  });
+
   it("falls back to the body without a <main>, and skips empty front matter", () => {
     expect(
       htmlToMarkdown(page("", "<section><h2>Pricing</h2><p>Free forever</p></section>"), PAGE_URL)
