@@ -10,6 +10,7 @@ import { AuthErrorListener } from "@/components/auth-error-listener";
 import { MarketingNav } from "@/components/marketing-nav";
 import { Reveal } from "@/components/reveal";
 import { Eyebrow } from "@/components/marketing/eyebrow";
+import { FilmPlayer } from "@/components/marketing/film-player";
 import { HeroAccent } from "@/components/marketing/hero-accent";
 import { OnePlace } from "@/components/landing/one-place";
 import { Workflow } from "@/components/landing/workflow";
@@ -129,6 +130,18 @@ export function LandingPage() {
               {t("howItWorks.body")}
             </p>
           </div>
+
+          {/* The 30-second film, where "See how it works" lands. It loads
+              nothing until it is scrolled to. Its on-screen text is English,
+              so the Spanish page goes straight to the steps. */}
+          {locale === "en" && (
+            <FilmPlayer
+              className="mt-10 sm:max-w-5xl"
+              label={t("howItWorks.film.label")}
+              soundOn={t("howItWorks.film.soundOn")}
+              soundOff={t("howItWorks.film.soundOff")}
+            />
+          )}
 
           <Workflow />
         </div>

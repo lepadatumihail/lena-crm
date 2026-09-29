@@ -32,6 +32,11 @@
     "badge": "Cómo funciona",
     "heading": "De un nuevo lead a tu próxima conversación.",
     "body": "Es fácil perder de vista un nombre entre tus notas. Dale a cada consulta una ficha de cliente, un siguiente paso y un mensaje listo para enviar.",
+    "film": {
+      "label": "Un vídeo de 30 segundos: un comprador pasa de su primer mensaje a una villa reservada, mientras LeadWing lo añade, redacta la respuesta en su idioma, encuentra los inmuebles que encajan y programa la visita.",
+      "soundOn": "Activar sonido",
+      "soundOff": "Silenciar"
+    },
     "steps": {
       "capture": {
         "title": "Reúne el lead en un solo sitio",

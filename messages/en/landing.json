@@ -32,6 +32,11 @@
     "badge": "How it works",
     "heading": "From a new lead to your next conversation.",
     "body": "A name in your notes is easy to lose. Give each enquiry a client card, a next step and a message you can send.",
+    "film": {
+      "label": "A 30-second film: a buyer goes from his first message to a reserved villa, as LeadWing adds him, drafts a reply in his language, finds listings that fit and books the viewing.",
+      "soundOn": "Sound on",
+      "soundOff": "Sound off"
+    },
     "steps": {
       "capture": {
         "title": "Bring the lead into one place",
