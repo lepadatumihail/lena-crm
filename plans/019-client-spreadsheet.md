@@ -415,3 +415,108 @@ Without approval, leave the constant `null`; the button stays hidden.
   `write-excel-file ^4.1.1`.
 - Next.js 16 route handlers with `generateStaticParams`:
   `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/route.md`
+
+## As built (2026-09-29)
+
+Commits on `main`: `e5d2a39` (the workbooks, `/downloads/[file]` and the
+importer words) and `1ea8de4` (the page, the hub and the shared pieces).
+Before `main` moved, each exact tree passed `npm ci`, typecheck, lint, tests
+and build (Node 24, CI's placeholder env) in a throwaway detached worktree:
+the shared working tree also held another session's film work.
+
+**Live on 29 Sep 2026.** Pushed as `ce96ec6..1ea8de4` (a fast-forward).
+GitHub Actions CI run 36627060907 is green. The Vercel production deployment
+`dpl_AmRsSjjoPAo8kZ7tvmdogmhjty3n` is READY on www.leadwing.app. On
+production:
+- `/tools`, `/es/herramientas` and both tracker pages answer 200,
+  `index, follow`, with the canonical and hreflang en/es/x-default. The
+  JSON-LD is WebPage → SpreadsheetDigitalDocument (its `contentUrl` is the
+  file in the page's language), BreadcrumbList Home › Tools › page, FAQPage.
+- Both downloads answer 200 from the prerender cache
+  (`x-vercel-cache: PRERENDER`) with the xlsx type and `attachment`; any
+  other name is a 404. Read back with `read-excel-file`: Buyers | Sellers |
+  How to use (Compradores | Vendedores | Cómo usarla), 21 headers per client
+  sheet, nothing under them.
+- `sitemap.xml` and `llms.txt` list the tracker and the hub.
+
+**Live database.** No migration. Local testing wrote 21 rows to the live
+`site_events` (ids 238–258: tool views, one `signup_open`, one `tool_use`
+from a download click, which confirmed the event carries the page's path).
+They were deleted by id the same day; the real Facebook rows around them
+(236, 237, 259) were left alone.
+
+**Deviations from the steps:**
+- **No dropdowns (the documented fallback).** The plugin inserts
+  `<dataValidations>` after the *first* `<conditionalFormatting>` it finds,
+  and write-excel-file writes one `<conditionalFormatting>` per rule, so the
+  two colour rules came out as CF, DV, CF: an order CT_Worksheet forbids,
+  which Excel answers with a repair prompt. The plugin isn't installed. The
+  How-to sheet lists the words LeadWing reads instead ("Words LeadWing
+  reads"), and `tracker.test.ts` checks every sheet's parts against the
+  ECMA-376 order and every listed word against the importer's normalizers.
+  To bring dropdowns back later: merge the two rules into one
+  `<conditionalFormatting>` before the plugin runs (a small custom feature),
+  or write the list validations ourselves; either way the order test must
+  stay green.
+- **Formulas.** write-excel-file writes a formula as given (`<f>=IF…</f>`),
+  and a file stores it without the "=" (openpyxl and xlsxwriter strip it
+  too), so no formula here has one. Formula cells carry no cached result, so
+  a small feature sets `<calcPr fullCalcOnLoad="1"/>`.
+- The client-safe constants (file names, `XLSX_TYPE`,
+  `TRACKER_SHEETS_COPY_URL`) live in `src/lib/tools/tracker-files.ts`, not
+  `src/lib/tools.ts`: `src/lib/tools/` is already a folder, and the page's
+  buttons must not import the Excel writer.
+- `buildTracker` builds its translators with `createTranslator` over
+  `messagesFor(locale)`, so it needs no request and the test no mock.
+- Colours: amber is `AND($T2<>"",$T2<=TODAY())`, grey is
+  `AND(ISNUMBER($U2),$U2>=STALE_AFTER_DAYS)`; amber comes first, so it wins
+  where both match. Fills only: `#FFF7C9` (the app's amber pill) and
+  `#EBEBEB`.
+- The How-to sheet's example rows are dated from `TODAY()` and carry the same
+  rules, so their colours stay true whenever the file opens. The import line
+  uses the app's own words ("open Buyers, choose Import from a spreadsheet"),
+  not "Clients → Import", which isn't what the app says. The last line
+  links the page with `HYPERLINK`.
+- Commit 1 has no link from the How-to sheet to the page: the route only
+  arrives with the pages in commit 2.
+- The preview table is rendered on the server from the import template's own
+  sample clients (Anna, James), dated from the page's `PUBLISHED_ON`; only
+  the buttons are a client component (`tracker-actions.tsx`). Its visible
+  label sits above the scrolling box, and the table's `<caption>` stays for
+  screen readers.
+- The hub's cards (`tool-cards.tsx`) sit inside the article, so they use
+  spans and two `!` overrides against the article's link styles. The footer
+  lists the hub first through `TOOL_LINKS = ["tools", ...TOOL_ROUTES]`
+  instead of the `lead` prop, which is meant for entries with no catalog
+  label.
+- `ToolViewBeacon` now counts once per path, not once per page load: the hub
+  and the related cards move between tools without a reload.
+- Next 16.2.6's SWC drops the leading space of a JSX text that spans lines
+  and holds an entity such as `&apos;` (`<strong>Sign in</strong> with …
+  There&apos;s …` rendered "Sign inwith"). Two spots take an explicit
+  `{" "}`; a scan of every `.tsx` in `src` found no other text of that shape.
+- Numbers wasn't checked (driving it would need a macOS automation prompt),
+  so the page says its rows "may stay white" there. LibreOffice opened both
+  files cleanly: formulas computed and the example rows were amber and grey.
+- The "Outgrown it?" button wraps: at 320 px its label pushed the page 20 px
+  sideways.
+
+**Checks:** nothing overflows at 320 or 375 px on the four pages (or the
+calculator's, whose footer changed); light and dark on phone and desktop in
+both languages; no console errors; the sign-up dialog opens from "Outgrown
+it?" and its form's `next` is `/clients/import`; the markdown twin serves
+the page.
+
+**Not done:**
+- Step 13, the Google Sheets copies: the founder said "not now", so
+  `TRACKER_SHEETS_COPY_URL` stays `null` and the button stays hidden.
+- The founder's manual tick list (Excel for Mac, Google Sheets, Numbers,
+  and an import of a saved file).
+
+**Notes for the founder:**
+- The import wizard opens a workbook's first sheet, so sellers have to pick
+  the Sellers sheet themselves (the page and the How-to sheet say so). A
+  small follow-up could preselect the sheet named after the side.
+- The H1s lead with "free" ("A free spreadsheet to track your buyers and
+  sellers", "Plantilla Excel gratis para llevar tus clientes
+  inmobiliarios"), as this plan's Step 10 specified for search.
