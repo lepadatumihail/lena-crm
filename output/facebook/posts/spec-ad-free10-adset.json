@@ -1,0 +1,47 @@
+{
+  "_note": "PREPARED 29 Sep 2026 on the founder's 'GO'. NOTHING CREATED ON META YET - awaiting his final yes.",
+  "hook": "free-for-10",
+  "designed_as": "A/B against the quiet-leads run: SAME audience, SAME placements, SAME budget, SAME optimization goal. Only the hook and creative change, so the offer is the only variable.",
+  "campaign": {
+    "objective": "OUTCOME_TRAFFIC",
+    "name": "Free 10 · Sep 26",
+    "is_adset_budget_sharing_enabled": false,
+    "status": "PAUSED_until_verified"
+  },
+  "adset": {
+    "name": "Free 10 · agents 60 km Marbella · feed only",
+    "optimization_goal": "LANDING_PAGE_VIEWS",
+    "billing_event": "IMPRESSIONS",
+    "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
+    "lifetime_budget_eur": 25,
+    "start": "2026-09-29T18:00:00+02:00",
+    "end": "2026-10-04T23:59:00+02:00",
+    "targeting": {
+      "geo": "60 km around Marbella",
+      "age_min": 24,
+      "age_max": 64,
+      "flexible_spec_interests": ["Real estate license", "Century 21 Real Estate", "Residential property brokerage"],
+      "work_positions": "OMITTED - the five job titles return Meta's suppressed 1,000 floor for ALL of Spain (26 Sep learning), so they add nothing",
+      "publisher_platforms": ["facebook", "instagram"],
+      "facebook_positions": ["feed"],
+      "instagram_positions": ["stream"]
+    },
+    "MANDATORY_AFTER_CREATION": "Re-READ the ad set's targeting and confirm publisher_platforms / facebook_positions / instagram_positions are present. Meta stripped them unprompted on 27 Sep (activity log, actor 'Meta' 1051435468209173). If absent, re-apply and verify again."
+  },
+  "creative": {
+    "image": "output/facebook/posts/12-ad-free10.png",
+    "spec": "output/facebook/posts/spec-ad-free10.json",
+    "link": "https://leadwing.app/start?utm_source=facebook&utm_medium=paid&utm_campaign=free10-sep26",
+    "call_to_action": "SIGN_UP",
+    "headline": "Free for your first 10 clients",
+    "description": "No card. The CRM for independent agents on the Costa del Sol.",
+    "primary_text": "Your first 10 clients on LeadWing are free. Forever, and without a card.\n\nBring your buyer list over from Excel or CSV. Check every row in a preview before anything saves, and undo the whole import in one click if it looks wrong.\n\nEvery buyer in one place: budget, viewings, offers, documents, and the next follow-up already drafted.\n\nBuilt for independent agents on the Costa del Sol. Start free: leadwing.app/start"
+  },
+  "known_weaknesses": [
+    "The audience is still the three interests - property-curious consumers, not working agents. Meta cannot target agents in Spain at all (26 Sep). The hook changes; who sees it does not.",
+    "Hook/landing mismatch: /start's headline is 'Still tracking clients in a spreadsheet?', not the free offer. The free offer is in its CTA and note only. A /free (ES /gratis) landing that repeats the hook would fix this - site code, needs a separate yes.",
+    "EUR 25 buys roughly 85 landing page views at the quiet-leads rate of EUR 0.30. Against 0 signups from 154 views so far, that is a weak test: it can show life, it cannot prove absence.",
+    "The app screenshot shows 'Mon 21 Sep' inside the mock. Known, previously accepted as not worth a re-render."
+  ],
+  "waste_test": "Applies as always: pause without asking if more than half the spend goes to audience_network, or clicks under EUR 0.05 with landing views below 30% of clicks. Also report off-feed SHARE of the day's spend, since the 27 Sep leak did not trip the test."
+}

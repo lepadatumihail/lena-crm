@@ -1,0 +1,17 @@
+{
+ "background": "output/facebook/posts/bg-terracotta-dusk.png",
+ "screenshot": "output/facebook/screenshots/home-dark-1440x900@2x.png",
+ "out": "output/facebook/posts/12-ad-free10.png",
+ "pill": "Free plan",
+ "headline": "Your first 10 clients.\nFree, forever.",
+ "headlineSize": 78,
+ "sub": "No card, no time limit. Bring your Excel list across and see if it fits.",
+ "audience": "The CRM for independent agents on the Costa del Sol.",
+ "chip": {
+  "title": "Free plan",
+  "sub": "10 clients · no card"
+ },
+ "button": "Start free",
+ "url": "leadwing.app",
+ "cropRatio": 0.86
+}
