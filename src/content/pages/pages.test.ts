@@ -50,6 +50,9 @@ describe("the commission calculator names no commission rate", () => {
   const SOURCES = [
     "src/content/pages/tool-commission.en.tsx",
     "src/content/pages/tool-commission.es.tsx",
+    // The hub describes the calculator too.
+    "src/content/pages/tools.en.tsx",
+    "src/content/pages/tools.es.tsx",
     "src/components/tools/commission-calculator.tsx",
     "messages/en/tools.json",
     "messages/es/tools.json",

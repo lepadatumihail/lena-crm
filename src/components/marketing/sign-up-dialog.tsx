@@ -21,11 +21,14 @@ export function SignUpDialog({
   className,
   variant,
   size = "pill",
+  next,
 }: {
   children: ReactNode;
   className?: string;
   variant?: ComponentProps<typeof Button>["variant"];
   size?: ComponentProps<typeof Button>["size"];
+  /** Where a new agent lands once in, when not Home: the client tracker opens the import. */
+  next?: string;
 }) {
   return (
     <Dialog onOpenChange={(open) => open && trackSiteEvent("signup_open")}>
@@ -35,7 +38,7 @@ export function SignUpDialog({
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-2xl px-6 pt-8 pb-6 sm:max-w-sm">
-        <SignInForm Title={DialogTitle} Description={DialogDescription} track logo={false} />
+        <SignInForm next={next} Title={DialogTitle} Description={DialogDescription} track logo={false} />
       </DialogContent>
     </Dialog>
   );

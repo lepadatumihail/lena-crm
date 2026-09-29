@@ -4,13 +4,18 @@ import { useEffect } from "react";
 
 import { trackSiteEvent } from "@/lib/site-events";
 
-let sent = false;
+const sent = new Set<string>();
 
-/** Counts one tool_view per page load (not per re-render or strict-mode double effect). */
+/**
+ * Counts one tool_view per tool page and page load (not per re-render or
+ * strict-mode double effect). Keyed by path: the hub and the related cards
+ * move between tools without a new load, and each tool still counts its view.
+ */
 export function ToolViewBeacon() {
   useEffect(() => {
-    if (sent) return;
-    sent = true;
+    const path = window.location.pathname;
+    if (sent.has(path)) return;
+    sent.add(path);
     trackSiteEvent("tool_view");
   }, []);
   return null;

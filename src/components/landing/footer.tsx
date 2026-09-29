@@ -17,6 +17,8 @@ const GUIDE_LINKS = [
   "guideFollowUp",
   "guideAndaluciaRegister",
 ] as const satisfies readonly LinkedRoute[];
+/** The hub first, then every tool, so a new tool joins the column by itself. */
+const TOOL_LINKS = ["tools", ...TOOL_ROUTES] as const satisfies readonly LinkedRoute[];
 
 /**
  * Shared by the landing, pricing, legal and written pages; links follow the
@@ -63,7 +65,7 @@ export function LandingFooter() {
             <FooterColumn
               heading={tMarketing("footer.tools")}
               locale={locale}
-              routes={TOOL_ROUTES}
+              routes={TOOL_LINKS}
               className="col-span-2 sm:col-span-1"
             />
           </div>

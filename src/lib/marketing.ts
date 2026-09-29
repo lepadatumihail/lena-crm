@@ -33,7 +33,7 @@ export type MarketingPageContent = {
   /**
    * "article" → Article structured data (guides); "page" → WebPage (product
    * pages); "about" → AboutPage carrying the Organization node (the About page);
-   * "tool" → WebPage about a WebApplication (the free tools, which set `tool`).
+   * "tool" → WebPage about the tool itself (the free tools, which set `tool`).
    */
   kind: "article" | "page" | "about" | "tool";
   /** ISO date of first publication: datePublished, and "Updated …" / dateModified unless `modified` is set. */
@@ -64,10 +64,14 @@ export type MarketingPageContent = {
   related: MarketingRoute[];
   /**
    * Tool pages only: the interactive part, rendered between the header and
-   * the article, and how structured data describes it.
+   * the article, and how structured data describes it: an app that runs in
+   * the browser (the calculator) or a file to download (the client tracker,
+   * whose `contentPath` is the file in the page's language).
    */
   tool?: {
     Component: ComponentType;
-    schema: { "@type": "WebApplication"; applicationCategory: string };
+    schema:
+      | { "@type": "WebApplication"; applicationCategory: string }
+      | { "@type": "SpreadsheetDigitalDocument"; encodingFormat: string; contentPath: string };
   };
 };

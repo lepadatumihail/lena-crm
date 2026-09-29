@@ -46,6 +46,11 @@ describe("isProtectedPath", () => {
     "/guides/idealista-lead-management",
     "/guides/andalusia-agent-register",
     "/es/guias/registro-agentes-inmobiliarios-andalucia",
+    "/tools",
+    "/es/herramientas",
+    "/tools/client-spreadsheet",
+    "/es/herramientas/plantilla-excel-inmobiliaria",
+    "/downloads/leadwing-client-tracker.xlsx",
     "/login",
     "/auth/callback",
     "/join/abc",
@@ -127,6 +132,16 @@ describe("marketing routes", () => {
       route: "toolCommission",
       locale: "es",
     });
+    expect(marketingRouteAt("/tools/client-spreadsheet")).toEqual({
+      route: "toolSpreadsheet",
+      locale: "en",
+    });
+    expect(marketingRouteAt("/es/herramientas/plantilla-excel-inmobiliaria")).toEqual({
+      route: "toolSpreadsheet",
+      locale: "es",
+    });
+    expect(marketingRouteAt("/tools")).toEqual({ route: "tools", locale: "en" });
+    expect(marketingRouteAt("/es/herramientas/")).toEqual({ route: "tools", locale: "es" });
   });
 
   it.each(["/login", "/es/nope", "/clients", "/privacy/x", "/join/abc"])(
@@ -152,6 +167,10 @@ describe("marketing routes", () => {
     expect(
       marketingCounterpart("/es/guias/registro-agentes-inmobiliarios-andalucia", "en")
     ).toBe("/guides/andalusia-agent-register");
+    expect(marketingCounterpart("/tools/client-spreadsheet", "es")).toBe(
+      "/es/herramientas/plantilla-excel-inmobiliaria"
+    );
+    expect(marketingCounterpart("/es/herramientas", "en")).toBe("/tools");
   });
 
   it("lists hreflang alternates with English as x-default", () => {

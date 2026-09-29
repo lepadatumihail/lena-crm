@@ -1,6 +1,7 @@
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { PRICES } from "@/lib/billing";
 import { TOOL_ROUTES, marketingPath, type MarketingRoute, type ToolRoute } from "@/lib/routes";
+import { trackerPath } from "@/lib/tools/tracker-files";
 import {
   SITE_ALTERNATE_NAMES,
   SITE_DESCRIPTION,
@@ -23,6 +24,7 @@ const en = (route: MarketingRoute) => absoluteUrl(marketingPath(route, "en"));
 /** One line per free tool: TypeScript asks for a line whenever a tool route is added. */
 const TOOL_LINES: Record<ToolRoute, string> = {
   toolCommission: `[Real estate commission calculator](${en("toolCommission")}): fee, VAT or IGIC, the split between two agencies, your share and IRPF withholding, on sales and rentals in Spain`,
+  toolSpreadsheet: `[Client tracker spreadsheet](${en("toolSpreadsheet")}): a free Excel workbook for buyers and sellers, with follow-ups that are due in amber, quiet clients in grey and columns that import into ${SITE_NAME} as they are; in English (${absoluteUrl(trackerPath("en"))}) and Spanish (${absoluteUrl(trackerPath("es"))})`,
 };
 
 export function GET() {
@@ -79,6 +81,7 @@ ${SITE_NAME} is a web app for solo and independent real-estate agents, including
 
 ## Free tools
 
+- [Free tools for estate agents](${en("tools")}): every tool below on one page
 ${TOOL_ROUTES.map((route) => `- ${TOOL_LINES[route]}`).join("\n")}
 `;
 

@@ -61,6 +61,11 @@ export const MARKETING_ROUTES = {
     en: "/tools/commission-calculator",
     es: "/es/herramientas/calculadora-comision-inmobiliaria",
   },
+  toolSpreadsheet: {
+    en: "/tools/client-spreadsheet",
+    es: "/es/herramientas/plantilla-excel-inmobiliaria",
+  },
+  tools: { en: "/tools", es: "/es/herramientas" },
   privacy: { en: "/privacy", es: "/es/privacidad" },
   terms: { en: "/terms", es: "/es/terminos" },
   legalNotice: { en: "/legal", es: "/es/aviso-legal" },
@@ -98,6 +103,8 @@ export const CONTENT_ROUTES = [
   "guideAndaluciaRegister",
   "about",
   "toolCommission",
+  "toolSpreadsheet",
+  "tools",
 ] as const satisfies readonly MarketingRoute[];
 
 export type ContentRoute = (typeof CONTENT_ROUTES)[number];
@@ -121,6 +128,8 @@ export const LINKED_ROUTES = [
   "guideAndaluciaRegister",
   "about",
   "toolCommission",
+  "toolSpreadsheet",
+  "tools",
 ] as const satisfies readonly MarketingRoute[];
 
 export type LinkedRoute = (typeof LINKED_ROUTES)[number];
@@ -131,10 +140,14 @@ export function isLinkedRoute(route: MarketingRoute): route is LinkedRoute {
 
 /**
  * The free tools: written pages whose content module carries an interactive
- * part (MarketingPageContent.tool). The footer's "Free tools" column and
- * llms.txt list them from here.
+ * part (MarketingPageContent.tool). The footer's "Free tools" column, the
+ * /tools hub and llms.txt list them from here; the hub itself is a plain
+ * written page, so it isn't one.
  */
-export const TOOL_ROUTES = ["toolCommission"] as const satisfies readonly LinkedRoute[];
+export const TOOL_ROUTES = [
+  "toolCommission",
+  "toolSpreadsheet",
+] as const satisfies readonly LinkedRoute[];
 
 export type ToolRoute = (typeof TOOL_ROUTES)[number];
 

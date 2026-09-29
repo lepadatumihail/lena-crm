@@ -20,7 +20,8 @@
     "copied": "Copiado"
   },
   "breadcrumb": {
-    "home": "Inicio"
+    "home": "Inicio",
+    "tools": "Herramientas"
   },
   "footer": {
     "product": "Producto",
@@ -59,6 +60,14 @@
     "toolCommission": {
       "label": "Calculadora de comisión",
       "blurb": "Calcula los honorarios con IVA, el reparto entre dos agencias y tu propia factura."
+    },
+    "toolSpreadsheet": {
+      "label": "Plantilla Excel de clientes",
+      "blurb": "Un Excel gratis para tus compradores y vendedores, listo para importar a LeadWing."
+    },
+    "tools": {
+      "label": "Todas las herramientas",
+      "blurb": "Una calculadora de comisión y una plantilla de clientes, gratis para agentes inmobiliarios."
     }
   },
   "consent": {

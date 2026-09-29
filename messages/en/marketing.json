@@ -20,7 +20,8 @@
     "copied": "Copied"
   },
   "breadcrumb": {
-    "home": "Home"
+    "home": "Home",
+    "tools": "Tools"
   },
   "footer": {
     "product": "Product",
@@ -59,6 +60,14 @@
     "toolCommission": {
       "label": "Commission calculator",
       "blurb": "Work out a fee with VAT, the split between two agencies and your own invoice."
+    },
+    "toolSpreadsheet": {
+      "label": "Client tracker spreadsheet",
+      "blurb": "A free Excel file for your buyers and sellers, ready to import into LeadWing."
+    },
+    "tools": {
+      "label": "All tools",
+      "blurb": "A commission calculator and a client spreadsheet, free for estate agents."
     }
   },
   "consent": {

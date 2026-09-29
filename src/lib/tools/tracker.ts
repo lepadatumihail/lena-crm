@@ -26,6 +26,8 @@ import { messagesFor } from "@/i18n/messages";
 import { STALE_AFTER_DAYS } from "@/lib/attention";
 import { PROPERTY_TYPES, stagesForSide, type ClientSide } from "@/lib/crm";
 import { templateTable } from "@/lib/import/template";
+import { marketingPath } from "@/lib/routes";
+import { absoluteUrl } from "@/lib/site";
 import type { TransferColumnKey } from "@/lib/transfer/columns";
 import type { TransferContext } from "@/lib/transfer/format";
 import { sheetName } from "@/lib/transfer/xlsx";
@@ -239,7 +241,7 @@ function line(value: string, width: number, style: Partial<CellObject> = {}): Ro
   ];
 }
 
-function howToSheet({ ctx, t, nav, clients }: Translators): TrackerSheet {
+function howToSheet(locale: AppLocale, { ctx, t, nav, clients }: Translators): TrackerSheet {
   const column = (key: TransferColumnKey) => ctx.tt(`columns.${key}`);
   const buyers = ctx.tt("sheets.buyers");
   const sellers = ctx.tt("sheets.sellers");
@@ -331,6 +333,8 @@ function howToSheet({ ctx, t, nav, clients }: Translators): TrackerSheet {
     ].map((text) => line(text, width))
   );
 
+  const url = absoluteUrl(marketingPath("toolSpreadsheet", locale));
+  const quote = (text: string) => `"${text.replace(/"/g, '""')}"`;
   data.push(
     [],
     line(
@@ -343,7 +347,13 @@ function howToSheet({ ctx, t, nav, clients }: Translators): TrackerSheet {
       }),
       width,
       { fontWeight: "bold" }
-    )
+    ),
+    // What shows is the short text, not the formula, so it keeps one line.
+    line(`HYPERLINK(${quote(url)},${quote(t("howTo.latest", { url }))})`, width, {
+      type: "Formula",
+      wrap: false,
+      height: undefined,
+    })
   );
 
   return {
@@ -376,6 +386,6 @@ const calculateOnOpen: TrackerFeature = {
 /** The client tracker in one language, as `.xlsx` bytes. */
 export async function buildTracker(locale: AppLocale): Promise<Buffer> {
   const tr = translators(locale);
-  const sheets = [clientSheet("buyer", tr), clientSheet("seller", tr), howToSheet(tr)];
+  const sheets = [clientSheet("buyer", tr), clientSheet("seller", tr), howToSheet(locale, tr)];
   return writeExcelFile(sheets, { features: [calculateOnOpen] }).toBuffer();
 }

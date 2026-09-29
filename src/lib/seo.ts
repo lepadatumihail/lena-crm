@@ -7,6 +7,7 @@ import { PRICES } from "@/lib/billing";
 import { faqEntries, LANDING_FAQ_KEYS } from "@/lib/faq";
 import type { MarketingPageContent } from "@/lib/marketing";
 import {
+  isToolRoute,
   marketingAlternates,
   marketingPath,
   type ContentRoute,
@@ -78,6 +79,8 @@ export const PUBLISHED: Record<ContentRoute, string> = {
   guideAndaluciaRegister: "2026-09-29",
   about: "2026-09-15",
   toolCommission: "2026-09-29",
+  toolSpreadsheet: "2026-09-29",
+  tools: "2026-09-29",
 };
 
 /**
@@ -264,6 +267,48 @@ const PAGE_TYPES: Record<MarketingPageContent["kind"], string> = {
 };
 
 /**
+ * A free tool as its page describes it: an app that runs in the browser (the
+ * calculator), or a spreadsheet to download (the client tracker), whose file
+ * is the one in the page's language.
+ */
+function toolJsonLd(
+  schema: NonNullable<MarketingPageContent["tool"]>["schema"],
+  id: string,
+  url: string,
+  locale: AppLocale,
+  content: MarketingPageContent
+): JsonLd {
+  if (schema["@type"] === "SpreadsheetDigitalDocument") {
+    return {
+      "@type": schema["@type"],
+      "@id": id,
+      name: content.heading,
+      url,
+      description: content.description,
+      contentUrl: absoluteUrl(schema.contentPath),
+      encodingFormat: schema.encodingFormat,
+      isAccessibleForFree: true,
+      inLanguage: locale,
+      publisher: { "@id": ORGANIZATION_ID },
+    };
+  }
+  return {
+    "@type": schema["@type"],
+    "@id": id,
+    name: content.heading,
+    url,
+    description: content.description,
+    applicationCategory: schema.applicationCategory,
+    operatingSystem: "Web",
+    browserRequirements: "Requires JavaScript",
+    isAccessibleForFree: true,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+    inLanguage: locale,
+    publisher: { "@id": ORGANIZATION_ID },
+  };
+}
+
+/**
  * Structured data for a written page: the page (an Article for guides, a
  * WebPage for the product pages and the tools, an AboutPage for the About
  * page), where it sits in the site, and its FAQ. A tool page also describes
@@ -290,11 +335,16 @@ export async function pageJsonLd(
   const subject = { "@id": aboutPage ? ORGANIZATION_ID : tool ? toolId : APP_ID };
 
   // Google rejects a ListItem without `item` anywhere but the last position,
-  // so there is no "Guides" level until /guides is a real page.
+  // so there is no "Guides" level until /guides is a real page. The tools
+  // have one: /tools, the hub.
+  const parents = isToolRoute(route)
+    ? [{ name: t("breadcrumb.tools"), item: absoluteUrl(marketingPath("tools", locale)) }]
+    : [];
   const crumbs: JsonLd[] = [
-    { "@type": "ListItem", position: 1, name: t("breadcrumb.home"), item: home },
-    { "@type": "ListItem", position: 2, name: content.heading, item: pageUrl },
-  ];
+    { name: t("breadcrumb.home"), item: home },
+    ...parents,
+    { name: content.heading, item: pageUrl },
+  ].map((crumb, i) => ({ "@type": "ListItem", position: i + 1, ...crumb }));
 
   return {
     "@context": "https://schema.org",
@@ -314,24 +364,7 @@ export async function pageJsonLd(
         about: content.topic ?? subject,
         ...(aboutPage || tool ? { mainEntity: subject } : {}),
       },
-      ...(tool
-        ? [
-            {
-              "@type": tool.schema["@type"],
-              "@id": toolId,
-              name: content.heading,
-              url: pageUrl,
-              description: content.description,
-              applicationCategory: tool.schema.applicationCategory,
-              operatingSystem: "Web",
-              browserRequirements: "Requires JavaScript",
-              isAccessibleForFree: true,
-              offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
-              inLanguage: locale,
-              publisher: { "@id": ORGANIZATION_ID },
-            },
-          ]
-        : []),
+      ...(tool ? [toolJsonLd(tool.schema, toolId, pageUrl, locale, content)] : []),
       {
         "@type": "BreadcrumbList",
         "@id": `${pageUrl}#breadcrumb`,
