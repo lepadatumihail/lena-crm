@@ -2,22 +2,27 @@ import Link from "next/link";
 
 import { intlTag } from "@/i18n/config";
 import { marketingPath } from "@/lib/routes";
-import { PUBLISHED } from "@/lib/seo";
+import { CHECKED, PUBLISHED } from "@/lib/seo";
 import { SITE_NAME } from "@/lib/site";
 import { Callout } from "@/components/marketing/callout";
 import type { MarketingPageContent } from "@/components/marketing/marketing-page";
 
 const L = "en";
 
+/** The page was first published on this day, which stays its datePublished. */
+const FIRST_PUBLISHED = PUBLISHED.guideAndaluciaRegister;
+
 /**
  * The day every fact below was last checked against its source. It is also
- * the page's "Updated" date, so a monthly re-check bumps
- * PUBLISHED.guideAndaluciaRegister even when nothing changed.
+ * the page's "Updated" date, its dateModified and its sitemap lastmod, so a
+ * monthly re-check bumps CHECKED.guideAndaluciaRegister, never PUBLISHED.
  */
+const LAST_CHECKED = CHECKED.guideAndaluciaRegister ?? FIRST_PUBLISHED;
+
 const AS_OF = new Intl.DateTimeFormat(intlTag(L), {
   dateStyle: "long",
   timeZone: "UTC",
-}).format(new Date(PUBLISHED.guideAndaluciaRegister));
+}).format(new Date(LAST_CHECKED));
 
 // Ley 5/2025 on the BOE, consolidated; the anchors are the BOE's own.
 const LAW = "https://www.boe.es/buscar/act.php?id=BOE-A-2026-423";
@@ -170,8 +175,9 @@ function Body() {
       <h2>What changed on 18 September 2026</h2>
       <p>
         The Spanish government raised objections to parts of the law, and the two governments
-        agreed to negotiate over 16 of its articles and one final provision, the four articles on
-        the register (49 to 52) among them. That agreement was published in the{" "}
+        agreed to negotiate over 16 of its articles and one final provision. Arts. 49 to 52 are
+        among them: four of the register’s five articles, the fifth being art. 53 on the
+        guarantee and insurance. That agreement was published in the{" "}
         <Source href={TALKS_BOE}>BOE</Source> and the <Source href={TALKS_BOJA}>BOJA</Source> on
         13 April 2026.
       </p>
@@ -408,7 +414,8 @@ export const content: MarketingPageContent = {
   description:
     "Ley 5/2025 made registration compulsory for estate agents in Andalusia, and in September 2026 the Junta agreed to change that. What the law says, sourced.",
   kind: "article",
-  published: PUBLISHED.guideAndaluciaRegister,
+  published: FIRST_PUBLISHED,
+  modified: LAST_CHECKED,
   eyebrow: "Guide · Andalusia",
   heading: "Andalusia’s estate agent register: what the law says, and what changed",
   lead: "Ley 5/2025, Andalusia’s housing law, created a register of estate agents and made joining it a condition for working. On 18 September 2026 the Junta de Andalucía announced it will change the law so that it no longer is. This page sets out what the law says today, what was announced and what to watch for, with a link to every source.",

@@ -11,7 +11,7 @@ import {
   type ListedRoute,
   type MarketingRoute,
 } from "@/lib/routes";
-import { PUBLISHED } from "@/lib/seo";
+import { CHECKED, PUBLISHED } from "@/lib/seo";
 import { absoluteUrl } from "@/lib/site";
 
 const PRIORITY: Record<ListedRoute, number> = {
@@ -50,7 +50,7 @@ const CHANGE_FREQUENCY: Record<ListedRoute, "weekly" | "monthly" | "yearly"> = {
  * they date from the deploy.
  */
 function lastModified(route: ListedRoute): Date {
-  if (isContentRoute(route)) return new Date(PUBLISHED[route]);
+  if (isContentRoute(route)) return new Date(CHECKED[route] ?? PUBLISHED[route]);
   if (route === "home" || route === "pricing") return new Date();
   return new Date(LEGAL_UPDATED[route]);
 }

@@ -2,22 +2,28 @@ import Link from "next/link";
 
 import { intlTag } from "@/i18n/config";
 import { marketingPath } from "@/lib/routes";
-import { PUBLISHED } from "@/lib/seo";
+import { CHECKED, PUBLISHED } from "@/lib/seo";
 import { SITE_NAME } from "@/lib/site";
 import { Callout } from "@/components/marketing/callout";
 import type { MarketingPageContent } from "@/components/marketing/marketing-page";
 
 const L = "es";
 
+/** El día en que se publicó la página, que sigue siendo su datePublished. */
+const FIRST_PUBLISHED = PUBLISHED.guideAndaluciaRegister;
+
 /**
  * El día en que se comprobó por última vez cada dato frente a su fuente. Es
- * también la fecha de "Actualizado", así que la revisión mensual sube
- * PUBLISHED.guideAndaluciaRegister aunque no haya cambiado nada.
+ * también la fecha de "Actualizado", su dateModified y el lastmod del sitemap,
+ * así que la revisión mensual sube CHECKED.guideAndaluciaRegister, nunca
+ * PUBLISHED.
  */
+const LAST_CHECKED = CHECKED.guideAndaluciaRegister ?? FIRST_PUBLISHED;
+
 const AS_OF = new Intl.DateTimeFormat(intlTag(L), {
   dateStyle: "long",
   timeZone: "UTC",
-}).format(new Date(PUBLISHED.guideAndaluciaRegister));
+}).format(new Date(LAST_CHECKED));
 
 // La Ley 5/2025 en el BOE, texto consolidado; las anclas son las del propio BOE.
 const LAW = "https://www.boe.es/buscar/act.php?id=BOE-A-2026-423";
@@ -152,8 +158,9 @@ function Body() {
       <h2>Qué cambió el 18 de septiembre de 2026</h2>
       <p>
         El Gobierno de España planteó discrepancias sobre parte de la ley, y los dos gobiernos
-        acordaron negociar sobre 16 de sus artículos y una disposición final, entre ellos los
-        cuatro del registro (del 49 al 52). Ese acuerdo se publicó en el{" "}
+        acordaron negociar sobre 16 de sus artículos y una disposición final. Entre ellos están
+        los arts. 49 a 52: cuatro de los cinco artículos del registro, porque el quinto, el 53,
+        sobre la garantía y el seguro, no figura en la lista. Ese acuerdo se publicó en el{" "}
         <Source href={TALKS_BOE}>BOE</Source> y en el <Source href={TALKS_BOJA}>BOJA</Source> el
         13 de abril de 2026.
       </p>
@@ -390,7 +397,8 @@ export const content: MarketingPageContent = {
   description:
     "La Ley 5/2025 hizo obligatoria la inscripción de los agentes inmobiliarios en Andalucía y en 2026 la Junta acordó cambiarlo. Qué dice hoy la ley, con fuentes.",
   kind: "article",
-  published: PUBLISHED.guideAndaluciaRegister,
+  published: FIRST_PUBLISHED,
+  modified: LAST_CHECKED,
   eyebrow: "Guía · Andalucía",
   heading: "Registro de agentes inmobiliarios de Andalucía: qué dice la ley y qué ha cambiado",
   lead: "La Ley 5/2025, de Vivienda de Andalucía, creó un registro de agentes inmobiliarios y convirtió la inscripción en requisito para ejercer. El 18 de septiembre de 2026 la Junta de Andalucía anunció que cambiará la ley para que deje de serlo. Aquí tienes qué dice hoy la ley, qué se ha anunciado y qué vigilar, con el enlace a cada fuente.",
