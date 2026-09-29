@@ -1,5 +1,17 @@
 # LeadWing Facebook daily log
 
+## Tue 29 Sep 2026 (founder, in session: "i just want to get signups")
+
+Investigated where signups actually break. Nothing sent, nothing edited, no ad spend proposed.
+
+**The 20 outreach messages went out with the copy the founder had already rejected.** The sheet's Drive `modifiedTime` is 2026-09-23T17:37:16Z — one second after it was created, i.e. never edited. Its Message/Text columns still hold v1 ("one client card", "If it's not for you, just say so and I won't message again") and the per-row WhatsApp links still open with it. So 0/20 is a copy test, not a market verdict — and because Status still reads "Not sent" on all 50 rows, **there is no record of which 20 were contacted**, so "the remaining 30" cannot be identified from the sheet as it stands.
+
+**The signup flow is not the leak.** Read `sign-up-dialog.tsx` and `sign-in-form.tsx`: Google OAuth or a 6-digit email code, in a dialog on the landing page itself, utm tags carried onto the new profile, in-app-browser handled. Nothing to fix. 154 landing views to 1 signup_open is an audience problem, matching the 26 Sep finding that the paid audience was property-curious consumers rather than agents.
+
+**SEO: indexed, ranking nowhere.** 23 pages in Google including both ES money pages; the two ES guides are not indexed yet (correctly routed and in the sitemap — a young domain crawling slowly, not a defect). Absent from the top 10 for all four commercial queries, but those queries are thin (113-136 total results), so winnable and worth compounding. It will not produce a signup this week; said so plainly rather than selling it as a quick win.
+
+Put to the founder, labelled 1-3, nothing applied: fix the sheet's copy and Status columns, ask the five who said no what they use today, then resume sends with the FINAL text. Drafts already in `outreach-followup-2026-09-26.md`.
+
 ## Tue 29 Sep 2026 (noon brief, run 12:09 Madrid)
 
 Quiet and complete — nothing needs the founder. 0 comments on all 12 page posts and all 6 ad dark posts, inbox empty (0 conversations), 0 followers. Reactions unchanged: 1 each on three dark posts, 1 on page post ...122110619499476753. Wed 30 Sep 09:30 import post confirmed still queued via /scheduled_posts (is_published false).
