@@ -68,5 +68,49 @@
     },
     "taxName": "{tax, select, iva {IVA} igic {IGIC} other {impuesto}}",
     "taxLabel": "{tax, select, iva {IVA} igic {IGIC} other {Impuesto}} {rate}"
+  },
+  "tracker": {
+    "columns": {
+      "lastContact": "Último contacto",
+      "nextFollowUp": "Próximo seguimiento",
+      "daysSince": "Días sin contacto"
+    },
+    "howToSheet": "Cómo usarla",
+    "howTo": {
+      "title": "Plantilla de clientes de LeadWing",
+      "intro": "Tus compradores y vendedores en un solo archivo, con un color en cada cliente que necesita una llamada.",
+      "stepsHeading": "Cómo usarla",
+      "steps": {
+        "rows": "Una fila por cliente: los compradores en la hoja {buyers} y los vendedores en la hoja {sellers}. Un vendedor con dos propiedades ocupa dos filas.",
+        "lists": "En {stage}, {priority}, {active} y las demás columnas de la lista de abajo, usa las palabras que aparecen allí, para que LeadWing las lea tal cual.",
+        "lastContact": "Cada vez que hables con un cliente, escribe la fecha en {column}, con el año primero: 2026-09-29.",
+        "nextFollowUp": "En {column}, pon el día en que toca volver a contactar.",
+        "colours": "Una fila se pone ámbar cuando la fecha de {column} es hoy o ya ha pasado, y gris cuando llevas {days} días o más sin contacto.",
+        "columns": "Añade tus propias columnas si las necesitas: LeadWing las importa como notas."
+      },
+      "exampleHeading": "Ejemplo",
+      "exampleMeaning": "Qué significa el color",
+      "exampleDue": "Ámbar: toca hacer el seguimiento",
+      "exampleQuiet": "Gris: lleva días sin contacto",
+      "wordsHeading": "Palabras que LeadWing lee",
+      "wordsStage": "{column} en {sheet}: {words}",
+      "wordsColumn": "{column}: {words}",
+      "wordsPair": "{first} y {second}: {words}",
+      "wordsTypes": "{buyers} (uno o varios, separados por comas) y {sellers}: {words}",
+      "import": "Pásala a LeadWing: entra en leadwing.app, abre {buyersPage}, elige «{action}» y escoge la hoja {buyersSheet}. Haz lo mismo en {sellersPage} con la hoja {sellersSheet}.",
+      "latest": "La última versión: {url}"
+    },
+    "page": {
+      "caption": "La hoja {sheet}, con dos filas de ejemplo",
+      "download": "Descargar para Excel",
+      "otherLanguage": "También en inglés",
+      "sheetsCopy": "Hacer una copia en Google Sheets",
+      "note": "Gratis y sin pedirte el email. Se abre en Excel, Google Sheets y Numbers.",
+      "import": "¿Se te queda corta? Impórtala a LeadWing",
+      "legend": {
+        "due": "Ámbar: toca hacer el seguimiento",
+        "quiet": "Gris: {days} días o más sin contacto"
+      }
+    }
   }
 }

@@ -51,6 +51,19 @@ describe("matchHeader: keywords, for headers the dictionary doesn't hold", () =>
   });
 });
 
+describe("matchHeader: the client tracker's own columns", () => {
+  it.each([
+    ["Last contact", "add_to_notes"],
+    ["Último contacto", "add_to_notes"],
+    ["Next follow-up", "add_to_notes"],
+    ["Próximo seguimiento", "add_to_notes"],
+    ["Days since contact", "ignore"],
+    ["Días sin contacto", "ignore"],
+  ])("%s → %s", (header, concept) => {
+    expect(matchHeader(header)).toEqual({ concept, exact: true });
+  });
+});
+
 describe("targetFor", () => {
   it("reads a concept by the file's side", () => {
     expect(targetFor("price", "buyer")).toBe("budget");

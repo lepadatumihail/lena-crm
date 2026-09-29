@@ -201,6 +201,10 @@ const DICTIONARY: [Entry, string[]][] = [
   ],
   // Consent flags. Never an email address, whatever the header says.
   ["add_to_notes", ["Email dado de baja", "GDPR"]],
+  // The free client tracker's own columns (lib/tools/tracker.ts). Its dates stay
+  // readable in the notes; its day count is a formula over them.
+  ["add_to_notes", ["Last contact", "Último contacto", "Next follow-up", "Próximo seguimiento"]],
+  ["ignore", ["Days since contact", "Días sin contacto"]],
   // ID, bank and personal data stays out unless the agent asks for it.
   ["ignore", ["NIF", "DNI", "DNI/NIE", "IBAN", "Pasaporte", "Passport", "Sexo", "Estado Civil", "Fecha de nacimiento"]],
   ["ignore", ["Photo", "Name Prefix", "Name Suffix", "Nickname", "File As", "Title"]],

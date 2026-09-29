@@ -68,5 +68,49 @@
     },
     "taxName": "{tax, select, iva {IVA} igic {IGIC} other {tax}}",
     "taxLabel": "{tax, select, iva {IVA} igic {IGIC} other {Tax}} {rate}"
+  },
+  "tracker": {
+    "columns": {
+      "lastContact": "Last contact",
+      "nextFollowUp": "Next follow-up",
+      "daysSince": "Days since contact"
+    },
+    "howToSheet": "How to use",
+    "howTo": {
+      "title": "LeadWing client tracker",
+      "intro": "Your buyers and sellers in one file, with a colour on every client who needs a call.",
+      "stepsHeading": "How to use it",
+      "steps": {
+        "rows": "One row per client: buyers on the {buyers} sheet, sellers on the {sellers} sheet. A seller with two properties takes two rows.",
+        "lists": "In {stage}, {priority}, {active} and the other columns listed below, use the words shown there, so LeadWing reads them as they are.",
+        "lastContact": "Each time you speak to a client, type the date in {column}, year first: 2026-09-29.",
+        "nextFollowUp": "In {column}, put the day you should get back to them.",
+        "colours": "A row turns amber when its {column} is today or earlier, and grey once {days} days have gone by without contact.",
+        "columns": "Add columns of your own if you need them: LeadWing brings them in as notes."
+      },
+      "exampleHeading": "Example",
+      "exampleMeaning": "What the colour means",
+      "exampleDue": "Amber: the follow-up is due",
+      "exampleQuiet": "Grey: gone quiet",
+      "wordsHeading": "Words LeadWing reads",
+      "wordsStage": "{column} on {sheet}: {words}",
+      "wordsColumn": "{column}: {words}",
+      "wordsPair": "{first} and {second}: {words}",
+      "wordsTypes": "{buyers} (one or more, separated by commas) and {sellers}: {words}",
+      "import": "Move it into LeadWing: sign in at leadwing.app, open {buyersPage}, choose “{action}” and pick the {buyersSheet} sheet. Do the same in {sellersPage} with the {sellersSheet} sheet.",
+      "latest": "The latest version: {url}"
+    },
+    "page": {
+      "caption": "The {sheet} sheet, with two example rows",
+      "download": "Download for Excel",
+      "otherLanguage": "Also in Spanish",
+      "sheetsCopy": "Make a copy in Google Sheets",
+      "note": "Free, no email needed. Opens in Excel, Google Sheets and Numbers.",
+      "import": "Outgrown it? Import it into LeadWing",
+      "legend": {
+        "due": "Amber: the follow-up is due",
+        "quiet": "Grey: no contact for {days} days or more"
+      }
+    }
   }
 }
