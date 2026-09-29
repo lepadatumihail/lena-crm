@@ -123,6 +123,19 @@ export function isLinkedRoute(route: MarketingRoute): route is LinkedRoute {
   return (LINKED_ROUTES as readonly MarketingRoute[]).includes(route);
 }
 
+/**
+ * The free tools: written pages whose content module carries an interactive
+ * part (MarketingPageContent.tool). The footer's "Free tools" column and
+ * llms.txt list them from here.
+ */
+export const TOOL_ROUTES = [] as const satisfies readonly LinkedRoute[];
+
+export type ToolRoute = (typeof TOOL_ROUTES)[number];
+
+export function isToolRoute(route: MarketingRoute): route is ToolRoute {
+  return (TOOL_ROUTES as readonly MarketingRoute[]).includes(route);
+}
+
 export function marketingPath(route: MarketingRoute, locale: AppLocale): string {
   return MARKETING_ROUTES[route][locale];
 }

@@ -32,9 +32,10 @@ export type MarketingPageContent = {
   description: string;
   /**
    * "article" → Article structured data (guides); "page" → WebPage (product
-   * pages); "about" → AboutPage carrying the Organization node (the About page).
+   * pages); "about" → AboutPage carrying the Organization node (the About page);
+   * "tool" → WebPage about a WebApplication (the free tools, which set `tool`).
    */
-  kind: "article" | "page" | "about";
+  kind: "article" | "page" | "about" | "tool";
   /** ISO date; shown as "Updated …", and used for datePublished/dateModified and sitemap lastmod. */
   published: string;
   /** Short badge above the H1 ("Guide", "Real estate CRM · Spain", …). */
@@ -55,4 +56,12 @@ export type MarketingPageContent = {
   topic?: { "@type": string; name: string } & Record<string, unknown>;
   /** 2–4 sibling routes shown as cards at the end; labels and blurbs come from marketing.json. */
   related: MarketingRoute[];
+  /**
+   * Tool pages only: the interactive part, rendered between the header and
+   * the article, and how structured data describes it.
+   */
+  tool?: {
+    Component: ComponentType;
+    schema: { "@type": "WebApplication"; applicationCategory: string };
+  };
 };

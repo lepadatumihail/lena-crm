@@ -3,7 +3,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Mail } from "lucide-react";
 
 import { asLocale, type AppLocale } from "@/i18n/config";
-import { marketingPath, type LinkedRoute } from "@/lib/routes";
+import { TOOL_ROUTES, marketingPath, type LinkedRoute } from "@/lib/routes";
 import { SITE_NAME, SUPPORT_EMAIL } from "@/lib/site";
 import { Logo } from "@/components/brand/logo";
 import { CookieChoiceButton } from "@/components/marketing/cookie-choice-button";
@@ -37,7 +37,7 @@ export function LandingFooter() {
   return (
     <footer className="border-t">
       <div className="mx-auto w-full max-w-6xl px-4">
-        <div className="text-muted-foreground flex flex-col items-center gap-8 py-8 text-sm sm:flex-row sm:items-start sm:justify-between">
+        <div className="text-muted-foreground flex flex-col items-center gap-8 py-8 text-sm sm:flex-row sm:flex-wrap sm:items-start sm:justify-between lg:flex-nowrap">
           <div className="flex items-center gap-2">
             <Logo
               markClassName="size-5"
@@ -46,7 +46,9 @@ export function LandingFooter() {
             <span>— {tSite("tagline")}</span>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-10 gap-y-6 text-center sm:text-left">
+          {/* Its own row until lg: squeezed between the brand and the contact
+              line, three columns ran out of room on a tablet. */}
+          <div className="grid grid-cols-2 gap-x-10 gap-y-6 text-center sm:order-last sm:w-full sm:grid-cols-3 sm:text-left lg:order-none lg:w-auto">
             <FooterColumn
               heading={tMarketing("footer.product")}
               locale={locale}
@@ -57,6 +59,12 @@ export function LandingFooter() {
               heading={tMarketing("footer.guides")}
               locale={locale}
               routes={GUIDE_LINKS}
+            />
+            <FooterColumn
+              heading={tMarketing("footer.tools")}
+              locale={locale}
+              routes={TOOL_ROUTES}
+              className="col-span-2 sm:col-span-1"
             />
           </div>
 
@@ -110,15 +118,17 @@ function FooterColumn({
   routes,
   locale,
   lead,
+  className,
 }: {
   heading: string;
   routes: readonly LinkedRoute[];
   locale: AppLocale;
   lead?: { href: string; label: string };
+  className?: string;
 }) {
   const t = useTranslations("marketing.routes");
   return (
-    <nav aria-label={heading}>
+    <nav aria-label={heading} className={className}>
       <h2 className="text-foreground text-sm font-medium">
         {heading}
       </h2>

@@ -16,6 +16,8 @@ import { LandingFooter } from "@/components/landing/footer";
 import { Eyebrow } from "@/components/marketing/eyebrow";
 import { FAQ_CARD, FaqList } from "@/components/marketing/faq-list";
 import { Prose } from "@/components/marketing/prose";
+import { SignUpDialog } from "@/components/marketing/sign-up-dialog";
+import { ToolViewBeacon } from "@/components/marketing/tool-view-beacon";
 
 export type { MarketingFaq, MarketingPageContent } from "@/lib/marketing";
 
@@ -40,6 +42,11 @@ export async function marketingPageMetadata(
  * FAQ, what to read next, a closing call to action and the footer. The page
  * files are one-liners around this; everything that differs between pages
  * lives in the content module.
+ *
+ * A tool page (content.tool) puts the tool straight under the header, outside
+ * the prose styles, and drops the header's buttons so a phone shows the first
+ * input without scrolling; its closing call to action signs up in a dialog,
+ * so the new profile records the tool as its landing page.
  */
 export async function MarketingPage({
   route,
@@ -66,6 +73,15 @@ export async function MarketingPage({
   const related = content.related.filter(isLinkedRoute).filter((r) => r !== route);
   const faq = content.faq.map(({ q, a }, i) => ({ key: `${i}`, question: q, answer: a }));
   const { Body } = content;
+  const Tool = content.tool?.Component;
+
+  const article = (
+    <div className="mx-auto w-full max-w-3xl px-4 pb-12">
+      <Prose>
+        <Body />
+      </Prose>
+    </div>
+  );
 
   return (
     <div className="flex flex-1 flex-col">
@@ -82,23 +98,33 @@ export async function MarketingPage({
           <p className="text-muted-foreground mt-4 text-sm">
             {t("article.updated", { date: updated })}
           </p>
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <Button asChild size="pill">
-              <Link href="/login">
-                {t("cta.primary")} <ArrowRight />
-              </Link>
-            </Button>
-            <Button asChild size="pill" variant="outline">
-              <Link href={pricing}>{t("cta.secondary")}</Link>
-            </Button>
-          </div>
+          {Tool ? null : (
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <Button asChild size="pill">
+                <Link href="/login">
+                  {t("cta.primary")} <ArrowRight />
+                </Link>
+              </Button>
+              <Button asChild size="pill" variant="outline">
+                <Link href={pricing}>{t("cta.secondary")}</Link>
+              </Button>
+            </div>
+          )}
         </header>
 
-        <div className="mx-auto w-full max-w-3xl px-4 pb-12">
-          <Prose>
-            <Body />
-          </Prose>
-        </div>
+        {/* The tool shares the article's slot, so every other page keeps the
+            exact tree it had (React's generated ids depend on it). */}
+        {Tool ? (
+          <>
+            <section aria-label={content.heading} className="mx-auto w-full max-w-3xl px-4 pb-12">
+              <ToolViewBeacon />
+              <Tool />
+            </section>
+            {article}
+          </>
+        ) : (
+          article
+        )}
 
         {faq.length > 0 ? (
           <section id="faq" className="bg-muted/50">
@@ -150,11 +176,17 @@ export async function MarketingPage({
               {t("cta.body", { limit: FREE_CLIENT_LIMIT })}
             </p>
             <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="pill">
-                <Link href="/login">
+              {Tool ? (
+                <SignUpDialog>
                   {t("cta.primary")} <ArrowRight />
-                </Link>
-              </Button>
+                </SignUpDialog>
+              ) : (
+                <Button asChild size="pill">
+                  <Link href="/login">
+                    {t("cta.primary")} <ArrowRight />
+                  </Link>
+                </Button>
+              )}
               <Button asChild size="pill" variant="outline">
                 <Link href={pricing}>{t("cta.secondary")}</Link>
               </Button>

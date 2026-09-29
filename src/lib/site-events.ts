@@ -2,11 +2,14 @@ import { isInAppBrowser } from "@/lib/in-app-browser";
 import { readUtm } from "@/lib/signup-source";
 
 /**
- * The ad-landing funnel, one step at a time: the page was seen, the sign-up
- * dialog opened, Google or an email code was tried, the visitor got in, or
- * chose WhatsApp instead. Each step is stored anonymously in site_events
- * (no cookie, no identifier, no IP), so the drop between two steps shows
- * without Vercel's dashboard and without a consent prompt.
+ * The funnels on the ad landings and the free tools, one step at a time. On
+ * an ad landing: the page was seen, the sign-up dialog opened, Google or an
+ * email code was tried, the visitor got in, or chose WhatsApp instead. On a
+ * free tool: the page was seen, the tool produced a result, and a result was
+ * copied to share (a tool page's sign-up dialog logs the same sign-up steps).
+ * Each step is stored anonymously in site_events (no cookie, no identifier,
+ * no IP), so the drop between two steps shows without Vercel's dashboard and
+ * without a consent prompt.
  */
 export const SITE_EVENTS = [
   "landing_view",
@@ -15,6 +18,9 @@ export const SITE_EVENTS = [
   "code_sent",
   "signed_in",
   "whatsapp_click",
+  "tool_view",
+  "tool_use",
+  "tool_share",
 ] as const;
 
 export type SiteEvent = (typeof SITE_EVENTS)[number];

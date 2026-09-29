@@ -24,7 +24,8 @@
   },
   "footer": {
     "product": "Product",
-    "guides": "Guides"
+    "guides": "Guides",
+    "tools": "Free tools"
   },
   "routes": {
     "pricing": {

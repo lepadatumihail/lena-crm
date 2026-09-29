@@ -1,6 +1,6 @@
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { PRICES } from "@/lib/billing";
-import { marketingPath, type MarketingRoute } from "@/lib/routes";
+import { TOOL_ROUTES, marketingPath, type MarketingRoute, type ToolRoute } from "@/lib/routes";
 import {
   SITE_ALTERNATE_NAMES,
   SITE_DESCRIPTION,
@@ -19,6 +19,9 @@ export const dynamic = "force-static";
 
 /** The English URL of a marketing page; this file is English only. */
 const en = (route: MarketingRoute) => absoluteUrl(marketingPath(route, "en"));
+
+/** One line per free tool: TypeScript asks for a line whenever a tool route is added. */
+const TOOL_LINES: Record<ToolRoute, string> = {};
 
 export function GET() {
   const pro = PRICES.standard;
@@ -71,6 +74,10 @@ ${SITE_NAME} is a web app for solo and independent real-estate agents, including
 - [Guide: Andalusia's estate agent register](${en("guideAndaluciaRegister")}): a dated summary of what Ley 5/2025 says about registering as an estate agent in Andalusia and of the change the Junta announced on 18 September 2026, with links to the BOE and BOJA
 - [Sign in](${SITE_URL}/login): Google or a one-time email code, no password
 - [Sitemap](${SITE_URL}/sitemap.xml)
+
+## Free tools
+
+${TOOL_ROUTES.map((route) => `- ${TOOL_LINES[route]}`).join("\n")}
 `;
 
   return new Response(body, {

@@ -249,13 +249,15 @@ const PAGE_TYPES: Record<MarketingPageContent["kind"], string> = {
   article: "Article",
   page: "WebPage",
   about: "AboutPage",
+  tool: "WebPage",
 };
 
 /**
  * Structured data for a written page: the page (an Article for guides, a
- * WebPage for the product pages, an AboutPage for the About page), where it
- * sits in the site, and its FAQ. Built from the same content module the page
- * renders, so the two agree.
+ * WebPage for the product pages and the tools, an AboutPage for the About
+ * page), where it sits in the site, and its FAQ. A tool page also describes
+ * the tool itself, and the page is about that tool rather than the CRM. Built
+ * from the same content module the page renders, so the two agree.
  */
 export async function pageJsonLd(
   route: MarketingRoute,
@@ -272,7 +274,9 @@ export async function pageJsonLd(
   ]);
   const pageUrl = absoluteUrl(marketingPath(route, locale));
   const home = absoluteUrl(marketingPath("home", locale));
-  const subject = { "@id": aboutPage ? ORGANIZATION_ID : APP_ID };
+  const { tool } = content;
+  const toolId = `${pageUrl}#tool`;
+  const subject = { "@id": aboutPage ? ORGANIZATION_ID : tool ? toolId : APP_ID };
 
   // Google rejects a ListItem without `item` anywhere but the last position,
   // so there is no "Guides" level until /guides is a real page.
@@ -297,8 +301,26 @@ export async function pageJsonLd(
         publisher: { "@id": ORGANIZATION_ID },
         isPartOf: { "@id": WEBSITE_ID },
         about: content.topic ?? subject,
-        ...(aboutPage ? { mainEntity: subject } : {}),
+        ...(aboutPage || tool ? { mainEntity: subject } : {}),
       },
+      ...(tool
+        ? [
+            {
+              "@type": tool.schema["@type"],
+              "@id": toolId,
+              name: content.heading,
+              url: pageUrl,
+              description: content.description,
+              applicationCategory: tool.schema.applicationCategory,
+              operatingSystem: "Web",
+              browserRequirements: "Requires JavaScript",
+              isAccessibleForFree: true,
+              offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+              inLanguage: locale,
+              publisher: { "@id": ORGANIZATION_ID },
+            },
+          ]
+        : []),
       {
         "@type": "BreadcrumbList",
         "@id": `${pageUrl}#breadcrumb`,
