@@ -690,3 +690,118 @@ one-liners like the guide pages, with `ROUTE = "toolCommission"`.
   https://www.boe.es/buscar/act.php?id=BOE-A-1994-26003
 - Sooprema's calculator (price × % only):
   https://www.sooprema.com/calculadora_comision.html
+
+## As built (2026-09-29)
+
+Commits on `main`: `773a79d` (Phase A), `0d86830` (Phase B), `6a22d2a`
+(Phase C). Before `main` moved, each exact tree passed `npm ci`, typecheck,
+lint, tests and build (Node 24, CI env) in a throwaway detached worktree:
+the shared working tree also held other sessions' uncommitted work.
+
+**Live on 29 Sep 2026.** Pushed as merge `c034cd5`, which brought in
+`3b1d9aa` from origin; the merged tree passed the same checks first, 886
+tests included. GitHub Actions CI run 36595925855 is green. The Vercel
+production deployment `dpl_Bz2ZW5tbL3BDqYgHeD6J6RY7HYG9` is READY on
+www.leadwing.app. On production:
+- Both URLs answer 200, `index, follow`, with the canonical, hreflang
+  en/es/x-default and JSON-LD WebPage → WebApplication `#tool`,
+  BreadcrumbList and FAQPage.
+- The only percentages on the pages are the tax rates.
+- The markdown twin, `sitemap.xml` and `llms.txt` list the tool.
+- A phone visit to the Spanish page computed the same figures as the
+  local build.
+- Its `tool_view` and `tool_use` reached the live table (ids 196–197) and
+  were deleted by id.
+
+**Live database.** `20260929150000_site_events_tools.sql` was applied on
+29 Sep 2026 in one transaction, with its history row (`site_events_tools`).
+The constraint was `site_events_event_check` and matched the 24 Sep
+migration. Checked afterwards: nine events, the new table comment, RLS on.
+Local testing wrote 39 rows (ids 142–164 and 173–188, the tool events and one
+`signup_open` on a tool path), deleted by id the same day.
+
+**Deviations from the steps:**
+- `parseMoney` and `parseBudget` moved unchanged to `src/lib/import/money.ts`
+  and are re-exported from `normalize.ts`. Importing `normalize.ts` would put
+  its module-level zod schema and the country and nationality lists into the
+  tool page's client bundle.
+- The form state, the query string and the arithmetic's input map to each
+  other in `src/lib/tools/commission-query.ts`, which has its own tests. The
+  form reads a link with `useSyncExternalStore` and fills in once after
+  hydration, because the lint forbids setState in an effect.
+- The arithmetic works in parts per million with BigInt half-up rounding
+  (`mulDiv`). With floats, 150 cents × 21% comes out as 31.4999… instead of
+  31.5.
+- Shell: the tool shares the article's slot in `<main>`, so the other pages
+  keep their React tree. A first version shifted `useId` values on the
+  guides. `<main>`, the head tags and the JSON-LD of five other pages were
+  compared byte for byte, before and after.
+- Footer: below `lg`, the link grid takes its own row. Squeezed between the
+  brand and the contact line, three columns were about 73 px wide at 768 px.
+- The CNMC guard in `pages.test.ts` also scans the component. It leaves the
+  lib files out, because this plan's own doc comment for `parsePercent`
+  reads "3.5 %".
+- Results: "Your agency keeps" and "You" are indented under "Our agency" when
+  the fee is shared. Money inputs show cents only when there are any. Copy
+  feedback is a toast plus an icon swap, so the buttons keep their width.
+- Phase C: a "Sale | Rental" choice leads the form (`d=rent` in a link). A
+  rental offers months of rent (0–120, scaled exactly), a % of a year's
+  rent, or a fixed amount. The share of the price shows on sales only.
+
+**Facts, checked 29 Sep 2026:**
+- IVA general rate 21%:
+  https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html
+- IGIC general rate 7%: the ATC's IGIC page is linked, and the ATC's rate
+  sheet of 1 Jan 2026 still applies 7%:
+  https://www3.gobiernodecanarias.org/tributos/atc/w/igic-impuesto-general-indirecto-canario-
+- RIRPF art. 95.1: withholding is 15%, or 7% in the year the activity
+  starts and the two after, if there was no professional activity the
+  year before and the payer is told in writing:
+  https://www.boe.es/buscar/act.php?id=BOE-A-2007-6820#a95
+- DGT V2188-21 (30 Jul 2021): an individual, non-collegiate agent working
+  personally registers in IAE section two (groups 724 and 799). Withholding
+  applies when the payer must withhold (RIRPF art. 76), and private clients
+  withhold nothing. The page links
+  https://petete.tributos.hacienda.gob.es/consultas/?num_consulta=V2188-21.
+  The DGT server answered 502 to every request on the build day, so the text
+  was read on supercontable.com, and the URL follows the format Google
+  indexes for other rulings. **Click it once to confirm it opens.**
+- Ley 2/1974 art. 14 (added by Ley 25/2009, in force 27 Dec 2009):
+  colegios may not set fee scales or recommend fees:
+  https://www.boe.es/buscar/act.php?id=BOE-A-1974-289#a14
+- LAU art. 20.1, last sentence (Ley 12/2023, in force 26 May 2023): "Los
+  gastos de gestión inmobiliaria y los de formalización del contrato serán a
+  cargo del arrendador":
+  https://www.boe.es/buscar/act.php?id=BOE-A-1994-26003#a20
+
+**Checks:**
+- Pages: both URLs render with no header buttons. At 375×812 the first
+  input sits above the fold, and nothing overflows at 320 px in either
+  language, including the fullest rental state. Light and dark were checked
+  on phone and desktop.
+- Behaviour: results update as you type, with dashes until the inputs are
+  complete. A link restores every field. The copy texts were read back from
+  the page; the Browser pane has no clipboard access. The sign-up dialog
+  opens from the closing band, checked in the Browser pane with animations
+  off, because the chrome-devtools MCP was locked by another session's
+  Chrome profile.
+- Head, twins and lists: the JSON-LD parses (WebPage → WebApplication
+  `#tool`, BreadcrumbList, FAQPage), the markdown twin serves the page, and
+  the sitemap lists both URLs with hreflang. `llms.txt` and the footer list
+  the tool.
+- Events: `/api/site-event` answers 204.
+
+**For plan 019:**
+- A tool is a content module with `kind: "tool"` and `tool: { Component,
+  schema }`. Add its route to `TOOL_ROUTES`: the footer column reads that
+  list, and `TOOL_LINES` in `src/app/llms.txt/route.ts` is a
+  `Record<ToolRoute, string>`, so TypeScript asks for its line.
+- `pages.test.ts` checks every module in `src/content/pages`.
+
+**Notes for the founder:**
+- Vercel Web Analytics records the URL of a page view. For a page opened
+  from a shared link, that includes the calculator's query string (numbers
+  only). Our own events and storage stay as the Decisions say.
+- The signed-in profit calculator (`/calculator`) defaults its agency fee to
+  "5" (`src/components/calculator/calculator-screen.tsx`). That's outside
+  this plan, but it is the kind of default the CNMC rule avoids.
