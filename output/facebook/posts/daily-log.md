@@ -1,5 +1,19 @@
 # LeadWing Facebook daily log
 
+## Tue 29 Sep 2026 (Keyword Planner: Google Search answered for EUR 0)
+
+The founder created the Google Ads account in session (CID 475-283-0127, Spain/Madrid/EUR/Business, no payment method, **0 campaigns confirmed** — the "your ads will go live" screen was boilerplate). Pulled Keyword Planner, Spain + Spanish.
+
+**Verdict given straight, as promised: Google Search will not produce 20 founding agents.** ~2,000/month Spain-wide on the four winnable head terms at EUR 1.79-7.93 bids = 60-100 clicks for EUR 150-400 = 3-5 free signups a month nationally, against incumbents. Same answer as Meta, opposite reason (Google can reach them; there are barely any of them), and it cost EUR 0 instead of EUR 45. That was the whole point of checking demand before buying it.
+
+**The finding that matters more: 89% of all category search (67,500 of 76,100/month) is competitor brand names.** `inmovilla` 50,000/month with a deep navigational tail; `resales online` 10,000. The 26 Sep hypothesis is now evidence — these agents already live inside an MLS with a CRM bundled in, and are not shopping.
+
+**LeadWing's own language has no demand at all**: `crm inmobiliario marbella`, `seguimiento leads inmobiliarios`, `gestionar leads idealista`, `alternativa inmovilla` all NO DATA. So the Marbella SEO pages target a query nobody types, the quiet-leads hook is problem-unaware, and the "switcher ad" Claude had proposed hours earlier is dead — disproved by the data the same day.
+
+Bright spot: `crm inmobiliario gratis` 500/month, **+900% in three months**, matching LeadWing's free tier. A positioning signal, not a channel.
+
+Outstanding and unchanged: the outreach sheet (1/2/3), now with a sharper question to ask the five. Google tag AW-18482538078 offered for the repo, not yet approved.
+
 ## Tue 29 Sep 2026 (founder decided: stop the ads, cut to one post a week)
 
 **Both applied.** Cadence: the Mon/Wed/Fri rhythm is replaced in the playbook's standing decisions by **one post a week, the Monday digest at 09:30 Madrid**; the Wednesday product post and Friday digest are dropped, and no Instagram (verified this run that no IG account exists — `instagram_business_account` and its twins return only the page id, so the ads' `instagram_positions` ran on the Facebook page as identity, and the API could not post organically to IG even if asked).
