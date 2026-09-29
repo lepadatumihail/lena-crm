@@ -1,5 +1,15 @@
 # LeadWing Facebook daily log
 
+## Tue 29 Sep 2026 (founder decided: stop the ads, cut to one post a week)
+
+**Both applied.** Cadence: the Mon/Wed/Fri rhythm is replaced in the playbook's standing decisions by **one post a week, the Monday digest at 09:30 Madrid**; the Wednesday product post and Friday digest are dropped, and no Instagram (verified this run that no IG account exists — `instagram_business_account` and its twins return only the page id, so the ads' `instagram_positions` ran on the Facebook page as identity, and the API could not post organically to IG even if asked).
+
+**Meta ads stopped for good**, recorded as a standing decision rather than a pause: the audience is not buyable (job titles return the suppressed 1,000 floor for all of Spain), not a creative or budget problem. Applied **without an API edit, deliberately** — nothing could spend: quiet-leads PAUSED with its window closed 28 Sep, spreadsheet past its 24 Sep window, post-boost PAUSED. Zero spend 29 Sep. Flagged one residual: for two days EUR 7.91 sits behind post-boost's PAUSED flag alone, on an account where Meta once flipped an ad set Pending->Active unprompted; left alone because that precedent was a targeting rewrite on an ACTIVE set, the window self-closes 1 Oct 23:59, and the 20 Sep security check argues for few edits. Offered a one-call `end_time` edit if he wants it airtight.
+
+**Tomorrow's Wed 30 Sep import post still publishes** — he cut the cadence but did not ask for it pulled, and he was told plainly it would publish unless he said so. Treated as the last post of the old rhythm. Corrected my own earlier note from this same day: Fri 2 Oct's digest and the Wed 7 Oct product post are now CANCELLED, so **the Thursday 1 Oct run owes nothing**; next draft is Mon 5 Oct's digest at the Sunday 4 Oct sitting.
+
+**Google Ads asked about.** Tested, not assumed: `googleads.googleapis.com` and `oauth2.googleapis.com` both answer through the proxy (Google's own 404, not a CONNECT 403) — so unlike `api.vercel.com` the network policy does NOT block Google Ads. The gate is credentials only: no `GOOGLE_ADS_*` variables in the environment. Told him the developer-token access-level catch and that for a EUR 30-50 first test the web UI beats waiting on API approval.
+
 ## Tue 29 Sep 2026 (founder, in session: "i just want to get signups")
 
 Investigated where signups actually break. Nothing sent, nothing edited, no ad spend proposed.
