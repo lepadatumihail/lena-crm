@@ -62,7 +62,7 @@ dropped. What remains is worth half a day:
 |---|---|
 | Form | A guide (`kind: "article"`) at `/guides/andalusia-agent-register` ↔ `/es/guias/registro-agentes-inmobiliarios-andalucia`. No interactive checker. |
 | No lawyer | Quote and link the law and the official announcements; never advise. Every claim has a source. The page never says whether a given person qualifies. |
-| Dated | A "Situation as of <date>" line at the top, and `PUBLISHED` bumped on every update. |
+| Dated | A "Situation as of <date>" line at the top. Each re-check bumps `CHECKED` (the check date: "Updated", dateModified, sitemap lastmod); `PUBLISHED` stays the first publication date (datePublished). |
 | Tone | Plain and calm: "nothing to file today" only if the sources support it. |
 
 ## Steps
@@ -155,7 +155,9 @@ README row is updated.
 ## Maintenance notes
 
 - Re-check monthly until the amending law passes, then once more when the
-  register opens. Bump `PUBLISHED` on each update.
+  register opens. Bump `CHECKED.guideAndaluciaRegister` on each check, never
+  `PUBLISHED` (29 Sep 2026 fix: bumping it moved datePublished every month,
+  which search engines can read as fake freshness).
 - If the obligation is gone for good and interest fades, keep the page as
   history rather than deleting it: it will still be the accurate answer.
 
@@ -329,9 +331,12 @@ irrelevant.)
   FAQs, and related `crmMarbella`, `guideFollowUp`, `about` (plan 018 had not
   shipped). English quotes give our translation first and the Spanish
   original under it; Spanish quotes are verbatim.
-- **One date.** `PUBLISHED.guideAndaluciaRegister` drives "Updated", the
-  "Situation as of" box, the date inside FAQ 1, the JSON-LD dates and the
-  sitemap's lastmod. The content modules read it rather than repeating it.
+- **Two dates** (changed 29 Sep 2026; first built as one).
+  `PUBLISHED.guideAndaluciaRegister` is the first publication date and only
+  feeds datePublished. `CHECKED.guideAndaluciaRegister`, the day of the last
+  source check, drives "Updated", the "Situation as of" box, the date inside
+  FAQ 1, dateModified and the sitemap's lastmod. The content modules read both
+  rather than repeating them.
 - **`MarketingPageContent.topic`** (new, optional). The page's JSON-LD
   `about` is a schema.org `Legislation` node for Ley 5/2025 (ELI identifier,
   date, `ES-AN`) instead of the app; other pages are unchanged
@@ -370,7 +375,8 @@ irrelevant.)
 4. Junta news (AVRA and Portavoz) for "agentes inmobiliarios".
 5. If anything changed, update the situation box, sections 3–4, the
    timeline, the FAQ and the Sources in both languages. Bump
-   `PUBLISHED.guideAndaluciaRegister` either way, and re-run the link check.
+   `CHECKED.guideAndaluciaRegister` (in `src/lib/seo.ts`) either way, never
+   `PUBLISHED`, and re-run the link check.
 6. When the agreement's text appears, compare it with the press release
    (STOP condition 2) before quoting it on the page.
 

@@ -81,6 +81,16 @@ export const PUBLISHED: Record<ContentRoute, string> = {
 };
 
 /**
+ * For a page whose facts are re-checked against their sources on a schedule
+ * (the Andalucía register guide): the day of the last check. It drives the
+ * page's "Updated" date, dateModified and the sitemap's lastmod, so a re-check
+ * never moves datePublished, which stays the PUBLISHED date.
+ */
+export const CHECKED: Partial<Record<ContentRoute, string>> = {
+  guideAndaluciaRegister: "2026-09-29",
+};
+
+/**
  * The numbers the pricing page's title and description interpolate: the free
  * cap and the lowest price anyone can pay today. Shared by the head tags and
  * the structured data so the two can never disagree — and a reminder that
@@ -297,7 +307,7 @@ export async function pageJsonLd(
         description: content.description,
         inLanguage: locale,
         datePublished: content.published,
-        dateModified: content.published,
+        dateModified: content.modified ?? content.published,
         author: { "@id": ORGANIZATION_ID },
         publisher: { "@id": ORGANIZATION_ID },
         isPartOf: { "@id": WEBSITE_ID },

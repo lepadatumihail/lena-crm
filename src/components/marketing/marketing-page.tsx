@@ -65,7 +65,7 @@ export async function MarketingPage({
   const updated = new Intl.DateTimeFormat(intlTag(locale), {
     dateStyle: "long",
     timeZone: "UTC",
-  }).format(new Date(content.published));
+  }).format(new Date(content.modified ?? content.published));
 
   const pricing = marketingPath("pricing", locale);
   // Only routes the marketing catalog can name become cards; anything else a

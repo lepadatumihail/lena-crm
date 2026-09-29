@@ -36,8 +36,14 @@ export type MarketingPageContent = {
    * "tool" → WebPage about a WebApplication (the free tools, which set `tool`).
    */
   kind: "article" | "page" | "about" | "tool";
-  /** ISO date; shown as "Updated …", and used for datePublished/dateModified and sitemap lastmod. */
+  /** ISO date of first publication: datePublished, and "Updated …" / dateModified unless `modified` is set. */
   published: string;
+  /**
+   * ISO date of the last revision or source check, when later than
+   * `published`: shown as "Updated …" and emitted as dateModified, while
+   * datePublished keeps `published`.
+   */
+  modified?: string;
   /** Short badge above the H1 ("Guide", "Real estate CRM · Spain", …). */
   eyebrow: string;
   /** The H1. */
