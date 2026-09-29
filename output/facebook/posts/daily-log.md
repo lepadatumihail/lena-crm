@@ -1,5 +1,17 @@
 # LeadWing Facebook daily log
 
+## Tue 29 Sep 2026 (noon brief, run 12:09 Madrid)
+
+Quiet and complete — nothing needs the founder. 0 comments on all 12 page posts and all 6 ad dark posts, inbox empty (0 conversations), 0 followers. Reactions unchanged: 1 each on three dark posts, 1 on page post ...122110619499476753. Wed 30 Sep 09:30 import post confirmed still queued via /scheduled_posts (is_published false).
+
+**The quiet-leads ad set expired on schedule**, exactly as the founder decided on 28 Sep. Its end_time 28 Sep 23:59 Madrid has passed; zero spend on both 28 and 29 Sep, and the account activity log shows no events at all since 28 Sep, so Meta did nothing further to it. Final and settled: EUR 18.66 of EUR 25, EUR 6.34 forfeited, 7,261 imp, 5,438 reach, 112 link clicks, 63 landing views at EUR 0.30, CPM EUR 2.57. Nothing is running anywhere on the account: all three LeadWing ad sets are done or paused (the ended spreadsheet set still *reads* ACTIVE, which is normal past an end_time), total experiment spend EUR 45.31.
+
+28 Sep page insights: 2 post engagements, 220 media views, 0 follows, 0 page views. Reel has flattened — 243 views / 236 plays / 233 reach, +2 plays in 24 h, still 0 reactions, comments, shares or followers; media views decayed 2,207 (27 Sep) to 220 to 9 today, so its free reach is spent.
+
+Drafted: nothing, and that is the rule working, not a gap. No comment or message to answer; the coming Wednesday (30 Sep) is queued; Fri 2 Oct's digest belongs to Thursday 1 Oct's run and Mon 5 Oct's to the Sunday 4 Oct sitting. No ad change proposed — the strategy rethink is founder-owned.
+
+Noticed: after tomorrow's post publishes the queue is EMPTY, so **Thursday 1 Oct's run owes two drafts**, not one — Fri 2 Oct's digest and the Wed 7 Oct product post (the coming Wednesday will have none queued). Recorded in Pending. SearchAPI answers fine, so Thursday's searches are unblocked.
+
 ## Mon 28 Sep 2026 (founder opened the strategy rethink: "what did we do wrong? how did Audience Network happen?")
 
 Answered from the ad account activity log, which settles the Audience Network question: `update_ad_set_target_spec` at 27 Sep 00:18:21 Madrid, **actor "Meta" (1051435468209173)**, rewrote the quiet-leads ad set from 4 feed placements to 29 including Audience Network, then re-activated it 17 s later. Not an operator change; the 20 Sep feed-only fix had held for 7 days. The post-boost ad set, same placements, untouched, still has them — so only the LANDING_PAGE_VIEWS ad set was rewritten. Recorded in Learnings with the operational rule: re-verify placements every run on any live ad.
