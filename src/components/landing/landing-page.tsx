@@ -133,17 +133,14 @@ export function LandingPage() {
             </p>
           </div>
 
-          {/* The 30-second film, where "See how it works" lands. It loads
-              nothing until it is scrolled to. Its on-screen text is English,
-              so the Spanish page goes straight to the steps. */}
-          {locale === "en" && (
-            <FilmPlayer
-              className="mt-10 sm:max-w-5xl"
-              label={t("howItWorks.film.label")}
-              soundOn={t("howItWorks.film.soundOn")}
-              soundOff={t("howItWorks.film.soundOff")}
-            />
-          )}
+          {/* The 30-second film, where "See how it works" lands, in the
+              page's language. It loads nothing until it is scrolled to. */}
+          <FilmPlayer
+            className="mt-10 sm:max-w-5xl"
+            label={t("howItWorks.film.label")}
+            soundOn={t("howItWorks.film.soundOn")}
+            soundOff={t("howItWorks.film.soundOff")}
+          />
 
           <Workflow />
         </div>

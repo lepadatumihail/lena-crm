@@ -5,6 +5,7 @@
 //   node output/video/record.mjs                         full film → output/video/leadwing-film.mp4
 //   node output/video/record.mjs --film hello-to-reserved  another film in this folder → hello-to-reserved.mp4
 //   node output/video/record.mjs --format portrait       4:5 feed cut → leadwing-film-4x5.mp4 (story: 9:16 → -9x16)
+//   node output/video/record.mjs --film hello-to-reserved --lang es   Spanish cut → hello-to-reserved-es.mp4
 //   node output/video/record.mjs --blur 4 --audio x.wav  motion blur (4 subframes a frame) + soundtrack
 //   node output/video/record.mjs --from 5 --to 10        just a range
 //   node output/video/record.mjs --stills 1.5,8.2        PNG frames into --dir
@@ -34,7 +35,8 @@ const CRF = Number(args.crf || 16);
 const FORMAT = ["portrait", "story"].includes(args.format) ? args.format : "landscape";
 const [VW, VH] = { landscape: [1920, 1080], portrait: [1080, 1350], story: [1080, 1920] }[FORMAT];
 const FILM = String(args.film || "leadwing-film"); // the HTML file (without .html); outputs are named after it
-const OUT = resolve(args.out || join(HERE, FILM + { landscape: ".mp4", portrait: "-4x5.mp4", story: "-9x16.mp4" }[FORMAT]));
+const LANG = args.lang ? String(args.lang) : ""; // a film that reads ?lang= (film 02: es); outputs get -es
+const OUT = resolve(args.out || join(HERE, FILM + (LANG ? "-" + LANG : "") + { landscape: ".mp4", portrait: "-4x5.mp4", story: "-9x16.mp4" }[FORMAT]));
 const DIR = resolve(args.dir || join(HERE, "frames"));
 
 const pwCandidates = [process.env.PLAYWRIGHT_DIR && join(resolve(process.env.PLAYWRIGHT_DIR), "node_modules/playwright-core/index.mjs"), join(ROOT, "node_modules/playwright-core/index.mjs")].filter(Boolean);
@@ -59,7 +61,7 @@ function findChrome() {
 const browser = await chromium.launch({ executablePath: findChrome(), args: ["--font-render-hinting=none", "--hide-scrollbars"] });
 const page = await browser.newPage({ viewport: { width: VW, height: VH }, deviceScaleFactor: DPR });
 page.on("pageerror", e => console.error("page error:", e.message));
-await page.goto(pathToFileURL(join(HERE, FILM + ".html")).href + `?record&format=${FORMAT}` + (args.stills || args.sheet ? "&debug" : ""));
+await page.goto(pathToFileURL(join(HERE, FILM + ".html")).href + `?record&format=${FORMAT}` + (LANG ? `&lang=${LANG}` : "") + (args.stills || args.sheet ? "&debug" : ""));
 await page.evaluate(() => window.__film.ready);
 const DUR = await page.evaluate(() => window.__film.duration);
 const cdp = await page.context().newCDPSession(page);

@@ -66,3 +66,23 @@ PLAYWRIGHT_DIR=~/.cache/leadwing-video node output/video/record.mjs --film hello
 ```
 
 `--film <name>` picks the HTML in this folder and names the outputs after it (`hello-to-reserved.mp4`, `-4x5.mp4`, `-9x16.mp4`); without it the recorder renders film 01 as before.
+
+### Spanish cut
+
+`?lang=es` (and `--lang es` in the recorder, which adds `-es` to the file names) swaps every word on screen on the same clock, so the soundtrack still fits. The UI words are the app's own Spanish from `messages/es` (stages Nuevo → Reservado, Pega un lead, Extraer datos, Borrador IA · Danés, 2 de tus anuncios encajan…); Lars still writes in English and his reply is still Danish. The lines: "Toda venta empieza con un *hola.*", "Pega la consulta. *LeadWing rellena el resto.*", "Una respuesta en su idioma. *Tú la envías.*", "Mira cuáles de tus anuncios *encajan.*", "Agenda la visita. *Confírmala por WhatsApp.*", "Haz seguimiento *en caliente.*", "Del *hola* a [Reservado]", and the end card "El CRM para agentes inmobiliarios independientes. Gratis hasta 10 clientes. Sin tarjeta." It is Claude's translation; a native read is still pending.
+
+```sh
+PLAYWRIGHT_DIR=~/.cache/leadwing-video node output/video/record.mjs --film hello-to-reserved --lang es --blur 8 --audio output/video/hello-to-reserved.wav
+PLAYWRIGHT_DIR=~/.cache/leadwing-video node output/video/record.mjs --film hello-to-reserved --lang es --format portrait --blur 8 --audio output/video/hello-to-reserved.wav
+```
+
+### Web cuts
+
+The site plays small cuts from `public/video`, loaded only when the film is on screen (`src/components/marketing/film-player.tsx` picks the language and the shape): `leadwing-film[-es]-16x9.mp4` (1280 × 720) and `-4x5.mp4` (720 × 900), 30 fps, x264 slow/film at CRF 23 capped at 1.8 and 1.6 Mbit/s, AAC 128k, `+faststart`; the posters are the title frame at 25.2 s as WebP q80.
+
+```sh
+ffmpeg -i hello-to-reserved-es.mp4 -vf "fps=30,scale=1280:720:flags=lanczos" -c:v libx264 -preset slow -tune film -crf 23 -maxrate 1800k -bufsize 3600k -profile:v high -level 3.1 -pix_fmt yuv420p -colorspace bt709 -c:a aac -b:a 128k -movflags +faststart ../../public/video/leadwing-film-es-16x9.mp4
+ffmpeg -ss 25.2 -i hello-to-reserved-es.mp4 -frames:v 1 -vf scale=1280:720:flags=lanczos /tmp/p.png && cwebp -q 80 -m 6 -sharp_yuv /tmp/p.png -o ../../public/video/leadwing-film-es-16x9.webp
+```
+
+The 4:5 cut is the same with `720:900` and `-maxrate 1600k -bufsize 3200k`.

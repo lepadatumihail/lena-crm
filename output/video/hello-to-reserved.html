@@ -427,6 +427,58 @@ function words(el) {
   return out;
 }
 
+/* ---------- language: ?lang=es is the Spanish cut, on the same clock ---------- */
+// The UI words are the app's own Spanish (messages/es). Lars still writes in English and his
+// reply is still Danish: that is what a buyer on the coast sends, whatever the agent speaks.
+const ES = new URLSearchParams(location.search).get("lang") === "es";
+const ES_TEXT = {
+  "New enquiry · 09:41": "Nueva consulta · 09:41",
+  "New": "Nuevo", "Contacted": "Contactado", "Qualified": "Cualificado", "Viewing": "Visita", "Reserved": "Reservado",
+  "up to €1.2M": "hasta 1,2 M €",
+  "Paste a lead": "Pega un lead", "AI-filled": "Rellenado por IA",
+  "Drop in the raw enquiry and AI pulls out the details.": "Pega la consulta tal cual y la IA extrae los datos.",
+  "From: Lars Nielsen": "De: Lars Nielsen",
+  "Name": "Nombre", "Language": "Idioma", "Looking for": "Busca", "Area": "Zona", "Budget": "Presupuesto", "Side": "Tipo",
+  "Danish": "Danés", "Villa · 4 bed": "Villa · 4 dorm.", "Buyer": "Comprador",
+  "Filled from the lead. Review and save.": "Rellenado desde el lead: revísalo y guarda.",
+  "Extract details": "Extraer datos", "Save buyer": "Guardar comprador",
+  "AI draft · Danish": "Borrador IA · Danés", "First reply": "Primera respuesta", "Copy": "Copiar",
+  "Open in WhatsApp": "Abrir en WhatsApp", "Opened in WhatsApp": "Abierto en WhatsApp",
+  "4 bed": "4 dorm.", "2 of your listings match": "2 de tus anuncios encajan",
+  "4 bed · 3 bath · Sea views": "4 dorm. · 3 baños · Vistas al mar",
+  "5 bed · 4 bath · Golf views": "5 dorm. · 4 baños · Vistas al golf",
+  "This week": "Esta semana", "Viewings & meetings": "Visitas y reuniones",
+  "Thu 12": "jue 12", "Fri 13": "vie 13", "Sat 14": "sáb 14", "Sun 15": "dom 15",
+  "Meeting · Notary": "Reunión · Notaría", "Viewing · Penthouse": "Visita · Ático",
+  "Viewing · Villa": "Visita · Villa", "Call · James Carter": "Llamada · J. Carter", // the full name overflows the slot
+  "Reminder: your viewing is tomorrow at 12:00.": "Recordatorio: tu visita es mañana a las 12:00.",
+  "Next up": "Próximo", "Follow up after the viewing": "Hacer seguimiento tras la visita",
+  "Reminder · 10:00": "Recordatorio · 10:00", "Today": "Hoy", "Done": "Hecha",
+  "Send the offer to the seller": "Enviar la oferta al vendedor", "Tomorrow": "Mañana",
+  "Lars Nielsen · offer accepted": "Lars Nielsen · oferta aceptada",
+  "Added just now": "Añadido ahora mismo", "WhatsApp · just now": "WhatsApp · ahora mismo",
+  "Call · just now": "Llamada · ahora mismo", "Viewing done · today": "Visita hecha · hoy",
+};
+const tr = s => (ES && ES_TEXT[s]) || s;
+// The lines set in script below (headline, chapters, title) carry their own Spanish.
+const COPY_ES = [
+  { land: ["Pega la consulta.", "<em>LeadWing rellena</em>", "<em>el resto.</em>"], vert: ["Pega la consulta.", "<em>LeadWing rellena el resto.</em>"] },
+  { land: ["Una respuesta", "en su idioma.", "<em>Tú la envías.</em>"], vert: ["Una respuesta en su idioma.", "<em>Tú la envías.</em>"] },
+  { land: ["Mira cuáles de", "tus anuncios", "<em>encajan.</em>"], vert: ["Mira cuáles de tus", "anuncios <em>encajan.</em>"] },
+  { land: ["Agenda la visita.", "<em>Confírmala</em>", "<em>por WhatsApp.</em>"], vert: ["Agenda la visita.", "<em>Confírmala por WhatsApp.</em>"] },
+  { land: ["Haz seguimiento", "<em>en caliente.</em>"], vert: ["Haz seguimiento", "<em>en caliente.</em>"] },
+];
+if (ES) {
+  document.documentElement.lang = "es";
+  const walker = document.createTreeWalker($("#canvas"), NodeFilter.SHOW_TEXT);
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+    const k = n.textContent.trim();
+    if (ES_TEXT[k]) n.textContent = n.textContent.replace(k, ES_TEXT[k]);
+  }
+  $("#tagl").textContent = "El CRM para agentes inmobiliarios independientes.";
+  $("#offer").textContent = "Gratis hasta 10 clientes. Sin tarjeta.";
+}
+
 /* ---------- the timeline (soundtrack.mjs mirrors these cues) ---------- */
 // 96 BPM: a beat is 0.625 s, a bar 2.5 s. Every stage lands on a beat.
 const S1 = 2.5, S2 = 7.5, S3 = 12.5, S4 = 16.25, S5 = 20.0, S6 = 23.75, S7 = 26.25;
@@ -498,16 +550,18 @@ $("#taskTick").innerHTML = ICONS.check;
 
 // S0 headline.
 const h0 = $("#h0");
-h0.innerHTML = VERT ? "Every sale starts<br>with a <em>hello.</em>" : "Every sale starts with a <em>hello.</em>";
+h0.innerHTML = ES
+  ? VERT ? "Toda venta empieza<br>con un <em>hola.</em>" : "Toda venta empieza con un <em>hola.</em>"
+  : VERT ? "Every sale starts<br>with a <em>hello.</em>" : "Every sale starts with a <em>hello.</em>";
 const h0w = words(h0);
 const bubble = $("#bubble");
 bubble.style.width = LAY.bubble.w + "px";
 
 // Chapter lines.
 for (const c of COPY) {
-  const el = document.createElement("h2");
+  const el = document.createElement("h2"), txt = ES ? COPY_ES[COPY.indexOf(c)] : c;
   el.className = "cp";
-  el.innerHTML = (VERT ? c.vert : c.land).map(l => `<span class="ln"><span class="li">${l}</span></span>`).join("");
+  el.innerHTML = (VERT ? txt.vert : txt.land).map(l => `<span class="ln"><span class="li">${l}</span></span>`).join("");
   $("#copy").append(el);
   c.el = el; c.lines = $$(".li", el);
 }
@@ -518,14 +572,14 @@ for (const s of STAGES) {
   const b = document.createElement("i"); b.className = "pb"; b.dataset.s = s; pill.append(b); PB[s] = b;
 }
 for (const s of STAGES) {
-  const l = document.createElement("span"); l.className = "pl"; l.dataset.s = s; l.textContent = LABEL[s]; pill.append(l); PL[s] = l;
+  const l = document.createElement("span"); l.className = "pl"; l.dataset.s = s; l.textContent = tr(LABEL[s]); pill.append(l); PL[s] = l;
 }
-const sub = $("#sub"), subEls = SUBS.map(([, ic, text]) => { const s = document.createElement("span"); s.innerHTML = icon(ic) + text; sub.append(s); return s; });
+const sub = $("#sub"), subEls = SUBS.map(([, ic, text]) => { const s = document.createElement("span"); s.innerHTML = icon(ic) + tr(text); sub.append(s); return s; });
 
-// Title: "From hello to [Reserved]".
-const tl1 = $("#tl1"), tl2 = $("#tl2");
-if (VERT) { tl1.innerHTML = "From <em>hello</em>"; tl2.innerHTML = `to <span id="tslot"></span>`; }
-else { tl1.innerHTML = `From <em>hello</em> to <span id="tslot"></span>`; tl2.remove(); }
+// Title: "From hello to [Reserved]" ("Del hola a [Reservado]").
+const tl1 = $("#tl1"), tl2 = $("#tl2"), [FROM, TO] = ES ? ["Del <em>hola</em>", "a"] : ["From <em>hello</em>", "to"];
+if (VERT) { tl1.innerHTML = FROM; tl2.innerHTML = `${TO} <span id="tslot"></span>`; }
+else { tl1.innerHTML = `${FROM} ${TO} <span id="tslot"></span>`; tl2.remove(); }
 const tw = [...words(tl1), ...(VERT ? words(tl2) : [])];
 
 // Calendar events on their day and hour.

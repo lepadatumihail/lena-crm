@@ -1,25 +1,37 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useLocale } from "next-intl";
 import { useReducedMotion } from "framer-motion";
 import { Volume2, VolumeX } from "lucide-react";
 
+import type { AppLocale } from "@/i18n/config";
 import { cn } from "@/lib/utils";
 
 /** Tailwind's `sm`: from here up the frame is 16:9 and plays the wide cut, below it 4:5. */
 const WIDE = "(min-width: 40rem)";
 
-const CUTS = {
-  wide: { src: "/video/leadwing-film-16x9.mp4", poster: "/video/leadwing-film-16x9.webp" },
-  tall: { src: "/video/leadwing-film-4x5.mp4", poster: "/video/leadwing-film-4x5.webp" },
-} as const;
+type Cut = { src: string; poster: string };
+type Cuts = { wide: Cut; tall: Cut };
+
+/** The film's on-screen words follow the page: one pair of cuts per language. */
+const CUTS: Record<AppLocale, Cuts> = {
+  en: {
+    wide: { src: "/video/leadwing-film-16x9.mp4", poster: "/video/leadwing-film-16x9.webp" },
+    tall: { src: "/video/leadwing-film-4x5.mp4", poster: "/video/leadwing-film-4x5.webp" },
+  },
+  es: {
+    wide: { src: "/video/leadwing-film-es-16x9.mp4", poster: "/video/leadwing-film-es-16x9.webp" },
+    tall: { src: "/video/leadwing-film-es-4x5.mp4", poster: "/video/leadwing-film-es-4x5.webp" },
+  },
+};
 
 /**
  * Points the video at the cut for its frame's shape. The poster loads right
  * away; with preload="none" the film itself waits for play().
  */
-function loadCut(video: HTMLVideoElement) {
-  const cut = window.matchMedia(WIDE).matches ? CUTS.wide : CUTS.tall;
+function loadCut(video: HTMLVideoElement, cuts: Cuts) {
+  const cut = window.matchMedia(WIDE).matches ? cuts.wide : cuts.tall;
   if (video.getAttribute("src") === cut.src) return;
   const playing = !video.paused;
   video.poster = cut.poster;
@@ -33,7 +45,7 @@ function loadCut(video: HTMLVideoElement) {
  * frame is a screen away, and the film plays muted and looping only while at
  * least half of it is on screen, so it never plays behind the reader's back.
  * With reduced motion it stays on the poster with the native controls. The
- * sound button unmutes (and starts it).
+ * sound button unmutes (and starts it). The cut is the page's language.
  */
 export function FilmPlayer({
   label,
@@ -49,6 +61,7 @@ export function FilmPlayer({
   const ref = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
   const still = useReducedMotion() === true;
+  const cuts = CUTS[useLocale()];
 
   useEffect(() => {
     const video = ref.current;
@@ -57,7 +70,7 @@ export function FilmPlayer({
 
     const near = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) loadCut(video);
+        if (entry.isIntersecting) loadCut(video, cuts);
       },
       { rootMargin: "100% 0px" }
     );
@@ -66,7 +79,7 @@ export function FilmPlayer({
     // A phone turned sideways swaps the frame's shape, so swap the cut too.
     const wide = window.matchMedia(WIDE);
     const reshape = () => {
-      if (video.hasAttribute("src")) loadCut(video);
+      if (video.hasAttribute("src")) loadCut(video, cuts);
     };
     wide.addEventListener("change", reshape);
 
@@ -75,7 +88,7 @@ export function FilmPlayer({
       : new IntersectionObserver(
           ([entry]) => {
             if (entry.isIntersecting) {
-              loadCut(video);
+              loadCut(video, cuts);
               void video.play().catch(() => null);
             } else video.pause();
           },
@@ -88,12 +101,12 @@ export function FilmPlayer({
       inView?.disconnect();
       wide.removeEventListener("change", reshape);
     };
-  }, [still]);
+  }, [still, cuts]);
 
   function toggleSound() {
     const video = ref.current;
     if (!video) return;
-    loadCut(video);
+    loadCut(video, cuts);
     video.muted = !video.muted;
     setMuted(video.muted);
     if (video.paused) void video.play().catch(() => null);
