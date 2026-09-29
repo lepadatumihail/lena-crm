@@ -68,6 +68,7 @@ export function SignInForm({
   Title,
   Description,
   track = false,
+  logo = true,
   className,
 }: {
   /** Where to go once signed in (already checked to be a local path). */
@@ -76,6 +77,8 @@ export function SignInForm({
   Description: ElementType;
   /** Log the anonymous funnel steps (the ad landings do). */
   track?: boolean;
+  /** The logo above the title. A dialog on our own pages leaves it out: the title already says LeadWing. */
+  logo?: boolean;
   className?: string;
 }) {
   const t = useTranslations("auth.login");
@@ -167,7 +170,7 @@ export function SignInForm({
   return (
     <div className={cn("flex flex-col gap-6", className)}>
       <div className="flex flex-col gap-1.5 text-center">
-        <Logo className="mx-auto mb-3 text-lg" markClassName="size-8" />
+        {logo ? <Logo className="mx-auto mb-3 text-lg" markClassName="size-8" /> : null}
         <Title className="text-2xl leading-none font-semibold">
           {step === "email" ? t("title") : t("codeTitle")}
         </Title>

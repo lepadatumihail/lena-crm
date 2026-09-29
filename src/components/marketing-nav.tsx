@@ -10,6 +10,7 @@ import { Logo } from "@/components/brand/logo";
 import { LocaleToggle } from "@/components/locale-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { NavFrame } from "@/components/marketing/nav-frame";
+import { SignUpDialog } from "@/components/marketing/sign-up-dialog";
 
 /**
  * The public header, in three shapes:
@@ -17,6 +18,8 @@ import { NavFrame } from "@/components/marketing/nav-frame";
  *   page    — real links back to the home page and pricing, for every other
  *             marketing page. Its call to action follows the visitor: an
  *             agent who is already signed in wants the app, not a sign-up.
+ * "Start for free" opens the sign-up dialog in place (SignUpDialog), so the
+ * visitor stays on the page and an ad's utm tags reach the new profile.
  *   minimal — controls and a way home, for the legal pages.
  * Every link follows the page's own language, so a Spanish page never sends
  * a visitor to an English URL. The strip it sits in condenses into a floating
@@ -73,9 +76,9 @@ export function MarketingNav({
               <Link href="#pricing">{t("pricing")}</Link>
             </Button>
             <Controls snug={snug} />
-            <Button asChild size="pill-sm" className={ctaClassName}>
-              <Link href="/login">{t("startFree")}</Link>
-            </Button>
+            <SignUpDialog size="pill-sm" className={ctaClassName}>
+              {t("startFree")}
+            </SignUpDialog>
           </>
         ) : variant === "page" ? (
           <>
@@ -96,11 +99,15 @@ export function MarketingNav({
               <Link href={marketingPath("pricing", locale)}>{t("pricing")}</Link>
             </Button>
             <Controls snug={snug} />
-            <Button asChild size="pill-sm" className={ctaClassName}>
-              <Link href={signedIn ? "/home" : "/login"}>
-                {signedIn ? t("backToApp") : t("startFree")}
-              </Link>
-            </Button>
+            {signedIn ? (
+              <Button asChild size="pill-sm" className={ctaClassName}>
+                <Link href="/home">{t("backToApp")}</Link>
+              </Button>
+            ) : (
+              <SignUpDialog size="pill-sm" className={ctaClassName}>
+                {t("startFree")}
+              </SignUpDialog>
+            )}
           </>
         ) : (
           <>
