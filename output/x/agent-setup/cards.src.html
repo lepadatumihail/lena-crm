@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LeadWing: how the marketing agent runs</title>
+<!--
+  One 1080x1350 card for the setup post. Every step is taken from
+  output/facebook/posts/PLAYBOOK.md. Render from the repo root with:
+  python3 output/x/render.py output/x/agent-setup
+-->
+<style>
+/*FONTS*/
+:root {
+  --ivory: #faf8f3;
+  --paper: #ffffff;
+  --ink: #2b2926;
+  --muted: #7b7469;
+  --orange: #c0603f;
+  --line: #e6dfd3;
+  --tint: #f6ebe4;
+  --tint-line: #ecd4c7;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--ivory); }
+body { font-family: Geist, system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+.card { width: 1080px; height: 1350px; padding: 88px 88px 60px; display: flex; flex-direction: column; background: var(--ivory); overflow: hidden; }
+.eyebrow { display: flex; align-items: center; gap: 14px; font-weight: 500; font-size: 26px; color: var(--muted); }
+.eyebrow i { width: 12px; height: 12px; border-radius: 50%; background: var(--orange); }
+h1 { margin-top: 34px; font-weight: 700; font-size: 74px; line-height: 1.05; letter-spacing: -0.035em; text-wrap: balance; }
+.main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 36px 0; }
+.mono { font-family: "Matter Mono", MatterMono, Menlo, monospace; }
+.foot { display: flex; justify-content: space-between; align-items: center; padding-top: 26px; border-top: 2px solid var(--line); font-weight: 500; font-size: 23px; color: var(--muted); }
+.brand { display: flex; align-items: center; gap: 12px; color: var(--ink); }
+.brand svg { width: 38px; height: 30px; fill: var(--orange); }
+
+.step { position: relative; display: grid; grid-template-columns: 64px 1fr; column-gap: 30px; padding-bottom: 34px; }
+.step:last-child { padding-bottom: 0; }
+.step::before { content: ""; position: absolute; left: 31px; top: 64px; bottom: 0; width: 2px; background: var(--line); }
+.step:last-child::before { display: none; }
+.step .k { width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--orange); background: var(--ivory); color: var(--orange); display: grid; place-items: center; font-weight: 700; font-size: 28px; }
+.step .tag { font-size: 22px; color: var(--orange); }
+.step h2 { margin-top: 6px; font-weight: 700; font-size: 38px; letter-spacing: -0.025em; }
+.step p { margin-top: 6px; font-size: 26px; line-height: 1.3; color: var(--muted); }
+
+.rules { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 46px; }
+.rule { padding: 26px 30px 30px; border: 2px solid var(--line); border-radius: 22px; background: var(--paper); }
+.rule.ask { background: var(--tint); border-color: var(--tint-line); }
+.rule b { display: block; font-weight: 500; font-size: 22px; color: var(--muted); }
+.rule.ask b { color: var(--orange); }
+.rule p { margin-top: 10px; font-weight: 700; font-size: 31px; line-height: 1.2; letter-spacing: -0.02em; text-wrap: balance; }
+</style>
+</head>
+<body>
+
+<template id="foot">
+  <footer class="foot">
+    <span class="brand">
+      <svg viewBox="0 0 240 190" aria-hidden="true">
+        <path d="M 217 14.1 c -20.5 12.7 -46.1 23.3 -86 35.4 -38.3 11.6 -53.8 16.9 -64.3 22.1 -28.9 14.2 -47.7 36.8 -54.2 64.9 -1.6 6.7 -2.8 26.5 -1.7 26.5 0.4 0 2.7 -3.5 5.2 -7.7 17.5 -29.6 46.2 -45.2 104.5 -56.8 53.7 -10.6 88.1 -36.8 101.3 -77 4.3 -13.2 4.4 -13.1 -4.8 -7.4 z"/>
+        <path d="M 171.5 98 c -14.8 7.1 -31.2 11.5 -58.4 15.5 -51.1 7.7 -77 24.3 -90.9 58.8 -3.3 8.2 -2.7 8.4 5.8 1.6 17.3 -13.9 31.5 -18.4 63.5 -20.4 28.3 -1.8 37.5 -4.3 53 -14.2 15.1 -9.8 32.1 -30.2 36 -43.1 0.8 -2.8 0.5 -2.8 -9 1.8 z"/>
+      </svg>
+      LeadWing build log
+    </span>
+    <span class="page">@lepadev</span>
+  </footer>
+</template>
+
+<section class="card" data-name="agent-setup">
+  <div class="eyebrow"><i></i>LeadWing · how the marketing agent runs</div>
+  <h1>How it’s wired to Facebook.</h1>
+  <div class="main">
+    <div class="steps">
+      <div class="step">
+        <div class="k">1</div>
+        <div><div class="tag mono">12:00 · 18:10 · PLAYBOOK.md</div><h2>A Claude Code routine wakes up</h2><p>Reads its playbook first: rules, decisions, lessons.</p></div>
+      </div>
+      <div class="step">
+        <div class="k">2</div>
+        <div><div class="tag mono">developers.facebook.com</div><h2>Talks to Facebook through a Meta app</h2><p>Tokens for the LeadWing Page and my ad account. No Zapier.</p></div>
+      </div>
+      <div class="step">
+        <div class="k">3</div>
+        <div><div class="tag mono">Graph API · Meta Pixel</div><h2>Handles the Page and the ads</h2><p>Schedules posts, reads comments and inbox, tracks ad spend.</p></div>
+      </div>
+      <div class="step">
+        <div class="k">4</div>
+        <div><div class="tag mono">daily-log.md → git</div><h2>Writes it all down</h2><p>Commits a log every run, adds a lesson when it learns one.</p></div>
+      </div>
+    </div>
+    <div class="rules">
+      <div class="rule"><b>Does on its own</b><p>Pauses an ad that’s wasting money</p></div>
+      <div class="rule ask"><b>Waits for my yes</b><p>Posts, replies and ad changes</p></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const cards = [...document.querySelectorAll(".card")];
+  const foot = document.getElementById("foot");
+  cards.forEach((card, i) => {
+    const f = foot.content.cloneNode(true);
+    if (cards.length > 1) f.querySelector(".page").textContent = `@lepadev · ${i + 1}/${cards.length}`;
+    card.append(f);
+  });
+  const n = new URLSearchParams(location.search).get("n");
+  if (n) cards.forEach((card, i) => { if (String(i + 1) !== n) card.remove(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<!--
+  Free-10 Meta ad, mono (29 Sep 2026). 1080x1350 (4:5, feed).
+  Dark by default; ?t=paper renders the light twin. Any CSS variable can be overridden from the
+  query string (e.g. ?--k=1.4), which is how the layout was tuned.
+  Product: real Buyers screen with a mock book (../screenshots/buyers-*-1280x900@3x.png, captured from a
+  throwaway preview route). Logo paths copied from src/lib/brand-mark.ts.
+  Render: PLAYWRIGHT_DIR=<dir with playwright-core> node output/facebook/posts/render-html-ad.mjs output/facebook/posts/free10-mono.html
+-->
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=block" rel="stylesheet">
+<style>
+:root {
+  --stage: #0a0908;
+  --fg: oklch(0.965 0.005 84);
+  --fg70: oklch(0.965 0.005 84 / 0.7);
+  --fg55: oklch(0.965 0.005 84 / 0.55);
+  --fg40: oklch(0.965 0.005 84 / 0.4);
+  --serif: "Instrument Serif", Georgia, serif;
+  --sans: "Geist", system-ui, sans-serif;
+  /* crop of the real screen, in CSS px of the 1280x900 capture */
+  --cx: 276; --cy: 70; --cw: 984; --ch: 450; --k: 1.48;
+  --px: 60px; --py: 522px; --rx: 9.5deg; --ry: -17deg; --rz: 0.6deg; --persp: 1900px;
+  --h1: 130px;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { background: #000; }
+#ad { position: relative; width: 1080px; height: 1350px; overflow: hidden; background: var(--stage); color: var(--fg); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+.abs { position: absolute; }
+
+#grid { position: absolute; inset: 0; background-image: linear-gradient(oklch(1 0 0 / 3.4%) 1px, transparent 1px), linear-gradient(90deg, oklch(1 0 0 / 3.4%) 1px, transparent 1px); background-size: 64px 64px; background-position: 8px 0; -webkit-mask-image: radial-gradient(ellipse 60% 42% at 55% 62%, #000 0%, transparent 78%); }
+#key { position: absolute; left: 600px; top: 800px; width: 1500px; height: 1000px; margin: -500px 0 0 -750px; border-radius: 50%; background: radial-gradient(closest-side, oklch(0.97 0.01 80 / .19), oklch(0.97 0.01 80 / .06) 48%, transparent); }
+#vig { position: absolute; inset: 0; background: radial-gradient(ellipse 95% 85% at 50% 45%, transparent 58%, rgba(0,0,0,.55)); }
+#grain { position: absolute; inset: 0; pointer-events: none; opacity: .05; background-size: 256px 256px; z-index: 50; }
+
+.logo { display: flex; align-items: center; gap: 12px; color: var(--fg); }
+.logo .wing { height: 38px; width: auto; fill: currentColor; }
+.logo .word { height: 29px; width: auto; fill: currentColor; }
+.cat { font: 400 26px/1 var(--sans); color: var(--fg55); display: flex; align-items: center; gap: 18px; }
+.cat::before { content: ""; width: 1px; height: 30px; background: oklch(1 0 0 / 0.2); }
+
+h1 { font: 400 var(--h1)/0.97 var(--serif); letter-spacing: -0.022em; }
+h1 span, h1 em { display: block; white-space: nowrap; }
+h1 em { font-style: italic; color: var(--fg55); padding-right: .05em; }
+.sub { font: 400 32px/1.35 var(--sans); color: var(--fg70); }
+.actions { display: flex; align-items: center; gap: 30px; }
+.cta { display: inline-flex; align-items: center; gap: 14px; height: 86px; padding: 0 44px 0 50px; border-radius: 999px; background: var(--fg); color: #121110; font: 500 34px/1 var(--sans); letter-spacing: -0.01em; box-shadow: 0 18px 50px -12px oklch(1 0 0 / 0.25); }
+.cta svg { width: 30px; height: 30px; stroke: currentColor; stroke-width: 2.3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.url { font: 400 30px/1 var(--sans); color: var(--fg55); }
+
+/* The product: a crop of the real Buyers screen, floating in 3D. */
+.scene { position: absolute; inset: 0; perspective: var(--persp); perspective-origin: 30% 50%; }
+.panel { position: absolute; left: var(--px); top: var(--py); width: calc(var(--cw) * var(--k) * 1px); height: calc(var(--ch) * var(--k) * 1px); border-radius: 26px; overflow: hidden; transform-origin: 0% 50%; transform: rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(var(--rz)); background: oklch(0.19 0.005 56); box-shadow: 0 0 0 1px oklch(1 0 0 / 0.15), 0 70px 140px -30px rgba(0,0,0,.95), 0 -20px 80px -30px oklch(1 0 0 / 0.12); -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%); }
+.panel::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.25); pointer-events: none; }
+.panel img { position: absolute; width: calc(1280px * var(--k)); left: calc(var(--cx) * var(--k) * -1px); top: calc(var(--cy) * var(--k) * -1px); }
+
+/* Offer: the plan card's meter, as an ad element. */
+.badge { position: absolute; display: flex; flex-direction: column; gap: 16px; padding: 26px 30px 28px; border-radius: 22px; background: oklch(0.215 0.005 56 / 0.88); border: 1px solid oklch(1 0 0 / 0.16); box-shadow: 0 50px 90px -20px rgba(0,0,0,.9), 0 0 60px -10px oklch(1 0 0 / 0.10), inset 0 1px 0 oklch(1 0 0 / 0.1); backdrop-filter: blur(20px); z-index: 5; }
+.badge .row { display: flex; align-items: baseline; justify-content: space-between; gap: 30px; }
+.badge b { font: 500 34px/1.1 var(--sans); letter-spacing: -0.01em; }
+.badge small { font: 400 26px/1.1 var(--sans); color: var(--fg55); }
+.segs { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; }
+.segs i { height: 12px; border-radius: 99px; background: oklch(1 0 0 / 0.1); }
+.segs i.on { background: var(--fg); }
+
+/* layout B: film still */
+.logo { left: 72px; top: 70px; height: 40px; }
+.cat { left: 290px; top: 70px; height: 40px; }
+h1 { left: 67px; top: 148px; }
+.sub { left: 72px; top: 434px; }
+.badge { left: 612px; top: 1146px; width: 398px; }
+.actions { left: 72px; top: 1178px; }
+
+[data-t="paper"] { --stage: oklch(0.975 0 0); --fg: oklch(0.19 0 0); --fg70: oklch(0.19 0 0 / 0.72); --fg55: oklch(0.19 0 0 / 0.5); --fg40: oklch(0.19 0 0 / 0.38); }
+[data-t="paper"] #grid { background-image: linear-gradient(oklch(0 0 0 / 4.2%) 1px, transparent 1px), linear-gradient(90deg, oklch(0 0 0 / 4.2%) 1px, transparent 1px); }
+[data-t="paper"] #key { background: radial-gradient(closest-side, oklch(0.93 0 0 / .9), oklch(0.96 0 0 / .45) 50%, transparent); }
+[data-t="paper"] #vig { display: none; }
+[data-t="paper"] #grain { opacity: .028; }
+[data-t="paper"] .cat::before { background: oklch(0 0 0 / 0.16); }
+[data-t="paper"] .panel { background: #fff; box-shadow: 0 0 0 1px oklch(0 0 0 / 0.1), 0 60px 120px -30px rgba(0,0,0,.28), 0 20px 40px -24px rgba(0,0,0,.18); }
+[data-t="paper"] .panel::after { box-shadow: none; }
+[data-t="paper"] .cta { background: oklch(0.19 0 0); color: #fff; box-shadow: 0 18px 44px -14px rgba(0,0,0,.45); }
+[data-t="paper"] .badge { background: oklch(1 0 0 / 0.9); border-color: oklch(0 0 0 / 0.09); box-shadow: 0 30px 70px -20px rgba(0,0,0,.28), 0 0 0 1px rgba(0,0,0,.02); }
+[data-t="paper"] .segs i { background: oklch(0 0 0 / 0.09); }
+[data-t="paper"] .segs i.on { background: var(--fg); }
+</style>
+</head>
+<body>
+<div id="ad">
+  <div id="grid"></div><div id="key"></div><div id="vig"></div>
+  <div class="scene"><div class="panel"><img id="shot" src="../screenshots/buyers-dark-1280x900@3x.png"></div></div>
+  <div class="abs logo">
+    <svg class="wing" viewBox="0 0 240 190"><path d="M 217 14.1 c -20.5 12.7 -46.1 23.3 -86 35.4 -38.3 11.6 -53.8 16.9 -64.3 22.1 -28.9 14.2 -47.7 36.8 -54.2 64.9 -1.6 6.7 -2.8 26.5 -1.7 26.5 0.4 0 2.7 -3.5 5.2 -7.7 17.5 -29.6 46.2 -45.2 104.5 -56.8 53.7 -10.6 88.1 -36.8 101.3 -77 4.3 -13.2 4.4 -13.1 -4.8 -7.4 z"/><path d="M 171.5 98 c -14.8 7.1 -31.2 11.5 -58.4 15.5 -51.1 7.7 -77 24.3 -90.9 58.8 -3.3 8.2 -2.7 8.4 5.8 1.6 17.3 -13.9 31.5 -18.4 63.5 -20.4 28.3 -1.8 37.5 -4.3 53 -14.2 15.1 -9.8 32.1 -30.2 36 -43.1 0.8 -2.8 0.5 -2.8 -9 1.8 z"/></svg>
+    <svg class="word" viewBox="0 0 757 172"><path d="M 535.9 11.3 c -6.8 4.6 -7.5 12.9 -1.6 19.3 10.3 11.1 27.6 -2.3 19.7 -15.3 -3.8 -6.3 -12 -8.1 -18.1 -4 z"/><path d="M 377.2 10.8 c -11.2 0.2 -12.3 0.4 -11.7 2 0.7 1.9 18.8 62.1 28.1 93.4 l 5.8 19.8 11.7 0 11.7 0 5.5 -17.2 c 3.1 -9.5 8.1 -25.5 11.3 -35.6 3.2 -10 6.1 -17.7 6.4 -17 0.4 0.7 5.3 16.7 11 35.6 l 10.4 34.3 11.9 -0.3 11.9 -0.3 10.8 -34 c 8.9 -27.9 22.4 -71.1 24.6 -78.8 0.5 -1.6 -0.5 -1.7 -12 -1.7 l -12.5 0 -3 9.7 c -1.6 5.4 -6.6 21.9 -11.1 36.8 -4.4 14.8 -8.3 27.7 -8.6 28.5 -0.3 0.8 -5.6 -15.6 -11.8 -36.5 l -11.2 -38 -10.2 -0.3 -10.1 -0.3 -2.5 8.1 c -14.1 46.1 -21.1 67.8 -21.7 67.2 -0.3 -0.4 -2.9 -9.3 -5.8 -19.7 -12 -43.1 -15.4 -55 -16 -55.5 -0.3 -0.3 -6.2 -0.4 -12.9 -0.2 z"/><path d="M 11.9 57 c 0 25.3 -0.1 51.1 -0.2 57.2 l -0.1 11.3 40.2 0.3 40.2 0.2 0 -10.8 0 -10.9 -6.7 -0.6 c -3.8 -0.4 -16.4 -0.7 -28 -0.7 l -21.3 0 0 -46 0 -46 -12 0 -12 0 -0.1 46 z"/><path d="M 338 30.5 l 0 19.5 -4.4 -3.4 c -7 -5.3 -12.8 -7.1 -23.2 -7.1 -49 0 -55.1 77.5 -6.9 87.5 10.9 2.3 22.3 -0.4 30.8 -7.1 l 3.7 -3 0 4.6 0 4.6 11.3 -0.3 11.2 -0.3 0.1 -57.3 0.2 -57.2 -11.4 0 -11.4 0 0 19.5 z m -14 30.6 c 15.4 7 19.2 27.8 7.2 39.8 -13.2 13.2 -33.3 6.5 -37.2 -12.4 -4 -19.1 13.4 -34.9 30 -27.4 z"/><path d="M 220.5 38.6 c -13.7 1.7 -31.5 9.4 -31.5 13.6 0 1.2 8 14.8 8.7 14.8 0.3 0 1.8 -0.9 3.3 -2 17.3 -12.3 41 -8.8 41 6.1 l 0 4 -5.2 -0.8 c -9.2 -1.4 -25.8 -0.8 -32 1 -19.5 5.9 -26.3 28 -13.1 42.7 10.2 11.3 31.2 13 45.3 3.5 6.4 -4.3 6 -4.3 6 0.5 l 0 4 10.4 0 10.4 0 0.7 -9.5 c 1.2 -15.6 0 -51.1 -1.9 -57 -4.4 -13.9 -23.1 -23.2 -42.1 -20.9 z m 17 51.5 l 4.7 1.2 -0.5 4.3 c -2 17.7 -34.7 21.5 -34.7 4.1 0 -9.7 13.4 -13.9 30.5 -9.6 z"/><path d="M 123.7 41 c -24.9 8.8 -35.8 34.8 -25.7 61.3 10.1 26.8 52.4 34.2 74.9 13.2 l 4.9 -4.6 -5.2 -4.7 c -10.2 -9.4 -9 -8.9 -13.3 -5.2 -13.1 11.5 -32.8 9.5 -39.8 -4.1 -3.8 -7.2 -5.3 -6.9 30.5 -6.9 l 32 0 0 -5.9 c 0 -19.2 -8.8 -34.4 -23.8 -41.4 -9.1 -4.1 -25.3 -4.9 -34.5 -1.7 z m 26.6 19.9 c 3.8 2.4 7.1 6.9 8.2 11.3 l 0.7 2.8 -20.7 0 -20.7 0 0.7 -2.8 c 2.9 -12.2 20.3 -18.4 31.8 -11.3 z"/><path d="M 605.7 41 c -5.2 1.3 -11 4.4 -15.2 8.1 l -3.5 3.1 0 -5.1 0 -5.2 -11.2 0.3 -11.3 0.3 -0.3 41.7 -0.2 41.8 11.4 0 11.5 0 0.3 -25.3 0.3 -25.2 2.7 -4.7 c 7.2 -12.2 26.2 -13.1 32.6 -1.5 1.5 2.8 1.7 6.8 2 29.9 l 0.3 26.8 11.5 0 11.5 0 -0.3 -31.3 c -0.3 -30.3 -0.4 -31.3 -2.7 -36.4 -6 -13.5 -23.7 -21.2 -39.4 -17.3 z"/><path d="M 682.6 42 c -36.1 11.5 -38.7 65.2 -4 81.2 4.2 2 6.6 2.3 16.4 2.3 12.3 0 15.5 -1 23.7 -7.1 4.3 -3.3 4.5 -3.1 3.7 2.8 -2.6 20.6 -26.9 27.7 -46.8 13.8 l -5.5 -3.9 -6.1 8.5 -6 8.5 2.7 2.5 c 4.3 3.8 16.4 9.3 24 10.9 22.3 4.8 43.3 -2.2 53.5 -17.7 7.3 -11 7.3 -11.3 7.3 -58.8 l 0 -42.5 -11 0 -11 0 -0.3 4.2 -0.3 4.2 -6.4 -4.3 c -9.8 -6.8 -22 -8.4 -33.9 -4.6 z m 28.9 21.5 c 12.7 7.4 14.6 27.5 3.4 36.9 -17 14.3 -41.5 -0.5 -36.8 -22.3 3.2 -15.3 19.9 -22.6 33.4 -14.6 z"/><path d="M 531.7 42.7 c -0.4 0.3 -0.7 19.2 -0.7 42 l 0 41.3 11.5 0 11.5 0 0 -42 0 -42 -10.8 0 c -6 0 -11.2 0.3 -11.5 0.7 z"/></svg>
+  </div>
+  <h1 class="abs"><span>Your first 10 clients.</span><em>Free, forever.</em></h1>
+  <p class="abs sub">No card. No time limit.</p>
+  <div class="badge" id="badge">
+    <div class="row"><b>Free</b><small>8 of 10 clients</small></div>
+    <div class="segs"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+  </div>
+  <div class="abs actions">
+    <span class="cta">Start free <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    <span class="url">leadwing.app</span>
+  </div>
+  <p class="abs cat" id="cat">The CRM for independent agents on the Costa del Sol</p>
+  <div id="grain"></div>
+</div>
+<script>
+const q = new URLSearchParams(location.search);
+const ad = document.getElementById("ad");
+ad.dataset.t = q.get("t") || "night";
+if (ad.dataset.t === "paper") document.getElementById("shot").src = "../screenshots/buyers-light-1280x900@3x.png";
+if (q.get("cta")) { const [x, y] = q.get("cta").split(","); Object.assign(document.querySelector(".actions").style, { left: x + "px", top: y + "px" }); }
+for (const [k, v] of q) if (k.startsWith("--")) ad.style.setProperty(k, v);
+if (q.get("badge") === "0") document.getElementById("badge").style.display = "none";
+else if (q.get("badge")) { const [x, y, w] = q.get("badge").split(",").map(Number); Object.assign(document.getElementById("badge").style, { left: x + "px", top: y + "px", width: w + "px" }); }
+const c = document.createElement("canvas"); c.width = c.height = 256;
+const x = c.getContext("2d"); const img = x.createImageData(256, 256);
+for (let i = 0; i < img.data.length; i += 4) { const n = Math.random() * 255; img.data[i] = img.data[i + 1] = img.data[i + 2] = n; img.data[i + 3] = 255; }
+x.putImageData(img, 0, 0);
+document.getElementById("grain").style.backgroundImage = `url(${c.toDataURL()})`;
+window.__ready = Promise.all([document.fonts.ready, new Promise((r) => { const im = document.getElementById("shot"); im.complete && im.naturalWidth ? r() : (im.onload = r); })]);
+</script>
+</body>
+</html>

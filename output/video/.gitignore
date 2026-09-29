@@ -1,0 +1,5 @@
+# Rendered masters (~15 MB each) and review frames stay local; re-render with record.mjs.
+# The web-sized cuts the landing plays live in public/video.
+*.mp4
+*.wav
+frames/

@@ -1,5 +1,7 @@
 # LeadWing Facebook artwork
 
+- `leadwing-cover-film.png`: cover in the launch film's look (`output/video`), 3280 × 1848 (a 1640 × 924, 16:9 canvas at 2×). The line is "Know who needs a follow-up. *Know what to say.*", and it shows the real drafted-message panel for Sofia. Phones show the whole image; desktop crops it to a ~2.7:1 band, so everything that matters sits between y 158 and 766 of the canvas, and the bottom-left stays empty for the profile picture. The source is `leadwing-cover-film.html`; re-render by screenshotting `#cover` with Playwright at deviceScaleFactor 2 (fonts come from Google Fonts, and the logo paths are copied from `src/lib/brand-mark.ts`).
+
 - `leadwing-cover-orange.png` — new cover, 2059 × 764, sculpted orange ribbons with the ivory logo and leadwing.app. Created using Imagegen; see `orange-cover-prompt.md` for the exact prompt. Keep it centered when positioning it.
 - `leadwing-profile.png` — 1024 × 1024, ivory wing on charcoal, with space for a circular profile crop.
 - `leadwing-cover.png` — earlier ivory cover, 1702 × 630, preserved as an alternative.
