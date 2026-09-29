@@ -5,9 +5,17 @@ import TurndownService from "turndown";
 /**
  * What isn't the page's content: site chrome, code, and whatever the page
  * itself hides from assistive technology, such as decorative mockups and icons.
+ * Headers and footers are only chrome as the site's own (see SECTIONING).
  */
 const NOT_CONTENT =
-  "script, style, noscript, template, svg, iframe, header, nav, footer, [hidden], [aria-hidden='true']";
+  "script, style, noscript, template, svg, iframe, nav, [hidden], [aria-hidden='true']";
+
+/**
+ * HTML's rule for when a <header> or <footer> stops being the site's banner or
+ * footer: inside one of these, it belongs to that part of the page, like the
+ * title, lead and date a written page opens <main> with.
+ */
+const SECTIONING = "main, article, aside, nav, section";
 
 /** Tailwind layouts whose children are separate boxes, spaced by gap rather than text. */
 const BOX_LAYOUT = /(?:^|\s)(?:inline-)?(?:flex|grid)(?:\s|$)/;
@@ -43,6 +51,11 @@ export function htmlToMarkdown(html: string, pageUrl: string): string {
 
   const content = doc.querySelector("main") ?? doc.body;
   for (const node of all(content, NOT_CONTENT)) node.remove();
+  for (const node of all(content, "header, footer")) {
+    if (!node.parentElement?.closest(SECTIONING)) node.remove();
+  }
+  // What a header keeps is the title block; its buttons are calls to action.
+  for (const button of all(content, "header [data-slot='button']")) button.remove();
   // "€0" and "forever" sit side by side in a flex row; without a space between
   // the boxes they would run together as "€0forever".
   for (const box of all(content, "[class]")) {
