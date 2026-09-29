@@ -20,6 +20,7 @@ const SOURCES = {
   rirpf: "https://www.boe.es/buscar/act.php?id=BOE-A-2007-6820#a95",
   ruling: "https://petete.tributos.hacienda.gob.es/consultas/?num_consulta=V2188-21",
   colegios: "https://www.boe.es/buscar/act.php?id=BOE-A-1974-289#a14",
+  lau: "https://www.boe.es/buscar/act.php?id=BOE-A-1994-26003#a20",
 } as const;
 
 function Source({ href, children }: { href: string; children: React.ReactNode }) {
@@ -84,6 +85,21 @@ function Body() {
       <p>
         Si la cifra que tienes es de las segundas, activa “Estos honorarios ya incluyen el IVA”
         y la calculadora quitará el impuesto antes de repartir nada.
+      </p>
+
+      <h2>Alquiler: meses de renta o una parte de la renta anual</h2>
+      <p>
+        En un alquiler, los honorarios se fijan en meses de renta, como un porcentaje de la
+        renta de un año o como un importe fijo. Elige “Alquiler”, introduce la renta mensual y
+        los honorarios tal como los diga tu acuerdo; el impuesto, el reparto con otra agencia,
+        tu parte y el IRPF funcionan exactamente igual que en una venta.
+      </p>
+      <p>
+        En un arrendamiento de vivienda, la ley pone los honorarios de la agencia a cargo del
+        arrendador: desde la Ley 12/2023, el{" "}
+        <Source href={SOURCES.lau}>artículo 20.1 de la Ley de Arrendamientos Urbanos</Source>{" "}
+        dice que los gastos de gestión inmobiliaria y los de formalización del contrato son a
+        cargo del arrendador.
       </p>
 
       <h2>Cómo se reparte una comisión compartida entre dos agencias</h2>
@@ -163,7 +179,7 @@ function Body() {
 export const content: MarketingPageContent = {
   title: "Calculadora de comisión inmobiliaria con IVA y reparto",
   description:
-    "Calculadora gratuita de comisión inmobiliaria: honorarios con IVA o IGIC, el reparto entre dos agencias, tu parte y la retención de IRPF de tu factura.",
+    "Calculadora gratuita de comisión inmobiliaria para venta y alquiler: honorarios con IVA o IGIC, reparto entre agencias, tu parte y la retención de IRPF.",
   kind: "tool",
   published: "2026-09-29",
   eyebrow: "Herramienta gratuita",
@@ -186,6 +202,10 @@ export const content: MarketingPageContent = {
     {
       q: "¿Qué retención de IRPF lleva la factura de un agente inmobiliario?",
       a: "Cuando un agente autónomo con la actividad dada de alta como profesional factura a una empresa o a un profesional, quien paga retiene el 15 % de la base, o el 7 % el año de inicio de la actividad y los dos siguientes. Las facturas a particulares no llevan retención.",
+    },
+    {
+      q: "¿Quién paga los honorarios de la agencia en un alquiler?",
+      a: "En un arrendamiento de vivienda, el arrendador: desde la Ley 12/2023, el artículo 20.1 de la Ley de Arrendamientos Urbanos pone a su cargo los gastos de gestión inmobiliaria y los de formalización del contrato.",
     },
     {
       q: "¿Hay una comisión estándar en España?",

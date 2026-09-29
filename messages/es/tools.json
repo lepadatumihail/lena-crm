@@ -1,12 +1,19 @@
 {
   "commission": {
     "form": {
+      "deal": "Tipo de operación",
+      "dealSale": "Venta",
+      "dealRent": "Alquiler",
+      "rent": "Renta mensual (€)",
       "price": "Precio de venta (€)",
       "optional": "Opcional",
       "fee": "Honorarios de la agencia ({unit})",
       "feeBasis": "Cómo se fijan los honorarios",
       "feeBasisPercent": "% del precio",
       "feeBasisAmount": "Importe fijo",
+      "feeBasisMonths": "Meses de renta",
+      "feeBasisAnnual": "% de la renta anual",
+      "months": "meses",
       "includesTax": "Estos honorarios ya incluyen {tax, select, iva {el IVA} igic {el IGIC} other {el impuesto}}",
       "tax": "Impuesto sobre los honorarios",
       "igic": "IGIC {rate} (Canarias)",
@@ -54,6 +61,7 @@
     },
     "copy": {
       "price": "Precio: {price}",
+      "rent": "Renta mensual: {price}",
       "fee": "Honorarios: {net} + {tax} = {gross}",
       "split": "Reparto: vuestra agencia {other} · nuestra agencia {ours} (+ {taxName})",
       "link": "Calculado con LeadWing: {url}"

@@ -13,6 +13,7 @@ import { trackSiteEvent } from "@/lib/site-events";
 import { computeCommission, parsePercent, type CommissionBreakdown } from "@/lib/tools/commission";
 import {
   EMPTY_FIELDS,
+  FEE_TYPES,
   TAX_RATES,
   WITHHOLDING_CHOICES,
   WITHHOLDING_RATES,
@@ -20,6 +21,7 @@ import {
   fieldsFromQuery,
   queryFromFields,
   type CommissionFields,
+  type Deal,
   type FeeType,
   type TaxChoice,
   type WithholdingChoice,
@@ -58,8 +60,8 @@ function formatters(tag: string) {
     money,
     percent: (fraction: number) => percent.format(fraction),
     /** A number as the page's language writes it in an input: "437.500", "16.250,50", "3,5". */
-    text: (value: number, kind: "money" | "percent") =>
-      kind === "percent"
+    text: (value: number, kind: "money" | "number") =>
+      kind === "number"
         ? percentText.format(value)
         : (Number.isInteger(value) ? euros : cents).format(value),
   };
@@ -68,8 +70,9 @@ function formatters(tag: string) {
 type Formatters = ReturnType<typeof formatters>;
 
 /**
- * The commission calculator on /tools/commission-calculator: a fee, its tax,
- * the split with another agency, the agent's share and their own invoice.
+ * The commission calculator on /tools/commission-calculator: a fee on a sale
+ * or a rental, its tax, the split with another agency, the agent's share and
+ * their own invoice.
  * Every input starts empty (no rate is ever suggested) and the inputs live in
  * the URL, so a calculation can be sent as a link.
  */
@@ -138,9 +141,18 @@ export function CommissionCalculator() {
     rate: taxRate == null ? "" : format.percent(taxRate),
   }).trim();
   const withholding = WITHHOLDING_RATES[fields.withholding];
-  // The share of the price only says something new for a fixed fee, or a
-  // percentage that included the tax.
-  const showShare = fields.feeType === "eur" || fields.includesTax;
+  // The share of the price only says something new on a sale, for a fixed
+  // fee or a percentage that included the tax.
+  const showShare = fields.deal === "sale" && (fields.feeType === "eur" || fields.includesTax);
+
+  /** Rent and sale price mean different things: a new deal starts from scratch. */
+  function changeDeal(deal: Deal) {
+    setFields((current) =>
+      current.deal === deal
+        ? current
+        : { ...current, deal, price: "", feeType: FEE_TYPES[deal][0], fee: "" }
+    );
+  }
 
   async function copy(kind: "split" | "link") {
     const text = kind === "split" ? splitText() : linkText();
@@ -163,7 +175,9 @@ export function CommissionCalculator() {
     if (!input || !result || result.otherAgencyNet == null) return null;
     const lines = [
       input.price != null && input.price > 0
-        ? t("copy.price", { price: format.money.format(input.price) })
+        ? t(fields.deal === "rent" ? "copy.rent" : "copy.price", {
+            price: format.money.format(input.price),
+          })
         : null,
       t("copy.fee", {
         net: format.money.format(result.feeNet),
@@ -184,10 +198,18 @@ export function CommissionCalculator() {
     return `${window.location.origin}${window.location.pathname}${query ? `?${query}` : ""}`;
   }
 
-  const feeTypes: { value: FeeType; label: string }[] = [
-    { value: "pct", label: t("form.feeBasisPercent") },
-    { value: "eur", label: t("form.feeBasisAmount") },
+  const deals: { value: Deal; label: string }[] = [
+    { value: "sale", label: t("form.dealSale") },
+    { value: "rent", label: t("form.dealRent") },
   ];
+  const basisLabels: Record<FeeType, string> = {
+    pct: t("form.feeBasisPercent"),
+    eur: t("form.feeBasisAmount"),
+    mo: t("form.feeBasisMonths"),
+    yr: t("form.feeBasisAnnual"),
+  };
+  const feeTypes = FEE_TYPES[fields.deal].map((value) => ({ value, label: basisLabels[value] }));
+  const feeUnit = { pct: "%", yr: "%", eur: "€", mo: t("form.months") }[fields.feeType];
   const taxes: { value: TaxChoice; label: string }[] = [
     { value: "iva", label: t("taxLabel", { tax: "iva", rate: format.percent(TAX_RATES.iva) }) },
     { value: "igic", label: t("form.igic", { rate: format.percent(TAX_RATES.igic) }) },
@@ -206,7 +228,22 @@ export function CommissionCalculator() {
   return (
     <div className="bg-card overflow-hidden rounded-2xl border shadow-xs md:grid md:grid-cols-2">
       <div className="space-y-6 p-5 sm:p-6">
-        <Field id={`${id}-price`} label={t("form.price")} aside={fields.feeType === "eur" ? t("form.optional") : null}>
+        <div className="space-y-2.5">
+          <p className="text-sm leading-none">{t("form.deal")}</p>
+          <ChoiceChips
+            label={t("form.deal")}
+            items={deals}
+            value={fields.deal}
+            onChange={changeDeal}
+            className={CHIPS}
+          />
+        </div>
+
+        <Field
+          id={`${id}-price`}
+          label={t(fields.deal === "rent" ? "form.rent" : "form.price")}
+          aside={fields.feeType === "eur" ? t("form.optional") : null}
+        >
           <Input
             id={`${id}-price`}
             inputMode="decimal"
@@ -219,9 +256,7 @@ export function CommissionCalculator() {
         </Field>
 
         <div className="space-y-2.5">
-          <Label htmlFor={`${id}-fee`}>
-            {t("form.fee", { unit: fields.feeType === "pct" ? "%" : "€" })}
-          </Label>
+          <Label htmlFor={`${id}-fee`}>{t("form.fee", { unit: feeUnit })}</Label>
           <ChoiceChips
             label={t("form.feeBasis")}
             items={feeTypes}

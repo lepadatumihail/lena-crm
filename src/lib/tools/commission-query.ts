@@ -4,8 +4,11 @@
  * arithmetic's input (null until everything it needs is there). The query
  * string carries plain numbers, so a link reads the same in either language:
  *
- *   p    price in euros            ft   fee basis: "pct" or "eur"
- *   f    fee (a % or euros)        inc  "1" when the fee includes the tax
+ *   d    "rent" for a rental (a sale when absent)
+ *   p    price in euros: the sale price, or the monthly rent on a rental
+ *   ft   fee basis: "pct" or "eur" on a sale; "mo", "yr" or "eur" on a rental
+ *   f    fee: a %, euros, or months of rent
+ *   inc  "1" when the fee includes the tax
  *   tax  "igic" or a custom % (IVA when absent)
  *   o    the other agency's %      a    your share of our side, in %
  *   w    IRPF withheld: "7" or "15" (none when absent)
@@ -13,9 +16,21 @@
  * Nothing in it identifies anyone. Bad values are ignored on the way in.
  */
 import { parseMoney } from "@/lib/import/money";
-import { parsePercent, type CommissionInput } from "@/lib/tools/commission";
+import { parseMonths, parsePercent, type CommissionInput } from "@/lib/tools/commission";
 
-export type FeeType = "pct" | "eur";
+export type Deal = "sale" | "rent";
+
+/**
+ * How the fee is set: a % of the sale price, a fixed amount, a number of
+ * months of rent, or a % of a year's rent.
+ */
+export type FeeType = "pct" | "eur" | "mo" | "yr";
+
+/** The bases each kind of deal offers, the first being the one it starts on. */
+export const FEE_TYPES: Record<Deal, readonly FeeType[]> = {
+  sale: ["pct", "eur"],
+  rent: ["mo", "yr", "eur"],
+};
 export type TaxChoice = "iva" | "igic" | "other";
 
 /** In the order the chips show them: none, the general rate, the new-professional rate. */
@@ -32,6 +47,7 @@ export const WITHHOLDING_RATES: Record<WithholdingChoice, CommissionInput["withh
 };
 
 export type CommissionFields = {
+  deal: Deal;
   price: string;
   feeType: FeeType;
   fee: string;
@@ -47,6 +63,7 @@ export type CommissionFields = {
 
 /** The form as a first visit shows it: no fee, no split, no share. */
 export const EMPTY_FIELDS: CommissionFields = {
+  deal: "sale",
   price: "",
   feeType: "pct",
   fee: "",
@@ -63,7 +80,14 @@ export const EMPTY_FIELDS: CommissionFields = {
 const moneyOrNull = (raw: string) => (raw.trim() ? parseMoney(raw) : null);
 
 function feeValue(fields: CommissionFields): number | null {
-  return fields.feeType === "pct" ? parsePercent(fields.fee) : moneyOrNull(fields.fee);
+  if (fields.feeType === "eur") return moneyOrNull(fields.fee);
+  return fields.feeType === "mo" ? parseMonths(fields.fee) : parsePercent(fields.fee);
+}
+
+function feeBasis(feeType: FeeType, value: number): CommissionInput["fee"] {
+  if (feeType === "eur") return { kind: "amount", amount: value };
+  if (feeType === "mo") return { kind: "months", months: value };
+  return { kind: feeType === "yr" ? "annualPercent" : "percent", percent: value };
 }
 
 function taxRate(fields: CommissionFields): number | null {
@@ -84,7 +108,7 @@ export function commissionInput(fields: CommissionFields): CommissionInput | nul
   if ((fields.shared && other == null) || (fields.agentSplit && agent == null)) return null;
   return {
     price,
-    fee: fields.feeType === "pct" ? { kind: "percent", percent: fee } : { kind: "amount", amount: fee },
+    fee: feeBasis(fields.feeType, fee),
     feeIncludesTax: fields.includesTax,
     taxRate: tax,
     otherAgencyPercent: other,
@@ -96,6 +120,7 @@ export function commissionInput(fields: CommissionFields): CommissionInput | nul
 /** The query string for a link that restores these fields; "" for an empty form. */
 export function queryFromFields(fields: CommissionFields): string {
   const query = new URLSearchParams();
+  if (fields.deal === "rent") query.set("d", "rent");
   const price = moneyOrNull(fields.price);
   if (price != null) query.set("p", String(price));
   const fee = feeValue(fields);
@@ -119,24 +144,28 @@ export function queryFromFields(fields: CommissionFields): string {
 
 /**
  * The fields a link carries, written back as text in the page's language by
- * `format` ("437.500" in Spanish, "437,500" in English). Anything unreadable
- * is left at its empty value.
+ * `format` ("437.500" in Spanish, "437,500" in English; "number" is a plain
+ * decimal such as a % or a count of months). Anything unreadable is left at
+ * its empty value.
  */
 export function fieldsFromQuery(
   search: string,
-  format: (value: number, kind: "money" | "percent") => string
+  format: (value: number, kind: "money" | "number") => string
 ): CommissionFields {
   const query = new URLSearchParams(search);
   const fields: CommissionFields = { ...EMPTY_FIELDS };
   const read = (key: string) => query.get(key)?.trim() ?? "";
 
+  fields.deal = read("d") === "rent" ? "rent" : "sale";
+
   const price = read("p") ? parseMoney(read("p")) : null;
   if (price != null && price > 0) fields.price = format(price, "money");
 
-  const feeType: FeeType = read("ft") === "eur" ? "eur" : "pct";
-  const fee = feeType === "pct" ? parsePercent(read("f")) : read("f") ? parseMoney(read("f")) : null;
+  const bases = FEE_TYPES[fields.deal];
+  const feeType = bases.find((basis) => basis === read("ft")) ?? bases[0];
   fields.feeType = feeType;
-  if (fee != null) fields.fee = format(fee, feeType === "pct" ? "percent" : "money");
+  const fee = feeValue({ ...fields, fee: read("f") });
+  if (fee != null) fields.fee = format(fee, feeType === "eur" ? "money" : "number");
 
   fields.includesTax = read("inc") === "1";
 
@@ -145,18 +174,18 @@ export function fieldsFromQuery(
   if (tax === "igic") fields.tax = "igic";
   else if (tax !== "iva" && custom != null) {
     fields.tax = "other";
-    fields.customTax = format(custom, "percent");
+    fields.customTax = format(custom, "number");
   }
 
   const other = parsePercent(read("o"));
   if (other != null) {
     fields.shared = true;
-    fields.otherShare = format(other, "percent");
+    fields.otherShare = format(other, "number");
   }
   const agent = parsePercent(read("a"));
   if (agent != null) {
     fields.agentSplit = true;
-    fields.agentShare = format(agent, "percent");
+    fields.agentShare = format(agent, "number");
   }
 
   const withholding = read("w");

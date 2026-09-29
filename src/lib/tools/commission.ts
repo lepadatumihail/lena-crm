@@ -1,7 +1,8 @@
 /**
  * The arithmetic behind the commission calculator, a free public tool: the
- * fee and its tax, the split with another agency, the agent's share of their
- * agency's side, and the agent's own invoice with IRPF withheld.
+ * fee and its tax (on a sale or a rental), the split with another agency, the
+ * agent's share of their agency's side, and the agent's own invoice with IRPF
+ * withheld.
  *
  * Pure functions, no React. Money is whole cents inside and euros at the
  * edges; percentages and rates become parts per million, so every line is
@@ -12,10 +13,18 @@
 
 export type FeeBasis =
   | { kind: "percent"; percent: number }
-  | { kind: "amount"; amount: number };
+  | { kind: "amount"; amount: number }
+  /** A rental: the monthly rent (`price`) times a number of months. */
+  | { kind: "months"; months: number }
+  /** A rental: a percentage of a year's rent (twelve times `price`). */
+  | { kind: "annualPercent"; percent: number };
 
 export type CommissionInput = {
-  /** Sale price in euros; required when the fee is a percentage. */
+  /**
+   * In euros: the sale price, or the monthly rent when the fee is counted in
+   * months of rent or as a percentage of a year's rent. Required whenever the
+   * fee depends on it.
+   */
   price: number | null;
   fee: FeeBasis;
   /** The fee as entered already includes the tax. */
@@ -34,7 +43,7 @@ export type CommissionBreakdown = {
   feeNet: number;
   feeTax: number;
   feeGross: number;
-  /** feeNet ÷ price when the price is known; for display only. */
+  /** feeNet ÷ price when a sale price is known; for display only. */
   feeShareOfPrice: number | null;
   /** null when the fee isn't shared. */
   otherAgencyNet: number | null;
@@ -50,6 +59,9 @@ export type CommissionBreakdown = {
 };
 
 const PPM = 1_000_000;
+
+/** The most months of rent a fee can be counted in: anything above is a typo. */
+const MAX_MONTHS = 120;
 
 /** amount × num ÷ den, rounded half up. BigInt, so no product ever loses a digit. */
 function mulDiv(amount: number, num: number, den: number): number {
@@ -91,16 +103,26 @@ export function computeCommission(input: CommissionInput): CommissionBreakdown |
   if (input.agentPercent != null && agent == null) return null;
   if (input.price != null && price == null) return null;
 
+  const { fee } = input;
   let entered: number;
-  if (input.fee.kind === "percent") {
-    const rate = percentPpm(input.fee.percent);
-    if (rate == null || price == null || price <= 0) return null;
-    entered = mulDiv(price, rate, PPM);
-  } else {
-    const amount = toCents(input.fee.amount);
+  if (fee.kind === "amount") {
+    const amount = toCents(fee.amount);
     if (amount == null) return null;
     entered = amount;
+  } else {
+    // Every other basis is worked out of the price (or the monthly rent).
+    if (price == null || price <= 0) return null;
+    if (fee.kind === "months") {
+      const { months } = fee;
+      if (!Number.isFinite(months) || months < 0 || months > MAX_MONTHS) return null;
+      entered = mulDiv(price, Math.round(months * PPM), PPM);
+    } else {
+      const rate = percentPpm(fee.percent);
+      if (rate == null) return null;
+      entered = mulDiv(fee.kind === "annualPercent" ? price * 12 : price, rate, PPM);
+    }
   }
+  if (!Number.isSafeInteger(entered)) return null;
 
   // Tax included: the base is what, taxed, gives the amount entered.
   const feeNet = input.feeIncludesTax ? mulDiv(entered, PPM, PPM + tax) : entered;
@@ -121,7 +143,10 @@ export function computeCommission(input: CommissionInput): CommissionBreakdown |
     feeNet: toEuros(feeNet),
     feeTax: toEuros(feeTax),
     feeGross: toEuros(feeNet + feeTax),
-    feeShareOfPrice: price != null && price > 0 ? feeNet / price : null,
+    feeShareOfPrice:
+      price != null && price > 0 && (fee.kind === "percent" || fee.kind === "amount")
+        ? feeNet / price
+        : null,
     otherAgencyNet: otherAgency == null ? null : toEuros(otherAgency),
     ourSideNet: toEuros(ourSide),
     agencyKeepsNet: agencyKeeps == null ? null : toEuros(agencyKeeps),
@@ -132,10 +157,19 @@ export function computeCommission(input: CommissionInput): CommissionBreakdown |
   };
 }
 
-/** "3,5" → 3.5, "3.5 %" → 3.5; "" and anything outside 0–100 → null. */
-export function parsePercent(raw: string): number | null {
-  const text = raw.trim().replace(/\s*%$/, "");
+/** A plain decimal as typed, "1,5" or "1.5"; null for "", text, a sign, or more than `max`. */
+function parseDecimal(text: string, max: number): number | null {
   if (!/^(?:\d+(?:[.,]\d*)?|[.,]\d+)$/.test(text)) return null;
   const value = Number(text.replace(",", "."));
-  return Number.isFinite(value) && value <= 100 ? value : null;
+  return Number.isFinite(value) && value <= max ? value : null;
+}
+
+/** "3,5" → 3.5, "3.5 %" → 3.5; "" and anything outside 0–100 → null. */
+export function parsePercent(raw: string): number | null {
+  return parseDecimal(raw.trim().replace(/\s*%$/, ""), 100);
+}
+
+/** A number of months of rent: "1,5" → 1.5; "" and anything outside 0–120 → null. */
+export function parseMonths(raw: string): number | null {
+  return parseDecimal(raw.trim(), MAX_MONTHS);
 }

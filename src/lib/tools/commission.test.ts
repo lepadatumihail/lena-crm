@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   computeCommission,
+  parseMonths,
   parsePercent,
   type CommissionBreakdown,
   type CommissionInput,
@@ -59,6 +60,35 @@ describe("computeCommission: the fee and its tax", () => {
   it("rounds a half cent of tax up", () => {
     // 150 cents × 21% is exactly 31.5 cents; floating point would make it 31.4999…
     expect(compute({ fee: { kind: "amount", amount: 1.5 } }).feeTax).toBe(0.32);
+  });
+});
+
+describe("computeCommission: a rental", () => {
+  it("counts the fee in months of the monthly rent, to the cent", () => {
+    expect(compute({ price: 1_500, fee: { kind: "months", months: 1 } }).feeNet).toBe(1_500);
+    expect(compute({ price: 1_850, fee: { kind: "months", months: 1.5 } }).feeNet).toBe(2_775);
+    expect(compute({ price: 1_333.33, fee: { kind: "months", months: 2 } }).feeNet).toBe(2_666.66);
+  });
+
+  it("takes a percentage of a year's rent", () => {
+    const r = compute({ price: 1_850, fee: { kind: "annualPercent", percent: 10 } });
+    expect([r.feeNet, r.feeTax, r.feeGross]).toEqual([2_220, 466.2, 2_686.2]);
+  });
+
+  it("gives no share of the price for a rent-based fee", () => {
+    expect(compute({ price: 1_850, fee: { kind: "months", months: 1 } }).feeShareOfPrice).toBeNull();
+    expect(
+      compute({ price: 1_850, fee: { kind: "annualPercent", percent: 10 } }).feeShareOfPrice
+    ).toBeNull();
+  });
+
+  it.each<[string, Partial<CommissionInput>]>([
+    ["months without a rent", { fee: { kind: "months", months: 1 } }],
+    ["a negative number of months", { price: 1_000, fee: { kind: "months", months: -1 } }],
+    ["more than 120 months", { price: 1_000, fee: { kind: "months", months: 121 } }],
+    ["an annual percentage over 100", { price: 1_000, fee: { kind: "annualPercent", percent: 101 } }],
+  ])("returns null for %s", (_, overrides) => {
+    expect(computeCommission(input(overrides))).toBeNull();
   });
 });
 
@@ -126,6 +156,21 @@ describe("computeCommission: incomplete or out-of-range input", () => {
   });
 });
 
+describe("parseMonths", () => {
+  it.each<[string, number | null]>([
+    ["1", 1],
+    ["1,5", 1.5],
+    [" 2 ", 2],
+    ["120", 120],
+    ["121", null],
+    ["", null],
+    ["-1", null],
+    ["un mes", null],
+  ])("reads %j as %s", (raw, value) => {
+    expect(parseMonths(raw)).toBe(value);
+  });
+});
+
 describe("parsePercent", () => {
   it.each<[string, number | null]>([
     ["3,5", 3.5],
@@ -167,12 +212,16 @@ describe("computeCommission: every breakdown adds up to the cent", () => {
     let checked = 0;
 
     for (let i = 0; i < 500; i++) {
-      const byPercent = random() < 0.5;
+      const basis = pick(["percent", "amount", "months", "annualPercent"] as const);
+      const fee: CommissionInput["fee"] =
+        basis === "amount"
+          ? { kind: "amount", amount: money(500_000) }
+          : basis === "months"
+            ? { kind: "months", months: Math.round(random() * 1200) / 100 }
+            : { kind: basis, percent: percent() };
       const case_: CommissionInput = {
-        price: byPercent || random() < 0.5 ? money(5_000_000) + 1 : null,
-        fee: byPercent
-          ? { kind: "percent", percent: percent() }
-          : { kind: "amount", amount: money(500_000) },
+        price: basis !== "amount" || random() < 0.5 ? money(5_000_000) + 1 : null,
+        fee,
         feeIncludesTax: random() < 0.5,
         taxRate: pick([0.21, 0.07, 0, Math.round(random() * 3000) / 10_000]),
         otherAgencyPercent: random() < 0.5 ? percent() : null,

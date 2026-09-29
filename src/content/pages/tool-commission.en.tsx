@@ -20,6 +20,7 @@ const SOURCES = {
   rirpf: "https://www.boe.es/buscar/act.php?id=BOE-A-2007-6820#a95",
   ruling: "https://petete.tributos.hacienda.gob.es/consultas/?num_consulta=V2188-21",
   colegios: "https://www.boe.es/buscar/act.php?id=BOE-A-1974-289#a14",
+  lau: "https://www.boe.es/buscar/act.php?id=BOE-A-1994-26003#a20",
 } as const;
 
 function Source({ href, children }: { href: string; children: React.ReactNode }) {
@@ -82,6 +83,20 @@ function Body() {
       <p>
         If the number you have is the second kind, switch on “This fee already includes IVA”
         and the calculator takes the tax out before splitting anything.
+      </p>
+
+      <h2>Rentals: months of rent or a share of the annual rent</h2>
+      <p>
+        On a rental, the fee is set as a number of months of rent, as a percentage of a
+        year&apos;s rent, or as a fixed amount. Choose “Rental”, enter the monthly rent and the
+        fee as your agreement states it; the tax, the split with another agency, your share
+        and IRPF then work exactly as they do on a sale.
+      </p>
+      <p>
+        On a housing rental (<em>arrendamiento de vivienda</em>), the law puts the agency&apos;s
+        fees on the landlord: since Ley 12/2023,{" "}
+        <Source href={SOURCES.lau}>article 20.1 of the Ley de Arrendamientos Urbanos</Source>{" "}
+        makes real estate management and contract formalisation costs the landlord&apos;s.
       </p>
 
       <h2>How a shared commission flows between two agencies</h2>
@@ -160,7 +175,7 @@ function Body() {
 export const content: MarketingPageContent = {
   title: "Real estate commission calculator for Spain: VAT and splits",
   description:
-    "Free real estate commission calculator for Spain: the fee with VAT or IGIC, the split between two agencies, your share and the IRPF withheld on your invoice.",
+    "Free real estate commission calculator for Spain, for sales and rentals: the fee with VAT or IGIC, the split between agencies, your share and the IRPF withheld.",
   kind: "tool",
   published: "2026-09-29",
   eyebrow: "Free tool",
@@ -183,6 +198,10 @@ export const content: MarketingPageContent = {
     {
       q: "What IRPF withholding goes on an agent's invoice?",
       a: "When a self-employed agent whose activity is registered as a professional one invoices a business or a professional, the payer withholds 15% of the base, or 7% in the year the activity starts and the two years after. Invoices to private clients carry no withholding.",
+    },
+    {
+      q: "Who pays the agency's fee on a rental?",
+      a: "On a housing rental (arrendamiento de vivienda), the landlord: since Ley 12/2023, article 20.1 of the Ley de Arrendamientos Urbanos makes real estate management and contract formalisation costs the landlord's.",
     },
     {
       q: "Is there a standard commission rate in Spain?",

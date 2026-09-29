@@ -9,13 +9,14 @@ import {
 } from "./commission-query";
 
 /** Numbers back to text the way the Spanish page writes them. */
-const spanish = (value: number, kind: "money" | "percent") =>
+const spanish = (value: number, kind: "money" | "number") =>
   new Intl.NumberFormat("es-ES", {
     maximumFractionDigits: kind === "money" ? 2 : 4,
     useGrouping: kind === "money",
   }).format(value);
 
 const filled: CommissionFields = {
+  deal: "sale",
   price: "437.500",
   feeType: "pct",
   fee: "3,5",
@@ -99,5 +100,44 @@ describe("the link", () => {
     expect(fieldsFromQuery("?p=abc&ft=usd&f=-3&tax=vat&o=150&a=&w=20&inc=yes", spanish)).toEqual(
       EMPTY_FIELDS
     );
+  });
+
+  it("carries a rental, its monthly rent and a fee in months", () => {
+    const fields: CommissionFields = {
+      ...EMPTY_FIELDS,
+      deal: "rent",
+      price: "1.850",
+      feeType: "mo",
+      fee: "1,5",
+    };
+    expect(queryFromFields(fields)).toBe("d=rent&p=1850&ft=mo&f=1.5");
+    expect(fieldsFromQuery("?d=rent&p=1850&ft=mo&f=1.5", spanish)).toEqual(fields);
+  });
+
+  it("keeps each deal to its own fee bases", () => {
+    expect(fieldsFromQuery("?ft=mo&f=2", spanish).feeType).toBe("pct");
+    expect(fieldsFromQuery("?d=rent&ft=pct&f=2", spanish).feeType).toBe("mo");
+    expect(fieldsFromQuery("?d=rent&ft=yr&f=10", spanish)).toMatchObject({ feeType: "yr", fee: "10" });
+    expect(fieldsFromQuery("?d=rent&ft=eur&f=900", spanish)).toMatchObject({ feeType: "eur", fee: "900" });
+  });
+});
+
+describe("commissionInput on a rental", () => {
+  const rental = { ...EMPTY_FIELDS, deal: "rent" as const, price: "1.850" };
+
+  it("reads months of rent and a percentage of the annual rent", () => {
+    expect(commissionInput({ ...rental, feeType: "mo", fee: "1,5" })?.fee).toEqual({
+      kind: "months",
+      months: 1.5,
+    });
+    expect(commissionInput({ ...rental, feeType: "yr", fee: "8" })?.fee).toEqual({
+      kind: "annualPercent",
+      percent: 8,
+    });
+  });
+
+  it("is null for a count of months it can't read", () => {
+    expect(commissionInput({ ...rental, feeType: "mo", fee: "121" })).toBeNull();
+    expect(commissionInput({ ...rental, feeType: "mo", fee: "uno" })).toBeNull();
   });
 });

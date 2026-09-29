@@ -1,12 +1,19 @@
 {
   "commission": {
     "form": {
+      "deal": "Type of deal",
+      "dealSale": "Sale",
+      "dealRent": "Rental",
+      "rent": "Monthly rent (€)",
       "price": "Sale price (€)",
       "optional": "Optional",
       "fee": "Agency fee ({unit})",
       "feeBasis": "How the fee is set",
       "feeBasisPercent": "% of the price",
       "feeBasisAmount": "Fixed amount",
+      "feeBasisMonths": "Months of rent",
+      "feeBasisAnnual": "% of the annual rent",
+      "months": "months",
       "includesTax": "This fee already includes {tax, select, iva {IVA} igic {IGIC} other {the tax}}",
       "tax": "Tax on the fee",
       "igic": "IGIC {rate} (Canarias)",
@@ -54,6 +61,7 @@
     },
     "copy": {
       "price": "Price: {price}",
+      "rent": "Monthly rent: {price}",
       "fee": "Fee: {net} + {tax} = {gross}",
       "split": "Split: your agency {other} · our agency {ours} (+ {taxName})",
       "link": "Worked out with LeadWing: {url}"
