@@ -47,6 +47,12 @@ export type MarketingPageContent = {
   Body: ComponentType;
   /** 3–6 page-specific entries, rendered as <details> and emitted as FAQPage JSON-LD. */
   faq: MarketingFaq[];
+  /**
+   * What the page is about, for structured data, when that is neither the
+   * product nor the company: a guide to a law names the law. A plain
+   * schema.org node; without it, pageJsonLd picks the subject itself.
+   */
+  topic?: { "@type": string; name: string } & Record<string, unknown>;
   /** 2–4 sibling routes shown as cards at the end; labels and blurbs come from marketing.json. */
   related: MarketingRoute[];
 };

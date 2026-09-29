@@ -75,6 +75,7 @@ export const PUBLISHED: Record<ContentRoute, string> = {
   crmMarbella: "2026-09-13",
   guideIdealista: "2026-09-13",
   guideFollowUp: "2026-09-13",
+  guideAndaluciaRegister: "2026-09-29",
   about: "2026-09-15",
 };
 
@@ -295,7 +296,7 @@ export async function pageJsonLd(
         author: { "@id": ORGANIZATION_ID },
         publisher: { "@id": ORGANIZATION_ID },
         isPartOf: { "@id": WEBSITE_ID },
-        about: subject,
+        about: content.topic ?? subject,
         ...(aboutPage ? { mainEntity: subject } : {}),
       },
       {

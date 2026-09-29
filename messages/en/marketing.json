@@ -47,6 +47,10 @@
       "label": "Lead follow-up",
       "blurb": "A follow-up cadence for buyers, with messages you can send as they are."
     },
+    "guideAndaluciaRegister": {
+      "label": "Andalusia agent register",
+      "blurb": "What Ley 5/2025 says about registering as an agent, and what changed in September 2026."
+    },
     "about": {
       "label": "About LeadWing",
       "blurb": "What LeadWing is, who it is for, the key facts and how to reach us."

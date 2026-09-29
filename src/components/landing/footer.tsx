@@ -12,8 +12,11 @@ const LEGAL_LINKS = ["privacy", "terms", "legalNotice"] as const;
 
 const PRODUCT_LINKS = ["pricing", "crmSpain", "crmMarbella", "about"] as const satisfies
   readonly LinkedRoute[];
-const GUIDE_LINKS = ["guideIdealista", "guideFollowUp"] as const satisfies
-  readonly LinkedRoute[];
+const GUIDE_LINKS = [
+  "guideIdealista",
+  "guideFollowUp",
+  "guideAndaluciaRegister",
+] as const satisfies readonly LinkedRoute[];
 
 /**
  * Shared by the landing, pricing, legal and written pages; links follow the

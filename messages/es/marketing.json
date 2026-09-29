@@ -47,6 +47,10 @@
       "label": "Seguimiento de leads",
       "blurb": "Una cadencia de seguimiento para compradores, con mensajes listos para enviar."
     },
+    "guideAndaluciaRegister": {
+      "label": "Registro de agentes en Andalucía",
+      "blurb": "Qué dice la Ley 5/2025 sobre inscribirse como agente y qué cambió en septiembre de 2026."
+    },
     "about": {
       "label": "Sobre LeadWing",
       "blurb": "Qué es LeadWing, para quién es, los datos clave y cómo contactar con nosotros."

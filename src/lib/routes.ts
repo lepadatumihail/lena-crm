@@ -52,6 +52,10 @@ export const MARKETING_ROUTES = {
     en: "/guides/real-estate-lead-follow-up",
     es: "/es/guias/seguimiento-leads-inmobiliarios",
   },
+  guideAndaluciaRegister: {
+    en: "/guides/andalusia-agent-register",
+    es: "/es/guias/registro-agentes-inmobiliarios-andalucia",
+  },
   about: { en: "/about", es: "/es/sobre-nosotros" },
   privacy: { en: "/privacy", es: "/es/privacidad" },
   terms: { en: "/terms", es: "/es/terminos" },
@@ -87,6 +91,7 @@ export const CONTENT_ROUTES = [
   "crmMarbella",
   "guideIdealista",
   "guideFollowUp",
+  "guideAndaluciaRegister",
   "about",
 ] as const satisfies readonly MarketingRoute[];
 
@@ -108,6 +113,7 @@ export const LINKED_ROUTES = [
   "crmMarbella",
   "guideIdealista",
   "guideFollowUp",
+  "guideAndaluciaRegister",
   "about",
 ] as const satisfies readonly MarketingRoute[];
 

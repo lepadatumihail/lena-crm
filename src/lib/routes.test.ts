@@ -44,6 +44,8 @@ describe("isProtectedPath", () => {
     "/es/precios",
     "/real-estate-crm-spain",
     "/guides/idealista-lead-management",
+    "/guides/andalusia-agent-register",
+    "/es/guias/registro-agentes-inmobiliarios-andalucia",
     "/login",
     "/auth/callback",
     "/join/abc",
@@ -136,6 +138,12 @@ describe("marketing routes", () => {
     expect(marketingCounterpart("/es/precios", "en")).toBe("/pricing");
     expect(marketingCounterpart("/about", "es")).toBe("/es/sobre-nosotros");
     expect(marketingCounterpart("/es/sobre-nosotros", "en")).toBe("/about");
+    expect(marketingCounterpart("/guides/andalusia-agent-register", "es")).toBe(
+      "/es/guias/registro-agentes-inmobiliarios-andalucia"
+    );
+    expect(
+      marketingCounterpart("/es/guias/registro-agentes-inmobiliarios-andalucia", "en")
+    ).toBe("/guides/andalusia-agent-register");
   });
 
   it("lists hreflang alternates with English as x-default", () => {
