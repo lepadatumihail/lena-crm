@@ -17,17 +17,17 @@ export type SellerStage = (typeof SELLER_STAGES)[number];
 export type Stage = BuyerStage | SellerStage;
 
 /**
- * One tone per stage, shared by pills, dots and stacked bars: blue while a
- * lead is new, outlined and then grey while they are worked, violet once
+ * One tone per stage, shared by pills, dots and stacked bars: indigo while a
+ * lead is new, outlined and then grey while they are worked, teal once
  * they are viewing, green when reserved. A seller waiting on a valuation is
  * yellow. A seller's Qualified matches a buyer's, so the word always looks
  * the same.
  */
 export const STAGE_TONES: Record<Stage, Tone> = {
-  new: "blue",
+  new: "indigo",
   contacted: "neutral",
   qualified: "grey",
-  viewing: "violet",
+  viewing: "teal",
   reserved: "green",
   pending: "amber",
 };

@@ -97,7 +97,7 @@ function VisualPortal() {
             {t("newLead", { name: "Anya Petrova" })}
           </p>
           {/* Blue, the New stage's tone: the lead arrived filled in. */}
-          <span className={cn("rounded-full border px-1.5 py-0.5 text-[9px] font-medium", TONE_TAG.blue)}>
+          <span className={cn("rounded-full border px-1.5 py-0.5 text-[9px] font-medium", TONE_TAG.indigo)}>
             {t("portal.aiFilled")}
           </span>
         </div>

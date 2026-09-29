@@ -231,7 +231,7 @@ export async function PricingPage({ locale }: { locale: AppLocale }) {
                   ? tBilling("founding.spots", { count: spotsLeft })
                   : tBilling("pricing.cohortFull")
               }
-              badgeTone={founding ? "blue" : "neutral"}
+              badgeTone={founding ? "indigo" : "neutral"}
             />
           </Reveal>
           <Reveal delay={80}>

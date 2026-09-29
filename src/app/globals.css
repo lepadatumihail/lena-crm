@@ -4,10 +4,11 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  Mono: pure grey surfaces, ink for actions and emphasis. Colour is kept for
-  meaning only: the badge palette below (blue, green, amber, red, violet), mapped to
-  stages, events and statuses in src/lib/tones.ts. Dark mode keeps its warm
-  near-black surfaces; its actions turn near-white.
+  Grey surfaces with one brand colour: indigo for actions, the logo's wing and
+  what is new. Every other colour carries a meaning: the badge palette below
+  (indigo, teal, green, amber, red), mapped to stages, events and statuses in
+  src/lib/tones.ts. Dark mode keeps its warm near-black surfaces; its indigo
+  steps up a shade.
 */
 :root {
   color-scheme: light;
@@ -22,9 +23,11 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.205 0 0);
 
-  /* Ink: buttons, checked controls, the current tab. */
-  --primary: oklch(0.205 0 0);
+  /* Indigo: buttons, checked controls, today. White text on it is 5.9:1. */
+  --primary: oklch(0.51 0.2 275);
   --primary-foreground: oklch(0.985 0 0);
+  /* The logo's wing: the primary by day, a lighter indigo at night. */
+  --brand: var(--primary);
 
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.269 0 0);
@@ -51,11 +54,15 @@
 
   /*
     The badge palette, Structurely-style: a pale fill with dark text of the
-    same hue for pills, and a solid for dots, bars and glyphs.
+    same hue for pills, and a solid for dots, bars and glyphs. Indigo is the
+    brand's own hue; teal sits between it and green so the two stay apart.
   */
-  --tone-blue: oklch(0.623 0.19 259);
-  --tone-blue-soft: oklch(0.95 0.025 255);
-  --tone-blue-ink: oklch(0.47 0.19 263);
+  --tone-indigo: oklch(0.6 0.19 277);
+  --tone-indigo-soft: oklch(0.95 0.03 280);
+  --tone-indigo-ink: oklch(0.47 0.2 277);
+  --tone-teal: oklch(0.66 0.11 205);
+  --tone-teal-soft: oklch(0.955 0.03 205);
+  --tone-teal-ink: oklch(0.47 0.08 210);
   --tone-green: oklch(0.68 0.16 150);
   --tone-green-soft: oklch(0.955 0.04 155);
   --tone-green-ink: oklch(0.47 0.12 152);
@@ -65,9 +72,6 @@
   --tone-red: oklch(0.637 0.21 25);
   --tone-red-soft: oklch(0.955 0.025 18);
   --tone-red-ink: oklch(0.5 0.19 27);
-  --tone-violet: oklch(0.6 0.2 295);
-  --tone-violet-soft: oklch(0.955 0.03 300);
-  --tone-violet-ink: oklch(0.48 0.2 295);
 
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.205 0 0);
@@ -81,8 +85,8 @@
   --sidebar-border: oklch(0.93 0 0);
   --sidebar-ring: var(--ring);
 
-  /* The inverted chapter (pricing): always dark, in both themes. */
-  --inverted: oklch(0.205 0 0);
+  /* The inverted chapter (pricing): deep indigo by day, near-black at night. */
+  --inverted: oklch(0.27 0.07 278);
   --inverted-foreground: oklch(0.97 0 0);
 
   /* The hero stage: a light grey by day; at night it drops to the inverted dark. */
@@ -106,8 +110,10 @@
   --popover: oklch(0.225 0.005 56);
   --popover-foreground: oklch(0.96 0.006 84);
 
-  --primary: oklch(0.93 0.004 84);
-  --primary-foreground: oklch(0.205 0.006 56);
+  /* White text on it is 4.7:1. */
+  --primary: oklch(0.56 0.18 277);
+  --primary-foreground: oklch(0.985 0 0);
+  --brand: oklch(0.72 0.13 277);
 
   --secondary: oklch(0.27 0.006 56);
   --secondary-foreground: oklch(0.96 0.006 84);
@@ -130,9 +136,12 @@
   --warning: oklch(0.8 0.13 75);
   --warning-foreground: oklch(0.205 0.006 56);
 
-  --tone-blue: oklch(0.7 0.15 255);
-  --tone-blue-soft: oklch(0.62 0.18 259 / 18%);
-  --tone-blue-ink: oklch(0.83 0.09 252);
+  --tone-indigo: oklch(0.7 0.15 277);
+  --tone-indigo-soft: oklch(0.6 0.19 277 / 20%);
+  --tone-indigo-ink: oklch(0.84 0.08 280);
+  --tone-teal: oklch(0.74 0.11 200);
+  --tone-teal-soft: oklch(0.7 0.12 200 / 16%);
+  --tone-teal-ink: oklch(0.86 0.07 200);
   --tone-green: oklch(0.72 0.15 152);
   --tone-green-soft: oklch(0.68 0.15 152 / 16%);
   --tone-green-ink: oklch(0.86 0.11 155);
@@ -142,9 +151,6 @@
   --tone-red: oklch(0.68 0.19 25);
   --tone-red-soft: oklch(0.64 0.2 25 / 18%);
   --tone-red-ink: oklch(0.82 0.1 20);
-  --tone-violet: oklch(0.7 0.16 295);
-  --tone-violet-soft: oklch(0.62 0.2 295 / 20%);
-  --tone-violet-ink: oklch(0.84 0.09 298);
 
   --sidebar: oklch(0.195 0.005 56);
   --sidebar-foreground: oklch(0.96 0.006 84);
@@ -173,6 +179,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-brand: var(--brand);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -188,9 +195,12 @@
   --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
-  --color-tone-blue: var(--tone-blue);
-  --color-tone-blue-soft: var(--tone-blue-soft);
-  --color-tone-blue-ink: var(--tone-blue-ink);
+  --color-tone-indigo: var(--tone-indigo);
+  --color-tone-indigo-soft: var(--tone-indigo-soft);
+  --color-tone-indigo-ink: var(--tone-indigo-ink);
+  --color-tone-teal: var(--tone-teal);
+  --color-tone-teal-soft: var(--tone-teal-soft);
+  --color-tone-teal-ink: var(--tone-teal-ink);
   --color-tone-green: var(--tone-green);
   --color-tone-green-soft: var(--tone-green-soft);
   --color-tone-green-ink: var(--tone-green-ink);
@@ -200,9 +210,6 @@
   --color-tone-red: var(--tone-red);
   --color-tone-red-soft: var(--tone-red-soft);
   --color-tone-red-ink: var(--tone-red-ink);
-  --color-tone-violet: var(--tone-violet);
-  --color-tone-violet-soft: var(--tone-violet-soft);
-  --color-tone-violet-ink: var(--tone-violet-ink);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);

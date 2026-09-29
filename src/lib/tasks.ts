@@ -34,7 +34,7 @@ export const DUE_TASKS_LIMIT = 6;
 /** One tone per status: board column dots, list section dots, status glyphs. */
 export const TASK_STATUS_TONES: Record<TaskStatus, Tone> = {
   todo: "neutral",
-  in_progress: "blue",
+  in_progress: "indigo",
   waiting: "neutral",
   done: "green",
 };

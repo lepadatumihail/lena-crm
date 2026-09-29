@@ -7,8 +7,9 @@ import {
 } from "@/lib/brand-mark";
 
 /**
- * The freestanding 1A wing inherits the theme's foreground in either mode.
- * Decorative by default: the wordmark (or adjacent text) carries the name.
+ * The freestanding 1A wing, in the brand's indigo (a lighter shade at night);
+ * the wordmark beside it stays in the foreground ink. Decorative by default:
+ * the wordmark (or adjacent text) carries the name.
  */
 export function LogoMark({ className }: { className?: string }) {
   return (
@@ -16,7 +17,7 @@ export function LogoMark({ className }: { className?: string }) {
       viewBox={WING_VIEWBOX}
       aria-hidden="true"
       focusable="false"
-      className={cn("text-foreground size-7 shrink-0 fill-current", className)}
+      className={cn("text-brand size-7 shrink-0 fill-current", className)}
     >
       {WING_PATHS.map((d, i) => (
         <path key={i} d={d} />

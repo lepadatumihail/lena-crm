@@ -44,10 +44,10 @@ function enumLabel(value: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-/* The agent-facing referral hues: pending neutral, qualified blue, won green. */
+/* The agent-facing referral hues: pending neutral, qualified indigo, won green. */
 const REFERRAL_TONE: Record<Enums<"referral_status">, Tone> = {
   pending: "neutral",
-  qualified: "blue",
+  qualified: "indigo",
   rewarded: "green",
   void: "neutral",
 };
@@ -145,10 +145,10 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
                   </TableCell>
                   <TableCell className="py-2">
                     <div className="flex items-center gap-1">
-                      {/* Pro is a quiet grey fill (comped time blue), Free an outline:
+                      {/* Pro is a quiet grey fill (comped time indigo), Free an outline:
                           a column of solid ink pills shouted louder than the data. */}
                       {plan.tier === "pro" ? (
-                        <Tag tone={plan.source === "comp" ? "blue" : "grey"}>
+                        <Tag tone={plan.source === "comp" ? "indigo" : "grey"}>
                           {plan.source === "comp" ? t("agents.proComped") : t("agents.pro")}
                         </Tag>
                       ) : (
@@ -316,7 +316,7 @@ export function AdminView({ overview }: { overview: AdminOverview }) {
                     {c.agentEmail ?? c.agent_id.slice(0, 8)}
                   </TableCell>
                   <TableCell>
-                    <Tag tone={c.kind === "pro_time" ? "blue" : "neutral"}>
+                    <Tag tone={c.kind === "pro_time" ? "indigo" : "neutral"}>
                       {c.kind === "pro_time" ? t("credits.kind.proTime") : t("credits.kind.balance")}
                     </Tag>
                   </TableCell>

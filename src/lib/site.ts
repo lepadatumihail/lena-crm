@@ -61,25 +61,27 @@ export const SITE_PROFILES: readonly string[] = [];
 
 /**
  * Brand palette, mirrored from globals.css (oklch → hex) for image rendering:
- * the mono light theme plus the badge tones the OG card's stage pills use.
+ * the light theme, its indigo primary, and the badge tones the OG card's
+ * stage pills use.
  */
 export const BRAND = {
   background: "#ffffff",
   card: "#ffffff",
   foreground: "#171717",
+  primary: "#4b50d5",
   muted: "#696969",
   mutedSurface: "#f5f5f5",
   border: "#e8e8e8",
-  blueSoft: "#e4f0ff",
-  blueInk: "#1b4fc3",
+  indigoSoft: "#eaedff",
+  indigoInk: "#4641c7",
+  tealSoft: "#daf6fa",
+  tealInk: "#056774",
   greenSoft: "#dcf9e5",
   greenInk: "#0a6d37",
   amberSoft: "#fff7c9",
   amberInk: "#845a00",
   redSoft: "#ffeaea",
   redInk: "#b7191c",
-  violetSoft: "#f3ecff",
-  violetInk: "#6a37bf",
 } as const;
 
 /** Absolute URL for a site path; the home page is the bare origin, no trailing slash. */

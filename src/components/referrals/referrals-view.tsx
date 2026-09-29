@@ -19,10 +19,10 @@ import {
 } from "@/lib/referrals/links";
 import type { Tone } from "@/lib/tones";
 
-/** A referral turns blue once they subscribe, green when it pays out, and quiet grey if they leave. */
+/** A referral turns indigo once they subscribe, green when it pays out, and quiet grey if they leave. */
 const STATE_TONE: Record<ReferralState, Tone> = {
   signed_up: "neutral",
-  subscribed: "blue",
+  subscribed: "indigo",
   rewarded: "green",
   left: "grey",
 };

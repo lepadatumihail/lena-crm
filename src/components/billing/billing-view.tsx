@@ -207,7 +207,7 @@ function PlanPanel({
     description = t("plan.descComp");
     badge = {
       label: t("plan.badgeUntil", { date: formatBillingDate(plan.proUntil, tag) ?? "" }),
-      tone: "blue",
+      tone: "indigo",
     };
     priceMain = formatCurrency(0, tag);
     priceNote = t("plan.priceForNow");

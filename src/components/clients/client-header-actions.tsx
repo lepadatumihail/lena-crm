@@ -65,11 +65,11 @@ import type { Client } from "@/lib/supabase/types";
 const STAGE_PILL_HOVER: Record<Tone, string> = {
   neutral: "hover:bg-muted data-[state=open]:bg-muted",
   grey: "hover:bg-foreground/10 data-[state=open]:bg-foreground/10",
-  blue: "hover:bg-tone-blue/20 data-[state=open]:bg-tone-blue/20",
+  indigo: "hover:bg-tone-indigo/20 data-[state=open]:bg-tone-indigo/20",
   green: "hover:bg-tone-green/20 data-[state=open]:bg-tone-green/20",
   amber: "hover:bg-tone-amber/25 data-[state=open]:bg-tone-amber/25",
   red: "hover:bg-tone-red/20 data-[state=open]:bg-tone-red/20",
-  violet: "hover:bg-tone-violet/20 data-[state=open]:bg-tone-violet/20",
+  teal: "hover:bg-tone-teal/20 data-[state=open]:bg-tone-teal/20",
   ink: "hover:bg-foreground/85 data-[state=open]:bg-foreground/85",
 };
 

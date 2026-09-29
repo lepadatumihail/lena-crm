@@ -460,7 +460,7 @@ export function AppPreview() {
                       )}
                     >
                       {r.id === "tom" ? (
-                        // A new lead lands on a pale blue row (blue is the New
+                        // A new lead lands on a pale indigo row (indigo is the New
                         // stage's tone) that settles into the list, so the eye
                         // finds it before reading.
                         <motion.span
@@ -468,7 +468,7 @@ export function AppPreview() {
                           initial={{ opacity: 1 }}
                           animate={{ opacity: 0 }}
                           transition={{ duration: 1.4, delay: 0.5, ease: "easeOut" }}
-                          className="bg-tone-blue-soft pointer-events-none absolute inset-0 !px-0"
+                          className="bg-tone-indigo-soft pointer-events-none absolute inset-0 !px-0"
                         />
                       ) : null}
                       <span className="hidden md:block">

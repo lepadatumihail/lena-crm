@@ -9,11 +9,11 @@ const STYLES: Record<
   CalloutKind,
   { icon: React.ComponentType<{ className?: string }>; box: string; mark: string }
 > = {
-  // A tip is the pale blue of the app's notices, so it never reads as a note.
+  // A tip is the pale indigo of the app's notices, so it never reads as a note.
   tip: {
     icon: Lightbulb,
-    box: cn(TONE_BORDER.blue, TONE_BG.blue),
-    mark: TONE_ICON.blue,
+    box: cn(TONE_BORDER.indigo, TONE_BG.indigo),
+    mark: TONE_ICON.indigo,
   },
   note: {
     icon: Info,

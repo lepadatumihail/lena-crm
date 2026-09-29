@@ -148,7 +148,7 @@ export function PricingCards({
               {current?.tier === "pro" ? (
                 <Tag>{t("pricing.yourPlan")}</Tag>
               ) : founding ? (
-                <Tag tone="blue">
+                <Tag tone="indigo">
                   <Sparkles />
                   {t("founding.spots", { count: spotsLeft })}
                 </Tag>

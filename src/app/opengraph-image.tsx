@@ -46,11 +46,11 @@ const ROWS: { initials: string; name: string; stage: BuyerStage; label: string; 
 const TAG: Record<Tone, { background: string; color: string; border: string }> = {
   neutral: { background: BRAND.card, color: BRAND.foreground, border: BRAND.border },
   grey: { background: BRAND.mutedSurface, color: BRAND.foreground, border: BRAND.mutedSurface },
-  blue: { background: BRAND.blueSoft, color: BRAND.blueInk, border: BRAND.blueSoft },
+  indigo: { background: BRAND.indigoSoft, color: BRAND.indigoInk, border: BRAND.indigoSoft },
   green: { background: BRAND.greenSoft, color: BRAND.greenInk, border: BRAND.greenSoft },
   amber: { background: BRAND.amberSoft, color: BRAND.amberInk, border: BRAND.amberSoft },
   red: { background: BRAND.redSoft, color: BRAND.redInk, border: BRAND.redSoft },
-  violet: { background: BRAND.violetSoft, color: BRAND.violetInk, border: BRAND.violetSoft },
+  teal: { background: BRAND.tealSoft, color: BRAND.tealInk, border: BRAND.tealSoft },
   ink: { background: BRAND.foreground, color: BRAND.background, border: BRAND.foreground },
 };
 const tagStyle = (stage: BuyerStage) => {
@@ -95,7 +95,7 @@ export default async function Image() {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <svg width="96" height="84" viewBox={WING_VIEWBOX} fill={BRAND.foreground}>
+            <svg width="96" height="84" viewBox={WING_VIEWBOX} fill={BRAND.primary}>
               {WING_PATHS.map((d, i) => (
                 <path key={i} d={d} />
               ))}
@@ -159,7 +159,7 @@ export default async function Image() {
                 width: 10,
                 height: 10,
                 borderRadius: 9999,
-                background: BRAND.foreground,
+                background: BRAND.primary,
                 display: "flex",
               }}
             />

@@ -84,14 +84,14 @@ export function UpcomingPanel({
               className={cn(
                 "focus-visible:ring-ring/50 flex h-11 w-10 shrink-0 flex-col items-center justify-center gap-1 rounded-lg leading-none outline-none transition-colors duration-150 focus-visible:ring-[3px]",
                 isToday
-                  ? "bg-foreground text-background"
+                  ? "bg-primary text-primary-foreground"
                   : "bg-muted/60 hover:bg-muted text-foreground"
               )}
             >
               <span
                 className={cn(
                   "text-[10px] first-letter:uppercase",
-                  isToday ? "text-background/70" : "text-muted-foreground"
+                  isToday ? "text-primary-foreground/75" : "text-muted-foreground"
                 )}
               >
                 {format(date, "EEE", { locale: dateFnsLocale(locale) }).replace(".", "")}
