@@ -57,6 +57,10 @@ export const MARKETING_ROUTES = {
     es: "/es/guias/registro-agentes-inmobiliarios-andalucia",
   },
   about: { en: "/about", es: "/es/sobre-nosotros" },
+  toolCommission: {
+    en: "/tools/commission-calculator",
+    es: "/es/herramientas/calculadora-comision-inmobiliaria",
+  },
   privacy: { en: "/privacy", es: "/es/privacidad" },
   terms: { en: "/terms", es: "/es/terminos" },
   legalNotice: { en: "/legal", es: "/es/aviso-legal" },
@@ -93,6 +97,7 @@ export const CONTENT_ROUTES = [
   "guideFollowUp",
   "guideAndaluciaRegister",
   "about",
+  "toolCommission",
 ] as const satisfies readonly MarketingRoute[];
 
 export type ContentRoute = (typeof CONTENT_ROUTES)[number];
@@ -115,6 +120,7 @@ export const LINKED_ROUTES = [
   "guideFollowUp",
   "guideAndaluciaRegister",
   "about",
+  "toolCommission",
 ] as const satisfies readonly MarketingRoute[];
 
 export type LinkedRoute = (typeof LINKED_ROUTES)[number];
@@ -128,7 +134,7 @@ export function isLinkedRoute(route: MarketingRoute): route is LinkedRoute {
  * part (MarketingPageContent.tool). The footer's "Free tools" column and
  * llms.txt list them from here.
  */
-export const TOOL_ROUTES = [] as const satisfies readonly LinkedRoute[];
+export const TOOL_ROUTES = ["toolCommission"] as const satisfies readonly LinkedRoute[];
 
 export type ToolRoute = (typeof TOOL_ROUTES)[number];
 

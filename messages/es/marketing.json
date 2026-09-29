@@ -55,6 +55,10 @@
     "about": {
       "label": "Sobre LeadWing",
       "blurb": "Qué es LeadWing, para quién es, los datos clave y cómo contactar con nosotros."
+    },
+    "toolCommission": {
+      "label": "Calculadora de comisión",
+      "blurb": "Calcula los honorarios con IVA, el reparto entre dos agencias y tu propia factura."
     }
   },
   "consent": {

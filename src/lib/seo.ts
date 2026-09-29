@@ -77,6 +77,7 @@ export const PUBLISHED: Record<ContentRoute, string> = {
   guideFollowUp: "2026-09-13",
   guideAndaluciaRegister: "2026-09-29",
   about: "2026-09-15",
+  toolCommission: "2026-09-29",
 };
 
 /**

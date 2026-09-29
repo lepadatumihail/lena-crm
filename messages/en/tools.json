@@ -1,0 +1,64 @@
+{
+  "commission": {
+    "form": {
+      "price": "Sale price (€)",
+      "optional": "Optional",
+      "fee": "Agency fee ({unit})",
+      "feeBasis": "How the fee is set",
+      "feeBasisPercent": "% of the price",
+      "feeBasisAmount": "Fixed amount",
+      "includesTax": "This fee already includes {tax, select, iva {IVA} igic {IGIC} other {the tax}}",
+      "tax": "Tax on the fee",
+      "igic": "IGIC {rate} (Canarias)",
+      "taxOther": "Other",
+      "customTax": "Tax rate (%)",
+      "shared": "Shared with another agency",
+      "otherShare": "The other agency's share of the fee (%)",
+      "agentSplit": "My agency keeps part of our side",
+      "agentShare": "My share of our side (%)",
+      "irpf": "IRPF on my invoice",
+      "irpfNone": "None",
+      "irpfNew": "{rate} (first three years)",
+      "irpfHelp": "Withholding applies only when you invoice a business or professional and your activity is registered as a professional one. Invoices to private clients carry none."
+    },
+    "results": {
+      "hint": "Fill in the fields to see the numbers.",
+      "client": "The client pays",
+      "fee": "Fee",
+      "plusTax": "+ {tax}",
+      "total": "Total",
+      "shareOfPrice": "That is {share} of the price.",
+      "split": "The split, before tax",
+      "otherAgency": "Other agency",
+      "ourSide": "Our agency",
+      "agencyKeeps": "Your agency keeps",
+      "you": "You",
+      "invoice": "Your invoice",
+      "base": "Base",
+      "minusIrpf": "− IRPF {rate}",
+      "receive": "You receive",
+      "irpfNote": "The IRPF withheld is an advance on your income tax, not a cost.",
+      "legend": {
+        "tax": "Tax",
+        "otherAgency": "Other agency",
+        "yourAgency": "Your agency",
+        "you": "You"
+      }
+    },
+    "actions": {
+      "copySplit": "Copy the split",
+      "copyLink": "Copy link",
+      "copied": "Copied",
+      "copiedSplit": "The split is copied.",
+      "copiedLink": "The link is copied."
+    },
+    "copy": {
+      "price": "Price: {price}",
+      "fee": "Fee: {net} + {tax} = {gross}",
+      "split": "Split: your agency {other} · our agency {ours} (+ {taxName})",
+      "link": "Worked out with LeadWing: {url}"
+    },
+    "taxName": "{tax, select, iva {IVA} igic {IGIC} other {tax}}",
+    "taxLabel": "{tax, select, iva {IVA} igic {IGIC} other {Tax}} {rate}"
+  }
+}

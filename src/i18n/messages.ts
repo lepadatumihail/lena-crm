@@ -29,6 +29,7 @@ import enSite from "../../messages/en/site.json";
 import enSupport from "../../messages/en/support.json";
 import enTasks from "../../messages/en/tasks.json";
 import enTemplates from "../../messages/en/templates.json";
+import enTools from "../../messages/en/tools.json";
 import enTransfer from "../../messages/en/transfer.json";
 import enValidation from "../../messages/en/validation.json";
 
@@ -55,6 +56,7 @@ import esSite from "../../messages/es/site.json";
 import esSupport from "../../messages/es/support.json";
 import esTasks from "../../messages/es/tasks.json";
 import esTemplates from "../../messages/es/templates.json";
+import esTools from "../../messages/es/tools.json";
 import esTransfer from "../../messages/es/transfer.json";
 import esValidation from "../../messages/es/validation.json";
 
@@ -82,6 +84,7 @@ export const en = {
   support: enSupport,
   tasks: enTasks,
   templates: enTemplates,
+  tools: enTools,
   transfer: enTransfer,
   validation: enValidation,
 };
@@ -112,6 +115,7 @@ const es = {
   support: esSupport,
   tasks: esTasks,
   templates: esTemplates,
+  tools: esTools,
   transfer: esTransfer,
   validation: esValidation,
 };

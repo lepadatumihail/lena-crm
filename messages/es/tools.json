@@ -1,0 +1,64 @@
+{
+  "commission": {
+    "form": {
+      "price": "Precio de venta (€)",
+      "optional": "Opcional",
+      "fee": "Honorarios de la agencia ({unit})",
+      "feeBasis": "Cómo se fijan los honorarios",
+      "feeBasisPercent": "% del precio",
+      "feeBasisAmount": "Importe fijo",
+      "includesTax": "Estos honorarios ya incluyen {tax, select, iva {el IVA} igic {el IGIC} other {el impuesto}}",
+      "tax": "Impuesto sobre los honorarios",
+      "igic": "IGIC {rate} (Canarias)",
+      "taxOther": "Otro",
+      "customTax": "Tipo del impuesto (%)",
+      "shared": "Comparto los honorarios con otra agencia",
+      "otherShare": "Parte de los honorarios para la otra agencia (%)",
+      "agentSplit": "Mi agencia se queda una parte de lo que nos toca",
+      "agentShare": "Mi parte de lo que nos toca (%)",
+      "irpf": "IRPF en mi factura",
+      "irpfNone": "Sin retención",
+      "irpfNew": "{rate} (tres primeros años)",
+      "irpfHelp": "Solo hay retención cuando facturas a una empresa o a un profesional y tu actividad está dada de alta como profesional. Las facturas a particulares no llevan retención."
+    },
+    "results": {
+      "hint": "Rellena los datos para ver las cifras.",
+      "client": "Lo que paga el cliente",
+      "fee": "Honorarios",
+      "plusTax": "+ {tax}",
+      "total": "Total",
+      "shareOfPrice": "Es el {share} del precio.",
+      "split": "El reparto, sin impuestos",
+      "otherAgency": "Otra agencia",
+      "ourSide": "Nuestra agencia",
+      "agencyKeeps": "Se queda tu agencia",
+      "you": "Tú",
+      "invoice": "Tu factura",
+      "base": "Base imponible",
+      "minusIrpf": "− IRPF {rate}",
+      "receive": "Cobras",
+      "irpfNote": "El IRPF retenido es un pago a cuenta de tu renta, no un gasto.",
+      "legend": {
+        "tax": "Impuesto",
+        "otherAgency": "Otra agencia",
+        "yourAgency": "Tu agencia",
+        "you": "Tú"
+      }
+    },
+    "actions": {
+      "copySplit": "Copiar el reparto",
+      "copyLink": "Copiar enlace",
+      "copied": "Copiado",
+      "copiedSplit": "Reparto copiado.",
+      "copiedLink": "Enlace copiado."
+    },
+    "copy": {
+      "price": "Precio: {price}",
+      "fee": "Honorarios: {net} + {tax} = {gross}",
+      "split": "Reparto: vuestra agencia {other} · nuestra agencia {ours} (+ {taxName})",
+      "link": "Calculado con LeadWing: {url}"
+    },
+    "taxName": "{tax, select, iva {IVA} igic {IGIC} other {impuesto}}",
+    "taxLabel": "{tax, select, iva {IVA} igic {IGIC} other {Impuesto}} {rate}"
+  }
+}

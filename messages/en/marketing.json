@@ -55,6 +55,10 @@
     "about": {
       "label": "About LeadWing",
       "blurb": "What LeadWing is, who it is for, the key facts and how to reach us."
+    },
+    "toolCommission": {
+      "label": "Commission calculator",
+      "blurb": "Work out a fee with VAT, the split between two agencies and your own invoice."
     }
   },
   "consent": {

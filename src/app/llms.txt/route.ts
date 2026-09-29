@@ -21,7 +21,9 @@ export const dynamic = "force-static";
 const en = (route: MarketingRoute) => absoluteUrl(marketingPath(route, "en"));
 
 /** One line per free tool: TypeScript asks for a line whenever a tool route is added. */
-const TOOL_LINES: Record<ToolRoute, string> = {};
+const TOOL_LINES: Record<ToolRoute, string> = {
+  toolCommission: `[Real estate commission calculator](${en("toolCommission")}): fee, VAT or IGIC, the split between two agencies, your share and IRPF withholding, for Spain`,
+};
 
 export function GET() {
   const pro = PRICES.standard;
