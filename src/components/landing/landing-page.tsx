@@ -12,6 +12,8 @@ import { Reveal } from "@/components/reveal";
 import { Eyebrow } from "@/components/marketing/eyebrow";
 import { FilmPlayer } from "@/components/marketing/film-player";
 import { HeroAccent } from "@/components/marketing/hero-accent";
+import { LandingViewBeacon } from "@/components/marketing/landing-view-beacon";
+import { SignUpDialog } from "@/components/marketing/sign-up-dialog";
 import { OnePlace } from "@/components/landing/one-place";
 import { Workflow } from "@/components/landing/workflow";
 import { FeatureDeepDives } from "@/components/landing/feature-deep-dives";
@@ -43,6 +45,8 @@ export function LandingPage() {
   return (
     <div className="flex flex-1 flex-col">
       <AuthErrorListener />
+      {/* Ads can land here too, so visits count like the ad landings'. */}
+      <LandingViewBeacon />
 
       {/* Nav */}
       <MarketingNav />
@@ -81,11 +85,9 @@ export function LandingPage() {
             </p>
             {/* Stacked and equal-width on phones, side by side from sm. */}
             <div className="mt-8 flex w-full max-w-xs flex-col items-stretch gap-3 sm:mt-9 sm:w-auto sm:max-w-none sm:flex-row sm:items-center">
-              <Button asChild size="pill">
-                <Link href="/login">
-                  {t("hero.ctaPrimary")} <ArrowRight />
-                </Link>
-              </Button>
+              <SignUpDialog>
+                {t("hero.ctaPrimary")} <ArrowRight />
+              </SignUpDialog>
               <Button asChild size="pill" variant="stage">
                 <Link href="#how-it-works">{t("hero.ctaSecondary")}</Link>
               </Button>
@@ -228,11 +230,9 @@ export function LandingPage() {
           <p className="text-muted-foreground mx-auto mt-4 max-w-md text-lg text-pretty">
             {t("finalCta.body")}
           </p>
-          <Button asChild size="pill" className="mt-8">
-            <Link href="/login">
-              {t("hero.ctaPrimary")} <ArrowRight />
-            </Link>
-          </Button>
+          <SignUpDialog className="mt-8">
+            {t("hero.ctaPrimary")} <ArrowRight />
+          </SignUpDialog>
         </Reveal>
       </section>
 
@@ -301,14 +301,12 @@ function PlanCard({
           both plans past the screen. Sides of 20px keep the English label on
           one line down to 320px. It sits on the card's floor, so both plans'
           buttons line up although only Pro carries the yearly note. */}
-      <Button
-        asChild
-        size="pill"
+      <SignUpDialog
         className="mt-auto h-auto min-h-11 w-full px-5 py-2.5 text-center leading-snug text-balance whitespace-normal"
         variant={highlighted ? "default" : "glass"}
       >
-        <Link href="/login">{cta}</Link>
-      </Button>
+        {cta}
+      </SignUpDialog>
     </div>
   );
 }
