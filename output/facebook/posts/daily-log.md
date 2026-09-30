@@ -1,5 +1,18 @@
 # LeadWing Facebook daily log
 
+## Wed 30 Sep 2026 (noon brief, 12:08 Madrid)
+
+**Wed 30 Sep 09:30 import post published on time** (post …122110445967476753, created_time 07:30:01 UTC), 0 reactions, 0 comments. It was the last post of the old rhythm; the scheduled queue is now empty, which is correct under the one-post-a-week decision. Nothing owed until Mon 5 Oct's digest at the Sunday 4 Oct sitting.
+
+**Free 10 ad, 30 Sep 12:08: EUR 4.80 of 25, 1,866 imp, 1,723 reach, CPM 2.57, 31 link clicks at EUR 0.155, 23 landing page views at EUR 0.209.** FB feed EUR 3.55 / 1,311 imp / 15 LPV; IG feed EUR 1.25 / 555 imp / 8 LPV; **zero Audience Network**. Waste test does not fire. **LPV is 74% of link clicks — the best ratio of any LeadWing ad** (quiet-leads peaked at 64% and cost EUR 0.30 a landing view). Pace ~EUR 4.0/day against the 4.49 needed, so ~EUR 2 may expire 4 Oct; reported, not acted on.
+
+**Meta re-minted the creative by itself at 00:19:50 Madrid** — actor "Meta" 1051435468209173, no operator edit. Creative 968627088918992 → 1445432247464313, new dark post …122114822697476753, ad back through review and ACTIVE by 00:23. Checked rather than assumed: same image hash a96e58d9fdf8fa69598aa5ac1edeac5d, same home link + utm, same message, same SIGN_UP CTA — the benign 24 Sep re-mint pattern, not the 27 Sep placement rewrite. **Placements re-read and still present** (facebook+instagram, feed, stream); ad set updated_time unchanged since creation.
+
+Comments/inbox: 0 comments on all 13 page posts and all 8 dark posts (new one included), inbox empty, 0 followers. Page insights: **first non-zero page_views_total ever, 4 on 29 Sep**, plus 35 post engagements and 1,218 media views — all the ad. Reel flat: 236 plays / 243 with replays / 233 reach / 0 followers. Old ad sets unchanged and not spending (quiet-leads PAUSED past its window; post-boost PAUSED, EUR 7.91, window self-closes 1 Oct 23:59; spreadsheet past 24 Sep).
+
+Drafted: nothing — no comments, no messages, no post due. Approved/posted: nothing. Vercel analytics still blocked (api.vercel.com CONNECT 403), so sign-ups are the founder's to read in the auth log.
+
+
 ## Tue 29 Sep 2026 (evening check, 18:10 Madrid)
 
 **A new Meta ad is LIVE — the founder created it himself in Ads Manager at 15:42 Madrid, hours after "stop the ads".** Campaign 6997552551894 "Free 10 · Sep 26", ad set 6997552554894, ad 6997552574094. EUR 25 lifetime to 4 Oct 23:59, LANDING_PAGE_VIEWS. The routine created, funded and edited nothing; found it in the account activity log.

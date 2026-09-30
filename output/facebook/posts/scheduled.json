@@ -1,110 +1,113 @@
 [
- {
-  "image": "output/facebook/posts/01-one-card.png",
-  "photo_id": "122105598927476753",
-  "post_id": "1279663088571991_122105598963476753",
-  "error": null,
-  "published_at": "2026-09-19T20:09:15.396249+02:00",
-  "permalink": "https://www.facebook.com/122105574255476753/posts/122105598963476753"
- },
- {
-  "image": "output/facebook/posts/06-wed-followup.png",
-  "photo_id": "122107059039476753",
-  "post_id": "1279663088571991_122107059069476753",
-  "scheduled_for": "2026-09-23T09:30:00+02:00",
-  "published_at": "2026-09-23T09:30:01+02:00",
-  "permalink": "https://www.facebook.com/122105574255476753/posts/122107059069476753",
-  "error": null,
-  "replaced": "typographic card replaced with the real-screenshot image on 21 Sep 00:37",
-  "text_edited": "23 Sep ~20:30: 'every buyer card shows what comes next' -> 'LeadWing shows you which buyers need a follow-up' (founder: 'fix today'); image unchanged",
-  "deleted": "23 Sep 2026 22:28 Madrid: deleted (0 reactions, 0 comments after 13 h) because its image still said 'every buyer card' and linked the home page; replaced by 1279663088571991_122110619499476753 (founder: 'do what you think is best')"
- },
- {
-  "image": "output/facebook/posts/07-thu-founding.png",
-  "photo_id": "122107059123476753",
-  "post_id": "1279663088571991_122107059153476753",
-  "scheduled_for": "2026-09-24T09:30:00+02:00",
-  "error": null,
-  "replaced": "typographic card replaced with the real-screenshot image on 21 Sep 00:37",
-  "published_at": "2026-09-24T09:30:01+02:00",
-  "permalink": "https://www.facebook.com/122105574255476753/posts/122107059153476753",
-  "note": "published on time; 0 reactions and 0 comments at 12:10 Madrid"
- },
- {
-  "image": "output/facebook/posts/04-spreadsheets-founder.jpg",
-  "photo_id": "122105661993476753",
-  "post_id": "1279663088571991_122105662023476753",
-  "published_at": "2026-09-19T20:34:13.685667+02:00",
-  "permalink": "https://www.facebook.com/122105574255476753/posts/122105662023476753"
- },
- {
-  "image": "output/facebook/posts/05-digest-2026-09-21.png",
-  "kind": "news digest",
-  "photo_id": "122107041819476753",
-  "post_id": "1279663088571991_122107041849476753",
-  "scheduled_for": "2026-09-21T09:30:00+02:00",
-  "published_at": "2026-09-21T09:30:03+02:00",
-  "permalink": "https://www.facebook.com/122105574255476753/posts/122107041849476753",
-  "sources_comment": "DECLINED by the founder (21 Sep): no source links at all, in the post or as a comment. Attribution stays as publication names in brackets; URLs live only in news-digest-2026-09-21.md."
- },
- {
-  "image": "output/facebook/posts/08-digest-2026-09-25.png",
-  "kind": "news digest",
-  "photo_id": "122110562553476753",
-  "post_id": "1279663088571991_122110562607476753",
-  "scheduled_for": "2026-09-25T09:30:00+02:00",
-  "approved": "founder, 23 Sep evening ('post all')",
-  "error": null,
-  "replaced": "23 Sep ~20:30: beige typographic card replaced with the editorial-photo card (founder: 'swap'); old scheduled post 122110445859476753 deleted, re-created with the same text for the same slot",
-  "published_at": "2026-09-25T09:30:02+02:00",
-  "permalink": "https://www.facebook.com/122105574255476753/posts/122110562607476753",
-  "note": "published on time with the editorial-photo card; 0 reactions and 0 comments at 12:10 Madrid"
- },
- {
-  "image": "output/facebook/posts/09-wed30-import.png",
-  "kind": "product post",
-  "photo_id": "122110445913476753",
-  "post_id": "1279663088571991_122110445967476753",
-  "scheduled_for": "2026-09-30T09:30:00+02:00",
-  "approved": "founder, 23 Sep evening ('post all')",
-  "error": null
- },
- {
-  "image": "output/facebook/posts/10-ad-quiet-leads.png",
-  "kind": "product post (replaces the 23 Sep 09:30 post)",
-  "photo_id": "122110619457476753",
-  "post_id": "1279663088571991_122110619499476753",
-  "published_at": "2026-09-23T22:28:09+02:00",
-  "permalink": "https://www.facebook.com/122105574255476753/posts/122110619499476753",
-  "link": "leadwing.app/quiet",
-  "boosted_by": "ad 6996512397894 (EUR 10, 25 Sep 10:00 - 1 Oct 23:59)",
-  "error": null
- },
- {
-  "video": "output/video/hello-to-reserved-9x16.mp4",
-  "kind": "Reel (film 02 'From hello to Reserved'), organic only, never boosted",
-  "video_id": "1531249725545826",
-  "post_id": "1279663088571991_122112798999476753",
-  "published_at": "2026-09-26T23:46:09+02:00",
-  "permalink": "https://www.facebook.com/reel/1531249725545826/",
-  "caption": "output/facebook/posts/film-02-captions.md (Facebook Reel section)",
-  "error": null,
-  "approved": "founder in session, 26 Sep ~23:45: 'i give you full permission'"
- },
- {
-  "image": "output/facebook/posts/11-digest-2026-09-28.png",
-  "kind": "Monday news digest (week of 21-27 Sep), lead: Andalucia ITP cut from 2027",
-  "photo_id": "122113173429476753",
-  "post_id": "1279663088571991_122113173585476753",
-  "scheduled_publish_time": 1790580600,
-  "scheduled_for": "2026-09-28T09:30:00+02:00",
-  "is_published": false,
-  "source_file": "output/facebook/posts/news-digest-2026-09-28.md",
-  "spec": "output/facebook/posts/spec-digest-2026-09-28.json",
-  "photo_asset": "output/facebook/posts/photo-2026-09-28-andalusian-door.png",
-  "error": null,
-  "approved": "founder in session, 27 Sep: '2- schedule it'",
-  "published_at": "2026-09-28T09:30:01+02:00",
-  "verified": "28 Sep noon: is_published true, 0 reactions, 0 comments at 12:10"
- }
+  {
+    "image": "output/facebook/posts/01-one-card.png",
+    "photo_id": "122105598927476753",
+    "post_id": "1279663088571991_122105598963476753",
+    "error": null,
+    "published_at": "2026-09-19T20:09:15.396249+02:00",
+    "permalink": "https://www.facebook.com/122105574255476753/posts/122105598963476753"
+  },
+  {
+    "image": "output/facebook/posts/06-wed-followup.png",
+    "photo_id": "122107059039476753",
+    "post_id": "1279663088571991_122107059069476753",
+    "scheduled_for": "2026-09-23T09:30:00+02:00",
+    "published_at": "2026-09-23T09:30:01+02:00",
+    "permalink": "https://www.facebook.com/122105574255476753/posts/122107059069476753",
+    "error": null,
+    "replaced": "typographic card replaced with the real-screenshot image on 21 Sep 00:37",
+    "text_edited": "23 Sep ~20:30: 'every buyer card shows what comes next' -> 'LeadWing shows you which buyers need a follow-up' (founder: 'fix today'); image unchanged",
+    "deleted": "23 Sep 2026 22:28 Madrid: deleted (0 reactions, 0 comments after 13 h) because its image still said 'every buyer card' and linked the home page; replaced by 1279663088571991_122110619499476753 (founder: 'do what you think is best')"
+  },
+  {
+    "image": "output/facebook/posts/07-thu-founding.png",
+    "photo_id": "122107059123476753",
+    "post_id": "1279663088571991_122107059153476753",
+    "scheduled_for": "2026-09-24T09:30:00+02:00",
+    "error": null,
+    "replaced": "typographic card replaced with the real-screenshot image on 21 Sep 00:37",
+    "published_at": "2026-09-24T09:30:01+02:00",
+    "permalink": "https://www.facebook.com/122105574255476753/posts/122107059153476753",
+    "note": "published on time; 0 reactions and 0 comments at 12:10 Madrid"
+  },
+  {
+    "image": "output/facebook/posts/04-spreadsheets-founder.jpg",
+    "photo_id": "122105661993476753",
+    "post_id": "1279663088571991_122105662023476753",
+    "published_at": "2026-09-19T20:34:13.685667+02:00",
+    "permalink": "https://www.facebook.com/122105574255476753/posts/122105662023476753"
+  },
+  {
+    "image": "output/facebook/posts/05-digest-2026-09-21.png",
+    "kind": "news digest",
+    "photo_id": "122107041819476753",
+    "post_id": "1279663088571991_122107041849476753",
+    "scheduled_for": "2026-09-21T09:30:00+02:00",
+    "published_at": "2026-09-21T09:30:03+02:00",
+    "permalink": "https://www.facebook.com/122105574255476753/posts/122107041849476753",
+    "sources_comment": "DECLINED by the founder (21 Sep): no source links at all, in the post or as a comment. Attribution stays as publication names in brackets; URLs live only in news-digest-2026-09-21.md."
+  },
+  {
+    "image": "output/facebook/posts/08-digest-2026-09-25.png",
+    "kind": "news digest",
+    "photo_id": "122110562553476753",
+    "post_id": "1279663088571991_122110562607476753",
+    "scheduled_for": "2026-09-25T09:30:00+02:00",
+    "approved": "founder, 23 Sep evening ('post all')",
+    "error": null,
+    "replaced": "23 Sep ~20:30: beige typographic card replaced with the editorial-photo card (founder: 'swap'); old scheduled post 122110445859476753 deleted, re-created with the same text for the same slot",
+    "published_at": "2026-09-25T09:30:02+02:00",
+    "permalink": "https://www.facebook.com/122105574255476753/posts/122110562607476753",
+    "note": "published on time with the editorial-photo card; 0 reactions and 0 comments at 12:10 Madrid"
+  },
+  {
+    "image": "output/facebook/posts/09-wed30-import.png",
+    "kind": "product post",
+    "photo_id": "122110445913476753",
+    "post_id": "1279663088571991_122110445967476753",
+    "scheduled_for": "2026-09-30T09:30:00+02:00",
+    "approved": "founder, 23 Sep evening ('post all')",
+    "error": null,
+    "published_at": "2026-09-30T09:30:01+02:00",
+    "permalink": "https://www.facebook.com/122105574255476753/posts/122110445967476753",
+    "note": "PUBLISHED on time, verified 30 Sep 12:08 Madrid: is_published true, created_time 2026-09-30T07:30 UTC. 0 reactions, 0 comments. The last post of the old Mon/Wed/Fri rhythm — the founder cut the cadence on 29 Sep but did not pull this one. Queue is now EMPTY; next post is Mon 5 Oct 09:30 digest, drafted at the Sunday 4 Oct sitting."
+  },
+  {
+    "image": "output/facebook/posts/10-ad-quiet-leads.png",
+    "kind": "product post (replaces the 23 Sep 09:30 post)",
+    "photo_id": "122110619457476753",
+    "post_id": "1279663088571991_122110619499476753",
+    "published_at": "2026-09-23T22:28:09+02:00",
+    "permalink": "https://www.facebook.com/122105574255476753/posts/122110619499476753",
+    "link": "leadwing.app/quiet",
+    "boosted_by": "ad 6996512397894 (EUR 10, 25 Sep 10:00 - 1 Oct 23:59)",
+    "error": null
+  },
+  {
+    "video": "output/video/hello-to-reserved-9x16.mp4",
+    "kind": "Reel (film 02 'From hello to Reserved'), organic only, never boosted",
+    "video_id": "1531249725545826",
+    "post_id": "1279663088571991_122112798999476753",
+    "published_at": "2026-09-26T23:46:09+02:00",
+    "permalink": "https://www.facebook.com/reel/1531249725545826/",
+    "caption": "output/facebook/posts/film-02-captions.md (Facebook Reel section)",
+    "error": null,
+    "approved": "founder in session, 26 Sep ~23:45: 'i give you full permission'"
+  },
+  {
+    "image": "output/facebook/posts/11-digest-2026-09-28.png",
+    "kind": "Monday news digest (week of 21-27 Sep), lead: Andalucia ITP cut from 2027",
+    "photo_id": "122113173429476753",
+    "post_id": "1279663088571991_122113173585476753",
+    "scheduled_publish_time": 1790580600,
+    "scheduled_for": "2026-09-28T09:30:00+02:00",
+    "is_published": false,
+    "source_file": "output/facebook/posts/news-digest-2026-09-28.md",
+    "spec": "output/facebook/posts/spec-digest-2026-09-28.json",
+    "photo_asset": "output/facebook/posts/photo-2026-09-28-andalusian-door.png",
+    "error": null,
+    "approved": "founder in session, 27 Sep: '2- schedule it'",
+    "published_at": "2026-09-28T09:30:01+02:00",
+    "verified": "28 Sep noon: is_published true, 0 reactions, 0 comments at 12:10"
+  }
 ]
