@@ -1,5 +1,9 @@
 # LeadWing Facebook daily log
 
+## Wed 30 Sep 2026 (evening check, 18:10 Madrid)
+
+Nothing new and the ad is healthy: 0 comments on all 13 page posts and all 8 dark posts, inbox empty, queue empty (correct under the one-post-a-week rhythm). Free 10 ad EUR 6.40 of 25, 2,655 imp, 47 link clicks at EUR 0.136, 35 landing page views at EUR 0.183 (LPV still 74% of clicks), 100% feed / zero Audience Network, waste test does not fire; creative and dark post re-read from the ad and unchanged since the 00:19 re-mint, placements still present, ad + ad set ACTIVE with no review issues. Pace is now EUR ~4.7/day against the 4.39 needed, so the noon shortfall forecast has closed. Nothing drafted, nothing applied.
+
 ## Wed 30 Sep 2026 (noon brief, 12:08 Madrid)
 
 **Wed 30 Sep 09:30 import post published on time** (post …122110445967476753, created_time 07:30:01 UTC), 0 reactions, 0 comments. It was the last post of the old rhythm; the scheduled queue is now empty, which is correct under the one-post-a-week decision. Nothing owed until Mon 5 Oct's digest at the Sunday 4 Oct sitting.
