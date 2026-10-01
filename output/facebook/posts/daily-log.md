@@ -400,3 +400,18 @@ Update 19:24: placement fix confirmed — ad set targeting is now publisher_plat
 - Placements: Audience Network (an_classic) took 41,872 imp and 165 clicks for €5.05 — junk. FB feed only 335 imp, 3 clicks, €0.32 (0.90% CTR, 1 LPV).
 - Landing-page views are 22% of reported clicks — consistent with accidental AN taps.
 - Age/gender (AN-dominated): women 35–54 = 71 of 170 clicks; men flat across ages.
+
+## Thu 1 Oct 2026 — noon brief (12:15 Madrid / 10:15 UTC)
+
+Numbers: followers 0. Yesterday (30 Sep): 29 post engagements, 1,641 media views, 0 page views, 0 new follows. Comments 0 across all 13 page posts and all 8 dark posts; inbox 0 conversations; scheduled queue empty (correct under the one-post-a-week rhythm). Reel flat at 236 plays / 243 incl. replays / 233 reach / 0 followers.
+
+Free-10 ad: EUR 9.87 of 25 (EUR 15.13 left), 3,985 imp, 3,375 reach, CPM 2.48, freq 1.18, 62 link clicks at EUR 0.159, 49 landing page views at EUR 0.201 — **79% of clicks, a new best**. Daily 29 Sep 2.82 / 1,069 / 23 / 15; 30 Sep 5.46 / 2,296 / 29 / 23; 1 Oct to 12:00 1.59 / 620 / 10 / 11. FB feed EUR 7.46 / 2,945 imp / 29 LPV, IG feed EUR 2.42 / 1,041 imp / 20 LPV, zero Audience Network, off-feed share of today's spend 0%. Waste test does not fire on any leg; spend in all 12 elapsed hourly buckets, so delivery is continuous.
+
+Verified: ad and ad set ACTIVE, no issues_info, no ad_review_feedback; creative re-read from the ad is still 1445432247464313 / dark post ...122114822697476753; feed-only placements PRESENT; both updated_time values unchanged. Account activity log for 30 Sep->2 Oct holds only billing charges — **no overnight Meta edit, the first such night since 29 Sep.**
+
+Pace: EUR 15.13 over 3.49 days needs EUR 4.33/day; today's front half (EUR 1.59) scaled by 30 Sep's front-to-full ratio projects ~EUR 4.11, so ~EUR 1 of the 25 may expire on 4 Oct. Reported, not acted on.
+
+Old ad sets, final check: post boost PAUSED EUR 7.91 unspent, end_time tonight 1 Oct 23:59 — the residual exposure closes by itself and this item is now done. quiet-leads PAUSED EUR 6.34 (closed 28 Sep); spreadsheet EUR 0.44 (closed 24 Sep). Account spend matches the free-10 ad exactly, so none of them spent anything.
+
+Drafted: nothing — the 29 Sep cadence decision cancelled Fri 2 Oct's digest, so this run owes no drafts. Next is Mon 5 Oct's digest at the Sunday 4 Oct sitting.
+Approved/posted: nothing. Vercel analytics still skipped (api.vercel.com blocked by the network policy).
