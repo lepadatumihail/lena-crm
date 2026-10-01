@@ -415,3 +415,7 @@ Old ad sets, final check: post boost PAUSED EUR 7.91 unspent, end_time tonight 1
 
 Drafted: nothing — the 29 Sep cadence decision cancelled Fri 2 Oct's digest, so this run owes no drafts. Next is Mon 5 Oct's digest at the Sunday 4 Oct sitting.
 Approved/posted: nothing. Vercel analytics still skipped (api.vercel.com blocked by the network policy).
+
+## Thu 1 Oct 2026 — evening check (18:10 Madrid / 16:10 UTC)
+
+All quiet and the ad is healthy: 0 comments on all 13 page posts and all 8 dark posts, 0 inbox conversations, nothing drafted, nothing to approve. Free-10 ad ACTIVE with no issues_info or ad_review_feedback, feed-only placements present, and a second night with no Meta re-mint (creative still 1445432247464313 / dark post ...122114822697476753, both updated_time values unchanged). EUR 11.04 of 25 (EUR 13.96 left), 4,522 imp, 3,658 reach, CPM 2.44, 70 link clicks at EUR 0.158, 55 landing page views at EUR 0.201 — still 79% of clicks, and 17 of today's 18 clicks landed (94%). FB feed EUR 8.36 / 3,387 imp / 33 LPV, IG feed EUR 2.68 / 1,135 imp / 22 LPV, zero Audience Network; delivery continuous across 18 of 19 elapsed hourly buckets. Waste test does not fire on any leg. Pace unchanged from noon: ~EUR 1 of the 25 may expire unspent on 4 Oct, reported only.

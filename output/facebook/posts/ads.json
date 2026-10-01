@@ -672,6 +672,31 @@
       "delivery": "continuous — spend in every one of the 12 elapsed hourly buckets today, so the zero-impressions trigger does not apply",
       "pace": "EUR 15.13 over 3.49 days to 4 Oct 23:59 needs EUR 4.33/day. Today's 00:00-11:59 took EUR 1.59; the same window on 30 Sep took EUR 2.11 against a EUR 5.46 full day, so today projects ~EUR 4.11 — a possible ~EUR 1 shortfall by 4 Oct. Reported, not acted on.",
       "account_activities": "GET /act_.../activities 30 Sep -> 2 Oct returns only 4 ad_account_billing_charge events, actor Meta — NO targeting or creative edits overnight"
+    },
+    "observed_2026_10_01T1810": {
+      "when": "1 Oct 2026 18:10 Madrid (16:10 UTC), evening check",
+      "verdict": "all quiet and the ad is healthy — nothing for the founder",
+      "spend_eur": 11.04,
+      "budget_remaining_eur": 13.96,
+      "impressions": 4522,
+      "reach": 3658,
+      "frequency": 1.236,
+      "cpm_eur": 2.44,
+      "clicks_all": 94,
+      "link_clicks": 70,
+      "landing_page_views": 55,
+      "cost_per_link_click_eur": 0.158,
+      "cost_per_landing_page_view_eur": 0.201,
+      "post_reactions": 1,
+      "lpv_ratio": "55/70 = 79% of link clicks — holding at the best ratio any LeadWing ad has produced (74% on 30 Sep, 64% on quiet-leads)",
+      "placements": "facebook/feed EUR 8.36 / 3,387 imp / 46 link clicks / 33 LPV (76% of spend); instagram/feed EUR 2.68 / 1,135 imp / 24 clicks / 22 LPV (24%); ZERO audience_network",
+      "daily": "29 Sep EUR 2.82 / 1,069 imp / 23 clicks / 15 LPV; 30 Sep EUR 5.48 / 2,300 imp / 29 clicks / 23 LPV; 1 Oct to 18:00 EUR 2.74 / 1,153 imp / 18 clicks / 17 LPV (17 of 18 = 94% today)",
+      "delivery": "continuous — spend in 18 of the 19 elapsed hourly buckets today (the 18:00 bucket is still filling at 6 imp), so the zero-feed-impressions trigger does not apply",
+      "waste_test": "does not fire on any leg — 0% audience_network, EUR 0.158 per click (test wants under EUR 0.05), LPV 79% of clicks (test wants below 30%)",
+      "review": "ad ACTIVE, ad set ACTIVE, no issues_info, no ad_review_feedback",
+      "no_meta_edit": "second night in a row with no overnight Meta change: creative still 1445432247464313 / dark post 1279663088571991_122114822697476753, ad updated_time still 2026-09-30T00:23:18+0200, ad set updated_time still 2026-09-29T15:43:16+0200, feed-only placements PRESENT (publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream])",
+      "pace": "EUR 13.96 over 3.24 days to 4 Oct 23:59 needs EUR 4.31/day; today to 18:00 took EUR 2.74 and 30 Sep's front-to-full ratio was 1.53, projecting ~EUR 4.19 today, so roughly EUR 1 of the 25 may still expire unspent. Reported only — no ad edit without a fresh yes, and EUR 1 is not worth one against the 20 Sep security-check lesson.",
+      "organic": "0 comments on all 13 page posts and all 8 dark posts, 0 inbox conversations, 1 lifetime post_reaction (on the Instagram leg)"
     }
   }
 }
