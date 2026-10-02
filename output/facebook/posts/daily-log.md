@@ -1,5 +1,39 @@
 # LeadWing Facebook daily log
 
+## Fri 2 Oct 2026 — noon brief (12:10 Madrid / 10:10 UTC)
+
+Numbers: followers 0. Yesterday (1 Oct): 29 post engagements, 1,379 media views, 0 page views, 0 new follows. Comments 0 across all 13 page posts and all 8 dark posts; inbox 0 conversations; scheduled queue empty (correct — one post a week, next is Mon 5 Oct). Reel flat at 236 plays / 243 incl. replays / 233 reach / 1.748 s average / 0 followers.
+
+Free-10 ad: EUR 13.97 of 25 (EUR 11.03 left), 5,732 imp, 4,466 reach, CPM 2.44, freq 1.28, 87 link clicks at EUR 0.161, 71 landing page views at EUR 0.197 — **82% of clicks, a new best** (79% yesterday). Daily 29 Sep 2.82 / 1,069 / 23 / 15; 30 Sep 5.48 / 2,300 / 29 / 23; 1 Oct 4.40 / 1,908 / 26 / 25 (a 96% landing ratio on the day); 2 Oct to 12:00 1.27 / 455 / 9 / 8. FB feed EUR 10.66 / 4,337 imp / 47 LPV (76% of spend), IG feed EUR 3.31 / 1,395 imp / 24 LPV, zero Audience Network. Delivery continuous — spend in 12 of today's 13 elapsed hourly buckets, and all 24 yesterday. Waste test does not fire on any leg.
+
+Verified: ad and ad set ACTIVE, no issues_info, no ad_review_feedback; creative re-read from the ad is still 1445432247464313 / dark post ...122114822697476753; feed-only placements PRESENT; ad updated_time still 2026-09-30T00:23:18+0200 and ad set still 2026-09-29T15:43:16+0200. Account activity log for 1->3 Oct holds one ad_account_billing_charge and nothing else — **third consecutive night with no Meta edit.**
+
+Pace, and it has got worse: EUR 11.03 over 2.49 days needs EUR 4.43/day. Today's 00:00-11:59 took EUR 1.27 against EUR 1.66 in the same window yesterday (a day that closed at EUR 4.40), which projects ~EUR 3.4 today. Day-on-day the ad is decaying — 5.48, 4.40, ~3.4 — while frequency climbs 1.18 -> 1.24 -> 1.28, so the 60 km / three-interest audience is saturating. **Roughly EUR 2-3 of the 25 now looks likely to expire unspent on 4 Oct 23:59, against ~EUR 1 yesterday.** Reported, not acted on; surfaced as decision 1 with a recommendation to let it expire (the only lever is compressing end_time, and the 21 Sep learning is that compressing a lifetime window killed delivery outright).
+
+Checked ahead for Sunday: SearchAPI still answers (one probe search, google_news/es/en, 10 results). But **`GET /api/v1/me` no longer returns `remaining_credits` or `current_month_usage`** — only account, api_usage (searches_this_hour, hourly_rate_limit 2000) and the billing period (15 Sep -> 15 Oct). The 20 Sep rule "judge by remaining_credits" can no longer be followed; see Learnings. Candidate lead for Monday's digest, not yet verified: Spain's proposed 150% surcharge on homes empty two years plus incentives to sell to the state (Olive Press, 1 Oct) — theolivepress.es is network-blocked here, so it needs a second source or it gets dropped.
+
+Drafted: nothing — the 29 Sep cadence decision means Friday has no digest, and Monday 5 Oct's is drafted at tomorrow's Sunday sitting (which is also the ad's last full day).
+Approved/posted: nothing. Vercel analytics still skipped (api.vercel.com blocked by the network policy).
+
+## Thu 1 Oct 2026 — noon brief (12:15 Madrid / 10:15 UTC)
+
+Numbers: followers 0. Yesterday (30 Sep): 29 post engagements, 1,641 media views, 0 page views, 0 new follows. Comments 0 across all 13 page posts and all 8 dark posts; inbox 0 conversations; scheduled queue empty (correct under the one-post-a-week rhythm). Reel flat at 236 plays / 243 incl. replays / 233 reach / 0 followers.
+
+Free-10 ad: EUR 9.87 of 25 (EUR 15.13 left), 3,985 imp, 3,375 reach, CPM 2.48, freq 1.18, 62 link clicks at EUR 0.159, 49 landing page views at EUR 0.201 — **79% of clicks, a new best**. Daily 29 Sep 2.82 / 1,069 / 23 / 15; 30 Sep 5.46 / 2,296 / 29 / 23; 1 Oct to 12:00 1.59 / 620 / 10 / 11. FB feed EUR 7.46 / 2,945 imp / 29 LPV, IG feed EUR 2.42 / 1,041 imp / 20 LPV, zero Audience Network, off-feed share of today's spend 0%. Waste test does not fire on any leg; spend in all 12 elapsed hourly buckets, so delivery is continuous.
+
+Verified: ad and ad set ACTIVE, no issues_info, no ad_review_feedback; creative re-read from the ad is still 1445432247464313 / dark post ...122114822697476753; feed-only placements PRESENT; both updated_time values unchanged. Account activity log for 30 Sep->2 Oct holds only billing charges — **no overnight Meta edit, the first such night since 29 Sep.**
+
+Pace: EUR 15.13 over 3.49 days needs EUR 4.33/day; today's front half (EUR 1.59) scaled by 30 Sep's front-to-full ratio projects ~EUR 4.11, so ~EUR 1 of the 25 may expire on 4 Oct. Reported, not acted on.
+
+Old ad sets, final check: post boost PAUSED EUR 7.91 unspent, end_time tonight 1 Oct 23:59 — the residual exposure closes by itself and this item is now done. quiet-leads PAUSED EUR 6.34 (closed 28 Sep); spreadsheet EUR 0.44 (closed 24 Sep). Account spend matches the free-10 ad exactly, so none of them spent anything.
+
+Drafted: nothing — the 29 Sep cadence decision cancelled Fri 2 Oct's digest, so this run owes no drafts. Next is Mon 5 Oct's digest at the Sunday 4 Oct sitting.
+Approved/posted: nothing. Vercel analytics still skipped (api.vercel.com blocked by the network policy).
+
+## Thu 1 Oct 2026 — evening check (18:10 Madrid / 16:10 UTC)
+
+All quiet and the ad is healthy: 0 comments on all 13 page posts and all 8 dark posts, 0 inbox conversations, nothing drafted, nothing to approve. Free-10 ad ACTIVE with no issues_info or ad_review_feedback, feed-only placements present, and a second night with no Meta re-mint (creative still 1445432247464313 / dark post ...122114822697476753, both updated_time values unchanged). EUR 11.04 of 25 (EUR 13.96 left), 4,522 imp, 3,658 reach, CPM 2.44, 70 link clicks at EUR 0.158, 55 landing page views at EUR 0.201 — still 79% of clicks, and 17 of today's 18 clicks landed (94%). FB feed EUR 8.36 / 3,387 imp / 33 LPV, IG feed EUR 2.68 / 1,135 imp / 22 LPV, zero Audience Network; delivery continuous across 18 of 19 elapsed hourly buckets. Waste test does not fire on any leg. Pace unchanged from noon: ~EUR 1 of the 25 may expire unspent on 4 Oct, reported only.
+
 ## Wed 30 Sep 2026 (evening check, 18:10 Madrid)
 
 Nothing new and the ad is healthy: 0 comments on all 13 page posts and all 8 dark posts, inbox empty, queue empty (correct under the one-post-a-week rhythm). Free 10 ad EUR 6.40 of 25, 2,655 imp, 47 link clicks at EUR 0.136, 35 landing page views at EUR 0.183 (LPV still 74% of clicks), 100% feed / zero Audience Network, waste test does not fire; creative and dark post re-read from the ad and unchanged since the 00:19 re-mint, placements still present, ad + ad set ACTIVE with no review issues. Pace is now EUR ~4.7/day against the 4.39 needed, so the noon shortfall forecast has closed. Nothing drafted, nothing applied.
@@ -400,22 +434,3 @@ Update 19:24: placement fix confirmed — ad set targeting is now publisher_plat
 - Placements: Audience Network (an_classic) took 41,872 imp and 165 clicks for €5.05 — junk. FB feed only 335 imp, 3 clicks, €0.32 (0.90% CTR, 1 LPV).
 - Landing-page views are 22% of reported clicks — consistent with accidental AN taps.
 - Age/gender (AN-dominated): women 35–54 = 71 of 170 clicks; men flat across ages.
-
-## Thu 1 Oct 2026 — noon brief (12:15 Madrid / 10:15 UTC)
-
-Numbers: followers 0. Yesterday (30 Sep): 29 post engagements, 1,641 media views, 0 page views, 0 new follows. Comments 0 across all 13 page posts and all 8 dark posts; inbox 0 conversations; scheduled queue empty (correct under the one-post-a-week rhythm). Reel flat at 236 plays / 243 incl. replays / 233 reach / 0 followers.
-
-Free-10 ad: EUR 9.87 of 25 (EUR 15.13 left), 3,985 imp, 3,375 reach, CPM 2.48, freq 1.18, 62 link clicks at EUR 0.159, 49 landing page views at EUR 0.201 — **79% of clicks, a new best**. Daily 29 Sep 2.82 / 1,069 / 23 / 15; 30 Sep 5.46 / 2,296 / 29 / 23; 1 Oct to 12:00 1.59 / 620 / 10 / 11. FB feed EUR 7.46 / 2,945 imp / 29 LPV, IG feed EUR 2.42 / 1,041 imp / 20 LPV, zero Audience Network, off-feed share of today's spend 0%. Waste test does not fire on any leg; spend in all 12 elapsed hourly buckets, so delivery is continuous.
-
-Verified: ad and ad set ACTIVE, no issues_info, no ad_review_feedback; creative re-read from the ad is still 1445432247464313 / dark post ...122114822697476753; feed-only placements PRESENT; both updated_time values unchanged. Account activity log for 30 Sep->2 Oct holds only billing charges — **no overnight Meta edit, the first such night since 29 Sep.**
-
-Pace: EUR 15.13 over 3.49 days needs EUR 4.33/day; today's front half (EUR 1.59) scaled by 30 Sep's front-to-full ratio projects ~EUR 4.11, so ~EUR 1 of the 25 may expire on 4 Oct. Reported, not acted on.
-
-Old ad sets, final check: post boost PAUSED EUR 7.91 unspent, end_time tonight 1 Oct 23:59 — the residual exposure closes by itself and this item is now done. quiet-leads PAUSED EUR 6.34 (closed 28 Sep); spreadsheet EUR 0.44 (closed 24 Sep). Account spend matches the free-10 ad exactly, so none of them spent anything.
-
-Drafted: nothing — the 29 Sep cadence decision cancelled Fri 2 Oct's digest, so this run owes no drafts. Next is Mon 5 Oct's digest at the Sunday 4 Oct sitting.
-Approved/posted: nothing. Vercel analytics still skipped (api.vercel.com blocked by the network policy).
-
-## Thu 1 Oct 2026 — evening check (18:10 Madrid / 16:10 UTC)
-
-All quiet and the ad is healthy: 0 comments on all 13 page posts and all 8 dark posts, 0 inbox conversations, nothing drafted, nothing to approve. Free-10 ad ACTIVE with no issues_info or ad_review_feedback, feed-only placements present, and a second night with no Meta re-mint (creative still 1445432247464313 / dark post ...122114822697476753, both updated_time values unchanged). EUR 11.04 of 25 (EUR 13.96 left), 4,522 imp, 3,658 reach, CPM 2.44, 70 link clicks at EUR 0.158, 55 landing page views at EUR 0.201 — still 79% of clicks, and 17 of today's 18 clicks landed (94%). FB feed EUR 8.36 / 3,387 imp / 33 LPV, IG feed EUR 2.68 / 1,135 imp / 22 LPV, zero Audience Network; delivery continuous across 18 of 19 elapsed hourly buckets. Waste test does not fire on any leg. Pace unchanged from noon: ~EUR 1 of the 25 may expire unspent on 4 Oct, reported only.

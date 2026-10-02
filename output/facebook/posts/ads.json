@@ -697,6 +697,21 @@
       "no_meta_edit": "second night in a row with no overnight Meta change: creative still 1445432247464313 / dark post 1279663088571991_122114822697476753, ad updated_time still 2026-09-30T00:23:18+0200, ad set updated_time still 2026-09-29T15:43:16+0200, feed-only placements PRESENT (publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream])",
       "pace": "EUR 13.96 over 3.24 days to 4 Oct 23:59 needs EUR 4.31/day; today to 18:00 took EUR 2.74 and 30 Sep's front-to-full ratio was 1.53, projecting ~EUR 4.19 today, so roughly EUR 1 of the 25 may still expire unspent. Reported only — no ad edit without a fresh yes, and EUR 1 is not worth one against the 20 Sep security-check lesson.",
       "organic": "0 comments on all 13 page posts and all 8 dark posts, 0 inbox conversations, 1 lifetime post_reaction (on the Instagram leg)"
+    },
+    "observed_2026_10_02T1210": {
+      "when": "2 Oct 2026 12:10 Madrid (10:10 UTC), noon brief",
+      "ad": "6997552574094 ACTIVE, no issues_info, no ad_review_feedback; updated_time 2026-09-30T00:23:18+0200 unchanged",
+      "creative": "1445432247464313 re-read from the ad, dark post 1279663088571991_122114822697476753 — THIRD consecutive night with no Meta re-mint; image_hash a96e58d9fdf8fa69598aa5ac1edeac5d, same home link with utm_campaign=free10-sep26, same message, same SIGN_UP CTA",
+      "adset": "6997552554894 ACTIVE, updated_time still 2026-09-29T15:43:16+0200; feed-only placements PRESENT (publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream]); 60 km Marbella, 24-64, three interests only; budget_remaining 1103 cents, end_time 2026-10-04T23:59:00+0200",
+      "activity_log": "GET /act_173026079415266/activities for 1->3 Oct returns one ad_account_billing_charge (actor Meta) and nothing else — no update_ad_creative, no update_ad_set_target_spec",
+      "lifetime": "EUR 13.97 of 25 (EUR 11.03 left), 5,732 imp, 4,466 reach, CPM 2.44, frequency 1.28, 87 link clicks at EUR 0.161, 71 landing page views at EUR 0.197",
+      "lpv_ratio": "71/87 = 82% of link clicks — a new best (79% on 1 Oct, 74% on 30 Sep, quiet-leads 64%); 1 Oct alone landed 25 of 26 clicks",
+      "daily": "29 Sep EUR 2.82 / 1,069 imp / 23 clicks / 15 LPV; 30 Sep EUR 5.48 / 2,300 / 29 / 23; 1 Oct EUR 4.40 / 1,908 / 26 / 25; 2 Oct to 12:00 EUR 1.27 / 455 / 9 / 8",
+      "placements": "lifetime FB feed EUR 10.66 / 4,337 imp / 47 LPV (76% of spend), IG feed EUR 3.31 / 1,395 imp / 24 LPV. ZERO Audience Network, off-feed share of today's spend 0%",
+      "delivery": "continuous — spend in 12 of today's 13 elapsed hourly buckets (12:00 had just opened) and in all 24 buckets of 1 Oct",
+      "waste_test": "does not fire on any leg: Audience Network 0% of spend (test wants >50%), cost per link click EUR 0.161 (test wants <EUR 0.05)",
+      "pace": "EUR 11.03 over 2.49 days needs EUR 4.43/day. Decaying day on day — 5.48, 4.40, ~3.4 projected today (EUR 1.27 by noon against EUR 1.66 in the same window yesterday, a day that closed at 4.40) — while frequency climbs 1.18 -> 1.24 -> 1.28: the 60 km / three-interest audience is saturating. Roughly EUR 2-3 of the 25 now likely to expire unspent on 4 Oct 23:59, against ~EUR 1 forecast on 1 Oct",
+      "action": "none — reported to the founder as decision 1 at the 2 Oct noon brief with a recommendation to let it expire. No ad edit without a fresh yes"
     }
   }
 }
