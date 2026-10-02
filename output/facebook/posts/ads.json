@@ -712,6 +712,105 @@
       "waste_test": "does not fire on any leg: Audience Network 0% of spend (test wants >50%), cost per link click EUR 0.161 (test wants <EUR 0.05)",
       "pace": "EUR 11.03 over 2.49 days needs EUR 4.43/day. Decaying day on day — 5.48, 4.40, ~3.4 projected today (EUR 1.27 by noon against EUR 1.66 in the same window yesterday, a day that closed at 4.40) — while frequency climbs 1.18 -> 1.24 -> 1.28: the 60 km / three-interest audience is saturating. Roughly EUR 2-3 of the 25 now likely to expire unspent on 4 Oct 23:59, against ~EUR 1 forecast on 1 Oct",
       "action": "none — reported to the founder as decision 1 at the 2 Oct noon brief with a recommendation to let it expire. No ad edit without a fresh yes"
+    },
+    "reading_2026_10_02T1810": {
+      "when": "2026-10-02T18:10+0200 evening check",
+      "ad": {
+        "id": "6997552574094",
+        "status": "ACTIVE",
+        "effective_status": "ACTIVE",
+        "updated_time": "2026-09-30T00:23:18+0200",
+        "issues_info": "ABSENT",
+        "ad_review_feedback": "ABSENT"
+      },
+      "adset": {
+        "id": "6997552554894",
+        "status": "ACTIVE",
+        "effective_status": "ACTIVE",
+        "updated_time": "2026-09-29T15:43:16+0200",
+        "end_time": "2026-10-04T23:59:00+0200",
+        "lifetime_budget": "2500",
+        "budget_remaining": "978"
+      },
+      "creative": {
+        "id": "1445432247464313",
+        "effective_object_story_id": "1279663088571991_122114822697476753",
+        "image_hash": "a96e58d9fdf8fa69598aa5ac1edeac5d",
+        "link": "https://www.leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=free10-sep26",
+        "cta": "SIGN_UP",
+        "verdict": "unchanged since the 30 Sep Meta re-mint"
+      },
+      "placements_present": {
+        "publisher_platforms": [
+          "facebook",
+          "instagram"
+        ],
+        "facebook_positions": [
+          "feed"
+        ],
+        "instagram_positions": [
+          "stream"
+        ]
+      },
+      "lifetime": {
+        "spend": "15.22",
+        "impressions": 6339,
+        "reach": 4817,
+        "cpm": 2.4,
+        "frequency": 1.316,
+        "link_clicks": 95,
+        "cost_per_link_click": 0.16,
+        "landing_page_views": 78,
+        "cost_per_lpv": 0.195,
+        "lpv_share_of_clicks": "82%",
+        "post_reaction": 1
+      },
+      "daily": {
+        "2026-09-29": {
+          "spend": "2.82",
+          "imp": 1069,
+          "clicks": 23,
+          "lpv": 15
+        },
+        "2026-09-30": {
+          "spend": "5.48",
+          "imp": 2300,
+          "clicks": 29,
+          "lpv": 23
+        },
+        "2026-10-01": {
+          "spend": "4.43",
+          "imp": 1915,
+          "clicks": 26,
+          "lpv": 25
+        },
+        "2026-10-02_to_1800": {
+          "spend": "2.49",
+          "imp": 1055,
+          "clicks": 17,
+          "lpv": 15
+        }
+      },
+      "placements_lifetime": {
+        "facebook_feed": {
+          "spend": "11.72",
+          "imp": 4848,
+          "clicks": 65,
+          "lpv": 51
+        },
+        "instagram_feed": {
+          "spend": "3.50",
+          "imp": 1491,
+          "clicks": 30,
+          "lpv": 27,
+          "post_reaction": 1
+        },
+        "audience_network": "ZERO"
+      },
+      "delivery": "continuous - spend in all 19 elapsed hourly buckets on 2 Oct; off-feed share of today's spend 0%",
+      "waste_test": "does not fire on any leg (0% audience_network; EUR 0.160 per link click; LPV 82% of clicks)",
+      "activities_2_to_3_Oct": "one ad_account_billing_charge (actor Meta) and nothing else - fourth consecutive night with no Meta edit",
+      "pace": "EUR 9.78 over 2.24 days needs EUR 4.36/day; 00:00-18:00 took EUR 2.49 vs EUR 2.74 in the same window on 1 Oct (a EUR 4.43 day), projecting ~EUR 4.03 today. Shortfall forecast narrowed to ~EUR 1-1.5 from EUR 2-3 at noon. Nothing edited; decision 1 (let it expire) still open."
     }
   }
 }

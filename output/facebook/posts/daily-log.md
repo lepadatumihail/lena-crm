@@ -1,5 +1,15 @@
 # LeadWing Facebook daily log
 
+## Fri 2 Oct 2026 — evening check (18:10 Madrid / 16:10 UTC)
+
+All quiet and the ad is healthy. 0 comments across all 13 page posts and all 8 dark posts, 0 inbox conversations, scheduled queue empty (correct — next post is Mon 5 Oct's digest, drafted at tomorrow's Sunday sitting).
+
+Free-10 ad verified: ad and ad set ACTIVE, no `issues_info`, no `ad_review_feedback`; creative re-read from the ad still 1445432247464313 / dark post ...122114822697476753; feed-only placements PRESENT; ad `updated_time` still 2026-09-30T00:23:18+0200, ad set still 2026-09-29T15:43:16+0200; `activities` for 2->3 Oct holds one `ad_account_billing_charge` and nothing else — a FOURTH consecutive night with no Meta edit.
+
+EUR 15.22 of 25 (EUR 9.78 left), 6,339 imp, 4,817 reach, CPM 2.40, freq 1.32, 95 link clicks at EUR 0.160, 78 landing page views at EUR 0.195 — 82% of clicks, holding the new best. Today 2.49 / 1,055 / 17 clicks / 15 LPV (88% on the day). Daily: 29 Sep 2.82; 30 Sep 5.48; 1 Oct 4.43 (restated from 4.40); 2 Oct to 18:00 2.49. FB feed lifetime EUR 11.72 / 4,848 imp / 51 LPV (77% of spend), IG feed EUR 3.50 / 1,491 imp / 27 LPV, zero Audience Network, off-feed share of today's spend 0%. Delivery continuous — spend in all 19 elapsed hourly buckets. Waste test does not fire on any leg.
+
+Pace, revised DOWN from noon: today's 00:00-18:00 took EUR 2.49 against EUR 2.74 in the same window on 1 Oct (a day that closed at 4.43), which projects ~EUR 4.03 today, not the ~3.4 feared at noon — the afternoon recovered (15:00-17:00 alone took EUR 0.95). EUR 9.78 over 2.24 days needs EUR 4.36/day, so **~EUR 1-1.5 of the 25 now looks likely to expire unspent, against EUR 2-3 at noon.** That strengthens the noon recommendation to let it expire; decision 1 from the noon brief is still open and nothing was edited.
+
 ## Fri 2 Oct 2026 — noon brief (12:10 Madrid / 10:10 UTC)
 
 Numbers: followers 0. Yesterday (1 Oct): 29 post engagements, 1,379 media views, 0 page views, 0 new follows. Comments 0 across all 13 page posts and all 8 dark posts; inbox 0 conversations; scheduled queue empty (correct — one post a week, next is Mon 5 Oct). Reel flat at 236 plays / 243 incl. replays / 233 reach / 1.748 s average / 0 followers.
