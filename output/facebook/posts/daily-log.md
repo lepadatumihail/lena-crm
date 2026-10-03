@@ -1,5 +1,24 @@
 # LeadWing Facebook daily log
 
+## Sat 3 Oct 2026 — noon brief (12:20 Madrid / 10:20 UTC)
+
+**PLACEMENT REGRESSION HAS RECURRED — Meta rewrote the free-10 ad set's placements at 00:21:09 Madrid, 4 placements -> 29, Audience Network included.** Proven from `GET /act_.../activities`: `update_ad_set_target_spec` at 2026-10-02T22:21:09+0000, actor **"Meta" id 1051435468209173** — no operator edit, same midnight-Madrid pattern and the same 4->29 diff as 27 Sep on quiet-leads. The ad set ran Active -> Pending process -> Active (00:21:26) and the ad went back through review and returned ACTIVE at 00:23:58. `publisher_platforms`, `facebook_positions` and `instagram_positions` are now ABSENT from the targeting (only age_max, age_min, flexible_spec, geo_locations, targeting_automation remain); `advantage_audience` is still 0. New precursor not seen on 27 Sep: **five `asa_auto_custom_audience` audiences created by actor "Meta" id 0 at 2 Oct 22:43 Madrid**, 1.5 h before the rewrite.
+
+**It is already costing feed delivery: 83% of today's spend is off-feed, against 0% yesterday.** Today EUR 1.85: IG Reels 0.99 / 410 imp, IG Stories 0.45 / 203, FB in-stream 0.09 / 30, FB Reels 0.01 / 12 = EUR 1.53 off-feed; FB feed collapsed to 0.25 / 93 imp (from 3.37 / 1,391 yesterday) and IG feed to 0.06 / 35. Audience Network has taken EUR 0.00 so far despite being in the list.
+
+**The waste test does NOT fire on any leg** — AN is 0% of spend, not >50%, and link clicks cost EUR 0.116, not under EUR 0.05 — so nothing was paused. Reported as decision 1 instead. Unlike 19-20 Sep this is not junk-click inventory: the off-feed legs produced 13 of today's 13 landing page views from 15 clicks (87%) at EUR 0.118 each, cheaper than the feed's EUR 0.195 — one morning of data, not a finding.
+
+Numbers: EUR 18.72 of 25 (EUR 6.28 left), 7,798 imp, 5,854 reach, CPM 2.40, freq 1.33, 120 link clicks at EUR 0.156, 99 landing page views at EUR 0.189 (82% of clicks). Lifetime feed impressions 7,153 of 7,798 (92%). Daily: 29 Sep 2.82 / 1,069 / 23 / 15; 30 Sep 5.48 / 2,300 / 29 / 23; 1 Oct 4.45 / 1,916 / 26 / 25; 2 Oct 4.12 / 1,732 / 26 / 23; 3 Oct to 12:59 1.85 / 783 / 16 / 13. Delivery continuous (13 of 13 elapsed hourly buckets).
+
+**The shortfall is GONE — the cheap off-feed inventory spends faster.** EUR 6.28 over 1.49 days needs EUR 4.22/day; today's 00:00-12:59 took EUR 1.85 against EUR 1.40 in the same window yesterday (a 4.12 day), projecting ~EUR 5.4. So decision 1 from the 2 Oct noon brief (let the remainder expire) is overtaken and needs no answer.
+
+Verified unchanged: creative still 1445432247464313 / dark post ...122114822697476753, no second re-mint; ad and ad set ACTIVE with no `issues_info` or `ad_review_feedback`; end_time still 2026-10-04T23:59+0200; EUR 18.72 + 6.28 = 25.00.
+
+Quiet: 0 comments across all 13 page posts and all 8 dark posts, 0 inbox conversations, scheduled queue empty (correct). Followers 0. Yesterday (2 Oct): 17 post engagements, 1,214 media views, 0 page views, 0 new follows. Reel 237 plays / 245 incl. replays / 233 reach / 1.744 s / 0 followers (+1 play in a day).
+
+Drafted: nothing. The 29 Sep cadence decision drops the Wednesday product post and the Friday digest, and Mon 5 Oct's digest belongs to tomorrow's Sunday sitting — Saturday owes nothing.
+Approved/posted: nothing. Vercel analytics still skipped (api.vercel.com blocked by the network policy).
+
 ## Fri 2 Oct 2026 — evening check (18:10 Madrid / 16:10 UTC)
 
 All quiet and the ad is healthy. 0 comments across all 13 page posts and all 8 dark posts, 0 inbox conversations, scheduled queue empty (correct — next post is Mon 5 Oct's digest, drafted at tomorrow's Sunday sitting).

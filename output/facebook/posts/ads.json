@@ -811,6 +811,216 @@
       "waste_test": "does not fire on any leg (0% audience_network; EUR 0.160 per link click; LPV 82% of clicks)",
       "activities_2_to_3_Oct": "one ad_account_billing_charge (actor Meta) and nothing else - fourth consecutive night with no Meta edit",
       "pace": "EUR 9.78 over 2.24 days needs EUR 4.36/day; 00:00-18:00 took EUR 2.49 vs EUR 2.74 in the same window on 1 Oct (a EUR 4.43 day), projecting ~EUR 4.03 today. Shortfall forecast narrowed to ~EUR 1-1.5 from EUR 2-3 at noon. Nothing edited; decision 1 (let it expire) still open."
+    },
+    "reading_2026_10_03T1220": {
+      "run_type": "noon brief",
+      "headline": "PLACEMENT REGRESSION RECURRED — Meta rewrote the ad set's placements 4 -> 29 at 2026-10-03T00:21:09+0200, actor 'Meta' id 1051435468209173, no operator edit. 83% of today's spend is off-feed. Waste test does not fire; NOT paused; put to the founder as decision 1.",
+      "ad": {
+        "id": "6997552574094",
+        "status": "ACTIVE",
+        "effective_status": "ACTIVE",
+        "updated_time": "2026-10-03T00:23:58+0200",
+        "issues_info": null,
+        "ad_review_feedback": null
+      },
+      "adset": {
+        "id": "6997552554894",
+        "status": "ACTIVE",
+        "effective_status": "ACTIVE",
+        "updated_time": "2026-10-03T00:21:26+0200",
+        "end_time": "2026-10-04T23:59:00+0200",
+        "lifetime_budget": 2500,
+        "budget_remaining": 628,
+        "optimization_goal": "LANDING_PAGE_VIEWS"
+      },
+      "creative": {
+        "id": "1445432247464313",
+        "effective_object_story_id": "1279663088571991_122114822697476753",
+        "image_hash": "a96e58d9fdf8fa69598aa5ac1edeac5d",
+        "link": "https://www.leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=free10-sep26",
+        "cta": "SIGN_UP",
+        "note": "unchanged — no second Meta re-mint"
+      },
+      "targeting_now": {
+        "keys_present": [
+          "age_max",
+          "age_min",
+          "flexible_spec",
+          "geo_locations",
+          "targeting_automation"
+        ],
+        "publisher_platforms": null,
+        "facebook_positions": null,
+        "instagram_positions": null,
+        "targeting_automation": {
+          "advantage_audience": 0
+        },
+        "note": "the three placement fields are ABSENT — Meta stripped them. Ads Manager text went from 4 placements (Feed desktop, IG feed, IG web feed, Feed mobile) to 29, including 'Third-party apps and websites on mobile devices (Audience Network)', IG Reels/Stories/search, Marketplace, right column, in-stream, FB Reels, Threads feed and notifications."
+      },
+      "lifetime": {
+        "spend": 18.72,
+        "impressions": 7798,
+        "reach": 5854,
+        "cpm": 2.400616,
+        "frequency": 1.332081,
+        "link_clicks": 120,
+        "cost_per_link_click": 0.156,
+        "landing_page_views": 99,
+        "cost_per_lpv": 0.189091,
+        "lpv_share_of_clicks": 0.825,
+        "post_reaction": 1,
+        "feed_impressions": 7153
+      },
+      "daily": [
+        {
+          "d": "2026-09-29",
+          "spend": 2.82,
+          "imp": 1069,
+          "clicks": 23,
+          "lpv": 15
+        },
+        {
+          "d": "2026-09-30",
+          "spend": 5.48,
+          "imp": 2300,
+          "clicks": 29,
+          "lpv": 23
+        },
+        {
+          "d": "2026-10-01",
+          "spend": 4.45,
+          "imp": 1916,
+          "clicks": 26,
+          "lpv": 25
+        },
+        {
+          "d": "2026-10-02",
+          "spend": 4.12,
+          "imp": 1732,
+          "clicks": 26,
+          "lpv": 23
+        },
+        {
+          "d": "2026-10-03",
+          "spend": 1.85,
+          "imp": 783,
+          "clicks": 16,
+          "lpv": 13,
+          "partial_to": "12:59 Madrid"
+        }
+      ],
+      "placements_lifetime": [
+        {
+          "p": "facebook/feed",
+          "spend": 13.381,
+          "imp": 5507,
+          "clicks": 73,
+          "lpv": 57
+        },
+        {
+          "p": "instagram/feed",
+          "spend": 3.826,
+          "imp": 1646,
+          "clicks": 32,
+          "lpv": 29
+        },
+        {
+          "p": "instagram/instagram_reels",
+          "spend": 0.972,
+          "imp": 403,
+          "clicks": 8,
+          "lpv": 7
+        },
+        {
+          "p": "instagram/instagram_stories",
+          "spend": 0.441,
+          "imp": 200,
+          "clicks": 5,
+          "lpv": 4
+        },
+        {
+          "p": "facebook/instream_video",
+          "spend": 0.09,
+          "imp": 30,
+          "clicks": 2,
+          "lpv": 2
+        },
+        {
+          "p": "facebook/facebook_reels",
+          "spend": 0.01,
+          "imp": 12,
+          "clicks": 0,
+          "lpv": 0
+        },
+        {
+          "p": "audience_network",
+          "spend": 0.0,
+          "imp": 0,
+          "note": "in the placement list since the rewrite but has not delivered"
+        }
+      ],
+      "placements_today": {
+        "off_feed_share_of_today_spend": 0.83,
+        "feed": {
+          "spend": 0.315,
+          "imp": 128,
+          "clicks": 1,
+          "lpv": 0
+        },
+        "off_feed": {
+          "spend": 1.535,
+          "imp": 655,
+          "clicks": 15,
+          "lpv": 13,
+          "cost_per_lpv": 0.118
+        }
+      },
+      "waste_test": "DOES NOT FIRE on any leg — audience_network 0% of spend (test wants >50%), link clicks EUR 0.116 (test wants <EUR 0.05). Not paused. Off-feed share of today's spend is 83% and is reported alongside, per the 27 Sep learning.",
+      "pace": "EUR 6.28 over 1.49 days needs EUR 4.22/day; today's 00:00-12:59 took EUR 1.85 against EUR 1.40 in the same window on 2 Oct (a EUR 4.12 day), projecting ~EUR 5.4. The unspent-remainder forecast has GONE — the off-feed inventory is cheap and plentiful. Decision 1 from the 2 Oct noon brief (let the remainder expire) is overtaken.",
+      "activities_2_to_4_oct": [
+        {
+          "t": "2026-10-02T20:43:52+0000",
+          "event": "create_audience x5",
+          "actor": "Meta id 0",
+          "detail": "asa_auto_custom_audience ids 6998239657894/658094/658294/658494/658694 — NEW, not seen on 27 Sep; 1.5 h before the placement rewrite"
+        },
+        {
+          "t": "2026-10-02T22:21:09+0000",
+          "event": "update_ad_set_target_spec",
+          "actor": "Meta id 1051435468209173",
+          "detail": "placements 4 -> 29"
+        },
+        {
+          "t": "2026-10-02T22:21:09+0000",
+          "event": "update_ad_set_run_status",
+          "actor": "Meta id 1051435468209173",
+          "detail": "Active -> Pending process"
+        },
+        {
+          "t": "2026-10-02T22:21:26+0000",
+          "event": "update_ad_set_run_status",
+          "actor": "Meta id 1051435468209173",
+          "detail": "Pending process -> Active"
+        },
+        {
+          "t": "2026-10-02T22:21:44+0000",
+          "event": "update_ad_run_status",
+          "actor": "Meta id 1051435468209173",
+          "detail": "Pending process -> Pending Review"
+        },
+        {
+          "t": "2026-10-02T22:23:58+0000",
+          "event": "update_ad_run_status",
+          "actor": "Meta id 0",
+          "detail": "Pending Review -> Active (review returned it)"
+        },
+        {
+          "t": "2026-10-02T13:45:46+0000",
+          "event": "ad_account_billing_charge",
+          "actor": "Meta id 0",
+          "detail": ""
+        }
+      ]
     }
   }
 }
