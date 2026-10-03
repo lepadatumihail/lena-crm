@@ -1,5 +1,19 @@
 # LeadWing Facebook daily log
 
+## Sat 3 Oct 2026 — evening check (18:10 Madrid / 16:10 UTC)
+
+All quiet on the page: 0 comments across all 13 page posts and all 8 ad dark posts, 0 inbox conversations, scheduled queue empty (correct — next post is Mon 5 Oct's digest, drafted at tomorrow's Sunday sitting). Nothing to reply to, nothing drafted, nothing posted.
+
+The placement regression PERSISTS and Meta did nothing further: `activities` for 3 Oct returns 0 events, ad set `updated_time` still 2026-10-03T00:21:26+0200, ad still 00:23:58, the three placement fields still ABSENT, creative still 1445432247464313 / dark post ...122114822697476753 with the same image hash, ad and ad set ACTIVE with no `issues_info` or `ad_review_feedback`, end_time still 4 Oct 23:59.
+
+**Audience Network has started delivering — EUR 0.16 for 1,337 impressions, 6 clicks, 1 landing page view, all of it after noon (EUR 0.00 at 12:59).** Half of today's impressions for 5% of today's money and 17% click-to-landing against 70% on the rest: the 19-20 Sep signature, at a size that changes nothing. It does split this morning's read, though — IG Reels (1.23 / 603 / 8 LPV) and IG Stories (1.07 / 493 / 9) really are converting; "off-feed" as a single category was the wrong frame.
+
+Numbers: EUR 19.90 of 25 (EUR 5.10 left), 9,721 imp, 6,352 reach, CPM 2.05, freq 1.53, 134 link clicks at EUR 0.148, 107 LPV at EUR 0.186 (80% of clicks). Today to 18:00: 3.00 / 2,691 imp / 30 clicks / 21 LPV, off-feed 88% of spend (83% at noon); FB feed down to 0.30 / 133 imp, IG feed 0.06 / 41. Delivery continuous (all 19 buckets); 14:00-17:00 bought 1,750 imp for 0.91.
+
+Waste test does not fire on any leg (AN 5.3% of today, 0.8% lifetime; clicks EUR 0.100; LPV 70%), so nothing was paused. Pace: 5.10 over ~1.25 days, today projects ~5.00 against 2 Oct's 4.15, leaving ~3.10 for tomorrow — on pace to spend out the full EUR 25.
+
+Decision 1 from the noon brief (A pause / B re-apply feed-only / C do nothing, recommendation C) is still open and unanswered; the EUR 0.16 of AN does not shift it. Vercel analytics still skipped (api.vercel.com blocked by the network policy).
+
 ## Sat 3 Oct 2026 — noon brief (12:20 Madrid / 10:20 UTC)
 
 **PLACEMENT REGRESSION HAS RECURRED — Meta rewrote the free-10 ad set's placements at 00:21:09 Madrid, 4 placements -> 29, Audience Network included.** Proven from `GET /act_.../activities`: `update_ad_set_target_spec` at 2026-10-02T22:21:09+0000, actor **"Meta" id 1051435468209173** — no operator edit, same midnight-Madrid pattern and the same 4->29 diff as 27 Sep on quiet-leads. The ad set ran Active -> Pending process -> Active (00:21:26) and the ad went back through review and returned ACTIVE at 00:23:58. `publisher_platforms`, `facebook_positions` and `instagram_positions` are now ABSENT from the targeting (only age_max, age_min, flexible_spec, geo_locations, targeting_automation remain); `advantage_audience` is still 0. New precursor not seen on 27 Sep: **five `asa_auto_custom_audience` audiences created by actor "Meta" id 0 at 2 Oct 22:43 Madrid**, 1.5 h before the rewrite.

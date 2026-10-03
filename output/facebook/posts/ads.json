@@ -1021,6 +1021,83 @@
           "detail": ""
         }
       ]
+    },
+    "reading_2026_10_03T1810": {
+      "when": "2026-10-03T18:10+0200 (evening check)",
+      "ad": {
+        "id": "6997552574094",
+        "effective_status": "ACTIVE",
+        "status": "ACTIVE",
+        "updated_time": "2026-10-03T00:23:58+0200",
+        "issues_info": "absent",
+        "ad_review_feedback": "absent"
+      },
+      "adset": {
+        "id": "6997552554894",
+        "effective_status": "ACTIVE",
+        "status": "ACTIVE",
+        "updated_time": "2026-10-03T00:21:26+0200",
+        "end_time": "2026-10-04T23:59:00+0200",
+        "lifetime_budget": "2500",
+        "budget_remaining": "510",
+        "optimization_goal": "LANDING_PAGE_VIEWS"
+      },
+      "creative": {
+        "id": "1445432247464313",
+        "effective_object_story_id": "1279663088571991_122114822697476753",
+        "image_hash": "a96e58d9fdf8fa69598aa5ac1edeac5d",
+        "link": "https://www.leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=free10-sep26",
+        "cta": "SIGN_UP",
+        "verdict": "unchanged since 30 Sep 00:19 re-mint; no second re-mint"
+      },
+      "placements_in_targeting": "publisher_platforms / facebook_positions / instagram_positions STILL ABSENT (Meta's 3 Oct 00:21 rewrite persists); targeting holds only age_max, age_min, flexible_spec, geo_locations, targeting_automation; advantage_audience 0",
+      "activities_3_oct": "GET /act_.../activities since=2026-10-03 returns 0 events - no further Meta change after the 00:21 rewrite and 00:23 re-review",
+      "lifetime": {
+        "spend": "19.90",
+        "impressions": 9721,
+        "reach": 6352,
+        "cpm": "2.05",
+        "frequency": "1.53",
+        "link_clicks": 134,
+        "cost_per_link_click": "0.1485",
+        "landing_page_views": 107,
+        "cost_per_lpv": "0.1860",
+        "lpv_share_of_clicks": "80%"
+      },
+      "daily": {
+        "2026-09-29": "2.82 / 1069 imp / 23 clicks / 15 LPV",
+        "2026-09-30": "5.48 / 2300 / 29 / 23",
+        "2026-10-01": "4.45 / 1916 / 26 / 25",
+        "2026-10-02": "4.15 / 1745 / 26 / 23",
+        "2026-10-03 to 18:00": "3.00 / 2691 / 30 / 21"
+      },
+      "placements_lifetime": {
+        "facebook_feed": "13.47 / 5583 imp / 74 clicks / 58 LPV",
+        "instagram_feed": "3.83 / 1658 / 32 / 29",
+        "instagram_reels": "1.21 / 594 / 9 / 8",
+        "instagram_stories": "1.06 / 486 / 11 / 9",
+        "audience_network": "0.16 / 1318 / 6 / 1",
+        "facebook_instream_video": "0.12 / 51 / 2 / 2",
+        "facebook_reels": "0.04 / 30 / 0 / 0",
+        "facebook_marketplace": "0.01 / 1 / 0 / 0",
+        "feed_share_of_spend": "87% (17.30 of 19.90)",
+        "feed_share_of_impressions": "74% (7241 of 9721)"
+      },
+      "placements_today": {
+        "off_feed_share_of_today_spend": "88% (2.64 of 3.00)",
+        "audience_network": "0.16 / 1337 imp / 6 clicks / 1 LPV - NEW, was 0.00 at noon",
+        "instagram_reels": "1.23 / 603 / 9 / 8",
+        "instagram_stories": "1.07 / 493 / 11 / 9",
+        "facebook_instream_video": "0.12 / 52 / 2 / 2",
+        "facebook_reels": "0.04 / 31 / 0 / 0",
+        "facebook_marketplace": "0.01 / 1 / 0 / 0",
+        "facebook_feed": "0.30 / 133 / 2 / 1",
+        "instagram_feed": "0.06 / 41 / 0 / 0"
+      },
+      "waste_test": "DOES NOT FIRE on any leg: audience_network 5.3% of today's spend and 0.8% of lifetime (test wants >50%); cost per link click today EUR 0.100 (test wants <0.05); LPV 70% of today's clicks (test wants <30%). Nothing paused.",
+      "delivery": "continuous - spend in all 19 elapsed hourly buckets today; 14:00-17:00 alone bought 1750 imp for EUR 0.91 (CPM ~0.52), which is the cheap off-feed inventory",
+      "pace": "EUR 5.10 left over ~1.25 days. Today's 00:00-18:00 took 3.00 against 2.49 in the same window on 2 Oct (a 4.15 day), projecting ~5.00 today and leaving ~3.10 for 4 Oct at a ~5/day rate. On pace to spend the full EUR 25 before 4 Oct 23:59; the shortfall stays gone.",
+      "open_decision": "Decision 1 from the 3 Oct noon brief (A pause / B re-apply feed-only placements / C do nothing, recommendation C) is STILL OPEN. No ad edit without a fresh yes."
     }
   }
 }
