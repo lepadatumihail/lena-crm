@@ -1242,6 +1242,73 @@
    "pace": "EUR 1.80 left; 3 Oct's 12:00-23:59 window alone took EUR 2.84, so the budget exhausts this evening and the full EUR 25 is spent",
    "decision_1_3_Oct": "OVERTAKEN - window closes tonight, option C (do nothing) is what happened",
    "honest_feed_only_result": "the 2 Oct evening reading: EUR 15.22, 95 clicks, 78 LPV, 82%"
+  },
+  "reading_2026_10_04T1810": {
+   "when": "2026-10-04T18:10+0200 (evening check - FINAL reading before the window closes tonight 23:59 Madrid)",
+   "ad": {
+    "id": "6997552574094",
+    "effective_status": "ACTIVE",
+    "status": "ACTIVE",
+    "updated_time": "2026-10-03T00:23:58+0200",
+    "issues_info": "absent",
+    "ad_review_feedback": "absent"
+   },
+   "adset": {
+    "id": "6997552554894",
+    "effective_status": "ACTIVE",
+    "status": "ACTIVE",
+    "updated_time": "2026-10-03T00:21:26+0200",
+    "end_time": "2026-10-04T23:59:00+0200",
+    "lifetime_budget": "2500",
+    "budget_remaining": "106"
+   },
+   "creative": {
+    "id": "1445432247464313",
+    "effective_object_story_id": "1279663088571991_122114822697476753",
+    "image_hash": "a96e58d9fdf8fa69598aa5ac1edeac5d",
+    "verdict": "unchanged; no further re-mint"
+   },
+   "placements_in_targeting": "publisher_platforms / facebook_positions / instagram_positions STILL ABSENT (Meta's 3 Oct 00:21 rewrite persists to the end of the run); targeting holds only age_max, age_min, flexible_spec, geo_locations, targeting_automation",
+   "activities_4_oct": "GET /act_.../activities since=2026-10-04 returns ONE event: ad_account_billing_charge 04:23 UTC, actor Meta id 0. No edit.",
+   "lifetime": {
+    "spend": "23.94",
+    "impressions": 12079,
+    "reach": 8075,
+    "cpm": "1.98",
+    "frequency": "1.50",
+    "link_clicks": 175,
+    "cost_per_link_click": "0.137",
+    "landing_page_views": 140,
+    "cost_per_landing_page_view": "0.171",
+    "lpv_share_of_clicks": "80%",
+    "post_reactions": 1
+   },
+   "today_to_1800": {
+    "spend": "2.36",
+    "impressions": 1443,
+    "link_clicks": 25,
+    "landing_page_views": 19,
+    "cost_per_link_click": "0.094",
+    "cost_per_landing_page_view": "0.124",
+    "note": "the run's cheapest day on both rates"
+   },
+   "placement_lifetime": {
+    "facebook_feed": "EUR 13.62 / 5,646 imp / 74 clicks / 58 LPV",
+    "instagram_feed": "EUR 3.89 / 1,674 imp / 32 clicks / 29 LPV",
+    "instagram_stories": "EUR 3.22 / 1,619 imp / 33 clicks / 27 LPV",
+    "instagram_reels": "EUR 2.36 / 1,279 imp / 21 clicks / 17 LPV",
+    "facebook_instream_video": "EUR 0.48 / 219 imp / 5 clicks / 5 LPV",
+    "audience_network": "EUR 0.22 / 1,556 imp / 8 clicks / 2 LPV (0.9% of lifetime spend - harmless)",
+    "facebook_reels": "EUR 0.12 / 80 imp / 2 clicks / 2 LPV",
+    "facebook_marketplace": "EUR 0.02 / 6 imp / 0 clicks",
+    "feed_share_of_lifetime_impressions": "7,320 of 12,079 = 61%"
+   },
+   "placement_today": {
+    "off_feed_share_of_spend": "95% (FB feed 0.07 / 32 imp, IG feed 0.04 / 15; IG Stories 1.42 / 776 imp / 10 LPV is the day's biggest leg)",
+    "audience_network": "EUR 0.05 / 100 imp / 2 clicks / 1 LPV = 2% of the day"
+   },
+   "waste_test": "DOES NOT FIRE on any leg: Audience Network 2% of today and 0.9% of lifetime (not >50%); link clicks EUR 0.094 (not under EUR 0.05); landing page views 76% of today's clicks and 80% lifetime (not below 30%). Nothing paused.",
+   "verdict": "Healthy to the last hour. EUR 1.06 left with ~6 h to run - it spends out or leaves well under a euro. After 23:59 Madrid tonight the ad set is structurally dead (lifetime window closed) and needs no further checking; do not resume, re-fund or extend without a fresh yes."
   }
  }
 }

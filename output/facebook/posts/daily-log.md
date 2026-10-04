@@ -1,5 +1,15 @@
 # LeadWing Facebook daily log
 
+## Sun 4 Oct 2026 — evening check (18:10 Madrid / 16:10 UTC)
+
+All quiet and the ad is healthy on its last evening. 0 comments across all 13 page posts and all 8 ad dark posts, 0 inbox conversations, nothing to reply to, nothing drafted, nothing posted. Monday's digest is confirmed still in the queue: post `1279663088571991_122117458551476753`, is_published false, scheduled_publish_time 1791185400 = 2026-10-05 09:30 Madrid, queue length 1.
+
+Free-10 ad, final reading before the window closes tonight 23:59 Madrid: EUR 23.94 of 25 (EUR 1.06 left), 12,079 imp, 8,075 reach, CPM 1.98, freq 1.50, 175 link clicks at EUR 0.137, 140 LPV at EUR 0.171 (80% of clicks). Today to 18:00: 2.36 / 1,443 imp / 25 clicks / 19 LPV — EUR 0.094 per click and EUR 0.124 per landing view, the run's cheapest day on both. Ad and ad set ACTIVE, no `issues_info`, no `ad_review_feedback`; creative still 1445432247464313 / dark post …122114822697476753, same image hash; `activities` since 4 Oct holds one billing charge and nothing else.
+
+The 3 Oct placement regression persists to the end: the three placement fields are still ABSENT and Meta made no further edit. Off-feed is 95% of today's spend (FB feed down to 0.07 / 32 imp) and feed is 61% of lifetime impressions. Audience Network finished harmless at EUR 0.22 / 1,556 imp lifetime (0.9% of spend). Waste test does not fire on any leg (AN 2% of today, clicks EUR 0.094, LPV 76% of today's clicks), so nothing was paused. After tonight the ad set is structurally dead and needs no further checking.
+
+Nothing needs the founder. Vercel analytics still skipped (api.vercel.com blocked by the network policy).
+
 ## Sun 4 Oct 2026 — noon brief / weekly sitting (12:20 Madrid / 10:20 UTC)
 
 All quiet on the page: 0 comments across all 13 page posts and all 8 ad dark posts, 0 inbox conversations, 0 followers, scheduled queue empty. Yesterday (3 Oct): 17 post engagements, 1,234 media views, 0 page views, 0 new follows. Reel flat at 237 plays / 245 incl. replays / 233 reach / 0 followers.
