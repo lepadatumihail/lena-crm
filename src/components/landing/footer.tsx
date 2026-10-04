@@ -84,7 +84,15 @@ export function LandingFooter() {
 
         <div className="text-muted-foreground flex flex-col-reverse items-center justify-between gap-3 border-t py-5 text-xs sm:flex-row">
           <span>
-            © {new Date().getFullYear()} {SITE_NAME}
+            © {new Date().getFullYear()} {SITE_NAME} · {tFooter("builtBy")}{" "}
+            <a
+              href={locale === "es" ? "https://lepadatu.dev/es" : "https://lepadatu.dev"}
+              target="_blank"
+              rel="noopener"
+              className="hover:text-foreground transition-colors"
+            >
+              lepadatu.dev
+            </a>
           </span>
           <nav
             aria-label={tLegal("label")}

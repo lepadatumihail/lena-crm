@@ -185,7 +185,8 @@
     "ask": "Still not sure? Write to"
   },
   "footer": {
-    "contactLead": "Questions? Write to us —"
+    "contactLead": "Questions? Write to us —",
+    "builtBy": "Built by"
   },
   "onePlace": {
     "badge": "The problem",

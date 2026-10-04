@@ -185,7 +185,8 @@
     "ask": "¿Sigues con dudas? Escribe a"
   },
   "footer": {
-    "contactLead": "¿Dudas? Escríbenos —"
+    "contactLead": "¿Dudas? Escríbenos —",
+    "builtBy": "Creado por"
   },
   "onePlace": {
     "badge": "El problema",
