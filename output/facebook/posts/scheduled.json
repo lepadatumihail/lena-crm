@@ -109,5 +109,20 @@
     "approved": "founder in session, 27 Sep: '2- schedule it'",
     "published_at": "2026-09-28T09:30:01+02:00",
     "verified": "28 Sep noon: is_published true, 0 reactions, 0 comments at 12:10"
+  },
+  {
+    "image": "output/facebook/posts/13-digest-2026-10-05.png",
+    "kind": "Monday news digest (week of 28 Sep - 4 Oct), lead: Congress derogated both housing decrees",
+    "photo_id": "122117458341476753",
+    "post_id": "1279663088571991_122117458551476753",
+    "scheduled_publish_time": 1791185400,
+    "scheduled_for": "2026-10-05T09:30:00+02:00",
+    "is_published": false,
+    "source_file": "output/facebook/posts/news-digest-2026-10-05.md",
+    "spec": "output/facebook/posts/spec-digest-2026-10-05.json",
+    "photo_asset": "output/facebook/posts/photo-2026-10-05-malaga-balconies.png",
+    "error": null,
+    "approved": "founder in session, 4 Oct: 'i give you freedom to make and put the posts, we are still at 0 so no big deal'",
+    "verified": "4 Oct: in /scheduled_posts, is_published false, attachment present, 1,743 chars, no banned word"
   }
 ]

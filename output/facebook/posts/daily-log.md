@@ -14,7 +14,9 @@ Waste test does not fire on any leg, so nothing was paused. Decision 1 from the 
 
 `npm ci` succeeded in this fresh clone and gave sharp 0.34.5 with `lib/index.js` — the SHARP_DIR workaround was not needed (see Learnings).
 
-Drafted: Monday's digest (decision 1). Re-surfaced: the Google tag install (decision 2) and the outreach follow-ups (decision 3), both still unanswered from 29 Sep. Approved/posted: nothing. Vercel analytics still skipped (api.vercel.com blocked by the network policy).
+**FOUNDER ANSWERED IN SESSION (4 Oct): "i give you freedom to make and put the posts, we are still at 0 so no big deal" — Monday's digest is SCHEDULED.** Post `1279663088571991_122117458551476753`, photo `122117458341476753`, 2026-10-05 09:30 Madrid, verified in `/scheduled_posts`: is_published false, attachment present, 1,743 chars, no banned word. Queue length 1. Recorded as a standing decision in the playbook: **publishing/scheduling no longer waits for a per-item yes**, while messaging anyone and any ad action still do — his words covered the posts only. Decisions 2 (Google tag) and 3 (outreach follow-ups) therefore remain open and unanswered.
+
+Drafted: Monday's digest (now scheduled). Re-surfaced: the Google tag install (decision 2) and the outreach follow-ups (decision 3), both still unanswered from 29 Sep. Approved/posted: nothing. Vercel analytics still skipped (api.vercel.com blocked by the network policy).
 
 ## Sat 3 Oct 2026 — evening check (18:10 Madrid / 16:10 UTC)
 
