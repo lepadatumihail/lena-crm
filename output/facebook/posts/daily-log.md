@@ -1,5 +1,21 @@
 # LeadWing Facebook daily log
 
+## Sun 4 Oct 2026 — noon brief / weekly sitting (12:20 Madrid / 10:20 UTC)
+
+All quiet on the page: 0 comments across all 13 page posts and all 8 ad dark posts, 0 inbox conversations, 0 followers, scheduled queue empty. Yesterday (3 Oct): 17 post engagements, 1,234 media views, 0 page views, 0 new follows. Reel flat at 237 plays / 245 incl. replays / 233 reach / 0 followers.
+
+**Drafted Monday 5 Oct's digest — the only post of the coming week.** Week of 28 Sep – 4 Oct; lead is Congress derogating BOTH housing decrees on Friday 2 Oct, so the automatic two-year tenancy extension and the rent-update cap fell and the old rules are back. Files: `news-digest-2026-10-05.md`, `13-digest-2026-10-05.png`, `spec-digest-2026-10-05.json`, `photo-2026-10-05-malaga-balconies.png`. Nothing scheduled — awaiting "post 1". Dropped one repeat (Málaga's ~100 tourist-apartment approvals, already in the 28 Sep digest) and resolved one cross-source conflict (Olive Press's "Marbella €1,888/month" is the €1,880 province average for 100 m²).
+
+**Free-10 ad, last day of its window:** EUR 23.20 of 25 (EUR 1.80 left), 11,596 imp, 7,860 reach, CPM 2.00, freq 1.48, 167 link clicks at EUR 0.139, 135 LPV at EUR 0.172 (81%). Today to 12:59: 1.62 / 960 imp / 17 clicks / 14 LPV, at the run's cheapest rates (EUR 0.095 per click, EUR 0.116 per LPV). 3 Oct closed at 4.68. Delivery continuous (13 of 13 buckets). The EUR 1.80 will spend out — yesterday's afternoon alone took 2.84 — so the full EUR 25 goes.
+
+Regression persists and Meta did nothing further: activities for 3->5 Oct hold only three billing charges, both `updated_time` values frozen, the three placement fields still absent, creative still 1445432247464313 / dark post ...122114822697476753, ad and ad set ACTIVE with no issues, end_time still tonight 23:59. **Off-feed is now 94% of daily spend** (FB feed down to EUR 0.07 / 26 imp); lifetime feed impressions 63% of total, down from 92% two days ago. Audience Network finished harmless: EUR 0.18 / 1,500 imp / 7 clicks / 2 LPV lifetime.
+
+Waste test does not fire on any leg, so nothing was paused. Decision 1 from the 3 Oct noon brief (A/B/C) is overtaken — the window closes tonight and C is what happened. After tonight the ad is structurally dead and needs no further checking.
+
+`npm ci` succeeded in this fresh clone and gave sharp 0.34.5 with `lib/index.js` — the SHARP_DIR workaround was not needed (see Learnings).
+
+Drafted: Monday's digest (decision 1). Re-surfaced: the Google tag install (decision 2) and the outreach follow-ups (decision 3), both still unanswered from 29 Sep. Approved/posted: nothing. Vercel analytics still skipped (api.vercel.com blocked by the network policy).
+
 ## Sat 3 Oct 2026 — evening check (18:10 Madrid / 16:10 UTC)
 
 All quiet on the page: 0 comments across all 13 page posts and all 8 ad dark posts, 0 inbox conversations, scheduled queue empty (correct — next post is Mon 5 Oct's digest, drafted at tomorrow's Sunday sitting). Nothing to reply to, nothing drafted, nothing posted.

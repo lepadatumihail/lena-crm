@@ -1,1103 +1,1247 @@
 {
-  "click_ad": {
-    "kind": "click ad",
-    "post_id": "1279663088571991_122105662023476753",
-    "approved": "€25 lifetime as a link-click ad, 19 Sep 2026",
-    "link": "https://leadwing.app/start?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26",
-    "image_hash": "2c66ea9b404867530f0ce140fc8c0e14",
-    "campaign_id": "6995417076094",
-    "adset_id": "6995417079494",
-    "status": "LANDING_PAGE_VIEWS, ends Thu 24 Sep 23:59; since 22 Sep ~16:50 the ad links to leadwing.app/start (creative 1140361055322528, same image and text, founder applied the swap); re-review CLEARED and ad + ad set ACTIVE again as of the 22 Sep 18:10 evening check",
-    "dark_post_id": "1279663088571991_122110668759476753",
-    "dark_post_id_previous": "1279663088571991_122105682405476753",
-    "dark_post_note": "both ads minted NEW dark posts at 2026-09-24T00:21 Madrid (same second on both), with new creative ids but the same image hash, link, copy and call_to_action; not an operator change - nothing was edited from the routine. Older dark posts stay reachable: check the current one plus 1279663088571991_122109116961476753 and 1279663088571991_122105682405476753 for comments.",
-    "optimization_goal_previous": "LINK_CLICKS",
-    "edit_2026_09_21": {
-      "change": "optimization_goal LINK_CLICKS -> REACH",
-      "why": "a full day at zero impressions and zero spend; lowest-cost LINK_CLICKS with no pixel could not win a narrow feed auction",
-      "billing_event": "IMPRESSIONS already, so no second edit was needed",
-      "verified_after": "optimization_goal=REACH, adset ACTIVE, budget_remaining 1935, ad effective_status IN_PROCESS (re-review, same as the 20 Sep edit)"
-    },
-    "observed_2026_09_21T1805": {
-      "spend_eur": 8.85,
-      "budget_remaining_eur": 16.15,
-      "reach": 10436,
-      "impressions": 46448,
-      "link_clicks_reported": 175,
-      "landing_page_views": 38,
-      "today_21_sep": "EUR 3.23 / 4089 imp / 3791 reach / cpm 0.79 / 4 link clicks / 1 LPV - delivery restored by the REACH switch",
-      "today_21_sep_placements": "facebook/feed EUR 2.89 / 3596 imp / 4 clicks / 1 LPV; instagram/feed EUR 0.34 / 493 imp / 0 clicks; audience_network zero",
-      "today_21_sep_hourly": "14:00 EUR 0.08, 15:00 EUR 1.65 (1830 imp), 16:00 EUR 0.91, 17:00 EUR 0.56, 18:00 EUR 0.03 (partial hour)",
-      "facebook_feed_lifetime": "EUR 3.14 / 3810 imp / 8 clicks / 2 LPV",
-      "instagram_feed_lifetime": "EUR 0.35 / 512 imp / 0 clicks",
-      "audience_network_lifetime": "EUR 5.13 / 42034 imp / 165 clicks - 58% of lifetime spend, all of it before the 20 Sep 13:11 placement fix",
-      "ad_effective_status": "ACTIVE (re-review after the REACH edit has cleared)",
-      "adset_effective_status": "ACTIVE",
-      "account_status": "1 (active, no disable reason, Visa *1984, EUR 1.45 balance)",
-      "issues_info": "none on ad or ad set",
-      "not_paused_because": "lifetime AN share 58% and lifetime cost per click EUR 0.051 make the waste test borderline on paper, but all AN spend predates the placement fix and today's real cost per click is EUR 0.81 - nothing is being wasted now",
-      "pixel_status": "GET /act_173026079415266/adspixels returns an empty list - the founder has not created the pixel yet, so the LANDING_PAGE_VIEWS edit stays blocked and the ad set was not touched",
-      "runway_note": "end_time is still Tue 22 Sep 23:59 with EUR 16.15 unspent - about 30 hours to absorb it at today's ~EUR 0.65/h"
-    },
-    "creative_id": "1421207649981623",
-    "creative_id_previous": "1083235867424577",
-    "ad_id": "6995418317094",
-    "end_time": "2026-09-24T23:59:00+02:00",
-    "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
-    "pacing_type": "standard",
-    "optimization_goal": "LANDING_PAGE_VIEWS",
-    "observed_2026_09_21T1205": {
-      "spend_eur": 5.65,
-      "budget_remaining_eur": 19.35,
-      "reach": 6691,
-      "impressions": 42405,
-      "link_clicks_reported": 171,
-      "landing_page_views": 37,
-      "today_21_sep": "no insights row at all - zero impressions, zero spend across the first 12 hours",
-      "since_placement_fix_20sep_1311": "24 impressions, EUR 0.01 in 17 hours",
-      "facebook_feed_lifetime": "EUR 0.33 / 356 imp / 4 clicks / 1 LPV",
-      "instagram_feed_lifetime": "39 imp / 0 clicks",
-      "audience_network_lifetime": "EUR 5.05 / 41875 imp / 165 clicks - 89% of spend, all before the placement fix",
-      "ad_effective_status": "ACTIVE",
-      "adset_effective_status": "ACTIVE",
-      "account_status": "1 (active, no disable reason, Visa on file)",
-      "issues_info": "none on ad or ad set",
-      "diagnosis": "not a pacing problem: feed-only + narrow interest/job-title audience + LOWEST_COST_WITHOUT_CAP + LINK_CLICKS with no pixel loses the auction outright",
-      "not_paused_because": "playbook waste test fires on lifetime AN share (89%) but that spend predates the placement fix; at EUR 0.01/day pausing saves nothing and only freezes the budget",
-      "proposed_fix_not_applied": "switch optimization_goal LINK_CLICKS -> REACH, keeping placements, audience, budget and the Tue 22 Sep 23:59 end time"
-    },
-    "observed_2026_09_20T2345": {
-      "spend_eur": 5.64,
-      "budget_remaining_eur": 19.36,
-      "reach": 6674,
-      "impressions": 42391,
-      "link_clicks_reported": 170,
-      "link_clicks_real_feed": 3,
-      "landing_page_views": 37,
-      "facebook_feed": "EUR 0.32 / 342 imp / 3 clicks / 1 LPV",
-      "instagram_feed": "36 imp / 0 clicks",
-      "audience_network_share": "EUR 5.05, 41875 imp, 165 clicks - junk, all before the 13:11 placement fix",
-      "since_reactivation_1923": "10 impressions, EUR 0.00 in 4.5 hours - delivery has effectively stopped",
-      "ad_effective_status": "ACTIVE",
-      "diagnosis": "pacing: EUR 19.36 over 4 remaining days on lowest-cost bidding will not win a narrow feed auction",
-      "proposed_fix_not_applied": "bring adset end_time forward to 2026-09-22T23:59 so the same EUR 19.36 is paced over ~2 days instead of 4"
-    },
-    "edit_2026_09_21_lpv": {
-      "change": "optimization_goal REACH -> LANDING_PAGE_VIEWS; end_time 22 Sep -> 24 Sep 23:59; budget, bid strategy, placements, audience unchanged",
-      "applied_by": "founder, from the terminal, on Claude's prepared script (Claude's tooling cannot edit ad sets)",
-      "pixel": "1625109429125373 attached to the ad account; NOT passed as promoted_object - Meta rejects pixel_id alone for OUTCOME_TRAFFIC (subcode 1885014); the account's pixel is matched to the ad URL automatically",
-      "verified_after": "optimization_goal=LANDING_PAGE_VIEWS, end_time=2026-09-24T23:59:00+0200, budget_remaining 1547, ad set + ad IN_PROCESS"
-    },
-    "observed_2026_09_22T1205": {
-      "spend_eur": 15.25,
-      "budget_remaining_eur": 9.75,
-      "reach": 14051,
-      "impressions": 50132,
-      "link_clicks_reported": 203,
-      "landing_page_views": 54,
-      "day_21_sep_full": "EUR 8.00 / 6987 imp / 6875 reach / cpm 1.14 / 21 link clicks / 10 LPV - EUR 4.77 of it after the 19:35 LPV switch",
-      "day_21_sep_placements": "facebook/feed EUR 6.43 / 6075 imp / 19 clicks / 9 LPV; instagram/feed EUR 1.57 / 912 imp / 2 clicks / 1 LPV; audience_network zero",
-      "today_22_sep_to_1205": "EUR 1.60 / 740 imp / 676 reach / cpm 2.16 / 11 link clicks / 7 LPV - LPV is 64% of clicks",
-      "today_22_sep_placements": "facebook/feed EUR 0.88 / 425 imp / 8 clicks / 6 LPV; instagram/feed EUR 0.72 / 315 imp / 3 clicks / 1 LPV; audience_network zero",
-      "today_22_sep_hourly": "delivery in every hour 00:00-11:59, EUR 0.01-0.50 each, no stall",
-      "audience_network_lifetime": "EUR 5.07 / 41883 imp / 165 clicks - now 33% of lifetime spend, all of it before the 20 Sep 13:11 placement fix",
-      "facebook_feed_lifetime": "EUR 7.63 / 6850 imp / 31 clicks / 16 LPV",
-      "instagram_feed_lifetime": "EUR 2.30 / 1261 imp / 5 clicks / 2 LPV",
-      "ad_effective_status": "ACTIVE",
-      "adset_effective_status": "ACTIVE",
-      "issues_info": "none on ad or ad set; no ad_review_feedback",
-      "account_status": "1 (active, no disable reason, Visa *1984, EUR 0.92 balance, EUR 97.88 lifetime spend)",
-      "waste_test": "does not fire on any reading: lifetime AN share 33% (under half) and lifetime cost per click EUR 0.075 (over EUR 0.05); today EUR 0.145 per click with LPV at 64% of clicks",
-      "runway_note": "EUR 9.75 over ~60 h to Thu 24 Sep 23:59; today's pace ~EUR 0.13/h would leave roughly EUR 1-2 unspent, and lifetime pacing usually accelerates at the end"
-    },
-    "observed_2026_09_22T1810": {
-      "spend_eur": 16.26,
-      "budget_remaining_eur": 8.74,
-      "reach": 14445,
-      "impressions": 50654,
-      "link_clicks_reported": 211,
-      "landing_page_views": 59,
-      "today_22_sep_to_1800": "EUR 2.59 / 1256 imp / 19 link clicks / 12 LPV - LPV is 63% of clicks, EUR 0.22 per LPV, EUR 0.14 per click",
-      "today_22_sep_placements": "facebook/feed EUR 1.46 / 760 imp / 12 clicks / 8 LPV; instagram/feed EUR 1.13 / 496 imp / 7 clicks / 4 LPV; audience_network zero",
-      "today_22_sep_hourly": "delivery in every hour 00:00-18:00; dipped to EUR 0.01 / 13 imp in the 17:00 hour during the post-swap re-review, back to a ~50 imp/h pace by 18:00",
-      "ad_effective_status": "ACTIVE - the re-review after the 16:50 /start creative swap has cleared",
-      "adset_effective_status": "ACTIVE",
-      "link_verified": "https://leadwing.app/start?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26 on both link_data.link and call_to_action",
-      "issues_info": "none on ad or ad set; no ad_review_feedback",
-      "account_status": "1 (active, no disable reason, Visa *1984, EUR 0.01 balance, EUR 97.90 lifetime spend)",
-      "engagement": "0 comments and 0 reactions on both dark posts and all page posts; lifetime actions show 1 post_reaction and 1 post_unlike from earlier in the run, nothing to answer",
-      "waste_test": "does not fire on any reading: lifetime AN share 31% (under half), lifetime cost per click EUR 0.077 (over EUR 0.05), today EUR 0.14 per click with LPV at 63% of clicks",
-      "runway_note": "EUR 8.74 over ~54 h to Thu 24 Sep 23:59; today's ~EUR 0.14/h would leave roughly EUR 1 unspent - still the founder's call, for the Wed 23 and Thu 24 noon briefs"
-    },
-    "observed_2026_09_23T1205": {
-      "spend_eur": 19.37,
-      "budget_remaining_eur": 5.63,
-      "reach": 15379,
-      "impressions": 52083,
-      "link_clicks_reported": 223,
-      "landing_page_views": 69,
-      "day_22_sep_full": "EUR 4.29 / 2049 imp / 1830 reach / cpm 2.09 / ctr 1.56% / 26 link clicks / 18 LPV - LPV is 69% of clicks, EUR 0.24 per LPV, EUR 0.17 per click. Best full day of the run on quality.",
-      "day_22_sep_split_by_landing": "before 17:00 (home page) EUR 2.62 / 19 clicks / 12 LPV; 17:00 onward (/start) EUR 1.67 / 7 clicks / 6 LPV",
-      "today_23_sep_to_1205": "EUR 1.41 / 636 imp / 589 reach / cpm 2.22 / ctr 0.79% / 5 link clicks / 4 LPV (80% of clicks)",
-      "today_23_sep_placements": "facebook/feed EUR 0.74 / 350 imp / 2 clicks / 2 LPV; instagram/feed EUR 0.68 / 286 imp / 3 clicks / 2 LPV; audience_network zero",
-      "today_23_sep_hourly": "delivery in every hour 00:00-12:00 except 02:00, EUR 0.03-0.43 each, no stall",
-      "start_page_era_total": "about 10 landing page views on /start since the 22 Sep 16:50 swap (6 on 22 Sep after 17:00 + 4 today) - too few to judge the page yet; sign-in attempts are the founder's read in the auth log",
-      "audience_network_lifetime": "EUR 5.06 / 41875 imp / 165 clicks - now 26% of lifetime spend, all of it before the 20 Sep 13:11 placement fix",
-      "facebook_feed_lifetime": "EUR 10.06 / 8112 imp / 43 clicks / 25 LPV",
-      "instagram_feed_lifetime": "EUR 4.01 / 1958 imp / 13 clicks / 8 LPV",
-      "stray_placements_lifetime": "facebook_reels EUR 0.11 / 56 imp, instagram_reels EUR 0.13 / 73 imp, facebook_stories EUR 0.01, right_hand_column EUR 0.00 - EUR 0.25 total, historical, none of it today",
-      "ad_effective_status": "ACTIVE",
-      "adset_effective_status": "ACTIVE",
-      "issues_info": "none on ad or ad set; no ad_review_feedback",
-      "link_verified": "https://leadwing.app/start?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26 on both link_data.link and call_to_action",
-      "account_status": "1 (active, no disable reason, Visa *1984, EUR 3.18 balance, EUR 102.19 lifetime spend)",
-      "waste_test": "does not fire on any reading: lifetime AN share 26% (under half), lifetime cost per click EUR 0.087 (over EUR 0.05), today EUR 0.28 per click with LPV at 80% of clicks",
-      "runway_note": "EUR 5.63 over ~36 h to Thu 24 Sep 23:59. 22 Sep ran at EUR 4.29/day and today is on a ~EUR 2.8/day pace, so most of it should land but roughly EUR 1 may expire. Follow-on funding put to the founder again in this brief."
-    },
-    "runway_decision_2026_09_23": {
-      "answer": "option A - no top-up, no follow-on budget (founder, 23 Sep, in the noon brief session)",
-      "effect": "the ad set spends out its remaining EUR 5.63 and ends Thu 24 Sep 23:59 as scheduled; roughly EUR 1 may expire unspent, accepted",
-      "applied": "nothing - A is the do-nothing option, no ad, ad set or budget call was made",
-      "next": "report final run totals in the Thu 24 evening check and the Fri 25 noon brief; do not resume, re-fund or edit the ad set without a fresh yes"
-    },
-    "link_previous": "https://leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26",
-    "edit_2026_09_22_landing": {
-      "change": "creative 1083235867424577 -> 1140361055322528: link and call_to_action link now leadwing.app/start?utm_campaign=spreadsheets-sep26; message, name, description, image_hash unchanged",
-      "why": "~21 home-page landings produced 0 sign-in attempts (auth log, 4 days); /start answers the ad in its own words with one action",
-      "applied_by": "founder from the terminal (ad_link_to_start.py); Claude's tooling cannot edit ads",
-      "verified_after": "ad effective_status IN_PROCESS, creative id 1140361055322528"
-    },
-    "observed_2026_09_23T1810": {
-      "spend_eur": 20.42,
-      "budget_remaining_eur": 4.58,
-      "reach": 15669,
-      "impressions": 52538,
-      "link_clicks_reported": 232,
-      "landing_page_views": 75,
-      "today_23_sep_to_1810": "EUR 2.45 / 1080 imp / 985 reach / cpm 2.27 / ctr 1.48% / 14 link clicks / 10 LPV - LPV is 71% of clicks, EUR 0.25 per LPV, EUR 0.18 per click",
-      "today_23_sep_placements": "facebook/feed EUR 1.26 / 611 imp / 9 clicks / 6 LPV; instagram/feed EUR 1.19 / 469 imp / 5 clicks / 4 LPV; audience_network zero",
-      "today_23_sep_hourly": "delivery in every hour 00:00-18:00 except 02:00, EUR 0.01-0.43 each, no stall; afternoon picked up (15:00 EUR 0.30 / 138 imp)",
-      "since_noon_brief": "EUR 1.04, 9 link clicks, 6 LPV in the ~6 h since the 12:05 reading",
-      "ad_effective_status": "ACTIVE",
-      "adset_effective_status": "ACTIVE",
-      "issues_info": "none on ad or ad set; no ad_review_feedback",
-      "waste_test": "does not fire: zero audience_network today, lifetime AN share 25%, lifetime cost per click EUR 0.088, today EUR 0.18 per click with LPV at 71% of clicks",
-      "engagement": "0 comments on every page post and on both dark posts; inbox empty. The current dark post 122109116961476753 now shows 1 reaction (was 0 at noon) - a reaction, nothing to answer",
-      "runway_note": "EUR 4.58 left over ~30 h to Thu 24 Sep 23:59 at a ~EUR 2.5/day pace. Option A stands: no top-up, roughly EUR 1 may expire unspent."
-    },
-    "creative_id_before_2026_09_24": "1140361055322528",
-    "dark_post_id_before_2026_09_24": "1279663088571991_122109116961476753",
-    "observed_2026_09_24T1210": {
-      "spend_eur": 22.78,
-      "budget_remaining_eur": 2.22,
-      "reach": 16366,
-      "impressions": 53448,
-      "link_clicks_reported": 249,
-      "landing_page_views": 87,
-      "day_23_sep_full": "EUR 3.57 / 1492 imp / 1343 reach / cpm 2.39 / 22 link clicks / 16 LPV (73% of clicks, EUR 0.22 per LPV)",
-      "today_24_sep_to_1210": "EUR 1.24 / 497 imp / 456 reach / cpm 2.49 / 9 link clicks / 6 LPV",
-      "today_24_sep_hourly": "delivery in every hour 00:00-12:00, EUR 0.03-0.21 each, no stall",
-      "placements_lifetime": "facebook feed EUR 12.00 / 8938 imp / 63 clicks / 39 LPV; instagram feed EUR 5.47 / 2496 imp / 19 clicks / 12 LPV; audience_network EUR 5.06 / 41876 imp (22% of lifetime spend, all before the 20 Sep placement fix); EUR 0.25 leaked historically to reels/stories/right column, none today",
-      "post_reactions_lifetime": 5,
-      "ad_effective_status": "ACTIVE",
-      "adset_effective_status": "ACTIVE",
-      "issues_info": "none",
-      "waste_test": "does not fire: lifetime AN share 22%, lifetime cost per click EUR 0.091, today EUR 0.14 per click with LPV at 67% of clicks",
-      "runway": "option A stands - ends today 23:59 with EUR 2.22 left; at ~EUR 0.10/h roughly EUR 1 expires unspent, as accepted",
-      "note": "the creative copy still says 'one card with their budget' (banned word) - the ad ends tonight, so it was not touched"
-    },
-    "observed_2026_09_24T1810": {
-      "spend_eur": 23.9,
-      "budget_remaining_eur": 1.1,
-      "reach": 16598,
-      "impressions": 53870,
-      "link_clicks_reported": 253,
-      "landing_page_views": 90,
-      "today_24_sep_to_1810": "EUR 2.34 / 914 imp / 814 reach / cpm 2.56 / ctr 2.19% / 13 link clicks / 9 LPV - 69% of clicks, EUR 0.26 per landing view",
-      "today_24_sep_placements": "facebook/feed EUR 1.39 / 544 imp / 11 clicks / 8 LPV; instagram/feed EUR 0.95 / 370 imp / 2 clicks / 1 LPV; audience_network zero",
-      "day_23_sep_full": "EUR 3.59 / 1497 imp / 1349 reach / 22 clicks / 16 LPV",
-      "ad_effective_status": "ACTIVE",
-      "adset_effective_status": "ACTIVE",
-      "issues_info": "none on ad or ad set; no ad_review_feedback",
-      "waste_test": "does not fire: lifetime audience_network share 21% (under half) and lifetime cost per click EUR 0.094 (over EUR 0.05); today feed-only with LPV at 69% of clicks",
-      "run_totals_near_final": "EUR 23.90 of EUR 25 over 19-24 Sep: 53,870 impressions, 16,598 reach, 253 reported link clicks, 90 landing page views (EUR 0.27 each). Ad set ends tonight 24 Sep 23:59 Madrid on option A; EUR 1.10 expires unspent, as accepted. The Fri 25 noon brief confirms it has ended."
-    },
-    "status_2026_09_25T1210": "ENDED as scheduled 24 Sep 23:59 Madrid on option A. Ad + ad set still read effective_status ACTIVE but the end_time has passed, so there is no 25 Sep row and no further spend. Do not resume, re-fund or edit without a fresh yes.",
-    "final_2026_09_25T1210": {
-      "spend_eur": 24.56,
-      "budget_unspent_eur": 0.44,
-      "impressions": 54155,
-      "reach": 16680,
-      "cpm": 0.4535,
-      "ctr": 0.5023,
-      "link_clicks_reported": 255,
-      "landing_page_views": 91,
-      "cost_per_landing_view_eur": 0.27,
-      "cost_per_click_eur": 0.096,
-      "last_day_24_sep": "EUR 2.99 / 1198 imp / 1049 reach / cpm 2.50 / ctr 2.17 / 15 clicks / 10 LPV",
-      "placements_lifetime": "facebook/feed EUR 12.94 / 9333 imp / 66 clicks / 42 LPV; instagram/feed EUR 6.31 / 2812 imp / 22 clicks / 13 LPV; audience_network EUR 5.06 / 41872 imp / 165 clicks / 36 LPV (all before the 20 Sep 13:11 placement fix); EUR 0.25 leaked to Reels/Stories/right-hand column, all historical",
-      "real_feed_totals": "12145 feed impressions, 88 feed clicks, 55 feed landing views for EUR 19.25 - the honest read of the run",
-      "reactions": "5 post_reaction, 3 net page likes, 0 comments across its dark posts"
-    },
-    "status_2026_09_27T1810": "ENDED 24 Sep 23:59; ad set and ad still read effective_status ACTIVE (normal for a finished lifetime ad set), budget_remaining EUR 0.44, no insights row since 24 Sep, no spend"
+ "click_ad": {
+  "kind": "click ad",
+  "post_id": "1279663088571991_122105662023476753",
+  "approved": "€25 lifetime as a link-click ad, 19 Sep 2026",
+  "link": "https://leadwing.app/start?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26",
+  "image_hash": "2c66ea9b404867530f0ce140fc8c0e14",
+  "campaign_id": "6995417076094",
+  "adset_id": "6995417079494",
+  "status": "LANDING_PAGE_VIEWS, ends Thu 24 Sep 23:59; since 22 Sep ~16:50 the ad links to leadwing.app/start (creative 1140361055322528, same image and text, founder applied the swap); re-review CLEARED and ad + ad set ACTIVE again as of the 22 Sep 18:10 evening check",
+  "dark_post_id": "1279663088571991_122110668759476753",
+  "dark_post_id_previous": "1279663088571991_122105682405476753",
+  "dark_post_note": "both ads minted NEW dark posts at 2026-09-24T00:21 Madrid (same second on both), with new creative ids but the same image hash, link, copy and call_to_action; not an operator change - nothing was edited from the routine. Older dark posts stay reachable: check the current one plus 1279663088571991_122109116961476753 and 1279663088571991_122105682405476753 for comments.",
+  "optimization_goal_previous": "LINK_CLICKS",
+  "edit_2026_09_21": {
+   "change": "optimization_goal LINK_CLICKS -> REACH",
+   "why": "a full day at zero impressions and zero spend; lowest-cost LINK_CLICKS with no pixel could not win a narrow feed auction",
+   "billing_event": "IMPRESSIONS already, so no second edit was needed",
+   "verified_after": "optimization_goal=REACH, adset ACTIVE, budget_remaining 1935, ad effective_status IN_PROCESS (re-review, same as the 20 Sep edit)"
   },
-  "rejected_boost": {
-    "post_id": "1279663088571991_122105598963476753",
-    "approved": "€5/day x 5 days = €25 lifetime, 19 Sep 2026",
-    "campaign_id": "6995415486894",
-    "adset_id": "6995415491294",
-    "creative_id": "1803034517386725",
-    "ad_id": "6995415507494",
-    "created_at": "2026-09-19T20:22:42.222258+02:00",
-    "end_time": "2026-09-24T23:59:00+02:00",
-    "paused_at_reason": "19 Sep 2026: founder rejected the typographic creative before delivery",
-    "status": "ARCHIVED, never delivered"
+  "observed_2026_09_21T1805": {
+   "spend_eur": 8.85,
+   "budget_remaining_eur": 16.15,
+   "reach": 10436,
+   "impressions": 46448,
+   "link_clicks_reported": 175,
+   "landing_page_views": 38,
+   "today_21_sep": "EUR 3.23 / 4089 imp / 3791 reach / cpm 0.79 / 4 link clicks / 1 LPV - delivery restored by the REACH switch",
+   "today_21_sep_placements": "facebook/feed EUR 2.89 / 3596 imp / 4 clicks / 1 LPV; instagram/feed EUR 0.34 / 493 imp / 0 clicks; audience_network zero",
+   "today_21_sep_hourly": "14:00 EUR 0.08, 15:00 EUR 1.65 (1830 imp), 16:00 EUR 0.91, 17:00 EUR 0.56, 18:00 EUR 0.03 (partial hour)",
+   "facebook_feed_lifetime": "EUR 3.14 / 3810 imp / 8 clicks / 2 LPV",
+   "instagram_feed_lifetime": "EUR 0.35 / 512 imp / 0 clicks",
+   "audience_network_lifetime": "EUR 5.13 / 42034 imp / 165 clicks - 58% of lifetime spend, all of it before the 20 Sep 13:11 placement fix",
+   "ad_effective_status": "ACTIVE (re-review after the REACH edit has cleared)",
+   "adset_effective_status": "ACTIVE",
+   "account_status": "1 (active, no disable reason, Visa *1984, EUR 1.45 balance)",
+   "issues_info": "none on ad or ad set",
+   "not_paused_because": "lifetime AN share 58% and lifetime cost per click EUR 0.051 make the waste test borderline on paper, but all AN spend predates the placement fix and today's real cost per click is EUR 0.81 - nothing is being wasted now",
+   "pixel_status": "GET /act_173026079415266/adspixels returns an empty list - the founder has not created the pixel yet, so the LANDING_PAGE_VIEWS edit stays blocked and the ad set was not touched",
+   "runway_note": "end_time is still Tue 22 Sep 23:59 with EUR 16.15 unspent - about 30 hours to absorb it at today's ~EUR 0.65/h"
   },
-  "pixel": {
-    "pixel_id": "1625109429125373",
-    "dataset_name": "LEADWING",
-    "created": "21 Sep 2026 ~18:50 by the founder in Events Manager (Meta API refused to create one with the page token)",
-    "site": "live on leadwing.app since 21 Sep 2026 ~19:05 (commits f512d57 + a19b77f): consent-gated cookie notice, marketing URLs only, PageView on load and on client navigation, autoConfig off, advanced matching off, host-based default in src/lib/site.ts (NEXT_PUBLIC_META_PIXEL_ID overrides)",
-    "verified": "21 Sep 2026 19:10 on www.leadwing.app: Accept -> fbq init 1625109429125373, PageView for / and /pricing; footer Cookies link reopens the notice; nothing on /login"
+  "creative_id": "1421207649981623",
+  "creative_id_previous": "1083235867424577",
+  "ad_id": "6995418317094",
+  "end_time": "2026-09-24T23:59:00+02:00",
+  "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
+  "pacing_type": "standard",
+  "optimization_goal": "LANDING_PAGE_VIEWS",
+  "observed_2026_09_21T1205": {
+   "spend_eur": 5.65,
+   "budget_remaining_eur": 19.35,
+   "reach": 6691,
+   "impressions": 42405,
+   "link_clicks_reported": 171,
+   "landing_page_views": 37,
+   "today_21_sep": "no insights row at all - zero impressions, zero spend across the first 12 hours",
+   "since_placement_fix_20sep_1311": "24 impressions, EUR 0.01 in 17 hours",
+   "facebook_feed_lifetime": "EUR 0.33 / 356 imp / 4 clicks / 1 LPV",
+   "instagram_feed_lifetime": "39 imp / 0 clicks",
+   "audience_network_lifetime": "EUR 5.05 / 41875 imp / 165 clicks - 89% of spend, all before the placement fix",
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "account_status": "1 (active, no disable reason, Visa on file)",
+   "issues_info": "none on ad or ad set",
+   "diagnosis": "not a pacing problem: feed-only + narrow interest/job-title audience + LOWEST_COST_WITHOUT_CAP + LINK_CLICKS with no pixel loses the auction outright",
+   "not_paused_because": "playbook waste test fires on lifetime AN share (89%) but that spend predates the placement fix; at EUR 0.01/day pausing saves nothing and only freezes the budget",
+   "proposed_fix_not_applied": "switch optimization_goal LINK_CLICKS -> REACH, keeping placements, audience, budget and the Tue 22 Sep 23:59 end time"
   },
-  "quiet_leads_ad": {
-    "kind": "click ad #2 (quiet leads)",
-    "approved": "founder, 23 Sep 2026 evening ('yeah i want both 4 and 5')",
-    "created": "2026-09-23T21:36+02:00 by the operator via the API",
-    "campaign_id": "6996508235894",
-    "adset_id": "6996508321694",
-    "ad_id": "6996508363294",
-    "creative_id": "1386955970174446",
-    "image_hash": "d548b01472e5ccd44a9627bb28348b71",
-    "image": "output/facebook/posts/10-ad-quiet-leads.png",
-    "dark_post_id": "1279663088571991_122110668771476753",
-    "dark_post_note": "minted by the 23 Sep 22:28 creative swap; the previous one (…122110568883476753) is orphaned but reachable. Neither appears in GET /{page}/posts: check both for comments on every run.",
-    "link": "https://leadwing.app/quiet?utm_source=facebook&utm_medium=paid&utm_campaign=quiet-leads-sep26",
-    "copy": {
-      "primary": "Most leads don't say no. They go quiet. / LeadWing shows you which buyers need a follow-up and has the message already written, in plain language. Send it as it is, or tweak it in ten seconds. / Built for independent agents on the Costa del Sol. Free for your first 10 clients, no card needed.",
-      "headline": "Follow-ups, already written",
-      "description": "Free for 10 clients",
-      "cta": "LEARN_MORE"
-    },
-    "setup": "OUTCOME_TRAFFIC, LANDING_PAGE_VIEWS, IMPRESSIONS, LOWEST_COST_WITHOUT_CAP, EUR 25 lifetime, 23 Sep 21:36 -> 28 Sep 23:59 Madrid, targeting copied from ad set 6995417079494 (24-64, 60 km Marbella, 3 interests + 5 job titles, facebook feed + instagram stream only, advantage_audience off), no promoted_object",
-    "status_at_creation": "campaign + ad set ACTIVE, ad PENDING_REVIEW",
-    "watch": "report spend / impressions / link clicks / landing_page_view / placement split each run; waste test applies; if review rejects, report the feedback and propose, never edit",
-    "status_2026_09_23T2205": "review CLEARED, ad ACTIVE",
-    "creative_id_previous": "29434012246199370",
-    "image_hash_previous": "e88921fb022463fd9b62eccdbd13c7f5",
-    "link_previous": "https://leadwing.app/start?utm_source=facebook&utm_medium=paid&utm_campaign=quiet-leads-sep26",
-    "dark_post_id_previous": "1279663088571991_122110568883476753",
-    "edit_2026_09_23_landing": {
-      "change": "creative 29434012246199370 -> 1299284655540840: link and call_to_action now leadwing.app/quiet (built tonight, deploy 83e3e16), image re-rendered with 'leadwing.app/quiet' printed, message/headline/description unchanged",
-      "why": "/start answers the spreadsheet ad in its own words; this ad's hook is quiet leads, so it needs a page that says the same thing",
-      "verified_after": "ad ACTIVE / IN_PROCESS (re-review), link verified on link_data.link"
-    },
-    "creative_id_before_2026_09_24": "1299284655540840",
-    "dark_post_id_before_2026_09_24": "1279663088571991_122110619979476753",
-    "status_2026_09_24T1210": "ad + ad set ACTIVE, re-review of the /quiet creative CLEARED, no issues_info, no ad_review_feedback; link verified as leadwing.app/quiet?utm_campaign=quiet-leads-sep26 on link_data.link and the call_to_action",
-    "observed_2026_09_24T1210": {
-      "spend_eur": 1.04,
-      "budget_remaining_eur": 23.97,
-      "reach": 506,
-      "impressions": 509,
-      "cpm": 2.04,
-      "link_clicks": 7,
-      "landing_page_views": 3,
-      "first_delivery": "nothing between creation 23 Sep 21:36 and midnight; delivery started 24 Sep 05:00 and ran every hour to 12:00 (peak 08:00, EUR 0.37 / 169 imp)",
-      "placements": "facebook feed EUR 0.81 / 417 imp / 6 clicks / 2 LPV; instagram feed EUR 0.23 / 92 imp / 1 click / 1 LPV; zero audience_network",
-      "waste_test": "does not fire: no audience_network, cost per click EUR 0.15",
-      "reactions_comments": "0 reactions and 0 comments on its dark post"
-    },
-    "observed_2026_09_24T1810": {
-      "spend_eur": 2.75,
-      "budget_remaining_eur": 22.25,
-      "reach": 1049,
-      "impressions": 1119,
-      "link_clicks_reported": 17,
-      "landing_page_views": 10,
-      "today_24_sep_to_1810": "EUR 2.75 / 1119 imp / 1049 reach / cpm 2.46 / ctr 1.79% / 17 link clicks / 10 LPV - 59% of clicks, EUR 0.275 per landing view. All lifetime spend is today; delivery began 05:00.",
-      "today_24_sep_placements": "facebook/feed EUR 1.84 / 864 imp / 14 clicks / 8 LPV; instagram/feed EUR 0.91 / 255 imp / 3 clicks / 2 LPV; audience_network zero",
-      "ad_effective_status": "ACTIVE",
-      "adset_effective_status": "ACTIVE",
-      "issues_info": "none on ad or ad set; no ad_review_feedback",
-      "waste_test": "does not fire: zero audience_network spend, cost per click EUR 0.16",
-      "end_time": "2026-09-28T23:59:00+0200, EUR 22.25 of EUR 25 left"
-    },
-    "status_2026_09_25T1210": "ad + ad set ACTIVE, no issues_info, no ad_review_feedback, feed-only, zero audience_network.",
-    "observed_2026_09_25T1210": {
-      "spend_eur": 5.33,
-      "budget_remaining_eur": 19.67,
-      "impressions": 1983,
-      "reach": 1702,
-      "cpm": 2.69,
-      "ctr": 1.92,
-      "link_clicks_reported": 30,
-      "landing_page_views": 17,
-      "cost_per_landing_view_eur": 0.31,
-      "cost_per_click_eur": 0.178,
-      "day_24_sep_full": "EUR 3.48 / 1360 imp / 1221 reach / cpm 2.56 / ctr 1.84 / 20 clicks / 11 LPV (55% of clicks)",
-      "today_25_sep_to_1210": "EUR 1.85 / 623 imp / 605 reach / cpm 2.97 / 10 clicks / 6 LPV (60% of clicks, EUR 0.31 each)",
-      "today_placements": "facebook/feed EUR 0.89 / 358 imp / 4 clicks / 2 LPV; instagram/feed EUR 0.96 / 265 imp / 6 clicks / 4 LPV; zero audience_network",
-      "today_hourly": "delivery in every hour 01:00-12:00, EUR 0.07-0.36 each, no stall; nothing in the 00:00 hour",
-      "waste_test": "does not fire: 0% audience_network, cost per click EUR 0.18, LPV 57% of clifetime clicks",
-      "runway": "EUR 19.67 left with ~84 h to Sun 28 Sep 23:59; today's pace ~EUR 3.7/day would spend ~EUR 13 of it and leave ~EUR 6-7 to expire. Proposed to the founder: extend end_time to Tue 30 Sep 23:59. Not applied.",
-      "reactions_comments": "1 reaction on the live dark post, 0 comments on it or the two orphans"
-    },
-    "observed_2026_09_25T1810": {
-      "ad_effective_status": "ACTIVE",
-      "adset_effective_status": "ACTIVE",
-      "issues_info": "none",
-      "ad_review_feedback": "null",
-      "spend": "7.34 of 25.00 (budget_remaining 17.66)",
-      "lifetime": "2,604 impressions, 2,240 reach, CPM EUR 2.82, 41 link clicks, 26 landing page views (63% of clicks, EUR 0.28 each), 3 post reactions, 44 post engagements",
-      "today_25_sep": "EUR 3.86, 1,244 impressions, 21 link clicks, 15 landing page views",
-      "placements": "Facebook feed EUR 4.42 / 1,727 imp / 26 lc / 18 lpv; Instagram feed EUR 2.92 / 877 imp / 15 lc / 8 lpv; zero audience_network",
-      "waste_test": "does not fire - no AN spend, cost per click EUR 0.18, landing views 63% of clicks"
-    },
-    "status_2026_09_26T1225": "ad + ad set ACTIVE, no issues_info, no ad_review_feedback, feed-only, zero audience_network.",
-    "observed_2026_09_26T1225": {
-      "spend_eur": 10.8,
-      "budget_remaining_eur": 14.2,
-      "impressions": 3733,
-      "reach": 3042,
-      "cpm": 2.89,
-      "ctr": 1.88,
-      "link_clicks_reported": 54,
-      "landing_page_views": 33,
-      "cost_per_landing_view_eur": 0.33,
-      "cost_per_click_eur": 0.2,
-      "day_25_sep_full": "EUR 5.72 / 1837 imp / 1617 reach / cpm 3.11 / ctr 1.85 / 26 clicks / 17 LPV (65% of clicks, EUR 0.34 each) / 1 post reaction",
-      "today_26_sep_to_1225": "EUR 1.60 / 536 imp / 511 reach / cpm 2.99 / ctr 2.05 / 8 clicks / 5 LPV",
-      "placements_lifetime": "facebook/feed EUR 6.14 / 2281 imp / 31 clicks / 22 LPV; instagram/feed EUR 4.67 / 1452 imp / 23 clicks / 11 LPV; zero audience_network",
-      "waste_test": "does not fire: 0% audience_network, EUR 0.20 per click, landing views 61% of clicks",
-      "runway": "EUR 14.20 left, ends Sun 28 Sep 23:59 (~2.6 days) = EUR 5.4/day needed against a 25 Sep pace of EUR 5.72/day, so it is now on track to spend out, better than the EUR 6-7 shortfall forecast on 25 Sep. No action per the founder 25 Sep."
-    },
-    "status_2026_09_26T1810": "ad + ad set ACTIVE, no issues_info, no ad_review_feedback; creative 1386955970174446, dark post 1279663088571991_122110668771476753 unchanged; 0 comments on it",
-    "observed_2026_09_26T1810": {
-      "spend_eur": 12.63,
-      "lifetime_budget_eur": 25,
-      "budget_remaining_eur": 12.37,
-      "impressions": 4625,
-      "reach": 3626,
-      "cpm_eur": 2.73,
-      "link_clicks": 64,
-      "landing_page_views": 41,
-      "lpv_share_of_clicks": "64%",
-      "cost_per_lpv_eur": 0.31,
-      "cost_per_click_eur": 0.2,
-      "day_2026_09_26_to_1810": {
-        "spend_eur": 3.43,
-        "impressions": 1427,
-        "link_clicks": 18,
-        "landing_page_views": 13,
-        "cost_per_lpv_eur": 0.26
-      },
-      "placements": {
-        "facebook/feed": {
-          "spend_eur": 7.09,
-          "impressions": 2752,
-          "link_clicks": 39,
-          "landing_page_views": 29
-        },
-        "instagram/feed": {
-          "spend_eur": 5.59,
-          "impressions": 1879,
-          "link_clicks": 25,
-          "landing_page_views": 12
-        },
-        "audience_network": "none"
-      },
-      "end_time": "2026-09-28T23:59+0200",
-      "waste_test": "does not fire",
-      "action": "none"
-    },
-    "paused_2026_09_27": "PAUSED by the routine on the founder's 'ok pause for now' (27 Sep noon), option A on the placement regression. Ad set 6996508321694 status PAUSED, ad 6996508363294 ADSET_PAUSED, budget_remaining 640 (EUR 6.40 of the EUR 25 forfeited, EUR 18.60 spent). Reason: Meta stripped the ad set's publisher_platforms/facebook_positions/instagram_positions at 2026-09-27T00:18:38+0200 with no operator edit, and 76% of that day's spend went to Audience Network, Reels, Stories and in-stream. Do not resume, re-fund or edit without a fresh yes; if it is ever resumed, re-apply feed-only placements FIRST and verify them after.",
-    "final_2026_09_27T1810": {
-      "adset_effective_status": "PAUSED",
-      "ad_effective_status": "ADSET_PAUSED",
-      "paused_at": "2026-09-27T13:54:26+0200",
-      "spend_eur": 18.65,
-      "budget_remaining_eur": 6.35,
-      "impressions": 7257,
-      "reach": 5436,
-      "link_clicks": 112,
-      "landing_page_views": 63,
-      "cost_per_lpv_eur": 0.3,
-      "cpm_eur": 2.57,
-      "spend_stopped": "last hourly bucket 13:00-13:59 Madrid on 27 Sep; zero spend and zero impressions in the 4 h since, checked at 18:10 Madrid",
-      "placements_lifetime": "facebook/feed 9.36 EUR / 3699 imp; instagram/feed 6.95 / 2470; audience_network 0.87 / 411; instagram_reels 0.87 / 409; instagram_stories 0.26 / 124; facebook_reels 0.19 / 93; instream_video 0.15 / 43; feed-only portion 16.31 EUR / 6169 imp",
-      "placement_fields": "publisher_platforms / facebook_positions / instagram_positions STILL ABSENT at the evening check - Meta did not restore them. Targeting holds only age_max, age_min, flexible_spec, geo_locations, targeting_automation. Re-apply feed-only placements FIRST and verify after, if this ad set is ever resumed.",
-      "note": "do not resume, re-fund or edit without a fresh yes"
-    },
-    "final_2026_09_28T1210": {
-      "adset_status": "PAUSED",
-      "ad_effective_status": "ADSET_PAUSED",
-      "issues_info": "none",
-      "spend_eur": 18.66,
-      "budget_remaining_eur": 6.34,
-      "impressions": 7261,
-      "reach": 5438,
-      "link_clicks": 112,
-      "landing_page_views": 63,
-      "cost_per_lpv_eur": 0.3,
-      "cpm_eur": 2.57,
-      "spend_28_sep": "0.00 - no insights row for 28 Sep, the pause is holding",
-      "placements_lifetime": "feed EUR 16.32 / 6171 imp / 91 clicks / 55 LPV (fb feed 9.37/3701/52/37, ig feed 6.95/2470/39/18); off-feed EUR 2.34 / 1090 imp / 21 clicks / 8 LPV (an_classic 0.87/411, ig_reels 0.87/409, ig_stories 0.26/124, fb_reels 0.19/95, instream 0.15/43)",
-      "placement_fields": "publisher_platforms / facebook_positions / instagram_positions STILL ABSENT - Meta never restored them",
-      "end_time": "2026-09-28T23:59:00+0200 - the lifetime window closes tonight; after that the EUR 6.34 needs an end_time edit as well as a fresh yes",
-      "account": "status 1, balance EUR 0.06, Visa *1984, amount_spent EUR 129.54 lifetime on the account"
-    },
-    "closed_2026_09_28": {
-      "decision": "founder, 28 Sep noon: 'let it expire, i need to rethink our strategy anyway'",
-      "applied": "nothing - do-nothing option; no edit, resume or top-up was made",
-      "outcome": "ad set left PAUSED and allowed to pass its own end_time 2026-09-28T23:59:00+0200 with EUR 6.34 of EUR 25 unspent",
-      "status": "CLOSED - do not re-propose resuming, re-funding or extending this ad set",
-      "final": "EUR 18.66 spent, 7,261 imp, 5,438 reach, 112 link clicks, 63 landing page views at EUR 0.30, CPM EUR 2.57"
-    }
+  "observed_2026_09_20T2345": {
+   "spend_eur": 5.64,
+   "budget_remaining_eur": 19.36,
+   "reach": 6674,
+   "impressions": 42391,
+   "link_clicks_reported": 170,
+   "link_clicks_real_feed": 3,
+   "landing_page_views": 37,
+   "facebook_feed": "EUR 0.32 / 342 imp / 3 clicks / 1 LPV",
+   "instagram_feed": "36 imp / 0 clicks",
+   "audience_network_share": "EUR 5.05, 41875 imp, 165 clicks - junk, all before the 13:11 placement fix",
+   "since_reactivation_1923": "10 impressions, EUR 0.00 in 4.5 hours - delivery has effectively stopped",
+   "ad_effective_status": "ACTIVE",
+   "diagnosis": "pacing: EUR 19.36 over 4 remaining days on lowest-cost bidding will not win a narrow feed auction",
+   "proposed_fix_not_applied": "bring adset end_time forward to 2026-09-22T23:59 so the same EUR 19.36 is paced over ~2 days instead of 4"
   },
-  "post_boost_ad": {
-    "kind": "engagement boost of the 23 Sep 'quiet leads' page post (5b)",
-    "approved": "founder, 23 Sep 2026 evening ('yeah i want both 4 and 5')",
-    "created": "2026-09-23T21:45+02:00 by the operator via the API",
-    "campaign_id": "6996508248894",
-    "adset_id": "6996508580294",
-    "ad_id": "6996512397894",
-    "creative_id": "1627298505638074",
-    "post_id": "1279663088571991_122110619499476753",
-    "post_note": "the 23 Sep 22:28 replacement product post (10-ad-quiet-leads.png, links leadwing.app/quiet); reactions and comments land on it",
-    "setup": "OUTCOME_ENGAGEMENT, POST_ENGAGEMENT with destination_type ON_POST and promoted_object {page_id}, IMPRESSIONS, LOWEST_COST_WITHOUT_CAP, EUR 10 lifetime, 25 Sep 10:00 -> 1 Oct 23:59 Madrid, same targeting and feed-only placements as the quiet-leads ad",
-    "status_at_creation": "campaign + ad set ACTIVE, ad PENDING_REVIEW; nothing delivers before the 25 Sep 10:00 start",
-    "api_notes": "POST_ENGAGEMENT without promoted_object creates fine but the ad is then refused (1885154); promoted_object is immutable after creation (1885090); POST_ENGAGEMENT + promoted_object page_id needs destination_type=ON_POST or it is refused (2490408). A first empty ad set 6996508349894 was deleted.",
-    "watch": "report spend / impressions / post reactions, comments, shares / page follows each run; judge on cost per engagement and follows, not clicks",
-    "status_2026_09_23T2205": "DISAPPROVED (generic 'Advertising Standards' feedback, no policy named). Most likely the housing-ad rule: the digest names homes for sale with prices and a registration deadline, and the ad set targets by age and job title, which housing ads may not. Proposed 5b: boost the 23 Sep product post instead. Appeal only possible from Ads Manager.",
-    "history": "first built on the scheduled Fri 25 Sep digest post (ad 6996508595494, creative 1132591039195016) and DISAPPROVED at review, most likely the housing-ad rule; the founder chose 5b on 23 Sep ~22:15, the rejected ad was deleted, campaign + ad set renamed 'Post boost' | 23 Sep ~22:20: the founder saw the 09:30 post still said 'every buyer card' on its image, so on 'do what you think is best' the pending boost ad 6996510974094 was deleted, the old post deleted, a new post published with the new creative and the boost re-created on it (ad 6996512397894, creative 1627298505638074)",
-    "status_2026_09_23T2215": "ad PENDING_REVIEW; ad set ACTIVE, EUR 10, 25 Sep 10:00 - 1 Oct 23:59",
-    "status_2026_09_23T2230": "ad IN_PROCESS (review); ad set ACTIVE, EUR 10, 25 Sep 10:00 - 1 Oct 23:59",
-    "status_2026_09_24T1210": "ad 6996512397894 ACTIVE - review CLEARED. Ad set ACTIVE, EUR 10 intact, delivery starts 25 Sep 10:00 Madrid, so no insights row yet (correct, not a stall).",
-    "observed_2026_09_24T1810": {
-      "ad_effective_status": "ACTIVE",
-      "adset_effective_status": "ACTIVE",
-      "issues_info": "none",
-      "spend_eur": 0,
-      "budget_remaining_eur": 10,
-      "insights": "empty - correct, delivery starts 25 Sep 10:00 Madrid"
-    },
-    "status_2026_09_25T1210": "ad + ad set ACTIVE, no issues_info; delivery began at the scheduled 25 Sep 10:00 Madrid.",
-    "observed_2026_09_25T1210": {
-      "spend_eur": 0.02,
-      "budget_remaining_eur": 9.98,
-      "impressions": 12,
-      "reach": 11,
-      "cpm": 1.67,
-      "engagement_actions": "none yet - 0 reactions, 0 comments, 0 shares, 0 page follows attributable to it",
-      "placements": "facebook/feed 5 imp EUR 0.00; instagram/feed 7 imp EUR 0.02",
-      "hourly": "10:00 h 3 imp, 11:00 h 9 imp",
-      "note": "first 2 h only, and very slow: 12 impressions against a EUR 10 / 6.5-day budget (~EUR 1.43/day). Not a stall by the playbook's test (delivery is non-zero). Evening check to confirm it picks up."
-    },
-    "observed_2026_09_25T1810": {
-      "ad_effective_status": "ACTIVE",
-      "adset_effective_status": "ACTIVE",
-      "issues_info": "none",
-      "spend": "0.30 of 10.00 (budget_remaining 9.70)",
-      "lifetime": "95 impressions, 88 reach, CPM EUR 3.16, 0 engagement actions of any kind",
-      "placements": "Facebook feed EUR 0.09 / 36 imp; Instagram feed EUR 0.21 / 59 imp",
-      "note": "delivery began 25 Sep 10:00 Madrid; EUR 0.30 / 95 imp in the first 8 h against EUR 0.02 / 12 imp in the first 2 h, so it is ramping, not stalled. Needs EUR 1.54/day to spend out by 1 Oct and is running at ~EUR 0.90/day. Zero engagement on 95 impressions is the thing to watch. Full-day judgement at the 26 Sep noon brief."
-    },
-    "status_2026_09_26T1225": "ad + ad set ACTIVE, no issues_info; delivering in every hour of 25 Sep, not stalled.",
-    "observed_2026_09_26T1225": {
-      "spend_eur": 1.45,
-      "budget_remaining_eur": 8.55,
-      "impressions": 360,
-      "reach": 319,
-      "cpm": 4.03,
-      "engagement_lifetime": "1 post reaction, 2 post engagements, 0 comments, 0 shares, 0 page follows",
-      "day_25_sep_first_partial": "EUR 0.87 / 207 imp / 1 post reaction / 2 post engagements (delivery started 10:00 Madrid, so 14 h not 24)",
-      "today_26_sep_to_1225": "EUR 0.58 / 153 imp / 0 engagement actions",
-      "placements_lifetime": "facebook/feed EUR 0.92 / 236 imp / 1 reaction; instagram/feed EUR 0.53 / 124 imp / 0",
-      "hourly_25_sep": "non-zero impressions in all 24 hourly buckets, 1-39 per hour - steady, just small",
-      "verdict": "engagement is not literally zero any more (the 1 reaction on page post 122110619499476753 is this ad), but EUR 1.45 bought one reaction: EUR 0.73 per post engagement, EUR 1.45 per reaction, 0 follows, 0 comments. Waste test does not fire (0% AN; the clicks-under-EUR-0.05 leg does not apply to an engagement ad).",
-      "runway": "EUR 8.55 left to 1 Oct 23:59 = EUR 1.55/day needed, running ~EUR 0.95/day, so ~EUR 3 expires unspent on the current pace.",
-      "proposed_not_applied": "see PLAYBOOK Pending - decision put to the founder at the 26 Sep noon brief, nothing edited."
-    },
-    "status_2026_09_26T1810": "ad + ad set ACTIVE, no issues_info, no ad_review_feedback; creative 1627298505638074 boosting page post 1279663088571991_122110619499476753",
-    "observed_2026_09_26T1810": {
-      "spend_eur": 1.93,
-      "lifetime_budget_eur": 10,
-      "budget_remaining_eur": 8.07,
-      "impressions": 489,
-      "reach": 408,
-      "cpm_eur": 3.95,
-      "post_reactions": 1,
-      "post_engagements": 2,
-      "comments": 0,
-      "shares": 0,
-      "page_follows": 0,
-      "cost_per_reaction_eur": 1.93,
-      "cost_per_post_engagement_eur": 0.97,
-      "day_2026_09_25": {
-        "spend_eur": 0.87,
-        "impressions": 207,
-        "note": "RESTATED DOWN by Meta from the 1.45 EUR / 360 imp read at the 26 Sep noon brief"
-      },
-      "day_2026_09_26_to_1810": {
-        "spend_eur": 1.06,
-        "impressions": 282,
-        "actions": "none at all"
-      },
-      "placements": {
-        "facebook/feed": {
-          "spend_eur": 1.26,
-          "impressions": 331,
-          "post_reactions": 1
-        },
-        "instagram/feed": {
-          "spend_eur": 0.66,
-          "impressions": 159,
-          "post_reactions": 0
-        },
-        "audience_network": "none"
-      },
-      "end_time": "2026-10-01T23:59+0200",
-      "waste_test": "does not fire (0% AN; clicks leg does not apply to POST_ENGAGEMENT)",
-      "action": "none - A/B decision from the 26 Sep noon brief still unanswered"
-    },
-    "status_2026_09_26T2020": "PAUSED at the ad-set level (6996508580294) at 20:20 Madrid in a Claude session, on the founder's in-session 'do whatever you think is best' to the recommendation 'pause the post boost'. EUR 7.95 of EUR 10 unspent, end_time still 1 Oct 23:59; resuming it needs the founder's yes.",
-    "status_2026_09_27T1810": "still PAUSED, ad reads ADSET_PAUSED, budget_remaining EUR 7.91 of EUR 10, untouched, no spend",
-    "state_2026_09_28T1210": {
-      "adset_status": "PAUSED",
-      "ad_effective_status": "ADSET_PAUSED",
-      "budget_remaining_eur": 7.91,
-      "placements": "publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream] - intact, unlike quiet-leads",
-      "end_time": "2026-10-01T23:59:00+0200",
-      "note": "untouched since the 26 Sep pause"
-    }
+  "edit_2026_09_21_lpv": {
+   "change": "optimization_goal REACH -> LANDING_PAGE_VIEWS; end_time 22 Sep -> 24 Sep 23:59; budget, bid strategy, placements, audience unchanged",
+   "applied_by": "founder, from the terminal, on Claude's prepared script (Claude's tooling cannot edit ad sets)",
+   "pixel": "1625109429125373 attached to the ad account; NOT passed as promoted_object - Meta rejects pixel_id alone for OUTCOME_TRAFFIC (subcode 1885014); the account's pixel is matched to the ad URL automatically",
+   "verified_after": "optimization_goal=LANDING_PAGE_VIEWS, end_time=2026-09-24T23:59:00+0200, budget_remaining 1547, ad set + ad IN_PROCESS"
   },
-  "account_2026_09_24T1810": "status 1, no disable reason, EUR 2.86 balance, EUR 105.79 lifetime spend",
-  "account_2026_09_25T1210": "status 1, no disable reason, EUR 6.12 balance, EUR 112.27 lifetime spend",
-  "account_2026_09_26T1225": {
-    "account_status": 1,
-    "disable_reason": 0,
-    "balance_eur": 3.56,
-    "amount_spent_eur": 118.86,
-    "funding": "VISA *1984"
+  "observed_2026_09_22T1205": {
+   "spend_eur": 15.25,
+   "budget_remaining_eur": 9.75,
+   "reach": 14051,
+   "impressions": 50132,
+   "link_clicks_reported": 203,
+   "landing_page_views": 54,
+   "day_21_sep_full": "EUR 8.00 / 6987 imp / 6875 reach / cpm 1.14 / 21 link clicks / 10 LPV - EUR 4.77 of it after the 19:35 LPV switch",
+   "day_21_sep_placements": "facebook/feed EUR 6.43 / 6075 imp / 19 clicks / 9 LPV; instagram/feed EUR 1.57 / 912 imp / 2 clicks / 1 LPV; audience_network zero",
+   "today_22_sep_to_1205": "EUR 1.60 / 740 imp / 676 reach / cpm 2.16 / 11 link clicks / 7 LPV - LPV is 64% of clicks",
+   "today_22_sep_placements": "facebook/feed EUR 0.88 / 425 imp / 8 clicks / 6 LPV; instagram/feed EUR 0.72 / 315 imp / 3 clicks / 1 LPV; audience_network zero",
+   "today_22_sep_hourly": "delivery in every hour 00:00-11:59, EUR 0.01-0.50 each, no stall",
+   "audience_network_lifetime": "EUR 5.07 / 41883 imp / 165 clicks - now 33% of lifetime spend, all of it before the 20 Sep 13:11 placement fix",
+   "facebook_feed_lifetime": "EUR 7.63 / 6850 imp / 31 clicks / 16 LPV",
+   "instagram_feed_lifetime": "EUR 2.30 / 1261 imp / 5 clicks / 2 LPV",
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none on ad or ad set; no ad_review_feedback",
+   "account_status": "1 (active, no disable reason, Visa *1984, EUR 0.92 balance, EUR 97.88 lifetime spend)",
+   "waste_test": "does not fire on any reading: lifetime AN share 33% (under half) and lifetime cost per click EUR 0.075 (over EUR 0.05); today EUR 0.145 per click with LPV at 64% of clicks",
+   "runway_note": "EUR 9.75 over ~60 h to Thu 24 Sep 23:59; today's pace ~EUR 0.13/h would leave roughly EUR 1-2 unspent, and lifetime pacing usually accelerates at the end"
   },
-  "account_2026_09_26T1810": {
-    "account_status": 1,
-    "disable_reason": 0,
-    "balance_eur": 5.88,
-    "amount_spent_eur": 118.86,
-    "funding": "VISA *1984"
+  "observed_2026_09_22T1810": {
+   "spend_eur": 16.26,
+   "budget_remaining_eur": 8.74,
+   "reach": 14445,
+   "impressions": 50654,
+   "link_clicks_reported": 211,
+   "landing_page_views": 59,
+   "today_22_sep_to_1800": "EUR 2.59 / 1256 imp / 19 link clicks / 12 LPV - LPV is 63% of clicks, EUR 0.22 per LPV, EUR 0.14 per click",
+   "today_22_sep_placements": "facebook/feed EUR 1.46 / 760 imp / 12 clicks / 8 LPV; instagram/feed EUR 1.13 / 496 imp / 7 clicks / 4 LPV; audience_network zero",
+   "today_22_sep_hourly": "delivery in every hour 00:00-18:00; dipped to EUR 0.01 / 13 imp in the 17:00 hour during the post-swap re-review, back to a ~50 imp/h pace by 18:00",
+   "ad_effective_status": "ACTIVE - the re-review after the 16:50 /start creative swap has cleared",
+   "adset_effective_status": "ACTIVE",
+   "link_verified": "https://leadwing.app/start?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26 on both link_data.link and call_to_action",
+   "issues_info": "none on ad or ad set; no ad_review_feedback",
+   "account_status": "1 (active, no disable reason, Visa *1984, EUR 0.01 balance, EUR 97.90 lifetime spend)",
+   "engagement": "0 comments and 0 reactions on both dark posts and all page posts; lifetime actions show 1 post_reaction and 1 post_unlike from earlier in the run, nothing to answer",
+   "waste_test": "does not fire on any reading: lifetime AN share 31% (under half), lifetime cost per click EUR 0.077 (over EUR 0.05), today EUR 0.14 per click with LPV at 63% of clicks",
+   "runway_note": "EUR 8.74 over ~54 h to Thu 24 Sep 23:59; today's ~EUR 0.14/h would leave roughly EUR 1 unspent - still the founder's call, for the Wed 23 and Thu 24 noon briefs"
   },
-  "account_2026_09_27T1810": "status 1, no disable reason, EUR 5.00 balance, EUR 126.55 lifetime spend; 27 Sep account spend EUR 2.98 / 1342 imp / 25 clicks / 10 LPV, all of it the quiet-leads ad set before the pause",
-  "free10_ad": {
-    "kind": "Free-for-10 click ad — created by the FOUNDER in Ads Manager 29 Sep 2026 15:42 Madrid, after the 'stop the ads' decision earlier the same day. Not created by the routine.",
-    "campaign_id": "6997552551894",
-    "adset_id": "6997552554894",
-    "ad_id": "6997552574094",
-    "creative_id": "1445432247464313 (was 968627088918992 at creation) — Meta RE-MINTED the creative at 2026-09-30T00:19:50 Madrid, actor 'Meta' id 1051435468209173, no operator edit. Verified byte-for-byte equivalent: same image_hash a96e58d9fdf8fa69598aa5ac1edeac5d, same link, same message, same SIGN_UP CTA. Same midnight-Madrid re-mint pattern as 24 Sep. Benign.",
-    "dark_post_id": "1279663088571991_122114822697476753 (minted 2026-09-30T00:20:07 Madrid by the re-mint above). The original 1279663088571991_122114677509476753 is orphaned but still reachable — check BOTH for comments every run.",
-    "image": "output/facebook/posts/12-ad-free10-mono.png (adimage hash a96e58d9fdf8fa69598aa5ac1edeac5d, 1080x1350) — the creative this repo prepared in commit d59b74b, used unchanged",
-    "link": "https://www.leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=free10-sep26 — the HOME page, not a hook-matched landing; the founder chose it (ad name says 'home')",
-    "objective": "OUTCOME_TRAFFIC / LANDING_PAGE_VIEWS, billing IMPRESSIONS, LOWEST_COST_WITHOUT_CAP",
-    "budget": "EUR 25 lifetime, 29 Sep 15:42 -> 4 Oct 23:59 Madrid (5.35 days, needs ~EUR 4.67/day to spend out)",
-    "targeting": "feed-only VERIFIED present at 18:10: publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream]; 60 km of Marbella, 24-64, the THREE interests only — the five dead job titles are gone",
-    "special_ad_categories": "[] — software ad, not housing; review CLEARED (effective_status ACTIVE, no issues_info, no ad_review_feedback)",
-    "observed_2026_09_29T1810": {
-      "spend_eur": 0.35,
-      "budget_remaining_eur": 24.65,
-      "impressions": 146,
-      "reach": 141,
-      "frequency": 1.035,
-      "cpm_eur": 2.4,
-      "clicks": 2,
-      "link_clicks": 1,
-      "landing_page_views": 1,
-      "placements": "facebook/feed EUR 0.20 / 78 imp / 1 link click / 1 LPV; instagram/feed EUR 0.15 / 68 imp / 0 — ZERO audience_network",
-      "hourly_madrid": "16:00 EUR 0.21 / 96 imp, 17:00 EUR 0.14 / 47 imp, 18:00 partial",
-      "waste_test": "does NOT fire: 0% audience_network, EUR 0.35 per link click (test wants under EUR 0.05), LPV 100% of link clicks (test wants under 30%). Nothing paused.",
-      "founder_edits": "15:52 UTC he renamed the ad and swapped the creative; Meta re-set run status at 15:58 UTC and it came back ACTIVE — review cleared, not a stall."
+  "observed_2026_09_23T1205": {
+   "spend_eur": 19.37,
+   "budget_remaining_eur": 5.63,
+   "reach": 15379,
+   "impressions": 52083,
+   "link_clicks_reported": 223,
+   "landing_page_views": 69,
+   "day_22_sep_full": "EUR 4.29 / 2049 imp / 1830 reach / cpm 2.09 / ctr 1.56% / 26 link clicks / 18 LPV - LPV is 69% of clicks, EUR 0.24 per LPV, EUR 0.17 per click. Best full day of the run on quality.",
+   "day_22_sep_split_by_landing": "before 17:00 (home page) EUR 2.62 / 19 clicks / 12 LPV; 17:00 onward (/start) EUR 1.67 / 7 clicks / 6 LPV",
+   "today_23_sep_to_1205": "EUR 1.41 / 636 imp / 589 reach / cpm 2.22 / ctr 0.79% / 5 link clicks / 4 LPV (80% of clicks)",
+   "today_23_sep_placements": "facebook/feed EUR 0.74 / 350 imp / 2 clicks / 2 LPV; instagram/feed EUR 0.68 / 286 imp / 3 clicks / 2 LPV; audience_network zero",
+   "today_23_sep_hourly": "delivery in every hour 00:00-12:00 except 02:00, EUR 0.03-0.43 each, no stall",
+   "start_page_era_total": "about 10 landing page views on /start since the 22 Sep 16:50 swap (6 on 22 Sep after 17:00 + 4 today) - too few to judge the page yet; sign-in attempts are the founder's read in the auth log",
+   "audience_network_lifetime": "EUR 5.06 / 41875 imp / 165 clicks - now 26% of lifetime spend, all of it before the 20 Sep 13:11 placement fix",
+   "facebook_feed_lifetime": "EUR 10.06 / 8112 imp / 43 clicks / 25 LPV",
+   "instagram_feed_lifetime": "EUR 4.01 / 1958 imp / 13 clicks / 8 LPV",
+   "stray_placements_lifetime": "facebook_reels EUR 0.11 / 56 imp, instagram_reels EUR 0.13 / 73 imp, facebook_stories EUR 0.01, right_hand_column EUR 0.00 - EUR 0.25 total, historical, none of it today",
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none on ad or ad set; no ad_review_feedback",
+   "link_verified": "https://leadwing.app/start?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26 on both link_data.link and call_to_action",
+   "account_status": "1 (active, no disable reason, Visa *1984, EUR 3.18 balance, EUR 102.19 lifetime spend)",
+   "waste_test": "does not fire on any reading: lifetime AN share 26% (under half), lifetime cost per click EUR 0.087 (over EUR 0.05), today EUR 0.28 per click with LPV at 80% of clicks",
+   "runway_note": "EUR 5.63 over ~36 h to Thu 24 Sep 23:59. 22 Sep ran at EUR 4.29/day and today is on a ~EUR 2.8/day pace, so most of it should land but roughly EUR 1 may expire. Follow-on funding put to the founder again in this brief."
+  },
+  "runway_decision_2026_09_23": {
+   "answer": "option A - no top-up, no follow-on budget (founder, 23 Sep, in the noon brief session)",
+   "effect": "the ad set spends out its remaining EUR 5.63 and ends Thu 24 Sep 23:59 as scheduled; roughly EUR 1 may expire unspent, accepted",
+   "applied": "nothing - A is the do-nothing option, no ad, ad set or budget call was made",
+   "next": "report final run totals in the Thu 24 evening check and the Fri 25 noon brief; do not resume, re-fund or edit the ad set without a fresh yes"
+  },
+  "link_previous": "https://leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=spreadsheets-sep26",
+  "edit_2026_09_22_landing": {
+   "change": "creative 1083235867424577 -> 1140361055322528: link and call_to_action link now leadwing.app/start?utm_campaign=spreadsheets-sep26; message, name, description, image_hash unchanged",
+   "why": "~21 home-page landings produced 0 sign-in attempts (auth log, 4 days); /start answers the ad in its own words with one action",
+   "applied_by": "founder from the terminal (ad_link_to_start.py); Claude's tooling cannot edit ads",
+   "verified_after": "ad effective_status IN_PROCESS, creative id 1140361055322528"
+  },
+  "observed_2026_09_23T1810": {
+   "spend_eur": 20.42,
+   "budget_remaining_eur": 4.58,
+   "reach": 15669,
+   "impressions": 52538,
+   "link_clicks_reported": 232,
+   "landing_page_views": 75,
+   "today_23_sep_to_1810": "EUR 2.45 / 1080 imp / 985 reach / cpm 2.27 / ctr 1.48% / 14 link clicks / 10 LPV - LPV is 71% of clicks, EUR 0.25 per LPV, EUR 0.18 per click",
+   "today_23_sep_placements": "facebook/feed EUR 1.26 / 611 imp / 9 clicks / 6 LPV; instagram/feed EUR 1.19 / 469 imp / 5 clicks / 4 LPV; audience_network zero",
+   "today_23_sep_hourly": "delivery in every hour 00:00-18:00 except 02:00, EUR 0.01-0.43 each, no stall; afternoon picked up (15:00 EUR 0.30 / 138 imp)",
+   "since_noon_brief": "EUR 1.04, 9 link clicks, 6 LPV in the ~6 h since the 12:05 reading",
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none on ad or ad set; no ad_review_feedback",
+   "waste_test": "does not fire: zero audience_network today, lifetime AN share 25%, lifetime cost per click EUR 0.088, today EUR 0.18 per click with LPV at 71% of clicks",
+   "engagement": "0 comments on every page post and on both dark posts; inbox empty. The current dark post 122109116961476753 now shows 1 reaction (was 0 at noon) - a reaction, nothing to answer",
+   "runway_note": "EUR 4.58 left over ~30 h to Thu 24 Sep 23:59 at a ~EUR 2.5/day pace. Option A stands: no top-up, roughly EUR 1 may expire unspent."
+  },
+  "creative_id_before_2026_09_24": "1140361055322528",
+  "dark_post_id_before_2026_09_24": "1279663088571991_122109116961476753",
+  "observed_2026_09_24T1210": {
+   "spend_eur": 22.78,
+   "budget_remaining_eur": 2.22,
+   "reach": 16366,
+   "impressions": 53448,
+   "link_clicks_reported": 249,
+   "landing_page_views": 87,
+   "day_23_sep_full": "EUR 3.57 / 1492 imp / 1343 reach / cpm 2.39 / 22 link clicks / 16 LPV (73% of clicks, EUR 0.22 per LPV)",
+   "today_24_sep_to_1210": "EUR 1.24 / 497 imp / 456 reach / cpm 2.49 / 9 link clicks / 6 LPV",
+   "today_24_sep_hourly": "delivery in every hour 00:00-12:00, EUR 0.03-0.21 each, no stall",
+   "placements_lifetime": "facebook feed EUR 12.00 / 8938 imp / 63 clicks / 39 LPV; instagram feed EUR 5.47 / 2496 imp / 19 clicks / 12 LPV; audience_network EUR 5.06 / 41876 imp (22% of lifetime spend, all before the 20 Sep placement fix); EUR 0.25 leaked historically to reels/stories/right column, none today",
+   "post_reactions_lifetime": 5,
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none",
+   "waste_test": "does not fire: lifetime AN share 22%, lifetime cost per click EUR 0.091, today EUR 0.14 per click with LPV at 67% of clicks",
+   "runway": "option A stands - ends today 23:59 with EUR 2.22 left; at ~EUR 0.10/h roughly EUR 1 expires unspent, as accepted",
+   "note": "the creative copy still says 'one card with their budget' (banned word) - the ad ends tonight, so it was not touched"
+  },
+  "observed_2026_09_24T1810": {
+   "spend_eur": 23.9,
+   "budget_remaining_eur": 1.1,
+   "reach": 16598,
+   "impressions": 53870,
+   "link_clicks_reported": 253,
+   "landing_page_views": 90,
+   "today_24_sep_to_1810": "EUR 2.34 / 914 imp / 814 reach / cpm 2.56 / ctr 2.19% / 13 link clicks / 9 LPV - 69% of clicks, EUR 0.26 per landing view",
+   "today_24_sep_placements": "facebook/feed EUR 1.39 / 544 imp / 11 clicks / 8 LPV; instagram/feed EUR 0.95 / 370 imp / 2 clicks / 1 LPV; audience_network zero",
+   "day_23_sep_full": "EUR 3.59 / 1497 imp / 1349 reach / 22 clicks / 16 LPV",
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none on ad or ad set; no ad_review_feedback",
+   "waste_test": "does not fire: lifetime audience_network share 21% (under half) and lifetime cost per click EUR 0.094 (over EUR 0.05); today feed-only with LPV at 69% of clicks",
+   "run_totals_near_final": "EUR 23.90 of EUR 25 over 19-24 Sep: 53,870 impressions, 16,598 reach, 253 reported link clicks, 90 landing page views (EUR 0.27 each). Ad set ends tonight 24 Sep 23:59 Madrid on option A; EUR 1.10 expires unspent, as accepted. The Fri 25 noon brief confirms it has ended."
+  },
+  "status_2026_09_25T1210": "ENDED as scheduled 24 Sep 23:59 Madrid on option A. Ad + ad set still read effective_status ACTIVE but the end_time has passed, so there is no 25 Sep row and no further spend. Do not resume, re-fund or edit without a fresh yes.",
+  "final_2026_09_25T1210": {
+   "spend_eur": 24.56,
+   "budget_unspent_eur": 0.44,
+   "impressions": 54155,
+   "reach": 16680,
+   "cpm": 0.4535,
+   "ctr": 0.5023,
+   "link_clicks_reported": 255,
+   "landing_page_views": 91,
+   "cost_per_landing_view_eur": 0.27,
+   "cost_per_click_eur": 0.096,
+   "last_day_24_sep": "EUR 2.99 / 1198 imp / 1049 reach / cpm 2.50 / ctr 2.17 / 15 clicks / 10 LPV",
+   "placements_lifetime": "facebook/feed EUR 12.94 / 9333 imp / 66 clicks / 42 LPV; instagram/feed EUR 6.31 / 2812 imp / 22 clicks / 13 LPV; audience_network EUR 5.06 / 41872 imp / 165 clicks / 36 LPV (all before the 20 Sep 13:11 placement fix); EUR 0.25 leaked to Reels/Stories/right-hand column, all historical",
+   "real_feed_totals": "12145 feed impressions, 88 feed clicks, 55 feed landing views for EUR 19.25 - the honest read of the run",
+   "reactions": "5 post_reaction, 3 net page likes, 0 comments across its dark posts"
+  },
+  "status_2026_09_27T1810": "ENDED 24 Sep 23:59; ad set and ad still read effective_status ACTIVE (normal for a finished lifetime ad set), budget_remaining EUR 0.44, no insights row since 24 Sep, no spend"
+ },
+ "rejected_boost": {
+  "post_id": "1279663088571991_122105598963476753",
+  "approved": "€5/day x 5 days = €25 lifetime, 19 Sep 2026",
+  "campaign_id": "6995415486894",
+  "adset_id": "6995415491294",
+  "creative_id": "1803034517386725",
+  "ad_id": "6995415507494",
+  "created_at": "2026-09-19T20:22:42.222258+02:00",
+  "end_time": "2026-09-24T23:59:00+02:00",
+  "paused_at_reason": "19 Sep 2026: founder rejected the typographic creative before delivery",
+  "status": "ARCHIVED, never delivered"
+ },
+ "pixel": {
+  "pixel_id": "1625109429125373",
+  "dataset_name": "LEADWING",
+  "created": "21 Sep 2026 ~18:50 by the founder in Events Manager (Meta API refused to create one with the page token)",
+  "site": "live on leadwing.app since 21 Sep 2026 ~19:05 (commits f512d57 + a19b77f): consent-gated cookie notice, marketing URLs only, PageView on load and on client navigation, autoConfig off, advanced matching off, host-based default in src/lib/site.ts (NEXT_PUBLIC_META_PIXEL_ID overrides)",
+  "verified": "21 Sep 2026 19:10 on www.leadwing.app: Accept -> fbq init 1625109429125373, PageView for / and /pricing; footer Cookies link reopens the notice; nothing on /login"
+ },
+ "quiet_leads_ad": {
+  "kind": "click ad #2 (quiet leads)",
+  "approved": "founder, 23 Sep 2026 evening ('yeah i want both 4 and 5')",
+  "created": "2026-09-23T21:36+02:00 by the operator via the API",
+  "campaign_id": "6996508235894",
+  "adset_id": "6996508321694",
+  "ad_id": "6996508363294",
+  "creative_id": "1386955970174446",
+  "image_hash": "d548b01472e5ccd44a9627bb28348b71",
+  "image": "output/facebook/posts/10-ad-quiet-leads.png",
+  "dark_post_id": "1279663088571991_122110668771476753",
+  "dark_post_note": "minted by the 23 Sep 22:28 creative swap; the previous one (…122110568883476753) is orphaned but reachable. Neither appears in GET /{page}/posts: check both for comments on every run.",
+  "link": "https://leadwing.app/quiet?utm_source=facebook&utm_medium=paid&utm_campaign=quiet-leads-sep26",
+  "copy": {
+   "primary": "Most leads don't say no. They go quiet. / LeadWing shows you which buyers need a follow-up and has the message already written, in plain language. Send it as it is, or tweak it in ten seconds. / Built for independent agents on the Costa del Sol. Free for your first 10 clients, no card needed.",
+   "headline": "Follow-ups, already written",
+   "description": "Free for 10 clients",
+   "cta": "LEARN_MORE"
+  },
+  "setup": "OUTCOME_TRAFFIC, LANDING_PAGE_VIEWS, IMPRESSIONS, LOWEST_COST_WITHOUT_CAP, EUR 25 lifetime, 23 Sep 21:36 -> 28 Sep 23:59 Madrid, targeting copied from ad set 6995417079494 (24-64, 60 km Marbella, 3 interests + 5 job titles, facebook feed + instagram stream only, advantage_audience off), no promoted_object",
+  "status_at_creation": "campaign + ad set ACTIVE, ad PENDING_REVIEW",
+  "watch": "report spend / impressions / link clicks / landing_page_view / placement split each run; waste test applies; if review rejects, report the feedback and propose, never edit",
+  "status_2026_09_23T2205": "review CLEARED, ad ACTIVE",
+  "creative_id_previous": "29434012246199370",
+  "image_hash_previous": "e88921fb022463fd9b62eccdbd13c7f5",
+  "link_previous": "https://leadwing.app/start?utm_source=facebook&utm_medium=paid&utm_campaign=quiet-leads-sep26",
+  "dark_post_id_previous": "1279663088571991_122110568883476753",
+  "edit_2026_09_23_landing": {
+   "change": "creative 29434012246199370 -> 1299284655540840: link and call_to_action now leadwing.app/quiet (built tonight, deploy 83e3e16), image re-rendered with 'leadwing.app/quiet' printed, message/headline/description unchanged",
+   "why": "/start answers the spreadsheet ad in its own words; this ad's hook is quiet leads, so it needs a page that says the same thing",
+   "verified_after": "ad ACTIVE / IN_PROCESS (re-review), link verified on link_data.link"
+  },
+  "creative_id_before_2026_09_24": "1299284655540840",
+  "dark_post_id_before_2026_09_24": "1279663088571991_122110619979476753",
+  "status_2026_09_24T1210": "ad + ad set ACTIVE, re-review of the /quiet creative CLEARED, no issues_info, no ad_review_feedback; link verified as leadwing.app/quiet?utm_campaign=quiet-leads-sep26 on link_data.link and the call_to_action",
+  "observed_2026_09_24T1210": {
+   "spend_eur": 1.04,
+   "budget_remaining_eur": 23.97,
+   "reach": 506,
+   "impressions": 509,
+   "cpm": 2.04,
+   "link_clicks": 7,
+   "landing_page_views": 3,
+   "first_delivery": "nothing between creation 23 Sep 21:36 and midnight; delivery started 24 Sep 05:00 and ran every hour to 12:00 (peak 08:00, EUR 0.37 / 169 imp)",
+   "placements": "facebook feed EUR 0.81 / 417 imp / 6 clicks / 2 LPV; instagram feed EUR 0.23 / 92 imp / 1 click / 1 LPV; zero audience_network",
+   "waste_test": "does not fire: no audience_network, cost per click EUR 0.15",
+   "reactions_comments": "0 reactions and 0 comments on its dark post"
+  },
+  "observed_2026_09_24T1810": {
+   "spend_eur": 2.75,
+   "budget_remaining_eur": 22.25,
+   "reach": 1049,
+   "impressions": 1119,
+   "link_clicks_reported": 17,
+   "landing_page_views": 10,
+   "today_24_sep_to_1810": "EUR 2.75 / 1119 imp / 1049 reach / cpm 2.46 / ctr 1.79% / 17 link clicks / 10 LPV - 59% of clicks, EUR 0.275 per landing view. All lifetime spend is today; delivery began 05:00.",
+   "today_24_sep_placements": "facebook/feed EUR 1.84 / 864 imp / 14 clicks / 8 LPV; instagram/feed EUR 0.91 / 255 imp / 3 clicks / 2 LPV; audience_network zero",
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none on ad or ad set; no ad_review_feedback",
+   "waste_test": "does not fire: zero audience_network spend, cost per click EUR 0.16",
+   "end_time": "2026-09-28T23:59:00+0200, EUR 22.25 of EUR 25 left"
+  },
+  "status_2026_09_25T1210": "ad + ad set ACTIVE, no issues_info, no ad_review_feedback, feed-only, zero audience_network.",
+  "observed_2026_09_25T1210": {
+   "spend_eur": 5.33,
+   "budget_remaining_eur": 19.67,
+   "impressions": 1983,
+   "reach": 1702,
+   "cpm": 2.69,
+   "ctr": 1.92,
+   "link_clicks_reported": 30,
+   "landing_page_views": 17,
+   "cost_per_landing_view_eur": 0.31,
+   "cost_per_click_eur": 0.178,
+   "day_24_sep_full": "EUR 3.48 / 1360 imp / 1221 reach / cpm 2.56 / ctr 1.84 / 20 clicks / 11 LPV (55% of clicks)",
+   "today_25_sep_to_1210": "EUR 1.85 / 623 imp / 605 reach / cpm 2.97 / 10 clicks / 6 LPV (60% of clicks, EUR 0.31 each)",
+   "today_placements": "facebook/feed EUR 0.89 / 358 imp / 4 clicks / 2 LPV; instagram/feed EUR 0.96 / 265 imp / 6 clicks / 4 LPV; zero audience_network",
+   "today_hourly": "delivery in every hour 01:00-12:00, EUR 0.07-0.36 each, no stall; nothing in the 00:00 hour",
+   "waste_test": "does not fire: 0% audience_network, cost per click EUR 0.18, LPV 57% of clifetime clicks",
+   "runway": "EUR 19.67 left with ~84 h to Sun 28 Sep 23:59; today's pace ~EUR 3.7/day would spend ~EUR 13 of it and leave ~EUR 6-7 to expire. Proposed to the founder: extend end_time to Tue 30 Sep 23:59. Not applied.",
+   "reactions_comments": "1 reaction on the live dark post, 0 comments on it or the two orphans"
+  },
+  "observed_2026_09_25T1810": {
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none",
+   "ad_review_feedback": "null",
+   "spend": "7.34 of 25.00 (budget_remaining 17.66)",
+   "lifetime": "2,604 impressions, 2,240 reach, CPM EUR 2.82, 41 link clicks, 26 landing page views (63% of clicks, EUR 0.28 each), 3 post reactions, 44 post engagements",
+   "today_25_sep": "EUR 3.86, 1,244 impressions, 21 link clicks, 15 landing page views",
+   "placements": "Facebook feed EUR 4.42 / 1,727 imp / 26 lc / 18 lpv; Instagram feed EUR 2.92 / 877 imp / 15 lc / 8 lpv; zero audience_network",
+   "waste_test": "does not fire - no AN spend, cost per click EUR 0.18, landing views 63% of clicks"
+  },
+  "status_2026_09_26T1225": "ad + ad set ACTIVE, no issues_info, no ad_review_feedback, feed-only, zero audience_network.",
+  "observed_2026_09_26T1225": {
+   "spend_eur": 10.8,
+   "budget_remaining_eur": 14.2,
+   "impressions": 3733,
+   "reach": 3042,
+   "cpm": 2.89,
+   "ctr": 1.88,
+   "link_clicks_reported": 54,
+   "landing_page_views": 33,
+   "cost_per_landing_view_eur": 0.33,
+   "cost_per_click_eur": 0.2,
+   "day_25_sep_full": "EUR 5.72 / 1837 imp / 1617 reach / cpm 3.11 / ctr 1.85 / 26 clicks / 17 LPV (65% of clicks, EUR 0.34 each) / 1 post reaction",
+   "today_26_sep_to_1225": "EUR 1.60 / 536 imp / 511 reach / cpm 2.99 / ctr 2.05 / 8 clicks / 5 LPV",
+   "placements_lifetime": "facebook/feed EUR 6.14 / 2281 imp / 31 clicks / 22 LPV; instagram/feed EUR 4.67 / 1452 imp / 23 clicks / 11 LPV; zero audience_network",
+   "waste_test": "does not fire: 0% audience_network, EUR 0.20 per click, landing views 61% of clicks",
+   "runway": "EUR 14.20 left, ends Sun 28 Sep 23:59 (~2.6 days) = EUR 5.4/day needed against a 25 Sep pace of EUR 5.72/day, so it is now on track to spend out, better than the EUR 6-7 shortfall forecast on 25 Sep. No action per the founder 25 Sep."
+  },
+  "status_2026_09_26T1810": "ad + ad set ACTIVE, no issues_info, no ad_review_feedback; creative 1386955970174446, dark post 1279663088571991_122110668771476753 unchanged; 0 comments on it",
+  "observed_2026_09_26T1810": {
+   "spend_eur": 12.63,
+   "lifetime_budget_eur": 25,
+   "budget_remaining_eur": 12.37,
+   "impressions": 4625,
+   "reach": 3626,
+   "cpm_eur": 2.73,
+   "link_clicks": 64,
+   "landing_page_views": 41,
+   "lpv_share_of_clicks": "64%",
+   "cost_per_lpv_eur": 0.31,
+   "cost_per_click_eur": 0.2,
+   "day_2026_09_26_to_1810": {
+    "spend_eur": 3.43,
+    "impressions": 1427,
+    "link_clicks": 18,
+    "landing_page_views": 13,
+    "cost_per_lpv_eur": 0.26
+   },
+   "placements": {
+    "facebook/feed": {
+     "spend_eur": 7.09,
+     "impressions": 2752,
+     "link_clicks": 39,
+     "landing_page_views": 29
     },
-    "observed_2026_09_30T1208": {
-      "spend_eur": 4.8,
-      "budget_remaining_eur": 20.2,
-      "impressions": 1866,
-      "reach": 1723,
-      "frequency": 1.083,
-      "cpm_eur": 2.57,
-      "link_clicks": 31,
-      "landing_page_views": 23,
-      "cost_per_link_click_eur": 0.155,
-      "cost_per_landing_page_view_eur": 0.209,
-      "post_reactions": 1,
-      "lpv_rate": "74% of link clicks — the best ratio of any LeadWing ad (previous best 64% on quiet-leads)",
-      "placements": "facebook/feed EUR 3.55 / 1,311 imp / 22 clicks / 15 LPV; instagram/feed EUR 1.25 / 555 imp / 9 clicks / 8 LPV — ZERO audience_network, 100% feed",
-      "daily": "29 Sep EUR 2.80 / 1,061 imp / 1,001 reach / 21 clicks / 15 LPV; 30 Sep to 12:08 Madrid EUR 2.00 / 805 imp / 778 reach / 10 clicks / 8 LPV",
-      "placement_fields": "RE-READ and still PRESENT: publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream]. Ad set updated_time unchanged at 2026-09-29T15:43:16+0200 — Meta has NOT touched the targeting.",
-      "review": "ad ACTIVE, ad set ACTIVE, no issues_info, no ad_review_feedback",
-      "waste_test": "does NOT fire: 0% audience_network, EUR 0.155 per link click (test wants under EUR 0.05), LPV 74% of clicks (test wants under 30%). Nothing paused.",
-      "pace": "EUR 20.20 left over ~4.5 days needs EUR 4.49/day; 30 Sep is running ~EUR 4.0/day (EUR 2.00 by 12:08). A shortfall of roughly EUR 2 of the 25 is possible. Reported, not acted on — no ad edit without a fresh yes."
+    "instagram/feed": {
+     "spend_eur": 5.59,
+     "impressions": 1879,
+     "link_clicks": 25,
+     "landing_page_views": 12
     },
-    "observed_2026_09_30T1810": {
-      "spend_eur": 6.4,
-      "budget_remaining_eur": 18.6,
-      "impressions": 2655,
-      "reach": 2388,
-      "frequency": 1.112,
-      "cpm_eur": 2.41,
-      "link_clicks": 47,
-      "landing_page_views": 35,
-      "cost_per_link_click_eur": 0.136,
-      "cost_per_landing_page_view_eur": 0.183,
-      "post_reactions": 1,
-      "lpv_rate": "74% of link clicks — holding at the best ratio any LeadWing ad has produced",
-      "placements": "facebook/feed EUR 4.84 / 1,928 imp / 33 clicks / 23 LPV; instagram/feed EUR 1.56 / 729 imp / 14 clicks / 12 LPV — ZERO audience_network, 100% feed",
-      "daily": "29 Sep EUR 2.82 / 1,069 imp / 23 clicks / 15 LPV; 30 Sep to 18:10 Madrid EUR 3.58 / 1,586 imp / 24 clicks / 20 LPV",
-      "placement_fields": "RE-READ and still PRESENT: publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream]. Ad set updated_time still 2026-09-29T15:43:16+0200 — Meta has not touched the targeting.",
-      "creative": "RE-READ from the ad: creative 1445432247464313, dark post 1279663088571991_122114822697476753 — unchanged since the 00:19 re-mint, same image hash a96e58d9fdf8fa69598aa5ac1edeac5d, same home link with utm_campaign=free10-sep26. No further Meta-side minting today.",
-      "review": "ad ACTIVE (updated_time 2026-09-30T00:23:18+0200), ad set ACTIVE, no issues_info, no ad_review_feedback",
-      "waste_test": "does NOT fire: 0% audience_network, EUR 0.136 per link click (test wants under EUR 0.05), LPV 74% of clicks (test wants under 30%). Off-feed share of today's spend is 0%. Nothing paused.",
-      "pace": "EUR 18.60 left over ~4.2 days needs EUR 4.39/day; 30 Sep is running EUR 3.58 in 18.2 h = ~EUR 4.7/day, so it is now ON PACE to spend out by 4 Oct 23:59 (the noon shortfall forecast has closed). Reported, not acted on.",
-      "comments": "the 1 post_reaction sits on the INSTAGRAM leg, so it does not show on the Facebook dark post (0 reactions there). Nothing to answer."
-    },
-    "observed_2026_10_01T1215": {
-      "when": "1 Oct 2026 12:15 Madrid (10:15 UTC), noon brief",
-      "ad": "6997552574094 ACTIVE, no issues_info, no ad_review_feedback; updated_time 2026-09-30T00:23:18+0200 unchanged since the 30 Sep re-mint",
-      "creative": "1445432247464313 re-read from the ad, dark post 1279663088571991_122114822697476753 — NO second Meta re-mint overnight; image_hash a96e58d9fdf8fa69598aa5ac1edeac5d, same home link with utm_campaign=free10-sep26, same message, same SIGN_UP CTA",
-      "adset": "6997552554894 ACTIVE, updated_time still 2026-09-29T15:43:16+0200; feed-only placements PRESENT (publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream]); 60 km Marbella, 24-64, three interests only",
-      "lifetime": "EUR 9.87 of 25 (EUR 15.13 left), 3,985 imp, 3,375 reach, CPM 2.48, frequency 1.18, 62 link clicks at EUR 0.159, 49 landing page views at EUR 0.201, 1 post_reaction (Instagram leg)",
-      "lpv_ratio": "49/62 = 79% of link clicks — a new best for any LeadWing ad (previous best 74% on 30 Sep, quiet-leads 64%)",
-      "daily": "29 Sep EUR 2.82 / 1,069 imp / 23 clicks / 15 LPV; 30 Sep EUR 5.46 / 2,296 imp / 29 clicks / 23 LPV; 1 Oct to 12:00 EUR 1.59 / 620 imp / 10 clicks / 11 LPV",
-      "placements": "lifetime FB feed EUR 7.46 / 2,945 imp / 40 clicks / 29 LPV, IG feed EUR 2.42 / 1,041 imp / 22 clicks / 20 LPV; today FB feed EUR 1.22 / 459 imp, IG feed EUR 0.38 / 162 imp. ZERO Audience Network, zero off-feed, off-feed share of today's spend 0%",
-      "waste_test": "does not fire on any leg (0% audience_network, EUR 0.159 per click, LPV 79% of clicks)",
-      "delivery": "continuous — spend in every one of the 12 elapsed hourly buckets today, so the zero-impressions trigger does not apply",
-      "pace": "EUR 15.13 over 3.49 days to 4 Oct 23:59 needs EUR 4.33/day. Today's 00:00-11:59 took EUR 1.59; the same window on 30 Sep took EUR 2.11 against a EUR 5.46 full day, so today projects ~EUR 4.11 — a possible ~EUR 1 shortfall by 4 Oct. Reported, not acted on.",
-      "account_activities": "GET /act_.../activities 30 Sep -> 2 Oct returns only 4 ad_account_billing_charge events, actor Meta — NO targeting or creative edits overnight"
-    },
-    "observed_2026_10_01T1810": {
-      "when": "1 Oct 2026 18:10 Madrid (16:10 UTC), evening check",
-      "verdict": "all quiet and the ad is healthy — nothing for the founder",
-      "spend_eur": 11.04,
-      "budget_remaining_eur": 13.96,
-      "impressions": 4522,
-      "reach": 3658,
-      "frequency": 1.236,
-      "cpm_eur": 2.44,
-      "clicks_all": 94,
-      "link_clicks": 70,
-      "landing_page_views": 55,
-      "cost_per_link_click_eur": 0.158,
-      "cost_per_landing_page_view_eur": 0.201,
-      "post_reactions": 1,
-      "lpv_ratio": "55/70 = 79% of link clicks — holding at the best ratio any LeadWing ad has produced (74% on 30 Sep, 64% on quiet-leads)",
-      "placements": "facebook/feed EUR 8.36 / 3,387 imp / 46 link clicks / 33 LPV (76% of spend); instagram/feed EUR 2.68 / 1,135 imp / 24 clicks / 22 LPV (24%); ZERO audience_network",
-      "daily": "29 Sep EUR 2.82 / 1,069 imp / 23 clicks / 15 LPV; 30 Sep EUR 5.48 / 2,300 imp / 29 clicks / 23 LPV; 1 Oct to 18:00 EUR 2.74 / 1,153 imp / 18 clicks / 17 LPV (17 of 18 = 94% today)",
-      "delivery": "continuous — spend in 18 of the 19 elapsed hourly buckets today (the 18:00 bucket is still filling at 6 imp), so the zero-feed-impressions trigger does not apply",
-      "waste_test": "does not fire on any leg — 0% audience_network, EUR 0.158 per click (test wants under EUR 0.05), LPV 79% of clicks (test wants below 30%)",
-      "review": "ad ACTIVE, ad set ACTIVE, no issues_info, no ad_review_feedback",
-      "no_meta_edit": "second night in a row with no overnight Meta change: creative still 1445432247464313 / dark post 1279663088571991_122114822697476753, ad updated_time still 2026-09-30T00:23:18+0200, ad set updated_time still 2026-09-29T15:43:16+0200, feed-only placements PRESENT (publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream])",
-      "pace": "EUR 13.96 over 3.24 days to 4 Oct 23:59 needs EUR 4.31/day; today to 18:00 took EUR 2.74 and 30 Sep's front-to-full ratio was 1.53, projecting ~EUR 4.19 today, so roughly EUR 1 of the 25 may still expire unspent. Reported only — no ad edit without a fresh yes, and EUR 1 is not worth one against the 20 Sep security-check lesson.",
-      "organic": "0 comments on all 13 page posts and all 8 dark posts, 0 inbox conversations, 1 lifetime post_reaction (on the Instagram leg)"
-    },
-    "observed_2026_10_02T1210": {
-      "when": "2 Oct 2026 12:10 Madrid (10:10 UTC), noon brief",
-      "ad": "6997552574094 ACTIVE, no issues_info, no ad_review_feedback; updated_time 2026-09-30T00:23:18+0200 unchanged",
-      "creative": "1445432247464313 re-read from the ad, dark post 1279663088571991_122114822697476753 — THIRD consecutive night with no Meta re-mint; image_hash a96e58d9fdf8fa69598aa5ac1edeac5d, same home link with utm_campaign=free10-sep26, same message, same SIGN_UP CTA",
-      "adset": "6997552554894 ACTIVE, updated_time still 2026-09-29T15:43:16+0200; feed-only placements PRESENT (publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream]); 60 km Marbella, 24-64, three interests only; budget_remaining 1103 cents, end_time 2026-10-04T23:59:00+0200",
-      "activity_log": "GET /act_173026079415266/activities for 1->3 Oct returns one ad_account_billing_charge (actor Meta) and nothing else — no update_ad_creative, no update_ad_set_target_spec",
-      "lifetime": "EUR 13.97 of 25 (EUR 11.03 left), 5,732 imp, 4,466 reach, CPM 2.44, frequency 1.28, 87 link clicks at EUR 0.161, 71 landing page views at EUR 0.197",
-      "lpv_ratio": "71/87 = 82% of link clicks — a new best (79% on 1 Oct, 74% on 30 Sep, quiet-leads 64%); 1 Oct alone landed 25 of 26 clicks",
-      "daily": "29 Sep EUR 2.82 / 1,069 imp / 23 clicks / 15 LPV; 30 Sep EUR 5.48 / 2,300 / 29 / 23; 1 Oct EUR 4.40 / 1,908 / 26 / 25; 2 Oct to 12:00 EUR 1.27 / 455 / 9 / 8",
-      "placements": "lifetime FB feed EUR 10.66 / 4,337 imp / 47 LPV (76% of spend), IG feed EUR 3.31 / 1,395 imp / 24 LPV. ZERO Audience Network, off-feed share of today's spend 0%",
-      "delivery": "continuous — spend in 12 of today's 13 elapsed hourly buckets (12:00 had just opened) and in all 24 buckets of 1 Oct",
-      "waste_test": "does not fire on any leg: Audience Network 0% of spend (test wants >50%), cost per link click EUR 0.161 (test wants <EUR 0.05)",
-      "pace": "EUR 11.03 over 2.49 days needs EUR 4.43/day. Decaying day on day — 5.48, 4.40, ~3.4 projected today (EUR 1.27 by noon against EUR 1.66 in the same window yesterday, a day that closed at 4.40) — while frequency climbs 1.18 -> 1.24 -> 1.28: the 60 km / three-interest audience is saturating. Roughly EUR 2-3 of the 25 now likely to expire unspent on 4 Oct 23:59, against ~EUR 1 forecast on 1 Oct",
-      "action": "none — reported to the founder as decision 1 at the 2 Oct noon brief with a recommendation to let it expire. No ad edit without a fresh yes"
-    },
-    "reading_2026_10_02T1810": {
-      "when": "2026-10-02T18:10+0200 evening check",
-      "ad": {
-        "id": "6997552574094",
-        "status": "ACTIVE",
-        "effective_status": "ACTIVE",
-        "updated_time": "2026-09-30T00:23:18+0200",
-        "issues_info": "ABSENT",
-        "ad_review_feedback": "ABSENT"
-      },
-      "adset": {
-        "id": "6997552554894",
-        "status": "ACTIVE",
-        "effective_status": "ACTIVE",
-        "updated_time": "2026-09-29T15:43:16+0200",
-        "end_time": "2026-10-04T23:59:00+0200",
-        "lifetime_budget": "2500",
-        "budget_remaining": "978"
-      },
-      "creative": {
-        "id": "1445432247464313",
-        "effective_object_story_id": "1279663088571991_122114822697476753",
-        "image_hash": "a96e58d9fdf8fa69598aa5ac1edeac5d",
-        "link": "https://www.leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=free10-sep26",
-        "cta": "SIGN_UP",
-        "verdict": "unchanged since the 30 Sep Meta re-mint"
-      },
-      "placements_present": {
-        "publisher_platforms": [
-          "facebook",
-          "instagram"
-        ],
-        "facebook_positions": [
-          "feed"
-        ],
-        "instagram_positions": [
-          "stream"
-        ]
-      },
-      "lifetime": {
-        "spend": "15.22",
-        "impressions": 6339,
-        "reach": 4817,
-        "cpm": 2.4,
-        "frequency": 1.316,
-        "link_clicks": 95,
-        "cost_per_link_click": 0.16,
-        "landing_page_views": 78,
-        "cost_per_lpv": 0.195,
-        "lpv_share_of_clicks": "82%",
-        "post_reaction": 1
-      },
-      "daily": {
-        "2026-09-29": {
-          "spend": "2.82",
-          "imp": 1069,
-          "clicks": 23,
-          "lpv": 15
-        },
-        "2026-09-30": {
-          "spend": "5.48",
-          "imp": 2300,
-          "clicks": 29,
-          "lpv": 23
-        },
-        "2026-10-01": {
-          "spend": "4.43",
-          "imp": 1915,
-          "clicks": 26,
-          "lpv": 25
-        },
-        "2026-10-02_to_1800": {
-          "spend": "2.49",
-          "imp": 1055,
-          "clicks": 17,
-          "lpv": 15
-        }
-      },
-      "placements_lifetime": {
-        "facebook_feed": {
-          "spend": "11.72",
-          "imp": 4848,
-          "clicks": 65,
-          "lpv": 51
-        },
-        "instagram_feed": {
-          "spend": "3.50",
-          "imp": 1491,
-          "clicks": 30,
-          "lpv": 27,
-          "post_reaction": 1
-        },
-        "audience_network": "ZERO"
-      },
-      "delivery": "continuous - spend in all 19 elapsed hourly buckets on 2 Oct; off-feed share of today's spend 0%",
-      "waste_test": "does not fire on any leg (0% audience_network; EUR 0.160 per link click; LPV 82% of clicks)",
-      "activities_2_to_3_Oct": "one ad_account_billing_charge (actor Meta) and nothing else - fourth consecutive night with no Meta edit",
-      "pace": "EUR 9.78 over 2.24 days needs EUR 4.36/day; 00:00-18:00 took EUR 2.49 vs EUR 2.74 in the same window on 1 Oct (a EUR 4.43 day), projecting ~EUR 4.03 today. Shortfall forecast narrowed to ~EUR 1-1.5 from EUR 2-3 at noon. Nothing edited; decision 1 (let it expire) still open."
-    },
-    "reading_2026_10_03T1220": {
-      "run_type": "noon brief",
-      "headline": "PLACEMENT REGRESSION RECURRED — Meta rewrote the ad set's placements 4 -> 29 at 2026-10-03T00:21:09+0200, actor 'Meta' id 1051435468209173, no operator edit. 83% of today's spend is off-feed. Waste test does not fire; NOT paused; put to the founder as decision 1.",
-      "ad": {
-        "id": "6997552574094",
-        "status": "ACTIVE",
-        "effective_status": "ACTIVE",
-        "updated_time": "2026-10-03T00:23:58+0200",
-        "issues_info": null,
-        "ad_review_feedback": null
-      },
-      "adset": {
-        "id": "6997552554894",
-        "status": "ACTIVE",
-        "effective_status": "ACTIVE",
-        "updated_time": "2026-10-03T00:21:26+0200",
-        "end_time": "2026-10-04T23:59:00+0200",
-        "lifetime_budget": 2500,
-        "budget_remaining": 628,
-        "optimization_goal": "LANDING_PAGE_VIEWS"
-      },
-      "creative": {
-        "id": "1445432247464313",
-        "effective_object_story_id": "1279663088571991_122114822697476753",
-        "image_hash": "a96e58d9fdf8fa69598aa5ac1edeac5d",
-        "link": "https://www.leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=free10-sep26",
-        "cta": "SIGN_UP",
-        "note": "unchanged — no second Meta re-mint"
-      },
-      "targeting_now": {
-        "keys_present": [
-          "age_max",
-          "age_min",
-          "flexible_spec",
-          "geo_locations",
-          "targeting_automation"
-        ],
-        "publisher_platforms": null,
-        "facebook_positions": null,
-        "instagram_positions": null,
-        "targeting_automation": {
-          "advantage_audience": 0
-        },
-        "note": "the three placement fields are ABSENT — Meta stripped them. Ads Manager text went from 4 placements (Feed desktop, IG feed, IG web feed, Feed mobile) to 29, including 'Third-party apps and websites on mobile devices (Audience Network)', IG Reels/Stories/search, Marketplace, right column, in-stream, FB Reels, Threads feed and notifications."
-      },
-      "lifetime": {
-        "spend": 18.72,
-        "impressions": 7798,
-        "reach": 5854,
-        "cpm": 2.400616,
-        "frequency": 1.332081,
-        "link_clicks": 120,
-        "cost_per_link_click": 0.156,
-        "landing_page_views": 99,
-        "cost_per_lpv": 0.189091,
-        "lpv_share_of_clicks": 0.825,
-        "post_reaction": 1,
-        "feed_impressions": 7153
-      },
-      "daily": [
-        {
-          "d": "2026-09-29",
-          "spend": 2.82,
-          "imp": 1069,
-          "clicks": 23,
-          "lpv": 15
-        },
-        {
-          "d": "2026-09-30",
-          "spend": 5.48,
-          "imp": 2300,
-          "clicks": 29,
-          "lpv": 23
-        },
-        {
-          "d": "2026-10-01",
-          "spend": 4.45,
-          "imp": 1916,
-          "clicks": 26,
-          "lpv": 25
-        },
-        {
-          "d": "2026-10-02",
-          "spend": 4.12,
-          "imp": 1732,
-          "clicks": 26,
-          "lpv": 23
-        },
-        {
-          "d": "2026-10-03",
-          "spend": 1.85,
-          "imp": 783,
-          "clicks": 16,
-          "lpv": 13,
-          "partial_to": "12:59 Madrid"
-        }
-      ],
-      "placements_lifetime": [
-        {
-          "p": "facebook/feed",
-          "spend": 13.381,
-          "imp": 5507,
-          "clicks": 73,
-          "lpv": 57
-        },
-        {
-          "p": "instagram/feed",
-          "spend": 3.826,
-          "imp": 1646,
-          "clicks": 32,
-          "lpv": 29
-        },
-        {
-          "p": "instagram/instagram_reels",
-          "spend": 0.972,
-          "imp": 403,
-          "clicks": 8,
-          "lpv": 7
-        },
-        {
-          "p": "instagram/instagram_stories",
-          "spend": 0.441,
-          "imp": 200,
-          "clicks": 5,
-          "lpv": 4
-        },
-        {
-          "p": "facebook/instream_video",
-          "spend": 0.09,
-          "imp": 30,
-          "clicks": 2,
-          "lpv": 2
-        },
-        {
-          "p": "facebook/facebook_reels",
-          "spend": 0.01,
-          "imp": 12,
-          "clicks": 0,
-          "lpv": 0
-        },
-        {
-          "p": "audience_network",
-          "spend": 0.0,
-          "imp": 0,
-          "note": "in the placement list since the rewrite but has not delivered"
-        }
-      ],
-      "placements_today": {
-        "off_feed_share_of_today_spend": 0.83,
-        "feed": {
-          "spend": 0.315,
-          "imp": 128,
-          "clicks": 1,
-          "lpv": 0
-        },
-        "off_feed": {
-          "spend": 1.535,
-          "imp": 655,
-          "clicks": 15,
-          "lpv": 13,
-          "cost_per_lpv": 0.118
-        }
-      },
-      "waste_test": "DOES NOT FIRE on any leg — audience_network 0% of spend (test wants >50%), link clicks EUR 0.116 (test wants <EUR 0.05). Not paused. Off-feed share of today's spend is 83% and is reported alongside, per the 27 Sep learning.",
-      "pace": "EUR 6.28 over 1.49 days needs EUR 4.22/day; today's 00:00-12:59 took EUR 1.85 against EUR 1.40 in the same window on 2 Oct (a EUR 4.12 day), projecting ~EUR 5.4. The unspent-remainder forecast has GONE — the off-feed inventory is cheap and plentiful. Decision 1 from the 2 Oct noon brief (let the remainder expire) is overtaken.",
-      "activities_2_to_4_oct": [
-        {
-          "t": "2026-10-02T20:43:52+0000",
-          "event": "create_audience x5",
-          "actor": "Meta id 0",
-          "detail": "asa_auto_custom_audience ids 6998239657894/658094/658294/658494/658694 — NEW, not seen on 27 Sep; 1.5 h before the placement rewrite"
-        },
-        {
-          "t": "2026-10-02T22:21:09+0000",
-          "event": "update_ad_set_target_spec",
-          "actor": "Meta id 1051435468209173",
-          "detail": "placements 4 -> 29"
-        },
-        {
-          "t": "2026-10-02T22:21:09+0000",
-          "event": "update_ad_set_run_status",
-          "actor": "Meta id 1051435468209173",
-          "detail": "Active -> Pending process"
-        },
-        {
-          "t": "2026-10-02T22:21:26+0000",
-          "event": "update_ad_set_run_status",
-          "actor": "Meta id 1051435468209173",
-          "detail": "Pending process -> Active"
-        },
-        {
-          "t": "2026-10-02T22:21:44+0000",
-          "event": "update_ad_run_status",
-          "actor": "Meta id 1051435468209173",
-          "detail": "Pending process -> Pending Review"
-        },
-        {
-          "t": "2026-10-02T22:23:58+0000",
-          "event": "update_ad_run_status",
-          "actor": "Meta id 0",
-          "detail": "Pending Review -> Active (review returned it)"
-        },
-        {
-          "t": "2026-10-02T13:45:46+0000",
-          "event": "ad_account_billing_charge",
-          "actor": "Meta id 0",
-          "detail": ""
-        }
-      ]
-    },
-    "reading_2026_10_03T1810": {
-      "when": "2026-10-03T18:10+0200 (evening check)",
-      "ad": {
-        "id": "6997552574094",
-        "effective_status": "ACTIVE",
-        "status": "ACTIVE",
-        "updated_time": "2026-10-03T00:23:58+0200",
-        "issues_info": "absent",
-        "ad_review_feedback": "absent"
-      },
-      "adset": {
-        "id": "6997552554894",
-        "effective_status": "ACTIVE",
-        "status": "ACTIVE",
-        "updated_time": "2026-10-03T00:21:26+0200",
-        "end_time": "2026-10-04T23:59:00+0200",
-        "lifetime_budget": "2500",
-        "budget_remaining": "510",
-        "optimization_goal": "LANDING_PAGE_VIEWS"
-      },
-      "creative": {
-        "id": "1445432247464313",
-        "effective_object_story_id": "1279663088571991_122114822697476753",
-        "image_hash": "a96e58d9fdf8fa69598aa5ac1edeac5d",
-        "link": "https://www.leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=free10-sep26",
-        "cta": "SIGN_UP",
-        "verdict": "unchanged since 30 Sep 00:19 re-mint; no second re-mint"
-      },
-      "placements_in_targeting": "publisher_platforms / facebook_positions / instagram_positions STILL ABSENT (Meta's 3 Oct 00:21 rewrite persists); targeting holds only age_max, age_min, flexible_spec, geo_locations, targeting_automation; advantage_audience 0",
-      "activities_3_oct": "GET /act_.../activities since=2026-10-03 returns 0 events - no further Meta change after the 00:21 rewrite and 00:23 re-review",
-      "lifetime": {
-        "spend": "19.90",
-        "impressions": 9721,
-        "reach": 6352,
-        "cpm": "2.05",
-        "frequency": "1.53",
-        "link_clicks": 134,
-        "cost_per_link_click": "0.1485",
-        "landing_page_views": 107,
-        "cost_per_lpv": "0.1860",
-        "lpv_share_of_clicks": "80%"
-      },
-      "daily": {
-        "2026-09-29": "2.82 / 1069 imp / 23 clicks / 15 LPV",
-        "2026-09-30": "5.48 / 2300 / 29 / 23",
-        "2026-10-01": "4.45 / 1916 / 26 / 25",
-        "2026-10-02": "4.15 / 1745 / 26 / 23",
-        "2026-10-03 to 18:00": "3.00 / 2691 / 30 / 21"
-      },
-      "placements_lifetime": {
-        "facebook_feed": "13.47 / 5583 imp / 74 clicks / 58 LPV",
-        "instagram_feed": "3.83 / 1658 / 32 / 29",
-        "instagram_reels": "1.21 / 594 / 9 / 8",
-        "instagram_stories": "1.06 / 486 / 11 / 9",
-        "audience_network": "0.16 / 1318 / 6 / 1",
-        "facebook_instream_video": "0.12 / 51 / 2 / 2",
-        "facebook_reels": "0.04 / 30 / 0 / 0",
-        "facebook_marketplace": "0.01 / 1 / 0 / 0",
-        "feed_share_of_spend": "87% (17.30 of 19.90)",
-        "feed_share_of_impressions": "74% (7241 of 9721)"
-      },
-      "placements_today": {
-        "off_feed_share_of_today_spend": "88% (2.64 of 3.00)",
-        "audience_network": "0.16 / 1337 imp / 6 clicks / 1 LPV - NEW, was 0.00 at noon",
-        "instagram_reels": "1.23 / 603 / 9 / 8",
-        "instagram_stories": "1.07 / 493 / 11 / 9",
-        "facebook_instream_video": "0.12 / 52 / 2 / 2",
-        "facebook_reels": "0.04 / 31 / 0 / 0",
-        "facebook_marketplace": "0.01 / 1 / 0 / 0",
-        "facebook_feed": "0.30 / 133 / 2 / 1",
-        "instagram_feed": "0.06 / 41 / 0 / 0"
-      },
-      "waste_test": "DOES NOT FIRE on any leg: audience_network 5.3% of today's spend and 0.8% of lifetime (test wants >50%); cost per link click today EUR 0.100 (test wants <0.05); LPV 70% of today's clicks (test wants <30%). Nothing paused.",
-      "delivery": "continuous - spend in all 19 elapsed hourly buckets today; 14:00-17:00 alone bought 1750 imp for EUR 0.91 (CPM ~0.52), which is the cheap off-feed inventory",
-      "pace": "EUR 5.10 left over ~1.25 days. Today's 00:00-18:00 took 3.00 against 2.49 in the same window on 2 Oct (a 4.15 day), projecting ~5.00 today and leaving ~3.10 for 4 Oct at a ~5/day rate. On pace to spend the full EUR 25 before 4 Oct 23:59; the shortfall stays gone.",
-      "open_decision": "Decision 1 from the 3 Oct noon brief (A pause / B re-apply feed-only placements / C do nothing, recommendation C) is STILL OPEN. No ad edit without a fresh yes."
-    }
+    "audience_network": "none"
+   },
+   "end_time": "2026-09-28T23:59+0200",
+   "waste_test": "does not fire",
+   "action": "none"
+  },
+  "paused_2026_09_27": "PAUSED by the routine on the founder's 'ok pause for now' (27 Sep noon), option A on the placement regression. Ad set 6996508321694 status PAUSED, ad 6996508363294 ADSET_PAUSED, budget_remaining 640 (EUR 6.40 of the EUR 25 forfeited, EUR 18.60 spent). Reason: Meta stripped the ad set's publisher_platforms/facebook_positions/instagram_positions at 2026-09-27T00:18:38+0200 with no operator edit, and 76% of that day's spend went to Audience Network, Reels, Stories and in-stream. Do not resume, re-fund or edit without a fresh yes; if it is ever resumed, re-apply feed-only placements FIRST and verify them after.",
+  "final_2026_09_27T1810": {
+   "adset_effective_status": "PAUSED",
+   "ad_effective_status": "ADSET_PAUSED",
+   "paused_at": "2026-09-27T13:54:26+0200",
+   "spend_eur": 18.65,
+   "budget_remaining_eur": 6.35,
+   "impressions": 7257,
+   "reach": 5436,
+   "link_clicks": 112,
+   "landing_page_views": 63,
+   "cost_per_lpv_eur": 0.3,
+   "cpm_eur": 2.57,
+   "spend_stopped": "last hourly bucket 13:00-13:59 Madrid on 27 Sep; zero spend and zero impressions in the 4 h since, checked at 18:10 Madrid",
+   "placements_lifetime": "facebook/feed 9.36 EUR / 3699 imp; instagram/feed 6.95 / 2470; audience_network 0.87 / 411; instagram_reels 0.87 / 409; instagram_stories 0.26 / 124; facebook_reels 0.19 / 93; instream_video 0.15 / 43; feed-only portion 16.31 EUR / 6169 imp",
+   "placement_fields": "publisher_platforms / facebook_positions / instagram_positions STILL ABSENT at the evening check - Meta did not restore them. Targeting holds only age_max, age_min, flexible_spec, geo_locations, targeting_automation. Re-apply feed-only placements FIRST and verify after, if this ad set is ever resumed.",
+   "note": "do not resume, re-fund or edit without a fresh yes"
+  },
+  "final_2026_09_28T1210": {
+   "adset_status": "PAUSED",
+   "ad_effective_status": "ADSET_PAUSED",
+   "issues_info": "none",
+   "spend_eur": 18.66,
+   "budget_remaining_eur": 6.34,
+   "impressions": 7261,
+   "reach": 5438,
+   "link_clicks": 112,
+   "landing_page_views": 63,
+   "cost_per_lpv_eur": 0.3,
+   "cpm_eur": 2.57,
+   "spend_28_sep": "0.00 - no insights row for 28 Sep, the pause is holding",
+   "placements_lifetime": "feed EUR 16.32 / 6171 imp / 91 clicks / 55 LPV (fb feed 9.37/3701/52/37, ig feed 6.95/2470/39/18); off-feed EUR 2.34 / 1090 imp / 21 clicks / 8 LPV (an_classic 0.87/411, ig_reels 0.87/409, ig_stories 0.26/124, fb_reels 0.19/95, instream 0.15/43)",
+   "placement_fields": "publisher_platforms / facebook_positions / instagram_positions STILL ABSENT - Meta never restored them",
+   "end_time": "2026-09-28T23:59:00+0200 - the lifetime window closes tonight; after that the EUR 6.34 needs an end_time edit as well as a fresh yes",
+   "account": "status 1, balance EUR 0.06, Visa *1984, amount_spent EUR 129.54 lifetime on the account"
+  },
+  "closed_2026_09_28": {
+   "decision": "founder, 28 Sep noon: 'let it expire, i need to rethink our strategy anyway'",
+   "applied": "nothing - do-nothing option; no edit, resume or top-up was made",
+   "outcome": "ad set left PAUSED and allowed to pass its own end_time 2026-09-28T23:59:00+0200 with EUR 6.34 of EUR 25 unspent",
+   "status": "CLOSED - do not re-propose resuming, re-funding or extending this ad set",
+   "final": "EUR 18.66 spent, 7,261 imp, 5,438 reach, 112 link clicks, 63 landing page views at EUR 0.30, CPM EUR 2.57"
   }
+ },
+ "post_boost_ad": {
+  "kind": "engagement boost of the 23 Sep 'quiet leads' page post (5b)",
+  "approved": "founder, 23 Sep 2026 evening ('yeah i want both 4 and 5')",
+  "created": "2026-09-23T21:45+02:00 by the operator via the API",
+  "campaign_id": "6996508248894",
+  "adset_id": "6996508580294",
+  "ad_id": "6996512397894",
+  "creative_id": "1627298505638074",
+  "post_id": "1279663088571991_122110619499476753",
+  "post_note": "the 23 Sep 22:28 replacement product post (10-ad-quiet-leads.png, links leadwing.app/quiet); reactions and comments land on it",
+  "setup": "OUTCOME_ENGAGEMENT, POST_ENGAGEMENT with destination_type ON_POST and promoted_object {page_id}, IMPRESSIONS, LOWEST_COST_WITHOUT_CAP, EUR 10 lifetime, 25 Sep 10:00 -> 1 Oct 23:59 Madrid, same targeting and feed-only placements as the quiet-leads ad",
+  "status_at_creation": "campaign + ad set ACTIVE, ad PENDING_REVIEW; nothing delivers before the 25 Sep 10:00 start",
+  "api_notes": "POST_ENGAGEMENT without promoted_object creates fine but the ad is then refused (1885154); promoted_object is immutable after creation (1885090); POST_ENGAGEMENT + promoted_object page_id needs destination_type=ON_POST or it is refused (2490408). A first empty ad set 6996508349894 was deleted.",
+  "watch": "report spend / impressions / post reactions, comments, shares / page follows each run; judge on cost per engagement and follows, not clicks",
+  "status_2026_09_23T2205": "DISAPPROVED (generic 'Advertising Standards' feedback, no policy named). Most likely the housing-ad rule: the digest names homes for sale with prices and a registration deadline, and the ad set targets by age and job title, which housing ads may not. Proposed 5b: boost the 23 Sep product post instead. Appeal only possible from Ads Manager.",
+  "history": "first built on the scheduled Fri 25 Sep digest post (ad 6996508595494, creative 1132591039195016) and DISAPPROVED at review, most likely the housing-ad rule; the founder chose 5b on 23 Sep ~22:15, the rejected ad was deleted, campaign + ad set renamed 'Post boost' | 23 Sep ~22:20: the founder saw the 09:30 post still said 'every buyer card' on its image, so on 'do what you think is best' the pending boost ad 6996510974094 was deleted, the old post deleted, a new post published with the new creative and the boost re-created on it (ad 6996512397894, creative 1627298505638074)",
+  "status_2026_09_23T2215": "ad PENDING_REVIEW; ad set ACTIVE, EUR 10, 25 Sep 10:00 - 1 Oct 23:59",
+  "status_2026_09_23T2230": "ad IN_PROCESS (review); ad set ACTIVE, EUR 10, 25 Sep 10:00 - 1 Oct 23:59",
+  "status_2026_09_24T1210": "ad 6996512397894 ACTIVE - review CLEARED. Ad set ACTIVE, EUR 10 intact, delivery starts 25 Sep 10:00 Madrid, so no insights row yet (correct, not a stall).",
+  "observed_2026_09_24T1810": {
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none",
+   "spend_eur": 0,
+   "budget_remaining_eur": 10,
+   "insights": "empty - correct, delivery starts 25 Sep 10:00 Madrid"
+  },
+  "status_2026_09_25T1210": "ad + ad set ACTIVE, no issues_info; delivery began at the scheduled 25 Sep 10:00 Madrid.",
+  "observed_2026_09_25T1210": {
+   "spend_eur": 0.02,
+   "budget_remaining_eur": 9.98,
+   "impressions": 12,
+   "reach": 11,
+   "cpm": 1.67,
+   "engagement_actions": "none yet - 0 reactions, 0 comments, 0 shares, 0 page follows attributable to it",
+   "placements": "facebook/feed 5 imp EUR 0.00; instagram/feed 7 imp EUR 0.02",
+   "hourly": "10:00 h 3 imp, 11:00 h 9 imp",
+   "note": "first 2 h only, and very slow: 12 impressions against a EUR 10 / 6.5-day budget (~EUR 1.43/day). Not a stall by the playbook's test (delivery is non-zero). Evening check to confirm it picks up."
+  },
+  "observed_2026_09_25T1810": {
+   "ad_effective_status": "ACTIVE",
+   "adset_effective_status": "ACTIVE",
+   "issues_info": "none",
+   "spend": "0.30 of 10.00 (budget_remaining 9.70)",
+   "lifetime": "95 impressions, 88 reach, CPM EUR 3.16, 0 engagement actions of any kind",
+   "placements": "Facebook feed EUR 0.09 / 36 imp; Instagram feed EUR 0.21 / 59 imp",
+   "note": "delivery began 25 Sep 10:00 Madrid; EUR 0.30 / 95 imp in the first 8 h against EUR 0.02 / 12 imp in the first 2 h, so it is ramping, not stalled. Needs EUR 1.54/day to spend out by 1 Oct and is running at ~EUR 0.90/day. Zero engagement on 95 impressions is the thing to watch. Full-day judgement at the 26 Sep noon brief."
+  },
+  "status_2026_09_26T1225": "ad + ad set ACTIVE, no issues_info; delivering in every hour of 25 Sep, not stalled.",
+  "observed_2026_09_26T1225": {
+   "spend_eur": 1.45,
+   "budget_remaining_eur": 8.55,
+   "impressions": 360,
+   "reach": 319,
+   "cpm": 4.03,
+   "engagement_lifetime": "1 post reaction, 2 post engagements, 0 comments, 0 shares, 0 page follows",
+   "day_25_sep_first_partial": "EUR 0.87 / 207 imp / 1 post reaction / 2 post engagements (delivery started 10:00 Madrid, so 14 h not 24)",
+   "today_26_sep_to_1225": "EUR 0.58 / 153 imp / 0 engagement actions",
+   "placements_lifetime": "facebook/feed EUR 0.92 / 236 imp / 1 reaction; instagram/feed EUR 0.53 / 124 imp / 0",
+   "hourly_25_sep": "non-zero impressions in all 24 hourly buckets, 1-39 per hour - steady, just small",
+   "verdict": "engagement is not literally zero any more (the 1 reaction on page post 122110619499476753 is this ad), but EUR 1.45 bought one reaction: EUR 0.73 per post engagement, EUR 1.45 per reaction, 0 follows, 0 comments. Waste test does not fire (0% AN; the clicks-under-EUR-0.05 leg does not apply to an engagement ad).",
+   "runway": "EUR 8.55 left to 1 Oct 23:59 = EUR 1.55/day needed, running ~EUR 0.95/day, so ~EUR 3 expires unspent on the current pace.",
+   "proposed_not_applied": "see PLAYBOOK Pending - decision put to the founder at the 26 Sep noon brief, nothing edited."
+  },
+  "status_2026_09_26T1810": "ad + ad set ACTIVE, no issues_info, no ad_review_feedback; creative 1627298505638074 boosting page post 1279663088571991_122110619499476753",
+  "observed_2026_09_26T1810": {
+   "spend_eur": 1.93,
+   "lifetime_budget_eur": 10,
+   "budget_remaining_eur": 8.07,
+   "impressions": 489,
+   "reach": 408,
+   "cpm_eur": 3.95,
+   "post_reactions": 1,
+   "post_engagements": 2,
+   "comments": 0,
+   "shares": 0,
+   "page_follows": 0,
+   "cost_per_reaction_eur": 1.93,
+   "cost_per_post_engagement_eur": 0.97,
+   "day_2026_09_25": {
+    "spend_eur": 0.87,
+    "impressions": 207,
+    "note": "RESTATED DOWN by Meta from the 1.45 EUR / 360 imp read at the 26 Sep noon brief"
+   },
+   "day_2026_09_26_to_1810": {
+    "spend_eur": 1.06,
+    "impressions": 282,
+    "actions": "none at all"
+   },
+   "placements": {
+    "facebook/feed": {
+     "spend_eur": 1.26,
+     "impressions": 331,
+     "post_reactions": 1
+    },
+    "instagram/feed": {
+     "spend_eur": 0.66,
+     "impressions": 159,
+     "post_reactions": 0
+    },
+    "audience_network": "none"
+   },
+   "end_time": "2026-10-01T23:59+0200",
+   "waste_test": "does not fire (0% AN; clicks leg does not apply to POST_ENGAGEMENT)",
+   "action": "none - A/B decision from the 26 Sep noon brief still unanswered"
+  },
+  "status_2026_09_26T2020": "PAUSED at the ad-set level (6996508580294) at 20:20 Madrid in a Claude session, on the founder's in-session 'do whatever you think is best' to the recommendation 'pause the post boost'. EUR 7.95 of EUR 10 unspent, end_time still 1 Oct 23:59; resuming it needs the founder's yes.",
+  "status_2026_09_27T1810": "still PAUSED, ad reads ADSET_PAUSED, budget_remaining EUR 7.91 of EUR 10, untouched, no spend",
+  "state_2026_09_28T1210": {
+   "adset_status": "PAUSED",
+   "ad_effective_status": "ADSET_PAUSED",
+   "budget_remaining_eur": 7.91,
+   "placements": "publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream] - intact, unlike quiet-leads",
+   "end_time": "2026-10-01T23:59:00+0200",
+   "note": "untouched since the 26 Sep pause"
+  }
+ },
+ "account_2026_09_24T1810": "status 1, no disable reason, EUR 2.86 balance, EUR 105.79 lifetime spend",
+ "account_2026_09_25T1210": "status 1, no disable reason, EUR 6.12 balance, EUR 112.27 lifetime spend",
+ "account_2026_09_26T1225": {
+  "account_status": 1,
+  "disable_reason": 0,
+  "balance_eur": 3.56,
+  "amount_spent_eur": 118.86,
+  "funding": "VISA *1984"
+ },
+ "account_2026_09_26T1810": {
+  "account_status": 1,
+  "disable_reason": 0,
+  "balance_eur": 5.88,
+  "amount_spent_eur": 118.86,
+  "funding": "VISA *1984"
+ },
+ "account_2026_09_27T1810": "status 1, no disable reason, EUR 5.00 balance, EUR 126.55 lifetime spend; 27 Sep account spend EUR 2.98 / 1342 imp / 25 clicks / 10 LPV, all of it the quiet-leads ad set before the pause",
+ "free10_ad": {
+  "kind": "Free-for-10 click ad — created by the FOUNDER in Ads Manager 29 Sep 2026 15:42 Madrid, after the 'stop the ads' decision earlier the same day. Not created by the routine.",
+  "campaign_id": "6997552551894",
+  "adset_id": "6997552554894",
+  "ad_id": "6997552574094",
+  "creative_id": "1445432247464313 (was 968627088918992 at creation) — Meta RE-MINTED the creative at 2026-09-30T00:19:50 Madrid, actor 'Meta' id 1051435468209173, no operator edit. Verified byte-for-byte equivalent: same image_hash a96e58d9fdf8fa69598aa5ac1edeac5d, same link, same message, same SIGN_UP CTA. Same midnight-Madrid re-mint pattern as 24 Sep. Benign.",
+  "dark_post_id": "1279663088571991_122114822697476753 (minted 2026-09-30T00:20:07 Madrid by the re-mint above). The original 1279663088571991_122114677509476753 is orphaned but still reachable — check BOTH for comments every run.",
+  "image": "output/facebook/posts/12-ad-free10-mono.png (adimage hash a96e58d9fdf8fa69598aa5ac1edeac5d, 1080x1350) — the creative this repo prepared in commit d59b74b, used unchanged",
+  "link": "https://www.leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=free10-sep26 — the HOME page, not a hook-matched landing; the founder chose it (ad name says 'home')",
+  "objective": "OUTCOME_TRAFFIC / LANDING_PAGE_VIEWS, billing IMPRESSIONS, LOWEST_COST_WITHOUT_CAP",
+  "budget": "EUR 25 lifetime, 29 Sep 15:42 -> 4 Oct 23:59 Madrid (5.35 days, needs ~EUR 4.67/day to spend out)",
+  "targeting": "feed-only VERIFIED present at 18:10: publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream]; 60 km of Marbella, 24-64, the THREE interests only — the five dead job titles are gone",
+  "special_ad_categories": "[] — software ad, not housing; review CLEARED (effective_status ACTIVE, no issues_info, no ad_review_feedback)",
+  "observed_2026_09_29T1810": {
+   "spend_eur": 0.35,
+   "budget_remaining_eur": 24.65,
+   "impressions": 146,
+   "reach": 141,
+   "frequency": 1.035,
+   "cpm_eur": 2.4,
+   "clicks": 2,
+   "link_clicks": 1,
+   "landing_page_views": 1,
+   "placements": "facebook/feed EUR 0.20 / 78 imp / 1 link click / 1 LPV; instagram/feed EUR 0.15 / 68 imp / 0 — ZERO audience_network",
+   "hourly_madrid": "16:00 EUR 0.21 / 96 imp, 17:00 EUR 0.14 / 47 imp, 18:00 partial",
+   "waste_test": "does NOT fire: 0% audience_network, EUR 0.35 per link click (test wants under EUR 0.05), LPV 100% of link clicks (test wants under 30%). Nothing paused.",
+   "founder_edits": "15:52 UTC he renamed the ad and swapped the creative; Meta re-set run status at 15:58 UTC and it came back ACTIVE — review cleared, not a stall."
+  },
+  "observed_2026_09_30T1208": {
+   "spend_eur": 4.8,
+   "budget_remaining_eur": 20.2,
+   "impressions": 1866,
+   "reach": 1723,
+   "frequency": 1.083,
+   "cpm_eur": 2.57,
+   "link_clicks": 31,
+   "landing_page_views": 23,
+   "cost_per_link_click_eur": 0.155,
+   "cost_per_landing_page_view_eur": 0.209,
+   "post_reactions": 1,
+   "lpv_rate": "74% of link clicks — the best ratio of any LeadWing ad (previous best 64% on quiet-leads)",
+   "placements": "facebook/feed EUR 3.55 / 1,311 imp / 22 clicks / 15 LPV; instagram/feed EUR 1.25 / 555 imp / 9 clicks / 8 LPV — ZERO audience_network, 100% feed",
+   "daily": "29 Sep EUR 2.80 / 1,061 imp / 1,001 reach / 21 clicks / 15 LPV; 30 Sep to 12:08 Madrid EUR 2.00 / 805 imp / 778 reach / 10 clicks / 8 LPV",
+   "placement_fields": "RE-READ and still PRESENT: publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream]. Ad set updated_time unchanged at 2026-09-29T15:43:16+0200 — Meta has NOT touched the targeting.",
+   "review": "ad ACTIVE, ad set ACTIVE, no issues_info, no ad_review_feedback",
+   "waste_test": "does NOT fire: 0% audience_network, EUR 0.155 per link click (test wants under EUR 0.05), LPV 74% of clicks (test wants under 30%). Nothing paused.",
+   "pace": "EUR 20.20 left over ~4.5 days needs EUR 4.49/day; 30 Sep is running ~EUR 4.0/day (EUR 2.00 by 12:08). A shortfall of roughly EUR 2 of the 25 is possible. Reported, not acted on — no ad edit without a fresh yes."
+  },
+  "observed_2026_09_30T1810": {
+   "spend_eur": 6.4,
+   "budget_remaining_eur": 18.6,
+   "impressions": 2655,
+   "reach": 2388,
+   "frequency": 1.112,
+   "cpm_eur": 2.41,
+   "link_clicks": 47,
+   "landing_page_views": 35,
+   "cost_per_link_click_eur": 0.136,
+   "cost_per_landing_page_view_eur": 0.183,
+   "post_reactions": 1,
+   "lpv_rate": "74% of link clicks — holding at the best ratio any LeadWing ad has produced",
+   "placements": "facebook/feed EUR 4.84 / 1,928 imp / 33 clicks / 23 LPV; instagram/feed EUR 1.56 / 729 imp / 14 clicks / 12 LPV — ZERO audience_network, 100% feed",
+   "daily": "29 Sep EUR 2.82 / 1,069 imp / 23 clicks / 15 LPV; 30 Sep to 18:10 Madrid EUR 3.58 / 1,586 imp / 24 clicks / 20 LPV",
+   "placement_fields": "RE-READ and still PRESENT: publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream]. Ad set updated_time still 2026-09-29T15:43:16+0200 — Meta has not touched the targeting.",
+   "creative": "RE-READ from the ad: creative 1445432247464313, dark post 1279663088571991_122114822697476753 — unchanged since the 00:19 re-mint, same image hash a96e58d9fdf8fa69598aa5ac1edeac5d, same home link with utm_campaign=free10-sep26. No further Meta-side minting today.",
+   "review": "ad ACTIVE (updated_time 2026-09-30T00:23:18+0200), ad set ACTIVE, no issues_info, no ad_review_feedback",
+   "waste_test": "does NOT fire: 0% audience_network, EUR 0.136 per link click (test wants under EUR 0.05), LPV 74% of clicks (test wants under 30%). Off-feed share of today's spend is 0%. Nothing paused.",
+   "pace": "EUR 18.60 left over ~4.2 days needs EUR 4.39/day; 30 Sep is running EUR 3.58 in 18.2 h = ~EUR 4.7/day, so it is now ON PACE to spend out by 4 Oct 23:59 (the noon shortfall forecast has closed). Reported, not acted on.",
+   "comments": "the 1 post_reaction sits on the INSTAGRAM leg, so it does not show on the Facebook dark post (0 reactions there). Nothing to answer."
+  },
+  "observed_2026_10_01T1215": {
+   "when": "1 Oct 2026 12:15 Madrid (10:15 UTC), noon brief",
+   "ad": "6997552574094 ACTIVE, no issues_info, no ad_review_feedback; updated_time 2026-09-30T00:23:18+0200 unchanged since the 30 Sep re-mint",
+   "creative": "1445432247464313 re-read from the ad, dark post 1279663088571991_122114822697476753 — NO second Meta re-mint overnight; image_hash a96e58d9fdf8fa69598aa5ac1edeac5d, same home link with utm_campaign=free10-sep26, same message, same SIGN_UP CTA",
+   "adset": "6997552554894 ACTIVE, updated_time still 2026-09-29T15:43:16+0200; feed-only placements PRESENT (publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream]); 60 km Marbella, 24-64, three interests only",
+   "lifetime": "EUR 9.87 of 25 (EUR 15.13 left), 3,985 imp, 3,375 reach, CPM 2.48, frequency 1.18, 62 link clicks at EUR 0.159, 49 landing page views at EUR 0.201, 1 post_reaction (Instagram leg)",
+   "lpv_ratio": "49/62 = 79% of link clicks — a new best for any LeadWing ad (previous best 74% on 30 Sep, quiet-leads 64%)",
+   "daily": "29 Sep EUR 2.82 / 1,069 imp / 23 clicks / 15 LPV; 30 Sep EUR 5.46 / 2,296 imp / 29 clicks / 23 LPV; 1 Oct to 12:00 EUR 1.59 / 620 imp / 10 clicks / 11 LPV",
+   "placements": "lifetime FB feed EUR 7.46 / 2,945 imp / 40 clicks / 29 LPV, IG feed EUR 2.42 / 1,041 imp / 22 clicks / 20 LPV; today FB feed EUR 1.22 / 459 imp, IG feed EUR 0.38 / 162 imp. ZERO Audience Network, zero off-feed, off-feed share of today's spend 0%",
+   "waste_test": "does not fire on any leg (0% audience_network, EUR 0.159 per click, LPV 79% of clicks)",
+   "delivery": "continuous — spend in every one of the 12 elapsed hourly buckets today, so the zero-impressions trigger does not apply",
+   "pace": "EUR 15.13 over 3.49 days to 4 Oct 23:59 needs EUR 4.33/day. Today's 00:00-11:59 took EUR 1.59; the same window on 30 Sep took EUR 2.11 against a EUR 5.46 full day, so today projects ~EUR 4.11 — a possible ~EUR 1 shortfall by 4 Oct. Reported, not acted on.",
+   "account_activities": "GET /act_.../activities 30 Sep -> 2 Oct returns only 4 ad_account_billing_charge events, actor Meta — NO targeting or creative edits overnight"
+  },
+  "observed_2026_10_01T1810": {
+   "when": "1 Oct 2026 18:10 Madrid (16:10 UTC), evening check",
+   "verdict": "all quiet and the ad is healthy — nothing for the founder",
+   "spend_eur": 11.04,
+   "budget_remaining_eur": 13.96,
+   "impressions": 4522,
+   "reach": 3658,
+   "frequency": 1.236,
+   "cpm_eur": 2.44,
+   "clicks_all": 94,
+   "link_clicks": 70,
+   "landing_page_views": 55,
+   "cost_per_link_click_eur": 0.158,
+   "cost_per_landing_page_view_eur": 0.201,
+   "post_reactions": 1,
+   "lpv_ratio": "55/70 = 79% of link clicks — holding at the best ratio any LeadWing ad has produced (74% on 30 Sep, 64% on quiet-leads)",
+   "placements": "facebook/feed EUR 8.36 / 3,387 imp / 46 link clicks / 33 LPV (76% of spend); instagram/feed EUR 2.68 / 1,135 imp / 24 clicks / 22 LPV (24%); ZERO audience_network",
+   "daily": "29 Sep EUR 2.82 / 1,069 imp / 23 clicks / 15 LPV; 30 Sep EUR 5.48 / 2,300 imp / 29 clicks / 23 LPV; 1 Oct to 18:00 EUR 2.74 / 1,153 imp / 18 clicks / 17 LPV (17 of 18 = 94% today)",
+   "delivery": "continuous — spend in 18 of the 19 elapsed hourly buckets today (the 18:00 bucket is still filling at 6 imp), so the zero-feed-impressions trigger does not apply",
+   "waste_test": "does not fire on any leg — 0% audience_network, EUR 0.158 per click (test wants under EUR 0.05), LPV 79% of clicks (test wants below 30%)",
+   "review": "ad ACTIVE, ad set ACTIVE, no issues_info, no ad_review_feedback",
+   "no_meta_edit": "second night in a row with no overnight Meta change: creative still 1445432247464313 / dark post 1279663088571991_122114822697476753, ad updated_time still 2026-09-30T00:23:18+0200, ad set updated_time still 2026-09-29T15:43:16+0200, feed-only placements PRESENT (publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream])",
+   "pace": "EUR 13.96 over 3.24 days to 4 Oct 23:59 needs EUR 4.31/day; today to 18:00 took EUR 2.74 and 30 Sep's front-to-full ratio was 1.53, projecting ~EUR 4.19 today, so roughly EUR 1 of the 25 may still expire unspent. Reported only — no ad edit without a fresh yes, and EUR 1 is not worth one against the 20 Sep security-check lesson.",
+   "organic": "0 comments on all 13 page posts and all 8 dark posts, 0 inbox conversations, 1 lifetime post_reaction (on the Instagram leg)"
+  },
+  "observed_2026_10_02T1210": {
+   "when": "2 Oct 2026 12:10 Madrid (10:10 UTC), noon brief",
+   "ad": "6997552574094 ACTIVE, no issues_info, no ad_review_feedback; updated_time 2026-09-30T00:23:18+0200 unchanged",
+   "creative": "1445432247464313 re-read from the ad, dark post 1279663088571991_122114822697476753 — THIRD consecutive night with no Meta re-mint; image_hash a96e58d9fdf8fa69598aa5ac1edeac5d, same home link with utm_campaign=free10-sep26, same message, same SIGN_UP CTA",
+   "adset": "6997552554894 ACTIVE, updated_time still 2026-09-29T15:43:16+0200; feed-only placements PRESENT (publisher_platforms [facebook, instagram], facebook_positions [feed], instagram_positions [stream]); 60 km Marbella, 24-64, three interests only; budget_remaining 1103 cents, end_time 2026-10-04T23:59:00+0200",
+   "activity_log": "GET /act_173026079415266/activities for 1->3 Oct returns one ad_account_billing_charge (actor Meta) and nothing else — no update_ad_creative, no update_ad_set_target_spec",
+   "lifetime": "EUR 13.97 of 25 (EUR 11.03 left), 5,732 imp, 4,466 reach, CPM 2.44, frequency 1.28, 87 link clicks at EUR 0.161, 71 landing page views at EUR 0.197",
+   "lpv_ratio": "71/87 = 82% of link clicks — a new best (79% on 1 Oct, 74% on 30 Sep, quiet-leads 64%); 1 Oct alone landed 25 of 26 clicks",
+   "daily": "29 Sep EUR 2.82 / 1,069 imp / 23 clicks / 15 LPV; 30 Sep EUR 5.48 / 2,300 / 29 / 23; 1 Oct EUR 4.40 / 1,908 / 26 / 25; 2 Oct to 12:00 EUR 1.27 / 455 / 9 / 8",
+   "placements": "lifetime FB feed EUR 10.66 / 4,337 imp / 47 LPV (76% of spend), IG feed EUR 3.31 / 1,395 imp / 24 LPV. ZERO Audience Network, off-feed share of today's spend 0%",
+   "delivery": "continuous — spend in 12 of today's 13 elapsed hourly buckets (12:00 had just opened) and in all 24 buckets of 1 Oct",
+   "waste_test": "does not fire on any leg: Audience Network 0% of spend (test wants >50%), cost per link click EUR 0.161 (test wants <EUR 0.05)",
+   "pace": "EUR 11.03 over 2.49 days needs EUR 4.43/day. Decaying day on day — 5.48, 4.40, ~3.4 projected today (EUR 1.27 by noon against EUR 1.66 in the same window yesterday, a day that closed at 4.40) — while frequency climbs 1.18 -> 1.24 -> 1.28: the 60 km / three-interest audience is saturating. Roughly EUR 2-3 of the 25 now likely to expire unspent on 4 Oct 23:59, against ~EUR 1 forecast on 1 Oct",
+   "action": "none — reported to the founder as decision 1 at the 2 Oct noon brief with a recommendation to let it expire. No ad edit without a fresh yes"
+  },
+  "reading_2026_10_02T1810": {
+   "when": "2026-10-02T18:10+0200 evening check",
+   "ad": {
+    "id": "6997552574094",
+    "status": "ACTIVE",
+    "effective_status": "ACTIVE",
+    "updated_time": "2026-09-30T00:23:18+0200",
+    "issues_info": "ABSENT",
+    "ad_review_feedback": "ABSENT"
+   },
+   "adset": {
+    "id": "6997552554894",
+    "status": "ACTIVE",
+    "effective_status": "ACTIVE",
+    "updated_time": "2026-09-29T15:43:16+0200",
+    "end_time": "2026-10-04T23:59:00+0200",
+    "lifetime_budget": "2500",
+    "budget_remaining": "978"
+   },
+   "creative": {
+    "id": "1445432247464313",
+    "effective_object_story_id": "1279663088571991_122114822697476753",
+    "image_hash": "a96e58d9fdf8fa69598aa5ac1edeac5d",
+    "link": "https://www.leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=free10-sep26",
+    "cta": "SIGN_UP",
+    "verdict": "unchanged since the 30 Sep Meta re-mint"
+   },
+   "placements_present": {
+    "publisher_platforms": [
+     "facebook",
+     "instagram"
+    ],
+    "facebook_positions": [
+     "feed"
+    ],
+    "instagram_positions": [
+     "stream"
+    ]
+   },
+   "lifetime": {
+    "spend": "15.22",
+    "impressions": 6339,
+    "reach": 4817,
+    "cpm": 2.4,
+    "frequency": 1.316,
+    "link_clicks": 95,
+    "cost_per_link_click": 0.16,
+    "landing_page_views": 78,
+    "cost_per_lpv": 0.195,
+    "lpv_share_of_clicks": "82%",
+    "post_reaction": 1
+   },
+   "daily": {
+    "2026-09-29": {
+     "spend": "2.82",
+     "imp": 1069,
+     "clicks": 23,
+     "lpv": 15
+    },
+    "2026-09-30": {
+     "spend": "5.48",
+     "imp": 2300,
+     "clicks": 29,
+     "lpv": 23
+    },
+    "2026-10-01": {
+     "spend": "4.43",
+     "imp": 1915,
+     "clicks": 26,
+     "lpv": 25
+    },
+    "2026-10-02_to_1800": {
+     "spend": "2.49",
+     "imp": 1055,
+     "clicks": 17,
+     "lpv": 15
+    }
+   },
+   "placements_lifetime": {
+    "facebook_feed": {
+     "spend": "11.72",
+     "imp": 4848,
+     "clicks": 65,
+     "lpv": 51
+    },
+    "instagram_feed": {
+     "spend": "3.50",
+     "imp": 1491,
+     "clicks": 30,
+     "lpv": 27,
+     "post_reaction": 1
+    },
+    "audience_network": "ZERO"
+   },
+   "delivery": "continuous - spend in all 19 elapsed hourly buckets on 2 Oct; off-feed share of today's spend 0%",
+   "waste_test": "does not fire on any leg (0% audience_network; EUR 0.160 per link click; LPV 82% of clicks)",
+   "activities_2_to_3_Oct": "one ad_account_billing_charge (actor Meta) and nothing else - fourth consecutive night with no Meta edit",
+   "pace": "EUR 9.78 over 2.24 days needs EUR 4.36/day; 00:00-18:00 took EUR 2.49 vs EUR 2.74 in the same window on 1 Oct (a EUR 4.43 day), projecting ~EUR 4.03 today. Shortfall forecast narrowed to ~EUR 1-1.5 from EUR 2-3 at noon. Nothing edited; decision 1 (let it expire) still open."
+  },
+  "reading_2026_10_03T1220": {
+   "run_type": "noon brief",
+   "headline": "PLACEMENT REGRESSION RECURRED — Meta rewrote the ad set's placements 4 -> 29 at 2026-10-03T00:21:09+0200, actor 'Meta' id 1051435468209173, no operator edit. 83% of today's spend is off-feed. Waste test does not fire; NOT paused; put to the founder as decision 1.",
+   "ad": {
+    "id": "6997552574094",
+    "status": "ACTIVE",
+    "effective_status": "ACTIVE",
+    "updated_time": "2026-10-03T00:23:58+0200",
+    "issues_info": null,
+    "ad_review_feedback": null
+   },
+   "adset": {
+    "id": "6997552554894",
+    "status": "ACTIVE",
+    "effective_status": "ACTIVE",
+    "updated_time": "2026-10-03T00:21:26+0200",
+    "end_time": "2026-10-04T23:59:00+0200",
+    "lifetime_budget": 2500,
+    "budget_remaining": 628,
+    "optimization_goal": "LANDING_PAGE_VIEWS"
+   },
+   "creative": {
+    "id": "1445432247464313",
+    "effective_object_story_id": "1279663088571991_122114822697476753",
+    "image_hash": "a96e58d9fdf8fa69598aa5ac1edeac5d",
+    "link": "https://www.leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=free10-sep26",
+    "cta": "SIGN_UP",
+    "note": "unchanged — no second Meta re-mint"
+   },
+   "targeting_now": {
+    "keys_present": [
+     "age_max",
+     "age_min",
+     "flexible_spec",
+     "geo_locations",
+     "targeting_automation"
+    ],
+    "publisher_platforms": null,
+    "facebook_positions": null,
+    "instagram_positions": null,
+    "targeting_automation": {
+     "advantage_audience": 0
+    },
+    "note": "the three placement fields are ABSENT — Meta stripped them. Ads Manager text went from 4 placements (Feed desktop, IG feed, IG web feed, Feed mobile) to 29, including 'Third-party apps and websites on mobile devices (Audience Network)', IG Reels/Stories/search, Marketplace, right column, in-stream, FB Reels, Threads feed and notifications."
+   },
+   "lifetime": {
+    "spend": 18.72,
+    "impressions": 7798,
+    "reach": 5854,
+    "cpm": 2.400616,
+    "frequency": 1.332081,
+    "link_clicks": 120,
+    "cost_per_link_click": 0.156,
+    "landing_page_views": 99,
+    "cost_per_lpv": 0.189091,
+    "lpv_share_of_clicks": 0.825,
+    "post_reaction": 1,
+    "feed_impressions": 7153
+   },
+   "daily": [
+    {
+     "d": "2026-09-29",
+     "spend": 2.82,
+     "imp": 1069,
+     "clicks": 23,
+     "lpv": 15
+    },
+    {
+     "d": "2026-09-30",
+     "spend": 5.48,
+     "imp": 2300,
+     "clicks": 29,
+     "lpv": 23
+    },
+    {
+     "d": "2026-10-01",
+     "spend": 4.45,
+     "imp": 1916,
+     "clicks": 26,
+     "lpv": 25
+    },
+    {
+     "d": "2026-10-02",
+     "spend": 4.12,
+     "imp": 1732,
+     "clicks": 26,
+     "lpv": 23
+    },
+    {
+     "d": "2026-10-03",
+     "spend": 1.85,
+     "imp": 783,
+     "clicks": 16,
+     "lpv": 13,
+     "partial_to": "12:59 Madrid"
+    }
+   ],
+   "placements_lifetime": [
+    {
+     "p": "facebook/feed",
+     "spend": 13.381,
+     "imp": 5507,
+     "clicks": 73,
+     "lpv": 57
+    },
+    {
+     "p": "instagram/feed",
+     "spend": 3.826,
+     "imp": 1646,
+     "clicks": 32,
+     "lpv": 29
+    },
+    {
+     "p": "instagram/instagram_reels",
+     "spend": 0.972,
+     "imp": 403,
+     "clicks": 8,
+     "lpv": 7
+    },
+    {
+     "p": "instagram/instagram_stories",
+     "spend": 0.441,
+     "imp": 200,
+     "clicks": 5,
+     "lpv": 4
+    },
+    {
+     "p": "facebook/instream_video",
+     "spend": 0.09,
+     "imp": 30,
+     "clicks": 2,
+     "lpv": 2
+    },
+    {
+     "p": "facebook/facebook_reels",
+     "spend": 0.01,
+     "imp": 12,
+     "clicks": 0,
+     "lpv": 0
+    },
+    {
+     "p": "audience_network",
+     "spend": 0.0,
+     "imp": 0,
+     "note": "in the placement list since the rewrite but has not delivered"
+    }
+   ],
+   "placements_today": {
+    "off_feed_share_of_today_spend": 0.83,
+    "feed": {
+     "spend": 0.315,
+     "imp": 128,
+     "clicks": 1,
+     "lpv": 0
+    },
+    "off_feed": {
+     "spend": 1.535,
+     "imp": 655,
+     "clicks": 15,
+     "lpv": 13,
+     "cost_per_lpv": 0.118
+    }
+   },
+   "waste_test": "DOES NOT FIRE on any leg — audience_network 0% of spend (test wants >50%), link clicks EUR 0.116 (test wants <EUR 0.05). Not paused. Off-feed share of today's spend is 83% and is reported alongside, per the 27 Sep learning.",
+   "pace": "EUR 6.28 over 1.49 days needs EUR 4.22/day; today's 00:00-12:59 took EUR 1.85 against EUR 1.40 in the same window on 2 Oct (a EUR 4.12 day), projecting ~EUR 5.4. The unspent-remainder forecast has GONE — the off-feed inventory is cheap and plentiful. Decision 1 from the 2 Oct noon brief (let the remainder expire) is overtaken.",
+   "activities_2_to_4_oct": [
+    {
+     "t": "2026-10-02T20:43:52+0000",
+     "event": "create_audience x5",
+     "actor": "Meta id 0",
+     "detail": "asa_auto_custom_audience ids 6998239657894/658094/658294/658494/658694 — NEW, not seen on 27 Sep; 1.5 h before the placement rewrite"
+    },
+    {
+     "t": "2026-10-02T22:21:09+0000",
+     "event": "update_ad_set_target_spec",
+     "actor": "Meta id 1051435468209173",
+     "detail": "placements 4 -> 29"
+    },
+    {
+     "t": "2026-10-02T22:21:09+0000",
+     "event": "update_ad_set_run_status",
+     "actor": "Meta id 1051435468209173",
+     "detail": "Active -> Pending process"
+    },
+    {
+     "t": "2026-10-02T22:21:26+0000",
+     "event": "update_ad_set_run_status",
+     "actor": "Meta id 1051435468209173",
+     "detail": "Pending process -> Active"
+    },
+    {
+     "t": "2026-10-02T22:21:44+0000",
+     "event": "update_ad_run_status",
+     "actor": "Meta id 1051435468209173",
+     "detail": "Pending process -> Pending Review"
+    },
+    {
+     "t": "2026-10-02T22:23:58+0000",
+     "event": "update_ad_run_status",
+     "actor": "Meta id 0",
+     "detail": "Pending Review -> Active (review returned it)"
+    },
+    {
+     "t": "2026-10-02T13:45:46+0000",
+     "event": "ad_account_billing_charge",
+     "actor": "Meta id 0",
+     "detail": ""
+    }
+   ]
+  },
+  "reading_2026_10_03T1810": {
+   "when": "2026-10-03T18:10+0200 (evening check)",
+   "ad": {
+    "id": "6997552574094",
+    "effective_status": "ACTIVE",
+    "status": "ACTIVE",
+    "updated_time": "2026-10-03T00:23:58+0200",
+    "issues_info": "absent",
+    "ad_review_feedback": "absent"
+   },
+   "adset": {
+    "id": "6997552554894",
+    "effective_status": "ACTIVE",
+    "status": "ACTIVE",
+    "updated_time": "2026-10-03T00:21:26+0200",
+    "end_time": "2026-10-04T23:59:00+0200",
+    "lifetime_budget": "2500",
+    "budget_remaining": "510",
+    "optimization_goal": "LANDING_PAGE_VIEWS"
+   },
+   "creative": {
+    "id": "1445432247464313",
+    "effective_object_story_id": "1279663088571991_122114822697476753",
+    "image_hash": "a96e58d9fdf8fa69598aa5ac1edeac5d",
+    "link": "https://www.leadwing.app/?utm_source=facebook&utm_medium=paid&utm_campaign=free10-sep26",
+    "cta": "SIGN_UP",
+    "verdict": "unchanged since 30 Sep 00:19 re-mint; no second re-mint"
+   },
+   "placements_in_targeting": "publisher_platforms / facebook_positions / instagram_positions STILL ABSENT (Meta's 3 Oct 00:21 rewrite persists); targeting holds only age_max, age_min, flexible_spec, geo_locations, targeting_automation; advantage_audience 0",
+   "activities_3_oct": "GET /act_.../activities since=2026-10-03 returns 0 events - no further Meta change after the 00:21 rewrite and 00:23 re-review",
+   "lifetime": {
+    "spend": "19.90",
+    "impressions": 9721,
+    "reach": 6352,
+    "cpm": "2.05",
+    "frequency": "1.53",
+    "link_clicks": 134,
+    "cost_per_link_click": "0.1485",
+    "landing_page_views": 107,
+    "cost_per_lpv": "0.1860",
+    "lpv_share_of_clicks": "80%"
+   },
+   "daily": {
+    "2026-09-29": "2.82 / 1069 imp / 23 clicks / 15 LPV",
+    "2026-09-30": "5.48 / 2300 / 29 / 23",
+    "2026-10-01": "4.45 / 1916 / 26 / 25",
+    "2026-10-02": "4.15 / 1745 / 26 / 23",
+    "2026-10-03 to 18:00": "3.00 / 2691 / 30 / 21"
+   },
+   "placements_lifetime": {
+    "facebook_feed": "13.47 / 5583 imp / 74 clicks / 58 LPV",
+    "instagram_feed": "3.83 / 1658 / 32 / 29",
+    "instagram_reels": "1.21 / 594 / 9 / 8",
+    "instagram_stories": "1.06 / 486 / 11 / 9",
+    "audience_network": "0.16 / 1318 / 6 / 1",
+    "facebook_instream_video": "0.12 / 51 / 2 / 2",
+    "facebook_reels": "0.04 / 30 / 0 / 0",
+    "facebook_marketplace": "0.01 / 1 / 0 / 0",
+    "feed_share_of_spend": "87% (17.30 of 19.90)",
+    "feed_share_of_impressions": "74% (7241 of 9721)"
+   },
+   "placements_today": {
+    "off_feed_share_of_today_spend": "88% (2.64 of 3.00)",
+    "audience_network": "0.16 / 1337 imp / 6 clicks / 1 LPV - NEW, was 0.00 at noon",
+    "instagram_reels": "1.23 / 603 / 9 / 8",
+    "instagram_stories": "1.07 / 493 / 11 / 9",
+    "facebook_instream_video": "0.12 / 52 / 2 / 2",
+    "facebook_reels": "0.04 / 31 / 0 / 0",
+    "facebook_marketplace": "0.01 / 1 / 0 / 0",
+    "facebook_feed": "0.30 / 133 / 2 / 1",
+    "instagram_feed": "0.06 / 41 / 0 / 0"
+   },
+   "waste_test": "DOES NOT FIRE on any leg: audience_network 5.3% of today's spend and 0.8% of lifetime (test wants >50%); cost per link click today EUR 0.100 (test wants <0.05); LPV 70% of today's clicks (test wants <30%). Nothing paused.",
+   "delivery": "continuous - spend in all 19 elapsed hourly buckets today; 14:00-17:00 alone bought 1750 imp for EUR 0.91 (CPM ~0.52), which is the cheap off-feed inventory",
+   "pace": "EUR 5.10 left over ~1.25 days. Today's 00:00-18:00 took 3.00 against 2.49 in the same window on 2 Oct (a 4.15 day), projecting ~5.00 today and leaving ~3.10 for 4 Oct at a ~5/day rate. On pace to spend the full EUR 25 before 4 Oct 23:59; the shortfall stays gone.",
+   "open_decision": "Decision 1 from the 3 Oct noon brief (A pause / B re-apply feed-only placements / C do nothing, recommendation C) is STILL OPEN. No ad edit without a fresh yes."
+  },
+  "reading_2026_10_04T1220": {
+   "note": "LAST DAY of the window (end_time 2026-10-04T23:59+0200). Regression persists; no Meta change overnight.",
+   "creative_id_reread_from_ad": "1445432247464313",
+   "dark_post_id_reread_from_ad": "1279663088571991_122114822697476753",
+   "image_hash": "a96e58d9fdf8fa69598aa5ac1edeac5d",
+   "ad_status": "ACTIVE",
+   "adset_status": "ACTIVE",
+   "issues_info": null,
+   "ad_review_feedback": null,
+   "ad_updated_time": "2026-10-03T00:23:58+0200",
+   "adset_updated_time": "2026-10-03T00:21:26+0200",
+   "placement_fields_present": false,
+   "advantage_audience": 0,
+   "activities_3_to_5_Oct": "3 x ad_account_billing_charge (actor Meta), nothing else",
+   "spend": 23.2,
+   "budget_remaining": 1.8,
+   "impressions": 11596,
+   "reach": 7860,
+   "cpm": 2.00069,
+   "frequency": 1.475318,
+   "link_clicks": 167,
+   "cost_per_link_click": 0.138922,
+   "landing_page_views": 135,
+   "cost_per_landing_page_view": 0.171852,
+   "lpv_share_of_clicks": "81%",
+   "today_to_1259": {
+    "spend": 1.62,
+    "impressions": 960,
+    "link_clicks": 17,
+    "landing_page_views": 14,
+    "cost_per_click": 0.095,
+    "cost_per_lpv": 0.116,
+    "off_feed_share_of_spend": "94%"
+   },
+   "daily": [
+    {
+     "d": "2026-09-29",
+     "spend": 2.82,
+     "imp": 1069,
+     "clicks": 23,
+     "lpv": 15
+    },
+    {
+     "d": "2026-09-30",
+     "spend": 5.48,
+     "imp": 2300,
+     "clicks": 29,
+     "lpv": 23
+    },
+    {
+     "d": "2026-10-01",
+     "spend": 4.45,
+     "imp": 1916,
+     "clicks": 26,
+     "lpv": 25
+    },
+    {
+     "d": "2026-10-02",
+     "spend": 4.15,
+     "imp": 1745,
+     "clicks": 26,
+     "lpv": 23
+    },
+    {
+     "d": "2026-10-03",
+     "spend": 4.68,
+     "imp": 3606,
+     "clicks": 46,
+     "lpv": 35
+    },
+    {
+     "d": "2026-10-04",
+     "spend": 1.62,
+     "imp": 960,
+     "clicks": 17,
+     "lpv": 14,
+     "partial_to": "12:59"
+    }
+   ],
+   "placements_lifetime": [
+    {
+     "p": "facebook/feed",
+     "spend": 13.61,
+     "imp": 5628,
+     "clicks": 74,
+     "lpv": 58
+    },
+    {
+     "p": "instagram/feed",
+     "spend": 3.87,
+     "imp": 1663,
+     "clicks": 32,
+     "lpv": 29
+    },
+    {
+     "p": "instagram/stories",
+     "spend": 2.7,
+     "imp": 1343,
+     "clicks": 28,
+     "lpv": 24
+    },
+    {
+     "p": "instagram/reels",
+     "spend": 2.24,
+     "imp": 1186,
+     "clicks": 19,
+     "lpv": 15
+    },
+    {
+     "p": "facebook/instream_video",
+     "spend": 0.45,
+     "imp": 197,
+     "clicks": 5,
+     "lpv": 5
+    },
+    {
+     "p": "audience_network/classic",
+     "spend": 0.18,
+     "imp": 1500,
+     "clicks": 7,
+     "lpv": 2
+    },
+    {
+     "p": "facebook/reels",
+     "spend": 0.12,
+     "imp": 73,
+     "clicks": 2,
+     "lpv": 2
+    },
+    {
+     "p": "facebook/marketplace",
+     "spend": 0.02,
+     "imp": 6,
+     "clicks": 0,
+     "lpv": 0
+    }
+   ],
+   "feed_impressions_share_lifetime": "7291 of 11596 (63%), down from 92% on 3 Oct",
+   "waste_test": "does NOT fire on any leg (AN 0.8% lifetime / 0.6% today; clicks EUR 0.095; LPV 82% of clicks) - nothing paused",
+   "delivery": "continuous, 13 of 13 elapsed hourly buckets",
+   "pace": "EUR 1.80 left; 3 Oct's 12:00-23:59 window alone took EUR 2.84, so the budget exhausts this evening and the full EUR 25 is spent",
+   "decision_1_3_Oct": "OVERTAKEN - window closes tonight, option C (do nothing) is what happened",
+   "honest_feed_only_result": "the 2 Oct evening reading: EUR 15.22, 95 clicks, 78 LPV, 82%"
+  }
+ }
 }

@@ -1,0 +1,22 @@
+{
+ "out": "output/facebook/posts/13-digest-2026-10-05.png",
+ "eyebrow": "Week of 28 Sep – 4 Oct",
+ "headline": "Congress threw out\nboth housing decrees.",
+ "headlineSize": 58,
+ "sub": "Five things Costa del Sol agents should know this week.",
+ "items": [
+  "The automatic two-year tenancy extension and the cap on rent updates fell with Friday's vote — the old rules are back.",
+  "Andalusian resale asking prices hit a record €2,952/m², up 10% in a year; Málaga is the priciest province at €4,317/m².",
+  "Málaga province rents set another record in September at €18.8/m²; Marbella and Ojén are both over €23/m².",
+  "Foreign buyers paid €2,479/m² against €1,839 for Spanish buyers — around 35% more.",
+  "Buying in Málaga city now takes 54.5% of household disposable income, against 36.9% nationally."
+ ],
+ "pill": "Curated by LeadWing",
+ "url": "leadwing.app",
+ "theme": "photo",
+ "photo": "output/facebook/posts/photo-2026-10-05-malaga-balconies.png",
+ "photoHeight": 380,
+ "itemSize": 27,
+ "itemGap": 18,
+ "ruleGap": 18
+}
