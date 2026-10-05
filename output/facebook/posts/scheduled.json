@@ -117,12 +117,14 @@
     "post_id": "1279663088571991_122117458551476753",
     "scheduled_publish_time": 1791185400,
     "scheduled_for": "2026-10-05T09:30:00+02:00",
-    "is_published": false,
+    "is_published": true,
     "source_file": "output/facebook/posts/news-digest-2026-10-05.md",
     "spec": "output/facebook/posts/spec-digest-2026-10-05.json",
     "photo_asset": "output/facebook/posts/photo-2026-10-05-malaga-balconies.png",
     "error": null,
     "approved": "founder in session, 4 Oct: 'i give you freedom to make and put the posts, we are still at 0 so no big deal'",
-    "verified": "4 Oct: in /scheduled_posts, is_published false, attachment present, 1,743 chars, no banned word"
+    "verified": "5 Oct noon: PUBLISHED on time, is_published true, created_time 2026-10-05T07:30:01Z = 09:30 Madrid. 0 reactions, 0 comments at 12:10. Queue now empty, which is correct under the one-post-a-week rhythm; next post is Mon 12 Oct, drafted at the Sunday 11 Oct sitting.",
+    "published_at": "2026-10-05T09:30:01+02:00",
+    "permalink": "https://www.facebook.com/122105574255476753/posts/122117458551476753"
   }
 ]

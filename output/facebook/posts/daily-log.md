@@ -1,5 +1,19 @@
 # LeadWing Facebook daily log
 
+## Mon 5 Oct 2026 — noon brief (12:10 Madrid / 10:10 UTC)
+
+**Monday's digest PUBLISHED on time:** post `1279663088571991_122117458551476753`, is_published true, created_time 2026-10-05T07:30:01Z = 09:30:01 Madrid, 0 reactions and 0 comments at 12:10. Lead was Congress derogating both housing decrees on 2 Oct. The scheduled queue is now EMPTY, correct under the one-post-a-week rhythm; next post is Mon 12 Oct's digest, drafted at the Sunday 11 Oct sitting, so Wed 7 and Fri 9 Oct owe nothing.
+
+All quiet otherwise: 0 comments across all 14 page posts and all 8 ad dark posts, 0 inbox conversations, 0 followers, 0 page views. Yesterday (4 Oct): 6 post engagements, 1,795 media views, 0 new follows. Reel flat at 237 plays / 245 incl. replays / 0 comments / 0 followers. Nothing to reply to, nothing drafted, nothing posted.
+
+**Free-10 ad is FINISHED and this item is closed.** The window passed 4 Oct 23:59 Madrid and it spent nothing on 5 Oct (no insights row; account-level spend for 5 Oct zero, and 4 Oct's EUR 3.38 matches the ad euro for euro). True final totals, a little above the 4 Oct evening reading because the last five hours still delivered: **EUR 24.96 of 25 (EUR 0.04 unspent), 12,984 imp, 8,400 reach, CPM 1.92, 185 link clicks at EUR 0.135, 148 landing page views at EUR 0.169 (80% of clicks), 1 reaction, 0 signups.** Feed closed at 56% of lifetime impressions (7,328 of 12,984) after the 3 Oct placement rewrite; Audience Network finished harmless at EUR 0.23 / 1,822 imp. Nothing was paused — the waste test never fired on any leg, and there was nothing left to pause.
+
+Noted for future runs: **the ad and ad set still READ `effective_status` ACTIVE even though the window has expired** — `end_time` and `budget_remaining` (EUR 0.04) are what say it is dead. Not edited: no fresh yes, and nothing to gain. Total LeadWing ad spend to date EUR 70.27 for 302 landing page views, 1 signup_open, 0 accounts.
+
+Decisions put to the founder: (1) drop the evening check now that nothing is live to watch, (2) the Google tag install, still unanswered from 29 Sep, (3) the outreach list — fix the sheet copy and Status, then resume sends with the final text; that list is the only channel that has ever reached a working agent and it ran on rejected copy.
+
+Vercel analytics still skipped (api.vercel.com blocked by the network policy).
+
 ## Sun 4 Oct 2026 — evening check (18:10 Madrid / 16:10 UTC)
 
 All quiet and the ad is healthy on its last evening. 0 comments across all 13 page posts and all 8 ad dark posts, 0 inbox conversations, nothing to reply to, nothing drafted, nothing posted. Monday's digest is confirmed still in the queue: post `1279663088571991_122117458551476753`, is_published false, scheduled_publish_time 1791185400 = 2026-10-05 09:30 Madrid, queue length 1.
