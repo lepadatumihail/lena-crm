@@ -1,5 +1,9 @@
 # LeadWing Facebook daily log
 
+## Mon 5 Oct 2026 — evening check (18:10 Madrid / 16:10 UTC)
+
+All quiet and nothing live: 0 comments across all 14 page posts, all 8 ad dark posts and the Reel, 0 inbox conversations, scheduled queue empty (correct — next post is Mon 12 Oct's digest, drafted at the Sunday 11 Oct sitting). Free-10 ad confirmed finished: no 5 Oct insights row, account-level 5 Oct spend zero, lifetime unchanged at EUR 24.96 / 12,984 imp / 185 clicks / 148 LPV; ad and ad set still *read* ACTIVE but `end_time` 2026-10-04T23:59+0200 has passed and `budget_remaining` is EUR 0.04, so it cannot spend. Nothing paused, nothing drafted, nothing posted, nothing needs the founder.
+
 ## Mon 5 Oct 2026 — noon brief (12:10 Madrid / 10:10 UTC)
 
 **Monday's digest PUBLISHED on time:** post `1279663088571991_122117458551476753`, is_published true, created_time 2026-10-05T07:30:01Z = 09:30:01 Madrid, 0 reactions and 0 comments at 12:10. Lead was Congress derogating both housing decrees on 2 Oct. The scheduled queue is now EMPTY, correct under the one-post-a-week rhythm; next post is Mon 12 Oct's digest, drafted at the Sunday 11 Oct sitting, so Wed 7 and Fri 9 Oct owe nothing.
