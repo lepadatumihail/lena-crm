@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif, Noto_Serif_Display } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import NextTopLoader from "nextjs-toploader";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -35,6 +35,21 @@ const instrumentSerif = Instrument_Serif({
   display: "swap",
 });
 
+/**
+ * Instrument Serif has no Cyrillic, so Russian pages set their display type
+ * in Noto Serif Display, narrowed on its width axis to Instrument's colour
+ * (globals.css, `html:lang(ru)`). Not preloaded: the other languages never
+ * download it.
+ */
+const cyrillicDisplay = Noto_Serif_Display({
+  variable: "--font-cyrillic-display",
+  style: ["normal", "italic"],
+  subsets: ["cyrillic", "latin"],
+  axes: ["wdth"],
+  display: "swap",
+  preload: false,
+});
+
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations("site")]);
   const title = `${SITE_NAME} — ${t("tagline")}`;
@@ -64,7 +79,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       url: "/",
       siteName: SITE_NAME,
-      locale: locale === "es" ? "es_ES" : SITE_LOCALE,
+      locale: locale === "es" ? "es_ES" : locale === "ru" ? "ru_RU" : SITE_LOCALE,
       title,
       description,
     },
@@ -111,7 +126,7 @@ export default async function RootLayout({
       lang={locale}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${cyrillicDisplay.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         {/* Thin progress bar at the top during route transitions. */}

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { LOCALES } from "@/i18n/config";
 import { marketingPath } from "@/lib/routes";
 import {
   grantProTime,
@@ -47,9 +48,8 @@ function userIdFrom(formData: FormData): string {
 function revalidateAll() {
   revalidatePath("/admin");
   revalidatePath("/referrals");
-  // The pricing page shows the founding spots left, in both languages.
-  revalidatePath(marketingPath("pricing", "en"));
-  revalidatePath(marketingPath("pricing", "es"));
+  // The pricing page shows the founding spots left, in every language.
+  for (const locale of LOCALES) revalidatePath(marketingPath("pricing", locale));
 }
 
 // ---------------- admin ----------------

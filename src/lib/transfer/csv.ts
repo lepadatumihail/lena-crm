@@ -7,9 +7,9 @@ import type { Cell, Table } from "./format";
 /** Excel reads a UTF-8 CSV's accents only when the file starts with this mark. */
 export const CSV_BOM = "﻿";
 
-/** Spanish Excel splits columns on semicolons and reads "," as the decimal mark. */
+/** Spanish and Russian Excel split columns on semicolons and read "," as the decimal mark. */
 export function csvDialect(locale: AppLocale): { delimiter: string; decimal: string } {
-  return locale === "es" ? { delimiter: ";", decimal: "," } : { delimiter: ",", decimal: "." };
+  return locale === "en" ? { delimiter: ",", decimal: "." } : { delimiter: ";", decimal: "," };
 }
 
 /*

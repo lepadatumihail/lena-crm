@@ -1,0 +1,18 @@
+{
+  "firstNameRequired": "Укажите имя",
+  "invalidEmail": "Введите корректный email",
+  "invalidAmount": "Введите корректную сумму",
+  "wholeNumber": "Введите целое число",
+  "pickDate": "Выберите дату",
+  "pickTime": "Выберите время",
+  "chooseClient": "Выберите клиента",
+  "titleRequired": "Укажите название",
+  "dateRequired": "Укажите дату",
+  "nameRequired": "Придумайте название",
+  "messageRequired": "Напишите сообщение",
+  "numberBetween": "Введите число от 0 до {max}",
+  "nameTooLong": "{max, plural, one {Не больше # символа} few {Не больше # символов} many {Не больше # символов} other {Не больше # символа}}",
+  "pickTimeZone": "Выберите часовой пояс",
+  "titleTooLong": "{max, plural, one {Название — не больше # символа} few {Название — не больше # символов} many {Название — не больше # символов} other {Название — не больше # символа}}",
+  "descriptionTooLong": "{max, plural, one {Описание — не больше # символа} few {Описание — не больше # символов} many {Описание — не больше # символов} other {Описание — не больше # символа}}"
+}

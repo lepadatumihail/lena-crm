@@ -66,6 +66,32 @@ describe("language routing", () => {
       expect(response.headers.get("location")).toBe(`https://www.leadwing.app${target}`);
     }
   });
+
+  const russian: Record<string, string>[] = [{ "accept-language": "ru-RU,ru;q=0.9" }, { cookie: "NEXT_LOCALE=ru" }];
+
+  it.each([
+    ["/", "/ru"],
+    ["/quiet", "/ru/povtornyi-kontakt"],
+    ["/tools/agent-earnings-calculator", "/ru/instrumenty/skolko-zarabatyvaet-rieltor"],
+  ])("sends a Russian visitor from %s to %s", async (pathname, target) => {
+    for (const headers of russian) {
+      const response = await proxy(
+        new NextRequest(`https://www.leadwing.app${pathname}`, { headers: { accept: BROWSER, ...headers } })
+      );
+      expect(response.status, JSON.stringify(headers)).toBe(307);
+      expect(response.headers.get("location")).toBe(`https://www.leadwing.app${target}`);
+    }
+  });
+
+  it("never moves a visitor off a Russian URL, whatever the cookie says", async () => {
+    const response = await proxy(
+      new NextRequest("https://www.leadwing.app/ru/tarify", {
+        headers: { accept: BROWSER, cookie: "NEXT_LOCALE=es" },
+      })
+    );
+    expect(response.status).toBe(200);
+    expect(response.headers.get("location")).toBeNull();
+  });
 });
 
 describe("markdown for agents", () => {
@@ -74,6 +100,7 @@ describe("markdown for agents", () => {
     ["/es", "/markdown/es"],
     ["/privacy", "/markdown/privacy"],
     ["/es/aviso-legal", "/markdown/es/aviso-legal"],
+    ["/ru/o-nas", "/markdown/ru/o-nas"],
   ])("rewrites %s to %s when Accept prefers markdown", async (pathname, route) => {
     const response = await request(pathname, AGENT);
     expect(response.headers.get("x-middleware-rewrite")).toBe(`https://www.leadwing.app${route}`);

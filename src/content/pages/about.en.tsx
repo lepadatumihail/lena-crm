@@ -34,7 +34,7 @@ function Body() {
           reservation contracts, prices with IVA.
         </dd>
         <dt>Languages</dt>
-        <dd>English and Spanish</dd>
+        <dd>English, Spanish and Russian</dd>
         <dt>Launched</dt>
         <dd>{SITE_FOUNDED}</dd>
         <dt>Pricing</dt>
@@ -143,7 +143,7 @@ export const content: MarketingPageContent = {
   published: "2026-09-15",
   eyebrow: "About",
   heading: `About ${SITE_NAME}`,
-  lead: `${SITE_NAME} is a CRM for independent real-estate agents. It keeps every buyer, seller, viewing, offer and document on one client card, across all the agencies an agent works with, and drafts each follow-up in the client's own language. It launched in ${SITE_FOUNDED} and runs in the browser, in English and Spanish.`,
+  lead: `${SITE_NAME} is a CRM for independent real-estate agents. It keeps every buyer, seller, viewing, offer and document on one client card, across all the agencies an agent works with, and drafts each follow-up in the client's own language. It launched in ${SITE_FOUNDED} and runs in the browser, in English, Spanish and Russian.`,
   Body,
   faq: [
     {

@@ -24,7 +24,7 @@ import {
   absoluteUrl,
 } from "@/lib/site";
 
-const OG_LOCALES: Record<AppLocale, string> = { en: SITE_LOCALE, es: "es_ES" };
+const OG_LOCALES: Record<AppLocale, string> = { en: SITE_LOCALE, es: "es_ES", ru: "ru_RU" };
 
 /**
  * Everything a public page needs in <head> for one language: title,

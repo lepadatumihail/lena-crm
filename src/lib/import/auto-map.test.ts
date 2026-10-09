@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import enTransfer from "../../../messages/en/transfer.json";
 import esTransfer from "../../../messages/es/transfer.json";
+import ruTransfer from "../../../messages/ru/transfer.json";
 import type { ClientSide } from "@/lib/crm";
 import { columnsForSide } from "@/lib/transfer/columns";
 
@@ -139,7 +140,7 @@ describe("autoMap: LeadWing's own files", () => {
     "down_payment", "down_payment_date", "ppc", "ppc_date", "notary_date", "notary_notes", "commission", "closed_at",
   ]);
   const cases = (["buyer", "seller"] as const).flatMap((side) =>
-    ([["en", enTransfer], ["es", esTransfer]] as const).map(([locale, catalog]) => ({ side, locale, catalog }))
+    ([["en", enTransfer], ["es", esTransfer], ["ru", ruTransfer]] as const).map(([locale, catalog]) => ({ side, locale, catalog }))
   );
 
   it.each(cases)("maps every $locale $side column back to its key", ({ side, catalog }) => {

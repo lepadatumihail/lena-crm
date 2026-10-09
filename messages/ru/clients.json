@@ -1,0 +1,219 @@
+{
+  "list": {
+    "count": "{count, plural, one {# клиент} few {# клиента} many {# клиентов} other {# клиента}}",
+    "countWithInactive": "{count, plural, one {# клиент (вкл. неактивных)} few {# клиента (вкл. неактивных)} many {# клиентов (вкл. неактивных)} other {# клиента (вкл. неактивных)}}",
+    "commissionPipeline": "{amount} в воронке",
+    "commissionClosed": "{amount} закрыто",
+    "newClient": "{side, select, buyer {Новый покупатель} other {Новый продавец}}",
+    "searchPlaceholder": "Поиск: имя, email, телефон, агентство…",
+    "stagePlaceholder": "Этап",
+    "allStages": "Все этапы",
+    "priority": "Приоритет",
+    "table": "Таблица",
+    "board": "Доска",
+    "inactive": "Неактивные",
+    "noMatches": "Нет клиентов, подходящих под фильтры.",
+    "empty": {
+      "title": "{side, select, buyer {Покупателей пока нет} other {Продавцов пока нет}}",
+      "body": "{side, select, buyer {Добавьте первого покупателя, чтобы вести его по воронке.} other {Добавьте первого продавца, чтобы вести его по воронке.}}",
+      "import": "Импорт из таблицы"
+    },
+    "toasts": {
+      "moveFailed": "Не удалось переместить клиента",
+      "moved": "Новый этап: {stage}",
+      "priorityFailed": "Не удалось изменить приоритет",
+      "updateFailed": "Не удалось обновить"
+    },
+    "all": "Все",
+    "followUp": "Пора связаться",
+    "followUpEmpty": "Всё сделано: пока никому не нужно напоминать о себе.",
+    "typeAll": "Все типы",
+    "agencyAll": "Все",
+    "agencyNone": "Без агентства",
+    "selected": "{count, plural, one {Выбран #} few {Выбрано #} many {Выбрано #} other {Выбрано #}}",
+    "inView": "{count, plural, one {# в списке} few {# в списке} many {# в списке} other {# в списке}}",
+    "clearSelection": "Снять выделение",
+    "bulk": {
+      "moveTo": "Перевести на этап…",
+      "flag": "Сделать приоритетными",
+      "hide": "Скрыть",
+      "toasts": {
+        "moved": "{count, plural, one {Перемещён # клиент} few {Перемещено # клиента} many {Перемещено # клиентов} other {Перемещено # клиента}} на этап «{stage}»",
+        "flagged": "{count, plural, one {Приоритет у # клиента} few {Приоритет у # клиентов} many {Приоритет у # клиентов} other {Приоритет у # клиента}}",
+        "hidden": "{count, plural, one {Скрыт # клиент} few {Скрыто # клиента} many {Скрыто # клиентов} other {Скрыто # клиента}}",
+        "failed": "{count, plural, one {Не удалось применить # изменение} few {Не удалось применить # изменения} many {Не удалось применить # изменений} other {Не удалось применить # изменения}}"
+      }
+    },
+    "summary": {
+      "budgetTotal": "Сумма бюджетов",
+      "askingTotal": "Сумма цен",
+      "viewings": "Показы",
+      "properties": "Объекты",
+      "priority": "Приоритетные",
+      "commission": "Комиссия в воронке",
+      "closed": "Закрыто",
+      "shownNote": "Итоги по клиентам, которые сейчас в списке."
+    },
+    "import": "Импорт из таблицы"
+  },
+  "priority": {
+    "flag": "Сделать приоритетным",
+    "unflag": "Снять приоритет"
+  },
+  "latest": {
+    "none": "Контактов ещё не было",
+    "note": "Заметка",
+    "channels": {
+      "whatsapp": "WhatsApp",
+      "call": "Звонок",
+      "email": "Email",
+      "meeting": "Встреча",
+      "other": "Контакт"
+    }
+  },
+  "reach": {
+    "whatsapp": "WhatsApp: {name}",
+    "call": "Позвонить: {name}",
+    "email": "Написать письмо: {name}"
+  },
+  "table": {
+    "name": "Имя",
+    "stage": "Этап",
+    "type": "Тип",
+    "agency": "Агентство",
+    "contact": "Контакт",
+    "updated": "Обновлено",
+    "budget": "Бюджет",
+    "askingPrice": "Цена продавца",
+    "viewings": "Показы",
+    "properties": "Объекты",
+    "role": "Роль",
+    "lastActivity": "Последняя активность",
+    "actions": "Действия",
+    "upTo": "до <amount></amount>",
+    "from": "от <amount></amount>",
+    "selectAll": "Выбрать все",
+    "selectRow": "Выбрать: {name}",
+    "inactive": "Неактивен"
+  },
+  "kanban": {
+    "dropHere": "Перетащите сюда"
+  },
+  "controls": {
+    "active": "Активен",
+    "deleteClient": "Удалить клиента",
+    "deleteTitle": "Удалить клиента?",
+    "deleteDescription": "Клиент {name} и все его данные — пожелания, показы, предложения, документы и задачи — будут удалены безвозвратно. Это действие нельзя отменить.",
+    "toasts": {
+      "stageFailed": "Не удалось сменить этап",
+      "stageUpdated": "Этап обновлён",
+      "priorityFailed": "Не удалось изменить приоритет",
+      "updateFailed": "Не удалось обновить",
+      "reactivated": "Клиент снова активен",
+      "hidden": "Клиент скрыт",
+      "deleteFailed": "Не удалось удалить клиента",
+      "deleted": "Клиент удалён"
+    }
+  },
+  "form": {
+    "firstName": "Имя",
+    "firstNamePlaceholder": "Мария",
+    "lastName": "Фамилия",
+    "lastNamePlaceholder": "Иванова",
+    "email": "Email",
+    "emailPlaceholder": "maria@example.com",
+    "phone": "Телефон",
+    "language": "Язык",
+    "languageSearch": "Найти язык…",
+    "nationality": "Гражданство",
+    "nationalitySearch": "Найти гражданство…",
+    "noChoice": "Не указано",
+    "useTyped": "Использовать «{value}»",
+    "dealType": "Тип сделки",
+    "role": "Роль",
+    "selectPlaceholder": "Выберите…",
+    "agency": "Агентство",
+    "agencyPlaceholder": "например, Marbella Homes",
+    "agencyDescription": "Агентство, с которым вы ведёте этого клиента, если есть.",
+    "agencySuggestions": "Ваши агентства",
+    "useAgency": "Выбрать «{name}»",
+    "notes": "Заметки",
+    "notesPlaceholder": "Всё, что стоит запомнить…",
+    "priority": "Приоритет",
+    "priorityDescription": "Отметьте клиента, чтобы он был вверху списка.",
+    "create": "Создать клиента",
+    "save": "Сохранить изменения",
+    "toasts": {
+      "limitTitle": "Достигнут лимит клиентов бесплатного тарифа",
+      "limitDescription": "В Pro клиентов без ограничений, а всё добавленное остаётся на месте.",
+      "seePlans": "Смотреть тарифы",
+      "createFailed": "Не удалось создать клиента",
+      "created": "Клиент создан",
+      "saveFailed": "Не удалось сохранить изменения",
+      "saved": "Изменения сохранены"
+    }
+  },
+  "leadPaste": {
+    "triggerTitle": "Вставьте лид — форма заполнится сама",
+    "triggerDescription": "Из Idealista, письма или WhatsApp — ИИ заполнит форму за вас.",
+    "dialogTitle": "Вставьте лид",
+    "dialogDescription": "Вставьте запрос как есть — сообщение с портала, пересланное письмо или текст из WhatsApp, — и ИИ извлечёт данные.",
+    "placeholder": "Здравствуйте, увидела ваше объявление на Idealista. Меня зовут Аня Петрова, ищу квартиру с 2 спальнями в Марбелье до 600 000 €. Мой номер: +34 600 123 456…",
+    "extract": "Извлечь данные",
+    "toasts": {
+      "failed": "Не удалось разобрать лид",
+      "filled": "Заполнено по лиду — проверьте и сохраните"
+    },
+    "errors": {
+      "empty": "Сначала вставьте сообщение лида",
+      "tooLong": "Сообщение слишком длинное — вставьте только текст запроса.",
+      "aiFailed": "Ошибка запроса к ИИ",
+      "unreadable": "Не удалось прочитать ответ ИИ."
+    }
+  },
+  "new": {
+    "back": "{side, select, buyer {Назад к покупателям} other {Назад к продавцам}}",
+    "title": "{side, select, buyer {Новый покупатель} other {Новый продавец}}",
+    "description": "{side, select, buyer {Добавьте нового покупателя в воронку.} other {Добавьте нового продавца в воронку.}}",
+    "importHint": "Клиентов много? <link>Импортируйте таблицу</link>."
+  },
+  "edit": {
+    "title": "Изменить: {name}"
+  },
+  "errors": {
+    "invalidForm": "Проверьте форму и попробуйте ещё раз.",
+    "limitReached": "У вас уже {limit, plural, one {# клиент} few {# клиента} many {# клиентов} other {# клиента}} — это лимит бесплатного тарифа. В Pro ограничений нет.",
+    "invalidStage": "Неверный этап"
+  },
+  "rowMenu": {
+    "open": "Открыть",
+    "edit": "Изменить",
+    "moveTo": "Перевести на этап",
+    "hide": "Скрыть",
+    "reactivate": "Активировать"
+  },
+  "sheet": {
+    "title": "Клиент",
+    "contact": "Контакты",
+    "pipeline": "Воронка",
+    "details": "Данные",
+    "open": "Открыть карточку",
+    "stage": "Этап",
+    "budget": "Бюджет",
+    "askingPrice": "Цена продавца",
+    "viewings": "Показы",
+    "properties": "Объекты",
+    "lastActivity": "Последняя активность",
+    "priority": "Приоритет"
+  },
+  "export": {
+    "label": "Экспорт",
+    "count": "{side, select, buyer {{count, plural, one {Экспортировать # покупателя} few {Экспортировать # покупателей} many {Экспортировать # покупателей} other {Экспортировать # покупателя}}} other {{count, plural, one {Экспортировать # продавца} few {Экспортировать # продавцов} many {Экспортировать # продавцов} other {Экспортировать # продавца}}}}",
+    "excel": "Excel (.xlsx)",
+    "csv": "CSV",
+    "default": "По умолчанию",
+    "selected": "Экспортировать",
+    "failed": "Не удалось экспортировать",
+    "sessionEnded": "Сеанс завершён. Войдите снова."
+  }
+}

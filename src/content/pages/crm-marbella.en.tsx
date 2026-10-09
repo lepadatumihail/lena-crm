@@ -196,7 +196,7 @@ export const content: MarketingPageContent = {
     },
     {
       q: "Is there a Spanish version of the app?",
-      a: "Yes. The interface is available in English and Spanish, and it installs on a phone's home screen like an app, which is where most of a viewing day happens.",
+      a: "Yes. The interface is available in English, Spanish and Russian, and it installs on a phone's home screen like an app, which is where most of a viewing day happens.",
     },
   ],
   related: ["crmSpain", "guideIdealista", "pricing"],

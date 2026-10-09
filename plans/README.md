@@ -30,6 +30,7 @@ done.
 | 019 | Free client-tracker spreadsheet that imports into LeadWing (+ the /tools hub) | P1 | S–M (≈1–1.5 d) | 018 Phase A (hard), 012 (built) | DONE (built and live 2026-09-29 as e5d2a39 + 1ea8de4; no dropdowns: the validation plugin broke Excel's part order, so the How-to sheet lists the words, the documented fallback; Google Sheets copies not made, founder's call; his Excel/Sheets/Numbers tick list, Search Console and the Facebook post are his) — [plan](019-client-spreadsheet.md) |
 | 020 | Andalucía agent register explainer (downgraded after the 18 Sep 2026 agreement) | P3 | S (≈0.5 d) | — | DONE (built and live 2026-09-29 as 1c3747d; facts as of that day, re-check monthly until the amending law passes) — [plan](020-andalucia-agent-register.md) |
 | 021 | Agent earnings calculator, the third free tool ("how much does an estate agent earn in Spain") | P2 | S–M | 018 (built) | BUILT 2026-10-09 (cuota table from Orden PJC/297/2026: update it each year when the new Orden is out) — [plan](021-agent-earnings-calculator.md) |
+| 022 | Russian as the third language: app, every public page under /ru, legal, workbook, importer, PDF | P2 | L | — | BUILT 2026-10-09 (translated by Claude, no native review yet; signed-in screens unchecked; migration applied live) — [plan](022-russian-language.md) |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) | REJECTED (with one-line rationale)
 

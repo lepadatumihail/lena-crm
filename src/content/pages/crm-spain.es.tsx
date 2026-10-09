@@ -229,7 +229,7 @@ function Body() {
         </li>
       </ul>
       <p>
-        Todo lo demás está en los dos planes, en español o en inglés, en el navegador y
+        Todo lo demás está en los dos planes, en español, inglés o ruso, en el navegador y
         instalado en la pantalla de inicio del móvil.
       </p>
     </>
@@ -264,7 +264,7 @@ export const content: MarketingPageContent = {
     },
     {
       q: "¿Está en español?",
-      a: "La interfaz está en español y en inglés, y cambias de idioma cuando quieras. Los mensajes que se redactan para un cliente van en el idioma de ese cliente, que muchas veces no es ninguno de los dos.",
+      a: "La interfaz está en español, inglés y ruso, y cambias de idioma cuando quieras. Los mensajes que se redactan para un cliente van en el idioma de ese cliente, que muchas veces no es ninguno de los dos.",
     },
     {
       q: "¿Sirve también para alquileres?",

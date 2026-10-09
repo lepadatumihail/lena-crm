@@ -225,7 +225,7 @@ function Body() {
         </li>
       </ul>
       <p>
-        Everything else is on both plans, in English or Spanish, on the web and installed on
+        Everything else is on both plans, in English, Spanish or Russian, on the web and installed on
         your phone’s home screen.
       </p>
     </>
@@ -260,7 +260,7 @@ export const content: MarketingPageContent = {
     },
     {
       q: "Is the app in Spanish?",
-      a: "The interface is in English and Spanish, and you switch at any time. Messages drafted for a client are written in that client's own language, which is often neither of those.",
+      a: "The interface is in English, Spanish and Russian, and you switch at any time. Messages drafted for a client are written in that client's own language, which is often neither of those.",
     },
     {
       q: "Does it handle rentals as well as sales?",

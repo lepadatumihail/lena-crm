@@ -6,6 +6,7 @@ import {
   View,
   Text,
   StyleSheet,
+  Font,
   pdf,
 } from "@react-pdf/renderer";
 
@@ -36,6 +37,33 @@ const toneColor = (n: number) =>
   !Number.isFinite(n) || n === 0 ? INK : n > 0 ? GREEN : RED;
 const lossColor = (n: number) => (Number.isFinite(n) && n < 0 ? RED : INK);
 
+/**
+ * The built-in Helvetica covers WinAnsi only: Latin letters, € and a few
+ * marks. A document with any other letter (the Russian interface, or a
+ * Cyrillic project name in any language) is set in Geist instead, the TTF
+ * Next ships for OG images, copied to public/fonts. It has one weight, so
+ * bold lines stay regular there.
+ */
+const UNICODE_FAMILY = "Geist";
+const UNICODE_FONT = "/fonts/Geist-Regular.ttf";
+const BEYOND_HELVETICA = /[^\u0000-\u00ff€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ]/;
+
+let unicodeRegistered = false;
+function registerUnicodeFont() {
+  if (unicodeRegistered) return;
+  Font.register({
+    family: UNICODE_FAMILY,
+    fonts: [{ src: UNICODE_FONT }, { src: UNICODE_FONT, fontWeight: 700 }],
+  });
+  unicodeRegistered = true;
+}
+
+/** Whether any text the document prints needs more than Helvetica has. */
+function needsUnicode(view: DealView): boolean {
+  const texts = [view.title, view.dateLabel, ...Object.values(view.labels)];
+  return texts.some((text) => typeof text === "string" && BEYOND_HELVETICA.test(text));
+}
+
 const styles = StyleSheet.create({
   page: {
     paddingTop: 44,
@@ -45,7 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: INK,
   },
-  title: { fontSize: 22, fontFamily: "Helvetica-Bold" },
+  title: { fontSize: 22, fontWeight: 700 },
   subtitle: { fontSize: 9.5, color: FAINT, marginTop: 5 },
   rule: { borderBottomWidth: 1, borderBottomColor: INK, marginTop: 12 },
 
@@ -60,7 +88,7 @@ const styles = StyleSheet.create({
   kpiDivider: { borderRightWidth: 1, borderRightColor: BORDER },
   // Labels are sentence case and regular, as in the app.
   kpiLabel: { fontSize: 8.5, color: MUTED },
-  kpiValue: { fontSize: 13.5, fontFamily: "Helvetica-Bold", marginTop: 4 },
+  kpiValue: { fontSize: 13.5, fontWeight: 700, marginTop: 4 },
 
   columns: { flexDirection: "row", marginTop: 22 },
   col: { flex: 1 },
@@ -85,7 +113,7 @@ const styles = StyleSheet.create({
   },
   rowLabel: { color: MUTED },
   rowValue: { color: INK },
-  bold: { fontFamily: "Helvetica-Bold" },
+  bold: { fontWeight: 700 },
 
   table: {
     marginTop: 2,
@@ -110,7 +138,7 @@ const styles = StyleSheet.create({
   thText: { fontSize: 8.5, color: MUTED },
   cExit: { width: "28%" },
   cNum: { width: "24%", textAlign: "right" },
-  cExitBold: { width: "28%", fontFamily: "Helvetica-Bold" },
+  cExitBold: { width: "28%", fontWeight: 700 },
 
   footer: {
     position: "absolute",
@@ -178,10 +206,11 @@ export function DealPdfDocument({
   input,
   result: r,
   labels,
-}: DealView) {
+  unicode = false,
+}: DealView & { unicode?: boolean }) {
   return (
     <Document title={title || labels.documentTitle}>
-      <Page size="A4" style={styles.page}>
+      <Page size="A4" style={unicode ? [styles.page, { fontFamily: UNICODE_FAMILY }] : styles.page}>
         <Text style={styles.title}>{title || labels.untitled}</Text>
         <Text style={styles.subtitle}>{labels.subtitle}</Text>
         <View style={styles.rule} />
@@ -279,7 +308,9 @@ export function DealPdfDocument({
 
 /** Build the PDF in the browser and trigger a download. Client-only. */
 export async function downloadDealPdf(view: DealView, fileName: string) {
-  const blob = await pdf(<DealPdfDocument {...view} />).toBlob();
+  const unicode = needsUnicode(view);
+  if (unicode) registerUnicodeFont();
+  const blob = await pdf(<DealPdfDocument {...view} unicode={unicode} />).toBlob();
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;

@@ -1,0 +1,191 @@
+{
+  "columns": {
+    "first_name": "Имя",
+    "last_name": "Фамилия",
+    "email": "Email",
+    "phone": "Телефон",
+    "language": "Язык",
+    "nationality": "Гражданство",
+    "agency": "Агентство",
+    "stage": "Этап",
+    "deal_type": "Тип сделки",
+    "seller_role": "Роль",
+    "priority": "Приоритет",
+    "is_active": "Активен",
+    "budget_min": "Бюджет от (€)",
+    "budget_max": "Бюджет до (€)",
+    "property_types": "Типы объектов",
+    "bedrooms": "Спальни",
+    "bathrooms": "Ванные",
+    "area_notes": "Заметки о районе",
+    "property_type": "Тип объекта",
+    "price": "Цена (€)",
+    "property_bedrooms": "Спальни",
+    "address": "Адрес",
+    "city": "Город / район",
+    "property_notes": "Заметки об объекте",
+    "notes": "Заметки",
+    "down_payment": "Депозит (€)",
+    "down_payment_date": "Дата депозита",
+    "ppc": "Договор задатка (€)",
+    "ppc_date": "Дата договора задатка",
+    "notary_date": "Дата у нотариуса",
+    "notary_notes": "Заметки по нотариусу",
+    "commission": "Комиссия (€)",
+    "closed_at": "Дата закрытия",
+    "viewing_count": "Показы",
+    "created_at": "Создан",
+    "updated_at": "Изменён",
+    "id": "ID в LeadWing"
+  },
+  "values": {
+    "yes": "Да",
+    "no": "Нет"
+  },
+  "sheets": {
+    "buyers": "Покупатели",
+    "sellers": "Продавцы",
+    "viewings": "Показы",
+    "appointments": "Календарь",
+    "tasks": "Задачи",
+    "taskNotes": "Заметки к задачам",
+    "templates": "Шаблоны",
+    "dealAnalyses": "Расчёты сделок",
+    "files": "Файлы",
+    "account": "Аккаунт"
+  },
+  "tables": {
+    "viewings": {
+      "client_name": "Клиент",
+      "client_id": "ID клиента",
+      "title": "Название объекта",
+      "description": "Описание",
+      "scheduled_at": "Дата и время",
+      "had_offer": "Было предложение",
+      "offer_price": "Сумма предложения (€)",
+      "property_price": "Запрашиваемая цена (€)",
+      "created_at": "Создан",
+      "id": "ID"
+    },
+    "appointments": {
+      "type": "Тип",
+      "title": "Название",
+      "client_name": "Клиент",
+      "client_id": "ID клиента",
+      "property": "Объект",
+      "starts_at": "Начало",
+      "ends_at": "Конец",
+      "location": "Место",
+      "notes": "Заметки",
+      "reminder_minutes": "Напоминание (за сколько минут)",
+      "created_at": "Создана",
+      "id": "ID"
+    },
+    "tasks": {
+      "title": "Название",
+      "description": "Описание",
+      "status": "Статус",
+      "priority": "Приоритет",
+      "due_on": "Срок",
+      "completed_at": "Выполнена",
+      "client_name": "Клиент",
+      "client_id": "ID клиента",
+      "created_at": "Создана",
+      "id": "ID"
+    },
+    "taskNotes": {
+      "task_title": "Задача",
+      "task_id": "ID задачи",
+      "body": "Заметка",
+      "created_at": "Создана",
+      "id": "ID"
+    },
+    "templates": {
+      "name": "Название",
+      "subject": "Тема",
+      "body": "Сообщение",
+      "created_at": "Создан",
+      "updated_at": "Изменён",
+      "id": "ID"
+    },
+    "dealAnalyses": {
+      "title": "Название",
+      "analysis_date": "Дата",
+      "property_type": "Тип объекта",
+      "asking_price": "Запрашиваемая цена (€)",
+      "transfer_tax_pct": "Налог на передачу (%)",
+      "lawyer_pct": "Юрист (%)",
+      "notary_pct": "Нотариус (%)",
+      "renovation_price_per_sqm": "Ремонт (€/м²)",
+      "surface_sqm": "Площадь (м²)",
+      "contingency_pct": "Резерв (%)",
+      "duration_months": "Срок (мес.)",
+      "expected_sale_price": "Ожидаемая цена продажи (€)",
+      "agency_fee_pct": "Комиссия агентства (%)",
+      "notes": "Заметки",
+      "created_at": "Создан",
+      "id": "ID"
+    },
+    "files": {
+      "client_name": "Клиент",
+      "client_id": "ID клиента",
+      "attached_to": "Прикреплён к",
+      "parent_id": "ID показа или объекта",
+      "file_name": "Имя файла",
+      "mime_type": "Тип",
+      "size": "Размер (байт)",
+      "created_at": "Загружен",
+      "id": "ID"
+    },
+    "account": {
+      "full_name": "Имя",
+      "email": "Email",
+      "language": "Язык",
+      "time_zone": "Часовой пояс",
+      "plan": "Тариф",
+      "pro_until": "Pro до",
+      "founding_number": "Номер основателя",
+      "created_at": "Зарегистрирован"
+    }
+  },
+  "attachedTo": {
+    "document": "Документ",
+    "viewing": "Показ",
+    "property": "Объект"
+  },
+  "dealPropertyTypes": {
+    "resale": "Вторичное жильё",
+    "new_build": "Новостройка"
+  },
+  "plans": {
+    "free": "Бесплатный",
+    "pro": "Pro"
+  },
+  "readme": {
+    "title": "Экспорт LeadWing",
+    "generated": "Создано {date} для {email}.",
+    "filesHeading": "Что в этой папке",
+    "workbook": "Все таблицы ниже в одной книге Excel, по листу на каждую.",
+    "buyers": "Ваши покупатели с критериями поиска и бронированием.",
+    "sellers": "Ваши продавцы, по строке на каждый объект.",
+    "viewings": "Все показы — с предложением о покупке, если оно было.",
+    "appointments": "Ваш календарь: встречи и показы с датой.",
+    "tasks": "Ваши задачи.",
+    "taskNotes": "Заметки к задачам.",
+    "templates": "Ваши шаблоны сообщений.",
+    "dealAnalyses": "Сохранённые расчёты из калькулятора доходности.",
+    "files": "Список загруженных вами файлов. Самих файлов в этой папке нет.",
+    "account": "Данные вашего аккаунта и тариф.",
+    "formatHeading": "Как читать файлы",
+    "timeZone": "Время указано в вашем часовом поясе, {timeZone}. Даты записаны в формате год-месяц-день.",
+    "csv": "Файлы CSV — это текст в кодировке UTF-8. Столбцы разделены знаком «{delimiter}», десятичный разделитель — «{decimal}».",
+    "ids": "Строки ссылаются друг на друга через столбцы с ID: «ID клиента» у показа — это «ID в LeadWing» у покупателя.",
+    "uploads": "Чтобы получить копию загруженных файлов, напишите на {email}, и мы их пришлём."
+  },
+  "errors": {
+    "invalid": "Некорректный запрос. Перезагрузите страницу и попробуйте снова.",
+    "forbidden": "Этот запрос отправлен не из LeadWing.",
+    "signedOut": "Сессия завершилась. Войдите снова.",
+    "failed": "На нашей стороне что-то пошло не так. Попробуйте ещё раз."
+  }
+}

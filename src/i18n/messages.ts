@@ -60,6 +60,33 @@ import esTools from "../../messages/es/tools.json";
 import esTransfer from "../../messages/es/transfer.json";
 import esValidation from "../../messages/es/validation.json";
 
+import ruAdmin from "../../messages/ru/admin.json";
+import ruAuth from "../../messages/ru/auth.json";
+import ruBilling from "../../messages/ru/billing.json";
+import ruCalculator from "../../messages/ru/calculator.json";
+import ruCalendar from "../../messages/ru/calendar.json";
+import ruClientDetail from "../../messages/ru/clientDetail.json";
+import ruClients from "../../messages/ru/clients.json";
+import ruCommon from "../../messages/ru/common.json";
+import ruCrm from "../../messages/ru/crm.json";
+import ruHome from "../../messages/ru/home.json";
+import ruImports from "../../messages/ru/imports.json";
+import ruLanding from "../../messages/ru/landing.json";
+import ruLegal from "../../messages/ru/legal.json";
+import ruMarketing from "../../messages/ru/marketing.json";
+import ruNav from "../../messages/ru/nav.json";
+import ruNotifications from "../../messages/ru/notifications.json";
+import ruReferrals from "../../messages/ru/referrals.json";
+import ruServer from "../../messages/ru/server.json";
+import ruSettings from "../../messages/ru/settings.json";
+import ruSite from "../../messages/ru/site.json";
+import ruSupport from "../../messages/ru/support.json";
+import ruTasks from "../../messages/ru/tasks.json";
+import ruTemplates from "../../messages/ru/templates.json";
+import ruTools from "../../messages/ru/tools.json";
+import ruTransfer from "../../messages/ru/transfer.json";
+import ruValidation from "../../messages/ru/validation.json";
+
 export const en = {
   admin: enAdmin,
   auth: enAuth,
@@ -120,6 +147,35 @@ const es = {
   validation: esValidation,
 };
 
+const ru = {
+  admin: ruAdmin,
+  auth: ruAuth,
+  billing: ruBilling,
+  calculator: ruCalculator,
+  calendar: ruCalendar,
+  clientDetail: ruClientDetail,
+  clients: ruClients,
+  common: ruCommon,
+  crm: ruCrm,
+  home: ruHome,
+  imports: ruImports,
+  landing: ruLanding,
+  legal: ruLegal,
+  marketing: ruMarketing,
+  nav: ruNav,
+  notifications: ruNotifications,
+  referrals: ruReferrals,
+  server: ruServer,
+  settings: ruSettings,
+  site: ruSite,
+  support: ruSupport,
+  tasks: ruTasks,
+  templates: ruTemplates,
+  tools: ruTools,
+  transfer: ruTransfer,
+  validation: ruValidation,
+};
+
 type Dict = Record<string, unknown>;
 
 function isDict(value: unknown): value is Dict {
@@ -138,6 +194,7 @@ function deepMerge<T extends Dict>(base: T, override: Dict): T {
 const CATALOGS: Record<AppLocale, Messages> = {
   en,
   es: deepMerge(en, es),
+  ru: deepMerge(en, ru),
 };
 
 export function messagesFor(locale: AppLocale): Messages {

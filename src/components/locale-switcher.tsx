@@ -3,12 +3,18 @@
 import { useTransition } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { Languages } from "lucide-react";
+import { Check, ChevronDown, Languages } from "lucide-react";
 
 import { setLocale } from "@/i18n/actions";
 import { LOCALES, LOCALE_LABELS, isLocale, type AppLocale } from "@/i18n/config";
 import { marketingCounterpart } from "@/lib/routes";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Select,
   SelectContent,
@@ -33,38 +39,45 @@ export function useSwitchLocale() {
   return { pending, switchTo };
 }
 
-/** Compact EN / ES toggle for the marketing pages and sign-in. */
-export function LocaleToggle({ className }: { className?: string }) {
+/**
+ * The language menu on the marketing pages: a compact trigger with the
+ * current code, opening every language by its own name. A row of one button
+ * per language stopped fitting the phone header at three.
+ */
+export function LocaleMenu({ className }: { className?: string }) {
   const locale = useLocale();
   const t = useTranslations("nav");
   const { pending, switchTo } = useSwitchLocale();
   return (
-    <div
-      role="group"
-      aria-label={t("language")}
-      className={cn(
-        "flex items-center rounded-md border p-0.5 text-xs",
-        className
-      )}
-    >
-      {LOCALES.map((l) => (
-        <button
-          key={l}
-          type="button"
-          onClick={() => l !== locale && switchTo(l)}
-          disabled={pending}
-          aria-pressed={l === locale}
-          className={cn(
-            "rounded-sm px-2 py-1 uppercase transition-colors",
-            l === locale
-              ? "bg-muted text-foreground font-medium"
-              : "text-muted-foreground hover:text-foreground"
-          )}
-        >
-          {l}
-        </button>
-      ))}
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        disabled={pending}
+        aria-label={`${t("language")}: ${isLocale(locale) ? LOCALE_LABELS[locale] : locale}`}
+        className={cn(
+          "text-muted-foreground hover:text-foreground data-[state=open]:text-foreground flex h-8 items-center gap-1 rounded-md px-2 text-xs uppercase outline-none transition-colors",
+          "focus-visible:ring-ring/50 focus-visible:ring-[3px] [&_svg]:size-3.5",
+          className
+        )}
+      >
+        <Languages aria-hidden />
+        {locale}
+        <ChevronDown aria-hidden className="opacity-60" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-36">
+        {LOCALES.map((l) => (
+          <DropdownMenuItem
+            key={l}
+            lang={l}
+            onSelect={() => {
+              if (l !== locale) switchTo(l);
+            }}
+          >
+            <span className="w-4">{l === locale ? <Check className="size-4" /> : null}</span>
+            {LOCALE_LABELS[l]}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 

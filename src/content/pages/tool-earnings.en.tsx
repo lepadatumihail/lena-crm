@@ -166,7 +166,7 @@ function Body() {
         <Link href={marketingPath("home", "en")}>{SITE_NAME}</Link> is a CRM for independent
         estate agents in Spain. It keeps every buyer and seller with their viewings, offers and
         the follow-ups that are due, so nobody goes quiet without you noticing. It works in
-        English and Spanish, and it is free for up to {FREE_CLIENT_LIMIT} clients.
+        English, Spanish and Russian, and it is free for up to {FREE_CLIENT_LIMIT} clients.
       </p>
 
       <p className="text-muted-foreground text-sm">

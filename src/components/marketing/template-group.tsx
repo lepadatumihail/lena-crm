@@ -95,7 +95,7 @@ export function TemplateGroup({
             onClick={() => setSelected(index)}
             onKeyDown={(event) => onKeyDown(event, index)}
             className={cn(
-              "rounded-md px-4 py-1.5 transition-colors",
+              "rounded-md px-3 py-1.5 transition-colors sm:px-4",
               index === selected
                 ? "bg-background text-foreground font-medium shadow-xs"
                 : "text-muted-foreground hover:text-foreground"

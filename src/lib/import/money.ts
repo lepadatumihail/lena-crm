@@ -28,9 +28,18 @@ function moneyValue(run: string, suffix: string | undefined): number | null {
   return Math.round(value * 100) / 100;
 }
 
+/**
+ * Russian and French write thousands with a space: "5 000", "1 250 000", and
+ * Intl's ru-RU formatting uses a no-break space (U+00A0, or U+202F). A space
+ * between a digit and exactly three more is a thousands mark; joining them
+ * first keeps "5 000" one number instead of a 5 and a 0.
+ */
+const SPACED_THOUSANDS = /(\d)[ \u00a0\u202f\u2009](?=\d{3}(?!\d))/g;
+
 function moneyTokens(raw: string): number[] {
   const values: number[] = [];
-  for (const match of raw.toLowerCase().matchAll(MONEY_TOKEN)) {
+  const text = raw.toLowerCase().replace(SPACED_THOUSANDS, "$1");
+  for (const match of text.matchAll(MONEY_TOKEN)) {
     const value = moneyValue(match[1], match[2]);
     if (value != null) values.push(value);
   }

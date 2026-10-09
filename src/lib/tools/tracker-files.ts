@@ -9,6 +9,7 @@ import { LOCALES, type AppLocale } from "@/i18n/config";
 export const TRACKER_FILES = {
   en: "leadwing-client-tracker.xlsx",
   es: "plantilla-clientes-inmobiliaria-leadwing.xlsx",
+  ru: "leadwing-tablitsa-klientov.xlsx",
 } as const satisfies Record<AppLocale, string>;
 
 export const XLSX_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -32,4 +33,5 @@ export function trackerLocale(file: string): AppLocale | null {
 export const TRACKER_SHEETS_COPY_URL: Record<AppLocale, string | null> = {
   en: null,
   es: null,
+  ru: null,
 };

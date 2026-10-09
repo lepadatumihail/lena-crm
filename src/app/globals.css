@@ -319,6 +319,40 @@
 /* --- Marketing type and surfaces --- */
 
 /*
+  Russian pages: Instrument Serif has no Cyrillic, so the display face becomes
+  Noto Serif Display (layout.tsx), condensed and a touch lighter on its axes so
+  a Russian headline has the same narrow, fine-stroked colour as an English
+  one. `html:lang(ru)` outranks the font variables next/font sets on <html>.
+*/
+html:lang(ru) {
+  --font-instrument-serif: var(--font-cyrillic-display);
+  --font-display: var(--font-cyrillic-display);
+}
+html:lang(ru) :where(.display-1, .display-2, .display-3, .font-display) {
+  font-stretch: 70%;
+  font-weight: 350;
+}
+
+/*
+  Russian words run long ("запрашиваемой"): in an article's table on a 320 px
+  phone a cell hyphenates, or as a last resort breaks a word, rather than push
+  the page sideways. English and Spanish tables already fit.
+*/
+html:lang(ru) article :is(td, th) {
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
+/* The same for a heading on a phone: «конфиденциальности» alone is wider than
+   a 320 px screen at the legal pages' title size. */
+@media (max-width: 40rem) {
+  html:lang(ru) :is(h1, h2, h3) {
+    hyphens: auto;
+    overflow-wrap: break-word;
+  }
+}
+
+/*
   Display sizes for marketing headlines: the serif at regular weight, set
   large and tight. Fluid between a phone and a wide desktop so no breakpoint
   ever jumps; `text-balance` stays in the markup.

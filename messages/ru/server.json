@@ -1,0 +1,56 @@
+{
+  "appointments": {
+    "aClient": "клиент",
+    "viewing": "Показ",
+    "viewingWith": "Показ: {name}",
+    "viewingAt": "Показ · {place}",
+    "viewingWithAt": "Показ: {name} · {place}",
+    "meeting": "Встреча",
+    "meetingWith": "Встреча: {name}"
+  },
+  "notifications": {
+    "appointmentsToday": "Сегодня {count, plural, one {# встреча} few {# встречи} many {# встреч} other {# встречи}}",
+    "more": "И ещё {count}",
+    "offerPending": "Предложение без ответа · {name}",
+    "offerPendingBody": "Предложение о покупке сделано, но бронирования ещё нет — стоит напомнить о себе.",
+    "followUp": "Напомнить о себе: {name}",
+    "followUpBody": "{stage} · без новостей {days, plural, one {# день} few {# дня} many {# дней} other {# дня}}",
+    "followUpDigest": "{count, plural, one {# покупатель перестал отвечать} few {# покупателя перестали отвечать} many {# покупателей перестали отвечать} other {# покупателя перестали отвечать}}",
+    "followUpDigestMore": "и ещё {count}",
+    "keyDate": "{label} · {name}",
+    "keyDateBody": "{date} ({when})",
+    "keyDates": {
+      "ppc": "Оплата задатка (PPC)",
+      "notary": "Нотариус",
+      "downpayment": "Депозит"
+    },
+    "today": "сегодня",
+    "tomorrow": "завтра",
+    "inDays": "через {count, plural, one {# день} few {# дня} many {# дней} other {# дня}}",
+    "taskDue": "Задача на сегодня",
+    "taskOverdue": "Задача просрочена · {days, plural, one {# день} few {# дня} many {# дней} other {# дня}}",
+    "errors": {
+      "notAuthenticated": "Вы не вошли в аккаунт",
+      "invalidContext": "Некорректный контекст синхронизации",
+      "signals": "Не удалось загрузить сигналы"
+    }
+  },
+  "tasks": {
+    "errors": {
+      "checkForm": "Проверьте форму.",
+      "notFound": "Задача не найдена",
+      "clientNotFound": "Этого клиента больше нет.",
+      "notReady": "Задачи пока недоступны.",
+      "notesNotReady": "Заметки пока недоступны.",
+      "noteNotFound": "Заметка не найдена"
+    }
+  },
+  "activity": {
+    "errors": {
+      "checkForm": "Проверьте форму.",
+      "notFound": "Запись не найдена",
+      "clientNotFound": "Этого клиента больше нет.",
+      "notReady": "История пока недоступна."
+    }
+  }
+}

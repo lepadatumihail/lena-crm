@@ -152,6 +152,12 @@ describe("marketing routes", () => {
     });
     expect(marketingRouteAt("/tools")).toEqual({ route: "tools", locale: "en" });
     expect(marketingRouteAt("/es/herramientas/")).toEqual({ route: "tools", locale: "es" });
+    expect(marketingRouteAt("/ru")).toEqual({ route: "home", locale: "ru" });
+    expect(marketingRouteAt("/ru/tarify")).toEqual({ route: "pricing", locale: "ru" });
+    expect(marketingRouteAt("/ru/instrumenty/skolko-zarabatyvaet-rieltor")).toEqual({
+      route: "toolEarnings",
+      locale: "ru",
+    });
   });
 
   it.each(["/login", "/es/nope", "/clients", "/privacy/x", "/join/abc"])(
@@ -187,6 +193,7 @@ describe("marketing routes", () => {
     expect(marketingAlternates("home")).toEqual({
       en: "/",
       es: "/es",
+      ru: "/ru",
       "x-default": "/",
     });
   });

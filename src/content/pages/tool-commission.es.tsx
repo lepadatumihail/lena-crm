@@ -184,7 +184,7 @@ function Body() {
         <Link href={home}>{SITE_NAME}</Link> es un CRM para agentes inmobiliarios
         independientes en España. Guarda a cada cliente con la agencia por la que llegó, junto
         con sus visitas, sus ofertas y los seguimientos pendientes, así que cuando se cierra
-        una venta la operación ya está en un solo sitio. Funciona en español y en inglés, y es
+        una venta la operación ya está en un solo sitio. Funciona en español, inglés y ruso, y es
         gratis hasta {FREE_CLIENT_LIMIT} clientes.
       </p>
 

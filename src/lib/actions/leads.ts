@@ -16,7 +16,7 @@ export type ExtractedLead = {
 };
 
 /** The agent reads the extracted `notes`, so the model writes them in the UI language. */
-const NOTES_LANGUAGE: Record<string, string> = { en: "English", es: "Spanish" };
+const NOTES_LANGUAGE: Record<string, string> = { en: "English", es: "Spanish", ru: "Russian" };
 
 /**
  * Parse a raw lead message (portal inquiry, forwarded email, WhatsApp text)

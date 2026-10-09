@@ -50,12 +50,15 @@ describe("the commission calculator names no commission rate", () => {
   const SOURCES = [
     "src/content/pages/tool-commission.en.tsx",
     "src/content/pages/tool-commission.es.tsx",
+    "src/content/pages/tool-commission.ru.tsx",
     // The hub describes the calculator too.
     "src/content/pages/tools.en.tsx",
     "src/content/pages/tools.es.tsx",
+    "src/content/pages/tools.ru.tsx",
     "src/components/tools/commission-calculator.tsx",
     "messages/en/tools.json",
     "messages/es/tools.json",
+    "messages/ru/tools.json",
   ];
 
   it.each(SOURCES)("%s", (path) => {
@@ -78,6 +81,7 @@ describe("the earnings calculator names no commission rate", () => {
   const SOURCES = [
     "src/content/pages/tool-earnings.en.tsx",
     "src/content/pages/tool-earnings.es.tsx",
+    "src/content/pages/tool-earnings.ru.tsx",
     "src/components/tools/earnings-calculator.tsx",
     "src/components/tools/cuota-table.tsx",
   ];

@@ -7,6 +7,7 @@
  */
 import enTransfer from "../../../messages/en/transfer.json";
 import esTransfer from "../../../messages/es/transfer.json";
+import ruTransfer from "../../../messages/ru/transfer.json";
 import type { ClientSide } from "@/lib/crm";
 import type { TransferColumnKey } from "@/lib/transfer/columns";
 import { fold } from "@/lib/utils";
@@ -260,7 +261,7 @@ for (const [entry, headers] of DICTIONARY) {
       : { concept: entry.concept, rank: entry.rank, exact: true };
   for (const header of headers) EXACT.set(foldHeader(header), match);
 }
-for (const catalog of [enTransfer, esTransfer]) {
+for (const catalog of [enTransfer, esTransfer, ruTransfer]) {
   for (const [key, header] of Object.entries(catalog.columns)) {
     const folded = foldHeader(header);
     // The dictionary above wins: es "Nombre" stays ambiguous, "Teléfono" keeps its rank.

@@ -197,7 +197,7 @@ export const content: MarketingPageContent = {
     },
     {
       q: "¿Está la aplicación en español?",
-      a: "Sí. La interfaz está en español y en inglés, y se instala en la pantalla de inicio del móvil como una app, que es donde transcurre casi todo un día de visitas.",
+      a: "Sí. La interfaz está en español, inglés y ruso, y se instala en la pantalla de inicio del móvil como una app, que es donde transcurre casi todo un día de visitas.",
     },
   ],
   related: ["crmSpain", "guideIdealista", "pricing"],

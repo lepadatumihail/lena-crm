@@ -6,7 +6,7 @@
  * This is the agent's UI language only. Messages to clients follow the
  * client's own language (see message-composer / actions/messages).
  */
-export const LOCALES = ["en", "es"] as const;
+export const LOCALES = ["en", "es", "ru"] as const;
 export type AppLocale = (typeof LOCALES)[number];
 
 export const DEFAULT_LOCALE: AppLocale = "en";
@@ -18,12 +18,14 @@ export const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 export const LOCALE_LABELS: Record<AppLocale, string> = {
   en: "English",
   es: "Español",
+  ru: "Русский",
 };
 
 /** BCP 47 tag used for Intl date/number formatting in each UI language. */
 export const INTL_TAGS: Record<AppLocale, string> = {
   en: "en-GB",
   es: "es-ES",
+  ru: "ru-RU",
 };
 
 export function isLocale(value: unknown): value is AppLocale {

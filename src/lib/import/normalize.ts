@@ -7,6 +7,7 @@ import { z } from "zod";
 
 import enCrm from "../../../messages/en/crm.json";
 import esCrm from "../../../messages/es/crm.json";
+import ruCrm from "../../../messages/ru/crm.json";
 import { COUNTRIES, countryName, parsePhone } from "@/lib/countries";
 import {
   BUYER_STAGES,
@@ -183,8 +184,8 @@ export function parseCount(raw: string): number | null {
   return value <= MAX_COUNT ? value : null;
 }
 
-const YES = new Set(["yes", "y", "true", "1", "x", "si", "s", "ja", "oui", "verdadero", "✓", "✔", "*"]);
-const NO = new Set(["no", "n", "false", "0", "nein", "non", "falso"]);
+const YES = new Set(["yes", "y", "true", "1", "x", "si", "s", "ja", "oui", "verdadero", "да", "✓", "✔", "*"]);
+const NO = new Set(["no", "n", "false", "0", "nein", "non", "falso", "нет"]);
 
 export function parseYesNo(raw: string): boolean | null {
   const value = raw.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -219,7 +220,7 @@ const PROPERTY_WORDS: Record<PropertyType, string[]> = {
 const PROPERTY_VOCABULARY = vocabulary(
   PROPERTY_TYPES.map(
     (type) =>
-      [type, [type, enCrm.propertyTypes[type], esCrm.propertyTypes[type], ...PROPERTY_WORDS[type]]] as const
+      [type, [type, enCrm.propertyTypes[type], esCrm.propertyTypes[type], ruCrm.propertyTypes[type], ...PROPERTY_WORDS[type]]] as const
   )
 );
 /* Longest first, so "casa adosada" is a townhouse before "casa" is a house. */
@@ -278,7 +279,7 @@ const LANGUAGE_WORDS: Record<Language, string[]> = {
 const LANGUAGE_VOCABULARY = vocabulary(
   LANGUAGES.map(
     (language) =>
-      [language, [language, enCrm.languages[language], esCrm.languages[language], ...LANGUAGE_WORDS[language]]] as const
+      [language, [language, enCrm.languages[language], esCrm.languages[language], ruCrm.languages[language], ...LANGUAGE_WORDS[language]]] as const
   )
 );
 
@@ -324,6 +325,7 @@ const NATIONALITY_VOCABULARY = vocabulary(
         enCrm.nationalities[iso],
         es,
         ...masculine(es),
+        ruCrm.nationalities[iso],
         ...(n.aliases ?? []),
         ...(country ? [country.name, countryName(country.iso, "es")] : []),
         n.iso,
@@ -350,7 +352,7 @@ const STAGE_WORDS: Record<Stage, string[]> = {
 
 const STAGE_VOCABULARY = vocabulary(
   ([...BUYER_STAGES, ...SELLER_STAGES] as Stage[]).map(
-    (stage) => [stage, [stage, enCrm.stages[stage], esCrm.stages[stage], ...STAGE_WORDS[stage]]] as const
+    (stage) => [stage, [stage, enCrm.stages[stage], esCrm.stages[stage], ruCrm.stages[stage], ...STAGE_WORDS[stage]]] as const
   )
 );
 
@@ -363,8 +365,8 @@ export function normalizeStage(raw: string, side: ClientSide): Stage | null {
 }
 
 const DEAL_TYPE_VOCABULARY = vocabulary<"direct" | "collab">([
-  ["direct", ["direct", enCrm.dealTypes.direct, esCrm.dealTypes.direct, "directa"]],
-  ["collab", ["collab", enCrm.dealTypes.collab, esCrm.dealTypes.collab, "compartida", "compartido", "shared"]],
+  ["direct", ["direct", enCrm.dealTypes.direct, esCrm.dealTypes.direct, ruCrm.dealTypes.direct, "directa"]],
+  ["collab", ["collab", enCrm.dealTypes.collab, esCrm.dealTypes.collab, ruCrm.dealTypes.collab, "compartida", "compartido", "shared"]],
 ]);
 
 export function normalizeDealType(raw: string): "direct" | "collab" | null {
@@ -372,10 +374,10 @@ export function normalizeDealType(raw: string): "direct" | "collab" | null {
 }
 
 const SELLER_ROLE_VOCABULARY = vocabulary<"owner" | "representative">([
-  ["owner", ["owner", enCrm.sellerRoles.owner, esCrm.sellerRoles.owner, "propietaria", "dueño", "dueña"]],
+  ["owner", ["owner", enCrm.sellerRoles.owner, esCrm.sellerRoles.owner, ruCrm.sellerRoles.owner, "propietaria", "dueño", "dueña"]],
   [
     "representative",
-    ["representative", enCrm.sellerRoles.representative, esCrm.sellerRoles.representative, "apoderado", "apoderada"],
+    ["representative", enCrm.sellerRoles.representative, esCrm.sellerRoles.representative, ruCrm.sellerRoles.representative, "apoderado", "apoderada"],
   ],
 ]);
 

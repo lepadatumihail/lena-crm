@@ -14,16 +14,22 @@ const WIDE = "(min-width: 40rem)";
 type Cut = { src: string; poster: string };
 type Cuts = { wide: Cut; tall: Cut };
 
-/** The film's on-screen words follow the page: one pair of cuts per language. */
+const ENGLISH_CUTS: Cuts = {
+  wide: { src: "/video/leadwing-film-16x9.mp4", poster: "/video/leadwing-film-16x9.webp" },
+  tall: { src: "/video/leadwing-film-4x5.mp4", poster: "/video/leadwing-film-4x5.webp" },
+};
+
+/**
+ * The film's on-screen words follow the page: one pair of cuts per language.
+ * There is no Russian cut yet, so the Russian pages play the English one.
+ */
 const CUTS: Record<AppLocale, Cuts> = {
-  en: {
-    wide: { src: "/video/leadwing-film-16x9.mp4", poster: "/video/leadwing-film-16x9.webp" },
-    tall: { src: "/video/leadwing-film-4x5.mp4", poster: "/video/leadwing-film-4x5.webp" },
-  },
+  en: ENGLISH_CUTS,
   es: {
     wide: { src: "/video/leadwing-film-es-16x9.mp4", poster: "/video/leadwing-film-es-16x9.webp" },
     tall: { src: "/video/leadwing-film-es-4x5.mp4", poster: "/video/leadwing-film-es-4x5.webp" },
   },
+  ru: ENGLISH_CUTS,
 };
 
 /**

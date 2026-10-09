@@ -7,7 +7,7 @@ import { marketingPath } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/brand/logo";
-import { LocaleToggle } from "@/components/locale-switcher";
+import { LocaleMenu } from "@/components/locale-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { NavFrame } from "@/components/marketing/nav-frame";
 import { SignUpDialog } from "@/components/marketing/sign-up-dialog";
@@ -36,18 +36,18 @@ export function MarketingNav({
   const t = useTranslations("nav.marketing");
   const locale = asLocale(useLocale());
   const home = marketingPath("home", locale);
-  // "Empieza gratis" runs wider than "Start for free": on a 375px phone the
-  // Spanish row only fits beside the wordmark with the controls and the call
-  // to action set a little closer. English keeps its spacing.
-  const snug = locale === "es";
+  // "Empieza gratis" and «Начать бесплатно» run wider than "Start for free":
+  // on a 375px phone those rows only fit beside the wordmark with the controls
+  // and the call to action set a little closer. English keeps its spacing.
+  const snug = locale !== "en";
   const ctaClassName = snug ? "max-sm:px-3" : undefined;
 
   return (
     <NavFrame>
       <Link href={home} className="flex shrink-0 items-center gap-2">
-        {/* Below 375px the Spanish "Empieza gratis" plus the theme and
-            language controls leave no room for the wordmark; keep it for
-            screen readers so the link still has a name. */}
+        {/* Below 375px a longer call to action ("Empieza gratis") plus the
+            theme and language controls leave no room for the wordmark; keep
+            it for screen readers so the link still has a name. */}
         <Logo
           className="max-sm:text-sm"
           markClassName="max-sm:size-6"
@@ -137,7 +137,8 @@ function Controls({ snug }: { snug: boolean }) {
       className={cn("flex items-center gap-1 sm:mr-1", snug && "max-sm:gap-0")}
     >
       <ThemeToggle />
-      <LocaleToggle className={cn(snug && "max-sm:[&>button]:px-1.5")} />
+      {/* On a phone the longer calls to action need the globe's room too. */}
+      <LocaleMenu className={cn(snug && "max-sm:px-1.5 max-sm:[&>svg:first-child]:hidden")} />
     </div>
   );
 }

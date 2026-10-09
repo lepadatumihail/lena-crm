@@ -166,7 +166,7 @@ function Body() {
         seguimiento. <Link href={marketingPath("home", "es")}>{SITE_NAME}</Link> es un CRM para
         agentes inmobiliarios independientes en España. Guarda cada comprador y cada vendedor con
         sus visitas, sus ofertas y los seguimientos pendientes, para que nadie se quede sin
-        respuesta sin que te des cuenta. Funciona en español y en inglés, y es gratis hasta{" "}
+        respuesta sin que te des cuenta. Funciona en español, inglés y ruso, y es gratis hasta{" "}
         {FREE_CLIENT_LIMIT} clientes.
       </p>
 

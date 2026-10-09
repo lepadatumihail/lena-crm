@@ -34,7 +34,7 @@ function Body() {
           contratos de reserva y precios con IVA.
         </dd>
         <dt>Idiomas</dt>
-        <dd>Español e inglés</dd>
+        <dd>Español, inglés y ruso</dd>
         <dt>Lanzamiento</dt>
         <dd>{SITE_FOUNDED}</dd>
         <dt>Precios</dt>
@@ -146,7 +146,7 @@ export const content: MarketingPageContent = {
   published: "2026-09-15",
   eyebrow: "Sobre nosotros",
   heading: `Sobre ${SITE_NAME}`,
-  lead: `${SITE_NAME} es un CRM para agentes inmobiliarios independientes. Reúne en una ficha a cada comprador y vendedor, con sus visitas, ofertas y documentos, de todas las agencias con las que trabaja el agente, y redacta cada seguimiento en el idioma del cliente. Se lanzó en ${SITE_FOUNDED} y funciona en el navegador, en español y en inglés.`,
+  lead: `${SITE_NAME} es un CRM para agentes inmobiliarios independientes. Reúne en una ficha a cada comprador y vendedor, con sus visitas, ofertas y documentos, de todas las agencias con las que trabaja el agente, y redacta cada seguimiento en el idioma del cliente. Se lanzó en ${SITE_FOUNDED} y funciona en el navegador, en español, inglés y ruso.`,
   Body,
   faq: [
     {

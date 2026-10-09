@@ -34,7 +34,7 @@ export function Greeting({
   // Formatted from the day alone, so neither runtime's own zone can move it.
   const dateLabel = format(
     parseISO(dateKeyInTimeZone(nowISO, timeZone)),
-    locale === "es" ? "EEEE, d 'de' MMMM" : "EEEE d MMMM",
+    locale === "es" ? "EEEE, d 'de' MMMM" : locale === "ru" ? "EEEE, d MMMM" : "EEEE d MMMM",
     { locale: dateFnsLocale(locale) }
   );
 

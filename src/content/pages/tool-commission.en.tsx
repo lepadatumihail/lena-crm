@@ -180,7 +180,7 @@ function Body() {
         <Link href={home}>{SITE_NAME}</Link> is a CRM for independent estate agents in Spain.
         It keeps every client with the agency they came through, with their viewings, their
         offers and the follow-ups that are due, so when a sale closes the deal is already in
-        one place. It works in English and Spanish, and it is free for up to{" "}
+        one place. It works in English, Spanish and Russian, and it is free for up to{" "}
         {FREE_CLIENT_LIMIT} clients.
       </p>
 

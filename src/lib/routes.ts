@@ -33,48 +33,63 @@ export function isProtectedPath(pathname: string): boolean {
 }
 
 /**
- * Public marketing pages, one URL per language. English lives at the root and
- * Spanish under /es, so search engines get a crawlable, linkable page per
+ * Public marketing pages, one URL per language. English lives at the root,
+ * Spanish under /es and Russian under /ru (Latin transliterated slugs, so a
+ * link pasted into WhatsApp or an e-mail stays readable), so search engines get a crawlable, linkable page per
  * language: the cookie switch the app uses is invisible to them. hreflang
  * tags, the sitemap, the footer and the language toggle all read this map;
  * routes.test.ts checks every path has a page file.
  */
 export const MARKETING_ROUTES = {
-  home: { en: "/", es: "/es" },
-  pricing: { en: "/pricing", es: "/es/precios" },
-  crmSpain: { en: "/real-estate-crm-spain", es: "/es/crm-inmobiliario-espana" },
-  crmMarbella: { en: "/crm-for-marbella-agents", es: "/es/crm-inmobiliario-marbella" },
+  home: { en: "/", es: "/es", ru: "/ru" },
+  pricing: { en: "/pricing", es: "/es/precios", ru: "/ru/tarify" },
+  crmSpain: {
+    en: "/real-estate-crm-spain",
+    es: "/es/crm-inmobiliario-espana",
+    ru: "/ru/crm-dlya-rieltorov-ispaniya",
+  },
+  crmMarbella: {
+    en: "/crm-for-marbella-agents",
+    es: "/es/crm-inmobiliario-marbella",
+    ru: "/ru/crm-dlya-rieltorov-marbelya",
+  },
   guideIdealista: {
     en: "/guides/idealista-lead-management",
     es: "/es/guias/gestionar-leads-idealista",
+    ru: "/ru/gaidy/lidy-s-idealista",
   },
   guideFollowUp: {
     en: "/guides/real-estate-lead-follow-up",
     es: "/es/guias/seguimiento-leads-inmobiliarios",
+    ru: "/ru/gaidy/povtornyi-kontakt-s-lidami",
   },
   guideAndaluciaRegister: {
     en: "/guides/andalusia-agent-register",
     es: "/es/guias/registro-agentes-inmobiliarios-andalucia",
+    ru: "/ru/gaidy/reestr-agentov-nedvizhimosti-andalusii",
   },
-  about: { en: "/about", es: "/es/sobre-nosotros" },
+  about: { en: "/about", es: "/es/sobre-nosotros", ru: "/ru/o-nas" },
   toolCommission: {
     en: "/tools/commission-calculator",
     es: "/es/herramientas/calculadora-comision-inmobiliaria",
+    ru: "/ru/instrumenty/kalkulyator-komissii-rieltora",
   },
   toolSpreadsheet: {
     en: "/tools/client-spreadsheet",
     es: "/es/herramientas/plantilla-excel-inmobiliaria",
+    ru: "/ru/instrumenty/tablitsa-klientov-excel",
   },
   toolEarnings: {
     en: "/tools/agent-earnings-calculator",
     es: "/es/herramientas/calculadora-ingresos-agente-inmobiliario",
+    ru: "/ru/instrumenty/skolko-zarabatyvaet-rieltor",
   },
-  tools: { en: "/tools", es: "/es/herramientas" },
-  privacy: { en: "/privacy", es: "/es/privacidad" },
-  terms: { en: "/terms", es: "/es/terminos" },
-  legalNotice: { en: "/legal", es: "/es/aviso-legal" },
-  start: { en: "/start", es: "/es/empezar" },
-  quiet: { en: "/quiet", es: "/es/seguimiento" },
+  tools: { en: "/tools", es: "/es/herramientas", ru: "/ru/instrumenty" },
+  privacy: { en: "/privacy", es: "/es/privacidad", ru: "/ru/konfidentsialnost" },
+  terms: { en: "/terms", es: "/es/terminos", ru: "/ru/usloviya" },
+  legalNotice: { en: "/legal", es: "/es/aviso-legal", ru: "/ru/pravovaya-informatsiya" },
+  start: { en: "/start", es: "/es/empezar", ru: "/ru/nachat" },
+  quiet: { en: "/quiet", es: "/es/seguimiento", ru: "/ru/povtornyi-kontakt" },
 } as const satisfies Record<string, Record<AppLocale, string>>;
 
 export type MarketingRoute = keyof typeof MARKETING_ROUTES;

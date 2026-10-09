@@ -103,6 +103,19 @@ describe("the link", () => {
     expect(earningsFieldsFromQuery(queryFromEarningsFields(need), es)).toEqual(need);
   });
 
+  it("restores a link on a Russian page, whose amounts are grouped with spaces", () => {
+    const ru = (value: number, kind: "money" | "number") =>
+      new Intl.NumberFormat("ru-RU", {
+        maximumFractionDigits: kind === "money" && !Number.isInteger(value) ? 2 : 4,
+        minimumFractionDigits: kind === "money" && !Number.isInteger(value) ? 2 : 0,
+        useGrouping: kind === "money" ? "always" : false,
+      }).format(value);
+    const fields = earningsFieldsFromQuery("n=8&p=350000&ft=eur&f=5000&k=500", ru);
+    expect(fields.fee).toBe(ru(5000, "money"));
+    expect(earningsInput(fields)).toMatchObject({ price: 350_000, fee: { kind: "amount", amount: 5000 }, costs: 500 });
+    expect(queryFromEarningsFields(fields)).toBe("n=8&p=350000&ft=eur&f=5000&k=500");
+  });
+
   it("ignores what it can't read", () => {
     expect(earningsFieldsFromQuery("m=nope&n=2.5&ft=mo&f=abc&a=150&w=21&c=-3", es)).toEqual(
       EMPTY_EARNINGS_FIELDS

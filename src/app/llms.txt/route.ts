@@ -25,7 +25,7 @@ const en = (route: MarketingRoute) => absoluteUrl(marketingPath(route, "en"));
 /** One line per free tool: TypeScript asks for a line whenever a tool route is added. */
 const TOOL_LINES: Record<ToolRoute, string> = {
   toolCommission: `[Real estate commission calculator](${en("toolCommission")}): fee, VAT or IGIC, the split between two agencies, your share and IRPF withholding, on sales and rentals in Spain`,
-  toolSpreadsheet: `[Client tracker spreadsheet](${en("toolSpreadsheet")}): a free Excel workbook for buyers and sellers, with follow-ups that are due in amber, quiet clients in grey and columns that import into ${SITE_NAME} as they are; in English (${absoluteUrl(trackerPath("en"))}) and Spanish (${absoluteUrl(trackerPath("es"))})`,
+  toolSpreadsheet: `[Client tracker spreadsheet](${en("toolSpreadsheet")}): a free Excel workbook for buyers and sellers, with follow-ups that are due in amber, quiet clients in grey and columns that import into ${SITE_NAME} as they are; in English (${absoluteUrl(trackerPath("en"))}), Spanish (${absoluteUrl(trackerPath("es"))}) and Russian (${absoluteUrl(trackerPath("ru"))})`,
   toolEarnings: `[Agent earnings calculator](${en("toolEarnings")}): what a self-employed estate agent in Spain takes home a month from a year of sales, after splits, the cuota de autónomos (estimated from the ${COTIZACION_YEAR} table), costs and IRPF; or how many sales a take-home figure needs`,
 };
 
@@ -35,14 +35,14 @@ export function GET() {
 
 > ${SITE_DESCRIPTION}
 
-${SITE_NAME} is a web app for solo and independent real-estate agents, including agents who work with several agencies at once. It is built around how these agents actually work: WhatsApp, property portals and clients who speak different languages. The interface is available in English and Spanish, and it installs on a phone's home screen. Sales pipelines are live today; long and short-term rentals are planned.
+${SITE_NAME} is a web app for solo and independent real-estate agents, including agents who work with several agencies at once. It is built around how these agents actually work: WhatsApp, property portals and clients who speak different languages. The interface is available in English, Spanish and Russian, and it installs on a phone's home screen. Sales pipelines are live today; long and short-term rentals are planned.
 
 ## About ${SITE_NAME}
 
 - Name: ${SITE_NAME} (also known as ${SITE_ALTERNATE_NAMES.join(", ")})
 - Website: ${SITE_URL}
 - Launched: ${SITE_FOUNDED}
-- Languages: English and Spanish
+- Languages: English, Spanish and Russian
 - Contact: ${SUPPORT_EMAIL}
 - ${SITE_DISAMBIGUATION}
 
