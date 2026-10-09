@@ -69,6 +69,82 @@
     "taxName": "{tax, select, iva {IVA} igic {IGIC} other {impuesto}}",
     "taxLabel": "{tax, select, iva {IVA} igic {IGIC} other {Impuesto}} {rate}"
   },
+  "earnings": {
+    "form": {
+      "mode": "¿Qué quieres saber?",
+      "modeEarn": "Lo que gano",
+      "modeNeed": "Ventas que necesito",
+      "sales": "Ventas al año",
+      "target": "Lo que quiero ganar al mes (€)",
+      "price": "Precio medio de venta (€)",
+      "optional": "Opcional",
+      "fee": "Honorarios de la agencia por venta, sin IVA ({unit})",
+      "feeBasis": "Cómo se fijan los honorarios",
+      "feeBasisPercent": "% del precio",
+      "feeBasisAmount": "Importe fijo",
+      "shared": "Comparto algunas ventas con otra agencia",
+      "sharedSales": "Ventas compartidas (%)",
+      "otherShare": "Parte de los honorarios para la otra agencia (%)",
+      "agentSplit": "Mi agencia o mi red se queda una parte",
+      "agentShare": "Mi parte de lo que nos toca (%)",
+      "cuota": "Cuota de autónomos",
+      "cuotaEstimate": "Calcúlala (tabla {year})",
+      "cuotaOwn": "La escribo yo",
+      "cuotaAmount": "Mi cuota al mes (€)",
+      "cuotaHelp": "La estimación es la cuota mínima de tu tramo de rendimientos. ¿Tienes la cuota reducida del primer año o elegiste una base más alta? Escribe lo que pagas.",
+      "costs": "Otros gastos del negocio al mes (€)",
+      "costsHelp": "Portales, coche, teléfono, la cuota de la oficina: lo que pagas para trabajar.",
+      "irpf": "Retención de IRPF en mis facturas",
+      "irpfNone": "Sin retención",
+      "irpfNew": "{rate} (tres primeros años)",
+      "irpfHelp": "Hay retención cuando facturas a una agencia, a una red o a otra empresa. Sin retención, la calculadora aparta los pagos fraccionados que haces tú cada trimestre (modelo 130)."
+    },
+    "results": {
+      "hint": "Rellena los datos para ver las cifras.",
+      "takeHome": "Te quedan",
+      "perMonth": "al mes",
+      "perYear": "{amount} al año",
+      "need": "Necesitas",
+      "salesYear": "{count, plural, one {# venta al año} other {# ventas al año}}",
+      "salesMonth": "Unas {count} al mes, y te quedan {amount} al mes.",
+      "unreachable": "Con estas cifras no hay número de ventas que llegue. Revisa los honorarios y los repartos.",
+      "year": "Tu año, sin IVA",
+      "fees": "Honorarios de tus ventas",
+      "otherAgencies": "− Otras agencias",
+      "agencyKeeps": "− Se queda tu agencia",
+      "yourFees": "Tus honorarios",
+      "perSale": "Son {amount} por venta.",
+      "comesOff": "Lo que se descuenta",
+      "cuota": "− Cuota de autónomos",
+      "cuotaBand": "Tramo {band} de la tabla de {year}: {amount} al mes.",
+      "cuotaTyped": "{amount} al mes.",
+      "costs": "− Otros gastos",
+      "irpfWithheld": "− IRPF retenido ({rate})",
+      "irpfAdvance": "− Pagos fraccionados de IRPF (modelo 130)",
+      "takeHomeYear": "Te queda al año",
+      "takeHomeMonth": "Te queda al mes",
+      "irpfNote": "El IRPF retenido o pagado a cuenta se descuenta de tu renta: la declaración anual fija la cifra real, que depende de todos tus ingresos, tu comunidad y tus deducciones.",
+      "legend": {
+        "otherAgencies": "Otras agencias",
+        "agency": "Tu agencia",
+        "costs": "Cuota y gastos",
+        "tax": "IRPF",
+        "you": "Tú"
+      }
+    },
+    "actions": {
+      "copyLink": "Copiar enlace",
+      "copiedLink": "Enlace copiado."
+    },
+    "table": {
+      "band": "Tramo",
+      "earnings": "Rendimientos netos al mes",
+      "cuota": "Cuota mínima al mes",
+      "upTo": "Hasta {amount}",
+      "between": "De {from} a {to}",
+      "over": "Más de {amount}"
+    }
+  },
   "tracker": {
     "columns": {
       "lastContact": "Último contacto",

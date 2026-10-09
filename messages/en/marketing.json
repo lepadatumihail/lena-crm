@@ -61,6 +61,10 @@
       "label": "Commission calculator",
       "blurb": "Work out a fee with VAT, the split between two agencies and your own invoice."
     },
+    "toolEarnings": {
+      "label": "Agent earnings calculator",
+      "blurb": "See what a year of sales leaves you each month, or how many sales your income needs."
+    },
     "toolSpreadsheet": {
       "label": "Client tracker spreadsheet",
       "blurb": "A free Excel file for your buyers and sellers, ready to import into LeadWing."

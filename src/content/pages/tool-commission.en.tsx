@@ -169,8 +169,10 @@ function Body() {
         calculator and change one at a time to see what each is worth to you.
       </p>
       <p>
-        The figure the calculator gives you is what your invoice says. It comes before your own
-        income tax and your costs, which only you can work out.
+        The figure the calculator gives you is what your invoice says, before your own income tax
+        and your costs. For a whole year of sales, after the cuota de autónomos, your costs and
+        IRPF, use the{" "}
+        <Link href={marketingPath("toolEarnings", "en")}>agent earnings calculator</Link>.
       </p>
 
       <h2>Keeping track of the deals behind the numbers</h2>

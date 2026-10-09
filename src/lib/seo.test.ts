@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 
 import { content as toolEn } from "@/content/pages/tool-commission.en";
 import { content as toolEs } from "@/content/pages/tool-commission.es";
+import { content as earningsEn } from "@/content/pages/tool-earnings.en";
+import { content as earningsEs } from "@/content/pages/tool-earnings.es";
 import { content as spreadsheetEn } from "@/content/pages/tool-spreadsheet.en";
 import { content as spreadsheetEs } from "@/content/pages/tool-spreadsheet.es";
 import { content as hubEn } from "@/content/pages/tools.en";
@@ -27,12 +29,14 @@ type Node = Record<string, unknown>;
 
 describe("pageJsonLd for a tool page", () => {
   it.each([
-    ["en", toolEn],
-    ["es", toolEs],
-  ] as const)("describes the %s calculator as the page's subject", async (locale, content) => {
-    const jsonLd = (await pageJsonLd("toolCommission", locale, content)) as { "@graph": Node[] };
+    ["toolCommission", "en", toolEn],
+    ["toolCommission", "es", toolEs],
+    ["toolEarnings", "en", earningsEn],
+    ["toolEarnings", "es", earningsEs],
+  ] as const)("describes %s (%s) as the page's subject", async (route, locale, content) => {
+    const jsonLd = (await pageJsonLd(route, locale, content)) as { "@graph": Node[] };
     const graph = jsonLd["@graph"];
-    const pageUrl = absoluteUrl(marketingPath("toolCommission", locale));
+    const pageUrl = absoluteUrl(marketingPath(route, locale));
     const byType = (type: string) => graph.filter((node) => node["@type"] === type);
 
     expect(graph.map((node) => node["@type"])).toEqual([

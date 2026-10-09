@@ -66,3 +66,27 @@ describe("the commission calculator names no commission rate", () => {
     expect(found.filter((value) => !ALLOWED.has(value))).toEqual([]);
   });
 });
+
+/**
+ * The same rule on the earnings calculator, whose copy also names the Social
+ * Security rate (31.5), the quarterly IRPF advances (20) and the share of
+ * withheld income that waives them (70). Its labels live in the tools
+ * catalogs, which the block above already scans.
+ */
+describe("the earnings calculator names no commission rate", () => {
+  const ALLOWED = new Set([21, 7, 15, 100, 31.5, 20, 70]);
+  const SOURCES = [
+    "src/content/pages/tool-earnings.en.tsx",
+    "src/content/pages/tool-earnings.es.tsx",
+    "src/components/tools/earnings-calculator.tsx",
+    "src/components/tools/cuota-table.tsx",
+  ];
+
+  it.each(SOURCES)("%s", (path) => {
+    const text = readFileSync(join(process.cwd(), path), "utf8");
+    const found = [...text.matchAll(/(\d+(?:[.,]\d+)?)\s?%/g)].map((m) =>
+      Number(m[1].replace(",", "."))
+    );
+    expect(found.filter((value) => !ALLOWED.has(value))).toEqual([]);
+  });
+});

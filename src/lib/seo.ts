@@ -80,19 +80,22 @@ export const PUBLISHED: Record<ContentRoute, string> = {
   about: "2026-09-15",
   toolCommission: "2026-09-29",
   toolSpreadsheet: "2026-09-29",
+  toolEarnings: "2026-10-09",
   tools: "2026-09-29",
 };
 
 /**
  * For a page revised or re-checked against its sources after publication
  * (the Andalucía register guide on a schedule, the commission calculator's
- * "who pays" section): the day of the last revision or check. It drives the
- * page's "Updated" date, dateModified and the sitemap's lastmod, so a revision
- * never moves datePublished, which stays the PUBLISHED date.
+ * "who pays" section, the hub's third tool): the day of the last revision or
+ * check. It drives the page's "Updated" date, dateModified and the sitemap's
+ * lastmod, so a revision never moves datePublished, which stays the PUBLISHED
+ * date.
  */
 export const CHECKED: Partial<Record<ContentRoute, string>> = {
   guideAndaluciaRegister: "2026-09-29",
   toolCommission: "2026-10-09",
+  tools: "2026-10-09",
 };
 
 /**

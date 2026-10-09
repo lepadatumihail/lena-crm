@@ -58,13 +58,16 @@ export type CommissionBreakdown = {
   yourInvoiceTotal: number;
 };
 
-const PPM = 1_000_000;
+export const PPM = 1_000_000;
 
 /** The most months of rent a fee can be counted in: anything above is a typo. */
 const MAX_MONTHS = 120;
 
-/** amount × num ÷ den, rounded half up. BigInt, so no product ever loses a digit. */
-function mulDiv(amount: number, num: number, den: number): number {
+/**
+ * amount × num ÷ den, rounded half up, for amounts of zero or more. BigInt, so
+ * no product ever loses a digit.
+ */
+export function mulDiv(amount: number, num: number, den: number): number {
   const two = BigInt(2);
   const d = BigInt(den);
   return Number((BigInt(amount) * BigInt(num) * two + d) / (d * two));

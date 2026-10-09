@@ -61,6 +61,10 @@
       "label": "Calculadora de comisión",
       "blurb": "Calcula los honorarios con IVA, el reparto entre dos agencias y tu propia factura."
     },
+    "toolEarnings": {
+      "label": "Calculadora de ingresos",
+      "blurb": "Mira lo que te deja un año de ventas cada mes, o cuántas ventas necesitas para tus ingresos."
+    },
     "toolSpreadsheet": {
       "label": "Plantilla Excel de clientes",
       "blurb": "Un Excel gratis para tus compradores y vendedores, listo para importar a LeadWing."

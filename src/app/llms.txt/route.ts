@@ -1,6 +1,7 @@
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { PRICES } from "@/lib/billing";
 import { TOOL_ROUTES, marketingPath, type MarketingRoute, type ToolRoute } from "@/lib/routes";
+import { COTIZACION_YEAR } from "@/lib/tools/earnings";
 import { trackerPath } from "@/lib/tools/tracker-files";
 import {
   SITE_ALTERNATE_NAMES,
@@ -25,6 +26,7 @@ const en = (route: MarketingRoute) => absoluteUrl(marketingPath(route, "en"));
 const TOOL_LINES: Record<ToolRoute, string> = {
   toolCommission: `[Real estate commission calculator](${en("toolCommission")}): fee, VAT or IGIC, the split between two agencies, your share and IRPF withholding, on sales and rentals in Spain`,
   toolSpreadsheet: `[Client tracker spreadsheet](${en("toolSpreadsheet")}): a free Excel workbook for buyers and sellers, with follow-ups that are due in amber, quiet clients in grey and columns that import into ${SITE_NAME} as they are; in English (${absoluteUrl(trackerPath("en"))}) and Spanish (${absoluteUrl(trackerPath("es"))})`,
+  toolEarnings: `[Agent earnings calculator](${en("toolEarnings")}): what a self-employed estate agent in Spain takes home a month from a year of sales, after splits, the cuota de autónomos (estimated from the ${COTIZACION_YEAR} table), costs and IRPF; or how many sales a take-home figure needs`,
 };
 
 export function GET() {

@@ -69,6 +69,82 @@
     "taxName": "{tax, select, iva {IVA} igic {IGIC} other {tax}}",
     "taxLabel": "{tax, select, iva {IVA} igic {IGIC} other {Tax}} {rate}"
   },
+  "earnings": {
+    "form": {
+      "mode": "What do you want to know?",
+      "modeEarn": "What I'll earn",
+      "modeNeed": "Sales I need",
+      "sales": "Sales a year",
+      "target": "Take-home a month (€)",
+      "price": "Average sale price (€)",
+      "optional": "Optional",
+      "fee": "Agency fee per sale, before IVA ({unit})",
+      "feeBasis": "How the fee is set",
+      "feeBasisPercent": "% of the price",
+      "feeBasisAmount": "Fixed amount",
+      "shared": "Some sales are shared with another agency",
+      "sharedSales": "Sales that are shared (%)",
+      "otherShare": "The other agency's share of the fee (%)",
+      "agentSplit": "My agency or network keeps part of the fee",
+      "agentShare": "My share of our side (%)",
+      "cuota": "Cuota de autónomos",
+      "cuotaEstimate": "Estimate it ({year} table)",
+      "cuotaOwn": "I'll type it",
+      "cuotaAmount": "My cuota a month (€)",
+      "cuotaHelp": "The estimate is the minimum for your earnings band. On the reduced first-year cuota, or a higher base you chose? Type what you pay.",
+      "costs": "Other business costs a month (€)",
+      "costsHelp": "Portals, car, phone, a desk fee: what you pay to work.",
+      "irpf": "IRPF withheld from my invoices",
+      "irpfNone": "None",
+      "irpfNew": "{rate} (first three years)",
+      "irpfHelp": "Withheld when you invoice an agency, a network or another business. With none withheld, the calculator sets aside the quarterly advances you pay yourself (modelo 130)."
+    },
+    "results": {
+      "hint": "Fill in the fields to see the numbers.",
+      "takeHome": "You take home",
+      "perMonth": "a month",
+      "perYear": "{amount} a year",
+      "need": "You need",
+      "salesYear": "{count, plural, one {# sale a year} other {# sales a year}}",
+      "salesMonth": "About {count} a month, and {amount} a month to take home.",
+      "unreachable": "No number of sales gets there with these figures. Check the fee and the splits.",
+      "year": "Your year, before IVA",
+      "fees": "Fees on your sales",
+      "otherAgencies": "− Other agencies",
+      "agencyKeeps": "− Your agency keeps",
+      "yourFees": "Your fees",
+      "perSale": "That is {amount} a sale.",
+      "comesOff": "What comes off",
+      "cuota": "− Cuota de autónomos",
+      "cuotaBand": "Band {band} of the {year} table: {amount} a month.",
+      "cuotaTyped": "{amount} a month.",
+      "costs": "− Other costs",
+      "irpfWithheld": "− IRPF withheld ({rate})",
+      "irpfAdvance": "− IRPF advances (modelo 130)",
+      "takeHomeYear": "Take-home a year",
+      "takeHomeMonth": "Take-home a month",
+      "irpfNote": "IRPF withheld or paid in advance counts towards your income tax: your annual return settles the real figure, which depends on your whole income, your region and your deductions.",
+      "legend": {
+        "otherAgencies": "Other agencies",
+        "agency": "Your agency",
+        "costs": "Cuota and costs",
+        "tax": "IRPF",
+        "you": "You"
+      }
+    },
+    "actions": {
+      "copyLink": "Copy link",
+      "copiedLink": "The link is copied."
+    },
+    "table": {
+      "band": "Band",
+      "earnings": "Net earnings a month",
+      "cuota": "Minimum cuota a month",
+      "upTo": "Up to {amount}",
+      "between": "{from} to {to}",
+      "over": "Over {amount}"
+    }
+  },
   "tracker": {
     "columns": {
       "lastContact": "Last contact",

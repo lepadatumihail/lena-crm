@@ -173,8 +173,10 @@ function Body() {
         cambia una cada vez para ver cuánto vale cada una para ti.
       </p>
       <p>
-        La cifra que te da la calculadora es lo que dice tu factura. Va antes de tu propio IRPF
-        y de tus gastos, que solo puedes calcular tú.
+        La cifra que te da la calculadora es lo que dice tu factura, antes de tu propio IRPF y de
+        tus gastos. Para un año entero de ventas, después de la cuota de autónomos, tus gastos y
+        el IRPF, usa la{" "}
+        <Link href={marketingPath("toolEarnings", "es")}>calculadora de ingresos</Link>.
       </p>
 
       <h2>Las operaciones detrás de las cifras</h2>

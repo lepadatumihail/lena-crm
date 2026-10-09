@@ -65,6 +65,10 @@ export const MARKETING_ROUTES = {
     en: "/tools/client-spreadsheet",
     es: "/es/herramientas/plantilla-excel-inmobiliaria",
   },
+  toolEarnings: {
+    en: "/tools/agent-earnings-calculator",
+    es: "/es/herramientas/calculadora-ingresos-agente-inmobiliario",
+  },
   tools: { en: "/tools", es: "/es/herramientas" },
   privacy: { en: "/privacy", es: "/es/privacidad" },
   terms: { en: "/terms", es: "/es/terminos" },
@@ -104,6 +108,7 @@ export const CONTENT_ROUTES = [
   "about",
   "toolCommission",
   "toolSpreadsheet",
+  "toolEarnings",
   "tools",
 ] as const satisfies readonly MarketingRoute[];
 
@@ -129,6 +134,7 @@ export const LINKED_ROUTES = [
   "about",
   "toolCommission",
   "toolSpreadsheet",
+  "toolEarnings",
   "tools",
 ] as const satisfies readonly MarketingRoute[];
 
@@ -147,6 +153,7 @@ export function isLinkedRoute(route: MarketingRoute): route is LinkedRoute {
 export const TOOL_ROUTES = [
   "toolCommission",
   "toolSpreadsheet",
+  "toolEarnings",
 ] as const satisfies readonly LinkedRoute[];
 
 export type ToolRoute = (typeof TOOL_ROUTES)[number];

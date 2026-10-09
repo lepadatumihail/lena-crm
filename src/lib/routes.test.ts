@@ -50,6 +50,8 @@ describe("isProtectedPath", () => {
     "/es/herramientas",
     "/tools/client-spreadsheet",
     "/es/herramientas/plantilla-excel-inmobiliaria",
+    "/tools/agent-earnings-calculator",
+    "/es/herramientas/calculadora-ingresos-agente-inmobiliario",
     "/downloads/leadwing-client-tracker.xlsx",
     "/login",
     "/auth/callback",
@@ -138,6 +140,14 @@ describe("marketing routes", () => {
     });
     expect(marketingRouteAt("/es/herramientas/plantilla-excel-inmobiliaria")).toEqual({
       route: "toolSpreadsheet",
+      locale: "es",
+    });
+    expect(marketingRouteAt("/tools/agent-earnings-calculator")).toEqual({
+      route: "toolEarnings",
+      locale: "en",
+    });
+    expect(marketingRouteAt("/es/herramientas/calculadora-ingresos-agente-inmobiliario")).toEqual({
+      route: "toolEarnings",
       locale: "es",
     });
     expect(marketingRouteAt("/tools")).toEqual({ route: "tools", locale: "en" });
