@@ -4,6 +4,7 @@ import type { MarketingPageContent } from "@/components/marketing/marketing-page
 import { CommissionCalculator } from "@/components/tools/commission-calculator";
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { marketingPath } from "@/lib/routes";
+import { CHECKED } from "@/lib/seo";
 import { SITE_NAME } from "@/lib/site";
 
 const home = marketingPath("home", "es");
@@ -21,6 +22,7 @@ const SOURCES = {
   ruling: "https://petete.tributos.hacienda.gob.es/consultas/?num_consulta=V2188-21",
   colegios: "https://www.boe.es/buscar/act.php?id=BOE-A-1974-289#a14",
   lau: "https://www.boe.es/buscar/act.php?id=BOE-A-1994-26003#a20",
+  civilCode: "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763#art1257",
 } as const;
 
 function Source({ href, children }: { href: string; children: React.ReactNode }) {
@@ -87,19 +89,34 @@ function Body() {
         y la calculadora quitará el impuesto antes de repartir nada.
       </p>
 
+      <h2>¿Quién paga los honorarios de la inmobiliaria?</h2>
+      <p>
+        Quien firmó el encargo con la agencia. En una compraventa, ninguna ley dice si paga el
+        vendedor o el comprador: los honorarios los debe quien contrató a la agencia, y un
+        contrato solo obliga a quienes lo firman (
+        <Source href={SOURCES.civilCode}>artículo 1257 del Código Civil</Source>). En la
+        práctica suele ser el vendedor, a través de la <em>nota de encargo</em>.
+      </p>
+      <p>
+        El comprador solo paga honorarios si firmó su propio encargo, por ejemplo con un agente
+        al que contrató para buscarle vivienda. En una venta compartida, las dos agencias se
+        reparten unos mismos honorarios: la agencia que tiene el encargo comparte lo que le
+        paga su cliente con la agencia que trajo al comprador.
+      </p>
+      <p>
+        En los alquileres, en cambio, sí decide la ley. En un arrendamiento de vivienda, desde
+        la Ley 12/2023, el{" "}
+        <Source href={SOURCES.lau}>artículo 20.1 de la Ley de Arrendamientos Urbanos</Source>{" "}
+        dice que los gastos de gestión inmobiliaria y los de formalización del contrato son a
+        cargo del arrendador.
+      </p>
+
       <h2>Alquiler: meses de renta o una parte de la renta anual</h2>
       <p>
         En un alquiler, los honorarios se fijan en meses de renta, como un porcentaje de la
         renta de un año o como un importe fijo. Elige “Alquiler”, introduce la renta mensual y
         los honorarios tal como los diga tu acuerdo; el impuesto, el reparto con otra agencia,
         tu parte y el IRPF funcionan exactamente igual que en una venta.
-      </p>
-      <p>
-        En un arrendamiento de vivienda, la ley pone los honorarios de la agencia a cargo del
-        arrendador: desde la Ley 12/2023, el{" "}
-        <Source href={SOURCES.lau}>artículo 20.1 de la Ley de Arrendamientos Urbanos</Source>{" "}
-        dice que los gastos de gestión inmobiliaria y los de formalización del contrato son a
-        cargo del arrendador.
       </p>
 
       <h2>Cómo se reparte una comisión compartida entre dos agencias</h2>
@@ -182,6 +199,7 @@ export const content: MarketingPageContent = {
     "Calculadora gratuita de comisión inmobiliaria para venta y alquiler: honorarios con IVA o IGIC, reparto entre agencias, tu parte y la retención de IRPF.",
   kind: "tool",
   published: "2026-09-29",
+  modified: CHECKED.toolCommission,
   eyebrow: "Herramienta gratuita",
   heading: "Calculadora de comisión inmobiliaria: honorarios, IVA y reparto entre agencias",
   lead: "Calcula los honorarios con IVA, el reparto entre dos agencias y tu propia factura a partir de las cifras que has pactado.",
@@ -204,8 +222,8 @@ export const content: MarketingPageContent = {
       a: "Cuando un agente autónomo con la actividad dada de alta como profesional factura a una empresa o a un profesional, quien paga retiene el 15 % de la base, o el 7 % el año de inicio de la actividad y los dos siguientes. Las facturas a particulares no llevan retención.",
     },
     {
-      q: "¿Quién paga los honorarios de la agencia en un alquiler?",
-      a: "En un arrendamiento de vivienda, el arrendador: desde la Ley 12/2023, el artículo 20.1 de la Ley de Arrendamientos Urbanos pone a su cargo los gastos de gestión inmobiliaria y los de formalización del contrato.",
+      q: "¿Quién paga los honorarios de la inmobiliaria?",
+      a: "Quien firmó el encargo con la agencia. En una compraventa ninguna ley lo decide, así que suele ser el vendedor, a través de la nota de encargo; el comprador solo paga si firmó su propio encargo. En un alquiler de vivienda, el artículo 20.1 de la Ley de Arrendamientos Urbanos pone los honorarios a cargo del arrendador (desde la Ley 12/2023).",
     },
     {
       q: "¿Hay una comisión estándar en España?",

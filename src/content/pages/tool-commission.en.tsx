@@ -4,6 +4,7 @@ import type { MarketingPageContent } from "@/components/marketing/marketing-page
 import { CommissionCalculator } from "@/components/tools/commission-calculator";
 import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { marketingPath } from "@/lib/routes";
+import { CHECKED } from "@/lib/seo";
 import { SITE_NAME } from "@/lib/site";
 
 const home = marketingPath("home", "en");
@@ -21,6 +22,7 @@ const SOURCES = {
   ruling: "https://petete.tributos.hacienda.gob.es/consultas/?num_consulta=V2188-21",
   colegios: "https://www.boe.es/buscar/act.php?id=BOE-A-1974-289#a14",
   lau: "https://www.boe.es/buscar/act.php?id=BOE-A-1994-26003#a20",
+  civilCode: "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763#art1257",
 } as const;
 
 function Source({ href, children }: { href: string; children: React.ReactNode }) {
@@ -85,18 +87,33 @@ function Body() {
         and the calculator takes the tax out before splitting anything.
       </p>
 
+      <h2>Who pays estate agent fees in Spain?</h2>
+      <p>
+        Whoever signed the agreement with the agency. On a sale, no law says whether the seller
+        or the buyer pays: the fee is owed by the person who hired the agency, and a contract
+        binds only the people who signed it (
+        <Source href={SOURCES.civilCode}>article 1257 of the Civil Code</Source>). In practice
+        that is usually the seller, through the listing agreement, the <em>nota de encargo</em>.
+      </p>
+      <p>
+        A buyer pays a fee only if they signed an agreement of their own, for example with an
+        agent they hired to find them a property. On a shared sale, the two agencies divide one
+        fee: the agency holding the listing shares what its client pays with the agency that
+        brought the buyer.
+      </p>
+      <p>
+        Rentals are where the law does decide. On a housing rental (
+        <em>arrendamiento de vivienda</em>), since Ley 12/2023,{" "}
+        <Source href={SOURCES.lau}>article 20.1 of the Ley de Arrendamientos Urbanos</Source>{" "}
+        makes real estate management and contract formalisation costs the landlord&apos;s.
+      </p>
+
       <h2>Rentals: months of rent or a share of the annual rent</h2>
       <p>
         On a rental, the fee is set as a number of months of rent, as a percentage of a
         year&apos;s rent, or as a fixed amount. Choose “Rental”, enter the monthly rent and the
         fee as your agreement states it; the tax, the split with another agency, your share
         and IRPF then work exactly as they do on a sale.
-      </p>
-      <p>
-        On a housing rental (<em>arrendamiento de vivienda</em>), the law puts the agency&apos;s
-        fees on the landlord: since Ley 12/2023,{" "}
-        <Source href={SOURCES.lau}>article 20.1 of the Ley de Arrendamientos Urbanos</Source>{" "}
-        makes real estate management and contract formalisation costs the landlord&apos;s.
       </p>
 
       <h2>How a shared commission flows between two agencies</h2>
@@ -178,6 +195,7 @@ export const content: MarketingPageContent = {
     "Free real estate commission calculator for Spain, for sales and rentals: the fee with VAT or IGIC, the split between agencies, your share and the IRPF withheld.",
   kind: "tool",
   published: "2026-09-29",
+  modified: CHECKED.toolCommission,
   eyebrow: "Free tool",
   heading: "Real estate commission calculator: fee, VAT and the split between agencies",
   lead: "Work out the fee with VAT, the split between two agencies and your own invoice, from the numbers you agreed.",
@@ -200,8 +218,8 @@ export const content: MarketingPageContent = {
       a: "When a self-employed agent whose activity is registered as a professional one invoices a business or a professional, the payer withholds 15% of the base, or 7% in the year the activity starts and the two years after. Invoices to private clients carry no withholding.",
     },
     {
-      q: "Who pays the agency's fee on a rental?",
-      a: "On a housing rental (arrendamiento de vivienda), the landlord: since Ley 12/2023, article 20.1 of the Ley de Arrendamientos Urbanos makes real estate management and contract formalisation costs the landlord's.",
+      q: "Who pays estate agent fees in Spain?",
+      a: "Whoever signed the agreement with the agency. No law decides it on a sale, so it is usually the seller, through the listing agreement (nota de encargo); a buyer pays only under an agreement of their own. On a housing rental, article 20.1 of the Ley de Arrendamientos Urbanos puts the agency's fees on the landlord (since Ley 12/2023).",
     },
     {
       q: "Is there a standard commission rate in Spain?",

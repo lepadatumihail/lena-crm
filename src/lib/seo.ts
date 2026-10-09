@@ -84,13 +84,15 @@ export const PUBLISHED: Record<ContentRoute, string> = {
 };
 
 /**
- * For a page whose facts are re-checked against their sources on a schedule
- * (the Andalucía register guide): the day of the last check. It drives the
- * page's "Updated" date, dateModified and the sitemap's lastmod, so a re-check
+ * For a page revised or re-checked against its sources after publication
+ * (the Andalucía register guide on a schedule, the commission calculator's
+ * "who pays" section): the day of the last revision or check. It drives the
+ * page's "Updated" date, dateModified and the sitemap's lastmod, so a revision
  * never moves datePublished, which stays the PUBLISHED date.
  */
 export const CHECKED: Partial<Record<ContentRoute, string>> = {
   guideAndaluciaRegister: "2026-09-29",
+  toolCommission: "2026-10-09",
 };
 
 /**
