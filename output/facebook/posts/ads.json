@@ -1309,6 +1309,86 @@
    },
    "waste_test": "DOES NOT FIRE on any leg: Audience Network 2% of today and 0.9% of lifetime (not >50%); link clicks EUR 0.094 (not under EUR 0.05); landing page views 76% of today's clicks and 80% lifetime (not below 30%). Nothing paused.",
    "verdict": "Healthy to the last hour. EUR 1.06 left with ~6 h to run - it spends out or leaves well under a euro. After 23:59 Madrid tonight the ad set is structurally dead (lifetime window closed) and needs no further checking; do not resume, re-fund or extend without a fresh yes."
+  },
+  "closed_2026_10_05": {
+   "window_closed": "2026-10-04T23:59:00+0200, verified: no insights row for 5 Oct and account spend for 5 Oct is zero",
+   "status_note": "ad 6997552574094 and ad set 6997552554894 still READ effective_status ACTIVE, but end_time has passed and budget_remaining is EUR 0.04, so the set cannot spend. Structurally dead. Not edited (no fresh yes, and nothing to gain).",
+   "final_spend_eur": 24.96,
+   "lifetime_budget_eur": 25.0,
+   "unspent_eur": 0.04,
+   "impressions": 12984,
+   "reach": 8400,
+   "cpm_eur": 1.92,
+   "frequency": 1.55,
+   "link_clicks": 185,
+   "cost_per_link_click_eur": 0.135,
+   "landing_page_views": 148,
+   "cost_per_lpv_eur": 0.169,
+   "lpv_share_of_clicks": "80%",
+   "post_reactions": 1,
+   "signups": 0,
+   "day_2026_10_04_full": {
+    "spend_eur": 3.38,
+    "impressions": 2348,
+    "link_clicks": 35,
+    "landing_page_views": 27
+   },
+   "placements_lifetime": {
+    "facebook/feed": {
+     "spend_eur": 13.61,
+     "impressions": 5652,
+     "link_clicks": 75,
+     "landing_page_views": 59
+    },
+    "instagram/feed": {
+     "spend_eur": 3.91,
+     "impressions": 1676,
+     "link_clicks": 32,
+     "landing_page_views": 29
+    },
+    "instagram/stories": {
+     "spend_eur": 3.86,
+     "impressions": 1959,
+     "link_clicks": 38,
+     "landing_page_views": 30
+    },
+    "instagram/reels": {
+     "spend_eur": 2.58,
+     "impressions": 1465,
+     "link_clicks": 23,
+     "landing_page_views": 19
+    },
+    "facebook/instream_video": {
+     "spend_eur": 0.6,
+     "impressions": 300,
+     "link_clicks": 7,
+     "landing_page_views": 7
+    },
+    "facebook/reels": {
+     "spend_eur": 0.15,
+     "impressions": 102,
+     "link_clicks": 2,
+     "landing_page_views": 2
+    },
+    "facebook/marketplace": {
+     "spend_eur": 0.02,
+     "impressions": 8
+    },
+    "audience_network/an_classic": {
+     "spend_eur": 0.23,
+     "impressions": 1822,
+     "link_clicks": 8,
+     "landing_page_views": 2
+    }
+   },
+   "feed_share_of_lifetime_impressions": "56% (7,328 of 12,984) - down from 92% before the 3 Oct placement rewrite",
+   "creative_at_close": {
+    "creative_id": "1445432247464313",
+    "dark_post_id": "1279663088571991_122114822697476753",
+    "ad_updated_time": "2026-10-03T00:23:58+0200",
+    "adset_updated_time": "2026-10-03T00:21:26+0200"
+   },
+   "do_not": "Do not resume, re-fund or extend without a fresh yes from the founder."
   }
  }
 }
