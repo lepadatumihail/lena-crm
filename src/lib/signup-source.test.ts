@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { cleanHost, parseSignupSource, readReferrer, readSignupSource, readUtm } from "@/lib/signup-source";
+import {
+  cleanHost,
+  parseSignupSource,
+  readReferrer,
+  readSignupSource,
+  readUtm,
+  utmQuery,
+} from "@/lib/signup-source";
 
 describe("readSignupSource", () => {
   it("keeps the ad's tags and the landing page", () => {
@@ -43,6 +50,24 @@ describe("readSignupSource", () => {
 
   it("leaves out a referrer that is not a bare hostname", () => {
     expect(readSignupSource("", "/quiet", "https://google.com/search?q=crm")).toEqual({ landing: "/quiet" });
+  });
+});
+
+describe("utmQuery", () => {
+  it("keeps the tags exactly as they arrived, and nothing else", () => {
+    expect(utmQuery("?p=450000&utm_source=chatgpt.com&fbclid=abc&utm_campaign=free10-sep26")).toBe(
+      "utm_source=chatgpt.com&utm_campaign=free10-sep26"
+    );
+  });
+
+  it("neither caps nor trims what it keeps", () => {
+    const long = "x".repeat(150);
+    expect(utmQuery(`?utm_content=${long}`)).toBe(`utm_content=${long}`);
+  });
+
+  it("is empty without tags", () => {
+    expect(utmQuery("?d=sale")).toBe("");
+    expect(utmQuery("")).toBe("");
   });
 });
 

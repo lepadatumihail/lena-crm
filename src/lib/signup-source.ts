@@ -65,6 +65,22 @@ export function readUtm(search: string): Partial<Record<UtmKey, string>> {
 }
 
 /**
+ * The utm tags on a query string exactly as they arrived, as a query string
+ * of their own ("" without any). A page that rewrites its own address adds
+ * them back, so the steps after the first, the sign-up included, still say
+ * which ad or assistant sent the visitor.
+ */
+export function utmQuery(search: string): string {
+  const from = new URLSearchParams(search);
+  const kept = new URLSearchParams();
+  for (const key of UTM_KEYS) {
+    const value = from.get(key);
+    if (value) kept.set(key, value);
+  }
+  return kept.toString();
+}
+
+/**
  * Tags, landing page and referring site (see readReferrer) for the page being
  * signed up from, or null when there is nothing to record.
  */

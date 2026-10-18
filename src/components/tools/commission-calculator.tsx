@@ -10,6 +10,7 @@ import { parseMoney } from "@/lib/import/money";
 import { marketingPath } from "@/lib/routes";
 import { absoluteUrl } from "@/lib/site";
 import { trackSiteEvent } from "@/lib/site-events";
+import { calculatorHref } from "@/lib/tools/calculator-url";
 import { computeCommission, parsePercent, type CommissionBreakdown } from "@/lib/tools/commission";
 import {
   EMPTY_FIELDS,
@@ -83,7 +84,7 @@ export function CommissionCalculator() {
   useEffect(() => {
     if (!hydrated) return;
     const timer = window.setTimeout(() => {
-      const next = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
+      const next = calculatorHref(window.location, query);
       const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
       if (next !== current) window.history.replaceState(null, "", next);
     }, URL_DELAY_MS);

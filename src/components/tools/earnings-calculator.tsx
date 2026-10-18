@@ -8,6 +8,7 @@ import { Check, Link2 } from "lucide-react";
 import { asLocale, intlTag } from "@/i18n/config";
 import { parseMoney } from "@/lib/import/money";
 import { trackSiteEvent } from "@/lib/site-events";
+import { calculatorHref } from "@/lib/tools/calculator-url";
 import {
   WITHHOLDING_CHOICES,
   WITHHOLDING_RATES,
@@ -106,7 +107,7 @@ export function EarningsCalculator() {
   useEffect(() => {
     if (!hydrated) return;
     const timer = window.setTimeout(() => {
-      const next = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
+      const next = calculatorHref(window.location, query);
       const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
       if (next !== current) window.history.replaceState(null, "", next);
     }, URL_DELAY_MS);
