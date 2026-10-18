@@ -31,6 +31,7 @@ done.
 | 020 | Andalucía agent register explainer (downgraded after the 18 Sep 2026 agreement) | P3 | S (≈0.5 d) | — | DONE (built and live 2026-09-29 as 1c3747d; facts as of that day, re-check monthly until the amending law passes) — [plan](020-andalucia-agent-register.md) |
 | 021 | Agent earnings calculator, the third free tool ("how much does an estate agent earn in Spain") | P2 | S–M | 018 (built) | BUILT 2026-10-09 (cuota table from Orden PJC/297/2026: update it each year when the new Orden is out) — [plan](021-agent-earnings-calculator.md) |
 | 022 | Russian as the third language: app, every public page under /ru, legal, workbook, importer, PDF | P2 | L | — | BUILT 2026-10-09 (translated by Claude, no native review yet; signed-in screens unchecked; migration applied live) — [plan](022-russian-language.md) |
+| 023 | What the property portals charge agents: a dated, sourced guide (Idealista, Fotocasa, international) | P2 | S–M (≈1 d) | — | DONE (built 2026-10-18 with ES title A; prices re-verified the same day, A Place in the Sun dropped (site unreachable), rental-ad item skipped; re-check quarterly and bump CHECKED.guidePortalPrices) — [plan](023-portal-prices-guide.md) |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) | REJECTED (with one-line rationale)
 

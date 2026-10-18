@@ -101,6 +101,13 @@ function Body() {
         reference are raw material. Budget, timing, financing, whether they are even in the
         country — all of that you have to ask for.
       </p>
+      <p>
+        And if you are deciding which portals to pay for,{" "}
+        <Link href={marketingPath("guidePortalPrices", L)}>
+          here is what each portal charges an agency
+        </Link>
+        , with the official prices kept apart from the ones nobody can source.
+      </p>
 
       <h2>Step 1: answer the same day, in their language</h2>
       <p>
@@ -325,5 +332,5 @@ export const content: MarketingPageContent = {
       a: "Note the portal and the date in the client’s notes the day the lead arrives, then once a quarter count enquiries, viewings and signed deals for each one. The viewings column is the one that separates a portal that brings buyers from a portal that brings traffic.",
     },
   ],
-  related: ["guideFollowUp", "crmSpain", "pricing"],
+  related: ["guideFollowUp", "guidePortalPrices", "crmSpain", "pricing"],
 };

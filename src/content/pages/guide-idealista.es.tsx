@@ -104,6 +104,13 @@ function Body() {
         referencia son materia prima. El presupuesto, los plazos, la financiación y hasta si están
         en España lo tienes que preguntar tú.
       </p>
+      <p>
+        Y si estás decidiendo en qué portales pagar,{" "}
+        <Link href={marketingPath("guidePortalPrices", L)}>
+          esto es lo que cobra cada portal a una agencia
+        </Link>
+        , con los precios que son oficiales separados de los que no.
+      </p>
 
       <h2>Paso 1: responde el mismo día y en su idioma</h2>
       <p>
@@ -330,5 +337,5 @@ export const content: MarketingPageContent = {
       a: "Anota el portal y la fecha en las notas de la ficha el día que entra el lead y, una vez por trimestre, cuenta contactos, visitas y operaciones firmadas de cada uno. La columna de visitas es la que distingue un portal que trae compradores de otro que solo trae tráfico.",
     },
   ],
-  related: ["guideFollowUp", "crmSpain", "pricing"],
+  related: ["guideFollowUp", "guidePortalPrices", "crmSpain", "pricing"],
 };

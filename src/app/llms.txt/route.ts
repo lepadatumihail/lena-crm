@@ -78,6 +78,7 @@ ${SITE_NAME} is a web app for solo and independent real-estate agents, including
 - [Guide: managing Idealista leads](${en("guideIdealista")}): how to answer and qualify portal enquiries from Idealista, Fotocasa and Kyero
 - [Guide: real estate lead follow-up](${en("guideFollowUp")}): a follow-up cadence and message templates in English, Spanish and German
 - [Guide: Andalusia's estate agent register](${en("guideAndaluciaRegister")}): a dated summary of what Ley 5/2025 says about registering as an estate agent in Andalusia and of the change the Junta announced on 18 September 2026, with links to the BOE and BOJA
+- [Guide: what property portals charge agents in Spain](${en("guidePortalPrices")}): a dated table of what Idealista, Fotocasa, habitaclia, pisos.com, yaencontre, Kyero, ThinkSpain, Properstar, Spainhouses, FINN.no and other portals publish about their prices for agencies, separating official prices from unverified reported figures, with links to each source
 - [Sign in](${SITE_URL}/login): Google or a one-time email code, no password
 - [Sitemap](${SITE_URL}/sitemap.xml)
 

@@ -53,6 +53,10 @@
       "label": "Andalusia agent register",
       "blurb": "What Ley 5/2025 says about registering as an agent, and what changed in September 2026."
     },
+    "guidePortalPrices": {
+      "label": "Property portal prices",
+      "blurb": "What Idealista, Fotocasa, Kyero and other portals charge an agency, and which prices are official."
+    },
     "about": {
       "label": "About LeadWing",
       "blurb": "What LeadWing is, who it is for, the key facts and how to reach us."

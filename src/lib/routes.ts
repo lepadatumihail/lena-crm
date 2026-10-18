@@ -68,6 +68,11 @@ export const MARKETING_ROUTES = {
     es: "/es/guias/registro-agentes-inmobiliarios-andalucia",
     ru: "/ru/gaidy/reestr-agentov-nedvizhimosti-andalusii",
   },
+  guidePortalPrices: {
+    en: "/guides/property-portal-prices-spain",
+    es: "/es/guias/tarifas-portales-inmobiliarios-profesionales",
+    ru: "/ru/gaidy/tseny-portalov-nedvizhimosti-ispanii",
+  },
   about: { en: "/about", es: "/es/sobre-nosotros", ru: "/ru/o-nas" },
   toolCommission: {
     en: "/tools/commission-calculator",
@@ -120,6 +125,7 @@ export const CONTENT_ROUTES = [
   "guideIdealista",
   "guideFollowUp",
   "guideAndaluciaRegister",
+  "guidePortalPrices",
   "about",
   "toolCommission",
   "toolSpreadsheet",
@@ -146,6 +152,7 @@ export const LINKED_ROUTES = [
   "guideIdealista",
   "guideFollowUp",
   "guideAndaluciaRegister",
+  "guidePortalPrices",
   "about",
   "toolCommission",
   "toolSpreadsheet",

@@ -16,6 +16,7 @@ const GUIDE_LINKS = [
   "guideIdealista",
   "guideFollowUp",
   "guideAndaluciaRegister",
+  "guidePortalPrices",
 ] as const satisfies readonly LinkedRoute[];
 /** The hub first, then every tool, so a new tool joins the column by itself. */
 const TOOL_LINKS = ["tools", ...TOOL_ROUTES] as const satisfies readonly LinkedRoute[];
