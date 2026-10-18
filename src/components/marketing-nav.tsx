@@ -19,7 +19,9 @@ import { SignUpDialog } from "@/components/marketing/sign-up-dialog";
  *             marketing page. Its call to action follows the visitor: an
  *             agent who is already signed in wants the app, not a sign-up.
  * "Start for free" opens the sign-up dialog in place (SignUpDialog), so the
- * visitor stays on the page and an ad's utm tags reach the new profile.
+ * visitor stays on the page and an ad's utm tags reach the new profile. A
+ * page can send the new agent somewhere other than Home (`signUpNext`): the
+ * client tracker's page opens the import.
  *   minimal — controls and a way home, for the legal pages.
  * Every link follows the page's own language, so a Spanish page never sends
  * a visitor to an English URL. The strip it sits in condenses into a floating
@@ -29,9 +31,12 @@ import { SignUpDialog } from "@/components/marketing/sign-up-dialog";
 export function MarketingNav({
   variant = "landing",
   signedIn = false,
+  signUpNext,
 }: {
   variant?: "landing" | "page" | "minimal";
   signedIn?: boolean;
+  /** Where "Start for free" lands a new agent on a `page` header, when not Home. */
+  signUpNext?: string;
 }) {
   const t = useTranslations("nav.marketing");
   const locale = asLocale(useLocale());
@@ -104,7 +109,7 @@ export function MarketingNav({
                 <Link href="/home">{t("backToApp")}</Link>
               </Button>
             ) : (
-              <SignUpDialog size="pill-sm" className={ctaClassName}>
+              <SignUpDialog size="pill-sm" className={ctaClassName} next={signUpNext}>
                 {t("startFree")}
               </SignUpDialog>
             )}

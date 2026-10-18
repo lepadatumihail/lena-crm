@@ -5,7 +5,8 @@ import { recordSiteEvent } from "@/lib/site-events-server";
 /**
  * Anonymous funnel steps from the ad landings and the free tools
  * (src/lib/site-events.ts), sent with sendBeacon. Nothing here identifies a visitor: no cookie is read and no
- * IP or user agent is stored, only the step, the page and its utm tags.
+ * IP or user agent is stored, only the step, the page, its utm tags and the
+ * hostname of the site that linked to it.
  */
 export async function POST(request: Request) {
   const raw = await request.text();

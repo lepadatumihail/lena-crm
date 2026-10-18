@@ -14,6 +14,14 @@ export const TRACKER_FILES = {
 
 export const XLSX_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
+/**
+ * Where an agent who signs up on the tracker's page lands: the import, which
+ * reads the workbook's Buyers sheet as it is, rather than Home. Every sign-up
+ * button on the page goes there (the header, the one under the table, the
+ * closing one).
+ */
+export const TRACKER_IMPORT_PATH = "/clients/import";
+
 export function trackerPath(locale: AppLocale): string {
   return `/downloads/${TRACKER_FILES[locale]}`;
 }

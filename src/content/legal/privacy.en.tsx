@@ -95,8 +95,10 @@ export function PrivacyEn() {
           store a password.
         </li>
         <li>
-          How you found us: if you create your account from one of our pages, that page and
-          the campaign tags in its address (for example, which of our ads you tapped).
+          How you found us: if you create your account from one of our pages, that page, the
+          campaign tags in its address (for example, which of our ads you tapped) and the
+          name of the website that linked you to it (for example google.com: the name only,
+          never the full address).
         </li>
         <li>
           Billing, on Pro only: the details Stripe collects at checkout, such as name,
@@ -140,9 +142,9 @@ export function PrivacyEn() {
           statistics that do not identify you.
         </li>
         <li>
-          To learn which of our ads and pages bring the agents who sign up, from the tags
-          recorded with your account: our legitimate interest in knowing what our marketing
-          achieves (art. 6(1)(f)).
+          To learn which of our ads and pages, and which other websites, bring the agents who
+          sign up, from the tags and the website name recorded with your account: our
+          legitimate interest in knowing what our marketing achieves (art. 6(1)(f)).
         </li>
         <li>
           To measure our advertising on Facebook and Instagram with the Meta Pixel: your
@@ -359,9 +361,11 @@ export function PrivacyEn() {
       <p>
         Website statistics come from Vercel Web Analytics, which sets no cookies and stores
         nothing on your device: it counts page views with a hashed identifier that is
-        discarded within a day. On the pages our ads link to, we also count each step
-        ourselves (page seen, sign-up opened, code sent, signed in) together with the
-        page’s campaign tags, again with no cookie and nothing that identifies you.
+        discarded within a day. On the pages our ads link to and on our free tools, we also
+        count each step ourselves (page seen, tool used, sign-up opened, code sent, signed
+        in) together with the page’s campaign tags and the name of the website that linked
+        to it (such as google.com, never the full address), again with no cookie and
+        nothing that identifies you.
       </p>
       <p>
         If you accept the cookie notice, the Meta Pixel (Meta Platforms Ireland Limited) loads

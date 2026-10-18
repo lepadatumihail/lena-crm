@@ -6,7 +6,7 @@ import { FREE_CLIENT_LIMIT } from "@/lib/access";
 import { STALE_AFTER_DAYS } from "@/lib/attention";
 import { marketingPath } from "@/lib/routes";
 import { SITE_NAME } from "@/lib/site";
-import { XLSX_TYPE, trackerPath } from "@/lib/tools/tracker-files";
+import { TRACKER_IMPORT_PATH, XLSX_TYPE, trackerPath } from "@/lib/tools/tracker-files";
 
 const PUBLISHED_ON = "2026-09-29";
 const home = marketingPath("home", "en");
@@ -178,5 +178,6 @@ export const content: MarketingPageContent = {
       encodingFormat: XLSX_TYPE,
       contentPath: trackerPath("en"),
     },
+    next: TRACKER_IMPORT_PATH,
   },
 };

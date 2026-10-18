@@ -12,7 +12,7 @@ import { syncLocaleFromProfile } from "@/i18n/actions";
 import { asLocale } from "@/i18n/config";
 import { marketingPath } from "@/lib/routes";
 import { isInAppBrowser } from "@/lib/in-app-browser";
-import { readSignupSource } from "@/lib/signup-source";
+import { readReferrer, readSignupSource } from "@/lib/signup-source";
 import { trackSiteEvent, type SiteEvent } from "@/lib/site-events";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -61,7 +61,9 @@ function useInAppBrowser(): boolean {
  * own title elements (a card heading, a dialog title) so each is announced
  * properly. Inside an in-app browser, where Google refuses to sign anyone in,
  * only the code is offered. Whatever utm tags the page carries go with the
- * sign-up, so a new profile records the ad that brought it.
+ * sign-up, so a new profile records the ad that brought it, and so does the
+ * hostname of the site that linked to the page (a search engine, an AI
+ * assistant), for the visitors no tag describes.
  */
 export function SignInForm({
   next = "/home",
@@ -95,7 +97,12 @@ export function SignInForm({
   const log = (event: SiteEvent) => {
     if (track) trackSiteEvent(event);
   };
-  const source = () => readSignupSource(window.location.search, window.location.pathname);
+  const source = () =>
+    readSignupSource(
+      window.location.search,
+      window.location.pathname,
+      readReferrer(document.referrer, window.location.hostname)
+    );
 
   async function handleGoogle() {
     setGoogleLoading(true);

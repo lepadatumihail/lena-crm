@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 
 import { LOCALES } from "@/i18n/config";
 import type { MarketingPageContent } from "@/lib/marketing";
-import { CONTENT_ROUTES } from "@/lib/routes";
+import { CONTENT_ROUTES, isProtectedPath } from "@/lib/routes";
+import { TRACKER_IMPORT_PATH } from "@/lib/tools/tracker-files";
 
 const DIR = join(process.cwd(), "src/content/pages");
 
@@ -27,6 +28,17 @@ describe("content modules", () => {
 
   it.each(PAGES)("%s: is a tool page if and only if it carries a tool", (_, content) => {
     expect(content.kind === "tool").toBe(content.tool !== undefined);
+  });
+
+  // The tracker's visitors came for a spreadsheet, so signing up opens the
+  // import; the calculators' visitors may have no file, and keep Home's
+  // three ways in (import, paste a lead, add one client).
+  it.each(PAGES)("%s: lands sign-ups on the import only from the client tracker", (file, content) => {
+    expect(content.tool?.next).toBe(file.startsWith("tool-spreadsheet.") ? TRACKER_IMPORT_PATH : undefined);
+  });
+
+  it("lands them on a page inside the app", () => {
+    expect(isProtectedPath(TRACKER_IMPORT_PATH)).toBe(true);
   });
 
   it.each(PAGES)("%s: keeps the title within 60 characters", (_, content) => {

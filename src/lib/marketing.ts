@@ -66,12 +66,14 @@ export type MarketingPageContent = {
    * Tool pages only: the interactive part, rendered between the header and
    * the article, and how structured data describes it: an app that runs in
    * the browser (the calculator) or a file to download (the client tracker,
-   * whose `contentPath` is the file in the page's language).
+   * whose `contentPath` is the file in the page's language). `next` is where
+   * the page's sign-up buttons land a new agent, when not Home.
    */
   tool?: {
     Component: ComponentType;
     schema:
       | { "@type": "WebApplication"; applicationCategory: string }
       | { "@type": "SpreadsheetDigitalDocument"; encodingFormat: string; contentPath: string };
+    next?: string;
   };
 };

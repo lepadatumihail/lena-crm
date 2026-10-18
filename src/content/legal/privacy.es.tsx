@@ -96,9 +96,10 @@ export function PrivacyEs() {
           guardamos una contraseña.
         </li>
         <li>
-          Cómo nos encontraste: si creas tu cuenta desde una de nuestras páginas, esa página y
+          Cómo nos encontraste: si creas tu cuenta desde una de nuestras páginas, esa página,
           las etiquetas de campaña de su dirección (por ejemplo, en cuál de nuestros anuncios
-          pulsaste).
+          pulsaste) y el nombre de la web que te llevó a ella (por ejemplo google.com: solo el
+          nombre, nunca la dirección completa).
         </li>
         <li>
           Facturación, solo en Pro: los datos que Stripe recoge al pagar, como nombre,
@@ -142,9 +143,9 @@ export function PrivacyEs() {
           no te identifican.
         </li>
         <li>
-          Saber qué anuncios y páginas nos traen a los agentes que se registran, a partir de
-          las etiquetas guardadas con tu cuenta: nuestro interés legítimo en conocer el
-          resultado de nuestro marketing (art. 6.1.f).
+          Saber qué anuncios y páginas, y qué otras webs, nos traen a los agentes que se
+          registran, a partir de las etiquetas y del nombre de la web guardados con tu cuenta:
+          nuestro interés legítimo en conocer el resultado de nuestro marketing (art. 6.1.f).
         </li>
         <li>
           Medir nuestra publicidad en Facebook e Instagram con el píxel de Meta: tu
@@ -380,10 +381,12 @@ export function PrivacyEs() {
       <p>
         Las estadísticas de la web provienen de Vercel Web Analytics, que no instala cookies
         ni guarda nada en tu dispositivo: cuenta las visitas con un identificador cifrado que
-        se descarta en menos de un día. En las páginas a las que enlazan nuestros anuncios
-        también contamos nosotros cada paso (página vista, registro abierto, código enviado,
-        sesión iniciada) junto con las etiquetas de campaña de la página, igualmente sin
-        cookies y sin nada que te identifique.
+        se descarta en menos de un día. En las páginas a las que enlazan nuestros anuncios y
+        en nuestras herramientas gratuitas también contamos nosotros cada paso (página vista,
+        herramienta usada, registro abierto, código enviado, sesión iniciada) junto con las
+        etiquetas de campaña de la página y el nombre de la web que enlazó a ella (como
+        google.com, nunca la dirección completa), igualmente sin cookies y sin nada que te
+        identifique.
       </p>
       <p>
         Si aceptas el aviso de cookies, el píxel de Meta (Meta Platforms Ireland Limited) se

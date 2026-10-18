@@ -1,5 +1,5 @@
 import { isInAppBrowser } from "@/lib/in-app-browser";
-import { readUtm } from "@/lib/signup-source";
+import { readReferrer, readUtm } from "@/lib/signup-source";
 
 /**
  * The funnels on the ad landings and the free tools, one step at a time. On
@@ -8,8 +8,9 @@ import { readUtm } from "@/lib/signup-source";
  * free tool: the page was seen, the tool produced a result, and a result was
  * copied to share (a tool page's sign-up dialog logs the same sign-up steps).
  * Each step is stored anonymously in site_events (no cookie, no identifier,
- * no IP), so the drop between two steps shows without Vercel's dashboard and
- * without a consent prompt.
+ * no IP) with the page, its utm tags and the hostname of the site that
+ * linked to it, so the drop between two steps, and where the visitors came
+ * from, shows without Vercel's dashboard and without a consent prompt.
  */
 export const SITE_EVENTS = [
   "landing_view",
@@ -39,6 +40,7 @@ export function trackSiteEvent(event: SiteEvent): void {
     event,
     path: window.location.pathname,
     ...readUtm(window.location.search),
+    referrer: readReferrer(document.referrer, window.location.hostname),
     in_app: isInAppBrowser(ua),
     mobile: /Mobi|Android/i.test(ua),
   });

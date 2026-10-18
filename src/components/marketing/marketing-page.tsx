@@ -46,7 +46,8 @@ export async function marketingPageMetadata(
  * A tool page (content.tool) puts the tool straight under the header, outside
  * the prose styles, and drops the header's buttons so a phone shows the first
  * input without scrolling; its closing call to action signs up in a dialog,
- * so the new profile records the tool as its landing page.
+ * so the new profile records the tool as its landing page. When the tool
+ * names a `next`, the header's and the closing sign-up both land there.
  */
 export async function MarketingPage({
   route,
@@ -74,6 +75,7 @@ export async function MarketingPage({
   const faq = content.faq.map(({ q, a }, i) => ({ key: `${i}`, question: q, answer: a }));
   const { Body } = content;
   const Tool = content.tool?.Component;
+  const signUpNext = content.tool?.next;
 
   const article = (
     <div className="mx-auto w-full max-w-3xl px-4 pb-12">
@@ -86,7 +88,7 @@ export async function MarketingPage({
   return (
     <div className="flex flex-1 flex-col">
       <JsonLd data={jsonLd} />
-      <MarketingNav variant="page" />
+      <MarketingNav variant="page" signUpNext={signUpNext} />
 
       <main className="flex-1">
         <header className="mx-auto w-full max-w-3xl px-4 pt-12 pb-8 sm:pt-16">
@@ -177,7 +179,7 @@ export async function MarketingPage({
             </p>
             <div className="mt-2 flex flex-col gap-3 sm:flex-row">
               {Tool ? (
-                <SignUpDialog>
+                <SignUpDialog next={signUpNext}>
                   {t("cta.primary")} <ArrowRight />
                 </SignUpDialog>
               ) : (

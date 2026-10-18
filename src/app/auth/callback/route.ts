@@ -37,10 +37,11 @@ export async function GET(request: Request) {
 
 /**
  * A Google sign-up can't carry metadata the way the email code does, so the
- * page it started on sends its utm tags here. They go on the profile only if
- * it was created in the last few minutes and has no source yet: an existing
- * agent signing in from an ad keeps the source they joined with. The step is
- * also counted in site_events. Best effort throughout.
+ * page it started on sends its utm tags and referring site here. They go on
+ * the profile only if it was created in the last few minutes and has no
+ * source yet: an existing agent signing in from an ad keeps the source they
+ * joined with. The step is also counted in site_events. Best effort
+ * throughout.
  */
 async function recordGoogleSignupSource(userId: string | undefined, source: SignupSource | null) {
   if (!userId || !source) return;

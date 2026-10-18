@@ -971,6 +971,7 @@ export type Database = {
           utm_medium: string | null;
           utm_campaign: string | null;
           utm_content: string | null;
+          referrer: string | null;
           in_app: boolean;
           mobile: boolean;
         };
@@ -982,6 +983,7 @@ export type Database = {
           utm_medium?: string | null;
           utm_campaign?: string | null;
           utm_content?: string | null;
+          referrer?: string | null;
           in_app?: boolean;
           mobile?: boolean;
         };
@@ -993,6 +995,7 @@ export type Database = {
           utm_medium?: string | null;
           utm_campaign?: string | null;
           utm_content?: string | null;
+          referrer?: string | null;
           in_app?: boolean;
           mobile?: boolean;
         };

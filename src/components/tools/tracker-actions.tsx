@@ -5,7 +5,12 @@ import { ArrowRight, Download, FileSpreadsheet } from "lucide-react";
 
 import { LOCALES, type AppLocale } from "@/i18n/config";
 import { trackSiteEvent } from "@/lib/site-events";
-import { TRACKER_FILES, TRACKER_SHEETS_COPY_URL, trackerPath } from "@/lib/tools/tracker-files";
+import {
+  TRACKER_FILES,
+  TRACKER_IMPORT_PATH,
+  TRACKER_SHEETS_COPY_URL,
+  trackerPath,
+} from "@/lib/tools/tracker-files";
 import { Button } from "@/components/ui/button";
 import { SignUpDialog } from "@/components/marketing/sign-up-dialog";
 
@@ -63,7 +68,7 @@ export function TrackerImport() {
   return (
     <SignUpDialog
       variant="outline"
-      next="/clients/import"
+      next={TRACKER_IMPORT_PATH}
       className="h-auto min-h-11 max-w-full py-2.5 text-center leading-snug text-balance whitespace-normal"
     >
       {t("import")} <ArrowRight />
