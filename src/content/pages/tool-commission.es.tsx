@@ -22,6 +22,7 @@ const SOURCES = {
   ruling: "https://petete.tributos.hacienda.gob.es/consultas/?num_consulta=V2188-21",
   colegios: "https://www.boe.es/buscar/act.php?id=BOE-A-1974-289#a14",
   lau: "https://www.boe.es/buscar/act.php?id=BOE-A-1994-26003#a20",
+  rdl29: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20823",
   civilCode: "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763#art1257",
 } as const;
 
@@ -104,11 +105,13 @@ function Body() {
         paga su cliente con la agencia que trajo al comprador.
       </p>
       <p>
-        En los alquileres, en cambio, sí decide la ley. En un arrendamiento de vivienda, desde
-        la Ley 12/2023, el{" "}
-        <Source href={SOURCES.lau}>artículo 20.1 de la Ley de Arrendamientos Urbanos</Source>{" "}
-        dice que los gastos de gestión inmobiliaria y los de formalización del contrato son a
-        cargo del arrendador.
+        En los alquileres, en cambio, sí decide la ley. En un arrendamiento de vivienda, los
+        gastos de gestión inmobiliaria y los de formalización del contrato “no podrán ser
+        repercutidos al arrendatario, ni directa ni indirectamente” (
+        <Source href={SOURCES.lau}>artículo 20.2 de la Ley de Arrendamientos Urbanos</Source>, en
+        la redacción del <Source href={SOURCES.rdl29}>Real Decreto-ley 29/2026</Source>, en vigor
+        desde el 8 de octubre de 2026). Antes de esa reforma, desde la Ley 12/2023, el artículo
+        20.1 ya los ponía a cargo del arrendador.
       </p>
 
       <h2>Alquiler: meses de renta o una parte de la renta anual</h2>
@@ -225,7 +228,7 @@ export const content: MarketingPageContent = {
     },
     {
       q: "¿Quién paga los honorarios de la inmobiliaria?",
-      a: "Quien firmó el encargo con la agencia. En una compraventa ninguna ley lo decide, así que suele ser el vendedor, a través de la nota de encargo; el comprador solo paga si firmó su propio encargo. En un alquiler de vivienda, el artículo 20.1 de la Ley de Arrendamientos Urbanos pone los honorarios a cargo del arrendador (desde la Ley 12/2023).",
+      a: "Quien firmó el encargo con la agencia. En una compraventa ninguna ley lo decide, así que suele ser el vendedor, a través de la nota de encargo; el comprador solo paga si firmó su propio encargo. En un alquiler de vivienda, la Ley de Arrendamientos Urbanos no permite repercutir al inquilino los gastos de gestión inmobiliaria ni los de formalización del contrato (artículo 20.2, en la redacción del Real Decreto-ley 29/2026; antes, desde la Ley 12/2023, el artículo 20.1 los ponía a cargo del arrendador).",
     },
     {
       q: "¿Hay una comisión estándar en España?",

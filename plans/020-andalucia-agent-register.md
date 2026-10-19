@@ -397,3 +397,29 @@ irrelevant.)
   including both new ones; llms.txt has the line; both markdown twins
   answer 200 `text/markdown`; and the footer links appear on `/` and `/es`.
 - Next re-check: late October 2026 (see the routine above).
+
+### Re-check, 2026-10-19: the agreement reached the BOE
+
+- **New text.** BOE-A-2026-21762 (BOE no. 259, 19 Oct 2026, pp.
+  139655–139656) is the Resolution of 24 Sep 2026 of the Secretaría General
+  de Coordinación Territorial. It publishes the agreement of 17 Sep 2026 of
+  the bilateral commission's Subcomisión de Seguimiento Normativo on Ley
+  5/2025.
+- **Point I.5.º, arts. 49–52.**
+  - The Junta "asume el compromiso de promover la correspondiente
+    modificación legislativa con la finalidad de suprimir las referencias a
+    la inscripción registral obligatoria para el acceso a la actividad".
+  - The art. 52 requirements will be "de carácter alternativo siendo
+    bastante presentar uno de ellos".
+  - Colegiación is referred to State law.
+- **Matches the press release** (STOP condition 2): it says the same thing,
+  and adds the explicit "uno de ellos" wording.
+- **Point III** orders publication in the BOJA too. Its BOJA publication
+  wasn't confirmed: the BOJA search renders by script.
+- **Law unchanged.** Ley 5/2025's consolidated text still says "última
+  actualización, publicada el 24/12/2025".
+- **Page updated** in all three languages: callout, section 3 (BOE quotes),
+  "what to watch" (the agreement item dropped), the requirements note, the
+  timeline (19 Oct row), sources, lead and FAQ.
+  `CHECKED.guideAndaluciaRegister` = 2026-10-19.
+- **Next.** Keep checking monthly for the amending law in the BOJA and BOE.

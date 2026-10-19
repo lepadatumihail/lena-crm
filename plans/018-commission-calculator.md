@@ -805,3 +805,22 @@ Local testing wrote 39 rows (ids 142–164 and 173–188, the tool events and on
 - The signed-in profit calculator (`/calculator`) defaults its agency fee to
   "5" (`src/components/calculator/calculator-screen.tsx`). That's outside
   this plan, but it is the kind of default the CNMC rule avoids.
+
+## Re-check, 2026-10-19: LAU art. 20 moved
+
+- **What changed.** Real Decreto-ley 29/2026, of 6 Oct (BOE-A-2026-20823),
+  rewrote LAU art. 20. It has applied since 8 Oct 2026 and, on 19 Oct, the
+  BOE showed no ratification by Congress. RDL 26/2026, which Congress
+  repealed on 2 Oct, had made the same change before.
+- **The rule now.** The tenant rule is now art. 20.2: "Los gastos de gestión
+  inmobiliaria y de formalización del contrato no podrán ser repercutidos al
+  arrendatario, ni directa ni indirectamente". A non-essential service can be
+  charged to the tenant only if they asked for it in writing, after being
+  told it was optional and what it cost.
+- **Page updated.** The "who pays" paragraph and FAQ (ES/EN/RU) now cite art.
+  20.2 as worded by RDL 29/2026, and say that art. 20.1 had already put these
+  costs on the landlord since Ley 12/2023. The outcome for the tenant is the
+  same either way. `CHECKED.toolCommission` = 2026-10-19.
+- **Watch.** If Congress repeals RDL 29/2026, art. 20 reverts to the Ley
+  12/2023 wording. Then change "artículo 20.2 … Real Decreto-ley 29/2026"
+  back to art. 20.1 and drop the `rdl29` source.

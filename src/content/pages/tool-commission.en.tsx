@@ -22,6 +22,7 @@ const SOURCES = {
   ruling: "https://petete.tributos.hacienda.gob.es/consultas/?num_consulta=V2188-21",
   colegios: "https://www.boe.es/buscar/act.php?id=BOE-A-1974-289#a14",
   lau: "https://www.boe.es/buscar/act.php?id=BOE-A-1994-26003#a20",
+  rdl29: "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20823",
   civilCode: "https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763#art1257",
 } as const;
 
@@ -103,9 +104,12 @@ function Body() {
       </p>
       <p>
         Rentals are where the law does decide. On a housing rental (
-        <em>arrendamiento de vivienda</em>), since Ley 12/2023,{" "}
-        <Source href={SOURCES.lau}>article 20.1 of the Ley de Arrendamientos Urbanos</Source>{" "}
-        makes real estate management and contract formalisation costs the landlord&apos;s.
+        <em>arrendamiento de vivienda</em>), estate agency and contract formalisation costs “may
+        not be passed on to the tenant, directly or indirectly” (
+        <Source href={SOURCES.lau}>article 20.2 of the Ley de Arrendamientos Urbanos</Source>, as
+        worded by <Source href={SOURCES.rdl29}>Real Decreto-ley 29/2026</Source>, in force since 8
+        October 2026, our translation). Before that change, from Ley 12/2023, article 20.1
+        already made them the landlord’s.
       </p>
 
       <h2>Rentals: months of rent or a share of the annual rent</h2>
@@ -221,7 +225,7 @@ export const content: MarketingPageContent = {
     },
     {
       q: "Who pays estate agent fees in Spain?",
-      a: "Whoever signed the agreement with the agency. No law decides it on a sale, so it is usually the seller, through the listing agreement (nota de encargo); a buyer pays only under an agreement of their own. On a housing rental, article 20.1 of the Ley de Arrendamientos Urbanos puts the agency's fees on the landlord (since Ley 12/2023).",
+      a: "Whoever signed the agreement with the agency. No law decides it on a sale, so it is usually the seller, through the listing agreement (nota de encargo); a buyer pays only under an agreement of their own. On a housing rental, the Ley de Arrendamientos Urbanos doesn't allow agency and contract formalisation costs to be passed on to the tenant (article 20.2, as worded by Real Decreto-ley 29/2026; before that, from Ley 12/2023, article 20.1 made them the landlord's).",
     },
     {
       q: "Is there a standard commission rate in Spain?",

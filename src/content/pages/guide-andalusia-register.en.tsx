@@ -39,6 +39,7 @@ const TALKS_BOE = "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-8197";
 const TALKS_BOJA = "https://www.juntadeandalucia.es/boja/2026/69/32";
 const JUNTA_NEWS =
   "https://www.juntadeandalucia.es/organismos/avra/servicios/actualidad/noticias/detalle/684223.html";
+const AGREEMENT_BOE = "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-21762";
 const DECREE_197 = "https://www.juntadeandalucia.es/boja/2026/515/9";
 const LEY_10_2003 = "https://www.boe.es/buscar/act.php?id=BOE-A-2003-10185#a3";
 const BOJA_SEARCH =
@@ -89,9 +90,9 @@ function Body() {
             and the law gives the Junta until 24 January 2028 to set it up.
           </li>
           <li>
-            On 18 September 2026 the Junta announced it will change the law so that registration
-            is no longer a condition for working. No amending text and no date have been
-            published.
+            On 19 October 2026 the BOE published the agreement with the national government in which
+            the Junta commits to changing the law so that registration is no longer a condition
+            for working. The amendment has not been passed and has no date.
           </li>
         </ul>
         <p>This page quotes and links the official texts. It is not legal advice.</p>
@@ -204,8 +205,31 @@ function Body() {
         <li>the state rules on membership of professional associations would apply.</li>
       </ul>
       <p>
-        The announcement gives no date and no draft text. On {AS_OF}, neither the agreement nor
-        any law amending Ley 5/2025 had been published in the BOE or the BOJA.
+        On 19 October 2026 the <Source href={AGREEMENT_BOE}>BOE published the agreement</Source>{" "}
+        (BOE-A-2026-21762), adopted on 17 September by the bilateral commission’s subcommittee. On
+        the register it says:
+      </p>
+      <Quote
+        where="Agreement of 17 September 2026, point I.5"
+        href={AGREEMENT_BOE}
+        original="…la Junta de Andalucía asume el compromiso de promover la correspondiente modificación legislativa con la finalidad de suprimir las referencias a la inscripción registral obligatoria para el acceso a la actividad."
+      >
+        …the Junta de Andalucía undertakes to promote the corresponding legislative amendment in
+        order to remove the references to compulsory registration for access to the activity.
+      </Quote>
+      <Quote
+        where="The same point"
+        href={AGREEMENT_BOE}
+        original="…dicha modificación legislativa recogerá, en lo que se refiere al artículo 52, que los requisitos en él enumerados tienen carácter alternativo siendo bastante presentar uno de ellos."
+      >
+        …as regards article 52, that amendment will state that the requirements it lists are
+        alternatives, meeting one of them being enough.
+      </Quote>
+      <p>
+        The same point adds that the amended law will leave professional association membership
+        to national rules, and the agreement itself provides for publication in the BOJA too. It
+        sets no date for the amendment: on {AS_OF}, no law amending Ley 5/2025 had been
+        published, and its consolidated text on the BOE is still the original.
       </p>
 
       <h2>What it means for you</h2>
@@ -233,10 +257,6 @@ function Body() {
       <h3>What to watch for</h3>
       <ol>
         <li>
-          <strong>The agreement’s text</strong>, published in the BOE and the BOJA. It is the
-          formal record of what the two governments agreed; the announcement is a summary.
-        </li>
-        <li>
           <strong>A law or decree-law amending arts. 49 to 52</strong>, published in the BOJA.
           Until one is published, the current text stands.
         </li>
@@ -256,10 +276,9 @@ function Body() {
 
       <h2>The requirements, as the law writes them</h2>
       <p>
-        These are the conditions for joining the register in arts. 51 to 53, as published. The
-        Junta has announced that the amended law will make clear that the requirements are
-        alternatives and that state rules on professional association membership apply, so read
-        this as the current text, not as the final list.
+        These are the conditions for joining the register in arts. 51 to 53, as published. In the agreement published in the BOE, the Junta commits to an amendment that makes
+        them alternatives, so that meeting one is enough, and leaves association membership to
+        national rules, so read this as the current text, not as the final list.
       </p>
       <table>
         <thead>
@@ -359,6 +378,10 @@ function Body() {
         </dd>
         <dt>18 September 2026</dt>
         <dd>The Junta announces the agreement: compulsory registration is to be removed.</dd>
+        <dt>19 October 2026</dt>
+        <dd>
+          The BOE publishes the agreement (<Source href={AGREEMENT_BOE}>BOE-A-2026-21762</Source>).
+        </dd>
         <dt>24 January 2028</dt>
         <dd>
           Deadline for the register to be created and opened, unless the amendment changes it.
@@ -387,6 +410,11 @@ function Body() {
             discrepancias sobre la Ley de Vivienda de Andalucía”
           </Source>
           , 18 September 2026.
+        </li>
+        <li>
+          <Source href={AGREEMENT_BOE}>BOE-A-2026-21762</Source>, the resolution of 24 September
+          2026 publishing the agreement of 17 September 2026 on Ley 5/2025, BOE no. 259, 19
+          October 2026.
         </li>
         <li>
           <Source href={DECREE_197}>Decreto 197/2026, de 30 de julio</Source>, on the structure of
@@ -418,16 +446,16 @@ export const content: MarketingPageContent = {
   modified: LAST_CHECKED,
   eyebrow: "Guide · Andalusia",
   heading: "Andalusia’s estate agent register: what the law says, and what changed",
-  lead: "Ley 5/2025, Andalusia’s housing law, created a register of estate agents and made joining it a condition for working. On 18 September 2026 the Junta de Andalucía announced it will change the law so that it no longer is. This page sets out what the law says today, what was announced and what to watch for, with a link to every source.",
+  lead: "Ley 5/2025, Andalusia’s housing law, created a register of estate agents and made joining it a condition for working. In an agreement with the national government, published in the BOE on 19 October 2026, the Junta de Andalucía commits to changing the law so that it no longer is. This page sets out what the law says today, what was announced and what to watch for, with a link to every source.",
   Body,
   faq: [
     {
       q: "Is registration compulsory for estate agents in Andalusia?",
-      a: `The law in force says it is: Ley 5/2025 makes registration a requirement for working as an estate agent in Andalusia (art. 50.3). But the register has not been set up yet, and on 18 September 2026 the Junta announced it will change the law so that registration is no longer a condition for working. As of ${AS_OF}, no amending law had been published.`,
+      a: `The law in force says it is: Ley 5/2025 makes registration a requirement for working as an estate agent in Andalusia (art. 50.3). But the register has not been set up yet, and in the agreement with the national government published in the BOE on 19 October 2026 the Junta commits to changing the law so that registration is no longer a condition for working. As of ${AS_OF}, no amending law had been published.`,
     },
     {
       q: "What are the requirements for the Andalusia agent register?",
-      a: "As the law is written: the qualifications listed in art. 52.1 (an API title, a university degree in certain fields, four years’ experience, membership of an API college), 100 hours of official training in the previous four years, a financial guarantee or professional liability insurance, and no criminal record related to property intermediation (arts. 52 and 53). The Junta has announced that the amended law will make clear that the requirements are alternatives.",
+      a: "As the law is written: the qualifications listed in art. 52.1 (an API title, a university degree in certain fields, four years’ experience, membership of an API college), 100 hours of official training in the previous four years, a financial guarantee or professional liability insurance, and no criminal record related to property intermediation (arts. 52 and 53). In the agreement published in the BOE, the Junta commits to an amendment that makes them alternatives: meeting one will be enough.",
     },
     {
       q: "When will the Andalusia agent register open?",
@@ -435,11 +463,11 @@ export const content: MarketingPageContent = {
     },
     {
       q: "Do I need to be an API or a member of a professional association to work as an estate agent?",
-      a: "National law requires neither: Ley 10/2003 (art. 3) allows individuals and companies to do estate agency work without any title and without belonging to an official college, subject to the consumer-protection requirements set by the rules that regulate the activity. Ley 5/2025, as written, lists an API title and membership of an API college among the qualifications for its register, and the Junta has announced that the amended law will apply the state rules on professional association membership.",
+      a: "National law requires neither: Ley 10/2003 (art. 3) allows individuals and companies to do estate agency work without any title and without belonging to an official college, subject to the consumer-protection requirements set by the rules that regulate the activity. Ley 5/2025, as written, lists an API title and membership of an API college among the qualifications for its register, and the Junta has committed to an amendment that leaves association membership to national rules.",
     },
     {
       q: "Who would have to register?",
-      a: "As the law is written, anyone who habitually and for pay, as a professional or a business, provides intermediation, advice and management services for buying, renting, exchanging or assigning residential property in Andalusia (art. 49.1). The announced change would remove registration as a condition for working.",
+      a: "As the law is written, anyone who habitually and for pay, as a professional or a business, provides intermediation, advice and management services for buying, renting, exchanging or assigning residential property in Andalusia (art. 49.1). The promised amendment would remove registration as a condition for working.",
     },
   ],
   related: ["crmMarbella", "guideFollowUp", "about"],

@@ -40,6 +40,7 @@ const TALKS_BOE = "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-8197";
 const TALKS_BOJA = "https://www.juntadeandalucia.es/boja/2026/69/32";
 const JUNTA_NEWS =
   "https://www.juntadeandalucia.es/organismos/avra/servicios/actualidad/noticias/detalle/684223.html";
+const AGREEMENT_BOE = "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-21762";
 const DECREE_197 = "https://www.juntadeandalucia.es/boja/2026/515/9";
 const LEY_10_2003 = "https://www.boe.es/buscar/act.php?id=BOE-A-2003-10185#a3";
 const BOJA_SEARCH =
@@ -88,9 +89,9 @@ function Body() {
             marcha.
           </li>
           <li>
-            El 18 de septiembre de 2026 la Junta anunció que cambiará la ley para que la
-            inscripción deje de ser un requisito para ejercer. No se ha publicado ni el texto de
-            la reforma ni una fecha.
+            El 19 de octubre de 2026 el BOE publicó el acuerdo con el Gobierno en el que la Junta se
+            compromete a cambiar la ley para que la inscripción deje de ser un requisito para
+            ejercer. La reforma todavía no se ha aprobado y no tiene fecha.
           </li>
         </ul>
         <p>Esta página cita y enlaza los textos oficiales. No es asesoramiento jurídico.</p>
@@ -183,8 +184,21 @@ function Body() {
         <li>se aplicaría la normativa estatal sobre colegiación.</li>
       </ul>
       <p>
-        La nota no da fecha ni texto. A {AS_OF} no se había publicado en el BOE ni en el BOJA ni
-        el acuerdo ni ninguna ley que modifique la Ley 5/2025.
+        El 19 de octubre de 2026 el <Source href={AGREEMENT_BOE}>BOE publicó el acuerdo</Source>{" "}
+        (BOE-A-2026-21762), adoptado el 17 de septiembre por la subcomisión de la Comisión
+        Bilateral. Sobre el registro dice:
+      </p>
+      <Quote where="Acuerdo de 17 de septiembre de 2026, apartado I.5.º" href={AGREEMENT_BOE}>
+        …la Junta de Andalucía asume el compromiso de promover la correspondiente modificación legislativa con la finalidad de suprimir las referencias a la inscripción registral obligatoria para el acceso a la actividad.
+      </Quote>
+      <Quote where="El mismo apartado" href={AGREEMENT_BOE}>
+        …dicha modificación legislativa recogerá, en lo que se refiere al artículo 52, que los requisitos en él enumerados tienen carácter alternativo siendo bastante presentar uno de ellos.
+      </Quote>
+      <p>
+        El mismo apartado añade que la reforma remitirá la colegiación a la normativa estatal, y
+        el propio acuerdo prevé publicarse también en el BOJA. No fija fecha para la reforma: a{" "}
+        {AS_OF} no se había publicado ninguna ley que modifique la Ley 5/2025, cuyo texto
+        consolidado en el BOE sigue siendo el original.
       </p>
 
       <h2>Qué significa para ti</h2>
@@ -213,10 +227,6 @@ function Body() {
       <h3>Qué vigilar</h3>
       <ol>
         <li>
-          <strong>El texto del acuerdo</strong>, publicado en el BOE y en el BOJA. Es el texto
-          oficial de lo que acordaron los dos gobiernos; la nota de prensa es un resumen.
-        </li>
-        <li>
           <strong>Una ley o un decreto-ley que modifique los arts. 49 a 52</strong>, publicado en
           el BOJA. Mientras no se publique, rige el texto actual.
         </li>
@@ -237,9 +247,9 @@ function Body() {
       <h2>Los requisitos, tal como los escribe la ley</h2>
       <p>
         Estas son las condiciones para inscribirse en el registro según los arts. 51 a 53, tal
-        como se publicaron. La Junta ha anunciado que la reforma precisará que los requisitos son
-        alternativos y que se aplica la normativa estatal sobre colegiación, así que léelos como
-        el texto actual, no como la lista definitiva.
+        como se publicaron. En el acuerdo publicado en el BOE, la Junta se compromete a que la reforma los haga
+        alternativos, de modo que baste con cumplir uno, y remita la colegiación a la normativa
+        estatal, así que léelos como el texto actual, no como la lista definitiva.
       </p>
       <table>
         <thead>
@@ -340,6 +350,10 @@ function Body() {
         </dd>
         <dt>18 de septiembre de 2026</dt>
         <dd>La Junta anuncia el acuerdo: se eliminará la inscripción obligatoria.</dd>
+        <dt>19 de octubre de 2026</dt>
+        <dd>
+          El BOE publica el acuerdo (<Source href={AGREEMENT_BOE}>BOE-A-2026-21762</Source>).
+        </dd>
         <dt>24 de enero de 2028</dt>
         <dd>
           Fin del plazo para crear y poner en marcha el registro, salvo que la reforma lo cambie.
@@ -369,6 +383,11 @@ function Body() {
             discrepancias sobre la Ley de Vivienda de Andalucía”
           </Source>
           , 18 de septiembre de 2026.
+        </li>
+        <li>
+          <Source href={AGREEMENT_BOE}>BOE-A-2026-21762</Source>, Resolución de 24 de septiembre de
+          2026 por la que se publica el Acuerdo de 17 de septiembre de 2026 sobre la Ley 5/2025,
+          BOE núm. 259, de 19 de octubre de 2026.
         </li>
         <li>
           <Source href={DECREE_197}>Decreto 197/2026, de 30 de julio</Source>, de estructura de
@@ -401,16 +420,16 @@ export const content: MarketingPageContent = {
   modified: LAST_CHECKED,
   eyebrow: "Guía · Andalucía",
   heading: "Registro de agentes inmobiliarios de Andalucía: qué dice la ley y qué ha cambiado",
-  lead: "La Ley 5/2025, de Vivienda de Andalucía, creó un registro de agentes inmobiliarios y convirtió la inscripción en requisito para ejercer. El 18 de septiembre de 2026 la Junta de Andalucía anunció que cambiará la ley para que deje de serlo. Aquí tienes qué dice hoy la ley, qué se ha anunciado y qué vigilar, con el enlace a cada fuente.",
+  lead: "La Ley 5/2025, de Vivienda de Andalucía, creó un registro de agentes inmobiliarios y convirtió la inscripción en requisito para ejercer. En un acuerdo con el Gobierno, publicado en el BOE el 19 de octubre de 2026, la Junta de Andalucía se compromete a cambiar la ley para que deje de serlo. Aquí tienes qué dice hoy la ley, qué se ha anunciado y qué vigilar, con el enlace a cada fuente.",
   Body,
   faq: [
     {
       q: "¿Es obligatorio inscribirse en el registro de agentes inmobiliarios de Andalucía?",
-      a: `La ley vigente dice que sí: la Ley 5/2025 convierte la inscripción en requisito para ejercer como agente inmobiliario en Andalucía (art. 50.3). Pero el registro aún no se ha puesto en marcha, y el 18 de septiembre de 2026 la Junta anunció que cambiará la ley para que la inscripción deje de ser requisito para ejercer. A ${AS_OF} no se había publicado ninguna ley que la modifique.`,
+      a: `La ley vigente dice que sí: la Ley 5/2025 convierte la inscripción en requisito para ejercer como agente inmobiliario en Andalucía (art. 50.3). Pero el registro aún no se ha puesto en marcha, y en el acuerdo con el Gobierno publicado en el BOE el 19 de octubre de 2026 la Junta se compromete a cambiar la ley para que la inscripción deje de ser requisito para ejercer. A ${AS_OF} no se había publicado ninguna ley que la modifique.`,
     },
     {
       q: "¿Qué requisitos pide el registro de agentes inmobiliarios de Andalucía?",
-      a: "Tal como está escrita la ley: las capacitaciones o titulaciones del art. 52.1 (título de API, titulación universitaria de determinadas ramas, cuatro años de experiencia, colegiación en un Colegio de API), 100 horas de formación oficial en los cuatro años anteriores, una garantía financiera o un seguro de responsabilidad civil profesional, y no tener antecedentes penales relacionados con la intermediación inmobiliaria (arts. 52 y 53). La Junta ha anunciado que la reforma precisará el carácter alternativo de los requisitos.",
+      a: "Tal como está escrita la ley: las capacitaciones o titulaciones del art. 52.1 (título de API, titulación universitaria de determinadas ramas, cuatro años de experiencia, colegiación en un Colegio de API), 100 horas de formación oficial en los cuatro años anteriores, una garantía financiera o un seguro de responsabilidad civil profesional, y no tener antecedentes penales relacionados con la intermediación inmobiliaria (arts. 52 y 53). En el acuerdo publicado en el BOE, la Junta se compromete a que la reforma los haga alternativos: bastará con cumplir uno.",
     },
     {
       q: "¿Cuándo abrirá el registro de agentes inmobiliarios de Andalucía?",
@@ -418,11 +437,11 @@ export const content: MarketingPageContent = {
     },
     {
       q: "¿Hace falta ser API o estar colegiado para trabajar como agente inmobiliario?",
-      a: "La normativa estatal no exige ninguna de las dos cosas: la Ley 10/2003 (art. 3) permite a personas físicas y jurídicas ejercer la intermediación inmobiliaria sin título alguno y sin pertenecer a ningún colegio oficial, sin perjuicio de los requisitos de protección a los consumidores que establezca la normativa reguladora de la actividad. La Ley 5/2025, tal como está escrita, incluye el título de API y la colegiación entre las capacitaciones para su registro, y la Junta ha anunciado que la reforma aplicará la normativa estatal sobre colegiación.",
+      a: "La normativa estatal no exige ninguna de las dos cosas: la Ley 10/2003 (art. 3) permite a personas físicas y jurídicas ejercer la intermediación inmobiliaria sin título alguno y sin pertenecer a ningún colegio oficial, sin perjuicio de los requisitos de protección a los consumidores que establezca la normativa reguladora de la actividad. La Ley 5/2025, tal como está escrita, incluye el título de API y la colegiación entre las capacitaciones para su registro, y la Junta se ha comprometido a que la reforma remita la colegiación a la normativa estatal.",
     },
     {
       q: "¿Quién tendría que inscribirse?",
-      a: "Según el texto actual, toda persona que se dedique de forma habitual y retribuida, profesional o empresarialmente, a la intermediación, el asesoramiento y la gestión en la compra, el alquiler, la permuta o la cesión de viviendas en Andalucía (art. 49.1). El cambio anunciado eliminaría la inscripción como requisito para ejercer.",
+      a: "Según el texto actual, toda persona que se dedique de forma habitual y retribuida, profesional o empresarialmente, a la intermediación, el asesoramiento y la gestión en la compra, el alquiler, la permuta o la cesión de viviendas en Andalucía (art. 49.1). La reforma comprometida eliminaría la inscripción como requisito para ejercer.",
     },
   ],
   related: ["crmMarbella", "guideFollowUp", "about"],

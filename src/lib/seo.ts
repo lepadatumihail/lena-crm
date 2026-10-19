@@ -94,9 +94,9 @@ export const PUBLISHED: Record<ContentRoute, string> = {
  * date.
  */
 export const CHECKED: Partial<Record<ContentRoute, string>> = {
-  guideAndaluciaRegister: "2026-09-29",
+  guideAndaluciaRegister: "2026-10-19",
   guidePortalPrices: "2026-10-18",
-  toolCommission: "2026-10-09",
+  toolCommission: "2026-10-19",
   tools: "2026-10-09",
 };
 
