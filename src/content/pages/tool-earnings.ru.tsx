@@ -136,6 +136,13 @@ function Body() {
         </Source>
         . Если это ваш случай, выберите «Введу сам» и укажите, сколько вы платите.
       </p>
+      <p>
+        Если вы ещё не зарегистрировались, вот{" "}
+        <Link href={marketingPath("guideBecomeAgent", "ru")}>
+          как стать риелтором в Испании и что требует каждый регион
+        </Link>
+        , с шагами регистрации как autónomo.
+      </p>
 
       <h2>IRPF: что удерживают и что вы должны</h2>
       <p>
@@ -217,7 +224,7 @@ export const content: MarketingPageContent = {
       a: "Нет. IVA в ваших счетах принадлежит налоговой службе: вы его собираете и каждый квартал перечисляете. Вводите комиссию без IVA; калькулятор никогда не считает налог доходом.",
     },
   ],
-  related: ["toolCommission", "guideFollowUp", "pricing"],
+  related: ["toolCommission", "guideBecomeAgent", "guideFollowUp", "pricing"],
   tool: {
     Component: EarningsCalculator,
     schema: { "@type": "WebApplication", applicationCategory: "FinanceApplication" },

@@ -57,6 +57,10 @@
       "label": "Tarifas de los portales",
       "blurb": "Qué cobran Idealista, Fotocasa, Kyero y otros portales a una agencia, y qué precios son oficiales."
     },
+    "guideBecomeAgent": {
+      "label": "Cómo ser agente inmobiliario",
+      "blurb": "Qué exige la ley en cada comunidad y cómo darte de alta como autónomo, con fuentes."
+    },
     "about": {
       "label": "Sobre LeadWing",
       "blurb": "Qué es LeadWing, para quién es, los datos clave y cómo contactar con nosotros."

@@ -254,6 +254,10 @@ function Body() {
           activity (<Source href={LEY_10_2003}>Ley 10/2003, art. 3</Source>, our translation).
         </li>
       </ul>
+      <p>
+        What the other regions require, and how to register as self-employed, is in{" "}
+        <Link href={marketingPath("guideBecomeAgent", L)}>how to become an estate agent in Spain</Link>.
+      </p>
       <h3>What to watch for</h3>
       <ol>
         <li>
@@ -470,7 +474,7 @@ export const content: MarketingPageContent = {
       a: "As the law is written, anyone who habitually and for pay, as a professional or a business, provides intermediation, advice and management services for buying, renting, exchanging or assigning residential property in Andalusia (art. 49.1). The promised amendment would remove registration as a condition for working.",
     },
   ],
-  related: ["crmMarbella", "guideFollowUp", "about"],
+  related: ["guideBecomeAgent", "crmMarbella", "guideFollowUp", "about"],
   topic: {
     "@type": "Legislation",
     name: "Ley 5/2025, de 16 de diciembre, de Vivienda de Andalucía",

@@ -13,6 +13,7 @@ const LEGAL_LINKS = ["privacy", "terms", "legalNotice"] as const;
 const PRODUCT_LINKS = ["pricing", "crmSpain", "crmMarbella", "about"] as const satisfies
   readonly LinkedRoute[];
 const GUIDE_LINKS = [
+  "guideBecomeAgent",
   "guideIdealista",
   "guideFollowUp",
   "guideAndaluciaRegister",

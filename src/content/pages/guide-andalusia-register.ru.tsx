@@ -266,6 +266,10 @@ function Body() {
           <Source href={LEY_10_2003}>Ley 10/2003, ст. 3</Source>, наш перевод).
         </li>
       </ul>
+      <p>
+        Что требуют остальные регионы и как зарегистрироваться как autónomo, читайте в
+        руководстве <Link href={marketingPath("guideBecomeAgent", L)}>как стать риелтором в Испании</Link>.
+      </p>
       <h3>За чем следить</h3>
       <ol>
         <li>
@@ -481,7 +485,7 @@ export const content: MarketingPageContent = {
       a: "По тексту закона — всем, кто регулярно и за вознаграждение, в качестве специалиста или предприятия, оказывает услуги посредничества, консультирования и сопровождения при покупке, аренде, обмене или уступке жилой недвижимости в Андалусии (ст. 49.1). Обещанные поправки отменили бы регистрацию как условие для работы.",
     },
   ],
-  related: ["crmMarbella", "guideFollowUp", "about"],
+  related: ["guideBecomeAgent", "crmMarbella", "guideFollowUp", "about"],
   topic: {
     "@type": "Legislation",
     name: "Ley 5/2025, de 16 de diciembre, de Vivienda de Andalucía",

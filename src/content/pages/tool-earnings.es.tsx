@@ -129,6 +129,13 @@ function Body() {
         </Source>
         ). Si es tu caso, elige “La escribo yo” y pon lo que pagas.
       </p>
+      <p>
+        Si todavía no te has dado de alta, aquí tienes{" "}
+        <Link href={marketingPath("guideBecomeAgent", "es")}>
+          cómo ser agente inmobiliario y qué exige cada comunidad
+        </Link>
+        , con los pasos del alta como autónomo.
+      </p>
 
       <h2>El IRPF: lo que te retienen y lo que debes</h2>
       <p>
@@ -209,7 +216,7 @@ export const content: MarketingPageContent = {
       a: "No. El IVA de tus facturas es de Hacienda: lo cobras y lo ingresas cada trimestre. Introduce tus honorarios sin IVA; la calculadora nunca cuenta el impuesto como ingreso.",
     },
   ],
-  related: ["toolCommission", "guideFollowUp", "pricing"],
+  related: ["toolCommission", "guideBecomeAgent", "guideFollowUp", "pricing"],
   tool: {
     Component: EarningsCalculator,
     schema: { "@type": "WebApplication", applicationCategory: "FinanceApplication" },

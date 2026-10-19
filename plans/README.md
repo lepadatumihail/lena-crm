@@ -32,6 +32,7 @@ done.
 | 021 | Agent earnings calculator, the third free tool ("how much does an estate agent earn in Spain") | P2 | S–M | 018 (built) | BUILT 2026-10-09 (cuota table from Orden PJC/297/2026: update it each year when the new Orden is out) — [plan](021-agent-earnings-calculator.md) |
 | 022 | Russian as the third language: app, every public page under /ru, legal, workbook, importer, PDF | P2 | L | — | BUILT 2026-10-09 (translated by Claude, no native review yet; signed-in screens unchecked; migration applied live) — [plan](022-russian-language.md) |
 | 023 | What the property portals charge agents: a dated, sourced guide (Idealista, Fotocasa, international) | P2 | S–M (≈1 d) | — | DONE (built 2026-10-18 with ES title A; prices re-verified the same day, A Place in the Sun dropped (site unreachable), rental-ad item skipped; re-check quarterly and bump CHECKED.guidePortalPrices) — [plan](023-portal-prices-guide.md) |
+| 024 | How to become an estate agent in Spain, region by region (guide, ES/EN/RU) | P2 | M (≈1–1.5 d) | — (Andalucía guide updated first, d1e8c73) | DONE (built 2026-10-19 with ES title A; every regional row re-verified the same day; Valencia sentence read in full, Baleares DA 13ª applies to all agents, País Vasco quote corrected to the TC's holding; re-check quarterly and bump CHECKED.guideBecomeAgent) — [plan](024-become-an-agent-guide.md) |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) | REJECTED (with one-line rationale)
 

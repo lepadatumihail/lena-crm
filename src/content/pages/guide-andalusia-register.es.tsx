@@ -224,6 +224,10 @@ function Body() {
           <Source href={LEY_10_2003}>Ley 10/2003, art. 3</Source>).
         </li>
       </ul>
+      <p>
+        Lo que exigen las demás comunidades, y cómo darte de alta como autónomo, está en{" "}
+        <Link href={marketingPath("guideBecomeAgent", L)}>cómo ser agente inmobiliario</Link>.
+      </p>
       <h3>Qué vigilar</h3>
       <ol>
         <li>
@@ -444,7 +448,7 @@ export const content: MarketingPageContent = {
       a: "Según el texto actual, toda persona que se dedique de forma habitual y retribuida, profesional o empresarialmente, a la intermediación, el asesoramiento y la gestión en la compra, el alquiler, la permuta o la cesión de viviendas en Andalucía (art. 49.1). La reforma comprometida eliminaría la inscripción como requisito para ejercer.",
     },
   ],
-  related: ["crmMarbella", "guideFollowUp", "about"],
+  related: ["guideBecomeAgent", "crmMarbella", "guideFollowUp", "about"],
   topic: {
     "@type": "Legislation",
     name: "Ley 5/2025, de 16 de diciembre, de Vivienda de Andalucía",

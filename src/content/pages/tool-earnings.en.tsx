@@ -129,6 +129,13 @@ function Body() {
         </Source>
         ). If that is you, choose “I&apos;ll type it” and enter what you pay.
       </p>
+      <p>
+        If you haven’t registered yet, here is{" "}
+        <Link href={marketingPath("guideBecomeAgent", "en")}>
+          how to become an estate agent in Spain and what each region requires
+        </Link>
+        , with the steps to register as self-employed.
+      </p>
 
       <h2>IRPF: what is withheld and what you owe</h2>
       <p>
@@ -208,7 +215,7 @@ export const content: MarketingPageContent = {
       a: "No. The IVA on your invoices belongs to the tax agency: you collect it and pay it over each quarter. Enter your fees before IVA; the calculator never counts the tax as income.",
     },
   ],
-  related: ["toolCommission", "guideFollowUp", "pricing"],
+  related: ["toolCommission", "guideBecomeAgent", "guideFollowUp", "pricing"],
   tool: {
     Component: EarningsCalculator,
     schema: { "@type": "WebApplication", applicationCategory: "FinanceApplication" },

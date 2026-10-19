@@ -68,6 +68,11 @@ export const MARKETING_ROUTES = {
     es: "/es/guias/registro-agentes-inmobiliarios-andalucia",
     ru: "/ru/gaidy/reestr-agentov-nedvizhimosti-andalusii",
   },
+  guideBecomeAgent: {
+    en: "/guides/how-to-become-estate-agent-spain",
+    es: "/es/guias/como-ser-agente-inmobiliario",
+    ru: "/ru/gaidy/kak-stat-rieltorom-v-ispanii",
+  },
   guidePortalPrices: {
     en: "/guides/property-portal-prices-spain",
     es: "/es/guias/tarifas-portales-inmobiliarios-profesionales",
@@ -126,6 +131,7 @@ export const CONTENT_ROUTES = [
   "guideFollowUp",
   "guideAndaluciaRegister",
   "guidePortalPrices",
+  "guideBecomeAgent",
   "about",
   "toolCommission",
   "toolSpreadsheet",
@@ -153,6 +159,7 @@ export const LINKED_ROUTES = [
   "guideFollowUp",
   "guideAndaluciaRegister",
   "guidePortalPrices",
+  "guideBecomeAgent",
   "about",
   "toolCommission",
   "toolSpreadsheet",
