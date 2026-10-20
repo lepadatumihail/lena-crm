@@ -71,8 +71,9 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico, manifest, service worker, robots, sitemap, llms.txt, generated OG/Twitter images
-     * - static asset file extensions (images, and the film on the ad landings)
+     * - static asset file extensions (images, the film on the ad landings, and
+     *   plain text such as the IndexNow key file)
      */
-    "/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|sw.js|robots.txt|sitemap.xml|llms.txt|opengraph-image|twitter-image|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mp4)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|sw.js|robots.txt|sitemap.xml|llms.txt|opengraph-image|twitter-image|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mp4|txt)$).*)",
   ],
 };

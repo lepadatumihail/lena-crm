@@ -56,8 +56,11 @@ export const FOUNDER_WHATSAPP = "+34628825167";
  * what ties the domain to the listings carrying the same name, so it only
  * belongs here once a profile really exists and says the same name and URL.
  * Nothing is emitted while the list is empty.
+ *
+ * - Facebook: the LeadWing page (username leadwingcrm), whose website field
+ *   is https://www.leadwing.app/ (checked through the Graph API, 20 Oct 2026).
  */
-export const SITE_PROFILES: readonly string[] = [];
+export const SITE_PROFILES: readonly string[] = ["https://www.facebook.com/leadwingcrm"];
 
 /**
  * Brand palette, mirrored from globals.css (oklch → hex) for image rendering:

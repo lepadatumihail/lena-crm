@@ -1,0 +1,36 @@
+name: IndexNow
+
+# After each successful production deploy, tell IndexNow (Bing, Yandex,
+# Seznam, Naver, Yep) which pages changed, so they recrawl them within hours.
+# Vercel reports its deploys to GitHub as deployment statuses; previews are
+# skipped. Run it by hand with "all" to resubmit every page in the sitemap.
+# Needs no secret: the key is public by design (public/<key>.txt).
+on:
+  deployment_status:
+  workflow_dispatch:
+    inputs:
+      all:
+        description: Submit every page in the sitemap, not just recent changes
+        type: boolean
+        default: false
+
+jobs:
+  ping:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+      github.event.deployment.environment == 'Production')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      # Vercel reports success as the deploy turns ready; give the production
+      # domain a minute to point at it, so the sitemap read is the new one.
+      - if: github.event_name == 'deployment_status'
+        run: sleep 60
+
+      - run: npm run indexnow -- ${{ inputs.all && '--all' || '' }}
