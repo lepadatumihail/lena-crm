@@ -61,6 +61,18 @@
       "label": "Cómo ser agente inmobiliario",
       "blurb": "Qué exige la ley en cada comunidad y cómo darte de alta como autónomo, con fuentes."
     },
+    "guideFreeCrm": {
+      "label": "CRM inmobiliario gratis",
+      "blurb": "Qué incluye cada plan gratuito en España, dónde está su límite y qué se paga aparte."
+    },
+    "guideBestCrm": {
+      "label": "Mejor CRM para agentes independientes",
+      "blurb": "Qué CRM encaja con tu forma de trabajar: solo, con varias agencias, con tu cartera o con una MLS."
+    },
+    "guideCrmAlternatives": {
+      "label": "Alternativas a Witei e Inmovilla",
+      "blurb": "Lo que cuestan Witei e Inmovilla, qué otras opciones hay y cómo llevarte tus clientes."
+    },
     "about": {
       "label": "Sobre LeadWing",
       "blurb": "Qué es LeadWing, para quién es, los datos clave y cómo contactar con nosotros."

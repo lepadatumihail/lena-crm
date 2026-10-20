@@ -61,6 +61,18 @@
       "label": "Becoming an estate agent",
       "blurb": "What each region of Spain requires, and how to register as self-employed, with sources."
     },
+    "guideFreeCrm": {
+      "label": "Free real estate CRMs",
+      "blurb": "What each free CRM plan in Spain includes, where its limit sits and what costs extra."
+    },
+    "guideBestCrm": {
+      "label": "Best CRM for independent agents",
+      "blurb": "Which CRM fits how you work: alone, across agencies, with your own listings or an MLS."
+    },
+    "guideCrmAlternatives": {
+      "label": "Witei and Inmovilla alternatives",
+      "blurb": "What Witei and Inmovilla cost, what else is out there, and how to move your clients."
+    },
     "about": {
       "label": "About LeadWing",
       "blurb": "What LeadWing is, who it is for, the key facts and how to reach us."
