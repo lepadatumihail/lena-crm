@@ -585,7 +585,7 @@ function Body() {
       </p>
 
       <h2>Источники</h2>
-      <p>Сайты самих порталов, проверены {AS_OF}.</p>
+      <p>Сайты самих порталов, проверены {AS_OF}</p>
       <ul>
         <li>
           Idealista: <Source href={S.idealistaPro}>профессионалам</Source>,{" "}

@@ -58,7 +58,7 @@ ${SITE_NAME} is a web app for solo and independent real-estate agents, including
 - Auto-engage: spots clients going quiet and surfaces them with a ready-to-send nudge
 - Buyer-to-listing matching: shows which of the agent's own listings fit a buyer's budget, property type and bedrooms
 - Portal lead capture: paste an enquiry from Idealista, Fotocasa, Kyero, an email or a WhatsApp and it becomes a ready-to-save lead
-- Viewing scheduler: month calendar with reminders, Google Calendar sync and one-tap WhatsApp confirmations
+- Viewing scheduler: month calendar with reminders, a read-only calendar feed to subscribe to in Google Calendar, and one-tap WhatsApp confirmations
 - Import and export: bring clients in from Excel or CSV files (Google Contacts, Outlook, other CRMs), with a preview and one-click undo; export any list as Excel or CSV and the whole account as a ZIP, on every plan
 - Privacy: every agent's clients are isolated; nobody else sees their book
 
