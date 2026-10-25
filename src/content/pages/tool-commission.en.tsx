@@ -220,6 +220,10 @@ export const content: MarketingPageContent = {
       a: "However the two agencies agree: there is no standard split. The client pays the agency it signed with, and the other agency invoices that agency for its share plus tax. Each side is worked out on the fee before tax.",
     },
     {
+      q: "How much does a captador (listing agent) earn in Spain?",
+      a: "Whatever their agreement with the agency says. No law or standard sets a percentage for the captador, the agent who wins the listing, or for the agent or collaborator who brings the buyer: each agency agrees it with each of them. A self-employed agent invoices the agency for their share plus VAT, usually with IRPF withheld. In the calculator, turn on “My agency keeps part of our side” and enter your share as your agreement states it to see what you're paid in euros.",
+    },
+    {
       q: "What IRPF withholding goes on an agent's invoice?",
       a: "When a self-employed agent whose activity is registered as a professional one invoices a business or a professional, the payer withholds 15% of the base, or 7% in the year the activity starts and the two years after. Invoices to private clients carry no withholding.",
     },

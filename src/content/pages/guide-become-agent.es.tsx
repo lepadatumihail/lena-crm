@@ -446,6 +446,10 @@ export const content: MarketingPageContent = {
       a: "Depende de la comunidad. Es obligatorio en Cataluña y en la Comunitat Valenciana. En Andalucía la ley lo exige, pero el registro no se ha creado y la Junta se ha comprometido a quitar la obligación. En Madrid, Illes Balears, Navarra, Canarias y el País Vasco es voluntario.",
     },
     {
+      q: "¿Puedo vender casas sin estar registrado como agente inmobiliario?",
+      a: "En la mayor parte de España, sí: la ley estatal no exige título, colegiación ni registro para intermediar en la venta de viviendas (Ley 10/2003, art. 3). Las excepciones son Cataluña y la Comunitat Valenciana, donde hay que inscribirse en el registro de agentes para ejercer. Andalucía también lo exige en su ley, pero el registro aún no se ha creado y la Junta se ha comprometido a quitar la obligación. En Madrid, Illes Balears, Navarra, Canarias y el País Vasco el registro es voluntario, aunque en Illes Balears la ley pide a todos los agentes, inscritos o no, un establecimiento, una garantía y un seguro.",
+    },
+    {
       q: "¿Qué hay que estudiar para ser agente inmobiliario?",
       a: "La ley estatal no exige ningún estudio. Algunas comunidades piden formación para inscribirse en su registro: por ejemplo, Cataluña pide una titulación relacionada o cursos de al menos 200 horas lectivas, y Madrid y Navarra piden 200 horas para su registro voluntario.",
     },

@@ -423,6 +423,10 @@ export const content: MarketingPageContent = {
       a: "It depends on the region. It is compulsory in Catalonia and the Valencia region. Andalusia's law requires it, but the register was never set up and the Junta has committed to removing the requirement. In Madrid, the Balearic Islands, Navarre, the Canary Islands and the Basque Country it is voluntary.",
     },
     {
+      q: "Can I sell homes in Spain without being registered as an estate agent?",
+      a: "In most of Spain, yes: national law requires no title, college membership or registration to broker home sales (Ley 10/2003, art. 3). The exceptions are Catalonia and the Valencia region, where agents must join the regional register to work. Andalusia's law requires it too, but the register has not been set up yet and the Junta has committed to removing the requirement. In Madrid, the Balearic Islands, Navarre, the Canary Islands and the Basque Country the register is voluntary, though the Balearic law asks every agent, registered or not, for premises, a guarantee and insurance.",
+    },
+    {
       q: "What do you need to study to become an estate agent in Spain?",
       a: "National law requires no studies. Some regions ask for training to join their register: Catalonia asks for a related degree or courses of at least 200 teaching hours, and Madrid and Navarre ask for 200 hours for their voluntary registers.",
     },

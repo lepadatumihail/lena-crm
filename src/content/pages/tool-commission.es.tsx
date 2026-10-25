@@ -223,6 +223,10 @@ export const content: MarketingPageContent = {
       a: "Como acuerden las dos agencias: no hay un reparto estándar. El cliente paga a la agencia con la que firmó, y la otra agencia le factura su parte más impuestos. Cada parte se calcula sobre los honorarios sin impuestos.",
     },
     {
+      q: "¿Cuánto cobra un captador inmobiliario?",
+      a: "Lo que diga su acuerdo con la agencia. No hay un porcentaje legal ni estándar para el captador, el agente que consigue el encargo, ni para el agente o colaborador que trae al comprador: cada agencia lo pacta con cada uno. Si trabaja como autónomo, factura su parte a la agencia más IVA, normalmente con retención de IRPF. En la calculadora, activa “Mi agencia se queda una parte de lo que nos toca” y pon tu parte tal como la diga tu acuerdo: verás lo que cobras en euros.",
+    },
+    {
       q: "¿Qué retención de IRPF lleva la factura de un agente inmobiliario?",
       a: "Cuando un agente autónomo con la actividad dada de alta como profesional factura a una empresa o a un profesional, quien paga retiene el 15 % de la base, o el 7 % el año de inicio de la actividad y los dos siguientes. Las facturas a particulares no llevan retención.",
     },

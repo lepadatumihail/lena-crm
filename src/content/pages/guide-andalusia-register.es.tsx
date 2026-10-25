@@ -440,6 +440,10 @@ export const content: MarketingPageContent = {
       a: "No hay fecha anunciada. La ley da a la Junta hasta el 24 de enero de 2028, dos años desde su entrada en vigor, para crear, regular y poner en funcionamiento el registro, y un decreto de julio de 2026 encargó su desarrollo a la Secretaría General de Vivienda.",
     },
     {
+      q: "¿Tiene la Ley 5/2025 un régimen transitorio para los agentes inmobiliarios?",
+      a: "No para los agentes. La ley tiene tres disposiciones transitorias, y tratan de las viviendas protegidas calificadas antes de la ley, de las condiciones de calidad de las nuevas promociones y rehabilitaciones y de los registros de demandantes de vivienda protegida. El plazo lo marca la disposición final séptima, que da a la Junta hasta el 24 de enero de 2028 para crear y poner en marcha el registro. Mientras no exista, no hay registro en el que inscribirse ni declaración que presentar, y en el acuerdo publicado en el BOE el 19 de octubre de 2026 la Junta se compromete a cambiar la ley para que la inscripción deje de ser requisito para ejercer.",
+    },
+    {
       q: "¿Hace falta ser API o estar colegiado para trabajar como agente inmobiliario?",
       a: "La normativa estatal no exige ninguna de las dos cosas: la Ley 10/2003 (art. 3) permite a personas físicas y jurídicas ejercer la intermediación inmobiliaria sin título alguno y sin pertenecer a ningún colegio oficial, sin perjuicio de los requisitos de protección a los consumidores que establezca la normativa reguladora de la actividad. La Ley 5/2025, tal como está escrita, incluye el título de API y la colegiación entre las capacitaciones para su registro, y la Junta se ha comprometido a que la reforma remita la colegiación a la normativa estatal.",
     },

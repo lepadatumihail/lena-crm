@@ -466,6 +466,10 @@ export const content: MarketingPageContent = {
       a: "No date has been announced. The law gives the Junta until 24 January 2028, two years from its entry into force, to create, regulate and open the register, and a July 2026 decree put its Secretaría General de Vivienda in charge of developing it.",
     },
     {
+      q: "Does Ley 5/2025 have a transitional regime for estate agents?",
+      a: "Not for agents. The law has three transitional provisions, and they cover protected housing approved before the law, quality standards for new developments and refurbishments, and the registers of applicants for protected housing. The deadline comes from final provision seven, which gives the Junta until 24 January 2028 to create and launch the register. Until it exists there is no register to join and no declaration to file, and in the agreement published in the BOE on 19 October 2026 the Junta commits to changing the law so that registration is no longer a condition for working.",
+    },
+    {
       q: "Do I need to be an API or a member of a professional association to work as an estate agent?",
       a: "National law requires neither: Ley 10/2003 (art. 3) allows individuals and companies to do estate agency work without any title and without belonging to an official college, subject to the consumer-protection requirements set by the rules that regulate the activity. Ley 5/2025, as written, lists an API title and membership of an API college among the qualifications for its register, and the Junta has committed to an amendment that leaves association membership to national rules.",
     },
