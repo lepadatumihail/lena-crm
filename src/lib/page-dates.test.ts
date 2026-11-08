@@ -46,9 +46,10 @@ describe("a re-checked page keeps its publication date", () => {
     expect(node.dateModified).toBe(node.datePublished);
   });
 
-  it("dates the guide's sitemap entries from the check", () => {
+  it("dates the guide's sitemap entries from the check", async () => {
+    const entries = await sitemap();
     const lastmod = (path: string) =>
-      sitemap().find((entry) => entry.url.endsWith(path))?.lastModified;
+      entries.find((entry) => entry.url.endsWith(path))?.lastModified;
     expect(lastmod("/guides/andalusia-agent-register")).toEqual(new Date("2026-10-27"));
     expect(lastmod("/es/guias/registro-agentes-inmobiliarios-andalucia")).toEqual(
       new Date("2026-10-27")

@@ -5,7 +5,8 @@
     "follow_up": "Follow up",
     "reservation_date": "Key date",
     "stalled_offer": "Offer",
-    "task_due": "Task"
+    "task_due": "Task",
+    "page_enquiry": "Enquiry"
   },
   "bell": {
     "aria": "Notifications",
@@ -27,5 +28,32 @@
       "all": "All",
       "unread": "Unread"
     }
+  },
+  "pageEnquiry": {
+    "title": "New enquiry from your page: {name}",
+    "buying": "Buying",
+    "selling": "Selling",
+    "when": {
+      "looking": "Just looking",
+      "soon": "Within 6 months",
+      "now": "Ready now"
+    },
+    "sellWhen": {
+      "price": "Wants a price",
+      "soon": "Within 6 months",
+      "asap": "As soon as possible"
+    },
+    "bedrooms": "{count, plural, one {# bedroom} other {# bedrooms}}",
+    "bedroomsMore": "4+ bedrooms",
+    "note": "From your LeadWing page, in {language}.",
+    "noteWhen": "When: {when}.",
+    "noteWhere": "Home: {where}.",
+    "noteExample": "Sent from the example page.",
+    "emailSubject": "New enquiry from your LeadWing page: {name}",
+    "emailIntro": "{name} wrote to you from your LeadWing page, in {language}.",
+    "emailMessage": "Their message:",
+    "emailContact": "Contact: {contact}",
+    "emailCta": "Reply within the hour to keep your page's reply time fast. Open the client in LeadWing:",
+    "emailFooter": "You get this email because your LeadWing page is live."
   }
 }

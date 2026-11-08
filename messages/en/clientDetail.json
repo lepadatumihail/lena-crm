@@ -35,7 +35,8 @@
       "nextUp": "Next up",
       "nothingScheduled": "Nothing booked"
     },
-    "call": "Call"
+    "call": "Call",
+    "fromPage": "From your page"
   },
   "attachments": {
     "attach": "Attach a file",
@@ -292,5 +293,10 @@
       "deleted": "Deleted",
       "deleteFailed": "Couldn't delete"
     }
+  },
+  "pageEnquiry": {
+    "waiting": "New from your page {ago}. Reply within the hour to keep your page's reply time fast.",
+    "late": "From your page {ago} and not answered yet. Your page's reply time counts it.",
+    "replied": "From your page. You replied after {wait}."
   }
 }

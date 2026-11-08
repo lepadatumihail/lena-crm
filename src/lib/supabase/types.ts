@@ -13,6 +13,75 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      agent_pages: {
+        Row: {
+          id: string;
+          agent_id: string;
+          slug: string;
+          previous_slugs: string[];
+          published: boolean;
+          is_example: boolean;
+          display_name: string;
+          photo_path: string | null;
+          default_lang: string;
+          spoken_languages: string[];
+          native_language: string | null;
+          areas: string[];
+          helps: string[];
+          since_year: number | null;
+          works: string;
+          agency_name: string | null;
+          whatsapp: string | null;
+          content: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          agent_id: string;
+          slug: string;
+          previous_slugs?: string[];
+          published?: boolean;
+          is_example?: boolean;
+          display_name: string;
+          photo_path?: string | null;
+          default_lang: string;
+          spoken_languages?: string[];
+          native_language?: string | null;
+          areas?: string[];
+          helps?: string[];
+          since_year?: number | null;
+          works?: string;
+          agency_name?: string | null;
+          whatsapp?: string | null;
+          content?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          agent_id?: string;
+          slug?: string;
+          previous_slugs?: string[];
+          published?: boolean;
+          is_example?: boolean;
+          display_name?: string;
+          photo_path?: string | null;
+          default_lang?: string;
+          spoken_languages?: string[];
+          native_language?: string | null;
+          areas?: string[];
+          helps?: string[];
+          since_year?: number | null;
+          works?: string;
+          agency_name?: string | null;
+          whatsapp?: string | null;
+          content?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       client_imports: {
         Row: {
           id: string;
@@ -72,6 +141,7 @@ export type Database = {
           seller_role: Database["public"]["Enums"]["seller_role"] | null;
           import_id: string | null;
           last_contacted_at: string | null;
+          source: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -94,6 +164,7 @@ export type Database = {
           seller_role?: Database["public"]["Enums"]["seller_role"] | null;
           import_id?: string | null;
           last_contacted_at?: string | null;
+          source?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -116,6 +187,7 @@ export type Database = {
           seller_role?: Database["public"]["Enums"]["seller_role"] | null;
           import_id?: string | null;
           last_contacted_at?: string | null;
+          source?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -640,6 +712,54 @@ export type Database = {
         };
         Relationships: [];
       };
+      page_enquiries: {
+        Row: {
+          id: string;
+          agent_id: string;
+          page_id: string;
+          client_id: string | null;
+          kind: "buy" | "sell";
+          lang: string;
+          name: string;
+          contact: string;
+          details: Json;
+          message: string | null;
+          sender_key: string | null;
+          received_at: string;
+          first_reply_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          agent_id: string;
+          page_id: string;
+          client_id?: string | null;
+          kind: "buy" | "sell";
+          lang: string;
+          name: string;
+          contact: string;
+          details?: Json;
+          message?: string | null;
+          sender_key?: string | null;
+          received_at?: string;
+          first_reply_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          agent_id?: string;
+          page_id?: string;
+          client_id?: string | null;
+          kind?: "buy" | "sell";
+          lang?: string;
+          name?: string;
+          contact?: string;
+          details?: Json;
+          message?: string | null;
+          sender_key?: string | null;
+          received_at?: string;
+          first_reply_at?: string | null;
+        };
+        Relationships: [];
+      };
       tasks: {
         Row: {
           id: string;
@@ -1074,7 +1194,8 @@ export type Database = {
         | "follow_up"
         | "reservation_date"
         | "stalled_offer"
-        | "task_due";
+        | "task_due"
+        | "page_enquiry";
       task_status: "todo" | "in_progress" | "waiting" | "done";
       activity_kind: "contact" | "note" | "stage";
       contact_channel: "whatsapp" | "call" | "email" | "meeting" | "other";
@@ -1117,6 +1238,8 @@ export type EmailTemplate = Tables<"email_templates">;
 export type ScheduledEmail = Tables<"scheduled_emails">;
 export type Appointment = Tables<"appointments">;
 export type Notification = Tables<"notifications">;
+export type AgentPageRow = Tables<"agent_pages">;
+export type PageEnquiry = Tables<"page_enquiries">;
 export type DealAnalysis = Tables<"deal_analyses">;
 export type Profile = Tables<"profiles">;
 export type Referral = Tables<"referrals">;

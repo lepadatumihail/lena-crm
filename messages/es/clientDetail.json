@@ -35,7 +35,8 @@
       "nextUp": "Próximo",
       "nothingScheduled": "Nada reservado"
     },
-    "call": "Llamar"
+    "call": "Llamar",
+    "fromPage": "Desde tu página"
   },
   "attachments": {
     "attach": "Adjuntar un archivo",
@@ -292,5 +293,10 @@
       "deleted": "Eliminado",
       "deleteFailed": "No se pudo eliminar"
     }
+  },
+  "pageEnquiry": {
+    "waiting": "Nuevo desde tu página {ago}. Responde en menos de una hora para mantener rápido el tiempo de respuesta de tu página.",
+    "late": "Llegó desde tu página {ago} y aún no tiene respuesta. Cuenta en el tiempo de respuesta de tu página.",
+    "replied": "Llegó desde tu página. Respondiste a los {wait}."
   }
 }

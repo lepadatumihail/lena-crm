@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 
 import { LOCALES, type AppLocale } from "@/i18n/config";
+import { agentPath, isIndexable } from "@/lib/agent-pages/content";
+import { agentPageAlternates } from "@/lib/agent-pages/seo";
 import { LEGAL_UPDATED } from "@/lib/legal";
 import {
   MARKETING_ROUTES,
@@ -72,7 +74,7 @@ function lastModified(route: ListedRoute): Date {
 }
 
 /** Every listed marketing page in every language, each carrying its hreflang twins; ad landings stay out. */
-export default function sitemap(): MetadataRoute.Sitemap {
+function marketingEntries(): MetadataRoute.Sitemap {
   const routes = (Object.keys(MARKETING_ROUTES) as MarketingRoute[]).filter(isListedRoute);
   return routes.flatMap((route) => {
     const languages: Partial<Record<AppLocale | "x-default", string>> = {};
@@ -87,4 +89,37 @@ export default function sitemap(): MetadataRoute.Sitemap {
       alternates: { languages },
     }));
   });
+}
+
+/**
+ * Public agent pages (/agent/<slug>): each language a live page can be
+ * indexed in, dated from its last edit. Without database credentials (tests,
+ * a build with placeholder env) there are none to list.
+ */
+async function agentPageEntries(): Promise<MetadataRoute.Sitemap> {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
+  const { listLivePages } = await import("@/lib/data/agent-pages");
+  const pages = await listLivePages();
+  return pages.flatMap((page) => {
+    const languages: Record<string, string> = {};
+    for (const [lang, path] of Object.entries(agentPageAlternates(page))) {
+      languages[lang] = absoluteUrl(path);
+    }
+    return page.langs
+      .filter((lang) => isIndexable(page, lang))
+      .map((lang) => ({
+        url: absoluteUrl(agentPath(page.slug, lang, page.defaultLang)),
+        lastModified: new Date(page.updatedAt),
+        changeFrequency: "weekly" as const,
+        priority: 0.5,
+        alternates: { languages },
+      }));
+  });
+}
+
+// Agent pages change without a deploy, so the sitemap is rebuilt hourly.
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  return [...marketingEntries(), ...(await agentPageEntries())];
 }

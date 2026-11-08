@@ -5,7 +5,8 @@
     "follow_up": "Seguimiento",
     "reservation_date": "Fecha clave",
     "stalled_offer": "Oferta",
-    "task_due": "Tarea"
+    "task_due": "Tarea",
+    "page_enquiry": "Consulta"
   },
   "bell": {
     "aria": "Notificaciones",
@@ -27,5 +28,32 @@
       "all": "Todas",
       "unread": "Sin leer"
     }
+  },
+  "pageEnquiry": {
+    "title": "Nueva consulta desde tu página: {name}",
+    "buying": "Compra",
+    "selling": "Venta",
+    "when": {
+      "looking": "Solo está mirando",
+      "soon": "En los próximos 6 meses",
+      "now": "Ya"
+    },
+    "sellWhen": {
+      "price": "Quiere saber el precio",
+      "soon": "En los próximos 6 meses",
+      "asap": "Lo antes posible"
+    },
+    "bedrooms": "{count, plural, one {# dormitorio} other {# dormitorios}}",
+    "bedroomsMore": "4+ dormitorios",
+    "note": "Desde tu página de LeadWing, en {language}.",
+    "noteWhen": "Cuándo: {when}.",
+    "noteWhere": "Vivienda: {where}.",
+    "noteExample": "Enviada desde la página de ejemplo.",
+    "emailSubject": "Nueva consulta desde tu página de LeadWing: {name}",
+    "emailIntro": "{name} te ha escrito desde tu página de LeadWing, en {language}.",
+    "emailMessage": "Su mensaje:",
+    "emailContact": "Contacto: {contact}",
+    "emailCta": "Responde en menos de una hora para que tu página siga mostrando una respuesta rápida. Abre el cliente en LeadWing:",
+    "emailFooter": "Recibes este email porque tu página de LeadWing está publicada."
   }
 }

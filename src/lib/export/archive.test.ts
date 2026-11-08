@@ -34,6 +34,7 @@ function client(id: string, overrides: Partial<Client>): Client {
     seller_role: null,
     import_id: null,
     last_contacted_at: null,
+    source: null,
     created_at: "2026-09-01T08:00:00Z",
     updated_at: "2026-09-10T16:45:00Z",
     ...overrides,

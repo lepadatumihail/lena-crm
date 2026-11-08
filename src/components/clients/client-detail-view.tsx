@@ -17,6 +17,7 @@ import {
   RefreshCw,
   Star,
   Tag as TagIcon,
+  Timer,
   type LucideIcon,
 } from "lucide-react";
 
@@ -45,7 +46,9 @@ import { ShellCrumb } from "@/components/shell/shell-context";
 import { StatStrip } from "@/components/shell/stat-strip";
 import { Button } from "@/components/ui/button";
 import { Money } from "@/components/ui/money";
+import { Notice } from "@/components/ui/notice";
 import { Tag } from "@/components/ui/tag";
+import type { ClientPageEnquiry } from "@/lib/data/agent-pages";
 import { appointmentTitleFor } from "@/i18n/appointments";
 import { intlTag } from "@/i18n/config";
 import { dateFnsLocale } from "@/i18n/dates";
@@ -91,6 +94,8 @@ export type ClientDetailData = {
   activities: ActivityRow[] | null;
   /** `?compose=` from the URL: a template to open the composer on. */
   compose: string | null;
+  /** The public-page enquiry that brought the client in, if one did. */
+  pageEnquiry?: ClientPageEnquiry | null;
   /** The instant the page is rendered for; injectable for previews. */
   now?: Date;
   /** The agent's IANA time zone: days and times on the page are read in it. */
@@ -141,10 +146,11 @@ export async function ClientDetailView({
   tasks,
   activities,
   compose,
+  pageEnquiry = null,
   now = new Date(),
   timeZone = DEFAULT_TIME_ZONE,
 }: ClientDetailData) {
-  const [t, tCrm, tClients, tCommon, tRes, tViewings, tAppt, tActivity, locale] =
+  const [t, tCrm, tClients, tCommon, tRes, tViewings, tAppt, tActivity, tPageEnquiry, locale] =
     await Promise.all([
       getTranslations("clientDetail.page"),
       getTranslations("crm"),
@@ -154,6 +160,7 @@ export async function ClientDetailView({
       getTranslations("clientDetail.viewings"),
       getTranslations("server.appointments"),
       getTranslations("clientDetail.activity"),
+      getTranslations("clientDetail.pageEnquiry"),
       getLocale(),
     ]);
   const tag = intlTag(locale);
@@ -204,6 +211,34 @@ export async function ClientDetailView({
     addSuffix: true,
     locale: dfl,
   });
+
+  // A client who wrote in from the agent's public page: how long they have
+  // waited, while the page's reply time is on the line, and later how fast
+  // the reply came (shown for three days, then the tag alone remains).
+  let pageNotice: { tone: "amber" | "red" | "green"; text: string } | null = null;
+  if (pageEnquiry) {
+    const received = parseISO(pageEnquiry.received_at);
+    if (pageEnquiry.first_reply_at) {
+      if (nowMs - received.getTime() <= 3 * DAY_MS) {
+        pageNotice = {
+          tone: "green",
+          text: tPageEnquiry("replied", {
+            wait: formatDistanceStrict(received, parseISO(pageEnquiry.first_reply_at), {
+              locale: dfl,
+            }),
+          }),
+        };
+      }
+    } else {
+      const late = nowMs - received.getTime() > 60 * 60 * 1000;
+      pageNotice = {
+        tone: late ? "red" : "amber",
+        text: tPageEnquiry(late ? "late" : "waiting", {
+          ago: formatDistanceStrict(received, now, { addSuffix: true, locale: dfl }),
+        }),
+      };
+    }
+  }
 
   // Who they are, in one line under the name. Language and nationality are
   // often the same word ("German"); say it once.
@@ -448,6 +483,12 @@ export async function ClientDetailView({
             <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
               <StageMenu clientId={client.id} stage={client.stage} side={side} />
               <Tag>{sideLabel(tCrm, side)}</Tag>
+              {client.source === "page" ? (
+                <Tag tone="indigo">
+                  <Globe2 />
+                  {t("fromPage")}
+                </Tag>
+              ) : null}
               {client.priority ? (
                 <Tag>
                   <Star className="fill-foreground text-foreground" />
@@ -494,6 +535,12 @@ export async function ClientDetailView({
           }
         />
       </div>
+
+      {pageNotice ? (
+        <Notice tone={pageNotice.tone} icon={pageNotice.tone === "green" ? undefined : Timer}>
+          {pageNotice.text}
+        </Notice>
+      ) : null}
 
       {/* Headline figures */}
       <StatStrip items={stats} />

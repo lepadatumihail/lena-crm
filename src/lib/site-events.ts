@@ -22,6 +22,10 @@ export const SITE_EVENTS = [
   "tool_view",
   "tool_use",
   "tool_share",
+  // Public agent pages (/agent/<slug>): seen, form started, enquiry sent.
+  "agent_page_view",
+  "agent_enquiry_start",
+  "agent_enquiry_sent",
 ] as const;
 
 export type SiteEvent = (typeof SITE_EVENTS)[number];

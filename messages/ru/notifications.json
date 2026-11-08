@@ -5,7 +5,8 @@
     "follow_up": "Повторный контакт",
     "reservation_date": "Важная дата",
     "stalled_offer": "Предложение",
-    "task_due": "Задача"
+    "task_due": "Задача",
+    "page_enquiry": "Запрос"
   },
   "bell": {
     "aria": "Уведомления",
@@ -27,5 +28,32 @@
       "all": "Все",
       "unread": "Непрочитанные"
     }
+  },
+  "pageEnquiry": {
+    "title": "Новый запрос с вашей страницы: {name}",
+    "buying": "Покупка",
+    "selling": "Продажа",
+    "when": {
+      "looking": "Пока присматривается",
+      "soon": "В ближайшие 6 месяцев",
+      "now": "Прямо сейчас"
+    },
+    "sellWhen": {
+      "price": "Хочет узнать цену",
+      "soon": "В ближайшие 6 месяцев",
+      "asap": "Как можно скорее"
+    },
+    "bedrooms": "{count, plural, one {# спальня} few {# спальни} many {# спален} other {# спальни}}",
+    "bedroomsMore": "4+ спальни",
+    "note": "С вашей страницы LeadWing, язык: {language}.",
+    "noteWhen": "Когда: {when}.",
+    "noteWhere": "Объект: {where}.",
+    "noteExample": "Отправлено со страницы-примера.",
+    "emailSubject": "Новый запрос с вашей страницы LeadWing: {name}",
+    "emailIntro": "{name} пишет вам со страницы LeadWing, язык: {language}.",
+    "emailMessage": "Сообщение:",
+    "emailContact": "Контакт: {contact}",
+    "emailCta": "Ответьте в течение часа, чтобы время ответа на странице оставалось быстрым. Откройте клиента в LeadWing:",
+    "emailFooter": "Вы получили это письмо, потому что ваша страница LeadWing опубликована."
   }
 }

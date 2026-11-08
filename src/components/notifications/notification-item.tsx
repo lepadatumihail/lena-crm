@@ -8,6 +8,7 @@ import {
   CalendarDays,
   Clock,
   Coins,
+  Globe,
   ListChecks,
   UserPlus,
 } from "lucide-react";
@@ -26,6 +27,7 @@ const ICONS: Record<NotificationType, ComponentType<{ className?: string }>> = {
   reservation_date: CalendarClock,
   stalled_offer: Coins,
   task_due: ListChecks,
+  page_enquiry: Globe,
 };
 
 /* The icon tells the types apart; the discs stay neutral, like an inbox. */
@@ -36,6 +38,7 @@ const TONES: Record<NotificationType, Tone> = {
   reservation_date: "neutral",
   stalled_offer: "neutral",
   task_due: "neutral",
+  page_enquiry: "neutral",
 };
 
 /**
