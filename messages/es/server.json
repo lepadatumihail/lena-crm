@@ -52,5 +52,18 @@
       "clientNotFound": "Ese cliente ya no existe.",
       "notReady": "La actividad aún no está disponible."
     }
+  },
+  "voice": {
+    "errors": {
+      "notEnabled": "Las notas de voz aún no están activadas en tu cuenta.",
+      "invalidRecording": "No se ha podido usar esa grabación. Grábala de nuevo, por favor.",
+      "tooShort": "Ha sido demasiado corta para entenderla. Habla un poco más.",
+      "dailyLimit": "Has llegado al límite de hoy de {limit} notas de voz. Vuelve a intentarlo mañana.",
+      "clientNotFound": "Ese cliente ya no existe.",
+      "notFound": "Esa nota de voz ya no existe.",
+      "notReady": "Esta nota de voz aún no está lista para guardar.",
+      "checkForm": "Algunos datos no parecen correctos. Revisa las tarjetas, por favor.",
+      "saveFailed": "No se ha podido guardar la nota de voz. Inténtalo de nuevo."
+    }
   }
 }

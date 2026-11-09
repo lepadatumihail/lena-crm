@@ -203,16 +203,19 @@ export function PrivacyEs() {
 
       <h2>5. Funciones de IA</h2>
       <p>
-        Dos funciones usan un modelo de lenguaje de un tercero: pegar una solicitud de un
-        portal para crear un lead y redactar mensajes o emails a un cliente. Solo se ejecutan
-        cuando pulsas el botón.
+        Tres funciones usan modelos de lenguaje de terceros: pegar una solicitud de un portal
+        para crear un lead, redactar mensajes o emails a un cliente y las notas de voz. Solo
+        se ejecutan cuando pulsas el botón o grabas una nota.
       </p>
       <ul>
         <li>
           Qué se envía: para la captura de leads, el texto que pegas. Para los borradores, el
           nombre del cliente, si compra o vende, su fase en el pipeline y la etiqueta de
           agencia, presupuesto y preferencias, su última visita u oferta, fechas de reserva y
-          cualquier borrador o instrucción que escribas.
+          cualquier borrador o instrucción que escribas. Para las notas de voz, la grabación,
+          para pasarla a texto; después ese texto y el nombre del cliente en cuya página la
+          grabaste, para ordenarla en actualizaciones de clientes. Tu lista de clientes nunca
+          se envía: los nombres se asocian a tus clientes en nuestros propios servidores.
         </li>
         <li>
           Quién lo recibe: OpenRouter, Inc. (Estados Unidos), que dirige la petición a los
@@ -220,12 +223,19 @@ export function PrivacyEs() {
           entrenar modelos y, como mucho, se conserva brevemente para control de abusos.
         </li>
         <li>
+          Grabaciones de voz: borramos la grabación de nuestro almacenamiento en cuanto se ha
+          pasado a texto, y en un plazo de 24 horas si el proceso falla. El texto se queda con
+          tus datos; al descartar una nota se borra también su texto, y al cerrar tu cuenta se
+          borra todo. LeadWing solo usa tu micrófono mientras grabas.
+        </li>
+        <li>
           Lo que vuelve es una sugerencia. Nada llega a tu cliente hasta que lo lees y lo
-          envías tú, y el modelo no ve nada más allá de la petición.
+          envías tú, nada de una nota de voz se guarda hasta que pulsas Guardar, y el modelo
+          no ve nada más allá de la petición.
         </li>
       </ul>
       <p>
-        Si prefieres no enviar datos de clientes a un proveedor de IA, no uses estas dos
+        Si prefieres no enviar datos de clientes a un proveedor de IA, no uses estas
         funciones; el resto del servicio funciona sin ellas.
       </p>
 
@@ -280,7 +290,7 @@ export function PrivacyEs() {
           </tr>
           <tr>
             <td>OpenRouter, Inc. y OpenAI</td>
-            <td>Redacción con IA y captura de leads (apartado 5)</td>
+            <td>Redacción con IA, captura de leads y notas de voz (apartado 5)</td>
             <td>Estados Unidos (cláusulas contractuales tipo)</td>
           </tr>
           <tr>

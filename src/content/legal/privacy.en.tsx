@@ -197,16 +197,19 @@ export function PrivacyEn() {
 
       <h2>5. AI features</h2>
       <p>
-        Two features use a third-party language model: pasting a portal enquiry to create a
-        lead, and drafting messages or emails to a client. They run only when you press the
-        button.
+        Three features use third-party language models: pasting a portal enquiry to create a
+        lead, drafting messages or emails to a client, and voice notes. They run only when
+        you press the button or record a note.
       </p>
       <ul>
         <li>
           What is sent: for lead capture, the text you paste. For drafts, the client’s name,
           whether they buy or sell, their pipeline stage and agency tag, budget and
           preferences, their most recent viewing or offer, reservation dates, and any draft
-          or instruction you type.
+          or instruction you type. For voice notes, the recording, to turn it into text; then
+          that text, and the name of the client whose page you recorded it on, to sort it
+          into client updates. Your client list is never sent: we match names to your clients
+          on our own servers.
         </li>
         <li>
           Who receives it: OpenRouter, Inc. (United States), which routes the request to
@@ -214,12 +217,19 @@ export function PrivacyEn() {
           models and is kept, if at all, only briefly for abuse monitoring.
         </li>
         <li>
+          Voice recordings: we delete the recording from our storage as soon as it has been
+          turned into text, and within 24 hours if processing fails. The text stays with your
+          records; discarding a note deletes its text too, and closing your account deletes
+          everything. LeadWing uses your microphone only while you record.
+        </li>
+        <li>
           What comes back is a suggestion. Nothing reaches your client until you read it and
-          send it yourself, and the model sees nothing beyond the request.
+          send it yourself, nothing from a voice note is saved until you tap Save, and the
+          model sees nothing beyond the request.
         </li>
       </ul>
       <p>
-        If you would rather not send client data to an AI provider, do not use these two
+        If you would rather not send client data to an AI provider, do not use these
         features; the rest of the service works without them.
       </p>
 
@@ -270,7 +280,7 @@ export function PrivacyEn() {
           </tr>
           <tr>
             <td>OpenRouter, Inc. and OpenAI</td>
-            <td>AI drafting and lead capture (section 5)</td>
+            <td>AI drafting, lead capture and voice notes (section 5)</td>
             <td>United States (standard contractual clauses)</td>
           </tr>
           <tr>

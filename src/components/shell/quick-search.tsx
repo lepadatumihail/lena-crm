@@ -31,7 +31,8 @@ import { sideLabel, stageLabel } from "@/i18n/labels";
 import { clientsPath } from "@/lib/crm";
 import { cn } from "@/lib/utils";
 import { ClientAvatar } from "@/components/clients/client-avatar";
-import { NEW_ACTIONS, openNewInPlace } from "@/components/shell/new-actions";
+import { newActionsFor, openNewInPlace } from "@/components/shell/new-actions";
+import { useVoiceNotes } from "@/components/shell/shell-context";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -114,15 +115,16 @@ export function QuickSearch() {
     ],
     [tNav]
   );
+  const voiceNotes = useVoiceNotes();
   const actions: Item[] = useMemo(
     () =>
-      NEW_ACTIONS.map((action) => ({
+      newActionsFor({ voiceNotes }).map((action) => ({
         id: action.id,
         href: action.href,
         label: tNav(action.labelKey),
         icon: action.icon,
       })),
-    [tNav]
+    [tNav, voiceNotes]
   );
 
   const q = query.trim().toLowerCase();

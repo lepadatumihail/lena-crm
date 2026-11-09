@@ -52,5 +52,18 @@
       "clientNotFound": "That client no longer exists.",
       "notReady": "Activity isn't available yet."
     }
+  },
+  "voice": {
+    "errors": {
+      "notEnabled": "Voice notes aren't switched on for your account yet.",
+      "invalidRecording": "That recording couldn't be used. Please record it again.",
+      "tooShort": "That was too short to hear. Talk for a little longer.",
+      "dailyLimit": "You've reached today's limit of {limit} voice notes. Try again tomorrow.",
+      "clientNotFound": "That client no longer exists.",
+      "notFound": "That voice note no longer exists.",
+      "notReady": "This voice note isn't ready to save yet.",
+      "checkForm": "Some details don't look right. Please check the cards.",
+      "saveFailed": "Couldn't save the voice note. Please try again."
+    }
   }
 }

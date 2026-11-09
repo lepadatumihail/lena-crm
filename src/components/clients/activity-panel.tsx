@@ -31,6 +31,7 @@ import { useAgentTimeZone } from "@/components/shell/shell-context";
 import { dayLabel } from "@/components/tasks/day-label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { VoiceNoteButton } from "@/components/voice/voice-note-button";
 import { intlTag } from "@/i18n/config";
 import { stageLabel } from "@/i18n/labels";
 import { addDaysToKey } from "@/lib/activity";
@@ -176,12 +177,19 @@ export function ActivityPanel({
       title={t("title")}
       icon={<History className="size-3.5" />}
       action={
-        <LogContactButton
-          client={client}
-          variant="ghost"
-          size="xs"
-          className="text-muted-foreground -mr-1.5"
-        />
+        <span className="-mr-1.5 flex items-center gap-0.5">
+          <VoiceNoteButton
+            clientId={client.id}
+            clientName={client.firstName}
+            className="text-muted-foreground"
+          />
+          <LogContactButton
+            client={client}
+            variant="ghost"
+            size="xs"
+            className="text-muted-foreground"
+          />
+        </span>
       }
     >
       <form

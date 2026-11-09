@@ -132,8 +132,8 @@ export function TermsEs() {
 
       <h2>9. Funciones de IA</h2>
       <p>
-        La captura de leads y la redacción de mensajes usan modelos de lenguaje de terceros
-        (apartado 5 de la <Link href={privacy}>Política de privacidad</Link>). Su resultado es
+        La captura de leads, la redacción de mensajes y las notas de voz usan modelos de
+        lenguaje de terceros (apartado 5 de la <Link href={privacy}>Política de privacidad</Link>). Su resultado es
         una sugerencia: puede ser incorrecto, incompleto o inadecuado, y debes leerlo antes
         de confiar en él o enviarlo. Tú eres el autor y el remitente de cada mensaje. No
         garantizamos ningún resultado de estas funciones, y podemos cambiar de proveedor o

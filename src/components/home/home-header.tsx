@@ -5,6 +5,7 @@ import { ChevronDown, Plus } from "lucide-react";
 
 import { Greeting } from "@/components/home/greeting";
 import { NEW_ACTIONS } from "@/components/shell/new-actions";
+import { VoiceNoteMenuItem } from "@/components/voice/voice-note-menu-item";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -40,7 +41,8 @@ export function HomeHeader({ now, summary }: { now: Date; summary?: ReactNode })
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" sideOffset={6} className="min-w-48">
-          {NEW_ACTIONS.map((action) => (
+          <VoiceNoteMenuItem label={tNav("mobile.voiceNote")} />
+          {NEW_ACTIONS.filter((action) => action.id !== "voice-note").map((action) => (
             <DropdownMenuItem key={action.id} asChild>
               <Link href={action.href}>
                 <action.icon strokeWidth={1.75} />

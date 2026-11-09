@@ -24,8 +24,8 @@ export const LEGAL_ENTITY = {
 
 /** Effective date of each document (ISO); shown on the page and used by the sitemap. */
 export const LEGAL_UPDATED = {
-  privacy: "2026-10-18",
-  terms: "2026-09-17",
+  privacy: "2026-11-09",
+  terms: "2026-11-09",
   legalNotice: "2026-09-07",
 } as const;
 

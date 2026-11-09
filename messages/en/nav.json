@@ -80,6 +80,7 @@
     "new": "Add new",
     "newTitle": "Add something new",
     "newDescription": "A client, a lead, a task or an appointment.",
-    "pasteLead": "Paste a lead"
+    "pasteLead": "Paste a lead",
+    "voiceNote": "Voice note"
   }
 }

@@ -1121,6 +1121,63 @@ export type Database = {
         };
         Relationships: [];
       };
+      voice_notes: {
+        Row: {
+          id: string;
+          agent_id: string;
+          client_id: string | null;
+          status: "uploaded" | "ready" | "applied" | "discarded" | "failed";
+          audio_path: string | null;
+          mime_type: string | null;
+          duration_ms: number | null;
+          size_bytes: number | null;
+          transcript: string | null;
+          proposal: Json | null;
+          applied: Json | null;
+          error: string | null;
+          cost_usd: number | null;
+          created_at: string;
+          updated_at: string;
+          applied_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          agent_id?: string;
+          client_id?: string | null;
+          status?: "uploaded" | "ready" | "applied" | "discarded" | "failed";
+          audio_path?: string | null;
+          mime_type?: string | null;
+          duration_ms?: number | null;
+          size_bytes?: number | null;
+          transcript?: string | null;
+          proposal?: Json | null;
+          applied?: Json | null;
+          error?: string | null;
+          cost_usd?: number | null;
+          created_at?: string;
+          updated_at?: string;
+          applied_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          agent_id?: string;
+          client_id?: string | null;
+          status?: "uploaded" | "ready" | "applied" | "discarded" | "failed";
+          audio_path?: string | null;
+          mime_type?: string | null;
+          duration_ms?: number | null;
+          size_bytes?: number | null;
+          transcript?: string | null;
+          proposal?: Json | null;
+          applied?: Json | null;
+          error?: string | null;
+          cost_usd?: number | null;
+          created_at?: string;
+          updated_at?: string;
+          applied_at?: string | null;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       client_latest_activity: {
@@ -1250,6 +1307,7 @@ export type TaskStatus = Enums<"task_status">;
 export type TaskPriority = Enums<"task_priority">;
 export type TaskNote = Tables<"task_notes">;
 export type ClientActivity = Tables<"client_activities">;
+export type VoiceNote = Tables<"voice_notes">;
 export type ClientLatestActivity = PublicSchema["Views"]["client_latest_activity"]["Row"];
 export type ActivityKind = Enums<"activity_kind">;
 export type ContactChannel = Enums<"contact_channel">;

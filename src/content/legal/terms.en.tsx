@@ -128,7 +128,8 @@ export function TermsEn() {
 
       <h2>9. AI features</h2>
       <p>
-        Lead capture and message drafting use third-party language models (section 5 of the{" "}
+        Lead capture, message drafting and voice notes use third-party language models (section
+        5 of the{" "}
         <Link href={privacy}>Privacy Policy</Link>). Their output is a suggestion: it can be
         wrong, incomplete or unsuitable, and you must read it before you rely on it or send
         it. You are the author and sender of every message. We do not guarantee any result

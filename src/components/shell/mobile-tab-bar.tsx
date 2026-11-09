@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -15,10 +15,12 @@ import {
 
 import type { RouteOverride } from "@/components/shell/app-sidebar";
 import {
-  NEW_ACTIONS,
+  newActionsFor,
   openNewInPlace,
   type NewAction,
 } from "@/components/shell/new-actions";
+import { useVoiceNotes } from "@/components/shell/shell-context";
+import { useVoiceNoteControls } from "@/components/voice/voice-note-provider";
 import {
   Sheet,
   SheetContent,
@@ -28,6 +30,9 @@ import {
 } from "@/components/ui/sheet";
 import { clientsPath } from "@/lib/crm";
 import { cn } from "@/lib/utils";
+
+/** How long the + must be held before it records instead of opening the menu. */
+const HOLD_MS = 350;
 
 type Tab = {
   href: string;
@@ -87,6 +92,49 @@ export function MobileTabBar({
     if (!openNewInPlace(action.id)) router.push(action.href);
   }
 
+  // Hold the + to record a voice note (plan 026); a tap still opens the menu.
+  const voice = useVoiceNoteControls();
+  const voiceNotes = useVoiceNotes();
+  const pressTimer = useRef<number | null>(null);
+  const heldRef = useRef(false);
+  useEffect(
+    () => () => {
+      if (pressTimer.current != null) window.clearTimeout(pressTimer.current);
+    },
+    []
+  );
+
+  function onPressStart(event: PointerEvent<HTMLButtonElement>) {
+    if (!voice || event.button !== 0) return;
+    heldRef.current = false;
+    pressTimer.current = window.setTimeout(() => {
+      pressTimer.current = null;
+      heldRef.current = true;
+      voice.holdStart();
+    }, HOLD_MS);
+  }
+
+  function cancelPress() {
+    if (pressTimer.current != null) {
+      window.clearTimeout(pressTimer.current);
+      pressTimer.current = null;
+    }
+  }
+
+  function onPressEnd() {
+    cancelPress();
+    if (heldRef.current) voice?.holdEnd();
+  }
+
+  function onPlus() {
+    // the press was a recording, not a tap
+    if (heldRef.current) {
+      heldRef.current = false;
+      return;
+    }
+    setOpen(true);
+  }
+
   return (
     <>
       <nav
@@ -101,7 +149,15 @@ export function MobileTabBar({
           <li className="flex items-center justify-center">
             <button
               type="button"
-              onClick={() => setOpen(true)}
+              onClick={onPlus}
+              onPointerDown={onPressStart}
+              onPointerUp={onPressEnd}
+              onPointerCancel={onPressEnd}
+              onPointerLeave={cancelPress}
+              onContextMenu={(event) => {
+                if (voice) event.preventDefault();
+              }}
+              style={voice ? { WebkitTouchCallout: "none", touchAction: "none" } : undefined}
               aria-label={t("mobile.new")}
               aria-haspopup="dialog"
               className="bg-primary text-primary-foreground focus-visible:ring-ring/50 flex size-12 items-center justify-center rounded-full shadow-md transition-transform duration-150 outline-none focus-visible:ring-[3px] active:scale-[0.94]"
@@ -125,7 +181,7 @@ export function MobileTabBar({
             <SheetDescription className="sr-only">{t("mobile.newDescription")}</SheetDescription>
           </SheetHeader>
           <ul className="grid gap-0.5 px-2">
-            {NEW_ACTIONS.map((action) => (
+            {newActionsFor({ voiceNotes }).map((action) => (
               <li key={action.id}>
                 <button
                   type="button"

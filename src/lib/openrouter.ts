@@ -39,3 +39,47 @@ export async function openrouterChat(
   };
   return data.choices?.[0]?.message?.content ?? "";
 }
+
+const TRANSCRIBE_URL = "https://openrouter.ai/api/v1/audio/transcriptions";
+export const DEFAULT_TRANSCRIBE_MODEL = "openai/gpt-4o-mini-transcribe";
+
+export type Transcription = { text: string; seconds: number | null; cost: number | null };
+
+/**
+ * Speech to text for voice notes (plan 026). OpenAI's transcription models
+ * have no zero-data-retention endpoint, so requests only go to providers that
+ * don't collect data (founder's choice, 8 Nov 2026). An error carries the
+ * HTTP status only, because a provider's error body can echo the input.
+ */
+export async function openrouterTranscribe(
+  input: { audio: Uint8Array; format: string; language?: string },
+  fetchImpl: typeof fetch = fetch
+): Promise<Transcription> {
+  const key = process.env.OPENROUTER_API_KEY;
+  if (!key) throw new Error("OPENROUTER_API_KEY is not set");
+
+  const res = await fetchImpl(TRANSCRIBE_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+      "X-Title": "LeadWing CRM",
+    },
+    body: JSON.stringify({
+      model: process.env.VOICE_TRANSCRIBE_MODEL ?? DEFAULT_TRANSCRIBE_MODEL,
+      input_audio: { data: Buffer.from(input.audio).toString("base64"), format: input.format },
+      ...(input.language ? { language: input.language } : {}),
+      provider: { data_collection: "deny" },
+    }),
+    signal: AbortSignal.timeout(60_000),
+  });
+  if (!res.ok) throw new Error(`transcribe:${res.status}`);
+
+  const data = (await res.json()) as { text?: unknown; usage?: { seconds?: unknown; cost?: unknown } };
+  const num = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : null);
+  return {
+    text: typeof data.text === "string" ? data.text.trim() : "",
+    seconds: num(data.usage?.seconds),
+    cost: num(data.usage?.cost),
+  };
+}

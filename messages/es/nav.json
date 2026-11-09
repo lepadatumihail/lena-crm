@@ -80,6 +80,7 @@
     "new": "Añadir",
     "newTitle": "Añadir algo nuevo",
     "newDescription": "Un cliente, un lead, una tarea o una cita.",
-    "pasteLead": "Pegar un lead"
+    "pasteLead": "Pegar un lead",
+    "voiceNote": "Nota de voz"
   }
 }

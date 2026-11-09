@@ -21,6 +21,7 @@ type ShellContextValue = {
   agentId: string | null;
   agentFirstName: string | null;
   timeZone: string;
+  voiceNotes: boolean;
 };
 
 const ShellContext = createContext<ShellContextValue | null>(null);
@@ -36,6 +37,7 @@ export function ShellProvider({
   agentId = null,
   agentFirstName = null,
   timeZone = DEFAULT_TIME_ZONE,
+  voiceNotes = false,
   children,
 }: {
   /** The signed-in agent's user id, for per-agent browser state on a shared device. */
@@ -43,12 +45,14 @@ export function ShellProvider({
   agentFirstName?: string | null;
   /** The agent's IANA time zone, from their settings. */
   timeZone?: string;
+  /** Whether voice notes are switched on for this agent (plan 026 rollout flag). */
+  voiceNotes?: boolean;
   children: ReactNode;
 }) {
   const [crumb, setCrumb] = useState<ShellCrumbValue | null>(null);
   const value = useMemo(
-    () => ({ crumb, setCrumb, agentId, agentFirstName, timeZone }),
-    [crumb, agentId, agentFirstName, timeZone]
+    () => ({ crumb, setCrumb, agentId, agentFirstName, timeZone, voiceNotes }),
+    [crumb, agentId, agentFirstName, timeZone, voiceNotes]
   );
   return <ShellContext value={value}>{children}</ShellContext>;
 }
@@ -70,6 +74,11 @@ export function useAgentFirstName(): string | null {
 /** The IANA zone the agent's day runs in, from their settings. */
 export function useAgentTimeZone(): string {
   return useContext(ShellContext)?.timeZone ?? DEFAULT_TIME_ZONE;
+}
+
+/** True when voice notes are switched on for the signed-in agent. */
+export function useVoiceNotes(): boolean {
+  return useContext(ShellContext)?.voiceNotes ?? false;
 }
 
 /**

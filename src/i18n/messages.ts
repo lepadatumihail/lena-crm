@@ -32,6 +32,7 @@ import enTemplates from "../../messages/en/templates.json";
 import enTools from "../../messages/en/tools.json";
 import enTransfer from "../../messages/en/transfer.json";
 import enValidation from "../../messages/en/validation.json";
+import enVoice from "../../messages/en/voice.json";
 
 import esAdmin from "../../messages/es/admin.json";
 import esAuth from "../../messages/es/auth.json";
@@ -59,6 +60,7 @@ import esTemplates from "../../messages/es/templates.json";
 import esTools from "../../messages/es/tools.json";
 import esTransfer from "../../messages/es/transfer.json";
 import esValidation from "../../messages/es/validation.json";
+import esVoice from "../../messages/es/voice.json";
 
 import ruAdmin from "../../messages/ru/admin.json";
 import ruAuth from "../../messages/ru/auth.json";
@@ -86,6 +88,7 @@ import ruTemplates from "../../messages/ru/templates.json";
 import ruTools from "../../messages/ru/tools.json";
 import ruTransfer from "../../messages/ru/transfer.json";
 import ruValidation from "../../messages/ru/validation.json";
+import ruVoice from "../../messages/ru/voice.json";
 
 export const en = {
   admin: enAdmin,
@@ -114,6 +117,7 @@ export const en = {
   tools: enTools,
   transfer: enTransfer,
   validation: enValidation,
+  voice: enVoice,
 };
 
 export type Messages = typeof en;
@@ -145,6 +149,7 @@ const es = {
   tools: esTools,
   transfer: esTransfer,
   validation: esValidation,
+  voice: esVoice,
 };
 
 const ru = {
@@ -174,6 +179,7 @@ const ru = {
   tools: ruTools,
   transfer: ruTransfer,
   validation: ruValidation,
+  voice: ruVoice,
 };
 
 type Dict = Record<string, unknown>;

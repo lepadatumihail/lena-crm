@@ -8,6 +8,7 @@ import { getSessionProfile, getSessionUser } from "@/lib/data/session";
 import { countDueTasks } from "@/lib/data/tasks";
 import { intlTag } from "@/i18n/config";
 import { planState } from "@/lib/access";
+import { voiceNotesEnabled } from "@/lib/flags";
 import { BUYER_STAGES } from "@/lib/crm";
 import { dateKeyInTimeZone, dayRangeInTimeZone, firstNameFrom } from "@/lib/home";
 import { resolveTimeZone } from "@/lib/time-zones";
@@ -19,6 +20,7 @@ import {
   type StageCount,
 } from "@/components/shell/app-sidebar";
 import { ShellProvider } from "@/components/shell/shell-context";
+import { VoiceNoteProvider } from "@/components/voice/voice-note-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
@@ -107,7 +109,9 @@ export default async function AppLayout({
       agentId={user.id}
       agentFirstName={firstNameFrom(profile?.full_name, user.email)}
       timeZone={timeZone}
+      voiceNotes={voiceNotesEnabled(profile)}
     >
+    <VoiceNoteProvider>
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar
         email={user.email ?? ""}
@@ -130,6 +134,7 @@ export default async function AppLayout({
         <MobileTabBar counts={{ today: counts.today, tasks: counts.tasks }} />
       </SidebarInset>
     </SidebarProvider>
+    </VoiceNoteProvider>
     </ShellProvider>
   );
 }
