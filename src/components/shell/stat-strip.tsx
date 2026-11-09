@@ -17,9 +17,9 @@ const COLUMNS = {
 } as const;
 
 /**
- * Headline figures in one bordered strip with hairlines between the cells:
- * the client page, billing, referrals and admin. Two to four figures; four
- * fold to two by two below lg.
+ * Headline figures in one bordered strip with hairlines between the cells,
+ * as on the admin page. Two to four figures; four fold to two by two below
+ * lg.
  */
 export function StatStrip({
   items,

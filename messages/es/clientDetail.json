@@ -31,12 +31,29 @@
       "propertiesLabel": "Inmuebles",
       "onMarket": "En el mercado",
       "days": "{count, plural, one {# día} other {# días}}",
-      "since": "Desde el {date}",
-      "nextUp": "Próximo",
-      "nothingScheduled": "Nada reservado"
+      "since": "Desde el {date}"
     },
     "call": "Llamar",
     "fromPage": "Desde tu página"
+  },
+  "nextStep": {
+    "label": "Siguiente paso",
+    "overdue": "Vencida hace {days, plural, one {# día} other {# días}}",
+    "dueToday": "Vence hoy",
+    "moreTasks": "{count, plural, one {y # tarea más} other {y # tareas más}}",
+    "done": "Marcar hecha",
+    "upcoming": "Próxima cita",
+    "openCalendar": "Abrir calendario",
+    "firstContact": "Sin contacto aún",
+    "firstContactTitle": "Envía a {name} un primer mensaje",
+    "quiet": "Sin contacto desde hace {days, plural, one {# día} other {# días}}",
+    "quietTitle": "Retoma el contacto con {name}",
+    "clear": "Todo al día",
+    "clearTitle": "Nada pendiente ahora",
+    "nextTask": "Siguiente tarea: {title}",
+    "lastContact": "Último contacto {when}",
+    "booked": "Próxima cita: {when}",
+    "nothingBooked": "Nada reservado aún"
   },
   "attachments": {
     "attach": "Adjuntar un archivo",

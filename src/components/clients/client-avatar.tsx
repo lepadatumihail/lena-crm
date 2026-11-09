@@ -7,6 +7,7 @@ const SIZES = {
   sm: "size-6 text-[10px]",
   md: "size-8 text-xs",
   lg: "size-12 text-base",
+  xl: "size-16 text-xl",
 } as const;
 
 /**

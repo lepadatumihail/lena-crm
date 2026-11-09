@@ -31,12 +31,29 @@
       "propertiesLabel": "Properties",
       "onMarket": "On the market",
       "days": "{count, plural, one {# day} other {# days}}",
-      "since": "Since {date}",
-      "nextUp": "Next up",
-      "nothingScheduled": "Nothing booked"
+      "since": "Since {date}"
     },
     "call": "Call",
     "fromPage": "From your page"
+  },
+  "nextStep": {
+    "label": "Next step",
+    "overdue": "Overdue by {days, plural, one {# day} other {# days}}",
+    "dueToday": "Due today",
+    "moreTasks": "{count, plural, one {and # more task} other {and # more tasks}}",
+    "done": "Mark done",
+    "upcoming": "Coming up",
+    "openCalendar": "Open calendar",
+    "firstContact": "No contact yet",
+    "firstContactTitle": "Send {name} a first message",
+    "quiet": "Quiet for {days, plural, one {# day} other {# days}}",
+    "quietTitle": "Check in with {name}",
+    "clear": "All caught up",
+    "clearTitle": "Nothing due right now",
+    "nextTask": "Next task: {title}",
+    "lastContact": "Last contact {when}",
+    "booked": "Next booked: {when}",
+    "nothingBooked": "Nothing booked yet"
   },
   "attachments": {
     "attach": "Attach a file",

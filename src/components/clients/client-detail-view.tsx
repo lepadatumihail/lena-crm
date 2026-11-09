@@ -34,6 +34,11 @@ import {
 import { CopyIconButton } from "@/components/clients/copy-icon-button";
 import { KeyValueList, KeyValueRow } from "@/components/shell/key-value";
 import { MessageComposer } from "@/components/clients/message-composer";
+import {
+  NextStepCard,
+  type BookedEvent,
+  type NextStep,
+} from "@/components/clients/next-step-card";
 import { DocumentsSection } from "@/components/clients/sections/documents-section";
 import { MatchingListingsSection } from "@/components/clients/sections/matching-listings-section";
 import { PreferencesSection } from "@/components/clients/sections/preferences-section";
@@ -43,7 +48,6 @@ import { TasksSection } from "@/components/clients/sections/tasks-section";
 import { ViewingsSection } from "@/components/clients/sections/viewings-section";
 import { Panel, PanelEmpty } from "@/components/shell/panel";
 import { ShellCrumb } from "@/components/shell/shell-context";
-import { StatStrip } from "@/components/shell/stat-strip";
 import { Button } from "@/components/ui/button";
 import { Money } from "@/components/ui/money";
 import { Notice } from "@/components/ui/notice";
@@ -60,15 +64,24 @@ import {
   sellerRoleLabel,
   sideLabel,
 } from "@/i18n/labels";
+import { lastTouchedAt, needsFollowUp } from "@/lib/activity";
 import { formatTimeInTimeZone } from "@/lib/attention";
-import { clientFullName, formatCurrency, type ClientSide } from "@/lib/crm";
+import { calendarHref } from "@/lib/calendar-view";
+import {
+  clientFullName,
+  defaultStageForSide,
+  formatCurrency,
+  type ClientSide,
+} from "@/lib/crm";
 import type { ActivityRow } from "@/lib/data/activity";
 import type { ViewingWithAttachments } from "@/lib/data/buyer";
 import type { ClientAppointment } from "@/lib/data/calendar";
 import type { ListingMatch, PropertyWithAttachments } from "@/lib/data/seller";
 import type { TaskRow } from "@/lib/data/tasks";
 import { dateKeyInTimeZone } from "@/lib/home";
+import { dueState, isOpenStatus } from "@/lib/tasks";
 import { DEFAULT_TIME_ZONE } from "@/lib/time-zones";
+import { cn } from "@/lib/utils";
 import type {
   BuyerPreferences,
   Client,
@@ -295,11 +308,63 @@ export async function ClientDetailView({
       : []),
   ].sort((a, b) => Date.parse(a.at) - Date.parse(b.at));
   const nextEvent = upcoming[0] ?? null;
-  const nextUp: Stat = {
-    label: t("stats.nextUp"),
-    value: nextEvent ? whenLabel(nextEvent.at) : <Muted>{t("stats.nothingScheduled")}</Muted>,
-    hint: nextEvent?.title ?? null,
-  };
+  const booked: BookedEvent | null = nextEvent
+    ? {
+        when: whenLabel(nextEvent.at),
+        title: nextEvent.title,
+        href: calendarHref("week", dateKeyInTimeZone(nextEvent.at, timeZone)),
+      }
+    : null;
+
+  // The one thing to do now, for the card on top of the side column: an
+  // overdue task, then one due today, a viewing or meeting today or
+  // tomorrow, a lead nobody has written to or a client gone quiet (the
+  // lists' Needs follow-up rule), a later booking, else all caught up.
+  const openTasks = (tasks ?? []).filter((task) => isOpenStatus(task.status));
+  const urgent = openTasks
+    .map((task) => ({ task, due: dueState(task.due_on, todayKey) }))
+    .filter(({ due }) => due === "overdue" || due === "today")
+    // Overdue first; the query's order (priority, then due date) within each.
+    .sort((a, b) => Number(a.due === "today") - Number(b.due === "today"));
+  const eventSoon =
+    nextEvent != null &&
+    [todayKey, tomorrowKey].includes(dateKeyInTimeZone(nextEvent.at, timeZone));
+  let nextStep: NextStep;
+  if (urgent.length > 0) {
+    const { task, due } = urgent[0];
+    nextStep = {
+      kind: "task",
+      due: due === "overdue" ? "overdue" : "today",
+      task,
+      overdueDays: task.due_on
+        ? Math.max(1, Math.round((Date.parse(todayKey) - Date.parse(task.due_on)) / DAY_MS))
+        : 0,
+      more: urgent.length - 1,
+    };
+  } else if (booked && eventSoon) {
+    nextStep = { kind: "event", event: booked };
+  } else if (needsFollowUp({ ...client, side }, nowMs)) {
+    nextStep =
+      client.last_contacted_at == null && client.stage === defaultStageForSide(side)
+        ? { kind: "firstContact" }
+        : {
+            kind: "quiet",
+            days: Math.floor((nowMs - Date.parse(lastTouchedAt(client))) / DAY_MS),
+          };
+  } else if (booked) {
+    nextStep = { kind: "event", event: booked };
+  } else {
+    nextStep = {
+      kind: "clear",
+      lastContact: client.last_contacted_at
+        ? formatDistanceStrict(parseISO(client.last_contacted_at), now, {
+            addSuffix: true,
+            locale: dfl,
+          })
+        : null,
+      nextTask: openTasks[0]?.title ?? null,
+    };
+  }
 
   let stats: Stat[];
   if (isBuyer) {
@@ -384,7 +449,6 @@ export async function ClientDetailView({
             reservationMoney
           ),
       },
-      nextUp,
     ];
   } else {
     const prices = properties
@@ -419,7 +483,6 @@ export async function ClientDetailView({
         value: daysListed != null ? t("stats.days", { count: daysListed }) : <Muted>—</Muted>,
         hint: firstListed ? t("stats.since", { date: calendarDate(firstListed) }) : null,
       },
-      nextUp,
     ];
   }
 
@@ -472,69 +535,103 @@ export async function ClientDetailView({
     <div className="space-y-5">
       <ShellCrumb side={side} label={name} />
 
-      {/* Identity and actions */}
-      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
-        <div className="flex min-w-0 items-start gap-4">
-          <ClientAvatar name={name} side={side} size="lg" className="mt-0.5" />
-          <div className="min-w-0">
-            <h2 className="truncate text-2xl leading-8 font-semibold tracking-tight">
-              {name}
-            </h2>
-            <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-              <StageMenu clientId={client.id} stage={client.stage} side={side} />
-              <Tag>{sideLabel(tCrm, side)}</Tag>
-              {client.source === "page" ? (
-                <Tag tone="indigo">
-                  <Globe2 />
-                  {t("fromPage")}
-                </Tag>
-              ) : null}
-              {client.priority ? (
-                <Tag>
-                  <Star className="fill-foreground text-foreground" />
-                  {tClients("list.priority")}
-                </Tag>
-              ) : null}
-              {!client.is_active ? <Tag>{t("inactive")}</Tag> : null}
+      {/* Who the client is and what the deal is worth, on one grey surface:
+          the name and the lead figure are set large in the display face, so
+          the eye lands here first and the panels below read as detail. */}
+      <section className="bg-muted/55 dark:bg-muted/35 rounded-2xl ring-1 ring-black/[0.04] ring-inset dark:ring-white/[0.06]">
+        <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4 p-5 sm:p-6">
+          <div className="flex min-w-0 items-start gap-3.5 sm:items-center sm:gap-4">
+            <span className="bg-background shrink-0 rounded-full p-1 shadow-xs">
+              <ClientAvatar
+                name={name}
+                side={side}
+                size="xl"
+                className="text-tone-indigo-ink bg-[linear-gradient(140deg,var(--tone-indigo-soft),var(--tone-teal-soft))] max-sm:size-12 max-sm:text-base"
+              />
+            </span>
+            <div className="min-w-0">
+              {/* A long name wraps on a phone and is cut short only where there is room for most of it. */}
+              <h2 className="font-display text-[1.75rem] leading-tight font-normal tracking-[-0.03em] text-balance break-words sm:truncate sm:text-[2rem]">
+                {name}
+              </h2>
+              <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                <StageMenu clientId={client.id} stage={client.stage} side={side} />
+                <Tag>{sideLabel(tCrm, side)}</Tag>
+                {client.source === "page" ? (
+                  <Tag tone="indigo">
+                    <Globe2 />
+                    {t("fromPage")}
+                  </Tag>
+                ) : null}
+                {client.priority ? (
+                  <Tag>
+                    <Star className="fill-foreground text-foreground" />
+                    {tClients("list.priority")}
+                  </Tag>
+                ) : null}
+                {!client.is_active ? <Tag>{t("inactive")}</Tag> : null}
+              </div>
+              <ul className="text-muted-foreground mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]">
+                {meta.map(({ icon: Icon, text }, i) => (
+                  <li key={i} className="inline-flex min-w-0 items-center gap-1.5">
+                    <Icon className="size-3.5 shrink-0" strokeWidth={1.75} />
+                    <span className="truncate">{text}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="text-muted-foreground mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]">
-              {meta.map(({ icon: Icon, text }, i) => (
-                <li key={i} className="inline-flex min-w-0 items-center gap-1.5">
-                  <Icon className="size-3.5 shrink-0" strokeWidth={1.75} />
-                  <span className="truncate">{text}</span>
-                </li>
-              ))}
-            </ul>
           </div>
+          <ClientHeaderActions
+            client={client}
+            primary={
+              <>
+              {activities ? (
+                <LogContactButton client={contactTarget} labelClassName="max-sm:sr-only" />
+              ) : null}
+              <MessageComposer
+                client={{
+                  id: client.id,
+                  first_name: client.first_name,
+                  phone: client.phone,
+                  email: client.email,
+                  language: client.language,
+                  side: client.side,
+                  stage: client.stage,
+                }}
+                varsInput={messageVarsInput}
+                customTemplates={customTemplates}
+                propertyOptions={propertyOptions}
+                autoOpenTemplate={compose}
+                triggerVariant="default"
+                triggerSize="sm"
+              />
+              </>
+            }
+          />
         </div>
-        <ClientHeaderActions
-          client={client}
-          primary={
-            <>
-            {activities ? (
-              <LogContactButton client={contactTarget} labelClassName="max-sm:sr-only" />
-            ) : null}
-            <MessageComposer
-              client={{
-                id: client.id,
-                first_name: client.first_name,
-                phone: client.phone,
-                email: client.email,
-                language: client.language,
-                side: client.side,
-                stage: client.stage,
-              }}
-              varsInput={messageVarsInput}
-              customTemplates={customTemplates}
-              propertyOptions={propertyOptions}
-              autoOpenTemplate={compose}
-              triggerVariant="default"
-              triggerSize="sm"
-            />
-            </>
-          }
-        />
-      </div>
+
+        {/* Headline figures: the money first and largest, the rest beside it. */}
+        <dl className="border-foreground/[0.07] mx-5 grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 pb-5 sm:mx-6 sm:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)] sm:pb-6">
+          {stats.map((stat, i) => (
+            <div key={stat.label} className={cn("min-w-0", i === 0 && "col-span-2 sm:col-span-1")}>
+              <dt className="text-muted-foreground truncate text-[13px]">{stat.label}</dt>
+              <dd
+                className={cn(
+                  "font-display mt-1 font-normal tracking-[-0.03em] break-words tabular-nums",
+                  i === 0
+                    ? "text-[2rem] leading-[1.15] sm:text-[2.25rem]"
+                    : "text-xl leading-7 sm:text-2xl sm:leading-8"
+                )}
+              >
+                {stat.value}
+              </dd>
+              {stat.hint ? (
+                <dd className="text-muted-foreground mt-0.5 truncate text-[13px]">{stat.hint}</dd>
+              ) : null}
+            </div>
+          ))}
+        </dl>
+      </section>
 
       {pageNotice ? (
         <Notice tone={pageNotice.tone} icon={pageNotice.tone === "green" ? undefined : Timer}>
@@ -542,14 +639,20 @@ export async function ClientDetailView({
         </Notice>
       ) : null}
 
-      {/* Headline figures */}
-      <StatStrip items={stats} />
 
       {/* Two to one, but the side column never drops under 20rem: at
           1024-1279px a third of the row would cut the phone number short. */}
       <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(20rem,1fr)]">
-        {/* Contact first in the DOM: on a phone it is what you reach for. */}
+        {/* The next step and contact first in the DOM: on a phone they are
+            what you reach for. */}
         <aside className="flex min-w-0 flex-col gap-5 lg:sticky lg:top-[4.75rem] lg:col-start-2 lg:row-start-1">
+          <NextStepCard
+            step={nextStep}
+            client={contactTarget}
+            phone={client.phone}
+            language={client.language}
+            booked={booked}
+          />
           <Panel title={t("contact")} icon={<Contact className="size-3.5" />}>
             {client.email || client.phone ? (
               <>

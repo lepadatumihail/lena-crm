@@ -31,12 +31,29 @@
       "propertiesLabel": "Объекты",
       "onMarket": "В продаже",
       "days": "{count, plural, one {# день} few {# дня} many {# дней} other {# дня}}",
-      "since": "С {date}",
-      "nextUp": "Ближайшее",
-      "nothingScheduled": "Ничего не назначено"
+      "since": "С {date}"
     },
     "call": "Позвонить",
     "fromPage": "С вашей страницы"
+  },
+  "nextStep": {
+    "label": "Следующий шаг",
+    "overdue": "Просрочено на {days, plural, one {# день} few {# дня} many {# дней} other {# дня}}",
+    "dueToday": "Срок сегодня",
+    "moreTasks": "{count, plural, one {и ещё # задача} few {и ещё # задачи} many {и ещё # задач} other {и ещё # задачи}}",
+    "done": "Выполнено",
+    "upcoming": "Ближайшая встреча",
+    "openCalendar": "Открыть календарь",
+    "firstContact": "Контакта ещё не было",
+    "firstContactTitle": "Напишите первое сообщение",
+    "quiet": "Без контакта {days, plural, one {# день} few {# дня} many {# дней} other {# дня}}",
+    "quietTitle": "Пора напомнить о себе",
+    "clear": "Всё под контролем",
+    "clearTitle": "Сейчас ничего не горит",
+    "nextTask": "Следующая задача: {title}",
+    "lastContact": "Последний контакт {when}",
+    "booked": "Ближайшее: {when}",
+    "nothingBooked": "Пока ничего не назначено"
   },
   "attachments": {
     "attach": "Прикрепить файл",

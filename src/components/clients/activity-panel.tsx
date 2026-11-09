@@ -40,7 +40,7 @@ import { formatTimeInTimeZone } from "@/lib/attention";
 import { STAGE_TONES, type Stage } from "@/lib/crm";
 import type { ActivityRow } from "@/lib/data/activity";
 import { dateKeyInTimeZone } from "@/lib/home";
-import { TONE_SOLID } from "@/lib/tones";
+import { TONE_BG, TONE_INK, TONE_SOLID, type Tone } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 import { ACTIVITY_BODY_MAX } from "@/lib/validation/activity";
 
@@ -145,14 +145,21 @@ export function ActivityPanel({
     return t("time", { day, time: formatTimeInTimeZone(iso, timeZone, intlTag(locale)) });
   }
 
-  function describe(a: ShownActivity): { icon: LucideIcon; title: ReactNode } {
+  // Each kind keeps its own colour on the timeline: a contact made is green,
+  // a note amber, a stage move takes the new stage's tone.
+  function describe(a: ShownActivity): { icon: LucideIcon; tone: Tone; title: ReactNode } {
     if (a.kind === "contact") {
-      return { icon: CHANNEL_ICONS[a.channel ?? "other"], title: t(`contact.${a.channel ?? "other"}`) };
+      return {
+        icon: CHANNEL_ICONS[a.channel ?? "other"],
+        tone: "green",
+        title: t(`contact.${a.channel ?? "other"}`),
+      };
     }
     if (a.kind === "stage") {
       const to = a.stage_to ?? "";
       return {
         icon: ArrowRight,
+        tone: STAGE_TONES[to as Stage] ?? "neutral",
         title: (
           <span className="inline-flex flex-wrap items-center gap-x-1.5">
             <span
@@ -169,7 +176,7 @@ export function ActivityPanel({
         ),
       };
     }
-    return { icon: NotebookPen, title: null };
+    return { icon: NotebookPen, tone: "amber", title: null };
   }
 
   return (
@@ -234,7 +241,7 @@ export function ActivityPanel({
 
       <ol className="px-4 pt-4 pb-3">
         {shown.map((a) => {
-          const { icon: Icon, title } = describe(a);
+          const { icon: Icon, tone, title } = describe(a);
           const deletable = !a.pending && (a.kind === "note" || a.kind === "contact");
           return (
             <li
@@ -242,7 +249,13 @@ export function ActivityPanel({
               className={cn("group relative flex gap-3 pb-4", a.pending && "opacity-60")}
             >
               <span aria-hidden className="bg-border absolute top-8 bottom-0 left-[13px] w-px" />
-              <span className="bg-muted text-muted-foreground relative flex size-7 shrink-0 items-center justify-center rounded-full">
+              <span
+                className={cn(
+                  "relative flex size-7 shrink-0 items-center justify-center rounded-full",
+                  TONE_BG[tone],
+                  TONE_INK[tone]
+                )}
+              >
                 <Icon className="size-3.5" />
               </span>
               <div className="min-w-0 flex-1 pt-[3px]">
@@ -297,7 +310,13 @@ export function ActivityPanel({
           );
         })}
         <li className="relative flex gap-3">
-          <span className="bg-muted text-muted-foreground relative flex size-7 shrink-0 items-center justify-center rounded-full">
+          <span
+            className={cn(
+              "relative flex size-7 shrink-0 items-center justify-center rounded-full",
+              TONE_BG.indigo,
+              TONE_INK.indigo
+            )}
+          >
             <UserPlus className="size-3.5" />
           </span>
           <div className="flex min-w-0 flex-1 items-start justify-between gap-3 pt-[3px] max-sm:flex-col max-sm:gap-0.5">
