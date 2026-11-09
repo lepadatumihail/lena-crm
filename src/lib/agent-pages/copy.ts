@@ -20,6 +20,8 @@ export type PageCopy = {
   replyBadge: Record<ReplyBucket, string>;
   replySub: string;
   ctaPrimary: string;
+  ctaShort: string;
+  repliesVia: string;
   whatsappHello: string;
   factsLabel: string;
   fSpeaks: string;
@@ -37,6 +39,11 @@ export type PageCopy = {
   sellerSteps: [Step, Step, Step];
   formTitleBuy: string;
   formTitleSell: string;
+  detailsTitle: string;
+  /** Above the form's question: "Step {n} of 2". */
+  stepOf: string;
+  continue: string;
+  back: string;
   tabsLabel: string;
   tabBuy: string;
   tabSell: string;
@@ -87,6 +94,8 @@ const en: PageCopy = {
   },
   replySub: "Measured by LeadWing on real enquiries",
   ctaPrimary: "Tell {name} what you’re looking for",
+  ctaShort: "Message {name}",
+  repliesVia: "Replies on WhatsApp or by email",
   whatsappHello: "Hi {name}, I found your page on LeadWing.",
   factsLabel: "{name} at a glance",
   fSpeaks: "Speaks",
@@ -130,6 +139,10 @@ const en: PageCopy = {
   ],
   formTitleBuy: "What are you looking for?",
   formTitleSell: "Tell {name} about your home",
+  detailsTitle: "How can {name} reach you?",
+  stepOf: "Step {n} of 2",
+  continue: "Continue",
+  back: "Back",
   tabsLabel: "Buying or selling",
   tabBuy: "Buying",
   tabSell: "Selling",
@@ -192,6 +205,8 @@ const es: PageCopy = {
   },
   replySub: "Medido por LeadWing con consultas reales",
   ctaPrimary: "Cuéntele a {name} qué busca",
+  ctaShort: "Escriba a {name}",
+  repliesVia: "Responde por WhatsApp o por email",
   whatsappHello: "Hola {name}, le escribo desde su página de LeadWing.",
   factsLabel: "{name} en breve",
   fSpeaks: "Habla",
@@ -235,11 +250,15 @@ const es: PageCopy = {
   ],
   formTitleBuy: "¿Qué busca?",
   formTitleSell: "Cuéntele a {name} sobre su vivienda",
+  detailsTitle: "¿Cómo puede contactarle {name}?",
+  stepOf: "Paso {n} de 2",
+  continue: "Continuar",
+  back: "Atrás",
   tabsLabel: "Comprar o vender",
   tabBuy: "Comprar",
   tabSell: "Vender",
   budget: "Presupuesto",
-  budgetOpts: ["Hasta 400.000 €", "400.000–800.000 €", "800.000 € – 1,5 M €", "Más de 1,5 M €"],
+  budgetOpts: ["Hasta 400.000 €", "400.000–800.000 €", "800.000–1,5 M €", "Más de 1,5 M €"],
   beds: "Dormitorios",
   where: "Dónde",
   notSure: "Aún no lo sé",
@@ -297,6 +316,8 @@ const sv: PageCopy = {
   },
   replySub: "Mätt av LeadWing på riktiga förfrågningar",
   ctaPrimary: "Berätta för {name} vad du söker",
+  ctaShort: "Skriv till {name}",
+  repliesVia: "Svarar på WhatsApp eller via e-post",
   whatsappHello: "Hej {name}! Jag hittade din sida på LeadWing.",
   factsLabel: "{name} i korthet",
   fSpeaks: "Talar",
@@ -340,6 +361,10 @@ const sv: PageCopy = {
   ],
   formTitleBuy: "Vad söker du?",
   formTitleSell: "Berätta för {name} om din bostad",
+  detailsTitle: "Hur når {name} dig?",
+  stepOf: "Steg {n} av 2",
+  continue: "Fortsätt",
+  back: "Tillbaka",
   tabsLabel: "Köpa eller sälja",
   tabBuy: "Köpa",
   tabSell: "Sälja",
@@ -347,7 +372,7 @@ const sv: PageCopy = {
   budgetOpts: [
     "Upp till 400 000 €",
     "400 000–800 000 €",
-    "800 000 € – 1,5 milj. €",
+    "800 000–1,5 milj. €",
     "Över 1,5 milj. €",
   ],
   beds: "Sovrum",

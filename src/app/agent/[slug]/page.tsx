@@ -3,11 +3,12 @@ import { notFound, permanentRedirect } from "next/navigation";
 
 import { AgentPageView } from "@/components/agent-page/agent-page";
 import { agentPath } from "@/lib/agent-pages/content";
-import { agentPageMetadata } from "@/lib/agent-pages/seo";
+import { AGENT_PAGE_VIEWPORT, agentPageMetadata } from "@/lib/agent-pages/seo";
 import { findPublishedPage, getReplyBucket } from "@/lib/data/agent-pages";
 
 // Every request reads the live page: an agent's edit shows at once.
 export const dynamic = "force-dynamic";
+export const viewport = AGENT_PAGE_VIEWPORT;
 
 type Params = { params: Promise<{ slug: string }> };
 

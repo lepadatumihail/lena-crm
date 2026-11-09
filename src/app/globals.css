@@ -375,6 +375,32 @@ html:lang(ru) article :is(td, th) {
 }
 
 /*
+  Agent pages (/agent/<slug>): the hero settles in piece by piece, and a form
+  step slides in from the side it came from. Motion only where the visitor
+  allows it (the markup applies these under motion-safe).
+*/
+@keyframes agent-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+}
+@keyframes agent-step-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--agent-step-from, 12px));
+  }
+}
+@keyframes agent-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.25);
+    filter: blur(4px);
+  }
+}
+
+/*
   Section labels in the app: small, regular, sentence case, the same in the
   sidebar, a panel header and a detail sheet. Colour is left to the caller.
 */

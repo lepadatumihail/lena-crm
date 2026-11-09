@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { SITE_NAME, SITE_URL, absoluteUrl } from "@/lib/site";
 
@@ -6,6 +6,20 @@ import { agentPath, isIndexable, type AgentPage, type PageLang } from "./content
 import { PAGE_COPY, fill } from "./copy";
 
 const OG_LOCALE: Record<PageLang, string> = { en: "en_GB", es: "es_ES", sv: "sv_SE" };
+
+/**
+ * Agent pages paint under the notch and the home indicator, so the phone's
+ * bottom bar can sit above it (env(safe-area-inset-bottom) is 0 without
+ * viewport-fit=cover); the page pads its own sides. The browser bar keeps the
+ * root layout's colours.
+ */
+export const AGENT_PAGE_VIEWPORT: Viewport = {
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#161312" },
+  ],
+};
 
 /**
  * "Elin Sandberg – svensk mäklare i Estepona": the name a buyer searches for,
