@@ -3,6 +3,10 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowRight,
   Check,
+  FileSpreadsheet,
+  LogOut,
+  ShieldCheck,
+  Smartphone,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -16,8 +20,7 @@ import { Sentences } from "@/components/marketing/sentences";
 import { LandingViewBeacon } from "@/components/marketing/landing-view-beacon";
 import { SignUpDialog } from "@/components/marketing/sign-up-dialog";
 import { OnePlace } from "@/components/landing/one-place";
-import { Workflow } from "@/components/landing/workflow";
-import { FeatureDeepDives } from "@/components/landing/feature-deep-dives";
+import { Journey } from "@/components/landing/journey";
 import { AppPreview } from "@/components/landing/app-preview";
 import { Testimonials } from "@/components/landing/testimonials";
 import { Faq } from "@/components/landing/faq";
@@ -34,10 +37,25 @@ import { cn } from "@/lib/utils";
  *
  * It reads as chapters: a framed stage for the hero (light grey by day, dark
  * at night), sections that alternate between the page background and a
- * faint grey, one inverted chapter for pricing, then the footer. Headlines
- * sit in the display face and every chapter opens with a small grey tracked
- * label rather than a pill. Colour is left to the product itself.
+ * faint grey, one inverted chapter for pricing, a second framed stage for
+ * the closing call, then the footer. Headlines sit in the display face and
+ * a chapter opens with a small grey tracked label rather than a pill.
+ *
+ * The order follows a cold visitor on a phone, who is most of the traffic:
+ * the pain and the product (hero), the mess it replaces, how it works in
+ * five steps with the sign-up button right where that ends, what other
+ * agents said, the price, the questions, one last ask. Nothing is said
+ * twice, and a sign-up button is never more than a chapter away.
  */
+
+/** The worries an agent has before trying a CRM, answered beside the button. */
+const REASSURANCES = [
+  { key: "import", icon: FileSpreadsheet },
+  { key: "phone", icon: Smartphone },
+  { key: "privacy", icon: ShieldCheck },
+  { key: "export", icon: LogOut },
+] as const;
+
 export function LandingPage() {
   const t = useTranslations("landing");
   const tNav = useTranslations("nav.marketing");
@@ -106,10 +124,8 @@ export function LandingPage() {
         </div>
       </section>
 
-      <Testimonials />
-
-      {/* One place — the apps agents juggle today, folded into one card */}
-      <section className="section-y pt-0">
+      {/* One place: the apps agents juggle today, folded into one card */}
+      <section className="section-y">
         <div className="mx-auto w-full max-w-6xl px-4">
           <Reveal className="mx-auto max-w-2xl text-center">
             <Eyebrow className="mb-4">{t("onePlace.badge")}</Eyebrow>
@@ -147,14 +163,50 @@ export function LandingPage() {
             soundOff={t("howItWorks.film.soundOff")}
           />
 
-          <Workflow />
+          <Journey />
+
+          {/* The ask, where the walk-through ends, with the usual worries
+              answered next to the button rather than down in the FAQ. */}
+          <Reveal className="bg-background ring-foreground/[0.06] mt-12 rounded-[1.75rem] ring-1 sm:mt-16 dark:ring-white/10">
+            <div className="flex flex-col gap-6 p-6 sm:p-10 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+              <h3 className="display-3 max-w-xl text-balance lg:max-w-[44rem]">
+                <Sentences>
+                  {t.rich("howItWorks.cta.heading", {
+                    nowrap: (chunks) => <span className="whitespace-nowrap">{chunks}</span>,
+                  })}
+                </Sentences>
+              </h3>
+              <div className="flex shrink-0 flex-col gap-3 lg:items-end">
+                <SignUpDialog className="max-lg:w-full">
+                  {t("hero.ctaPrimary")} <ArrowRight />
+                </SignUpDialog>
+                <p className="text-muted-foreground text-sm max-lg:text-center">
+                  {t("hero.note", { limit: FREE_CLIENT_LIMIT })}
+                </p>
+              </div>
+            </div>
+            <dl className="grid gap-x-8 gap-y-6 border-t p-6 sm:grid-cols-2 sm:p-10 lg:grid-cols-4">
+              {REASSURANCES.map(({ key, icon: Icon }) => (
+                <div key={key} className="flex gap-3 lg:flex-col lg:gap-3.5">
+                  <span className="bg-tone-indigo-soft text-tone-indigo-ink flex size-9 shrink-0 items-center justify-center rounded-xl">
+                    <Icon className="size-[18px]" strokeWidth={1.75} />
+                  </span>
+                  <div className="min-w-0">
+                    <dt className="text-[15px] font-medium">{t(`reassure.${key}.title`)}</dt>
+                    <dd className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                      {t(`reassure.${key}.body`)}
+                    </dd>
+                  </div>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
         </div>
       </section>
 
-      {/* Feature deep-dives */}
-      <FeatureDeepDives />
+      <Testimonials />
 
-      {/* Pricing — the inverted chapter */}
+      {/* Pricing: the inverted chapter */}
       <section
         id="pricing"
         className="section-y bg-inverted text-inverted-foreground scroll-mt-20"
@@ -227,19 +279,25 @@ export function LandingPage() {
 
       <Faq />
 
-      {/* Final CTA */}
-      <section className="section-y">
-        <Reveal className="mx-auto w-full max-w-6xl px-4 text-center">
-          <h2 className="display-2 text-balance">
-            <Sentences>{t("finalCta.heading")}</Sentences>
-          </h2>
-          <p className="text-muted-foreground mx-auto mt-4 max-w-md text-lg text-pretty">
-            {t("finalCta.body")}
-          </p>
-          <SignUpDialog className="mt-8">
-            {t("hero.ctaPrimary")} <ArrowRight />
-          </SignUpDialog>
-        </Reveal>
+      {/* Final CTA: the hero's stage again, so the page closes as it opened. */}
+      <section className="px-3 pt-16 pb-3 sm:px-4 sm:pt-24 sm:pb-4">
+        <div className="bg-stage text-stage-foreground ring-foreground/[0.06] relative mx-auto max-w-[88rem] overflow-hidden rounded-[1.75rem] ring-1 sm:rounded-[2.25rem] dark:ring-white/10">
+          <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+            <div className="hero-grid absolute inset-0 [--grid-line:rgb(0_0_0/0.05)] dark:[--grid-line:rgb(255_255_255/0.06)]" />
+            <div className="hero-glow absolute inset-0" />
+          </div>
+          <Reveal className="relative mx-auto w-full max-w-6xl px-4 py-20 text-center sm:py-28">
+            <h2 className="display-2 text-balance">
+              <Sentences>{t("finalCta.heading")}</Sentences>
+            </h2>
+            <p className="text-stage-foreground/70 mx-auto mt-4 max-w-md text-lg text-pretty dark:font-light dark:text-stage-foreground/65">
+              {t("finalCta.body")}
+            </p>
+            <SignUpDialog className="mt-8 max-sm:w-full max-sm:max-w-xs">
+              {t("hero.ctaPrimary")} <ArrowRight />
+            </SignUpDialog>
+          </Reveal>
+        </div>
       </section>
 
       <LandingFooter />

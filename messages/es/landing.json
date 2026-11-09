@@ -44,11 +44,19 @@
       },
       "attention": {
         "title": "Ten claro quién necesita tu atención",
-        "blurb": "Crea una tarea y un recordatorio para cada cliente. Consulta qué toca hacer y qué fichas llevan tiempo sin actualizar, con las visitas y los detalles de la operación a mano."
+        "blurb": "LeadWing te dice a quién toca escribir hoy: leads nuevos sin respuesta, compradores que se han enfriado y tareas que vencen. Cada ficha se abre por su siguiente paso."
       },
       "draft": {
         "title": "Ten claro qué decirle",
         "blurb": "Redacta un seguimiento personal en el idioma de tu cliente. Revísalo, dale tu toque y ábrelo en WhatsApp o en el correo para enviarlo."
+      },
+      "match": {
+        "title": "Mira qué anuncios encajan con cada comprador",
+        "blurb": "Como llevas compradores y vendedores en un mismo sitio, LeadWing te muestra al instante qué anuncios tuyos encajan con el presupuesto, el tipo y los dormitorios de cada comprador."
+      },
+      "viewing": {
+        "title": "Agenda la visita y confírmala por WhatsApp",
+        "blurb": "Agenda visitas y reuniones en un calendario limpio, recibe un recordatorio antes de cada una y envía al cliente una confirmación por WhatsApp con un toque."
       }
     },
     "tiles": {
@@ -61,29 +69,46 @@
         "heading": "Tus próximos pasos",
         "today": "Hoy",
         "task": "Hacer seguimiento tras la visita",
-        "client": "Compradora",
-        "reminder": "Recordatorio · 10:00",
-        "quietHeading": "Fichas sin actualizaciones recientes",
-        "quietDays": "{days} días"
+        "reminder": "Recordatorio · 10:00"
       },
       "draft": {
         "language": "Borrador IA · Alemán",
         "openWhatsApp": "Abrir en WhatsApp"
+      },
+      "match": {
+        "query": "<b>{name}</b> · busca Villa · €800k–1.2M · 4 dorm.",
+        "count": "2 de tus anuncios encajan",
+        "meta1": "€950k · 4 dorm.",
+        "meta2": "€1.1M · 5 dorm."
+      },
+      "viewing": {
+        "month": "Jun",
+        "event": "Visita · Villa, Nueva Andalucía",
+        "when": "sáb 12:00 · con {name}",
+        "reminder": "Recordatorio: tu visita es mañana a las 12:00.",
+        "whatsapp": "Un toque para enviar por WhatsApp"
       }
+    },
+    "cta": {
+      "heading": "Deja de perseguir. Que LeadWing escriba los <nowrap>seguimientos.</nowrap>"
     }
   },
-  "trust": {
-    "everywhere": {
-      "title": "Funciona en todas partes",
-      "body": "En ordenador y en móvil, e instalable como app en la pantalla de inicio de tu móvil."
+  "reassure": {
+    "import": {
+      "title": "Trae tu Excel",
+      "body": "Sube un Excel o un CSV, revisa cada fila y deshaz toda la importación con un clic."
     },
-    "data": {
-      "title": "Tus datos, solo tuyos",
-      "body": "Los clientes de cada agente están totalmente aislados. Nadie ve tu cartera salvo tú."
+    "phone": {
+      "title": "En tu móvil",
+      "body": "Se instala desde el navegador en tu pantalla de inicio. Sin tienda de aplicaciones ni actualizaciones."
     },
-    "setup": {
-      "title": "Nada que configurar",
-      "body": "Inicia sesión y empieza a añadir clientes. Sin formación, sin ruido y sin llamadas comerciales por usuario."
+    "privacy": {
+      "title": "Tus clientes, solo tuyos",
+      "body": "La cartera de cada agente está aislada. Nadie más la ve, ni siquiera en tu propia agencia."
+    },
+    "export": {
+      "title": "Te vas cuando quieras",
+      "body": "Exporta cualquier lista a Excel o CSV, o descarga toda tu cuenta, en todos los planes."
     }
   },
   "pricing": {
@@ -185,13 +210,13 @@
     "ask": "¿Sigues con dudas? Escribe a"
   },
   "footer": {
-    "contactLead": "¿Dudas? Escríbenos —",
+    "contactLead": "¿Dudas? Escríbenos",
     "builtBy": "Creado por"
   },
   "onePlace": {
     "badge": "El problema",
     "heading": "Deja de hacer malabares con cinco apps para un solo cliente.",
-    "body": "Los datos en Notas, los seguimientos en Recordatorios, las visitas en Calendario, los documentos en Drive y la conversación real en WhatsApp. En LeadWing, cada cliente tiene una sola ficha: pegas la consulta, apuntas la llamada, adjuntas los papeles, y «¿dónde lo apunté?» deja de ser una pregunta.",
+    "body": "Los datos en Notas, los seguimientos en Recordatorios, las visitas en Calendario, los documentos en Drive y la conversación real en WhatsApp. En LeadWing, cada cliente tiene una sola ficha, y «¿dónde lo apunté?» deja de ser una pregunta.",
     "caption": "Todo sobre Sofia en una sola ficha. Nada que buscar.",
     "srSummary": "Una animación: los iconos de Notas, Recordatorios, Calendario, Google Drive, hojas de cálculo, correo y WhatsApp vuelan hacia el ala de LeadWing y sale una ficha de cliente completa.",
     "card": {
@@ -202,75 +227,6 @@
       "followUp": "Seguimiento el viernes",
       "docs": "Pasaporte, NIE · 2 archivos",
       "footer": "Todo en un solo sitio"
-    }
-  },
-  "deepDives": {
-    "heading": "Deja de perseguir. Que LeadWing haga los <nowrap>seguimientos.</nowrap>",
-    "body": "Las cinco cosas que llenan el día de un agente independiente, resueltas dentro de LeadWing y no alrededor.",
-    "items": {
-      "whatsapp": {
-        "title": "Mensajes de WhatsApp escritos por IA",
-        "body": "Toca un cliente y LeadWing redacta el mensaje de WhatsApp por ti: cercano, personal y en su idioma. Léelo, ajústalo y envíalo.",
-        "point1": "Se abre directamente en WhatsApp",
-        "point2": "Escrito en el idioma del propio cliente",
-        "point3": "Siempre lo apruebas tú antes de enviarlo"
-      },
-      "match": {
-        "title": "Emparejamiento automático comprador ↔ anuncio",
-        "body": "Como llevas compradores y vendedores en un mismo sitio, LeadWing te muestra al instante qué anuncios tuyos encajan con el presupuesto, el tipo y los dormitorios de cada comprador.",
-        "point1": "Empareja por presupuesto, tipo y dormitorios",
-        "point2": "Un toque del comprador al vendedor",
-        "point3": "Sin duplicar trabajo entre las dos partes"
-      },
-      "portal": {
-        "title": "Captura de leads de portales",
-        "body": "Pega una consulta de Idealista, Fotocasa, Kyero, un email o un WhatsApp: LeadWing la lee y rellena un lead listo para guardar. Sin volver a teclear.",
-        "point1": "Funciona con cualquier portal, email o WhatsApp",
-        "point2": "Extrae nombre, teléfono, idioma y presupuesto",
-        "point3": "Te rellena el formulario de nuevo cliente"
-      },
-      "speed": {
-        "title": "Respuesta rápida al lead, en varios idiomas",
-        "body": "Cuando entra un lead nuevo, redacta la primera respuesta en su idioma con un toque: así respondes el primero en lugar de mirar un mensaje en blanco.",
-        "point1": "Primera respuesta con un toque",
-        "point2": "En el idioma del propio lead",
-        "point3": "Envía por WhatsApp o por email"
-      },
-      "scheduler": {
-        "title": "Agenda de visitas y recordatorios",
-        "body": "Agenda visitas y reuniones en un calendario limpio, recibe un recordatorio antes de cada una y envía al cliente una confirmación por WhatsApp con un toque.",
-        "point1": "Un calendario mensual sencillo para visitas y reuniones",
-        "point2": "Los recordatorios aparecen en tus notificaciones",
-        "point3": "Confirmación al cliente por WhatsApp con un toque"
-      }
-    },
-    "visuals": {
-      "newLead": "Nuevo lead · {name}",
-      "whatsapp": {
-        "online": "en línea",
-        "draftedBy": "Redactado por IA · Alemán"
-      },
-      "match": {
-        "query": "<b>{name}</b> · busca Villa · €800k–1.2M · 4 dorm.",
-        "count": "2 de tus anuncios encajan",
-        "meta1": "€950k · 4 dorm.",
-        "meta2": "€1.1M · 5 dorm."
-      },
-      "portal": {
-        "aiFilled": "Rellenado por IA",
-        "enquiry": "Penthouse · Marbella · consulta de Idealista"
-      },
-      "speed": {
-        "firstReply": "primera respuesta lista",
-        "aiDraft": "Borrador IA · Danés"
-      },
-      "scheduler": {
-        "month": "Jun",
-        "event": "Visita · Villa, Nueva Andalucía",
-        "when": "sáb 12:00 · con {name}",
-        "reminder": "Recordatorio: tu visita es mañana a las 12:00.",
-        "whatsapp": "Un toque para enviar por WhatsApp"
-      }
     }
   }
 }

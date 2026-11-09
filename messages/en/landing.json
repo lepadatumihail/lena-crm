@@ -44,11 +44,19 @@
       },
       "attention": {
         "title": "See who needs your attention",
-        "blurb": "Set a task and reminder for each client. See what is due and which clients have no recent updates, with viewings and deal details close at hand."
+        "blurb": "LeadWing lists who is due a message today: new leads nobody has answered, buyers gone quiet, tasks that are due. Every client page opens on the next step."
       },
       "draft": {
         "title": "Know what to say next",
         "blurb": "Draft a personal follow-up in your client’s language. Review it, make it yours, then open it in WhatsApp or email to send."
+      },
+      "match": {
+        "title": "See which listings fit each buyer",
+        "blurb": "Because you track buyers and sellers in one place, LeadWing instantly shows which of your listings fit each buyer's budget, type and bedrooms."
+      },
+      "viewing": {
+        "title": "Book the viewing, confirm it on WhatsApp",
+        "blurb": "Book viewings and meetings on a clean calendar, get a reminder before each one, and send the client a WhatsApp confirmation in a tap."
       }
     },
     "tiles": {
@@ -61,29 +69,46 @@
         "heading": "Your next steps",
         "today": "Today",
         "task": "Follow up after the viewing",
-        "client": "Buyer",
-        "reminder": "Reminder · 10:00",
-        "quietHeading": "No recent client updates",
-        "quietDays": "{days} days"
+        "reminder": "Reminder · 10:00"
       },
       "draft": {
         "language": "AI draft · German",
         "openWhatsApp": "Open in WhatsApp"
+      },
+      "match": {
+        "query": "<b>{name}</b> · wants Villa · €800k–1.2M · 4 bed",
+        "count": "2 of your listings match",
+        "meta1": "€950k · 4 bed",
+        "meta2": "€1.1M · 5 bed"
+      },
+      "viewing": {
+        "month": "Jun",
+        "event": "Viewing · Villa, Nueva Andalucía",
+        "when": "Sat 12:00 · with {name}",
+        "reminder": "Reminder: your viewing is tomorrow at 12:00.",
+        "whatsapp": "One tap to send on WhatsApp"
       }
+    },
+    "cta": {
+      "heading": "Stop chasing. Let LeadWing write the <nowrap>follow-ups.</nowrap>"
     }
   },
-  "trust": {
-    "everywhere": {
-      "title": "Works everywhere",
-      "body": "Desktop and mobile, and installable as an app on your phone's home screen."
+  "reassure": {
+    "import": {
+      "title": "Bring your Excel",
+      "body": "Upload a spreadsheet or CSV, preview every row, and undo the whole import in one click."
     },
-    "data": {
-      "title": "Your data, yours only",
-      "body": "Every agent's clients are fully isolated. Nobody sees your book but you."
+    "phone": {
+      "title": "On your phone",
+      "body": "Installs from the browser to your home screen. No app store, nothing to update."
     },
-    "setup": {
-      "title": "Nothing to set up",
-      "body": "Sign in and start adding clients. No training, no clutter, no per-seat sales calls."
+    "privacy": {
+      "title": "Only you see your clients",
+      "body": "Every agent's book is isolated. Nobody else sees it, not even at your own agency."
+    },
+    "export": {
+      "title": "Leave whenever you like",
+      "body": "Export any list to Excel or CSV, or download your whole account, on every plan."
     }
   },
   "pricing": {
@@ -185,13 +210,13 @@
     "ask": "Still not sure? Write to"
   },
   "footer": {
-    "contactLead": "Questions? Write to us —",
+    "contactLead": "Questions? Write to us",
     "builtBy": "Built by"
   },
   "onePlace": {
     "badge": "The problem",
     "heading": "Stop juggling five apps for one client.",
-    "body": "Details in Notes, follow-ups in Reminders, viewings in Calendar, documents in Drive, and the real conversation on WhatsApp. LeadWing gives each client one card instead: paste the enquiry, log the call, attach the papers, and “where did I put that?” stops being a question.",
+    "body": "Details in Notes, follow-ups in Reminders, viewings in Calendar, documents in Drive, the real conversation on WhatsApp. LeadWing gives each client one card, and “where did I put that?” stops being a question.",
     "caption": "Everything about Sofia on one card. Nothing left to hunt for.",
     "srSummary": "An animation: icons for Notes, Reminders, Calendar, Google Drive, spreadsheets, email and WhatsApp fly into the LeadWing wing, and one complete client card comes out.",
     "card": {
@@ -202,75 +227,6 @@
       "followUp": "Follow up on Friday",
       "docs": "Passport, NIE · 2 files",
       "footer": "All in one place"
-    }
-  },
-  "deepDives": {
-    "heading": "Stop chasing. Let LeadWing do the <nowrap>follow-ups.</nowrap>",
-    "body": "The five things that fill an independent agent's day, handled inside LeadWing instead of around it.",
-    "items": {
-      "whatsapp": {
-        "title": "AI-written WhatsApp messages",
-        "body": "Tap a client and LeadWing drafts the WhatsApp message for you — warm, personal, and in their language. Read it, tweak it, send it.",
-        "point1": "Opens straight in WhatsApp",
-        "point2": "Written in the client's own language",
-        "point3": "You always approve before it sends"
-      },
-      "match": {
-        "title": "Buyer ↔ listing auto-match",
-        "body": "Because you track buyers and sellers in one place, LeadWing instantly shows which of your listings fit each buyer's budget, type and bedrooms.",
-        "point1": "Matches on budget, type & bedrooms",
-        "point2": "One tap from buyer to the seller",
-        "point3": "No double-handling between sides"
-      },
-      "portal": {
-        "title": "Portal lead capture",
-        "body": "Paste an enquiry from Idealista, Fotocasa, Kyero, an email or a WhatsApp — LeadWing reads it and fills a ready-to-save lead. No retyping.",
-        "point1": "Works with any portal, email or WhatsApp",
-        "point2": "Pulls out name, phone, language & budget",
-        "point3": "Pre-fills the new-client form for you"
-      },
-      "speed": {
-        "title": "Multilingual speed-to-lead",
-        "body": "When a new lead comes in, draft a first reply in their language in one tap — so you're first to respond, not staring at a blank message.",
-        "point1": "One-tap first reply",
-        "point2": "In the lead's own language",
-        "point3": "Send via WhatsApp or email"
-      },
-      "scheduler": {
-        "title": "Viewing scheduler + reminders",
-        "body": "Book viewings and meetings on a clean calendar, get a reminder before each one, and send the client a WhatsApp confirmation in a tap.",
-        "point1": "A simple month calendar for viewings & meetings",
-        "point2": "Reminders surface in your notifications",
-        "point3": "One-tap WhatsApp confirmation to the client"
-      }
-    },
-    "visuals": {
-      "newLead": "New lead · {name}",
-      "whatsapp": {
-        "online": "online",
-        "draftedBy": "Drafted by AI · German"
-      },
-      "match": {
-        "query": "<b>{name}</b> · wants Villa · €800k–1.2M · 4 bed",
-        "count": "2 of your listings match",
-        "meta1": "€950k · 4 bed",
-        "meta2": "€1.1M · 5 bed"
-      },
-      "portal": {
-        "aiFilled": "AI-filled",
-        "enquiry": "Penthouse · Marbella · enquiry from Idealista"
-      },
-      "speed": {
-        "firstReply": "first reply ready",
-        "aiDraft": "AI draft · Danish"
-      },
-      "scheduler": {
-        "month": "Jun",
-        "event": "Viewing · Villa, Nueva Andalucía",
-        "when": "Sat 12:00 · with {name}",
-        "reminder": "Reminder: your viewing is tomorrow at 12:00.",
-        "whatsapp": "One tap to send on WhatsApp"
-      }
     }
   }
 }

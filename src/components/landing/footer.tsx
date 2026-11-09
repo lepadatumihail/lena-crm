@@ -50,7 +50,7 @@ export function LandingFooter() {
               markClassName="size-5"
               wordmarkClassName="text-foreground font-medium"
             />
-            <span>— {tSite("tagline")}</span>
+            <span className="border-l pl-2.5">{tSite("tagline")}</span>
           </div>
 
           {/* Its own row until lg: squeezed between the brand and the contact
