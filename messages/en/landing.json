@@ -1,8 +1,8 @@
 {
   "hero": {
     "badge": "CRM for independent real‑estate agents",
-    "title": "Your buyers <nowrap>go quiet.</nowrap> <accent>Your commission goes with them.</accent>",
-    "subtitle": "LeadWing is the CRM for independent real‑estate agents: every buyer in one place, who to follow up today, and the message already written in their language.",
+    "title": "<accent>Your buyers <nowrap>go quiet.</nowrap></accent> Your commission goes with them.",
+    "subtitle": "Every buyer in one place, who to follow up today, and the message already written in their language.",
     "ctaPrimary": "Start for free",
     "ctaSecondary": "See how it works",
     "note": "Free for up to {limit} clients. No card required."
@@ -10,9 +10,11 @@
   "preview": {
     "toasts": {
       "moved": "{name} → {stage}",
-      "newLead": "New lead from Idealista",
-      "offerAccepted": "{name} · offer accepted",
-      "reminderSent": "WhatsApp reminder ready for {name}"
+      "quiet": "{name} · quiet for {days, plural, one {# day} other {# days}}"
+    },
+    "draft": {
+      "label": "Draft in German",
+      "sent": "Sent on WhatsApp"
     }
   },
   "testimonials": {
@@ -218,7 +220,7 @@
     "heading": "Stop juggling five apps for one client.",
     "body": "Details in Notes, follow-ups in Reminders, viewings in Calendar, documents in Drive, the real conversation on WhatsApp. LeadWing gives each client one card, and “where did I put that?” stops being a question.",
     "caption": "Everything about Sofia on one card. Nothing left to hunt for.",
-    "srSummary": "An animation: icons for Notes, Reminders, Calendar, Google Drive, spreadsheets, email and WhatsApp fly into the LeadWing wing, and one complete client card comes out.",
+    "srSummary": "An animation: an empty LeadWing client card, and the icons for WhatsApp, Notes, Calendar, Reminders and Google Drive flying into it one by one. Each fills its own line: the phone number, the budget, the viewing, the follow-up and the documents.",
     "card": {
       "language": "German",
       "phone": "+49 171 234 5678 · WhatsApp",

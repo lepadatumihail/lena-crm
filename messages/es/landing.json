@@ -1,8 +1,8 @@
 {
   "hero": {
     "badge": "CRM para agentes inmobiliarios independientes",
-    "title": "Tus compradores <nowrap>se enfrían.</nowrap> <accent>Y tu comisión se va con ellos.</accent>",
-    "subtitle": "LeadWing es el CRM para agentes inmobiliarios independientes: todos tus compradores en un solo sitio, a quién contactar hoy y el mensaje ya escrito en su idioma.",
+    "title": "<accent>Tus compradores <nowrap>se enfrían.</nowrap></accent> Y tu comisión se va con ellos.",
+    "subtitle": "Todos tus compradores en un solo sitio, a quién contactar hoy y el mensaje ya escrito en su idioma.",
     "ctaPrimary": "Empieza gratis",
     "ctaSecondary": "Mira cómo funciona",
     "note": "Gratis hasta {limit} clientes. Sin tarjeta."
@@ -10,9 +10,11 @@
   "preview": {
     "toasts": {
       "moved": "{name} → {stage}",
-      "newLead": "Nuevo lead de Idealista",
-      "offerAccepted": "{name} · oferta aceptada",
-      "reminderSent": "Recordatorio de WhatsApp listo para {name}"
+      "quiet": "{name} · {days, plural, one {# día} other {# días}} sin contacto"
+    },
+    "draft": {
+      "label": "Borrador en alemán",
+      "sent": "Enviado por WhatsApp"
     }
   },
   "testimonials": {
@@ -218,11 +220,11 @@
     "heading": "Deja de hacer malabares con cinco apps para un solo cliente.",
     "body": "Los datos en Notas, los seguimientos en Recordatorios, las visitas en Calendario, los documentos en Drive y la conversación real en WhatsApp. En LeadWing, cada cliente tiene una sola ficha, y «¿dónde lo apunté?» deja de ser una pregunta.",
     "caption": "Todo sobre Sofia en una sola ficha. Nada que buscar.",
-    "srSummary": "Una animación: los iconos de Notas, Recordatorios, Calendario, Google Drive, hojas de cálculo, correo y WhatsApp vuelan hacia el ala de LeadWing y sale una ficha de cliente completa.",
+    "srSummary": "Una animación: una ficha de cliente de LeadWing vacía y los iconos de WhatsApp, Notas, Calendario, Recordatorios y Google Drive que vuelan hacia ella uno a uno. Cada uno rellena su línea: el teléfono, el presupuesto, la visita, el seguimiento y los documentos.",
     "card": {
       "language": "Alemán",
       "phone": "+49 171 234 5678 · WhatsApp",
-      "budget": "Apartamento · 600–800 k€ · vistas al mar",
+      "budget": "Piso · 600–800 k€ · vistas al mar",
       "viewing": "Visita jue 11:00 · Nueva Andalucía",
       "followUp": "Seguimiento el viernes",
       "docs": "Pasaporte, NIE · 2 archivos",

@@ -9,7 +9,7 @@ import {
   BellRing,
   Building2,
   CalendarDays,
-  Check,
+  CheckCheck,
   Home,
   LayoutGrid,
   List,
@@ -21,8 +21,8 @@ import {
   Phone,
   Plus,
   Search,
+  Sparkles,
   Star,
-  UserPlus,
   Users,
   type LucideIcon,
 } from "lucide-react";
@@ -40,10 +40,12 @@ import { cn } from "@/lib/utils";
 /*
   The hero's live demo: the Buyers list inside the app shell, drawn with the
   same primitives as the real screen (tags, avatars, money, two-line rows
-  with the last contact under the name, the Needs follow-up tab), so what a
-  visitor sees above the fold is what they get after signing in. A short loop plays out a week: a lead arrives, a buyer moves to
-  a viewing, an offer is accepted, a reminder goes out; then the board resets.
-  Decorative: aria-hidden, nothing in it takes focus.
+  with the last contact under the name, the Needs follow-up tab, Home's amber
+  dot), so what a visitor sees above the fold is what they get after signing
+  in. The loop acts out the headline on the top row, the one row every
+  screen shows: Sofia has been quiet for nine days, her message is ready in
+  German, it goes out on WhatsApp, and she moves to a viewing. Then it rests
+  and starts again. Decorative: aria-hidden, nothing in it takes focus.
 */
 
 type Channel = "whatsapp" | "call" | "email";
@@ -75,21 +77,25 @@ function needsFollowUp(r: Row): boolean {
   return r.stage !== "reserved" && r.contact.hours >= 7 * 24;
 }
 
+/** How long Sofia has been quiet when the loop starts. */
+const QUIET_DAYS = 9;
+
 // Sample records. Names are proper nouns and figures are numbers, so the rows
 // read the same in every UI language; only the labels around them translate.
-const ROWS: Record<string, Row> = {
-  sofia: {
-    id: "sofia",
-    name: "Sofia Müller",
-    stage: "viewing",
-    priority: true,
-    budgetMin: 600_000,
-    budgetMax: 800_000,
-    viewings: 3,
-    contact: { channel: "whatsapp", hours: 2 },
-    reach: CHANNELS,
-  },
-  james: {
+const SOFIA: Row = {
+  id: "sofia",
+  name: "Sofia Müller",
+  stage: "qualified",
+  priority: true,
+  budgetMin: 600_000,
+  budgetMax: 800_000,
+  viewings: 0,
+  contact: { channel: "whatsapp", hours: QUIET_DAYS * 24 },
+  reach: CHANNELS,
+};
+
+const OTHERS: Row[] = [
+  {
     id: "james",
     name: "James Carter",
     stage: "qualified",
@@ -99,49 +105,51 @@ const ROWS: Record<string, Row> = {
     contact: { channel: "call", hours: 26 },
     reach: CHANNELS,
   },
-  anya: {
+  {
     id: "anya",
     name: "Anya Petrova",
     stage: "contacted",
     budgetMin: 1_200_000,
     budgetMax: null,
     viewings: 0,
-    contact: { channel: "email", hours: 9 * 24 },
+    contact: { channel: "email", hours: 3 * 24 },
     reach: ["email"],
   },
-  tom: {
-    id: "tom",
-    name: "Tom Wright",
-    stage: "new",
-    budgetMin: null,
-    budgetMax: 2_400_000,
-    viewings: 0,
-    contact: null,
-    reach: ["whatsapp", "call"],
-  },
-};
+];
 
-// Three at rest, most recent first. Every beat of the loop lands on a row that
-// stays in view once Tom pushes Anya under the bottom edge.
-const START = ["sofia", "james", "anya"];
-const initialRows = (): Row[] => START.map((id) => ROWS[id]);
+/**
+ * Sofia writes German, so her message does too, whatever the page's language:
+ * that is the point. Two lines in the bubble at every width.
+ */
+const DRAFT = "Hallo Sofia! Zwei neue Villen in Nueva Andalucía passen genau zu Ihrer Suche.";
+const DRAFT_WORDS = DRAFT.split(" ");
 
-const STEP_MS = 3200;
+/**
+ * The beats, each with how long it holds before the next. rest: the quiet
+ * buyer at a glance (amber dot, "9 days ago", the follow-up count). quiet:
+ * the reminder. draft: the message writes itself in German under her row.
+ * sent: out on WhatsApp, her last contact is now and the count drops.
+ * moved: she books a viewing.
+ */
+type Beat = "rest" | "quiet" | "draft" | "sent" | "moved";
+const SCRIPT: readonly [Beat, number][] = [
+  ["rest", 1600],
+  ["quiet", 2400],
+  ["draft", 3200],
+  ["sent", 1900],
+  ["moved", 4200],
+];
+
 const TOAST_MS = 2800;
+/** One word every this many ms: the draft streams in like the assistant writes. */
+const WORD_MS = 70;
 
 /* One spring for every state change here; rows sliding get a touch longer. */
 const SPRING = { type: "spring", duration: 0.3, bounce: 0 } as const;
 const LAYOUT_SPRING = { type: "spring", duration: 0.4, bounce: 0 } as const;
-const EXIT = {
-  opacity: 0,
-  y: -12,
-  filter: "blur(4px)",
-  transition: { duration: 0.15, ease: "easeOut" },
-} as const;
 
-type ToastKind = "newLead" | "moved" | "offerAccepted" | "reminderSent";
-type ToastTone = Tone | "whatsapp";
-type Toast = { id: number; kind: ToastKind; tone: ToastTone; icon: LucideIcon };
+type ToastKind = "quiet" | "moved";
+type Toast = { id: number; kind: ToastKind; tone: Tone; icon: LucideIcon };
 
 /** "2 hours ago", "yesterday", "9 days ago": Intl does the wording per language. */
 function sinceLabel(hours: number, tag: string): string {
@@ -192,49 +200,56 @@ export function AppPreview() {
   const tClients = useTranslations("clients");
   const tag = intlTag(useLocale());
   const reduced = useReducedMotion();
-  const [rows, setRows] = useState<Row[]>(initialRows);
+  const [beat, setBeat] = useState<Beat>("rest");
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const [unread, setUnread] = useState(0);
-  const stepRef = useRef(0);
   const toastIdRef = useRef(0);
 
   useEffect(() => {
     if (reduced) return;
+    const timers = new Set<ReturnType<typeof setTimeout>>();
+    const later = (fn: () => void, ms: number) => {
+      const id = setTimeout(() => {
+        timers.delete(id);
+        fn();
+      }, ms);
+      timers.add(id);
+    };
 
-    function pushToast(kind: ToastKind, tone: ToastTone, icon: LucideIcon) {
+    function pushToast(kind: ToastKind, tone: Tone, icon: LucideIcon) {
       const id = ++toastIdRef.current;
       setToasts((list) => [...list, { id, kind, tone, icon }].slice(-2));
-      setTimeout(() => setToasts((list) => list.filter((x) => x.id !== id)), TOAST_MS);
-    }
-    function patch(id: string, changes: Partial<Row>) {
-      setRows((list) => list.map((r) => (r.id === id ? { ...r, ...changes } : r)));
+      later(() => setToasts((list) => list.filter((x) => x.id !== id)), TOAST_MS);
     }
 
-    const interval = setInterval(() => {
-      const step = stepRef.current % 5;
-      stepRef.current += 1;
-      if (step === 0) {
-        setRows((list) => [ROWS.tom, ...list]);
-        setUnread((n) => n + 1);
-        pushToast("newLead", "neutral", UserPlus);
-      } else if (step === 1) {
-        patch("james", { stage: "viewing" });
-        pushToast("moved", "neutral", ArrowRight);
-      } else if (step === 2) {
-        patch("sofia", { stage: "reserved" });
-        setUnread((n) => n + 1);
-        pushToast("offerAccepted", "green", Check);
-      } else if (step === 3) {
-        patch("james", { contact: { channel: "whatsapp", hours: 0 } });
-        pushToast("reminderSent", "whatsapp", MessageCircle);
-      } else {
-        setRows(initialRows());
-        setUnread(0);
-      }
-    }, STEP_MS);
+    let i = 0;
+    const advance = () => {
+      i = (i + 1) % SCRIPT.length;
+      const [next, hold] = SCRIPT[i];
+      setBeat(next);
+      if (next === "quiet") pushToast("quiet", "amber", BellRing);
+      if (next === "moved") pushToast("moved", "teal", ArrowRight);
+      later(advance, hold);
+    };
+    later(advance, SCRIPT[0][1]);
 
-    return () => clearInterval(interval);
+    return () => timers.forEach(clearTimeout);
   }, [reduced]);
+
+  // Everything on screen follows from the beat.
+  const sent = beat === "sent" || beat === "moved";
+  const moved = beat === "moved";
+  const sofia: Row = {
+    ...SOFIA,
+    stage: moved ? "viewing" : SOFIA.stage,
+    viewings: moved ? 1 : SOFIA.viewings,
+    contact: sent ? { channel: "whatsapp", hours: 0 } : SOFIA.contact,
+  };
+  const rows = [sofia, ...OTHERS];
+  // The bell carries the reminder until the message goes out.
+  const unread = beat === "quiet" || beat === "draft";
+  const bubble = beat === "draft" || beat === "sent";
+  // A pale wash on Sofia's row marks the beats that are about her standing.
+  const wash = beat === "quiet" ? "amber" : beat === "moved" ? "teal" : null;
 
   const stageCount = new Map<Stage, number>();
   for (const r of rows) stageCount.set(r.stage, (stageCount.get(r.stage) ?? 0) + 1);
@@ -242,17 +257,13 @@ export function AppPreview() {
 
   function toastText(kind: ToastKind): string {
     switch (kind) {
-      case "newLead":
-        return t("preview.toasts.newLead");
+      case "quiet":
+        return t("preview.toasts.quiet", { name: SOFIA.name, days: QUIET_DAYS });
       case "moved":
         return t("preview.toasts.moved", {
-          name: ROWS.james.name,
+          name: SOFIA.name,
           stage: stageLabel(tCrm, "viewing"),
         });
-      case "offerAccepted":
-        return t("preview.toasts.offerAccepted", { name: ROWS.sofia.name });
-      case "reminderSent":
-        return t("preview.toasts.reminderSent", { name: "James" });
     }
   }
 
@@ -335,7 +346,7 @@ export function AppPreview() {
               <span className="text-muted-foreground relative flex size-8 items-center justify-center">
                 <Bell className="size-4" strokeWidth={1.75} />
                 <AnimatePresence initial={false}>
-                  {unread > 0 ? (
+                  {unread ? (
                     <motion.span
                       key="unread"
                       initial={{ opacity: 0, scale: 0.25, filter: "blur(4px)" }}
@@ -438,125 +449,150 @@ export function AppPreview() {
                 <span className="hidden md:block" />
               </div>
 
-              {/* A fixed window of three rows, so the board keeps its height
-                  when the fourth arrives: the list scrolls the way a real one
-                  would, and the last row slides out under the bottom edge.
-                  164px is three 55px rows (the app's two-line row) less the
-                  third row's bottom border, which would otherwise double the
-                  card's own. */}
+              {/* A fixed window of three rows, so the board never changes
+                  height. 164px is three 55px rows (the app's two-line row)
+                  less the third row's bottom border, which would otherwise
+                  double the card's own. The draft floats over the lower two. */}
               <div className="relative h-[164px] overflow-hidden">
-                <AnimatePresence initial={false} mode="popLayout">
-                  {rows.map((r) => (
-                    <motion.div
-                      key={r.id}
-                      layout
-                      initial={{ opacity: 0, y: -8, filter: "blur(4px)" }}
-                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                      exit={EXIT}
-                      transition={LAYOUT_SPRING}
-                      className={cn(
-                        GRID,
-                        "relative h-[55px] border-b whitespace-nowrap last:border-0 [&>span]:px-3"
-                      )}
-                    >
-                      {r.id === "tom" ? (
-                        // A new lead lands on a pale indigo row (indigo is the New
-                        // stage's tone) that settles into the list, so the eye
-                        // finds it before reading.
-                        <motion.span
-                          aria-hidden
-                          initial={{ opacity: 1 }}
-                          animate={{ opacity: 0 }}
-                          transition={{ duration: 1.4, delay: 0.5, ease: "easeOut" }}
-                          className="bg-tone-indigo-soft pointer-events-none absolute inset-0 !px-0"
-                        />
-                      ) : null}
-                      <span className="hidden md:block">
-                        <span className="border-input block size-4 rounded-[4px] border shadow-xs" />
-                      </span>
-                      <span className="flex min-w-0 items-center gap-2.5">
+                {rows.map((r) => (
+                  <div
+                    key={r.id}
+                    className={cn(
+                      GRID,
+                      "relative h-[55px] border-b whitespace-nowrap last:border-0 [&>span]:px-3"
+                    )}
+                  >
+                    {r.id === SOFIA.id ? (
+                      <AnimatePresence>
+                        {wash ? (
+                          <motion.span
+                            key={beat}
+                            aria-hidden
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 1, 0] }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 2.2, times: [0, 0.2, 1], ease: "easeOut" }}
+                            className={cn(
+                              "pointer-events-none absolute inset-0 !px-0",
+                              wash === "amber" ? "bg-tone-amber-soft" : "bg-tone-teal-soft"
+                            )}
+                          />
+                        ) : null}
+                      </AnimatePresence>
+                    ) : null}
+                    <span className="hidden md:block">
+                      <span className="border-input relative block size-4 rounded-[4px] border shadow-xs" />
+                    </span>
+                    <span className="relative flex min-w-0 items-center gap-2.5">
+                      {/* Home's Needs follow-up mark: an amber dot on the avatar. */}
+                      <span className="relative shrink-0">
                         <ClientAvatar name={r.name} side="buyer" size="md" />
-                        <span className="min-w-0 flex-1">
-                          <span className="flex min-w-0 items-center gap-2">
-                            <span className="truncate font-medium">{r.name}</span>
-                            {r.priority ? (
-                              <Star className="fill-foreground text-foreground size-3.5 shrink-0" />
-                            ) : null}
-                            <StageSwap
-                              stage={r.stage}
-                              label={stageLabel(tCrm, r.stage)}
-                              className="ml-auto shrink-0 sm:hidden"
+                        <AnimatePresence initial={false}>
+                          {needsFollowUp(r) ? (
+                            <motion.span
+                              key="follow-up"
+                              initial={{ opacity: 0, scale: 0.25 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.25 }}
+                              transition={SPRING}
+                              className="bg-tone-amber ring-card absolute -top-px -right-px size-2.5 rounded-full ring-2"
                             />
-                          </span>
-                          <span className="relative mt-0.5 flex text-xs">
-                            <AnimatePresence mode="popLayout" initial={false}>
-                              <motion.span
-                                key={r.contact ? `${r.contact.channel}-${r.contact.hours}` : "none"}
-                                initial={{ opacity: 0, y: 6, filter: "blur(4px)" }}
-                                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                                exit={{ opacity: 0, y: -6, filter: "blur(4px)" }}
-                                transition={SPRING}
-                                className="text-muted-foreground flex min-w-0 items-center gap-1.5"
-                              >
-                                {r.contact ? (
-                                  <ContactLine
-                                    icon={CHANNEL_ICONS[r.contact.channel]}
-                                    label={tClients(`latest.channels.${r.contact.channel}`)}
-                                    since={sinceLabel(r.contact.hours, tag)}
-                                  />
-                                ) : (
-                                  <span className="truncate">{tClients("latest.none")}</span>
-                                )}
-                              </motion.span>
-                            </AnimatePresence>
-                          </span>
+                          ) : null}
+                        </AnimatePresence>
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="flex min-w-0 items-center gap-2">
+                          <span className="truncate font-medium">{r.name}</span>
+                          {r.priority ? (
+                            <Star className="fill-foreground text-foreground size-3.5 shrink-0" />
+                          ) : null}
+                          <StageSwap
+                            stage={r.stage}
+                            label={stageLabel(tCrm, r.stage)}
+                            className="ml-auto shrink-0 sm:hidden"
+                          />
+                        </span>
+                        <span className="relative mt-0.5 flex text-xs">
+                          <AnimatePresence mode="popLayout" initial={false}>
+                            <motion.span
+                              key={r.contact ? `${r.contact.channel}-${r.contact.hours}` : "none"}
+                              initial={{ opacity: 0, y: 6, filter: "blur(4px)" }}
+                              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                              exit={{ opacity: 0, y: -6, filter: "blur(4px)" }}
+                              transition={SPRING}
+                              className="text-muted-foreground flex min-w-0 items-center gap-1.5"
+                            >
+                              {r.contact ? (
+                                <ContactLine
+                                  icon={CHANNEL_ICONS[r.contact.channel]}
+                                  label={tClients(`latest.channels.${r.contact.channel}`)}
+                                  since={sinceLabel(r.contact.hours, tag)}
+                                />
+                              ) : (
+                                <span className="truncate">{tClients("latest.none")}</span>
+                              )}
+                            </motion.span>
+                          </AnimatePresence>
                         </span>
                       </span>
-                      <StageSwap
-                        stage={r.stage}
-                        label={stageLabel(tCrm, r.stage)}
-                        className="hidden sm:flex"
-                      />
-                      {/* Right-aligned by flex, so a range wider than the column
-                          ("600.000 € – 800.000 €") grows to the left instead of
-                          past the column's edge. */}
-                      <span className="hidden justify-end tabular-nums sm:flex">
-                        <span className="whitespace-nowrap">{budget(r)}</span>
-                      </span>
-                      <span className="hidden text-right tabular-nums xl:block">
-                        {r.viewings > 0 ? (
-                          r.viewings
-                        ) : (
-                          <span className="text-muted-foreground">0</span>
-                        )}
-                      </span>
-                      {/* One-tap WhatsApp, Call and Email; a missing channel keeps its slot. */}
-                      <span className="text-muted-foreground hidden items-center justify-end gap-0.5 !px-1 lg:flex">
-                        {CHANNELS.map((channel) => {
-                          const Icon = CHANNEL_ICONS[channel];
-                          return (
-                            <span key={channel} className="flex size-7 items-center justify-center">
-                              {r.reach.includes(channel) ? (
-                                <Icon className="size-3.5" strokeWidth={1.75} />
-                              ) : null}
-                            </span>
-                          );
-                        })}
-                      </span>
-                      <span className="text-muted-foreground hidden items-center justify-end md:flex">
-                        <MoreHorizontal className="size-3.5" strokeWidth={1.75} />
-                      </span>
-                      {/* The phone row's one icon: WhatsApp, else Call. */}
-                      <span className="text-muted-foreground flex items-center justify-end !pl-0 sm:hidden">
-                        {(() => {
-                          const channel = r.reach.find((c) => c !== "email");
-                          if (!channel) return null;
-                          const Icon = CHANNEL_ICONS[channel];
-                          return <Icon className="size-4" strokeWidth={1.75} />;
-                        })()}
-                      </span>
-                    </motion.div>
-                  ))}
+                    </span>
+                    <StageSwap
+                      stage={r.stage}
+                      label={stageLabel(tCrm, r.stage)}
+                      className="relative hidden sm:flex"
+                    />
+                    {/* Right-aligned by flex, so a range wider than the column
+                        ("600.000 € – 800.000 €") grows to the left instead of
+                        past the column's edge. */}
+                    <span className="relative hidden justify-end tabular-nums sm:flex">
+                      <span className="whitespace-nowrap">{budget(r)}</span>
+                    </span>
+                    <span className="relative hidden text-right tabular-nums xl:block">
+                      {r.viewings > 0 ? (
+                        <Flip value={r.viewings} />
+                      ) : (
+                        <span className="text-muted-foreground">0</span>
+                      )}
+                    </span>
+                    {/* One-tap WhatsApp, Call and Email; a missing channel keeps its slot. */}
+                    <span className="text-muted-foreground relative hidden items-center justify-end gap-0.5 !px-1 lg:flex">
+                      {CHANNELS.map((channel) => {
+                        const Icon = CHANNEL_ICONS[channel];
+                        return (
+                          <span key={channel} className="flex size-7 items-center justify-center">
+                            {r.reach.includes(channel) ? (
+                              <Icon className="size-3.5" strokeWidth={1.75} />
+                            ) : null}
+                          </span>
+                        );
+                      })}
+                    </span>
+                    <span className="text-muted-foreground relative hidden items-center justify-end md:flex">
+                      <MoreHorizontal className="size-3.5" strokeWidth={1.75} />
+                    </span>
+                    {/* The phone row's one icon: WhatsApp, else Call. */}
+                    <span className="text-muted-foreground relative flex items-center justify-end !pl-0 sm:hidden">
+                      {(() => {
+                        const channel = r.reach.find((c) => c !== "email");
+                        if (!channel) return null;
+                        const Icon = CHANNEL_ICONS[channel];
+                        return <Icon className="size-4" strokeWidth={1.75} />;
+                      })()}
+                    </span>
+                  </div>
+                ))}
+
+                {/* Sofia's message, written in German under her row and sent on
+                    WhatsApp: the composer's own outgoing bubble, in small. */}
+                <AnimatePresence>
+                  {bubble ? (
+                    <DraftBubble
+                      key="draft"
+                      sent={sent}
+                      label={t("preview.draft.label")}
+                      sentLabel={t("preview.draft.sent")}
+                    />
+                  ) : null}
                 </AnimatePresence>
               </div>
             </div>
@@ -579,10 +615,7 @@ export function AppPreview() {
                     className="bg-popover text-popover-foreground flex items-center gap-2 rounded-lg border px-3 py-2 text-[13px] font-medium shadow-lg"
                   >
                     <toast.icon
-                      className={cn(
-                        "size-4 shrink-0",
-                        toast.tone === "whatsapp" ? "text-muted-foreground" : TONE_INK[toast.tone]
-                      )}
+                      className={cn("size-4 shrink-0", TONE_INK[toast.tone])}
                       strokeWidth={2}
                     />
                     <span className="truncate">{toastText(toast.kind)}</span>
@@ -594,6 +627,82 @@ export function AppPreview() {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * The draft under Sofia's row: a label, then WhatsApp's outgoing bubble with
+ * the German text streaming in word by word. The full text sits invisibly
+ * underneath so the bubble is its final size from the first word. When it is
+ * sent, the label turns and the ticks show.
+ */
+function DraftBubble({
+  sent,
+  label,
+  sentLabel,
+}: {
+  sent: boolean;
+  label: string;
+  sentLabel: string;
+}) {
+  const [shown, setShown] = useState(0);
+  const done = shown >= DRAFT_WORDS.length;
+  useEffect(() => {
+    if (done) return;
+    const id = setTimeout(() => setShown((n) => n + 1), WORD_MS);
+    return () => clearTimeout(id);
+  }, [shown, done]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -6, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -10, filter: "blur(4px)", transition: { duration: 0.25, ease: "easeOut" } }}
+      transition={LAYOUT_SPRING}
+      className="bg-popover text-popover-foreground absolute top-[46px] right-2 z-10 w-[min(20rem,calc(100%-1rem))] origin-top-right rounded-xl border p-2 whitespace-normal shadow-lg sm:right-3"
+    >
+      <div className="text-muted-foreground relative flex h-5 items-center px-1 pb-1.5 text-[11px]">
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.span
+            key={sent ? "sent" : "draft"}
+            initial={{ opacity: 0, y: 4, filter: "blur(4px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: -4, filter: "blur(4px)" }}
+            transition={SPRING}
+            className="flex items-center gap-1.5"
+          >
+            {sent ? (
+              <MessageCircle className="size-3.5 text-[#25D366]" strokeWidth={2} />
+            ) : (
+              <Sparkles className="text-tone-indigo-ink size-3.5" strokeWidth={2} />
+            )}
+            {sent ? sentLabel : label}
+          </motion.span>
+        </AnimatePresence>
+      </div>
+      <div className="ml-auto rounded-xl rounded-br-sm bg-[#d9fdd3] px-2.5 pt-1.5 pb-1 text-[12.5px] leading-snug text-[#111b21] ring-1 ring-black/[0.04] dark:bg-[#005c4b] dark:text-[#e9edef] dark:ring-white/[0.06]">
+        <p className="relative">
+          <span className="invisible">{DRAFT}</span>
+          <span className="absolute inset-0">
+            {DRAFT_WORDS.slice(0, shown).join(" ")}
+            {!done ? (
+              <span className="ml-0.5 inline-block h-3 w-px translate-y-0.5 animate-pulse bg-current" />
+            ) : null}
+          </span>
+        </p>
+        <span className="flex h-4 items-center justify-end gap-1 text-[10px] text-[#667781] tabular-nums dark:text-[#8696a0]">
+          10:42
+          <motion.span
+            initial={false}
+            animate={{ opacity: sent ? 1 : 0, scale: sent ? 1 : 0.5 }}
+            transition={SPRING}
+            className="inline-flex"
+          >
+            <CheckCheck className="size-3.5 text-[#53bdeb]" strokeWidth={2} />
+          </motion.span>
+        </span>
+      </div>
+    </motion.div>
   );
 }
 
