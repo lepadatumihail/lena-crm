@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif, Noto_Serif_Display } from "next/font/google";
+import { Geist, Geist_Mono, Sora } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import NextTopLoader from "nextjs-toploader";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -23,31 +23,17 @@ const geistMono = Geist_Mono({
 });
 
 /**
- * The display face for marketing headlines and big numbers: a regular-weight
- * serif set large, so the type carries the page instead of bold sans.
+ * The display face for headlines and big numbers on the public pages
+ * (marketing, pricing, agent pages): Sora, a geometric sans, set regular and
+ * tight by the display-* utilities in globals.css. It has no italic and no
+ * Cyrillic: emphasis is colour or weight, and Russian pages set their
+ * headlines in Geist (`html:lang(ru)` in globals.css).
  * Swapping it is this block plus `--font-display` in globals.css.
  */
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
-  weight: "400",
-  style: ["normal", "italic"],
+const sora = Sora({
+  variable: "--font-sora",
   subsets: ["latin", "latin-ext"],
   display: "swap",
-});
-
-/**
- * Instrument Serif has no Cyrillic, so Russian pages set their display type
- * in Noto Serif Display, narrowed on its width axis to Instrument's colour
- * (globals.css, `html:lang(ru)`). Not preloaded: the other languages never
- * download it.
- */
-const cyrillicDisplay = Noto_Serif_Display({
-  variable: "--font-cyrillic-display",
-  style: ["normal", "italic"],
-  subsets: ["cyrillic", "latin"],
-  axes: ["wdth"],
-  display: "swap",
-  preload: false,
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -126,7 +112,7 @@ export default async function RootLayout({
       lang={locale}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${cyrillicDisplay.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${sora.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         {/* Thin progress bar at the top during route transitions. */}

@@ -48,6 +48,7 @@ import { LandingFooter } from "@/components/landing/footer";
 import { PricingCards, type CurrentPlan } from "@/components/billing/pricing-cards";
 import { Eyebrow } from "@/components/marketing/eyebrow";
 import { FAQ_CARD, FaqList } from "@/components/marketing/faq-list";
+import { Sentences } from "@/components/marketing/sentences";
 
 /** Head tags for the pricing page in one language; the page files call this. */
 export async function pricingMetadata(locale: AppLocale): Promise<Metadata> {
@@ -169,7 +170,7 @@ export async function PricingPage({ locale }: { locale: AppLocale }) {
         <div className="text-center">
           <Eyebrow className="mb-5">{t("eyebrow")}</Eyebrow>
           <h1 className="display-1 mx-auto max-w-3xl text-balance">
-            {t("heading")}
+            <Sentences>{t("heading")}</Sentences>
           </h1>
           <p className="text-muted-foreground mx-auto mt-4 max-w-xl text-lg text-pretty">
             {t("subheading")}
@@ -191,7 +192,7 @@ export async function PricingPage({ locale }: { locale: AppLocale }) {
         <div className="mx-auto w-full max-w-6xl section-y px-4">
           <Reveal className="mx-auto max-w-2xl text-center">
             <h2 className="display-2 text-balance">
-              {t("features.heading")}
+              <Sentences>{t("features.heading")}</Sentences>
             </h2>
             <p className="text-muted-foreground mt-3 text-pretty">{t("features.body")}</p>
           </Reveal>

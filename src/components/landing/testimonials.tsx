@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 
 import { Eyebrow } from "@/components/marketing/eyebrow";
+import { Sentences } from "@/components/marketing/sentences";
 import { TONE_BG, TONE_INK } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +18,9 @@ export function Testimonials() {
     <section aria-labelledby="agent-feedback" className="mx-auto w-full max-w-6xl px-4 py-16 sm:py-20">
       <div className="mb-8 text-center">
         <Eyebrow className="mb-3">{t("badge")}</Eyebrow>
-        <h2 id="agent-feedback" className="display-3 text-balance">{t("heading")}</h2>
+        <h2 id="agent-feedback" className="display-3 text-balance">
+          <Sentences>{t("heading")}</Sentences>
+        </h2>
       </div>
       <div className="grid gap-5 md:grid-cols-2">
         {AGENTS.map(({ key, name, initials }) => (

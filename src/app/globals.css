@@ -227,7 +227,7 @@
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-instrument-serif);
+  --font-display: var(--font-sora);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -319,18 +319,12 @@
 /* --- Marketing type and surfaces --- */
 
 /*
-  Russian pages: Instrument Serif has no Cyrillic, so the display face becomes
-  Noto Serif Display (layout.tsx), condensed and a touch lighter on its axes so
-  a Russian headline has the same narrow, fine-stroked colour as an English
-  one. `html:lang(ru)` outranks the font variables next/font sets on <html>.
+  Russian pages: Sora has no Cyrillic, so headlines fall back to Geist, the
+  body face, at the same sizes and weights. `html:lang(ru)` outranks the font
+  variables next/font sets on <html>.
 */
 html:lang(ru) {
-  --font-instrument-serif: var(--font-cyrillic-display);
-  --font-display: var(--font-cyrillic-display);
-}
-html:lang(ru) :where(.display-1, .display-2, .display-3, .font-display) {
-  font-stretch: 70%;
-  font-weight: 350;
+  --font-display: var(--font-geist-sans);
 }
 
 /*
@@ -353,30 +347,31 @@ html:lang(ru) article :is(td, th) {
 }
 
 /*
-  Display sizes for marketing headlines: the serif at regular weight, set
-  large and tight. Fluid between a phone and a wide desktop so no breakpoint
-  ever jumps; `text-balance` stays in the markup.
+  Display sizes for headlines: Sora at regular weight, tight. Sora runs about
+  a third wider than the narrow serif these sizes were first set for, so the
+  scale sits lower to keep the same line breaks. Fluid between a phone and a
+  wide desktop so no breakpoint ever jumps; `text-balance` stays in the markup.
 */
 @utility display-1 {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(2.75rem, 1.6rem + 3.8vw, 4.5rem);
-  line-height: 1.02;
-  letter-spacing: -0.01em;
+  font-size: clamp(2.25rem, 1.5rem + 2.6vw, 3.5rem);
+  line-height: 1.06;
+  letter-spacing: -0.035em;
 }
 @utility display-2 {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(2.125rem, 1.3rem + 2.5vw, 3.5rem);
-  line-height: 1.06;
-  letter-spacing: -0.01em;
+  font-size: clamp(1.875rem, 1.3rem + 1.9vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
 }
 @utility display-3 {
   font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(1.75rem, 1.35rem + 1.3vw, 2.5rem);
-  line-height: 1.1;
-  letter-spacing: -0.01em;
+  font-weight: 500;
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
 }
 
 /*

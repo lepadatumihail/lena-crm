@@ -12,6 +12,7 @@ import { Reveal } from "@/components/reveal";
 import { Eyebrow } from "@/components/marketing/eyebrow";
 import { FilmPlayer } from "@/components/marketing/film-player";
 import { HeroAccent } from "@/components/marketing/hero-accent";
+import { Sentences } from "@/components/marketing/sentences";
 import { LandingViewBeacon } from "@/components/marketing/landing-view-beacon";
 import { SignUpDialog } from "@/components/marketing/sign-up-dialog";
 import { OnePlace } from "@/components/landing/one-place";
@@ -112,7 +113,9 @@ export function LandingPage() {
         <div className="mx-auto w-full max-w-6xl px-4">
           <Reveal className="mx-auto max-w-2xl text-center">
             <Eyebrow className="mb-4">{t("onePlace.badge")}</Eyebrow>
-            <h2 className="display-2 text-balance">{t("onePlace.heading")}</h2>
+            <h2 className="display-2 text-balance">
+              <Sentences>{t("onePlace.heading")}</Sentences>
+            </h2>
             <p className="text-muted-foreground mt-4 text-lg text-pretty">
               {t("onePlace.body")}
             </p>
@@ -127,7 +130,9 @@ export function LandingPage() {
         <div className="mx-auto w-full max-w-6xl px-4">
           <div className="mx-auto max-w-2xl text-center">
             <Eyebrow className="mb-4">{t("howItWorks.badge")}</Eyebrow>
-            <h2 className="display-2 text-balance">{t("howItWorks.heading")}</h2>
+            <h2 className="display-2 text-balance">
+              <Sentences>{t("howItWorks.heading")}</Sentences>
+            </h2>
             <p className="text-muted-foreground mt-4 text-lg text-pretty">
               {t("howItWorks.body")}
             </p>
@@ -158,7 +163,9 @@ export function LandingPage() {
           <Reveal>
             <div className="text-center">
               <Eyebrow className="text-inverted-foreground/60 mb-4">{tNav("pricing")}</Eyebrow>
-              <h2 className="display-2 text-balance">{t("pricing.heading")}</h2>
+              <h2 className="display-2 text-balance">
+                <Sentences>{t("pricing.heading")}</Sentences>
+              </h2>
               <p className="text-inverted-foreground/70 mx-auto mt-4 max-w-xl text-lg text-pretty">
                 {t("pricing.body")}
               </p>
@@ -223,7 +230,9 @@ export function LandingPage() {
       {/* Final CTA */}
       <section className="section-y">
         <Reveal className="mx-auto w-full max-w-6xl px-4 text-center">
-          <h2 className="display-2 text-balance">{t("finalCta.heading")}</h2>
+          <h2 className="display-2 text-balance">
+            <Sentences>{t("finalCta.heading")}</Sentences>
+          </h2>
           <p className="text-muted-foreground mx-auto mt-4 max-w-md text-lg text-pretty">
             {t("finalCta.body")}
           </p>

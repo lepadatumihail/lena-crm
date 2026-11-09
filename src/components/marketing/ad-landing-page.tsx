@@ -20,6 +20,7 @@ import { MarketingNav } from "@/components/marketing-nav";
 import { Reveal } from "@/components/reveal";
 import { Eyebrow } from "@/components/marketing/eyebrow";
 import { HeroAccent } from "@/components/marketing/hero-accent";
+import { Sentences } from "@/components/marketing/sentences";
 import { FilmPlayer } from "@/components/marketing/film-player";
 import { LandingViewBeacon } from "@/components/marketing/landing-view-beacon";
 import { SeeItFirst } from "@/components/marketing/see-it-first";
@@ -133,7 +134,9 @@ export async function AdLandingPage({
           <div className="mx-auto w-full max-w-5xl px-4">
             <Reveal className="mx-auto max-w-2xl text-center">
               <Eyebrow className="mb-4">{tAd("film.eyebrow")}</Eyebrow>
-              <h2 className="display-2 text-balance">{tAd("film.heading")}</h2>
+              <h2 className="display-2 text-balance">
+                <Sentences>{tAd("film.heading")}</Sentences>
+              </h2>
             </Reveal>
             <FilmPlayer
               className="mt-10"
@@ -150,7 +153,9 @@ export async function AdLandingPage({
         <div className="mx-auto w-full max-w-6xl px-4">
           <Reveal className="mx-auto max-w-2xl text-center">
             <Eyebrow className="mb-4">{t("steps.eyebrow")}</Eyebrow>
-            <h2 className="display-2 text-balance">{t("steps.heading")}</h2>
+            <h2 className="display-2 text-balance">
+              <Sentences>{t("steps.heading")}</Sentences>
+            </h2>
           </Reveal>
           <ol className="mx-auto mt-10 grid max-w-4xl gap-5 sm:grid-cols-3">
             {STEPS.map((step, i) => (
@@ -172,7 +177,9 @@ export async function AdLandingPage({
         <div className="mx-auto w-full max-w-6xl px-4">
           <Reveal className="mx-auto max-w-2xl text-center">
             <Eyebrow className="mb-4">{t("changes.eyebrow")}</Eyebrow>
-            <h2 className="display-2 text-balance">{t("changes.heading")}</h2>
+            <h2 className="display-2 text-balance">
+              <Sentences>{t("changes.heading")}</Sentences>
+            </h2>
           </Reveal>
           <div className="mx-auto mt-10 grid max-w-4xl gap-5 sm:grid-cols-3">
             {changes.map(({ key, icon: Icon }) => (
@@ -194,7 +201,9 @@ export async function AdLandingPage({
 
       <section className="section-y">
         <Reveal className="mx-auto w-full max-w-6xl px-4 text-center">
-          <h2 className="display-2 mx-auto max-w-3xl text-balance">{t("final.heading")}</h2>
+          <h2 className="display-2 mx-auto max-w-3xl text-balance">
+            <Sentences>{t("final.heading")}</Sentences>
+          </h2>
           <p className="text-muted-foreground mx-auto mt-4 max-w-md text-lg text-pretty">
             {t("final.body")}
           </p>

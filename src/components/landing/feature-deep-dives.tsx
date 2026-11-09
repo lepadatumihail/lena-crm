@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import { Reveal } from "@/components/reveal";
+import { Sentences } from "@/components/marketing/sentences";
 import { TONE_TAG } from "@/lib/tones";
 import { cn } from "@/lib/utils";
 
@@ -188,11 +189,13 @@ export function FeatureDeepDives() {
     <section className="section-y mx-auto w-full max-w-6xl px-4">
       <Reveal className="mx-auto max-w-2xl text-center">
         <h2 className="display-2 text-balance">
-          {t.rich("deepDives.heading", {
-            nowrap: (chunks) => (
-              <span className="whitespace-nowrap">{chunks}</span>
-            ),
-          })}
+          <Sentences>
+            {t.rich("deepDives.heading", {
+              nowrap: (chunks) => (
+                <span className="whitespace-nowrap">{chunks}</span>
+              ),
+            })}
+          </Sentences>
         </h2>
         <p className="text-muted-foreground mt-4 text-lg text-pretty">
           {t("deepDives.body")}
