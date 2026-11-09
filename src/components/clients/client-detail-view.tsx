@@ -546,12 +546,12 @@ export async function ClientDetailView({
                 name={name}
                 side={side}
                 size="xl"
-                className="text-tone-indigo-ink bg-[linear-gradient(140deg,var(--tone-indigo-soft),var(--tone-teal-soft))] max-sm:size-12 max-sm:text-base"
+                className="max-sm:size-12 max-sm:text-base"
               />
             </span>
             <div className="min-w-0">
               {/* A long name wraps on a phone and is cut short only where there is room for most of it. */}
-              <h2 className="font-display text-[1.75rem] leading-tight font-normal tracking-[-0.03em] text-balance break-words sm:truncate sm:text-[2rem]">
+              <h2 className="font-display text-2xl leading-tight font-normal tracking-[-0.03em] text-balance break-words sm:truncate sm:text-[1.75rem]">
                 {name}
               </h2>
               <div className="mt-2 flex flex-wrap items-center gap-1.5">
@@ -592,6 +592,7 @@ export async function ClientDetailView({
                 client={{
                   id: client.id,
                   first_name: client.first_name,
+                  last_name: client.last_name,
                   phone: client.phone,
                   email: client.email,
                   language: client.language,
@@ -619,8 +620,8 @@ export async function ClientDetailView({
                 className={cn(
                   "font-display mt-1 font-normal tracking-[-0.03em] break-words tabular-nums",
                   i === 0
-                    ? "text-[2rem] leading-[1.15] sm:text-[2.25rem]"
-                    : "text-xl leading-7 sm:text-2xl sm:leading-8"
+                    ? "text-[1.625rem] leading-tight sm:text-[1.875rem]"
+                    : "text-lg leading-7 sm:text-xl"
                 )}
               >
                 {stat.value}

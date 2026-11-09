@@ -97,7 +97,12 @@
     "inactive": "Неактивен"
   },
   "kanban": {
-    "dropHere": "Перетащите сюда"
+    "dropHere": "Перетащите сюда",
+    "viewings": "{count, plural, one {# показ} few {# показа} many {# показов} other {# показа}}",
+    "properties": "{count, plural, one {# объект} few {# объекта} many {# объектов} other {# объекта}}",
+    "commission": "Комиссия <amount></amount>",
+    "totalBudget": "Общий бюджет в колонке",
+    "totalAsking": "Общая цена продавцов в колонке"
   },
   "controls": {
     "active": "Активен",

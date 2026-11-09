@@ -46,7 +46,7 @@ export function AttentionList({
             className="group hover:bg-muted/40 relative flex items-center gap-3 py-2.5 pr-2.5 pl-4 transition-colors duration-150"
           >
             <span className="relative flex shrink-0">
-              <ClientAvatar name={a.title} side={a.client.side} size="md" />
+              <ClientAvatar name={a.title} side={a.client.side} size="row" />
               {a.urgency ? (
                 <span
                   aria-hidden

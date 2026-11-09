@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Loader2, Mail, MessageCircle, Send, Sparkles } from "lucide-react";
+import { Languages, Loader2, Mail, Send, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,13 +21,13 @@ import {
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ClientAvatar } from "@/components/clients/client-avatar";
 import { useContactLog } from "@/components/clients/contact-log";
+import { WhatsAppIcon } from "@/components/clients/whatsapp-button";
 import { draftMessage } from "@/lib/actions/messages";
 import {
   MESSAGE_TEMPLATES,
@@ -45,7 +45,6 @@ import { LANGUAGES } from "@/lib/crm";
 import { cn } from "@/lib/utils";
 import { ACTIVITY_BODY_MAX } from "@/lib/validation/activity";
 
-const BLANK = "blank";
 const NO_PROPERTY = "none";
 
 type Channel = "whatsapp" | "email";
@@ -70,6 +69,8 @@ export function MessageComposer({
   client: {
     id: string;
     first_name: string;
+    /** For the avatar's initials in the header. */
+    last_name?: string | null;
     phone: string | null;
     email: string | null;
     language: string | null;
@@ -218,6 +219,19 @@ export function MessageComposer({
     body.trim().length > 0 &&
     (channel === "whatsapp" ? hasWhatsApp : hasEmail);
 
+  const fullName = [client.first_name, client.last_name].filter(Boolean).join(" ");
+  const address = channel === "whatsapp" ? client.phone : client.email;
+  // Every starting point as a chip, one tap each: the built-in starters,
+  // then the agent's own. Hovering one says what it is for.
+  const templateChoices = [
+    ...MESSAGE_TEMPLATES.map((tpl) => ({
+      id: tpl.id,
+      label: templateLabel(tTemplates, tpl.id),
+      hint: templateDescription(tTemplates, tpl.id),
+    })),
+    ...customTemplates.map((tpl) => ({ id: tpl.id, label: tpl.name, hint: tpl.subject })),
+  ];
+
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -229,42 +243,48 @@ export function MessageComposer({
         >
           <Sparkles /> {t("trigger")}
         </Button>
-        <DialogContent className="max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{t("title", { name: client.first_name })}</DialogTitle>
-            <DialogDescription>{t("description")}</DialogDescription>
+        <DialogContent className="max-h-[90vh] gap-5 overflow-y-auto sm:max-w-xl">
+          {/* Who it goes to, and where: the number or the address it opens with. */}
+          <DialogHeader className="flex-row items-center gap-3 pr-8">
+            <ClientAvatar name={fullName} side={client.side} size="lg" />
+            <div className="min-w-0">
+              <DialogTitle className="font-display text-xl leading-tight font-normal tracking-[-0.02em]">
+                {t("title", { name: client.first_name })}
+              </DialogTitle>
+              <p className="text-muted-foreground mt-1 flex min-w-0 items-center gap-1.5 text-[13px]">
+                {channel === "whatsapp" ? (
+                  <WhatsAppIcon className="size-3.5 shrink-0" />
+                ) : (
+                  <Mail className="size-3.5 shrink-0" />
+                )}
+                <span className="truncate">{address ?? "—"}</span>
+              </p>
+              <DialogDescription className="sr-only">{t("description")}</DialogDescription>
+            </div>
           </DialogHeader>
 
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
+          <div className="space-y-5">
+            <div
+              role="group"
+              aria-label={t("channel")}
+              className="bg-muted grid grid-cols-2 gap-1 rounded-full p-1"
+            >
+              <ChannelButton
+                active={channel === "whatsapp"}
                 disabled={!hasWhatsApp}
-                aria-pressed={channel === "whatsapp"}
                 onClick={() => setChannel("whatsapp")}
-                className={cn(
-                  "focus-visible:ring-ring/50 flex h-9 items-center justify-center gap-2 rounded-lg border px-3 text-sm outline-none transition-colors duration-150 focus-visible:ring-[3px] disabled:opacity-40",
-                  channel === "whatsapp"
-                    ? "border-foreground/20 bg-muted text-foreground font-medium"
-                    : "bg-background text-muted-foreground hover:bg-muted/60 hover:text-foreground"
-                )}
               >
-                <MessageCircle className="size-4" /> <SteadyLabel>WhatsApp</SteadyLabel>
-              </button>
-              <button
-                type="button"
+                <WhatsAppIcon className="size-4" />
+                <SteadyLabel>WhatsApp</SteadyLabel>
+              </ChannelButton>
+              <ChannelButton
+                active={channel === "email"}
                 disabled={!hasEmail}
-                aria-pressed={channel === "email"}
                 onClick={() => setChannel("email")}
-                className={cn(
-                  "focus-visible:ring-ring/50 flex h-9 items-center justify-center gap-2 rounded-lg border px-3 text-sm outline-none transition-colors duration-150 focus-visible:ring-[3px] disabled:opacity-40",
-                  channel === "email"
-                    ? "border-foreground/20 bg-muted text-foreground font-medium"
-                    : "bg-background text-muted-foreground hover:bg-muted/60 hover:text-foreground"
-                )}
               >
-                <Mail className="size-4" /> <SteadyLabel>{t("email")}</SteadyLabel>
-              </button>
+                <Mail className="size-4" />
+                <SteadyLabel>{t("email")}</SteadyLabel>
+              </ChannelButton>
             </div>
 
             {propertyChoices.length > 0 && (
@@ -293,69 +313,88 @@ export function MessageComposer({
               </div>
             )}
 
-            <div className="space-y-1.5">
-              <Label>{t("template")}</Label>
-              <Select
-                value={templateId || BLANK}
-                onValueChange={(v) => selectTemplate(v === BLANK ? "" : v)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={BLANK}>{t("blank")}</SelectItem>
-                  <SelectGroup>
-                    <SelectLabel>{t("starters")}</SelectLabel>
-                    {MESSAGE_TEMPLATES.map((tpl) => (
-                      <SelectItem key={tpl.id} value={tpl.id}>
-                        {templateLabel(tTemplates, tpl.id)} —{" "}
-                        {templateDescription(tTemplates, tpl.id)}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between gap-3">
+                <span id="msg-template-label" className="text-sm leading-none font-medium">
+                  {t("template")}
+                </span>
+                <Select value={language} onValueChange={changeLanguage}>
+                  <SelectTrigger
+                    size="sm"
+                    aria-label={t("language")}
+                    className="bg-muted/80 hover:bg-muted rounded-full border-0 px-3 text-[13px] shadow-none dark:bg-muted/80"
+                  >
+                    <Languages className="size-3.5" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent align="end">
+                    {LANGUAGES.map((l) => (
+                      <SelectItem key={l} value={l}>
+                        {languageLabel(tCrm, l)}
                       </SelectItem>
                     ))}
-                  </SelectGroup>
-                  {customTemplates.length > 0 && (
-                    <SelectGroup>
-                      <SelectLabel>{t("myTemplates")}</SelectLabel>
-                      {customTemplates.map((tpl) => (
-                        <SelectItem key={tpl.id} value={tpl.id}>
-                          {tpl.name}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  )}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label>{t("language")}</Label>
-              <Select value={language} onValueChange={changeLanguage}>
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {LANGUAGES.map((l) => (
-                    <SelectItem key={l} value={l}>
-                      {languageLabel(tCrm, l)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {channel === "email" && (
-              <div className="space-y-1.5">
-                <Label htmlFor="msg-subject">{t("subject")}</Label>
-                <Input
-                  id="msg-subject"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                  placeholder={t("subjectPlaceholder")}
-                />
+                  </SelectContent>
+                </Select>
               </div>
-            )}
+              <div
+                role="group"
+                aria-labelledby="msg-template-label"
+                className="flex flex-wrap gap-1.5"
+              >
+                {templateChoices.map((tpl) => (
+                  <TemplateChip
+                    key={tpl.id}
+                    selected={templateId === tpl.id}
+                    title={tpl.hint || undefined}
+                    onClick={() => selectTemplate(tpl.id)}
+                  >
+                    {tpl.label}
+                  </TemplateChip>
+                ))}
+              </div>
+            </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-2">
+              <Label htmlFor="msg-body">{t("message")}</Label>
+              {channel === "whatsapp" ? (
+                // A preview of the chat: the message sits in WhatsApp's own
+                // outgoing bubble, so the agent reads it as the client will.
+                <div className="bg-muted/60 rounded-2xl p-3 dark:bg-muted/30">
+                  <div className="ml-auto max-w-[94%] rounded-2xl rounded-br-md bg-[#d9fdd3] shadow-xs ring-1 ring-black/[0.04] transition-shadow duration-150 focus-within:ring-2 focus-within:ring-[#25D366]/60 dark:bg-[#005c4b] dark:ring-white/[0.06]">
+                    <Textarea
+                      id="msg-body"
+                      rows={2}
+                      value={body}
+                      onChange={(e) => setBody(e.target.value)}
+                      placeholder={t("messagePlaceholder")}
+                      className="max-h-72 min-h-16 resize-none border-0 bg-transparent px-3.5 py-2.5 text-[15px] leading-relaxed text-[#111b21] shadow-none focus-visible:ring-0 md:text-[15px] dark:bg-transparent dark:text-[#e9edef]"
+                    />
+                  </div>
+                </div>
+              ) : (
+                // An email: the subject line on top of the body, one sheet.
+                <div className="bg-background focus-within:ring-ring/50 overflow-hidden rounded-xl border shadow-xs transition-shadow duration-150 focus-within:ring-[3px] dark:bg-input/30">
+                  <Input
+                    id="msg-subject"
+                    aria-label={t("subject")}
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    placeholder={t("subjectPlaceholder")}
+                    className="h-11 rounded-none border-0 border-b px-3.5 font-medium shadow-none focus-visible:ring-0 dark:bg-transparent"
+                  />
+                  <Textarea
+                    id="msg-body"
+                    rows={6}
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                    placeholder={t("messagePlaceholder")}
+                    className="min-h-36 resize-none rounded-none border-0 bg-transparent px-3.5 py-3 leading-relaxed shadow-none focus-visible:ring-0 dark:bg-transparent"
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="msg-ai">
                 {t.rich("aiLabel", {
                   muted: (chunks) => (
@@ -366,18 +405,25 @@ export function MessageComposer({
                 })}
               </Label>
               <div className="flex gap-2">
-                <Input
-                  id="msg-ai"
-                  value={instruction}
-                  onChange={(e) => setInstruction(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      writeWithAI();
-                    }
-                  }}
-                  placeholder={t("aiPlaceholder")}
-                />
+                <div className="relative min-w-0 flex-1">
+                  <Sparkles
+                    aria-hidden
+                    className="text-tone-indigo-ink pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
+                  />
+                  <Input
+                    id="msg-ai"
+                    value={instruction}
+                    onChange={(e) => setInstruction(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        writeWithAI();
+                      }
+                    }}
+                    placeholder={t("aiPlaceholder")}
+                    className="pl-9"
+                  />
+                </div>
                 <Button
                   type="button"
                   variant="outline"
@@ -390,17 +436,6 @@ export function MessageComposer({
                 </Button>
               </div>
             </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="msg-body">{t("message")}</Label>
-              <Textarea
-                id="msg-body"
-                rows={6}
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
-                placeholder={t("messagePlaceholder")}
-              />
-            </div>
           </div>
 
           <DialogFooter>
@@ -408,7 +443,7 @@ export function MessageComposer({
               {tCommon("cancel")}
             </Button>
             <Button onClick={send} disabled={!canSend}>
-              <Send />
+              {channel === "whatsapp" ? <WhatsAppIcon className="text-current" /> : <Send />}
               {channel === "whatsapp" ? t("openWhatsApp") : t("openEmail")}
             </Button>
           </DialogFooter>
@@ -416,5 +451,69 @@ export function MessageComposer({
       </Dialog>
       {contactLog.dialog}
     </>
+  );
+}
+
+/** One half of the WhatsApp / Email switch: the chosen side is a raised white pill. */
+function ChannelButton({
+  active,
+  disabled,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  disabled: boolean;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      aria-pressed={active}
+      onClick={onClick}
+      className={cn(
+        "focus-visible:ring-ring/50 flex h-9 items-center justify-center gap-2 rounded-full px-3 text-sm outline-none select-none transition-[color,background-color,box-shadow] duration-150 focus-visible:ring-[3px] disabled:opacity-40 [touch-action:manipulation]",
+        active
+          ? "bg-background text-foreground shadow-[0_1px_2px_rgba(15,23,42,0.1)] dark:bg-input/60"
+          : "text-muted-foreground hover:text-foreground"
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
+/**
+ * A starting point as a soft pill, the chosen one in the brand's indigo with
+ * a hairline ring, as on the agent page's form. The weight never changes,
+ * so picking one doesn't reflow the row.
+ */
+function TemplateChip({
+  selected,
+  title,
+  onClick,
+  children,
+}: {
+  selected: boolean;
+  title?: string;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={selected}
+      title={title}
+      onClick={onClick}
+      className={cn(
+        "focus-visible:ring-ring/50 inline-flex h-8 items-center rounded-full px-3 text-[13px] outline-none select-none transition-[color,background-color,box-shadow,scale] duration-150 ease-(--ease-out-quint) focus-visible:ring-[3px] active:scale-[0.96] [touch-action:manipulation]",
+        selected
+          ? "bg-tone-indigo-soft text-tone-indigo-ink shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--primary)_40%,transparent)]"
+          : "bg-muted/80 text-foreground/80 hover:bg-muted hover:text-foreground"
+      )}
+    >
+      {children}
+    </button>
   );
 }

@@ -529,6 +529,7 @@ export function ClientsView({
           data={filtered}
           side={side}
           stages={boardStages}
+          followUpIds={followUpIds}
           onStageChange={handleStageChange}
           onTogglePriority={handleTogglePriority}
           onOpen={setOpenId}

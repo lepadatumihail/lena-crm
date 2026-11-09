@@ -97,7 +97,12 @@
     "inactive": "Inactivo"
   },
   "kanban": {
-    "dropHere": "Suelta aquí"
+    "dropHere": "Suelta aquí",
+    "viewings": "{count, plural, one {# visita} other {# visitas}}",
+    "properties": "{count, plural, one {# inmueble} other {# inmuebles}}",
+    "commission": "<amount></amount> de comisión",
+    "totalBudget": "Presupuesto total de esta columna",
+    "totalAsking": "Precio pedido total de esta columna"
   },
   "controls": {
     "active": "Activo",

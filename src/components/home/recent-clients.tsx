@@ -48,7 +48,7 @@ export function RecentClients({
           key={c.id}
           className="hover:bg-muted/40 relative flex items-center gap-3 px-4 py-2.5 transition-colors duration-150"
         >
-          <ClientAvatar name={c.name} side={c.side} size="md" />
+          <ClientAvatar name={c.name} side={c.side} size="row" />
           <div className="min-w-0 flex-1">
             <div className="flex min-w-0 items-center gap-1.5">
               <Link

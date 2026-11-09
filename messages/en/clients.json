@@ -97,7 +97,12 @@
     "inactive": "Inactive"
   },
   "kanban": {
-    "dropHere": "Drop here"
+    "dropHere": "Drop here",
+    "viewings": "{count, plural, one {# viewing} other {# viewings}}",
+    "properties": "{count, plural, one {# property} other {# properties}}",
+    "commission": "<amount></amount> commission",
+    "totalBudget": "Total budget in this column",
+    "totalAsking": "Total asking price in this column"
   },
   "controls": {
     "active": "Active",
