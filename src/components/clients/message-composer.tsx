@@ -242,7 +242,8 @@ export function MessageComposer({
           className={triggerClassName}
           onClick={() => setOpen(true)}
         >
-          <Sparkles /> {t("trigger")}
+          {/* Its own span, so a squeezed trigger cuts the label, not the icon. */}
+          <Sparkles /> <span className="truncate">{t("trigger")}</span>
         </Button>
         <DialogContent className="max-h-[90vh] gap-5 overflow-y-auto sm:max-w-xl">
           {/* Who it goes to, and where: the number or the address it opens with. */}

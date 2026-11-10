@@ -433,15 +433,16 @@ export async function ClientDetailView({
           <Muted>{t("stats.none")}</Muted>
         ),
         // The step, then the money when the cell has room for both: a
-        // truncated figure ("Commission €21,6…") reads as broken, so on a
-        // phone and in the narrow four-up row at lg the step stands alone,
-        // and elsewhere a long step name gives way before the figure does.
+        // truncated figure ("Commission €21,6…") reads as broken, so until
+        // the header card is wide enough to set the figures side by side
+        // (@3xl) the step stands alone, and there a long step name gives way
+        // before the figure does.
         hint:
           milestone && !reservation?.closed_at ? (
             <span className="flex min-w-0">
               <span className="truncate">{milestone.label}</span>
               {reservationMoney ? (
-                <span className="shrink-0 whitespace-pre max-sm:hidden lg:max-xl:hidden">
+                <span className="shrink-0 whitespace-pre @max-3xl:hidden">
                   {` · ${reservationMoney}`}
                 </span>
               ) : null}
@@ -537,42 +538,51 @@ export async function ClientDetailView({
       <ShellCrumb side={side} label={name} />
 
       {/* Who the client is and what the deal is worth, on one grey surface:
-          the name and the lead figure are set large in the display face, so
-          the eye lands here first and the panels below read as detail. */}
-      <section className="bg-muted/55 dark:bg-muted/35 rounded-2xl ring-1 ring-black/[0.04] ring-inset dark:ring-white/[0.06]">
-        <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4 p-5 sm:p-6">
-          <div className="flex min-w-0 items-start gap-3.5 sm:items-center sm:gap-4">
-            <span className="bg-background shrink-0 rounded-full p-1 shadow-xs">
+          the name and the lead figure are set in the display face, so the eye
+          lands here first and the panels below read as detail. Compact: the
+          tags ride beside the name and the facts take the line under it. The
+          layout follows the card's own width (@container), which the sidebar
+          narrows, not the window's. */}
+      <section className="bg-muted/55 dark:bg-muted/35 @container rounded-2xl ring-1 ring-black/[0.04] ring-inset dark:ring-white/[0.06]">
+        {/* Everything hangs from the top line: the avatar and the actions
+            stay level with the name when the tags or facts wrap below it. */}
+        <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3 p-4 @lg:px-5">
+          {/* The 20rem basis decides when the actions drop below: past it the
+              tags and facts wrap instead. */}
+          <div className="flex min-w-0 grow basis-80 items-start gap-3">
+            <span className="bg-background shrink-0 rounded-full p-[3px] shadow-xs">
               <ClientAvatar
                 name={name}
                 side={side}
-                size="xl"
-                className="max-sm:size-12 max-sm:text-base"
+                size="lg"
+                className="@max-lg:size-10 @max-lg:text-sm"
               />
             </span>
             <div className="min-w-0">
-              {/* A long name wraps on a phone and is cut short only where there is room for most of it. */}
-              <h2 className="font-display text-2xl leading-tight font-normal tracking-[-0.03em] text-balance break-words sm:truncate sm:text-[1.75rem]">
-                {name}
-              </h2>
-              <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                <StageMenu clientId={client.id} stage={client.stage} side={side} />
-                <Tag>{sideLabel(tCrm, side)}</Tag>
-                {client.source === "page" ? (
-                  <Tag tone="indigo">
-                    <Globe2 />
-                    {t("fromPage")}
-                  </Tag>
-                ) : null}
-                {client.priority ? (
-                  <Tag>
-                    <Star className="fill-foreground text-foreground" />
-                    {tClients("list.priority")}
-                  </Tag>
-                ) : null}
-                {!client.is_active ? <Tag>{t("inactive")}</Tag> : null}
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                {/* A long name wraps on a phone and is cut short only where there is room for most of it. */}
+                <h2 className="font-display min-w-0 text-[1.375rem] leading-7 font-normal tracking-[-0.03em] text-balance break-words @lg:truncate @lg:text-2xl @lg:leading-8">
+                  {name}
+                </h2>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <StageMenu clientId={client.id} stage={client.stage} side={side} />
+                  <Tag>{sideLabel(tCrm, side)}</Tag>
+                  {client.source === "page" ? (
+                    <Tag tone="indigo">
+                      <Globe2 />
+                      {t("fromPage")}
+                    </Tag>
+                  ) : null}
+                  {client.priority ? (
+                    <Tag>
+                      <Star className="fill-foreground text-foreground" />
+                      {tClients("list.priority")}
+                    </Tag>
+                  ) : null}
+                  {!client.is_active ? <Tag>{t("inactive")}</Tag> : null}
+                </div>
               </div>
-              <ul className="text-muted-foreground mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]">
+              <ul className="text-muted-foreground mt-1.5 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-[13px]">
                 {meta.map(({ icon: Icon, text }, i) => (
                   <li key={i} className="inline-flex min-w-0 items-center gap-1.5">
                     <Icon className="size-3.5 shrink-0" strokeWidth={1.75} />
@@ -582,12 +592,20 @@ export async function ClientDetailView({
               </ul>
             </div>
           </div>
+          {/* In a narrow card the actions take the full row: Edit and Log
+              contact shrink to icons and the message button stretches, so
+              the longest Spanish and Russian labels still fit a phone. */}
           <ClientHeaderActions
             client={client}
+            className="@max-lg:w-full"
             primary={
               <>
               {activities ? (
-                <LogContactButton client={contactTarget} labelClassName="max-sm:sr-only" />
+                <LogContactButton
+                  client={contactTarget}
+                  className="@max-lg:w-8 @max-lg:px-0!"
+                  labelClassName="@max-lg:sr-only"
+                />
               ) : null}
               <MessageComposer
                 client={{
@@ -606,33 +624,47 @@ export async function ClientDetailView({
                 autoOpenTemplate={compose}
                 triggerVariant="default"
                 triggerSize="sm"
+                triggerClassName="min-w-0 shrink @max-lg:flex-1"
               />
               </>
             }
           />
         </div>
 
-        {/* Headline figures: the money first and largest, the rest beside it. */}
-        <dl className="border-foreground/[0.07] mx-5 grid grid-cols-2 gap-x-6 gap-y-4 border-t pt-4 pb-5 sm:mx-6 sm:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)] sm:pb-6">
-          {stats.map((stat, i) => (
-            <div key={stat.label} className={cn("min-w-0", i === 0 && "col-span-2 sm:col-span-1")}>
-              <dt className="text-muted-foreground truncate text-[13px]">{stat.label}</dt>
-              <dd
+        {/* Headline figures: the money first and largest, with hairlines
+            between them like the admin's stat strip. A narrow card stacks the
+            money over the other two; a medium one splits into three columns;
+            a wide one sets them side by side at their own widths, so they
+            stay together instead of spreading across a big screen. There the
+            lead never shrinks and the others give way and truncate. */}
+        <div className="border-foreground/[0.07] mx-4 border-t pt-3 pb-4 @lg:mx-5">
+          <dl className="grid grid-cols-2 gap-x-6 gap-y-3 @xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)] @xl:gap-x-0 @3xl:flex">
+            {stats.map((stat, i) => (
+              <div
+                key={stat.label}
                 className={cn(
-                  "font-display mt-1 font-normal tracking-[-0.03em] break-words tabular-nums",
-                  i === 0
-                    ? "text-[1.625rem] leading-tight sm:text-[1.875rem]"
-                    : "text-lg leading-7 sm:text-xl"
+                  "border-foreground/[0.07] min-w-0 @xl:border-l @xl:px-5 @xl:first:border-l-0 @xl:first:pl-0 @xl:last:pr-0 @3xl:px-6",
+                  i === 0 && "col-span-2 @xl:col-span-1 @3xl:shrink-0"
                 )}
               >
-                {stat.value}
-              </dd>
-              {stat.hint ? (
-                <dd className="text-muted-foreground mt-0.5 truncate text-[13px]">{stat.hint}</dd>
-              ) : null}
-            </div>
-          ))}
-        </dl>
+                <dt className="text-muted-foreground truncate text-xs">{stat.label}</dt>
+                {/* Both value rows are 32px tall; the smaller figures sit 4px
+                    down a 28px line so all three share the lead's baseline. */}
+                <dd
+                  className={cn(
+                    "font-display mt-0.5 font-normal tracking-[-0.03em] break-words tabular-nums",
+                    i === 0 ? "text-[1.375rem] leading-8 @lg:text-2xl" : "pt-1 text-lg leading-7"
+                  )}
+                >
+                  {stat.value}
+                </dd>
+                {stat.hint ? (
+                  <dd className="text-muted-foreground truncate text-xs">{stat.hint}</dd>
+                ) : null}
+              </div>
+            ))}
+          </dl>
+        </div>
       </section>
 
       {pageNotice ? (

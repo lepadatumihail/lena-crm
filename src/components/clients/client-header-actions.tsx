@@ -157,9 +157,11 @@ export function StageMenu({
 export function ClientHeaderActions({
   client,
   primary,
+  className,
 }: {
   client: Client;
   primary?: ReactNode;
+  className?: string;
 }) {
   const router = useRouter();
   const t = useTranslations("clients");
@@ -203,10 +205,17 @@ export function ClientHeaderActions({
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <Button asChild variant="outline" size="sm">
+    <div className={cn("flex min-w-0 items-center gap-2", className)}>
+      {/* Just the pencil in a narrow header card (the page's @container),
+          square like the menu button; the word stays for screen readers. */}
+      <Button
+        asChild
+        variant="outline"
+        size="sm"
+        className="@max-lg:w-8 @max-lg:px-0!"
+      >
         <Link href={`/clients/${client.id}/edit`}>
-          <Pencil /> {tCommon("edit")}
+          <Pencil /> <span className="@max-lg:sr-only">{tCommon("edit")}</span>
         </Link>
       </Button>
       {primary}
