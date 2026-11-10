@@ -36,15 +36,18 @@ import { cn } from "@/lib/utils";
 /**
  * The card's figure, short so it fits a narrow column: a buyer's budget as
  * the table words it ("€600K – €800K", "up to €1.5M", "from €900K"), a
- * seller's asking price, else how to reach them. Money is set in the display
- * face, the one number on the card the eye should find first.
+ * seller's asking price, else how to reach them. A quiet line under the
+ * name, in the body face a step down, so the name leads and the money reads
+ * as detail.
  */
+const FIGURE = "text-foreground/75 truncate text-[13px] leading-5 tabular-nums";
+
 function CardFigure({ client }: { client: ClientRow }) {
   const t = useTranslations("clients.table");
   const tag = intlTag(useLocale());
   if (client.side === "buyer" && (client.budget_min != null || client.budget_max != null)) {
     return (
-      <p className="font-display truncate text-[15px] leading-6 tracking-[-0.01em]">
+      <p className={FIGURE}>
         <Budget
           compact
           min={client.budget_min}
@@ -58,7 +61,7 @@ function CardFigure({ client }: { client: ClientRow }) {
   }
   if (client.side !== "buyer" && client.asking_price != null) {
     return (
-      <p className="font-display text-[15px] leading-6 tracking-[-0.01em]">
+      <p className={FIGURE}>
         <Money value={client.asking_price} locale={tag} compact />
       </p>
     );
