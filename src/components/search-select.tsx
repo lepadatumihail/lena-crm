@@ -56,6 +56,8 @@ export function SearchSelect({
   onChange,
   options,
   labels,
+  variant = "outline",
+  icon,
   className,
   ...triggerProps
 }: Omit<ComponentProps<"button">, "value" | "onChange"> & {
@@ -63,6 +65,10 @@ export function SearchSelect({
   onChange: (value: string) => void;
   options: SearchSelectOption[];
   labels: Labels;
+  /** The trigger's look: a form field (outline) or a soft pill (ghost, styled by the caller). */
+  variant?: "outline" | "ghost";
+  /** Shown before the label when the current value has no prefix of its own. */
+  icon?: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
   const current = options.find((o) => fold(o.value) === fold(value));
@@ -72,7 +78,7 @@ export function SearchSelect({
       <PopoverTrigger asChild>
         <Button
           type="button"
-          variant="outline"
+          variant={variant}
           role="combobox"
           aria-expanded={open}
           className={cn("w-full justify-between gap-3 px-3 font-normal", className)}
@@ -84,7 +90,7 @@ export function SearchSelect({
               !value && "text-muted-foreground"
             )}
           >
-            {current?.prefix}
+            {current?.prefix ?? icon}
             <span className="truncate">
               {current?.label ?? (value || labels.placeholder)}
             </span>
