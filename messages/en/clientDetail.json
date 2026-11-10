@@ -266,7 +266,8 @@
     },
     "taskTitle": "Task",
     "taskTitleDefault": "Follow up with {name}",
-    "moveTo": "Move to {stage}",
+    "noTask": "No follow-up task",
+    "moveTo": "Move to <tag>{stage}</tag>",
     "save": "Save",
     "skip": "Skip",
     "toasts": {

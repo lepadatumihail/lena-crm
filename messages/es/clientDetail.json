@@ -266,7 +266,8 @@
     },
     "taskTitle": "Tarea",
     "taskTitleDefault": "Hacer seguimiento a {name}",
-    "moveTo": "Pasar a {stage}",
+    "noTask": "Sin tarea de seguimiento",
+    "moveTo": "Pasar a <tag>{stage}</tag>",
     "save": "Guardar",
     "skip": "Omitir",
     "toasts": {

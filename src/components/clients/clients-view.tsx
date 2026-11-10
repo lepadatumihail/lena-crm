@@ -70,6 +70,7 @@ import {
   parseAgencyParam,
 } from "@/lib/agencies";
 import {
+  clientFullName,
   clientsPath,
   stagesForSide,
   STAGE_TONES,
@@ -268,7 +269,7 @@ export function ClientsView({
 
   function handleContact(c: ClientRow, channel: RowChannel) {
     void contactLog.logStarted(
-      { id: c.id, firstName: c.first_name, side: c.side, stage: c.stage },
+      { id: c.id, firstName: c.first_name, name: clientFullName(c), side: c.side, stage: c.stage },
       channel
     );
   }

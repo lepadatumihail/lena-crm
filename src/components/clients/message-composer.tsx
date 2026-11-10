@@ -95,6 +95,7 @@ export function MessageComposer({
   const contactLog = useContactLog({
     id: client.id,
     firstName: client.first_name,
+    name: [client.first_name, client.last_name].filter(Boolean).join(" "),
     side: client.side,
     stage: client.stage,
   });

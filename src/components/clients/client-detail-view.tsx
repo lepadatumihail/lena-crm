@@ -191,6 +191,7 @@ export async function ClientDetailView({
   const contactTarget = {
     id: client.id,
     firstName: client.first_name,
+    name,
     side: client.side,
     stage: client.stage,
   };

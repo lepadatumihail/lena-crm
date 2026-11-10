@@ -266,7 +266,8 @@
     },
     "taskTitle": "Задача",
     "taskTitleDefault": "Связаться снова: {name}",
-    "moveTo": "Перевести на этап «{stage}»",
+    "noTask": "Без напоминания",
+    "moveTo": "Перевести на этап <tag>{stage}</tag>",
     "save": "Сохранить",
     "skip": "Пропустить",
     "toasts": {

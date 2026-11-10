@@ -3,7 +3,10 @@
 import { useState, useTransition, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { format, parseISO } from "date-fns";
 import {
+  BellOff,
+  BellRing,
   Check,
   Mail,
   MessageCircle,
@@ -13,12 +16,12 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-import { WhatsAppButton } from "@/components/clients/whatsapp-button";
+import { ClientAvatar } from "@/components/clients/client-avatar";
+import { WhatsAppButton, WhatsAppIcon } from "@/components/clients/whatsapp-button";
 import { useAgentTimeZone } from "@/components/shell/shell-context";
 import { dayLabel } from "@/components/tasks/day-label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ChoiceChips } from "@/components/ui/choice-chips";
 import {
   Dialog,
   DialogContent,
@@ -27,10 +30,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tag } from "@/components/ui/tag";
 import { Textarea } from "@/components/ui/textarea";
+import { dateFnsLocale } from "@/i18n/dates";
 import { stageLabel } from "@/i18n/labels";
+import { STAGE_TONES } from "@/lib/crm";
 import {
   CONTACT_CHANNELS,
   DEFAULT_NEXT_STEP,
@@ -54,6 +59,8 @@ import { whatsappLink } from "@/lib/whatsapp";
 export type ContactTarget = {
   id: string;
   firstName: string;
+  /** The full name, for the avatar's initials; the first name if missing. */
+  name?: string;
   side: string;
   stage: string;
 };
@@ -91,7 +98,7 @@ export function LogContactDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
         {/* Content unmounts when the dialog closes, so every open starts fresh. */}
         <LogContactForm
           client={client}
@@ -129,6 +136,11 @@ function LogContactForm({
   const [step, setStep] = useState<NextStep>(DEFAULT_NEXT_STEP);
   const [title, setTitle] = useState(defaultTitle);
   const [move, setMove] = useState(moveTarget != null);
+  // The follow-up's real day, so "In 3 days" reads as a date before saving.
+  const previewDue = nextStepDueOn(step, dateKeyInTimeZone(new Date().toISOString(), timeZone));
+  const dueLabel = previewDue
+    ? format(parseISO(previewDue), "EEE d MMM", { locale: dateFnsLocale(locale) })
+    : null;
 
   function save() {
     startTransition(async () => {
@@ -190,38 +202,57 @@ function LogContactForm({
 
   return (
     <form
-      className="grid gap-5"
+      // One shrinkable column, so the five channel tiles fit the dialog
+      // instead of widening it on a phone.
+      className="grid min-w-0 grid-cols-1 gap-5"
       onSubmit={(event) => {
         event.preventDefault();
         save();
       }}
     >
-      <DialogHeader>
-        <DialogTitle>
-          {logged
-            ? t("loggedTitle", { channel: logged.channel, name: client.firstName })
-            : t("title", { name: client.firstName })}
-        </DialogTitle>
-        <DialogDescription>
-          {logged
-            ? t("loggedDescription", { name: client.firstName })
-            : t("description", { name: client.firstName })}
-        </DialogDescription>
+      {/* Who it was with, as in the message dialog. Once a send or a call has
+          logged it, a green tick on the avatar says it's on record. */}
+      <DialogHeader className="flex-row items-center gap-3 pr-8">
+        <span className="relative shrink-0">
+          <ClientAvatar name={client.name ?? client.firstName} side={client.side} size="lg" />
+          {logged ? (
+            <span className="bg-tone-green ring-background absolute -right-0.5 -bottom-0.5 flex size-5 items-center justify-center rounded-full text-white ring-2">
+              <Check className="size-3" strokeWidth={3} />
+            </span>
+          ) : null}
+        </span>
+        <div className="min-w-0">
+          <DialogTitle className="font-display text-xl leading-tight font-normal tracking-[-0.02em] text-balance">
+            {logged
+              ? t("loggedTitle", { channel: logged.channel, name: client.firstName })
+              : t("title", { name: client.firstName })}
+          </DialogTitle>
+          <DialogDescription className="mt-1 text-[13px] text-pretty">
+            {logged
+              ? t("loggedDescription", { name: client.firstName })
+              : t("description", { name: client.firstName })}
+          </DialogDescription>
+        </div>
       </DialogHeader>
 
       {logged ? null : (
         <>
           <div className="grid gap-2">
-            <Label>{t("channelLabel")}</Label>
-            <ChoiceChips
-              label={t("channelLabel")}
-              value={channel}
-              onChange={setChannel}
-              items={CONTACT_CHANNELS.map((c) => {
+            <Label id="contact-channel">{t("channelLabel")}</Label>
+            <div role="group" aria-labelledby="contact-channel" className="grid grid-cols-5 gap-1 max-[359px]:grid-cols-3 sm:gap-1.5">
+              {CONTACT_CHANNELS.map((c) => {
                 const Icon = CHANNEL_ICONS[c];
-                return { value: c, label: t(`channels.${c}`), icon: <Icon /> };
+                return (
+                  <ChannelTile
+                    key={c}
+                    active={channel === c}
+                    onClick={() => setChannel(c)}
+                    icon={c === "whatsapp" ? <WhatsAppIcon /> : <Icon strokeWidth={1.75} />}
+                    label={t(`channels.${c}`)}
+                  />
+                );
               })}
-            />
+            </div>
           </div>
           <div className="grid gap-2">
             <Label htmlFor="contact-note">{t("note")}</Label>
@@ -232,35 +263,63 @@ function LogContactForm({
               placeholder={t("notePlaceholder")}
               maxLength={ACTIVITY_BODY_MAX}
               rows={2}
-              className="resize-none"
+              className="min-h-16 resize-none"
             />
           </div>
         </>
       )}
 
       <div className="grid gap-2">
-        <Label>{t("nextStep")}</Label>
-        <ChoiceChips
-          label={t("nextStep")}
-          value={step}
-          onChange={setStep}
-          items={NEXT_STEPS.map((s) => ({ value: s, label: t(`steps.${s}`) }))}
-        />
-        {step !== "none" ? (
-          <Input
-            aria-label={t("taskTitle")}
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-            maxLength={TASK_TITLE_MAX}
-            className="mt-1"
-          />
-        ) : null}
+        <Label id="contact-next-step">{t("nextStep")}</Label>
+        <div role="group" aria-labelledby="contact-next-step" className="flex flex-wrap gap-1.5">
+          {NEXT_STEPS.map((s) => (
+            <StepChip key={s} active={step === s} onClick={() => setStep(s)}>
+              {t(`steps.${s}`)}
+            </StepChip>
+          ))}
+        </div>
+        {/* The follow-up as the task it becomes: its title, editable, and its
+            day. "No follow-up" keeps the row, so the dialog doesn't jump. */}
+        <div
+          className={cn(
+            "mt-1 flex h-11 items-center gap-2.5 rounded-xl border px-3 transition-[border-color,box-shadow,background-color] duration-150",
+            previewDue
+              ? "bg-background focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] dark:bg-input/30"
+              : "bg-muted/30 border-dashed"
+          )}
+        >
+          {previewDue ? (
+            <>
+              <BellRing aria-hidden className="text-tone-indigo-ink size-4 shrink-0" strokeWidth={1.75} />
+              <input
+                aria-label={t("taskTitle")}
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+                maxLength={TASK_TITLE_MAX}
+                className="placeholder:text-muted-foreground w-0 min-w-0 flex-1 bg-transparent text-base outline-none sm:text-sm"
+              />
+              <span className="bg-muted text-foreground/80 shrink-0 rounded-md px-2 py-1 text-xs whitespace-nowrap tabular-nums">
+                {dueLabel}
+              </span>
+            </>
+          ) : (
+            <>
+              <BellOff aria-hidden className="text-muted-foreground size-4 shrink-0" strokeWidth={1.75} />
+              <span className="text-muted-foreground truncate text-sm">{t("noTask")}</span>
+            </>
+          )}
+        </div>
       </div>
 
       {moveTarget ? (
-        <label className="flex items-center gap-2.5 text-sm">
+        <label className="flex cursor-pointer items-center gap-2.5 text-sm">
           <Checkbox checked={move} onCheckedChange={(v) => setMove(v === true)} />
-          {t("moveTo", { stage: stageLabel(tCrm, moveTarget) })}
+          <span className="flex flex-wrap items-center gap-1.5">
+            {t.rich("moveTo", {
+              stage: stageLabel(tCrm, moveTarget),
+              tag: (chunks) => <Tag tone={STAGE_TONES[moveTarget]}>{chunks}</Tag>,
+            })}
+          </span>
         </label>
       ) : null}
 
@@ -291,6 +350,68 @@ function LogContactForm({
         </div>
       </DialogFooter>
     </form>
+  );
+}
+
+/**
+ * One way of reaching the client, as a tile: the icon over the word, all five
+ * in one row from 360px (three a row below that, so "WhatsApp" never clips).
+ * The chosen one takes the brand's soft indigo
+ * with a hairline ring, like the message dialog's template chips.
+ */
+function ChannelTile({
+  active,
+  onClick,
+  icon,
+  label,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: ReactNode;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={cn(
+        "focus-visible:ring-ring/50 flex h-16 min-w-0 flex-col items-center justify-center gap-1.5 rounded-xl text-[11px] leading-none tracking-[-0.01em] outline-none select-none transition-[color,background-color,box-shadow,scale] duration-150 ease-(--ease-out-quint) focus-visible:ring-[3px] active:scale-[0.96] sm:text-xs sm:tracking-normal [touch-action:manipulation] [&_svg]:size-5 [&_svg]:shrink-0",
+        active
+          ? "bg-tone-indigo-soft text-tone-indigo-ink shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--primary)_40%,transparent)]"
+          : "bg-muted/60 text-foreground/70 hover:bg-muted hover:text-foreground"
+      )}
+    >
+      {icon}
+      <span className="max-w-full truncate">{label}</span>
+    </button>
+  );
+}
+
+/** When to follow up, as a soft pill; the chosen one in indigo, its weight unchanged. */
+function StepChip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={cn(
+        "focus-visible:ring-ring/50 inline-flex h-8 items-center rounded-full px-3 text-[13px] whitespace-nowrap outline-none select-none transition-[color,background-color,box-shadow,scale] duration-150 ease-(--ease-out-quint) focus-visible:ring-[3px] active:scale-[0.96] [touch-action:manipulation]",
+        active
+          ? "bg-tone-indigo-soft text-tone-indigo-ink shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--primary)_40%,transparent)]"
+          : "bg-muted/80 text-foreground/80 hover:bg-muted hover:text-foreground"
+      )}
+    >
+      {children}
+    </button>
   );
 }
 

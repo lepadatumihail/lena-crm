@@ -200,7 +200,7 @@ export function ClientSheet({
                       href={c.phone ? `tel:${c.phone.replace(/\s+/g, "")}` : undefined}
                     />
                     <ContactButtons
-                      client={{ id: c.id, firstName: c.first_name, side: c.side, stage: c.stage }}
+                      client={{ id: c.id, firstName: c.first_name, name: clientFullName(c), side: c.side, stage: c.stage }}
                       phone={c.phone}
                       language={c.language}
                       className="mt-2"
