@@ -17,11 +17,11 @@ const URGENCY_TONE: Record<NonNullable<AttentionItem["urgency"]>, Tone> = {
 
 /**
  * Action items as inbox rows: the client's initials with a dot for how late
- * the item is, the name and the stage as a pill, then why it's here. The
- * whole row opens the client (with a message drafted, where there's one to
- * send), which a hover names on a wide screen. The check at the end logs a
- * contact made elsewhere, which clears a quiet lead or a new one from the
- * list without leaving Home.
+ * the item is, the name over why it's here, and at the end the stage as a
+ * pill beside the check. The whole row opens the client (with a message
+ * drafted, where there's one to send), which a hover names on a wide screen.
+ * The check logs a contact made elsewhere, which clears a quiet lead or a
+ * new one from the list without leaving Home.
  */
 export function AttentionList({
   items,
@@ -62,11 +62,7 @@ export function AttentionList({
               href={a.href}
               className="focus-visible:after:ring-ring/50 min-w-0 flex-1 outline-none after:absolute after:inset-0 focus-visible:after:ring-[3px] focus-visible:after:ring-inset"
             >
-              {/* One 20px line: the 22px pill overhangs it by a pixel each way. */}
-              <span className="flex h-5 min-w-0 items-center gap-2">
-                <span className="truncate text-sm leading-5 font-medium">{a.title}</span>
-                <StageBadge stage={a.client.stage} />
-              </span>
+              <span className="block truncate text-sm leading-5 font-medium">{a.title}</span>
               <span className="text-muted-foreground block truncate text-[13px] leading-5">
                 {a.detail}
               </span>
@@ -82,6 +78,7 @@ export function AttentionList({
               {drafts ? draftLabel : openLabel}
               {drafts ? null : <ArrowRight className="size-3.5" strokeWidth={1.75} />}
             </span>
+            <StageBadge stage={a.client.stage} />
             <LogContactButton
               client={a.client}
               iconOnly

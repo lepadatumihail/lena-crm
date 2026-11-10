@@ -57,23 +57,21 @@ const TILE_LABELS = ["w-24", "w-20", "w-28", "w-32"];
 
 export function StatTilesSkeleton() {
   return (
-    <div className="bg-card overflow-hidden rounded-xl border shadow-xs max-md:order-2">
+    <div className="@container max-md:order-2">
       <Loading />
-      <div aria-hidden className="bg-border grid grid-cols-2 gap-px xl:grid-cols-4">
+      <div aria-hidden className="grid grid-cols-2 gap-3 @4xl:grid-cols-4">
         {TILE_LABELS.map((width) => (
           <div
             key={width}
-            className="bg-card row-span-3 grid min-w-0 grid-rows-subgrid gap-y-0 p-4 sm:px-5"
+            className="bg-card row-span-2 grid min-w-0 grid-rows-subgrid gap-y-1 rounded-xl border px-3.5 py-3 shadow-xs"
           >
-            {/* One line of label, as the figures take where it fits (stat-tiles.tsx). */}
-            <div className="flex h-[1lh] items-center text-[13px] leading-snug sm:leading-5">
+            {/* One line of label, as the widgets take where it fits (stat-tiles.tsx). */}
+            <div className="flex h-[1lh] items-center text-xs leading-4">
               <Skeleton className={cn("h-3", width)} />
             </div>
-            <div className="mt-2 flex h-8 items-center sm:h-9">
-              <Skeleton className="h-6 w-12 sm:h-7" />
-            </div>
-            <div className="mt-3 flex h-8 items-end">
-              <Skeleton className="h-2 w-full rounded-full" />
+            <div className="flex h-7 items-center justify-between gap-3">
+              <Skeleton className="h-5 w-10" />
+              <Skeleton className="h-1.5 w-14 rounded-full" />
             </div>
           </div>
         ))}
@@ -101,12 +99,11 @@ export function AttentionSkeleton() {
           <li key={name + detail} className="flex items-center gap-3 py-2.5 pr-2.5 pl-4">
             <Skeleton className="size-8 shrink-0 rounded-full" />
             <div className="flex h-10 min-w-0 flex-1 flex-col justify-center gap-2.5">
-              <div className="flex items-center gap-2">
-                <Skeleton className={cn("h-3", name)} />
-                <Skeleton className="h-3.5 w-14 rounded-full" />
-              </div>
+              <Skeleton className={cn("h-3", name)} />
               <Skeleton className={cn("h-2.5", detail)} />
             </div>
+            {/* The stage pill and the check sit at the end, as in AttentionList. */}
+            <Skeleton className="h-3.5 w-14 shrink-0 rounded-full" />
             <span className="size-7 shrink-0" />
           </li>
         ))}

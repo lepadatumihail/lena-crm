@@ -86,8 +86,6 @@ export function SummaryPanel({
     const date = parseISO(d.key);
     return {
       key: d.key,
-      // Two letters: one would read "S S" and "T T" in English, "m m" in Spanish.
-      letter: format(date, "EEEEEE", { locale: dateLocale }),
       title: t("stats.viewingsOn", {
         date: format(date, "EEEE d MMM", { locale: dateLocale }),
         count: d.count,
