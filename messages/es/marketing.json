@@ -202,7 +202,7 @@
     "film": {
       "eyebrow": "Míralo primero",
       "heading": "LeadWing en 30 segundos.",
-      "label": "Un vídeo de 30 segundos: un comprador pasa de su primer mensaje a una villa reservada, mientras LeadWing lo añade, redacta la respuesta en su idioma, encuentra los inmuebles que encajan y programa la visita.",
+      "label": "Un vídeo de 30 segundos: al salir de una visita, un agente mantiene pulsado el + y graba una nota de voz. LeadWing la ordena por clientes: pasa a Lars a Visita con su nuevo presupuesto, agenda su segunda visita y añade a una compradora nueva, Anna. No se guarda nada hasta que el agente lo revisa y pulsa Guardar.",
       "soundOn": "Activar sonido",
       "soundOff": "Silenciar"
     }

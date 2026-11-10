@@ -1,0 +1,1031 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LeadWing Film 03 · Voice note</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+  // ?format=landscape (16:9, default) · portrait (4:5). ?lang=es is the Spanish cut on the same clock.
+  { const f = new URLSearchParams(location.search).get("format"), el = document.documentElement;
+    el.dataset.format = f === "portrait" ? "portrait" : "landscape"; el.classList.toggle("vert", el.dataset.format !== "landscape"); }
+</script>
+<!--
+  LeadWing film 03, "Voice note". Straight after a viewing an agent holds the + and talks; the
+  note splits phrase by phrase into the review cards the app really shows (one per person:
+  Lars's viewing, wishes, stage and appointment; a new client, Anna), the agent saves, and each
+  part lands where it lives: the board, the calendar. Same engine as films 01 and 02: one clock,
+  render(t) sets every element from the time alone, `record.mjs --film voice-note` steps it frame
+  by frame into ffmpeg. Open this file to watch it live (space pauses, arrows step, drag the bar).
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Sora:wght@400;500&display=block" rel="stylesheet">
+<style>
+:root {
+  /* The app's dark-mode tokens (src/app/globals.css, .dark). */
+  --stage: oklch(0.145 0.006 56);
+  --bg: oklch(0.19 0.005 56);
+  --card: oklch(0.225 0.005 56);
+  --card2: oklch(0.25 0.006 56);
+  --fg: oklch(0.96 0.006 84);
+  --fg80: oklch(0.96 0.006 84 / 0.8);
+  --fg45: oklch(0.96 0.006 84 / 0.46);
+  --muted: oklch(0.68 0.008 70);
+  --line: oklch(1 0 0 / 0.09);
+  --input: oklch(1 0 0 / 0.14);
+  --mutedbg: oklch(0.27 0.006 56);
+  --primary: oklch(0.56 0.18 277);
+  --primary-fg: oklch(0.985 0 0);
+  --indigo: oklch(0.7 0.15 277); --indigo-soft: oklch(0.6 0.19 277 / 20%); --indigo-ink: oklch(0.84 0.08 280);
+  --teal: oklch(0.74 0.11 200); --teal-soft: oklch(0.7 0.12 200 / 16%); --teal-ink: oklch(0.86 0.07 200);
+  --red: oklch(0.637 0.237 25.331);
+  /* The light end card: the landing's own tokens and the brand indigo. */
+  --brand: #4b50d5; --l-fg: oklch(0.205 0 0); --l-muted: oklch(0.52 0 0);
+  --display: "Sora", system-ui, sans-serif; --sans: "Geist", system-ui, sans-serif; --mono: "Geist Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #050505; }
+#stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--stage); color: var(--fg); font-family: var(--sans); transform-origin: 0 0; -webkit-font-smoothing: antialiased; }
+#canvas { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.vert #stage, .vert #canvas { width: 1080px; height: 1350px; }
+.full { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+svg.i { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.w { display: inline-block; }
+.mut { color: var(--muted); }
+
+/* Background: near-black, a faint grid, soft indigo and teal lights. */
+#bg { overflow: hidden; background: var(--stage); }
+#grid { position: absolute; inset: -120px; background-image: linear-gradient(oklch(1 0 0 / 3%) 1px, transparent 1px), linear-gradient(90deg, oklch(1 0 0 / 3%) 1px, transparent 1px); background-size: 80px 80px; -webkit-mask-image: radial-gradient(ellipse 58% 52% at 50% 50%, #000 5%, transparent 78%); mask-image: radial-gradient(ellipse 58% 52% at 50% 50%, #000 5%, transparent 78%); }
+.glow { position: absolute; left: 0; top: 0; width: 1500px; height: 1150px; margin: -575px 0 0 -750px; border-radius: 50%; opacity: 0; }
+#gInd { background: radial-gradient(closest-side, oklch(0.56 0.2 277 / .42), oklch(0.56 0.2 277 / .14) 45%, oklch(0.56 0.2 277 / .03) 75%, transparent); }
+#gTeal { background: radial-gradient(closest-side, oklch(0.7 0.13 200 / .36), oklch(0.7 0.13 200 / .12) 45%, oklch(0.7 0.13 200 / .03) 75%, transparent); }
+#gKey { background: radial-gradient(closest-side, oklch(0.97 0.02 80 / .1), oklch(0.97 0.02 80 / .03) 50%, transparent); }
+#vig { position: absolute; inset: 0; background: radial-gradient(ellipse 78% 72% at 50% 50%, transparent 48%, rgba(0,0,0,.55)); }
+#grain { pointer-events: none; opacity: .05; z-index: 60; background-size: 256px 256px; }
+
+/* The small LeadWing mark in the corner while the story plays. */
+#mark { position: absolute; display: flex; align-items: center; gap: 10px; color: var(--fg); opacity: 0; z-index: 30; }
+#mark .mw { height: 27px; width: auto; fill: currentColor; }
+#mark .mt { height: 22px; width: auto; fill: currentColor; }
+
+#cam { position: absolute; inset: 0; transform-origin: 50% 50%; }
+
+/* Headlines: Sora, regular, revealed line by line from behind a mask. */
+.hd { position: absolute; margin: 0; font: 400 84px/1.08 var(--display); letter-spacing: -.03em; color: var(--fg); visibility: hidden; }
+.vert .hd { font-size: 72px; }
+.hd em { font-style: normal; color: var(--fg45); }
+.hd .ln { display: block; overflow: hidden; padding: .06em .1em .16em 0; margin: -.06em 0 -.16em; }
+.hd .li { display: block; white-space: nowrap; }
+.hd .tick { display: inline-grid; place-items: center; width: .62em; height: .62em; margin-right: .26em; vertical-align: .02em; border-radius: 50%; font-size: 1em; }
+.hd .tick svg { width: .42em; height: .42em; stroke-width: 3; }
+
+/* What the agent says: the words appear as they're spoken. */
+#quote { position: absolute; visibility: hidden; }
+.qlab { display: flex; align-items: center; gap: 16px; height: 52px; margin-bottom: 22px; font: 500 24px/1 var(--sans); color: var(--muted); }
+.qmic { position: relative; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--indigo-soft); color: var(--indigo-ink); font-size: 26px; flex: none; }
+.qmic .dot { position: absolute; right: 2px; top: 2px; width: 13px; height: 13px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 3px var(--stage); }
+.qt { position: relative; height: 24px; min-width: 210px; }
+.qt span { position: absolute; left: 0; top: 0; white-space: nowrap; }
+#wave { display: flex; align-items: center; gap: 5px; height: 52px; margin-left: 4px; }
+#wave i { display: block; width: 6px; height: 6px; border-radius: 3px; background: var(--indigo); }
+.qtext { margin: 0; font: 400 46px/1.36 var(--sans); letter-spacing: -.01em; color: var(--fg); }
+.vert .qtext { font-size: 42px; }
+.ph { border-radius: .22em; padding: .02em .1em; margin: 0 -.1em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+
+/* The recorder: the phone's tab bar, its + held down, and the bar that says it's recording. */
+#world { position: absolute; inset: 0; perspective: 2400px; }
+#rec { position: absolute; left: 0; top: 0; width: 700px; height: 340px; transform-origin: 50% 70%; }
+.vert #rec { width: 820px; }
+#tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: 128px; display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; background: var(--bg); border: 1px solid var(--line); border-radius: 34px; box-shadow: 0 50px 100px -40px rgba(0,0,0,.9), inset 0 1px 0 oklch(1 0 0 / 5%); }
+.tb { display: flex; flex-direction: column; align-items: center; gap: 9px; font: 400 18px/1 var(--sans); color: var(--muted); }
+.tb svg { font-size: 34px; stroke-width: 1.75; }
+.tb.on { color: var(--fg); font-weight: 500; }
+.tb.on svg { stroke-width: 2.1; }
+#plus { position: relative; display: grid; place-items: center; width: 104px; height: 104px; border-radius: 50%; background: var(--primary); color: var(--primary-fg); font-size: 48px; box-shadow: 0 18px 40px -12px oklch(0.56 0.2 277 / .7); }
+#plus svg { stroke-width: 2.2; }
+#rings { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+#rings i { position: absolute; left: -52px; top: -52px; width: 104px; height: 104px; border-radius: 50%; border: 2px solid oklch(0.8 0.1 277 / .9); opacity: 0; }
+#pill { position: absolute; left: 50%; top: 0; height: 74px; display: flex; align-items: center; gap: 14px; padding: 0 30px; border-radius: 999px; background: var(--fg); color: var(--bg); font: 500 28px/1 var(--sans); white-space: nowrap; box-shadow: 0 24px 60px -18px rgba(0,0,0,.8); overflow: hidden; }
+#pill .pd { width: 18px; height: 18px; border-radius: 50%; background: var(--red); flex: none; }
+#pill .ps { display: none; font-size: 28px; color: var(--bg); }
+#clock { font-variant-numeric: tabular-nums; }
+.plab { position: relative; height: 30px; }
+.plab span { position: absolute; left: 0; top: 0; white-space: nowrap; opacity: 0; }
+.plab span:first-child { color: oklch(0.19 0.005 56 / .75); }
+
+/* The review: one card per person, as the voice-note sheet shows them. */
+#review { position: absolute; left: 0; top: 0; transform-origin: 50% 40%; visibility: hidden; }
+.rsum { margin: 0 0 18px; font: 400 24px/1.35 var(--sans); color: var(--muted); }
+.card { position: relative; margin-bottom: 16px; padding: 22px 26px 24px; background: var(--card); border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 50px 100px -45px rgba(0,0,0,.95), inset 0 1px 0 oklch(1 0 0 / 5%); }
+.chd { display: flex; align-items: center; gap: 14px; height: 40px; }
+.chd b { font: 500 29px/1 var(--sans); white-space: nowrap; }
+.chd .st { font: 400 24px/1 var(--sans); color: var(--muted); white-space: nowrap; }
+.chd .lnk { margin-left: auto; font: 500 20px/1 var(--sans); color: var(--indigo-ink); }
+.cb { position: relative; width: 28px; height: 28px; flex: none; display: grid; place-items: center; border-radius: 8px; border: 1.5px solid oklch(0.96 0.006 84 / .3); }
+.cb .f { position: absolute; inset: -1.5px; border-radius: 8px; background: var(--primary); transform: scale(0); }
+.cb svg { position: relative; font-size: 18px; color: var(--primary-fg); stroke-width: 3.2; opacity: 0; }
+.cb.on .f { transform: scale(1); }
+.cb.on svg { opacity: 1; }
+.rows { margin-top: 6px; padding-left: 42px; }
+.row { position: relative; display: grid; grid-template-columns: 28px 206px minmax(0, 1fr); align-items: center; column-gap: 14px; min-height: 58px; }
+.vert .row { grid-template-columns: 28px 212px minmax(0, 1fr); min-height: 53px; }
+/* 4:5 plays on phones: the interface type runs a size up. */
+.vert .row .rl, .vert .row .rv { font-size: 27px; }
+.vert .row .rv small { font-size: 21px; }
+.vert .chd b { font-size: 31px; } .vert .chd .st { font-size: 25px; } .vert .chd .lnk { font-size: 22px; }
+.vert .chip2 { height: 40px; font-size: 22px; }
+.vert .inp { font-size: 26px; } .vert .inp small { font-size: 23px; }
+.vert .btn { height: 60px; font-size: 26px; }
+.vert .kc b { font-size: 26px; } .vert .kc .fig { font-size: 26px; } .vert .kc .chips .tag { font-size: 17px; }
+.vert .colh { font-size: 25px; }
+.vert .ev { font-size: 22px; } .vert .ev small { font-size: 18px; } .vert .days { font-size: 23px; } .vert .calh { font-size: 27px; }
+.vert .svt { font-size: 38px; } .vert .svr b { font-size: 31px; } .vert .svr small { font-size: 25px; } .vert .svr .op { font-size: 24px; }
+.vert .rsum { display: none; }
+.vert .card { padding: 18px 24px 16px; margin-bottom: 14px; }
+.vert .nms { margin-top: 10px; }
+.vert .inp { height: 50px; }
+.row .rl { font: 500 25px/1.2 var(--sans); white-space: nowrap; }
+.row .rv { position: relative; font: 400 25px/1.25 var(--sans); color: var(--fg); white-space: nowrap; }
+.row .rv small { margin-left: 10px; font-size: 20px; color: var(--muted); }
+.row .rv i { font-style: normal; color: var(--muted); }
+.row .sk { position: absolute; left: 0; top: 50%; height: 14px; margin-top: -7px; border-radius: 7px; background: oklch(1 0 0 / 7%); }
+.row .fl { position: absolute; left: -12px; right: -14px; top: 4px; bottom: 4px; border-radius: 12px; opacity: 0; }
+.tag { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 15px; border-radius: 999px; font: 500 20px/1 var(--sans); white-space: nowrap; vertical-align: middle; }
+.tag.teal { background: var(--teal-soft); color: var(--teal-ink); }
+.tag.indigo { background: var(--indigo-soft); color: var(--indigo-ink); }
+.tag.grey { background: var(--mutedbg); color: var(--fg80); }
+.tag svg { font-size: 18px; }
+.chip2 { display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--input); font: 500 20px/1 var(--sans); color: var(--fg80); white-space: nowrap; }
+.chip2.on { background: var(--fg); border-color: var(--fg); color: var(--bg); }
+.nms { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0 4px 42px; }
+.inp { position: relative; height: 54px; display: flex; align-items: center; padding: 0 16px; border: 1px solid var(--input); border-radius: 13px; background: oklch(1 0 0 / 2.5%); font: 400 23px/1 var(--sans); overflow: hidden; }
+.inp small { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 21px; color: var(--muted); }
+.inp span { position: relative; }
+.rf { display: flex; justify-content: flex-end; gap: 12px; margin-top: 4px; }
+.btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 58px; padding: 0 28px; border-radius: 15px; font: 500 23px/1 var(--sans); white-space: nowrap; }
+.btn.ghost { color: var(--fg80); }
+.btn.pri { background: var(--primary); color: var(--primary-fg); min-width: 150px; }
+.btn.pri .bl { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+/* Saved. */
+#saved { position: absolute; left: 0; top: 0; visibility: hidden; }
+.svt { display: flex; align-items: center; gap: 14px; margin: 0 0 22px; font: 500 34px/1.2 var(--sans); }
+.svt i { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--indigo-soft); color: var(--indigo-ink); font-size: 24px; }
+.svt i svg { stroke-width: 2.6; }
+.svr { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; padding: 22px 24px; background: var(--card); border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 40px 80px -40px rgba(0,0,0,.9), inset 0 1px 0 oklch(1 0 0 / 5%); }
+.svr .tx { flex: 1; min-width: 0; }
+.svr b { display: block; font: 500 28px/1.2 var(--sans); white-space: nowrap; }
+.svr b span { font-weight: 400; color: var(--muted); }
+.svr small { display: block; margin-top: 8px; font: 400 23px/1.2 var(--sans); color: var(--muted); white-space: nowrap; }
+.svr .op { font: 500 21px/1 var(--sans); color: var(--fg80); }
+
+/* Avatars: initials on the indigo-to-teal disc the app gives every client. */
+.av { display: grid; place-items: center; width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(140deg, var(--indigo-soft), var(--teal-soft)); box-shadow: inset 0 0 0 1px oklch(0.96 0.006 84 / .1); color: var(--indigo-ink); font: 500 18px/1 var(--sans); flex: none; }
+
+/* The board. */
+#board { position: absolute; left: 0; top: 0; visibility: hidden; transform-origin: 50% 50%; }
+.colh { position: absolute; top: 0; display: flex; align-items: center; gap: 11px; height: 44px; padding: 0 4px; font: 500 23px/1 var(--sans); white-space: nowrap; }
+.colh .dot { width: 12px; height: 12px; border-radius: 50%; }
+.cnt { position: relative; display: inline-grid; place-items: center; min-width: 32px; height: 28px; padding: 0 9px; border-radius: 999px; background: var(--mutedbg); overflow: hidden; font: 500 17px/1 var(--sans); font-variant-numeric: tabular-nums; color: var(--muted); }
+.cnt span { grid-area: 1 / 1; }
+.colbg { position: absolute; border-radius: 22px; background: oklch(1 0 0 / 2.2%); }
+.kc { position: absolute; left: 0; top: 0; padding: 16px 17px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.9), inset 0 1px 0 oklch(1 0 0 / 5%); }
+.kc .kt { display: flex; align-items: flex-start; gap: 13px; }
+.kc .av { width: 46px; height: 46px; font-size: 17px; }
+.kc b { display: block; margin-top: 1px; font: 500 24px/1.2 var(--sans); white-space: nowrap; }
+.kc .fig { position: relative; height: 32px; margin-top: 3px; font: 400 24px/32px var(--display); letter-spacing: -.01em; white-space: nowrap; }
+.kc .fig > span { position: absolute; left: 0; top: 0; }
+.kc .cur { color: var(--muted); }
+.kc .chips { display: flex; gap: 7px; margin-top: 13px; padding-left: 59px; height: 30px; }
+.kc .chips .tag { height: 30px; padding: 0 12px; font-size: 16px; gap: 6px; }
+.kc .chips .tag svg { font-size: 15px; }
+.kc .ring { position: absolute; inset: -1px; border-radius: 18px; box-shadow: 0 0 0 2px var(--teal); opacity: 0; }
+
+/* The week. */
+#cal { position: absolute; left: 0; top: 0; padding: 22px 24px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 50px 100px -45px rgba(0,0,0,.95), inset 0 1px 0 oklch(1 0 0 / 5%); visibility: hidden; transform-origin: 50% 30%; }
+.calh { display: flex; align-items: baseline; justify-content: space-between; font: 500 25px/1 var(--sans); }
+.calh span { font: 400 20px/1 var(--sans); color: var(--muted); }
+.days { display: grid; grid-template-columns: 84px repeat(3, 1fr); margin-top: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line); font: 500 21px/1 var(--sans); color: var(--muted); white-space: nowrap; }
+.days span { padding-left: 12px; }
+.days .td { color: var(--fg); }
+.cgrid { position: relative; }
+.cgrid .lines { position: absolute; left: 84px; right: 0; top: 0; bottom: 0; }
+.hr { position: absolute; left: 0; font: 400 17px/1 var(--mono); color: var(--muted); }
+.ev { position: absolute; padding: 10px 14px; border-radius: 10px; border-left: 3px solid; font: 500 20px/1.2 var(--sans); white-space: nowrap; overflow: hidden; }
+.ev small { display: block; margin-top: 5px; font: 400 17px/1.2 var(--sans); opacity: .8; font-variant-numeric: tabular-nums; }
+.ev.grey { background: var(--mutedbg); color: var(--fg80); border-color: oklch(0.96 0.006 84 / .4); }
+.ev.teal { background: var(--teal-soft); color: var(--teal-ink); border-color: var(--teal); }
+#evNew { background: oklch(0.32 0.008 56); color: var(--fg); }
+
+/* The touch that holds the + and taps Save. */
+#touch { position: absolute; left: 0; top: 0; width: 132px; height: 132px; margin: -66px 0 0 -66px; border-radius: 50%; background: radial-gradient(closest-side, oklch(1 0 0 / .34), oklch(1 0 0 / .14) 70%, oklch(1 0 0 / .1)); box-shadow: 0 0 0 2.5px oklch(1 0 0 / .7), 0 14px 34px rgba(0,0,0,.4); z-index: 40; opacity: 0; }
+#flights { position: absolute; inset: 0; z-index: 35; pointer-events: none; }
+.fly { position: absolute; left: 0; top: 0; padding: .02em .16em; border-radius: .22em; font: 400 46px/1.36 var(--sans); letter-spacing: -.01em; color: var(--fg); white-space: nowrap; transform-origin: 0 50%; opacity: 0; box-shadow: 0 18px 40px -16px rgba(0,0,0,.7); }
+.vert .fly { font-size: 42px; }
+
+/* The light end card, the site's own look. */
+#end { background: #fff; color: var(--l-fg); visibility: hidden; z-index: 50; }
+#endIn { position: absolute; inset: 0; transform-origin: 50% 45%; }
+#logo { position: absolute; left: 50%; top: 0; display: flex; align-items: center; gap: 22px; }
+#logo .lw { height: 112px; width: auto; fill: var(--brand); }
+#logo .lwm { height: 88px; width: auto; fill: var(--l-fg); }
+.vert #logo .lw { height: 96px; } .vert #logo .lwm { height: 75px; }
+#endLine, #tagl { position: absolute; left: 0; right: 0; margin: 0; text-align: center; }
+#endLine { font: 400 68px/1.12 var(--display); letter-spacing: -.03em; color: var(--l-fg); }
+#endLine em { font-style: normal; color: var(--l-muted); }
+.vert #endLine { font-size: 64px; }
+#tagl { font: 400 30px/1.3 var(--sans); color: var(--l-muted); }
+#cta { position: absolute; left: 50%; top: 0; display: inline-flex; align-items: center; gap: 14px; height: 80px; padding: 0 40px; border-radius: 999px; background: var(--brand); color: #fff; font: 500 30px/1 var(--sans); white-space: nowrap; }
+#white { background: #fff; opacity: 0; z-index: 45; pointer-events: none; }
+
+/* Live preview controls (hidden while recording). */
+#ctrl { position: fixed; left: 0; right: 0; bottom: 0; z-index: 100; display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: rgba(0,0,0,.6); color: #fff; font: 500 13px ui-monospace, monospace; transition: opacity .3s; }
+#ctrl input { flex: 1; }
+#ctrl button { padding: 4px 10px; border: 1px solid rgba(255,255,255,.3); border-radius: 6px; background: none; color: #fff; font: inherit; cursor: pointer; }
+.rec #ctrl { display: none; }
+.idle #ctrl { opacity: 0; }
+</style>
+</head>
+<body>
+<div id="stage">
+<div id="canvas">
+  <div id="bg" class="full">
+    <div id="grid"></div>
+    <div class="glow" id="gKey"></div>
+    <div class="glow" id="gInd"></div>
+    <div class="glow" id="gTeal"></div>
+    <div id="vig"></div>
+  </div>
+
+  <div id="mark"><svg class="mw" viewBox="0 0 240 190" data-brand="wing"></svg><svg class="mt" viewBox="0 0 757 172" data-brand="word"></svg></div>
+
+  <div id="cam">
+    <div id="heads"></div>
+
+    <div id="quote">
+      <div class="qlab"><span class="qmic" data-icon="mic"><i class="dot" id="qdot"></i></span><span class="qt"><span id="ql1"></span><span id="ql2"></span></span><span id="wave"></span></div>
+      <p class="qtext" id="qtext"></p>
+    </div>
+
+    <div id="world">
+      <div id="rec">
+        <div id="pill"><i class="pd" id="pdot"></i><span class="ps" id="pspin" data-icon="loader-circle"></span><span id="clock">0:00</span><span class="plab" id="plab"><span id="pl1"></span><span id="pl2"></span><span id="pl3"></span></span></div>
+        <div id="tabbar">
+          <span class="tb on" data-icon="house"><span id="tb0"></span></span>
+          <span class="tb" data-icon="users"><span id="tb1"></span></span>
+          <span class="tb"><b id="plus" data-icon="plus"></b></span>
+          <span class="tb" data-icon="calendar-days"><span id="tb2"></span></span>
+          <span class="tb" data-icon="list-checks"><span id="tb3"></span></span>
+        </div>
+        <div id="rings"><i></i><i></i><i></i></div>
+      </div>
+
+      <div id="review">
+        <p class="rsum" id="rsum"></p>
+        <article class="card" id="cL">
+          <div class="chd"><span class="cb on"><i class="f"></i><svg class="i" viewBox="0 0 24 24" data-tick></svg></span><b id="lName"></b><span class="st" id="lStage"></span><span class="lnk" id="lChange"></span></div>
+          <div class="rows">
+            <div class="row" id="rView"><i class="fl"></i><span class="cb"><i class="f"></i><svg class="i" viewBox="0 0 24 24" data-tick></svg></span><span class="rl"></span><span class="rv"></span></div>
+            <div class="row" id="rWish"><i class="fl"></i><span class="cb"><i class="f"></i><svg class="i" viewBox="0 0 24 24" data-tick></svg></span><span class="rl"></span><span class="rv"></span></div>
+            <div class="row" id="rStage"><i class="fl"></i><span class="cb"><i class="f"></i><svg class="i" viewBox="0 0 24 24" data-tick></svg></span><span class="rl"></span><span class="rv"></span></div>
+            <div class="row" id="rAppt"><i class="fl"></i><span class="cb"><i class="f"></i><svg class="i" viewBox="0 0 24 24" data-tick></svg></span><span class="rl"></span><span class="rv"></span></div>
+          </div>
+        </article>
+        <article class="card" id="cA">
+          <div class="chd"><span class="cb on"><i class="f"></i><svg class="i" viewBox="0 0 24 24" data-tick></svg></span><b id="aNew"></b><span class="chip2 on" id="aBuyer"></span><span class="chip2" id="aSeller"></span></div>
+          <div class="nms" id="aHead"><i class="fl" style="position:absolute;left:-12px;right:-12px;top:-8px;bottom:-8px;border-radius:16px;opacity:0"></i><span class="inp"><small id="aFirstPh"></small><span id="aFirst"></span></span><span class="inp"><small id="aLastPh"></small><span id="aLast"></span></span></div>
+          <div class="rows">
+            <div class="row" id="aWish"><i class="fl"></i><span class="cb"><i class="f"></i><svg class="i" viewBox="0 0 24 24" data-tick></svg></span><span class="rl"></span><span class="rv"></span></div>
+          </div>
+        </article>
+        <div class="rf"><span class="btn ghost" id="bDiscard"></span><span class="btn pri" id="bSave"><span class="bl" id="sv1"></span><span class="bl" id="sv2"></span></span></div>
+      </div>
+
+      <div id="saved">
+        <p class="svt"><i data-icon="check"></i><span id="svTitle"></span></p>
+        <div class="svr" id="svL"><span class="av">LN</span><div class="tx"><b id="svLName"></b><small id="svLParts"></small></div><span class="op" id="svLOpen"></span></div>
+        <div class="svr" id="svA"><span class="av">AB</span><div class="tx"><b id="svAName"></b><small id="svAParts"></small></div><span class="op" id="svAOpen"></span></div>
+      </div>
+
+      <div id="board"></div>
+      <div id="cal">
+        <div class="calh"><b id="calT"></b><span id="calR"></span></div>
+        <div class="days" id="days"></div>
+        <div class="cgrid" id="cgrid"><div class="lines" id="glines"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="flights"></div>
+  <div id="touch"></div>
+
+  <div id="white" class="full"></div>
+  <div id="end" class="full"><div id="endIn">
+    <div id="logo"><svg class="lw" viewBox="0 0 240 190" data-brand="wing"></svg><svg class="lwm" viewBox="0 0 757 172" data-brand="word"></svg></div>
+    <p id="endLine"></p>
+    <p id="tagl"></p>
+    <div id="cta"><span id="ctaT"></span><span data-icon="arrow-right" style="display:flex"></span></div>
+  </div></div>
+
+  <div id="grain" class="full"></div>
+</div>
+</div>
+<div id="ctrl"><button id="pp">❚❚</button><input id="scrub" type="range" min="0" max="30" step="0.001" value="0"><span id="ctime">0.000</span></div>
+
+<script>
+const ICONS = {"house":"<path d=\"M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8\"/><path d=\"M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/>","users":"<path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"/><path d=\"M16 3.128a4 4 0 0 1 0 7.744\"/><path d=\"M22 21v-2a4 4 0 0 0-3-3.87\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/>","plus":"<path d=\"M5 12h14\"/><path d=\"M12 5v14\"/>","calendar-days":"<path d=\"M8 2v4\"/><path d=\"M16 2v4\"/><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"/><path d=\"M3 10h18\"/><path d=\"M8 14h.01\"/><path d=\"M12 14h.01\"/><path d=\"M16 14h.01\"/><path d=\"M8 18h.01\"/><path d=\"M12 18h.01\"/><path d=\"M16 18h.01\"/>","list-checks":"<path d=\"M13 5h8\"/><path d=\"M13 12h8\"/><path d=\"M13 19h8\"/><path d=\"m3 17 2 2 4-4\"/><path d=\"m3 7 2 2 4-4\"/>","mic":"<path d=\"M12 19v3\"/><path d=\"M19 10v2a7 7 0 0 1-14 0v-2\"/><rect x=\"9\" y=\"2\" width=\"6\" height=\"13\" rx=\"3\"/>","check":"<path d=\"M20 6 9 17l-5-5\"/>","loader-circle":"<path d=\"M21 12a9 9 0 1 1-6.219-8.56\"/>","arrow-right":"<path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/>","eye":"<path d=\"M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>"};
+const BRAND = {"wing":["M 217 14.1 c -20.5 12.7 -46.1 23.3 -86 35.4 -38.3 11.6 -53.8 16.9 -64.3 22.1 -28.9 14.2 -47.7 36.8 -54.2 64.9 -1.6 6.7 -2.8 26.5 -1.7 26.5 0.4 0 2.7 -3.5 5.2 -7.7 17.5 -29.6 46.2 -45.2 104.5 -56.8 53.7 -10.6 88.1 -36.8 101.3 -77 4.3 -13.2 4.4 -13.1 -4.8 -7.4 z","M 171.5 98 c -14.8 7.1 -31.2 11.5 -58.4 15.5 -51.1 7.7 -77 24.3 -90.9 58.8 -3.3 8.2 -2.7 8.4 5.8 1.6 17.3 -13.9 31.5 -18.4 63.5 -20.4 28.3 -1.8 37.5 -4.3 53 -14.2 15.1 -9.8 32.1 -30.2 36 -43.1 0.8 -2.8 0.5 -2.8 -9 1.8 z"],"word":["M 535.9 11.3 c -6.8 4.6 -7.5 12.9 -1.6 19.3 10.3 11.1 27.6 -2.3 19.7 -15.3 -3.8 -6.3 -12 -8.1 -18.1 -4 z","M 377.2 10.8 c -11.2 0.2 -12.3 0.4 -11.7 2 0.7 1.9 18.8 62.1 28.1 93.4 l 5.8 19.8 11.7 0 11.7 0 5.5 -17.2 c 3.1 -9.5 8.1 -25.5 11.3 -35.6 3.2 -10 6.1 -17.7 6.4 -17 0.4 0.7 5.3 16.7 11 35.6 l 10.4 34.3 11.9 -0.3 11.9 -0.3 10.8 -34 c 8.9 -27.9 22.4 -71.1 24.6 -78.8 0.5 -1.6 -0.5 -1.7 -12 -1.7 l -12.5 0 -3 9.7 c -1.6 5.4 -6.6 21.9 -11.1 36.8 -4.4 14.8 -8.3 27.7 -8.6 28.5 -0.3 0.8 -5.6 -15.6 -11.8 -36.5 l -11.2 -38 -10.2 -0.3 -10.1 -0.3 -2.5 8.1 c -14.1 46.1 -21.1 67.8 -21.7 67.2 -0.3 -0.4 -2.9 -9.3 -5.8 -19.7 -12 -43.1 -15.4 -55 -16 -55.5 -0.3 -0.3 -6.2 -0.4 -12.9 -0.2 z","M 11.9 57 c 0 25.3 -0.1 51.1 -0.2 57.2 l -0.1 11.3 40.2 0.3 40.2 0.2 0 -10.8 0 -10.9 -6.7 -0.6 c -3.8 -0.4 -16.4 -0.7 -28 -0.7 l -21.3 0 0 -46 0 -46 -12 0 -12 0 -0.1 46 z","M 338 30.5 l 0 19.5 -4.4 -3.4 c -7 -5.3 -12.8 -7.1 -23.2 -7.1 -49 0 -55.1 77.5 -6.9 87.5 10.9 2.3 22.3 -0.4 30.8 -7.1 l 3.7 -3 0 4.6 0 4.6 11.3 -0.3 11.2 -0.3 0.1 -57.3 0.2 -57.2 -11.4 0 -11.4 0 0 19.5 z m -14 30.6 c 15.4 7 19.2 27.8 7.2 39.8 -13.2 13.2 -33.3 6.5 -37.2 -12.4 -4 -19.1 13.4 -34.9 30 -27.4 z","M 220.5 38.6 c -13.7 1.7 -31.5 9.4 -31.5 13.6 0 1.2 8 14.8 8.7 14.8 0.3 0 1.8 -0.9 3.3 -2 17.3 -12.3 41 -8.8 41 6.1 l 0 4 -5.2 -0.8 c -9.2 -1.4 -25.8 -0.8 -32 1 -19.5 5.9 -26.3 28 -13.1 42.7 10.2 11.3 31.2 13 45.3 3.5 6.4 -4.3 6 -4.3 6 0.5 l 0 4 10.4 0 10.4 0 0.7 -9.5 c 1.2 -15.6 0 -51.1 -1.9 -57 -4.4 -13.9 -23.1 -23.2 -42.1 -20.9 z m 17 51.5 l 4.7 1.2 -0.5 4.3 c -2 17.7 -34.7 21.5 -34.7 4.1 0 -9.7 13.4 -13.9 30.5 -9.6 z","M 123.7 41 c -24.9 8.8 -35.8 34.8 -25.7 61.3 10.1 26.8 52.4 34.2 74.9 13.2 l 4.9 -4.6 -5.2 -4.7 c -10.2 -9.4 -9 -8.9 -13.3 -5.2 -13.1 11.5 -32.8 9.5 -39.8 -4.1 -3.8 -7.2 -5.3 -6.9 30.5 -6.9 l 32 0 0 -5.9 c 0 -19.2 -8.8 -34.4 -23.8 -41.4 -9.1 -4.1 -25.3 -4.9 -34.5 -1.7 z m 26.6 19.9 c 3.8 2.4 7.1 6.9 8.2 11.3 l 0.7 2.8 -20.7 0 -20.7 0 0.7 -2.8 c 2.9 -12.2 20.3 -18.4 31.8 -11.3 z","M 605.7 41 c -5.2 1.3 -11 4.4 -15.2 8.1 l -3.5 3.1 0 -5.1 0 -5.2 -11.2 0.3 -11.3 0.3 -0.3 41.7 -0.2 41.8 11.4 0 11.5 0 0.3 -25.3 0.3 -25.2 2.7 -4.7 c 7.2 -12.2 26.2 -13.1 32.6 -1.5 1.5 2.8 1.7 6.8 2 29.9 l 0.3 26.8 11.5 0 11.5 0 -0.3 -31.3 c -0.3 -30.3 -0.4 -31.3 -2.7 -36.4 -6 -13.5 -23.7 -21.2 -39.4 -17.3 z","M 682.6 42 c -36.1 11.5 -38.7 65.2 -4 81.2 4.2 2 6.6 2.3 16.4 2.3 12.3 0 15.5 -1 23.7 -7.1 4.3 -3.3 4.5 -3.1 3.7 2.8 -2.6 20.6 -26.9 27.7 -46.8 13.8 l -5.5 -3.9 -6.1 8.5 -6 8.5 2.7 2.5 c 4.3 3.8 16.4 9.3 24 10.9 22.3 4.8 43.3 -2.2 53.5 -17.7 7.3 -11 7.3 -11.3 7.3 -58.8 l 0 -42.5 -11 0 -11 0 -0.3 4.2 -0.3 4.2 -6.4 -4.3 c -9.8 -6.8 -22 -8.4 -33.9 -4.6 z m 28.9 21.5 c 12.7 7.4 14.6 27.5 3.4 36.9 -17 14.3 -41.5 -0.5 -36.8 -22.3 3.2 -15.3 19.9 -22.6 33.4 -14.6 z","M 531.7 42.7 c -0.4 0.3 -0.7 19.2 -0.7 42 l 0 41.3 11.5 0 11.5 0 0 -42 0 -42 -10.8 0 c -6 0 -11.2 0.3 -11.5 0.7 z"]};
+const DUR = 30;
+const FORMAT = document.documentElement.dataset.format, VERT = FORMAT !== "landscape";
+const CW = VERT ? 1080 : 1920, CH = VERT ? 1350 : 1080;
+const CX = CW / 2, CY = CH / 2;
+
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, p) => a + (b - a) * p;
+const P = (t, a, b) => clamp((t - a) / (b - a));
+const E = {
+  inC: p => p * p * p,
+  outC: p => 1 - (1 - p) ** 3,
+  outX: p => (1 - 2 ** (-10 * p)) / (1 - 2 ** -10),
+  ioC: p => (p < 0.5 ? 4 * p ** 3 : 1 - (-2 * p + 2) ** 3 / 2),
+  ioS: p => -(Math.cos(Math.PI * p) - 1) / 2,
+  outB: (p, s = 1.6) => 1 + (s + 1) * (p - 1) ** 3 + s * (p - 1) ** 2,
+};
+function spring(tau, f = 2.2, z = 0.55) {
+  if (tau <= 0) return 0;
+  const w = 2 * Math.PI * f, wd = w * Math.sqrt(1 - z * z);
+  return 1 - Math.exp(-z * w * tau) * (Math.cos(wd * tau) + ((z * w) / wd) * Math.sin(wd * tau));
+}
+const bump = p => Math.sin(Math.PI * clamp(p));
+const f2 = n => n.toFixed(2);
+function op(el, o) { el.style.opacity = clamp(o).toFixed(3); }
+function bl(el, b) { el.style.filter = b > 0.05 ? `blur(${b.toFixed(2)}px)` : "none"; }
+function show(el, on) { const d = on ? "" : "none"; if (el.style.display !== d) el.style.display = d; }
+function vis(el, on) { const v = on ? "visible" : "hidden"; if (el.style.visibility !== v) el.style.visibility = v; }
+function box(el) {
+  const cv = $("#canvas").getBoundingClientRect(), k = cv.width / CW, r = el.getBoundingClientRect();
+  return { x: (r.left - cv.left) / k, y: (r.top - cv.top) / k, w: r.width / k, h: r.height / k };
+}
+function rng(seed) { return () => { seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+const icon = name => `<svg class="i" viewBox="0 0 24 24">${ICONS[name]}</svg>`;
+
+/* ---------- words: the app's own (messages/en, messages/es), the story's own lines ---------- */
+// The agent's note and the review cards follow plan 026 exactly: the model makes one card per
+// person, rows for a viewing, wishes, a stage move ("only when the agent clearly says so") and an
+// appointment, and nothing is saved until the agent presses Save. The appointment is saved as a
+// meeting, so it lands grey on the calendar, the way the app draws it.
+const ES = new URLSearchParams(location.search).get("lang") === "es";
+const S = ES ? {
+  voiceNote: "Nota de voz", heard: "Lo que he oído", letGo: "Suelta para terminar", listening: "Escuchando…", sorting: "Ordenándolo por clientes…",
+  tabs: ["Inicio", "Clientes", "Calendario", "Tareas"],
+  summary: "La visita de Lars Nielsen y una compradora nueva, Anna Berg.",
+  stageNow: "· Cualificado", change: "Cambiar",
+  viewing: "Visita", viewingVal: "Villa, Nueva Andalucía <i>· Encantado</i>",
+  wishes: "Lo que buscan", larsWish: "Hasta 1.400.000 €<small>Antes 1.200.000 €</small>",
+  moveTo: "Pasar a", stageViewing: "Visita",
+  appointment: "Cita", appt: "Segunda visita <i>· jue, 12 nov · 11:00</i>",
+  newClient: "Cliente nuevo", buyer: "Comprador", seller: "Vendedor", first: "Nombre", last: "Apellidos",
+  annaWish: "Hasta 600.000 € <i>· 2 dorm. · Marbella</i>",
+  discard: "Descartar", save: "Guardar", saving: "Guardando…",
+  savedTitle: "Guardado para 2 clientes.", savedLars: "visita · lo que buscan · fase · cita", newTag: "· cliente nuevo", savedAnna: "lo que buscan", open: "Abrir",
+  cols: { new: "Nuevo", qualified: "Cualificado", viewing: "Visita" },
+  fig: { sofia: "hasta 800 mil €", lars0: "hasta 1,2 M€", lars1: "hasta 1,4 M€", james: "hasta 700 mil €", anya: "hasta 2 M€", anna: "hasta 600 mil €" },
+  chips: { villa: "Villa", apartment: "Apartamento", oneViewing: "1 visita", twoViewings: "2 visitas" },
+  calT: "Esta semana", calR: "9–15 nov", days: ["mié 11", "jue 12", "vie 13"],
+  evA: ["Visita · Ático", "10:00–11:00 · Anya Petrova"], evB: ["Notaría", "12:00–13:00"], evNew: ["Segunda visita", "11:00–12:00"],
+  heads: [
+    { land: ["Solo habla.", "<em>Mantén pulsado el +</em>", "<em>al salir de la visita.</em>"], vert: ["Solo habla.", "<em>Mantén pulsado el +</em>", "<em>al salir de la visita.</em>"] },
+    { land: ["LeadWing lo ordena", "<em>por clientes.</em>"], vert: ["LeadWing lo ordena", "<em>por clientes.</em>"] },
+    { land: ["Tú lo revisas.", "<em>Nada se guarda</em>", "<em>sin ti.</em>"], vert: ["Tú lo revisas.", "<em>Nada se guarda sin ti.</em>"] },
+  ],
+  done: ["Lars, al día.", "Visita agendada.", "Anna, añadida."],
+  endLine: "Habla.<br><em>LeadWing escribe por ti.</em>", tagline: "El CRM para agentes inmobiliarios independientes.", cta: "leadwing.app",
+  // What the agent says, phrase by phrase, and the part of the review each phrase lands on.
+  said: [
+    ["Lars Nielsen, encantado con la villa de Nueva Andalucía.", "rView"],
+    ["Segunda visita el jueves a las 11.", "rAppt"],
+    ["Presupuesto hasta 1,4 millones,", "rWish"],
+    ["pásalo a Visita.", "rStage"],
+    ["Compradora nueva, Anna Berg:", "aHead"],
+    ["dos dormitorios en Marbella, hasta 600 mil.", "aWish"],
+  ],
+} : {
+  voiceNote: "Voice note", heard: "What I heard", letGo: "Let go to finish", listening: "Listening…", sorting: "Sorting it into your clients…",
+  tabs: ["Home", "Clients", "Calendar", "Tasks"],
+  summary: "Lars Nielsen’s viewing, and a new buyer, Anna Berg.",
+  stageNow: "· Qualified", change: "Change",
+  viewing: "Viewing", viewingVal: "Villa, Nueva Andalucía <i>· Loved it</i>",
+  wishes: "Wishes", larsWish: "Up to €1,400,000<small>Was €1,200,000</small>",
+  moveTo: "Move to", stageViewing: "Viewing",
+  appointment: "Appointment", appt: "Second viewing <i>· Thu 12 Nov · 11:00</i>",
+  newClient: "New client", buyer: "Buyer", seller: "Seller", first: "First name", last: "Last name",
+  annaWish: "Up to €600,000 <i>· 2 bed · Marbella</i>",
+  discard: "Discard", save: "Save", saving: "Saving…",
+  savedTitle: "Saved for 2 clients.", savedLars: "viewing · wishes · stage · appointment", newTag: "· new client", savedAnna: "wishes", open: "Open",
+  cols: { new: "New", qualified: "Qualified", viewing: "Viewing" },
+  fig: { sofia: "up to €800K", lars0: "up to €1.2M", lars1: "up to €1.4M", james: "up to €700K", anya: "up to €2M", anna: "up to €600K" },
+  chips: { villa: "Villa", apartment: "Apartment", oneViewing: "1 viewing", twoViewings: "2 viewings" },
+  calT: "This week", calR: "9–15 Nov", days: ["Wed 11", "Thu 12", "Fri 13"],
+  evA: ["Viewing · Penthouse", "10:00–11:00 · Anya Petrova"], evB: ["Notary", "12:00–13:00"], evNew: ["Second viewing", "11:00–12:00"],
+  heads: [
+    { land: ["Just talk.", "<em>Hold the + after</em>", "<em>the viewing.</em>"], vert: ["Just talk.", "<em>Hold the + after the viewing.</em>"] },
+    { land: ["LeadWing sorts it", "<em>into your clients.</em>"], vert: ["LeadWing sorts it", "<em>into your clients.</em>"] },
+    { land: ["You check it.", "<em>Nothing’s saved</em>", "<em>until you do.</em>"], vert: ["You check it.", "<em>Nothing’s saved until you do.</em>"] },
+  ],
+  done: ["Lars updated.", "Viewing booked.", "Anna added."],
+  endLine: "Talk.<br><em>LeadWing does the typing.</em>", tagline: "The CRM for independent real‑estate agents.", cta: "leadwing.app",
+  said: [
+    ["Lars Nielsen loved the villa in Nueva Andalucía.", "rView"],
+    ["Second viewing Thursday at 11.", "rAppt"],
+    ["Budget’s now up to 1.4 million,", "rWish"],
+    ["move him to Viewing.", "rStage"],
+    ["And a new buyer, Anna Berg:", "aHead"],
+    ["two-bed in Marbella, up to 600k.", "aWish"],
+  ],
+};
+if (ES) document.documentElement.lang = "es";
+
+/* ---------- the timeline (voice-note-soundtrack.mjs mirrors these cues) ---------- */
+// 96 BPM: a beat is 0.625 s, a bar 2.5 s.
+const T = {
+  press: 0.625, rec: 0.72, w0: 1.3, w1: 9.5, rel: 10.0, sort: 10.625, recOut: 11.05, revIn: 11.3,
+  F: [11.875, 12.5, 13.125, 13.75, 14.375, 15.0], FLY: 0.62,
+  quoteOut: 16.1, curOn: 16.3, tap: 16.875, saved: 17.25, revOut: 18.0, boardIn: 18.05,
+  lars: 18.75, cal: 20.0, anna: 21.25, out: 24.3, end: 24.95,
+};
+const HEADS = [[0.8, 10.05], [10.62, 15.85], [16.35, 18.0]];
+const CLOCK_RATE = 24 / (T.rel - T.rec); // 0:24 of talking, told in nine seconds
+const TONE = { rView: "teal", rAppt: "teal", rWish: "teal", rStage: "teal", aHead: "indigo", aWish: "indigo" };
+const HL = { teal: "oklch(0.7 0.12 200 / 24%)", indigo: "oklch(0.6 0.19 277 / 34%)" };
+const HL_SOLID = { teal: "oklch(0.42 0.07 205)", indigo: "oklch(0.4 0.13 277)" };
+
+/* ---------- layout per format ---------- */
+const LAY = VERT ? {
+  left: { x: 84, w: 912 }, headTop: 92, quoteGap: 46,
+  rec: { cx: 540, top: 880 },
+  review: { x: 84, w: 912 },
+  board: { x: 84, w: 912, top: 0 }, cal: { x: 84, w: 912 },
+  mark: [60, 44], tilt: { rx: 4, ry: 0 },
+} : {
+  left: { x: 150, w: 780 }, headTop: 128, quoteGap: 60,
+  rec: { cx: 1388, top: 370 },
+  review: { x: 968, w: 852 },
+  board: { x: 968, w: 852, top: 120 }, cal: { x: 968, w: 852 },
+  mark: [60, 52], tilt: { rx: 3, ry: -7 },
+};
+
+/* ---------- static content ---------- */
+for (const el of $$("[data-icon]")) el.insertAdjacentHTML("afterbegin", icon(el.dataset.icon));
+for (const el of $$("[data-brand]")) el.innerHTML = BRAND[el.dataset.brand].map(d => `<path d="${d}"/>`).join("");
+for (const el of $$("[data-tick]")) el.innerHTML = ICONS.check;
+const set = (id, html) => { $("#" + id).innerHTML = html; };
+set("ql1", S.voiceNote); set("ql2", S.heard);
+set("pl1", S.letGo); set("pl2", S.listening); set("pl3", S.sorting);
+S.tabs.forEach((x, i) => set("tb" + i, x));
+set("rsum", S.summary); set("lName", "Lars Nielsen"); set("lStage", S.stageNow); set("lChange", S.change);
+const fillRow = (id, label, value) => { $(`#${id} .rl`).innerHTML = label; $(`#${id} .rv`).innerHTML = value; };
+fillRow("rView", S.viewing, S.viewingVal);
+fillRow("rWish", S.wishes, S.larsWish);
+fillRow("rStage", `${S.moveTo} <span class="tag teal">${S.stageViewing}</span>`, "");
+fillRow("rAppt", S.appointment, S.appt);
+fillRow("aWish", S.wishes, S.annaWish);
+// "Move to" holds its pill inside the label; it spans the label and value columns.
+$("#rStage .rl").style.gridColumn = "2 / 4";
+$("#rStage .rv").remove();
+set("aNew", S.newClient); set("aBuyer", S.buyer); set("aSeller", S.seller);
+set("aFirstPh", S.first); set("aLastPh", S.last); set("aFirst", "Anna"); set("aLast", "Berg");
+set("bDiscard", S.discard); set("sv1", S.save); set("sv2", icon("loader-circle") + S.saving);
+set("svTitle", S.savedTitle); set("svLName", "Lars Nielsen"); set("svLParts", S.savedLars); set("svLOpen", S.open);
+set("svAName", `Anna Berg <span>${S.newTag}</span>`); set("svAParts", S.savedAnna); set("svAOpen", S.open);
+set("calT", S.calT); set("calR", S.calR);
+set("endLine", S.endLine); set("tagl", S.tagline); set("ctaT", S.cta);
+$("#days").innerHTML = "<span></span>" + S.days.map(d => `<span>${d}</span>`).join("");
+
+// Headlines.
+const heads = S.heads.map((h, i) => {
+  const el = document.createElement("h2"); el.className = "hd";
+  el.innerHTML = (VERT ? h.vert : h.land).map(l => `<span class="ln"><span class="li">${l}</span></span>`).join("");
+  $("#heads").append(el);
+  return { el, lines: $$(".li", el), a: HEADS[i][0], b: HEADS[i][1] };
+});
+// The three results, one line each, ticked as each lands.
+const doneEl = document.createElement("h2"); doneEl.className = "hd";
+doneEl.innerHTML = S.done.map((l, i) => `<span class="ln"><span class="li"><span class="tick" style="background:${["var(--teal-soft)", "var(--mutedbg)", "var(--indigo-soft)"][i]};color:${["var(--teal-ink)", "var(--fg80)", "var(--indigo-ink)"][i]}">${icon("check")}</span>${l}</span></span>`).join("");
+$("#heads").append(doneEl);
+const doneLines = $$(".li", doneEl), DONE_AT = [T.lars, T.cal, T.anna];
+
+// The note: phrases of words, each word with the time it's said.
+const qtext = $("#qtext"), WORDS = [], PHRASES = [];
+S.said.forEach(([text, to], pi) => {
+  const ph = document.createElement("span"); ph.className = "ph";
+  text.split(" ").forEach((w, wi, all) => {
+    const s = document.createElement("span"); s.className = "w"; s.textContent = w; ph.append(s);
+    if (wi < all.length - 1) ph.append(document.createTextNode(" "));
+    WORDS.push({ el: s, text: w, pi });
+  });
+  qtext.append(ph); if (pi < S.said.length - 1) qtext.append(document.createTextNode(" "));
+  PHRASES.push({ el: ph, text, to, tone: TONE[to], words: WORDS.filter(x => x.pi === pi) });
+});
+{
+  // A human rhythm: longer words take longer, a comma breathes, a full stop breathes more.
+  const r = rng(26); let acc = 0;
+  for (const w of WORDS) {
+    w.at = acc;
+    const d = 0.16 + 0.035 * w.text.length + 0.05 * r();
+    w.dur = d;
+    acc += d + (/[.:]$/.test(w.text) ? 0.32 : /,$/.test(w.text) ? 0.14 : 0.02);
+  }
+  const k = (T.w1 - T.w0) / acc;
+  for (const w of WORDS) { w.at = T.w0 + w.at * k; w.dur *= k; }
+}
+// Waveform bars.
+const NB = VERT ? 30 : 34;
+$("#wave").innerHTML = "<i></i>".repeat(NB);
+const bars = $$("#wave i");
+
+// Flights: one copy of each phrase, flying to its row.
+const flights = PHRASES.map((p, i) => {
+  const el = document.createElement("span"); el.className = "fly"; el.textContent = p.text;
+  el.style.background = HL_SOLID[p.tone];
+  $("#flights").append(el);
+  return { el, p, at: T.F[i], target: $("#" + p.to) };
+});
+
+// The board: three columns, five clients.
+const board = $("#board");
+const COLS = [["new", "var(--indigo)"], ["qualified", "oklch(0.96 0.006 84 / .5)"], ["viewing", "var(--teal)"]];
+const COUNTS = { new: [1, 2, T.anna], qualified: [2, 1, T.lars], viewing: [1, 2, T.lars] };
+board.innerHTML = COLS.map(([s, c]) => `<div class="colbg" data-s="${s}"></div><div class="colh" data-s="${s}"><i class="dot" style="background:${c}"></i>${S.cols[s]}<b class="cnt"><span class="o"></span><span class="n"></span></b></div>`).join("");
+const chip = (tone, text, ic) => `<span class="tag ${tone}">${ic ? icon(ic) : ""}${text}</span>`;
+const KC = {
+  anna: { name: "Anna Berg", ini: "AB", fig: [S.fig.anna], chips: [] },
+  sofia: { name: "Sofia Müller", ini: "SM", fig: [S.fig.sofia], chips: [chip("grey", S.chips.apartment)] },
+  lars: { name: "Lars Nielsen", ini: "LN", fig: [S.fig.lars0, S.fig.lars1], chips: [chip("grey", S.chips.villa)] },
+  james: { name: "James Carter", ini: "JC", fig: [S.fig.james], chips: [chip("grey", S.chips.apartment)] },
+  anya: { name: "Anya Petrova", ini: "AP", fig: [S.fig.anya], chips: [chip("teal", S.chips.twoViewings, "eye"), chip("grey", S.chips.villa)] },
+};
+const money = s => s.replace(/(€|M€|mil €|€)/g, m => `<span class="cur">${m}</span>`);
+for (const [k, c] of Object.entries(KC)) {
+  const el = document.createElement("div"); el.className = "kc"; el.dataset.k = k;
+  el.innerHTML = `<div class="kt"><span class="av">${c.ini}</span><div><b>${c.name}</b><div class="fig">${c.fig.map(f => `<span>${money(f)}</span>`).join("")}</div></div></div><div class="chips">${k === "lars" ? chip("teal", S.chips.oneViewing, "eye").replace("tag teal", "tag teal nv") : ""}${c.chips.join("")}</div><i class="ring"></i>`;
+  board.append(el); c.el = el;
+  c.figs = $$(".fig span", el);
+}
+const larsNew = $(".nv", KC.lars.el);
+
+// The week: four days, 10:00 to 13:00.
+const cgrid = $("#cgrid");
+["10:00", "11:00", "12:00", "13:00"].forEach((h, i) => cgrid.insertAdjacentHTML("beforeend", `<span class="hr" data-h="${i}">${h}</span>`));
+cgrid.insertAdjacentHTML("beforeend", `<div class="ev teal" data-at="0,0">${S.evA[0]}<small>${S.evA[1]}</small></div><div class="ev grey" data-at="2,2">${S.evB[0]}<small>${S.evB[1]}</small></div><div class="ev grey" id="evNew" data-at="1,1">${S.evNew[0]}<small>${S.evNew[1]}</small></div>`);
+
+// Static grain: dithers the soft lights so 8-bit video doesn't band them.
+{
+  const c = document.createElement("canvas"); c.width = c.height = 256;
+  const g = c.getContext("2d"), img = g.createImageData(256, 256), r = rng(11);
+  for (let i = 0; i < img.data.length; i += 4) { const v = r() * 255; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
+  g.putImageData(img, 0, 0);
+  $("#grain").style.backgroundImage = `url(${c.toDataURL()})`;
+}
+
+/* ---------- measured after the fonts load ---------- */
+const M = {};
+function fitLines(el, max) {
+  el.style.fontSize = "";
+  const lines = $$(".li", el), widest = Math.max(...lines.map(l => l.scrollWidth));
+  if (widest > max) el.style.fontSize = parseFloat(getComputedStyle(el).fontSize) * (max / widest) + "px";
+}
+function layout() {
+  const L = LAY;
+  Object.assign($("#mark").style, { left: L.mark[0] + "px", top: L.mark[1] + "px" });
+  // Headlines on the left (16:9) or at the top (4:5); the note sits under the tallest of the first two.
+  for (const h of [...heads, { el: doneEl }]) { h.el.style.left = L.left.x + "px"; h.el.style.top = L.headTop + "px"; fitLines(h.el, L.left.w); }
+  const quote = $("#quote");
+  quote.style.left = L.left.x + "px"; quote.style.width = L.left.w + "px";
+  // In 4:5 the note sits under the first headline while it's recorded, then slides up under
+  // the second (shorter in Spanish) once it's sent; in 16:9 it stays put under the taller one.
+  const h0 = heads[0].el.offsetHeight, h1 = heads[1].el.offsetHeight;
+  M.quoteTop = L.headTop + (VERT ? h0 : Math.max(h0, h1)) + L.quoteGap;
+  M.quoteTop2 = VERT ? L.headTop + h1 + L.quoteGap : M.quoteTop;
+  quote.style.top = M.quoteTop + "px";
+  // Recorder: on the right in 16:9; in 4:5 centred between the note and the frame's foot,
+  // clear of the player's sound button in the bottom-right corner.
+  const rec = $("#rec");
+  rec.style.left = L.rec.cx - rec.offsetWidth / 2 + "px";
+  rec.style.top = (VERT ? (M.quoteTop + quote.offsetHeight + 1215) / 2 - rec.offsetHeight / 2 + 20 : L.rec.top) + "px";
+  // In 4:5 the note tucks in once it's sent, to leave the review room.
+  M.qk = VERT ? 0.84 : 1;
+  const pill = $("#pill");
+  M.pillW = [$("#pl1"), $("#pl2"), $("#pl3")].map(s => s.offsetWidth);
+  M.pillBase = pill.offsetWidth - $("#plab").offsetWidth;
+  // Review: right column in 16:9; under the note in 4:5.
+  const review = $("#review");
+  review.style.width = L.review.w + "px";
+  review.style.left = L.review.x + "px";
+  M.reviewTop = VERT ? M.quoteTop2 + quote.offsetHeight * M.qk + 30 : CY - review.offsetHeight / 2 + 10;
+  review.style.top = M.reviewTop + "px";
+  const saved = $("#saved");
+  saved.style.width = L.review.w + "px"; saved.style.left = L.review.x + "px";
+  const h3 = heads[2].el;
+  M.savedTop = VERT ? (L.headTop + h3.offsetHeight + 1215) / 2 - saved.offsetHeight / 2 : CY - saved.offsetHeight / 2;
+  saved.style.top = M.savedTop + "px";
+  // Skeleton bars, as wide as the value each row will get.
+  for (const row of $$(".row")) {
+    const v = $(".rv", row); if (!v) continue;
+    if (!$(".sk", row)) row.insertAdjacentHTML("beforeend", '<i class="sk"></i>');
+    const sk = $(".sk", row); sk.style.left = v.offsetLeft + "px"; sk.style.width = Math.min(v.offsetWidth, 300) * 0.8 + "px";
+  }
+  // Board and week.
+  const B = L.board, gap = 16, colW = (B.w - 2 * gap) / 3, cardH = 158, headH2 = 54;
+  M.colW = colW; M.cardH = cardH; M.slot = s => headH2 + s * (cardH + 14);
+  board.style.left = B.x + "px"; board.style.width = B.w + "px"; board.style.height = headH2 + 2 * (cardH + 14) + "px";
+  $$(".colh", board).forEach((h, i) => { h.style.left = i * (colW + gap) + "px"; });
+  $$(".colbg", board).forEach((h, i) => Object.assign(h.style, { left: i * (colW + gap) - 8 + "px", top: headH2 - 10 + "px", width: colW + 16 + "px", height: 2 * (cardH + 14) + 8 + "px" }));
+  for (const c of Object.values(KC)) { c.el.style.width = colW + "px"; c.el.style.height = cardH + "px"; }
+  M.colX = i => i * (colW + gap);
+  const cal = $("#cal");
+  cal.style.left = L.cal.x + "px"; cal.style.width = L.cal.w + "px";
+  const hourH = 74, gridW = L.cal.w - 48 - 84;
+  cgrid.style.height = 3 * hourH + 6 + "px";
+  $("#glines").style.backgroundImage = "linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px)";
+  $("#glines").style.backgroundSize = `100% ${hourH}px, 33.333% 100%`;
+  $$(".hr", cgrid).forEach((h, i) => { h.style.top = i * hourH - 8 + "px"; if (i === 3) h.remove(); });
+  for (const ev of $$(".ev", cgrid)) {
+    const [col, hr] = ev.dataset.at.split(",").map(Number), cw = gridW / 3;
+    Object.assign(ev.style, { left: 84 + col * cw + 5 + "px", top: hr * hourH + 4 + "px", width: cw - 10 + "px", height: hourH - 8 + "px" });
+  }
+  // Board on top, the week under it: centred together.
+  const bh = board.offsetHeight, ch = cal.offsetHeight, g2 = VERT ? 34 : 36;
+  const doneH = doneEl.offsetHeight;
+  if (VERT) {
+    doneEl.style.top = L.headTop + "px";
+    M.boardTop = L.headTop + doneH + 56;
+  } else {
+    M.boardTop = CY - (bh + g2 + ch) / 2;
+    doneEl.style.top = CY - doneH / 2 + "px";
+  }
+  board.style.top = M.boardTop + "px";
+  cal.style.top = M.boardTop + bh + g2 + "px";
+  // End card.
+  const logo = $("#logo"), top0 = CY - (VERT ? 300 : 250);
+  logo.style.top = top0 + "px";
+  $("#endLine").style.top = top0 + logo.offsetHeight + 54 + "px";
+  $("#tagl").style.top = top0 + logo.offsetHeight + 54 + $("#endLine").offsetHeight + 30 + "px";
+  $("#cta").style.top = top0 + logo.offsetHeight + 54 + $("#endLine").offsetHeight + 30 + 80 + "px";
+}
+
+/* ---------- renderers ---------- */
+const G = { ind: $("#gInd"), teal: $("#gTeal"), key: $("#gKey") };
+function placeGlow(el, x, y, s = 1) { el.style.transform = `translate(${f2(x)}px,${f2(y)}px) scale(${s.toFixed(4)})`; }
+function level(t) {
+  // How loud the voice is: a hump per word.
+  let v = 0;
+  for (const w of WORDS) { if (t < w.at - 0.05) break; v = Math.max(v, bump(P(t, w.at - 0.04, w.at + w.dur))); }
+  return v * (t < T.rel ? 1 : 0);
+}
+function renderBg(t) {
+  const right = VERT ? [540, 1000] : [1390, 560];
+  const life = E.outC(P(t, 0, 1.2)) * (1 - P(t, T.out, T.end));
+  placeGlow(G.ind, right[0], right[1], 0.85 + 0.08 * level(t));
+  op(G.ind, life * (0.75 + 0.25 * level(t)));
+  // Teal blooms when Lars lands in Viewing, and stays under the board.
+  const tp = E.outC(P(t, T.lars - 0.1, T.lars + 0.8)) * (1 - P(t, T.out, T.end));
+  placeGlow(G.teal, VERT ? 760 : 1640, VERT ? 640 : 420, 0.7 + 0.15 * bump(P(t, T.lars - 0.1, T.lars + 1.2)));
+  op(G.teal, tp * 0.8);
+  placeGlow(G.key, VERT ? 540 : 540, VERT ? 420 : 480, 1);
+  op(G.key, life * 0.7);
+  $("#grid").style.transform = `translate(${f2(-24 * E.ioS(P(t, 0, 25)))}px,0)`;
+}
+function renderMark(t) { op($("#mark"), 0.55 * P(t, 0.3, 0.9) * (1 - P(t, T.out - 0.2, T.out + 0.2))); }
+function renderCam(t) {
+  const s = lerp(1, 1.03, E.ioS(P(t, 0, T.out))) + 0.02 * E.inC(P(t, T.out, T.end));
+  $("#cam").style.transform = `scale(${s.toFixed(4)})`;
+  bl($("#cam"), 10 * E.inC(P(t, T.out, T.end)));
+}
+function revealLines(lines, t, a, b) {
+  lines.forEach((li, i) => {
+    const pi = E.outX(P(t, a + i * 0.08, a + i * 0.08 + 0.8)), po = E.inC(P(t, b + i * 0.05, b + i * 0.05 + 0.38));
+    li.style.transform = `translateY(${f2((1 - pi) * 106 - po * 106)}%)`;
+    bl(li, (1 - pi) * 5 + po * 6);
+    op(li, Math.min(1, pi * 2) * (1 - po));
+  });
+}
+function renderHeads(t) {
+  for (const h of heads) {
+    const on = t > h.a - 0.01 && t < h.b + 0.75; vis(h.el, on); if (!on) continue;
+    revealLines(h.lines, t, h.a, h.b);
+  }
+  const on = t > T.lars - 0.05 && t < T.out + 0.6; vis(doneEl, on);
+  if (on) doneLines.forEach((li, i) => {
+    const a = DONE_AT[i] + 0.12, pi = E.outX(P(t, a, a + 0.8)), po = E.inC(P(t, T.out - 0.1 + i * 0.05, T.out + 0.3 + i * 0.05));
+    li.style.transform = `translateY(${f2((1 - pi) * 106 - po * 106)}%)`;
+    bl(li, (1 - pi) * 5 + po * 6); op(li, Math.min(1, pi * 2) * (1 - po));
+    const tk = $(".tick", li), q = P(t, a + 0.1, a + 0.45);
+    tk.style.transform = `scale(${lerp(0.3, 1, E.outB(q, 2)).toFixed(4)})`;
+  });
+}
+
+const quote = $("#quote");
+function renderQuote(t) {
+  const on = t > 1.0 && t < T.quoteOut + 0.6; vis(quote, on); if (!on) return;
+  const qi = E.outX(P(t, 1.0, 1.6)), qo = E.inC(P(t, T.quoteOut, T.quoteOut + 0.5));
+  const tuck = E.ioC(P(t, T.rel + 0.15, T.revIn + 0.2)), qk = lerp(1, M.qk || 1, tuck), dy = ((M.quoteTop2 ?? M.quoteTop) - M.quoteTop) * tuck;
+  quote.style.transformOrigin = "0 0";
+  quote.style.transform = `translateY(${f2((1 - qi) * 30 - qo * 40 + dy)}px) scale(${qk.toFixed(4)})`;
+  op(quote, Math.min(1, qi * 1.5) * (1 - qo)); bl(quote, (1 - qi) * 8 + qo * 8);
+  // The label: "Voice note" while recording, "What I heard" once it's sent.
+  const sw = E.ioC(P(t, T.rel + 0.05, T.rel + 0.4));
+  op($("#ql1"), 1 - sw); op($("#ql2"), sw);
+  $("#ql1").style.transform = `translateY(${f2(-sw * 14)}px)`; $("#ql2").style.transform = `translateY(${f2((1 - sw) * 14)}px)`;
+  op($("#qdot"), (1 - sw) * (0.55 + 0.45 * Math.round((Math.sin(t * 6.2) + 1) / 2)));
+  // The waveform follows the voice, then lies down.
+  const lv = level(t), flat = 1 - P(t, T.rel, T.rel + 0.35);
+  bars.forEach((b, j) => {
+    const n = 0.5 + 0.5 * Math.sin(t * 17 + j * 2.13) * Math.cos(t * 9.7 + j * 0.71);
+    const h = 6 + 40 * flat * Math.max(level(t - j * 0.012), 0) * (0.25 + 0.75 * n);
+    b.style.height = f2(h) + "px";
+    op(b, 0.5 + 0.5 * flat * lv);
+  });
+  // The words, as they're said.
+  for (const w of WORDS) {
+    const p = P(t, w.at - 0.02, w.at + 0.2), e = E.outX(p);
+    w.el.style.transform = `translateY(${f2((1 - e) * 16)}px)`;
+    op(w.el, p > 0 ? Math.min(1, p * 1.6) : 0); bl(w.el, (1 - e) * 6);
+  }
+  // During the split each phrase is marked in the colour of where it goes.
+  PHRASES.forEach((p, i) => {
+    const a = T.F[i] - 0.18, k = E.outC(P(t, a, a + 0.25));
+    p.el.style.backgroundColor = k > 0 ? `color-mix(in oklch, ${HL[p.tone]} ${Math.round(k * 100)}%, transparent)` : "transparent";
+    const done = P(t, T.F[i] + T.FLY, T.F[i] + T.FLY + 0.4);
+    p.el.style.color = `color-mix(in oklch, var(--fg) ${Math.round(100 - 28 * done)}%, transparent)`;
+  });
+}
+
+const rec = $("#rec"), pill = $("#pill"), plus = $("#plus"), rings = $$("#rings i");
+function renderRec(t) {
+  const on = t < T.recOut + 0.6; vis(rec, on); if (!on) return;
+  const L = LAY, ri = E.outX(P(t, 0.05, 0.75)), ro = E.inC(P(t, T.recOut, T.recOut + 0.38));
+  rec.style.transform = `translate3d(0,${f2((1 - ri) * 70 + ro * 90)}px,${f2(-ro * 200)}px) rotateX(${f2(L.tilt.rx + (1 - ri) * 10)}deg) rotateY(${f2(L.tilt.ry * 0.6)}deg)`;
+  op(rec, Math.min(1, ri * 1.5) * (1 - ro)); bl(rec, (1 - ri) * 10 + ro * 10);
+  // The + goes down under the finger and stays down until it lets go.
+  const held = P(t, T.press - 0.06, T.press + 0.05) * (1 - P(t, T.rel, T.rel + 0.08));
+  const rel = spring(Math.max(0, t - T.rel), 2.6, 0.4);
+  plus.style.transform = `scale(${(1 - 0.07 * held + (t > T.rel ? 0.07 * (rel - 1) * -1 * (1 - rel) : 0)).toFixed(4)})`;
+  // The bar that says it's recording: red dot, the clock, "Let go to finish".
+  const pp = spring(Math.max(0, t - T.rec), 2.3, 0.55), po = P(t, T.recOut - 0.05, T.recOut + 0.3);
+  const lab = t < T.rel + 0.05 ? 0 : t < T.sort ? 1 : 2;
+  const sw1 = E.ioC(P(t, T.rel + 0.02, T.rel + 0.3)), sw2 = E.ioC(P(t, T.sort, T.sort + 0.28));
+  const wNow = M.pillW ? M.pillBase + lerp(lerp(M.pillW[0], M.pillW[1], sw1), M.pillW[2], sw2) - (t > T.rel ? 0 : 0) : 0;
+  if (wNow) pill.style.width = f2(wNow) + "px";
+  pill.style.transform = `translateX(-50%) translateY(${f2((1 - pp) * 40)}px) scale(${lerp(0.6, 1, pp).toFixed(4)})`;
+  op(pill, clamp((t - T.rec) * 8) * (1 - po));
+  const spin = $("#pspin"), dot = $("#pdot"), clock = $("#clock");
+  const recOn = t < T.rel;
+  show(dot, recOn); show(clock, recOn); spin.style.display = recOn ? "none" : "flex";
+  if (!recOn) spin.style.transform = `rotate(${((t - T.rel) * 520) % 360}deg)`;
+  op(dot, 0.5 + 0.5 * Math.round((Math.sin((t - T.rec) * 6.2) + 1) / 2));
+  const sec = Math.min(24, Math.floor(Math.max(0, t - T.rec) * CLOCK_RATE));
+  const txt = `0:${String(sec).padStart(2, "0")}`; if (clock.textContent !== txt) clock.textContent = txt;
+  const ls = [$("#pl1"), $("#pl2"), $("#pl3")], lo = [1 - sw1, sw1 * (1 - sw2), sw2];
+  ls.forEach((s, i) => { op(s, lo[i]); s.style.transform = `translateY(${f2((1 - lo[i]) * (i < lab ? -16 : 16))}px)`; });
+  $("#plab").style.width = (M.pillW ? lerp(lerp(M.pillW[0], M.pillW[1], sw1), M.pillW[2], sw2) : 0) + "px";
+  // Sound: rings off the + while the voice comes in.
+  const lv = level(t);
+  rings.forEach((r, k) => {
+    const ph = ((t - T.rec) * 0.95 + k / 3) % 1, live = P(t, T.rec, T.rec + 0.4) * (1 - P(t, T.rel - 0.1, T.rel + 0.2));
+    r.style.transform = `scale(${(1.05 + ph * (1.3 + 0.6 * lv)).toFixed(4)})`;
+    op(r, live * (1 - ph) * (0.32 + 0.68 * lv));
+  });
+  const pb = box(plus); M.plusC = [pb.x + pb.w / 2, pb.y + pb.h / 2];
+  const rb = box($("#rings").parentElement), rk = rb.w / rec.offsetWidth;
+  $("#rings").style.left = (M.plusC[0] - rb.x) / rk + "px"; $("#rings").style.top = (M.plusC[1] - rb.y) / rk + "px";
+}
+
+const review = $("#review");
+function renderReview(t) {
+  const on = t >= T.revIn - 0.02 && t < T.revOut + 0.6; vis(review, on); if (!on) return;
+  const L = LAY, ri = E.outX(P(t, T.revIn, T.revIn + 0.7)), ro = E.inC(P(t, T.saved - 0.3, T.saved + 0.15));
+  review.style.transform = `translate3d(0,${f2((1 - ri) * 80)}px,${f2(-ro * 120)}px) rotateX(${f2(L.tilt.rx + (1 - ri) * 14)}deg) rotateY(${f2(L.tilt.ry)}deg) scale(${(1 - 0.03 * ro).toFixed(4)})`;
+  op(review, Math.min(1, ri * 1.6) * (1 - ro)); bl(review, (1 - ri) * 10 + ro * 8);
+  // Cards one after the other.
+  [$("#rsum"), $("#cL"), $("#cA"), $(".rf")].forEach((el, i) => {
+    const p = E.outX(P(t, T.revIn + 0.06 + i * 0.09, T.revIn + 0.7 + i * 0.09));
+    el.style.transform = `translateY(${f2((1 - p) * 30)}px)`; op(el, Math.min(1, p * 1.6));
+  });
+  // Each row fills when its phrase lands.
+  flights.forEach((f, i) => {
+    const land = f.at + T.FLY, row = f.target;
+    const p = P(t, land - 0.08, land + 0.3), e = E.outX(p);
+    const v = $(".rv", row), rl = $(".rl", row), sk = $(".sk", row), fl = $(".fl", row);
+    if (v) { v.style.transform = `translateX(${f2((1 - e) * -10)}px)`; op(v, p > 0 ? E.outC(p) : 0); bl(v, (1 - e) * 4); }
+    if (sk) op(sk, 1 - p);
+    if (rl && f.p.to === "rStage") { const tg = $(".tag", rl); op(tg, 0.35 + 0.65 * E.outC(p)); tg.style.transform = `scale(${lerp(0.85, 1, E.outB(p, 2)).toFixed(4)})`; }
+    if (rl) rl.style.color = `color-mix(in oklch, var(--fg) ${Math.round(55 + 45 * E.outC(p))}%, transparent)`;
+    if (fl) { fl.style.background = HL[f.p.tone]; op(fl, 0.9 * bump(P(t, land - 0.05, land + 0.75))); }
+    const cb = $(".cb", row);
+    if (cb) {
+      const c = P(t, land, land + 0.24);
+      $(".f", cb).style.transform = `scale(${E.outB(c, 1.8).toFixed(4)})`;
+      op($("svg", cb), E.outC(P(t, land + 0.05, land + 0.25)));
+    }
+    if (f.p.to === "aHead") {
+      // The name takes the place of the placeholders when her phrase lands.
+      $$(".inp span", row).forEach(s => { op(s, E.outC(p)); s.style.transform = `translateX(${f2((1 - e) * -8)}px)`; });
+      $$(".inp small", row).forEach(s => op(s, 1 - E.outC(P(t, land - 0.12, land + 0.1))));
+    }
+  });
+  // The name lights up when the first phrase lands on Lars's card.
+  const lp = bump(P(t, T.F[0] + T.FLY - 0.05, T.F[0] + T.FLY + 0.8));
+  $("#lName").style.color = `color-mix(in oklch, var(--teal-ink) ${Math.round(lp * 100)}%, var(--fg))`;
+  // Save: pressed, then "Saving…".
+  const sv = E.ioC(P(t, T.tap + 0.04, T.tap + 0.2));
+  op($("#sv1"), 1 - sv); op($("#sv2"), sv);
+  $("#sv2 svg").style.transform = `rotate(${((t - T.tap) * 520) % 360}deg)`;
+  let s = 1; s -= 0.05 * bump(P(t, T.tap - 0.06, T.tap + 0.18));
+  $("#bSave").style.transform = `scale(${s.toFixed(4)})`;
+}
+
+function renderFlights(t) {
+  for (const f of flights) {
+    const p = P(t, f.at, f.at + T.FLY);
+    if (p <= 0 || p >= 1) { op(f.el, 0); continue; }
+    const src = f.p.words[0].el, sb = box(src), tb = box($(".rv", f.target) || $(".rl", f.target) || f.target);
+    const tgt = f.p.to === "aHead" ? box(f.target) : tb;
+    const fs = parseFloat(getComputedStyle(f.el).fontSize);
+    const k0 = M.qk || 1, k1 = clamp(25 / fs * 1.05, 0.3, 1);
+    const e = E.ioC(p), k = lerp(k0, k1, e);
+    const x0 = sb.x - 0.16 * fs, y0 = sb.y + sb.h / 2;
+    const x1 = tgt.x, y1 = tgt.y + tgt.h / 2;
+    // An arc: up and over in 16:9, a swoop down in 4:5.
+    const cx = lerp(x0, x1, 0.5) + (VERT ? 120 : 0), cy = Math.min(y0, y1) - (VERT ? 40 : 70);
+    const x = (1 - e) ** 2 * x0 + 2 * (1 - e) * e * cx + e * e * x1, y = (1 - e) ** 2 * y0 + 2 * (1 - e) * e * cy + e * e * y1;
+    f.el.style.transform = `translate(${f2(x)}px,${f2(y)}px) translateY(-50%) scale(${k.toFixed(4)})`;
+    op(f.el, Math.min(1, p * 8) * (1 - P(p, 0.78, 1)));
+    bl(f.el, 2.2 * bump(p));
+  }
+}
+
+const saved = $("#saved");
+function renderSaved(t) {
+  const on = t >= T.saved - 0.1 && t < T.revOut + 0.6; vis(saved, on); if (!on) return;
+  const L = LAY, si = E.outX(P(t, T.saved, T.saved + 0.6)), so = E.inC(P(t, T.revOut, T.revOut + 0.45));
+  saved.style.transform = `translate3d(0,${f2((1 - si) * 40 - so * 30)}px,${f2(-so * 160)}px) rotateX(${f2(L.tilt.rx)}deg) rotateY(${f2(L.tilt.ry)}deg)`;
+  op(saved, Math.min(1, si * 1.6) * (1 - so)); bl(saved, (1 - si) * 6 + so * 10);
+  [$(".svt", saved), $("#svL"), $("#svA")].forEach((el, i) => {
+    const p = E.outX(P(t, T.saved + i * 0.1, T.saved + 0.6 + i * 0.1));
+    el.style.transform = `translateY(${f2((1 - p) * 24)}px)`; op(el, Math.min(1, p * 1.8));
+  });
+  const ti = $(".svt i", saved), q = P(t, T.saved + 0.05, T.saved + 0.4);
+  ti.style.transform = `scale(${lerp(0.3, 1, E.outB(q, 2.2)).toFixed(4)})`;
+}
+
+function renderBoard(t) {
+  const on = t >= T.boardIn - 0.02 && t < T.end + 0.1; vis(board, on); if (!on) return;
+  const L = LAY, bi = E.outX(P(t, T.boardIn, T.boardIn + 0.75));
+  board.style.transform = `translate3d(0,${f2((1 - bi) * 70)}px,0) rotateX(${f2(L.tilt.rx + (1 - bi) * 12)}deg) rotateY(${f2(L.tilt.ry)}deg)`;
+  op(board, Math.min(1, bi * 1.5)); bl(board, (1 - bi) * 10);
+  // Counts.
+  for (const h of $$(".colh", board)) {
+    const [a, b, at] = COUNTS[h.dataset.s], q = E.outX(P(t, at - 0.05, at + 0.35)), o = $(".o", h), n = $(".n", h);
+    if (o.textContent !== String(a)) o.textContent = a; if (n.textContent !== String(b)) n.textContent = b;
+    o.style.transform = `translateY(${(-q * 110).toFixed(1)}%)`; op(o, 1 - q);
+    n.style.transform = `translateY(${((1 - q) * 110).toFixed(1)}%)`; op(n, q);
+  }
+  // Where each card sits: column, slot.
+  const lm = E.ioC(P(t, T.lars - 0.15, T.lars + 0.45)), am = E.outX(P(t, T.anna - 0.1, T.anna + 0.55));
+  const place = (c, col, slot, extra = "") => { c.el.style.transform = `translate(${f2(col)}px,${f2(slot)}px)${extra}`; };
+  // Lars lifts out of Qualified and drops into Viewing, on top.
+  const lift = bump(P(t, T.lars - 0.15, T.lars + 0.45));
+  place(KC.lars, lerp(M.colX(1), M.colX(2), lm), M.slot(0) - 26 * lift, ` scale(${(1 + 0.05 * lift).toFixed(4)})`);
+  KC.lars.el.style.zIndex = 5;
+  KC.lars.el.style.boxShadow = `0 ${f2(30 + 40 * lift)}px ${f2(60 + 50 * lift)}px -30px rgba(0,0,0,.95), inset 0 1px 0 oklch(1 0 0 / 5%)`;
+  place(KC.james, M.colX(1), lerp(M.slot(1), M.slot(0), E.ioC(P(t, T.lars + 0.05, T.lars + 0.6))));
+  place(KC.anya, M.colX(2), lerp(M.slot(0), M.slot(1), E.ioC(P(t, T.lars - 0.1, T.lars + 0.45))));
+  place(KC.sofia, M.colX(0), lerp(M.slot(0), M.slot(1), E.ioC(P(t, T.anna - 0.25, T.anna + 0.3))));
+  place(KC.anna, M.colX(0), M.slot(0) + (1 - am) * -40, ` scale(${lerp(0.9, 1, E.outB(am, 1.4)).toFixed(4)})`);
+  op(KC.anna.el, P(t, T.anna - 0.1, T.anna + 0.15)); bl(KC.anna.el, (1 - am) * 8);
+  // Lars's budget rolls to the new figure and his first viewing shows.
+  const fq = E.outX(P(t, T.lars + 0.25, T.lars + 0.65)), [f0, f1] = KC.lars.figs;
+  f0.style.transform = `translateY(${f2(-fq * 26)}px)`; op(f0, 1 - fq);
+  f1.style.transform = `translateY(${f2((1 - fq) * 26)}px)`; op(f1, fq);
+  const nv = P(t, T.lars + 0.4, T.lars + 0.75);
+  larsNew.style.transform = `scale(${lerp(0.4, 1, E.outB(nv, 1.8)).toFixed(4)})`; op(larsNew, E.outC(nv));
+  larsNew.style.display = nv > 0 ? "" : "none";
+  const ringL = $(".ring", KC.lars.el), rq = P(t, T.lars + 0.2, T.lars + 1.4);
+  op(ringL, 0.9 * bump(rq)); ringL.style.boxShadow = "0 0 0 2px var(--teal)";
+  const ringA = $(".ring", KC.anna.el), aq = P(t, T.anna + 0.1, T.anna + 1.3);
+  op(ringA, 0.9 * bump(aq)); ringA.style.boxShadow = "0 0 0 2px var(--indigo)";
+  // Each column brightens as something lands in it.
+  $$(".colbg", board).forEach(bg => {
+    const s = bg.dataset.s, pulse = s === "viewing" ? bump(P(t, T.lars, T.lars + 1.2)) : s === "new" ? bump(P(t, T.anna, T.anna + 1.2)) : 0;
+    bg.style.background = `oklch(1 0 0 / ${(0.022 + 0.035 * pulse).toFixed(3)})`;
+  });
+}
+
+const cal = $("#cal");
+function renderCal(t) {
+  const on = t >= T.boardIn + 0.1 && t < T.end + 0.1; vis(cal, on); if (!on) return;
+  const L = LAY, ci = E.outX(P(t, T.boardIn + 0.12, T.boardIn + 0.9));
+  cal.style.transform = `translate3d(0,${f2((1 - ci) * 70)}px,0) rotateX(${f2(L.tilt.rx + (1 - ci) * 12)}deg) rotateY(${f2(L.tilt.ry)}deg)`;
+  op(cal, Math.min(1, ci * 1.5)); bl(cal, (1 - ci) * 10);
+  const ev = $("#evNew"), d = P(t, T.cal - 0.05, T.cal + 0.35), sp = spring(Math.max(0, t - (T.cal - 0.05)), 2.3, 0.52);
+  ev.style.transform = `translateY(${f2((1 - sp) * -110)}px) scale(${lerp(1.08, 1, E.outC(d)).toFixed(4)})`;
+  op(ev, E.outC(P(t, T.cal - 0.05, T.cal + 0.12)));
+  ev.style.boxShadow = `0 ${f2((1 - E.outC(d)) * 26)}px ${f2((1 - E.outC(d)) * 40 + 2)}px -10px rgba(0,0,0,.65), 0 0 0 ${f2(2 * bump(P(t, T.cal + 0.15, T.cal + 1.3)))}px oklch(0.96 0.006 84 / .5)`;
+}
+
+const touch = $("#touch");
+function renderTouch(t) {
+  // Holding the + …
+  if (t < T.rel + 0.5 && M.plusC) {
+    const a = P(t, T.press - 0.25, T.press), held = t < T.rel, r = P(t, T.rel, T.rel + 0.35);
+    const s = held ? lerp(1.4, 1, E.outC(a)) * (1 + 0.04 * Math.sin(t * 5)) : lerp(1, 1.5, E.outC(r));
+    touch.style.transform = `translate(${f2(M.plusC[0])}px,${f2(M.plusC[1])}px) scale(${s.toFixed(4)})`;
+    op(touch, held ? E.outC(a) : 1 - r);
+    return;
+  }
+  // … and tapping Save.
+  if (t > T.curOn && t < T.tap + 0.6) {
+    const sb = box($("#bSave")), x = sb.x + sb.w * 0.55, y = sb.y + sb.h * 0.55;
+    const a = P(t, T.curOn, T.tap - 0.05), pr = bump(P(t, T.tap - 0.08, T.tap + 0.16)), o = P(t, T.tap + 0.15, T.tap + 0.45);
+    const s = lerp(1.6, 1, E.outC(a)) * (1 - 0.15 * pr) + 0.5 * E.outC(o);
+    touch.style.transform = `translate(${f2(x)}px,${f2(y + (1 - E.outC(a)) * 30)}px) scale(${s.toFixed(4)})`;
+    op(touch, E.outC(a) * (1 - o));
+    return;
+  }
+  op(touch, 0);
+}
+
+function renderEnd(t) {
+  op($("#white"), E.inC(P(t, T.out + 0.05, T.end)) * (1 - P(t, T.end + 0.05, T.end + 0.2)));
+  const on = t >= T.end; vis($("#end"), on); if (!on) return;
+  $("#endIn").style.transform = `scale(${(lerp(1.03, 1, E.outX(P(t, T.end, T.end + 1.2))) * lerp(1, 1.015, E.ioS(P(t, T.end + 1.2, DUR)))).toFixed(5)})`;
+  const item = (el, a, dy, base = "") => {
+    const q = P(t, a, a + 0.8), e = E.outX(q);
+    el.style.transform = `${base} translateY(${f2((1 - e) * dy)}px)`; op(el, Math.min(1, q * 2)); bl(el, (1 - e) * 10);
+  };
+  item($("#logo"), T.end + 0.05, 40, "translateX(-50%)");
+  item($("#endLine"), T.end + 0.45, 30);
+  item($("#tagl"), T.end + 0.95, 24);
+  const c = P(t, T.end + 1.4, T.end + 2.1), cta = $("#cta");
+  cta.style.transform = `translateX(-50%) scale(${lerp(0.82, 1, E.outB(c, 1.5)).toFixed(4)})`; op(cta, Math.min(1, c * 3));
+}
+
+function render(t) {
+  t = clamp(t, 0, DUR);
+  renderBg(t);
+  renderCam(t);
+  renderMark(t);
+  renderHeads(t);
+  renderQuote(t);
+  renderRec(t);
+  renderReview(t);
+  renderFlights(t);
+  renderSaved(t);
+  renderBoard(t);
+  renderCal(t);
+  renderTouch(t);
+  renderEnd(t);
+  if (dbg) dbg.textContent = t.toFixed(2);
+}
+
+/* ---------- boot: fonts first, then live playback or the recorder's clock ---------- */
+const params = new URLSearchParams(location.search);
+const recording = params.has("record");
+if (recording) document.body.classList.add("rec");
+const dbg = params.has("debug") ? document.body.appendChild(Object.assign(document.createElement("div"), { style: "position:fixed;left:10px;top:10px;z-index:999;padding:6px 14px;border-radius:8px;background:rgba(0,0,0,.78);color:#fff;font:600 46px/1 ui-monospace,monospace" })) : null;
+function fit() {
+  const k = recording ? 1 : Math.min(innerWidth / CW, innerHeight / CH);
+  $("#stage").style.transform = `translate(${(innerWidth - CW * k) / 2}px,${(innerHeight - CH * k) / 2}px) scale(${k})`;
+}
+fit(); addEventListener("resize", fit);
+const faces = ['400 100px Sora', '500 100px Sora', '400 20px Geist', '500 20px Geist', '600 20px Geist', '400 20px "Geist Mono"'];
+window.__film = {
+  duration: DUR,
+  ready: Promise.all(faces.map(f => document.fonts.load(f, ES ? "áéíóúñ€" : "€"))).then(() => document.fonts.ready).then(() => { layout(); render(0); return true; }),
+  seek: t => render(t),
+};
+if (!recording) {
+  let playing = !params.has("t"), t = parseFloat(params.get("t") || "0"), last = null;
+  const pp = $("#pp"), scrub = $("#scrub"), ctime = $("#ctime");
+  const showT = () => { scrub.value = t; ctime.textContent = t.toFixed(3); pp.textContent = playing ? "❚❚" : "▶"; };
+  window.__film.ready.then(() => {
+    render(t); showT();
+    const tick = now => { if (playing) { if (last !== null) t = (t + (now - last) / 1000) % DUR; render(t); showT(); } last = now; requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  });
+  pp.onclick = () => { playing = !playing; last = null; showT(); };
+  scrub.oninput = () => { t = parseFloat(scrub.value); playing = false; render(t); showT(); };
+  addEventListener("keydown", e => {
+    if (e.code === "Space") { playing = !playing; last = null; }
+    if (e.code === "ArrowRight") { playing = false; t = Math.min(DUR, t + (e.shiftKey ? 1 : 1 / 60)); render(t); }
+    if (e.code === "ArrowLeft") { playing = false; t = Math.max(0, t - (e.shiftKey ? 1 : 1 / 60)); render(t); }
+    showT();
+  });
+  let idle; addEventListener("mousemove", () => { document.body.classList.remove("idle"); clearTimeout(idle); idle = setTimeout(() => document.body.classList.add("idle"), 1800); });
+}
+</script>
+</body>
+</html>

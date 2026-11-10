@@ -86,3 +86,33 @@ ffmpeg -ss 25.2 -i hello-to-reserved-es.mp4 -frames:v 1 -vf scale=1280:720:flags
 ```
 
 The 4:5 cut is the same with `720:900` and `-maxrate 1600k -bufsize 3200k`.
+
+# Film 03 · Voice note
+
+A third 30-second film, made for the indigo brand and Sora (10 Nov 2026), about voice notes (plan 026). Straight after a viewing an agent holds the phone's + and talks; the note splits phrase by phrase into the review cards the app really shows; the agent saves; each part lands where it lives. It's in the app's dark mode with Sora headlines, an indigo glow, gradient avatars, and ends on the site's light card with the indigo wing.
+
+- `voice-note.html` — the film, same engine and controls as films 01 and 02 (`?t=`, `?format=portrait`, `?lang=es`, `?debug`). There's no 9:16 cut.
+- `voice-note-soundtrack.mjs` — its score, from film 02's instruments at 96 BPM in D: a chime when the + goes down, a soft syllable on every spoken word (the film's own word rhythm, re-run from the same seed, so each language gets its own WAV), a step up the scale for each phrase that lands, a resolve on Save, one ring per result, and the end card home on D. ≈ −15 LUFS, −1 dBTP.
+
+| Time | Beat |
+| --- | --- |
+| 0–1.3 s | The tab bar rises; the + goes down under a fingertip; "● 0:00 Let go to finish". "Just talk. *Hold the + after the viewing.*" |
+| 1.3–10 s | The note, word by word, with a waveform: "Lars Nielsen loved the villa in Nueva Andalucía. Second viewing Thursday at 11. Budget's now up to 1.4 million, move him to Viewing. And a new buyer, Anna Berg: two-bed in Marbella, up to 600k." The clock runs to 0:24 |
+| 10–11.3 s | Let go: "Listening…", "Sorting it into your clients…"; "LeadWing sorts it *into your clients.*" |
+| 11.3–15.85 s | The review: Lars Nielsen · Qualified (Viewing, Wishes, Move to Viewing, Appointment) and New client · Anna Berg (Wishes). Six phrases fly, on the beat, into the row they fill, each marked in the colour it lands in (teal for Lars, who moves to Viewing; indigo for Anna, who is New) |
+| 15.85–18 s | "You check it. *Nothing's saved until you do.*" A tap on Save, "Saving…", "Saved for 2 clients." |
+| 18–24.3 s | The board and the week: Lars lifts from Qualified into Viewing at €1.4M with his first viewing, the second viewing drops into Thursday 11:00, Anna lands in New. "✓ Lars updated. ✓ Viewing booked. ✓ Anna added." |
+| 24.3–30 s | Into white; the wing, "Talk. *LeadWing does the typing.*", "The CRM for independent real‑estate agents." and leadwing.app |
+
+What it shows is what the feature does: one card per person, rows only for what the agent said (a stage move only because he says "move him to Viewing"), the appointment saved as a meeting (so it's grey on the calendar, as the app draws it), the transcript under "What I heard", and nothing saved until Save. The words on screen while recording are the agent's speech, not an app screen: the app shows the red dot, the clock and "Let go to finish" while you hold the +. Spanish: `?lang=es` swaps every word on the same clock, UI from `messages/es` ("Suelta para terminar", "Ordenándolo por clientes…", "Lo que buscan", "Pasar a Visita", "Cita", "Guardado para 2 clientes.") and the note in Spain Spanish; lines "Solo habla.", "LeadWing lo ordena por clientes.", "Tú lo revisas. *Nada se guarda sin ti.*", "Lars, al día. Visita agendada. Anna, añadida.", "Habla. *LeadWing escribe por ti.*" It is Claude's translation; a native read is pending.
+
+```sh
+node output/video/voice-note-soundtrack.mjs
+node output/video/voice-note-soundtrack.mjs --lang es
+PLAYWRIGHT_DIR=~/.cache/leadwing-video node output/video/record.mjs --film voice-note --fps 30 --blur 4 --audio output/video/voice-note.wav
+PLAYWRIGHT_DIR=~/.cache/leadwing-video node output/video/record.mjs --film voice-note --format portrait --fps 30 --blur 4 --audio output/video/voice-note.wav
+PLAYWRIGHT_DIR=~/.cache/leadwing-video node output/video/record.mjs --film voice-note --lang es --fps 30 --blur 4 --audio output/video/voice-note-es.wav
+PLAYWRIGHT_DIR=~/.cache/leadwing-video node output/video/record.mjs --film voice-note --lang es --format portrait --fps 30 --blur 4 --audio output/video/voice-note-es.wav
+```
+
+The masters are 30 fps (the site plays 30 fps; at 60 fps a cut takes about 15 minutes, at 30 about 8). The web cuts are made exactly like film 02's, named `voice-note[-es]-16x9.mp4` and `-4x5.mp4`, and the posters are the finished review at 15.78 s instead of a title frame.

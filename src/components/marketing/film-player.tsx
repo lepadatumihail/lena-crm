@@ -15,8 +15,8 @@ type Cut = { src: string; poster: string };
 type Cuts = { wide: Cut; tall: Cut };
 
 const ENGLISH_CUTS: Cuts = {
-  wide: { src: "/video/leadwing-film-16x9.mp4", poster: "/video/leadwing-film-16x9.webp" },
-  tall: { src: "/video/leadwing-film-4x5.mp4", poster: "/video/leadwing-film-4x5.webp" },
+  wide: { src: "/video/voice-note-16x9.mp4", poster: "/video/voice-note-16x9.webp" },
+  tall: { src: "/video/voice-note-4x5.mp4", poster: "/video/voice-note-4x5.webp" },
 };
 
 /**
@@ -26,8 +26,8 @@ const ENGLISH_CUTS: Cuts = {
 const CUTS: Record<AppLocale, Cuts> = {
   en: ENGLISH_CUTS,
   es: {
-    wide: { src: "/video/leadwing-film-es-16x9.mp4", poster: "/video/leadwing-film-es-16x9.webp" },
-    tall: { src: "/video/leadwing-film-es-4x5.mp4", poster: "/video/leadwing-film-es-4x5.webp" },
+    wide: { src: "/video/voice-note-es-16x9.mp4", poster: "/video/voice-note-es-16x9.webp" },
+    tall: { src: "/video/voice-note-es-4x5.mp4", poster: "/video/voice-note-es-4x5.webp" },
   },
   ru: ENGLISH_CUTS,
 };
@@ -46,7 +46,9 @@ function loadCut(video: HTMLVideoElement, cuts: Cuts) {
 }
 
 /**
- * The 30-second film, built to cost nothing while the page loads: the server
+ * The 30-second voice-note film (output/video/voice-note.html): an agent talks
+ * after a viewing and LeadWing sorts the note into the right clients. It is
+ * built to cost nothing while the page loads: the server
  * HTML carries neither a video nor a poster URL. The poster arrives when the
  * frame is a screen away, and the film plays muted and looping only while at
  * least half of it is on screen, so it never plays behind the reader's back.
