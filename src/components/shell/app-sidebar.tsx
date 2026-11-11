@@ -173,15 +173,11 @@ export function AppSidebar({
           href="/home"
           aria-label="LeadWing"
           onClick={closeMobile}
-          className="focus-visible:ring-ring/50 flex items-center gap-2.5 rounded-md outline-none focus-visible:ring-[3px]"
+          className="focus-visible:ring-ring/50 flex items-center gap-1.5 rounded-md outline-none focus-visible:ring-[3px]"
         >
-          <LogoMark className="size-8" />
-          <span className="flex min-w-0 flex-col leading-none group-data-[collapsible=icon]:hidden">
-            <Wordmark className="text-[15px]" />
-            <span className="text-muted-foreground mt-1 truncate text-[11px]">
-              {t("tagline")}
-            </span>
-          </span>
+          {/* The wing and wordmark alone, sized as on the public site. */}
+          <LogoMark className="size-7" />
+          <Wordmark className="text-base group-data-[collapsible=icon]:hidden" />
         </Link>
       </SidebarHeader>
 
