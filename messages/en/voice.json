@@ -69,6 +69,7 @@
     "areas": "Areas",
     "types": "Property types",
     "stage": "Move to {stage}",
+    "stageRich": "Move to <tag>{stage}</tag>",
     "tasks": "To-dos",
     "taskTitle": "To-do",
     "noDate": "No date",

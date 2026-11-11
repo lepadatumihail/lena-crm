@@ -69,6 +69,7 @@
     "areas": "Zonas",
     "types": "Tipos de inmueble",
     "stage": "Pasar a {stage}",
+    "stageRich": "Pasar a <tag>{stage}</tag>",
     "tasks": "Tareas",
     "taskTitle": "Tarea",
     "noDate": "Sin fecha",

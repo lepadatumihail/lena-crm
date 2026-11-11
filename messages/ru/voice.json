@@ -69,6 +69,7 @@
     "areas": "Районы",
     "types": "Типы объектов",
     "stage": "Перевести в «{stage}»",
+    "stageRich": "Перевести в <tag>{stage}</tag>",
     "tasks": "Задачи",
     "taskTitle": "Задача",
     "noDate": "Без даты",
