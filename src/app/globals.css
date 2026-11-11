@@ -524,3 +524,52 @@ html:lang(ru) article :is(td, th) {
     animation-range: 8px 40px;
   }
 }
+
+/*
+  The public nav's dropdown panels (SiteMenu). A closed panel is display:none,
+  so its links stay in the HTML without being focusable or prefetched; it
+  fades in from just above its trigger through @starting-style and fades out
+  with display held until the fade ends (allow-discrete). Where neither is
+  supported the panel simply appears. Moving straight from one open menu to
+  the next swaps them with no animation at all ([data-instant]), and reduced
+  motion keeps only the fade.
+*/
+@layer components {
+  .menu-panel {
+    display: none;
+    opacity: 0;
+    transform: translateY(-4px) scale(0.985);
+    transform-origin: 1.5rem 0;
+    transition:
+      opacity 120ms var(--ease-standard),
+      transform 120ms var(--ease-standard),
+      display 120ms allow-discrete;
+  }
+  .menu-panel[data-open] {
+    display: block;
+    opacity: 1;
+    transform: none;
+    transition-duration: 200ms;
+    transition-timing-function: var(--ease-out-quint);
+  }
+  @starting-style {
+    .menu-panel[data-open] {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.985);
+    }
+  }
+  [data-instant] .menu-panel {
+    transition: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .menu-panel,
+    .menu-panel[data-open] {
+      transform: none;
+    }
+    @starting-style {
+      .menu-panel[data-open] {
+        transform: none;
+      }
+    }
+  }
+}

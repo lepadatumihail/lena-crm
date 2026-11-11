@@ -31,7 +31,39 @@
     "pricing": "Pricing",
     "startFree": "Start for free",
     "backHome": "Back to home",
-    "backToApp": "Back to the app"
+    "backToApp": "Back to the app",
+    "menu": {
+      "label": "Main",
+      "open": "Open menu",
+      "close": "Close menu",
+      "title": "Menu",
+      "product": "Product",
+      "tools": "Tools",
+      "guides": "Guides",
+      "groups": {
+        "product": "CRM for independent agents",
+        "tools": "Free for every agent",
+        "work": "Working as an agent",
+        "portals": "Portals and CRMs"
+      },
+      "items": {
+        "howItWorks": "From a new lead to your next conversation",
+        "crmSpain": "Built for how deals close in Spain",
+        "crmMarbella": "For agents on the Costa del Sol",
+        "about": "Who we are and how to reach us",
+        "toolCommission": "Your fee with VAT and the agency split",
+        "toolSpreadsheet": "An Excel file for buyers and sellers",
+        "toolEarnings": "What your sales leave you each month",
+        "guideBecomeAgent": "Rules by region and how to register",
+        "guideAndaluciaRegister": "Ley 5/2025 and the agent register",
+        "guideIdealista": "Reply to enquiries before they go cold",
+        "guideFollowUp": "A cadence and messages ready to send",
+        "guidePortalPrices": "Idealista, Fotocasa and Kyero prices",
+        "guideFreeCrm": "What each free plan includes",
+        "guideBestCrm": "The right CRM for how you work",
+        "guideCrmAlternatives": "Costs, other options and how to switch"
+      }
+    }
   },
   "legal": {
     "label": "Legal",

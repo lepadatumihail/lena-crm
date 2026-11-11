@@ -31,7 +31,39 @@
     "pricing": "Precios",
     "startFree": "Empieza gratis",
     "backHome": "Volver al inicio",
-    "backToApp": "Volver a la app"
+    "backToApp": "Volver a la app",
+    "menu": {
+      "label": "Principal",
+      "open": "Abrir el menú",
+      "close": "Cerrar el menú",
+      "title": "Menú",
+      "product": "Producto",
+      "tools": "Herramientas",
+      "guides": "Guías",
+      "groups": {
+        "product": "CRM para agentes independientes",
+        "tools": "Gratis para cualquier agente",
+        "work": "Trabajar como agente",
+        "portals": "Portales y CRM"
+      },
+      "items": {
+        "howItWorks": "De un nuevo lead a tu próxima conversación",
+        "crmSpain": "Pensado para vender en España",
+        "crmMarbella": "Para agentes de la Costa del Sol",
+        "about": "Quiénes somos y cómo contactarnos",
+        "toolCommission": "Tus honorarios con IVA y el reparto",
+        "toolSpreadsheet": "Un Excel para compradores y vendedores",
+        "toolEarnings": "Lo que te dejan tus ventas cada mes",
+        "guideBecomeAgent": "Lo que pide cada comunidad y el alta",
+        "guideAndaluciaRegister": "La Ley 5/2025 y el registro de agentes",
+        "guideIdealista": "Responde antes de que se enfríen",
+        "guideFollowUp": "Cadencia y mensajes listos para enviar",
+        "guidePortalPrices": "Precios de Idealista, Fotocasa y Kyero",
+        "guideFreeCrm": "Qué incluye cada plan gratuito",
+        "guideBestCrm": "El CRM para tu forma de trabajar",
+        "guideCrmAlternatives": "Precios, otras opciones y cómo cambiar"
+      }
+    }
   },
   "legal": {
     "label": "Legal",
