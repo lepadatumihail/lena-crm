@@ -10,6 +10,7 @@ import { ArrowLeft, Loader2, Mail } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { syncLocaleFromProfile } from "@/i18n/actions";
 import { asLocale } from "@/i18n/config";
+import { suggestEmail } from "@/lib/email-typo";
 import { marketingPath } from "@/lib/routes";
 import { isInAppBrowser } from "@/lib/in-app-browser";
 import { readReferrer, readSignupSource } from "@/lib/signup-source";
@@ -89,6 +90,8 @@ export function SignInForm({
   const inApp = useInAppBrowser();
   const [step, setStep] = useState<"email" | "code">("email");
   const [email, setEmail] = useState("");
+  /** A likely typo in the address, held back once with a "Did you mean …?". */
+  const [typo, setTypo] = useState<{ typed: string; suggestion: string } | null>(null);
   const [code, setCode] = useState("");
   const [googleLoading, setGoogleLoading] = useState(false);
   const [sending, setSending] = useState(false);
@@ -121,11 +124,11 @@ export function SignInForm({
     }
   }
 
-  async function sendCode(): Promise<boolean> {
+  async function sendCode(address: string): Promise<boolean> {
     setSending(true);
     const src = source();
     const { error } = await createClient().auth.signInWithOtp({
-      email,
+      email: address,
       // `data` only lands on a new user; the database copies it onto the profile.
       options: { shouldCreateUser: true, ...(src ? { data: { signup_source: src } } : {}) },
     });
@@ -138,19 +141,38 @@ export function SignInForm({
     return true;
   }
 
-  async function handleSendCode(e: React.FormEvent) {
-    e.preventDefault();
-    if (await sendCode()) {
+  async function requestCode(address: string) {
+    setTypo(null);
+    if (await sendCode(address)) {
       setCode("");
       setStep("code");
       toast.success(t("toasts.codeSent"), {
-        description: t("toasts.codeSentDescription", { email }),
+        description: t("toasts.codeSentDescription", { email: address }),
       });
     }
   }
 
+  async function handleSendCode(e: React.FormEvent) {
+    e.preventDefault();
+    // A mistyped provider ("gmal.com") can never receive the code, so the
+    // first press asks instead of sending. Pressing again sends it as typed.
+    const suggestion = suggestEmail(email);
+    if (suggestion && typo?.typed !== email) {
+      setTypo({ typed: email, suggestion });
+      return;
+    }
+    await requestCode(email);
+  }
+
+  /** "Did you mean …?" answered yes: the visitor already asked for a code, so send it there. */
+  function handleUseSuggestion() {
+    if (!typo) return;
+    setEmail(typo.suggestion);
+    void requestCode(typo.suggestion);
+  }
+
   async function handleResend() {
-    if (await sendCode()) {
+    if (await sendCode(email)) {
       setCode("");
       toast.success(t("toasts.newCodeSent"));
     }
@@ -210,7 +232,7 @@ export function SignInForm({
             )}
 
             <form onSubmit={handleSendCode} className="space-y-3">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="email">{t("emailLabel")}</Label>
                 <Input
                   id="email"
@@ -220,8 +242,31 @@ export function SignInForm({
                   autoComplete="email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  aria-describedby="email-hint"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (typo && e.target.value !== typo.typed) setTypo(null);
+                  }}
                 />
+                {/* Always rendered (a live region must exist before it fills, or
+                    screen readers skip it); while empty, -mt-2 takes back the gap. */}
+                <p id="email-hint" aria-live="polite" className="text-muted-foreground text-sm empty:-mt-2">
+                  {typo
+                    ? t.rich("didYouMean", {
+                        address: typo.suggestion,
+                        fix: (chunks) => (
+                          <button
+                            type="button"
+                            onClick={handleUseSuggestion}
+                            disabled={sending}
+                            className="text-foreground hover:text-primary font-medium underline underline-offset-4 transition-colors"
+                          >
+                            {chunks}
+                          </button>
+                        ),
+                      })
+                    : null}
+                </p>
               </div>
               {/* Enabled while the field is empty: the input's own required
                   and type=email checks say what is missing, where a disabled

@@ -76,6 +76,30 @@ describe("SignInForm", () => {
     });
   });
 
+  it("asks about a mistyped provider instead of sending, then sends to the fix", async () => {
+    render(<SignInForm Title={Title} Description={Description} />, { wrapper });
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "nico@gmal.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Email me a code" }));
+
+    expect((await screen.findByText(/Did you mean/)).textContent).toBe("Did you mean nico@gmail.com?");
+    expect(signInWithOtp).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: "nico@gmail.com" }));
+    await vi.waitFor(() => expect(signInWithOtp).toHaveBeenCalledTimes(1));
+    expect(signInWithOtp.mock.calls[0][0].email).toBe("nico@gmail.com");
+  });
+
+  it("sends the address as typed when the visitor presses again", async () => {
+    render(<SignInForm Title={Title} Description={Description} />, { wrapper });
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "nico@gmal.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Email me a code" }));
+    await screen.findByText(/Did you mean/);
+
+    fireEvent.click(screen.getByRole("button", { name: "Email me a code" }));
+    await vi.waitFor(() => expect(signInWithOtp).toHaveBeenCalledTimes(1));
+    expect(signInWithOtp.mock.calls[0][0].email).toBe("nico@gmal.com");
+  });
+
   it("records no referrer for a visitor who came from our own pages", async () => {
     setReferrer(`${window.location.origin}/tools`);
     render(<SignInForm Title={Title} Description={Description} />, { wrapper });
