@@ -64,7 +64,8 @@ function useInAppBrowser(): boolean {
  * only the code is offered. Whatever utm tags the page carries go with the
  * sign-up, so a new profile records the ad that brought it, and so does the
  * hostname of the site that linked to the page (a search engine, an AI
- * assistant), for the visitors no tag describes.
+ * assistant), for the visitors no tag describes. A new account also starts in
+ * the page's language, so signing up from /es opens a Spanish app.
  */
 export function SignInForm({
   next = "/home",
@@ -112,6 +113,8 @@ export function SignInForm({
     log("google_start");
     const callback = new URL("/auth/callback", window.location.origin);
     callback.searchParams.set("next", next);
+    // A new account starts in the language of the page it signed up on.
+    callback.searchParams.set("locale", locale);
     const src = source();
     if (src) callback.searchParams.set("src", JSON.stringify(src));
     const { error } = await createClient().auth.signInWithOAuth({
@@ -129,8 +132,12 @@ export function SignInForm({
     const src = source();
     const { error } = await createClient().auth.signInWithOtp({
       email: address,
-      // `data` only lands on a new user; the database copies it onto the profile.
-      options: { shouldCreateUser: true, ...(src ? { data: { signup_source: src } } : {}) },
+      // `data` only lands on a new user; the database copies it onto the
+      // profile, so a new account starts in the language of this page.
+      options: {
+        shouldCreateUser: true,
+        data: { locale, ...(src ? { signup_source: src } : {}) },
+      },
     });
     setSending(false);
     if (error) {

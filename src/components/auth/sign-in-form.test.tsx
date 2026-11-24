@@ -23,6 +23,12 @@ const wrapper = ({ children }: { children: ReactNode }) => (
   </NextIntlClientProvider>
 );
 
+const spanishWrapper = ({ children }: { children: ReactNode }) => (
+  <NextIntlClientProvider locale="es" messages={messagesFor("es")} timeZone="UTC">
+    {children}
+  </NextIntlClientProvider>
+);
+
 const Title = (props: { children?: ReactNode }) => <h2 {...props} />;
 const Description = (props: { children?: ReactNode }) => <p {...props} />;
 
@@ -56,6 +62,7 @@ describe("SignInForm", () => {
     const callback = new URL(signInWithOAuth.mock.calls[0][0].options.redirectTo);
     expect(callback.pathname).toBe("/auth/callback");
     expect(callback.searchParams.get("next")).toBe("/clients/import");
+    expect(callback.searchParams.get("locale")).toBe("en");
     expect(JSON.parse(callback.searchParams.get("src") ?? "null")).toEqual({
       utm_source: "chatgpt.com",
       landing: "/tools/client-spreadsheet",
@@ -69,10 +76,30 @@ describe("SignInForm", () => {
     fireEvent.click(screen.getByRole("button", { name: "Email me a code" }));
     await vi.waitFor(() => expect(signInWithOtp).toHaveBeenCalled());
 
+    expect(signInWithOtp.mock.calls[0][0].options.data.locale).toBe("en");
     expect(signInWithOtp.mock.calls[0][0].options.data.signup_source).toEqual({
       utm_source: "chatgpt.com",
       landing: "/tools/client-spreadsheet",
       referrer: "perplexity.ai",
+    });
+  });
+
+  it("starts a new account in the language of the page, by Google or by code", async () => {
+    window.history.pushState({}, "", "/es");
+    setReferrer("");
+    render(<SignInForm Title={Title} Description={Description} />, { wrapper: spanishWrapper });
+
+    fireEvent.click(screen.getByRole("button", { name: "Continuar con Google" }));
+    await vi.waitFor(() => expect(signInWithOAuth).toHaveBeenCalled());
+    const callback = new URL(signInWithOAuth.mock.calls[0][0].options.redirectTo);
+    expect(callback.searchParams.get("locale")).toBe("es");
+
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "agente@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Envíame un código" }));
+    await vi.waitFor(() => expect(signInWithOtp).toHaveBeenCalled());
+    expect(signInWithOtp.mock.calls[0][0].options.data).toEqual({
+      locale: "es",
+      signup_source: { landing: "/es" },
     });
   });
 
